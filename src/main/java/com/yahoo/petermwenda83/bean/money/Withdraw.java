@@ -14,14 +14,26 @@ package com.yahoo.petermwenda83.bean.money;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author peter
  *
  */
+@Entity
+@Table( name = "withdraw" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Withdraw extends PocketMoney{
 
 	
 	private Timestamp withdrawDate;
+	
+	
+	
 	
 	/** 
 	 * 
@@ -49,14 +61,18 @@ public class Withdraw extends PocketMoney{
 
 
 
-	/**
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Withdraw [withdrawDate=" + withdrawDate + ", getStudentId()=" + getStudentId() + ", getAmount()="
-				+ getAmount() + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "Withdraw [withdrawDate=" + withdrawDate + ", getAmount()=" + getAmount() + ", getAccount()="
+				+ getAccount().getUsername() + ", getStudent()=" + getStudent().getRegNo() + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 
 

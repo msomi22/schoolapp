@@ -14,7 +14,17 @@ package com.yahoo.petermwenda83.bean.student;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 
 /**
  * Has Student;s Basic details 
@@ -22,33 +32,39 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  * 
  */
-public class Student extends StorableBean implements Comparable<Student> {
-	
-		
-		
-		private String regStream;
-		private String currentStream;
-		private String isActive;
-		private String isAlumni;
-		private String isBoarding;
-		private String regNo;
-		private String firstname;
-		private String middlename;		
-		private String lastname;
-		private String gender;
-		private String dob;
-		private String bcertNo;
-		private String county;
-		private String regTerm;
-		private String finalYear;
-		private String finalTerm;
-		private String passport;
-		private String lastUpdated;
-		private Timestamp admissionDate;
-		
-  
-	
-    public Student() {
+
+@Entity
+@Table( name = "student" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Student extends StorableBeanByUUID implements Comparable<Student> {
+
+	private String regStream;
+	private String currentStream;
+	private String isActive;
+	private String isAlumni;
+	private String isBoarding;
+	private String regNo;
+	private String firstname;
+	private String middlename;		
+	private String lastname;
+	private String gender;
+	private String dob;
+	private String bcertNo;
+	private String county;
+	private String regTerm;
+	private String finalYear;
+	private String finalTerm;
+	private String passport;
+	private String lastUpdated;
+	private Timestamp admissionDate;
+
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+
+
+
+	public Student() {
 		super();
 		regStream = "";
 		currentStream = "";
@@ -69,9 +85,11 @@ public class Student extends StorableBean implements Comparable<Student> {
 		passport = "";
 		lastUpdated = "";
 		admissionDate = new Timestamp(new Date().getTime());
-	
+		
+		account = new Account();
+
 	}
-	
+
 	/**
 	 * @return the regStream
 	 */
@@ -337,8 +355,34 @@ public class Student extends StorableBean implements Comparable<Student> {
 	public void setAdmissionDate(Timestamp admissionDate) {
 		this.admissionDate = admissionDate;
 	}
-	
-	
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if(obj instanceof SmsApi) {	
+			Student type = (Student)obj;
+
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+
+		return isEqual;		
+	}
+
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+
+
 
 	/**
 	 * @see java.lang.Object#toString()
@@ -350,8 +394,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 				+ firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob="
 				+ dob + ", bcertNo=" + bcertNo + ", county=" + county + ", regTerm=" + regTerm + ", finalYear="
 				+ finalYear + ", finalTerm=" + finalTerm + ", passport=" + passport + ", lastUpdated=" + lastUpdated
-				+ ", admissionDate=" + admissionDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+				+ ", admissionDate=" + admissionDate + ", account=" + account + ", getUuid()=" + getUuid() + "]";
 	}
 
 	@Override

@@ -14,10 +14,19 @@ package com.yahoo.petermwenda83.bean.money;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * @author peter
  *
  */
+@Entity
+@Table( name = "deposit" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Deposit extends PocketMoney {
 	
 	
@@ -48,14 +57,16 @@ public class Deposit extends PocketMoney {
 
 
 
-	/**
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Deposit [depositDate=" + depositDate + ", getStudentId()=" + getStudentId() + ", getAmount()="
-				+ getAmount() + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "Deposit [depositDate=" + depositDate + ", getAmount()=" + getAmount() + ", getAccount()=" + getAccount()
+				+ ", getStudent()=" + getStudent() + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 
 

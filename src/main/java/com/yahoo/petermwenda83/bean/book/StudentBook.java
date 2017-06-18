@@ -12,7 +12,17 @@ package com.yahoo.petermwenda83.bean.book;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 /** 
  * This class represent a studentBook object, an object that contains the book
@@ -21,58 +31,40 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class StudentBook extends StorableBean{
+@Entity
+@Table( name = "studentkook" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentBook extends StorableBeanByUUID{
 	
-	private String studentId;
-	private String bookId;
 	private String hasReturned;
 	private String returnDate;
 	private Timestamp borrowDate;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="bookId", referencedColumnName="uuid")
+    private Book book;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+    private Student student;
 
 	/**
 	 * 
 	 */
 	public StudentBook() {
-		studentId = "";
-		bookId = "";
 		hasReturned = "";
 		returnDate = "";
 		borrowDate = new Timestamp(new Date().getTime()); 
 		
+		account = new Account();
+		book = new Book();
+		student = new Student();
 	}
 	
-
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
-	/**
-	 * @return the bookId
-	 */
-	public String getBookId() {
-		return bookId;
-	}
-
-
-	/**
-	 * @param bookId the bookId to set
-	 */
-	public void setBookId(String bookId) {
-		this.bookId = bookId;
-	}
-
 
 	/**
 	 * @return the hasReturned
@@ -121,17 +113,98 @@ public class StudentBook extends StorableBean{
 		this.borrowDate = borrowDate;
 	}
 
+	
+
+	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the book
+	 */
+	public Book getBook() {
+		return book;
+	}
+
+
+	/**
+	 * @param book the book to set
+	 */
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		StudentBook studentBook;
+		
+		if(obj instanceof StudentBook) {
+			studentBook = (StudentBook) obj;
+			
+			return getUuid().equals(studentBook.getUuid());
+		}
+		
+		return false;
+	}
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
 
 	
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentBook [studentId=" + studentId + ", bookId=" + bookId + ", hasReturned=" + hasReturned
-				+ ", returnDate=" + returnDate + ", borrowDate=" + borrowDate + ", getUuid()=" + getUuid()
-				+ ", getAccountId()=" + getAccountId() + "]";
+		return "StudentBook [hasReturned=" + hasReturned + ", returnDate=" + returnDate + ", borrowDate=" + borrowDate
+				+ ", account=" + account.getUsername() + ", book=" + book.getAuthor() + ", student=" + student.getRegNo() + ", getUuid()=" + getUuid() + "]";
 	}
+
+
+
+
+
 
 
 

@@ -9,7 +9,16 @@
  */
 package com.yahoo.petermwenda83.bean.exam;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /**
  * Exam/Term configuration object
@@ -17,46 +26,36 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class SysConfig extends StorableBean{
-	
-	/**
-	 * 
-	 */
-	
-	private String examId;
+@Entity
+@Table( name = "sysconfig" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class SysConfig extends StorableBeanByUUID{
+
 	private String term;
 	private String year;
 	private String cansendSMS;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="examId", referencedColumnName="uuid")
+	private Exam exam;
+	
+	
 	
 	/**
 	 * 
 	 */
 	public SysConfig() {
-		examId = "";
 		term = "";
 		year = "";
 		cansendSMS = "";
+		
+		account = new Account();
+		exam = new Exam();
 	}
-
-	
-	
-	/**
-	 * @return the examId
-	 */
-	public String getExamId() {
-		return examId;
-	}
-
-
-
-	/**
-	 * @param examId the examId to set
-	 */
-	public void setExamId(String examId) {
-		this.examId = examId;
-	}
-
-
 
 	/**
 	 * @return the term
@@ -113,13 +112,45 @@ public class SysConfig extends StorableBean{
 
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the exam
+	 */
+	public Exam getExam() {
+		return exam;
+	}
+
+	/**
+	 * @param exam the exam to set
+	 */
+	public void setExam(Exam exam) {
+		this.exam = exam;
+	}
+
+	
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "SysConfig [examId=" + examId + ", term=" + term + ", year=" + year + ", cansendSMS=" + cansendSMS
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "SysConfig [term=" + term + ", year=" + year + ", cansendSMS=" + cansendSMS + ", account=" + account
+				+ ", exam=" + exam + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 
 

@@ -5,35 +5,56 @@ package com.yahoo.petermwenda83.bean.account;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanById;
 /** 
  * @author peter
  *
  */
-public class OutGoingSMS extends StorableBean{
+@Entity
+@Table( name = "outgoingsms" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class OutGoingSMS extends StorableBeanById{
+
+	private String status;
+	private String mobile;
+	private String message;
+	private String smsCost;
+	private Timestamp sendDate;
 	
-	   private String status;
-	   private String mobile;
-	   private String message;
-	   private String smsCost;
-	   private Timestamp sendDate;
+	private String uuid;	
+
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
 
 	/**
 	 * 
 	 */
 	public OutGoingSMS() {
-		 status = "";
-		 mobile = "";
-		 message = "";
-		 smsCost = "";
-		 sendDate = new Timestamp(new Date().getTime()); 
+		status = "";
+		mobile = "";
+		message = "";
+		smsCost = "";
+		sendDate = new Timestamp(new Date().getTime()); 
+		
+		uuid = UUID.randomUUID().toString();
+		
+		account = new Account();
 
 	}
-	
-	
-	   /**
+
+
+	/**
 	 * @return the status
 	 */
 	public String getStatus() {
@@ -114,17 +135,76 @@ public class OutGoingSMS extends StorableBean{
 
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the uuid
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+
+
+	/**
+	 * @param uuid the uuid to set
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if(obj instanceof SmsApi) {	
+			OutGoingSMS type = (OutGoingSMS)obj;
+
+			isEqual = type.getUuid().equals(uuid);		
+		}
+
+		return isEqual;		
+	}
+
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return uuid.hashCode();
+	}
+
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "OutGoingSMS [status=" + status + ", mobile=" + mobile + ", message=" + message + ", smsCost=" + smsCost
-				+ ", sendDate=" + sendDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", sendDate=" + sendDate + ", uuid=" + uuid + ", account=" + account.getUsername() + ", getId()=" + getId() + "]";
 	}
 
 
 	/**
-		 * 
-		 */
-		private static final long serialVersionUID = -7291438428747377588L;
+	 * 
+	 */
+	private static final long serialVersionUID = -7291438428747377588L;
 }

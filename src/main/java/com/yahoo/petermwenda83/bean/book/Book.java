@@ -12,7 +12,17 @@ package com.yahoo.petermwenda83.bean.book;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 
 /** 
  * A book object in the school
@@ -20,30 +30,40 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Book extends StorableBean{
-	
-	  private String isbn;
-	  private String author;
-	  private String publisher;
-	  private String title;
-	  private String isAvailable;
-	  private String category;
-	  private Timestamp dateAdded;
+
+@Entity
+@Table( name = "book" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Book extends StorableBeanByUUID{
+
+	private String isbn;
+	private String author;
+	private String publisher;
+	private String title;
+	private String isAvailable;
+	private String category;
+	private Timestamp dateAdded;
+
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
 
 	/**
 	 * 
 	 */
 	public Book() {
-		 isbn = "";
-		 author = "";
-		 publisher = "";
-		 title = "";
-		 isAvailable = "";
-		 category = "";
-		 dateAdded = new Timestamp(new Date().getTime()); 
+		isbn = "";
+		author = "";
+		publisher = "";
+		title = "";
+		isAvailable = "";
+		category = "";
+		dateAdded = new Timestamp(new Date().getTime()); 
+		
+		account = new Account();
 	}
-	
-	  /**
+
+	/**
 	 * @return the isbn
 	 */
 	public String getIsbn() {
@@ -140,6 +160,48 @@ public class Book extends StorableBean{
 	public void setDateAdded(Timestamp dateAdded) {
 		this.dateAdded = dateAdded;
 	}
+	
+	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if(obj instanceof SmsApi) {	
+			Book type = (Book)obj;
+
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+
+		return isEqual;		
+	}
+
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+
+	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -147,12 +209,14 @@ public class Book extends StorableBean{
 	@Override
 	public String toString() {
 		return "Book [isbn=" + isbn + ", author=" + author + ", publisher=" + publisher + ", title=" + title
-				+ ", isAvailable=" + isAvailable + ", category=" + category + ", dateAdded=" + dateAdded
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", isAvailable=" + isAvailable + ", category=" + category + ", dateAdded=" + dateAdded + ", account="
+				+ account.getUsername() + ", getUuid()=" + getUuid() + "]";
 	}
 
+
+
 	/**
-		 * 
-		 */
-		private static final long serialVersionUID = 2519971559271467654L;
+	 * 
+	 */
+	private static final long serialVersionUID = 2519971559271467654L;
 }

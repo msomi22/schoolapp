@@ -14,7 +14,17 @@ package com.yahoo.petermwenda83.bean.staff;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 
 /**
  * Staff Basic Informations 
@@ -22,7 +32,11 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Staff extends StorableBean{
+
+@Entity
+@Table( name = "staff" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Staff extends StorableBeanByUUID{
 
 	private String acessLevelId; 
 	private String staffNo; 
@@ -36,6 +50,10 @@ public class Staff extends StorableBean{
 	private String username;
 	private String password;
 	private Timestamp regDate;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
 
 	/**
 	 * 
@@ -54,6 +72,8 @@ public class Staff extends StorableBean{
 		username ="";
 		password ="";
 		regDate = new Timestamp(new Date().getTime());
+		
+		account = new Account();
 	}
 
 	
@@ -247,9 +267,38 @@ public class Staff extends StorableBean{
 	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
 	}
+	
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if(obj instanceof SmsApi) {	
+			Staff type = (Staff)obj;
+
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+
+		return isEqual;		
+	}
+
 
 
 	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -257,9 +306,10 @@ public class Staff extends StorableBean{
 		return "Staff [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", isActive=" + isActive
 				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
 				+ gender + ", mobile=" + mobile + ", email=" + email + ", username=" + username + ", password="
-				+ password + ", regDate=" + regDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+				+ password + ", regDate=" + regDate + ", account=" + account.getUsername() + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 
 	/**

@@ -3,19 +3,35 @@
  */
 package com.yahoo.petermwenda83.bean.otherfee;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /** 
  * @author peter
  *
  */
-public class OtherFee extends StorableBean{
+@Entity
+@Table( name = "otherfee" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class OtherFee extends StorableBeanByUUID{
 	
 	
 	private String description;
 	private int amount;
 	private String term;
 	private String year;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
 	
 	/**
 	 * 
@@ -25,6 +41,8 @@ public class OtherFee extends StorableBean{
 		amount = 0;
 		term = "";
 		year = "";
+		
+		account = new Account();
 	}
 
 	/**
@@ -84,13 +102,29 @@ public class OtherFee extends StorableBean{
 	}
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "OtherFee [description=" + description + ", amount=" + amount + ", term=" + term + ", year=" + year
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", account=" + account.getUsername() + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 	/**
 	 * 

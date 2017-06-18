@@ -16,13 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 
 /**
@@ -33,13 +27,11 @@ import net.sf.ehcache.Element;
  
 public class Logout extends HttpServlet {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -3607520645710832503L;
-	private Cache accountsCache, statisticsCache;
-	Map<String,String> onlineUsersMap;
-	ServletContext context;
+	
+	private Map<String,String> onlineUsersMap;
+	private ServletContext context;
+	
+	
 
     
     /**
@@ -51,9 +43,6 @@ public class Logout extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        CacheManager mgr = CacheManager.getInstance();
-        accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-        statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
         onlineUsersMap = new HashMap<String,String>();
 		context = getServletContext();
     }
@@ -76,7 +65,8 @@ public class Logout extends HttpServlet {
     /**
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -86,17 +76,10 @@ public class Logout extends HttpServlet {
 
         if (session != null) {
             // Remove the statistics of this user from cache
-            String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+           // String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
             String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-            Account school = new Account();
-            
-            
-            Element element;
-            if ((element = accountsCache.get(username)) != null) {
-            	school = (Account) element.getObjectValue();
-            }
-            statisticsCache.remove(school.getUuid());
-            
+            //Account school = new Account();
+           
             onlineUsersMap =  (HashMap<String,String>)context.getAttribute("onlineUsersMap");
             onlineUsersMap.remove(userId);
 
@@ -107,4 +90,10 @@ public class Logout extends HttpServlet {
         } // end 'if (session != null) '
         
     }
+    
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3607520645710832503L;
 }

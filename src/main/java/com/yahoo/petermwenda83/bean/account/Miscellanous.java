@@ -3,7 +3,15 @@
  */
 package com.yahoo.petermwenda83.bean.account;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 
 /** 
  * @author peter
@@ -13,7 +21,10 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author peter
  *
  */
-public class Miscellanous extends StorableBean{
+@Entity
+@Table( name = "miscellanous" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Miscellanous extends StorableBeanByUUID{
 	
 	/**
 	 * 
@@ -22,6 +33,11 @@ public class Miscellanous extends StorableBean{
 	
 	private String key;
 	private String value;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
 
 	/**
 	 * 
@@ -29,6 +45,8 @@ public class Miscellanous extends StorableBean{
 	public Miscellanous() {
 		key = ""; 
 		value = "";
+		
+		account = new Account();
 	}
 	
 	/**
@@ -58,14 +76,57 @@ public class Miscellanous extends StorableBean{
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	
 
+	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if(obj instanceof SmsApi) {	
+			Miscellanous type = (Miscellanous)obj;
+
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+
+		return isEqual;		
+	}
+
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+	
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Miscellanous [key=" + key + ", value=" + value + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "Miscellanous [key=" + key + ", value=" + value + ", account=" + account.getUsername() + ", getUuid()=" + getUuid()
+				+ "]";
 	}
 
 	

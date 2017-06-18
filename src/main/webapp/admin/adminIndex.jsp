@@ -1,18 +1,11 @@
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
-
-<%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-
 
 <%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
 
@@ -53,41 +46,15 @@ if (session == null) {
      session.setMaxInactiveInterval(AdminSessionConstants.SESSION_TIMEOUT);
      response.setHeader("Refresh", AdminSessionConstants.SESSION_TIMEOUT + "; url=Logout");
 
-    CacheManager mgr = CacheManager.getInstance();
-    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_ACCOUNTS_BY_UUID);
-    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-    SessionStatistics statistics = new SessionStatistics();
     
     Element element;
     Account account = new Account();
-
-     List keys;
-     List<Account> schoolList = new ArrayList(); 
-    keys = accountsCache.getKeys();
-    for (Object key : keys) {
-        element = accountsCache.get(key);
-        account = (Account) element.getObjectValue();
-        schoolList.add(account);
-    }
-   
-
-
-     StudentDAO studentDAO = StudentDAO.getInstance();
-     List<Student> studentList = new ArrayList(); 
-     
 
      String principalUuid = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 
      String principalUsername = "";
      String staffname = "";
     
-
-     StaffDAO staffDAO = StaffDAO.getInstance();
-     List<Staff> staffList = new ArrayList(); 
-
-     StaffDetailsDAO staffDetailsDAO = StaffDetailsDAO.getInstance();
-     
-     
      
 
 
@@ -219,75 +186,11 @@ if (session == null) {
                     </tr>
                 </thead>   
                 <tbody>
-                    <%                                                          
-                      int count = 1;
-                         for (Account s : schoolList) {
-                          String status = "Active";
-
-                          if(StringUtils.equals(s.getIsActive(),"1")){
-                            status = "Active";
-                              }else{
-                             status = "Inactive";
-                               }
-
-                           StaffDetails staffDetails = new StaffDetails();
-                           staffList = staffDAO.getStaffList(s.getUuid()); 
-                           for(Staff staff : staffList){
-                            
-
-                           if(StringUtils.equals(staff.getPositionUuid(), principalUuid)) {
-                              principalUsername = staff.getUserName();
-                            
-                              staffDetails = staffDetailsDAO.getStaffDetail(staff.getUuid());
-
-                              if(staffDetails != null) {
-                                  staffname = "";
-                                  staffname = "("+staffDetails.getSurname()+" "+staffDetails.getFirstName()+" "+staffDetails.getLastName()+")";
-
-                              }else{
-                                staffname = "";
-                              }
-                           }
-                         }     
-                    %>
+                    
                     <tr>
-                        <td width="3%"><%=count%></td>
-                         <td class="center"><%=s.getName()%></td> 
-                         <td class="center"><%=s.getUsername()%></td>
-                         <td class="center"><%=principalUsername + " "+staffname+""%></td>
-                         <td class="center"><%=studentDAO.getStudentCount("1",s.getUuid())%></td>
-                         <td class="center"><%=s.getMobile()%></td>
-                         <td class="center"><%=s.getEmail()%></td>  
-                         <td class="center"><%=s.getAddress()%></td>
-                         <td class="center"><%=s.getTown()%></td>  
-                         <td class="center"><%=status%></td>  
-                         <td class="center">
-                                <form name="edit" method="POST" action="editSchool.jsp"> 
-                                <input type="hidden" name="schoolname" value="<%=s.getName()%>">
-                                <input type="hidden" name="username" value="<%=s.getUsername()%>">
-                                <input type="hidden" name="password" value="<%=s.getPassword()%>">
-                                <input type="hidden" name="mobile" value="<%=s.getMobile()%>">
-                                <input type="hidden" name="email" value="<%=s.getEmail()%>">
-                                <input type="hidden" name="postaladdress" value="<%=s.getAddress()%>">
-                                <input type="hidden" name="hometown" value="<%=s.getTown()%>">
-                                <input type="hidden" name="schooluuid" value="<%=s.getUuid()%>">
-                                <input class="btn btn-success" type="submit" name="edit" id="submit" value="Edit School" /> 
-                                </form>     
-
-                                <form name="edit" method="POST" action="profile.jsp"> 
-                                <input type="hidden" name="schooluuid" value="<%=s.getUuid()%>">
-                                <input class="btn btn-success" type="submit" name="edit" id="submit" value="Edit Password" /> 
-                                </form>                          
-                        </td>   
+                       
                     </tr>
 
-                    <%     
-                           count++;
-                           principalUsername = " ";
-                           staffname = " ";
-                            
-                            } 
-                    %>
                 </tbody>
             </table>  
 

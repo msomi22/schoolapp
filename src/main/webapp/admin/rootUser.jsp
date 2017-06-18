@@ -1,10 +1,6 @@
 
 <%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
@@ -45,14 +41,6 @@ if (session == null) {
      session.setMaxInactiveInterval(AdminSessionConstants.SESSION_TIMEOUT);
      response.setHeader("Refresh", AdminSessionConstants.SESSION_TIMEOUT + "; url=Logout");
 
-     PositionDAO positionDAO = PositionDAO.getInstance();
-     List<Position> positionList = new ArrayList<Position>(); 
-     positionList = positionDAO.getPositionList();
-
-
-     AccountDAO accountDAO = AccountDAO.getInstance();
-     List<Account> schoolList = new ArrayList(); 
-     schoolList = accountDAO.getAllSchools();
 %>
 
 
@@ -181,18 +169,7 @@ if (session == null) {
                          <div class="controls">
                             <select name="accountUuid" >
                                 <option value="">Please select one</option> 
-                               <%
-                                    int acount = 1;
-                                    if (schoolList != null) {
-                                        for (Account ac : schoolList) {
-                                %>
-                                <option value="<%= ac.getUuid()%>"><%=ac.getName()%></option>
-                                <%
-                                            acount++;
-                                        }
-                                    }
-                                    %>
-                                
+                               
                             </select>                           
                           
                         </div>

@@ -19,15 +19,10 @@
 %>
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
-<%@page import="com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.ClassTeacher"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-<%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 <%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
 
 <%@page import="java.util.ArrayList"%>
@@ -50,96 +45,10 @@
 
 <%   
 
-    CacheManager mgr = CacheManager.getInstance();
-    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-    SessionStatistics statistics = new SessionStatistics();
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    
+   
 
     Account school = new Account();
-    Element element;
-   
-
-    String classuuid = "";
-    String room  ="";
-    String staffPosition  ="";
-    String accountuuid = "";
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (Account) element.getObjectValue();
-    }
-
-   if(school !=null){ 
-     accountuuid = school.getUuid();
-   }
-     
-      ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance(); 
-      ExamConfig  examConfig = examConfigDAO.getExamConfig(accountuuid);
-       
-   
-
-     String staffUsername = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
-     String stffID = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-     staffPosition = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_POSITION);
-
-     ClassTeacherDAO classTeacherDAO = ClassTeacherDAO.getInstance();
-     RoomDAO roomDAO = RoomDAO.getInstance();
-     
-     if(stffID !=null){  
-     ClassTeacher ct = classTeacherDAO.getClassTeacherByteacherId(stffID); 
-       if(ct !=null){
-       classuuid = ct.getClassRoomUuid();
-          }
-              }
-
-     
-     ClassRoom cr = roomDAO.getroom(accountuuid, classuuid);
-      if(cr !=null){
-      room = cr.getRoomName(); 
-       }
-       
-        final String FORM1 = "FORM 1";
-        final String FORM2 = "FORM 2";
-        final String FORM3 = "FORM 3";
-        final String FORM4 = "FORM 4";
-
-  
-        String pos_Pricipal =(String)  PropertiesConfig.getConfigValue("POSITION_PRINCIPAL");
-        String pos_DeputyPricipal =(String)  PropertiesConfig.getConfigValue("POSITION_DEPUTY");
-        String pos_Teacher =(String) PropertiesConfig.getConfigValue("POSITION_TEACHER");
-        String pos_HOD =(String) PropertiesConfig.getConfigValue("POSITION_HOD");
-        String pos_CM =(String) PropertiesConfig.getConfigValue("POSITION_CM");
-        String pos_Secretary =(String) PropertiesConfig.getConfigValue("POSITION_SECRETARY");
-        String pos_Bursar =(String) PropertiesConfig.getConfigValue("POSITION_BURSAR");
-
-
-      String schoolname = "";
-
-      if (session == null) {
-           response.sendRedirect("../index.jsp");
-        }
-
-
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
-
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
     
-    schoolname = school.getName();
-
-  
-    HashMap<String, String> classroomHash = new HashMap<String, String>();
-    List<ClassRoom> classList = new ArrayList<ClassRoom>();
-    classList = roomDAO.getAllRooms(accountuuid);
-    if(classList !=null){
-    for(ClassRoom crr : classList){
-       classroomHash.put(crr.getUuid(), crr.getRoomName()); 
-         }
-     }
 
 %>                       
 
@@ -210,100 +119,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-           <!--PRINCIPAL-->
-            <% if(StringUtils.equals(staffPosition,pos_Pricipal)){ %>
-            <li class="active"><a href="studentIndex.jsp">Students</a></li>
-            <li><a href="fee.jsp">Finance</a></li>
-            <li><a href="staff.jsp">Staff</a></li>
-            <li><a href="examConfig.jsp">Control Panel</a></li>
-            <li> <a href="lib.jsp">Library</a>  </li>
-             <%}%>
-            <!--DEPUTY PRINCIPAL-->
-             <%  if(StringUtils.equals(staffPosition,pos_DeputyPricipal)){ %>
-             <li class="active"><a href="studentIndex.jsp">Students</a></li>
-             <li><a href="staff.jsp">Staff</a></li>
-             <li><a href="examConfig.jsp">Control Panel</a></li>
-             <li> <a href="lib.jsp">Library</a>  </li>
-             <% }  %>
-
-            <li class="dropdown">
-              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Examination <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Exam Results</li>
-                <!--CLASS TEACHER-->
-                <% if(StringUtils.contains(room, FORM1)){ %>
-                <li class=""> <a href="teacherClassF1.jsp">My Class</a>   </li>
-                 <%} else if(StringUtils.contains(room, FORM2)){%>
-                <li class=""> <a href="teacherClassF2.jsp">My Class</a>  </li>
-                 <%}else if(StringUtils.contains(room, FORM3)){%>
-                <li class=""> <a href="teacherClassF3.jsp">My Class</a>  </li>
-                 <%}else if(StringUtils.contains(room, FORM4)){%>
-                <li class=""> <a href="teacherClassF4.jsp">My Class</a> </li>
-                 <%}%>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">More..</li>
-                <% if(StringUtils.equals(staffPosition,pos_Pricipal) || 
-                      StringUtils.equals(staffPosition,pos_DeputyPricipal) || 
-                      StringUtils.equals(staffPosition,pos_CM) || 
-                      StringUtils.equals(staffPosition,pos_HOD) || StringUtils.equals(staffPosition,pos_Teacher) ){ %>
-                <li><a href="reports.jsp">Reports</a></li> 
-                 <%}%>
-
-              </ul>
-            </li>
-             
-             <!--CM-CURRICULUM MASTER-->
-             <%  if(StringUtils.equals(staffPosition,pos_CM)){ %>
-              <li class="active"><a href="studentIndex.jsp">Students</a></li>
-              <li><a href="reports.jsp">Reports</a></li> 
-              <li> <a href="teacherSubject.jsp">My Subjects</a> </li>
-              <li><a href="staff.jsp">Staff</a></li>
-              <li><a href="examConfig.jsp">Control Panel</a></li>
-
-              <% }  %>
-              <!--HOD-->
-               <%  if(StringUtils.equals(staffPosition,pos_HOD)){ %>
-                 <li> <a href="teacherSubject.jsp">My Subjects</a> </li>
-                 <li><a href="reports.jsp">Reports</a></li> 
-                <% }  %>
-
-                 <!--TEACHER-->
-                <%  if(StringUtils.equals(staffPosition,pos_Teacher)){ %>
-                <li> <a href="perclassUpload.jsp">Upload Exam</a> </li>
-                <li> <a href="teacherSubject.jsp">My Subjects</a> </li>
-
-                 <% }%>
-
-                  <!--BURSAR -->
-                  <%  if(StringUtils.equals(staffPosition,pos_Bursar)){ %>
-                   <li><a href="fee.jsp">Finance</a></li>
-                   <% }  %>
-                  <!--SECRETARY--> 
-                  <%  if(StringUtils.equals(staffPosition,pos_Secretary)){ %>
-                  <li class="active"><a href="studentIndex.jsp">Students</a></li>
-                  <li> <a href="lib.jsp">Library</a>  </li>
-                  <% }  %>
-
-                <li><a href="chat.jsp">Chat</a></li>
-
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-               <li class="dropdown">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                  <button type="button" class="btn btn-default btn-xs">
-                 <span class="glyphicon glyphicon-user"></span> <%=staffUsername%>
-                </button>
-                <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="divider"></li>
-                    <li><a href="profile.jsp">Profile</a></li> <br>
-                    <li><a href="help.html" target="_blank">Help</a></li> <br>
-                    <li><a href="../schoolLogout">Logout</a></li>
-                </ul>
-               </li>
-          </ul>
+           
+           </ul>
         </div>
       </div>
     </nav> 

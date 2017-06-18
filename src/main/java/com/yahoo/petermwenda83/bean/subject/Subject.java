@@ -11,7 +11,16 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.subject;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /**
  * A subject in a Account
@@ -19,41 +28,38 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  *  @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  * 
  */
-public class Subject extends StorableBean {
+@Entity
+@Table( name = "subject" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Subject extends StorableBeanByUUID {
 	
-	  private String categoryId;
 	  private String code;
 	  private String numericCode;
 	  private String description;
-	 
+	  
+
+		@ManyToOne
+		@JoinColumn(name="accountId", referencedColumnName="uuid")
+		private Account account;
+		
+		@ManyToOne
+		@JoinColumn(name="categoryId", referencedColumnName="uuid")
+		private Category category;
+		
+
 	/**
 	 * 
 	 */
 	public Subject() {
 		super();
-		categoryId = "";
 		code = "";
 		numericCode = "";
 		description = "";
+		
+		account = new Account();
+		category = new Category();
 	}
 	
-
-	  /**
-	 * @return the categoryId
-	 */
-	public String getCategoryId() {
-		return categoryId;
-	}
-
-
-	/**
-	 * @param categoryId the categoryId to set
-	 */
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
-
-
 	/**
 	 * @return the code
 	 */
@@ -104,14 +110,74 @@ public class Subject extends StorableBean {
 
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the category
+	 */
+	public Category getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		Subject subject;
+		
+		if(obj instanceof Subject) {
+			subject = (Subject) obj;
+			
+			return getUuid().equals(subject.getUuid());
+		}
+		
+		return false;
+	}
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+	
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Subject [categoryId=" + categoryId + ", code=" + code + ", numericCode=" + numericCode
-				+ ", description=" + description + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+		return "Subject [code=" + code + ", numericCode=" + numericCode + ", description=" + description + ", account="
+				+ account + ", category=" + category + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 
 

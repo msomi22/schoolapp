@@ -16,25 +16,8 @@
 **/
 %>
 
-<%@page import="com.yahoo.petermwenda83.pagination.student.StudentPaginator"%>
-<%@page import="com.yahoo.petermwenda83.pagination.student.StudentPage"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.student.PrimaryDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.student.StudentPrimary"%>
-
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-<%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 <%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
 
 
@@ -77,94 +60,8 @@
     //return;
 
 
-    CacheManager mgr = CacheManager.getInstance();
-    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-    SessionStatistics statistics = new SessionStatistics();
-    
-
     Account school = new Account();
-    Element element;
-   
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (Account) element.getObjectValue();
-    }
-
-     String accountuuid = school.getUuid();
-     String schoolname = school.getName();
-
-
-    ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();
-    ExamConfig examConfig = examConfigDAO.getExamConfig(accountuuid);
-
-
-     StudentDAO studentDAO = StudentDAO.getInstance();
-     List<Student> studentList = new ArrayList(); 
-     studentList = studentDAO.getStudentList(school , 0 , 15); 
-
-    HashMap<String, String> classroomHash = new HashMap<String, String>();
-    RoomDAO roomDAO = RoomDAO.getInstance();
-    List<ClassRoom> classList = new ArrayList<ClassRoom>();
-
-    classList = roomDAO.getAllRooms(accountuuid);
-    if(classList !=null){
-    for(ClassRoom cr : classList){
-       classroomHash.put(cr.getUuid(), cr.getRoomName()); 
-         }
-       }
-
-    
-    StudentPrimary studentPrimary = new StudentPrimary();
-    HashMap<String, StudentPrimary> studentPrimaryHash = new HashMap<String, StudentPrimary>();
-    PrimaryDAO primaryDAO = PrimaryDAO.getInstance();
-    List<StudentPrimary> studentPrimaryList = new ArrayList<StudentPrimary>();
-
-       studentPrimaryList = primaryDAO.getAllPrimary(); 
-       if(studentPrimaryList !=null){
-       for(StudentPrimary sprimary : studentPrimaryList){
-         studentPrimaryHash.put(sprimary.getStudentUuid(), sprimary); 
-         }
-       }
-
-
-     int ussdCount = 0;
-     StudentPaginator paginator = new StudentPaginator(accountuuid);
-     StudentPage studentpage;
-
-     studentpage = (StudentPage) session.getAttribute("currentPage");
-        String referrer = request.getHeader("referer");
-        String pageParam = (String) request.getParameter("page");
-
-        // We are to give the first page
-        if (studentpage == null
-                || !StringUtils.endsWith(referrer, "studentIndex.jsp")
-                || StringUtils.equalsIgnoreCase(pageParam, "first")) {
-              studentpage = paginator.getFirstPage();
-
-            //We are to give the last page
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "last")) {
-             studentpage = paginator.getLastPage();
-
-            // We are to give the previous page
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "previous")) {
-            studentpage = paginator.getPrevPage(studentpage);
-
-            // We are to give the next page 
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "next"))  {
-           studentpage = paginator.getNextPage(studentpage);
-        }
-
-        session.setAttribute("currentPage", studentpage);
-        studentList = studentpage.getContents();
-        ussdCount = (studentpage.getPageNum() - 1) * studentpage.getPagesize() + 1;
-      // }
-
-
- //date format
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-dd-MM");
-    SimpleDateFormat timezoneFormatter = new SimpleDateFormat("z");
-%> 
+    %>
 <jsp:include page="header.jsp" />
 
 
@@ -226,7 +123,7 @@
 
     <div class="col-sm-9">
         <div class="breadcrumb">
-           WELCOME TO  <%=schoolname%> : TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear()%> 
+           WELCOME TO  
        </div>
 
 
@@ -342,121 +239,9 @@
                     </thead>
         
                   <tbody class='tablebody'>
-                    <%
-                    String fullname = "";
-                    String status = "";
-                    String primaryschool = "";
-                    String kcpeindex = "";
-                    String kcpemark = "";
-                    String kcpeyear = ""; 
-                    String gender = "";
-                      
-                if(studentList !=null){
-                    for(Student s : studentList){
-
-                    String firstNameLowecase = "";
-                    String lastNameLowecase ="";
-                    String surNameLowecase ="";
-
-                    firstNameLowecase = StringUtils.capitalize(s.getFirstname().toLowerCase());
-                    lastNameLowecase = StringUtils.capitalize(s.getLastname().toLowerCase());
-                    surNameLowecase = StringUtils.capitalize(s.getSurname().toLowerCase());
-
-                    gender = s.getGender();
-                    if(StringUtils.equalsIgnoreCase(gender, "FEMALE")) {
-                                gender = "F";
-                                     }else{
-                                    gender = "M";
-                                 }
-                                  
-
-                    fullname = firstNameLowecase+" "+" "+" "+lastNameLowecase;
-                    studentPrimary = studentPrimaryHash.get(s.getUuid());
-                    if(studentPrimary !=null){
-                        primaryschool = studentPrimary.getSchoolname();
-                        kcpeindex =  studentPrimary.getIndex();
-                        kcpemark =  studentPrimary.getKcpemark();
-                        kcpeyear =  studentPrimary.getKcpeyear();
-                    }else{
-                        primaryschool = "";
-                        kcpeindex = "";
-                        kcpemark = "";
-                        kcpeyear = "";
-                    }
-                       %>
-
-                       <tr class="tabledit">
-                         <td width="3%"><%=ussdCount%></td>
-                         <td class="center"><%=s.getAdmno()%></td> 
-                         <td class="center"><%=fullname%></td>
-                         <td class="center"><%=gender%></td>
-                         <td class="center"><%=s.getdOB()%></td>
-                         <td class="center"><%=s.getBcertno()%></td>
-                         <td class="center"><%=classroomHash.get(s.getClassRoomUuid())%></td>
-                         <td class="center"><%=s.getCounty()%></td>
-                         <td class="center"><%=primaryschool%></td>
-                         <td class="center"><%=kcpeindex%></td>
-                         <td class="center"><%=kcpemark%></td>
-                         <td class="center"><%=kcpeyear%></td>
-                         <td class="center"><%=dateFormatter.format(s.getAdmissionDate())%></td>  
-                         <td class="center">
-                                <form name="view" method="POST" action="updateStudent.jsp"> 
-                                <input type="hidden" name="admNo" value="<%=s.getAdmno()%>">
-                                <input type="hidden" name="firstname" value="<%=firstNameLowecase%>">
-                                <input type="hidden" name="lastname" value="<%=lastNameLowecase%>">
-                                <input type="hidden" name="surname" value="<%=surNameLowecase%>">
-                                <input type="hidden" name="gender" value="<%=s.getGender()%>">
-                                <input type="hidden" name="dob" value="<%=s.getdOB()%>">
-                                <input type="hidden" name="BcertNo" value="<%=s.getBcertno()%>">
-                                <input type="hidden" name="county" value="<%=s.getCounty()%>">
-                                <input type="hidden" name="primary" value="<%=primaryschool%>">
-                                <input type="hidden" name="kcpeindex" value="<%=kcpeindex%>">
-                                <input type="hidden" name="kcpemark" value="<%=kcpemark%>">
-                                <input type="hidden" name="kcpeyear" value="<%=kcpeyear%>">
-                                <input type="hidden" name="studentUuid" value="<%=s.getUuid()%>">
-                                <input type="hidden" name="schoolUuid" value="<%=accountuuid%>">
-                                <input type="hidden" name="finalYear" value="<%=s.getFinalYear()%>">
-                                <input type="hidden" name="finalTerm" value="<%=s.getFinalTerm()%>">
-                                <input class="btn btn-success" type="submit" name="view" id="submit" value="Edit" /> 
-                                </form>                          
-                               </td>   
-                        
-                               </tr>
-
-                              <%
-                          ussdCount++;
-                         }
-                       }
-                     
-                            
-                    %>
+                    
                 </tbody>
             </table>  
-
-             <div id="pagination">
-                <form name="pageForm" method="post" action="studentIndex.jsp">                                
-                    <%                                            
-                        if (!studentpage.isFirstPage()) {
-                    %>
-                        <input class="toolbarBtn" type="submit" name="page" value="First" />
-                        <input class="toolbarBtn" type="submit" name="page" value="Previous" />
-                    <%
-                        }
-                    %>
-                    <span class="pageInfo">Page 
-                        <span class="pagePosition currentPage"><%= studentpage.getPageNum()%></span> of 
-                        <span class="pagePosition"><%= studentpage.getTotalPage()%></span>
-                    </span>   
-                    <%
-                        if (!studentpage.isLastPage()) {                        
-                    %>
-                        <input class="toolbarBtn" type="submit" name="page" value="Next">  
-                        <input class="toolbarBtn" type="submit" name="page" value="Last">
-                    <%
-                       }
-                    %>                                
-                </form>
-            </div>
 
 
   

@@ -1,48 +1,16 @@
 <!DOCTYPE html>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
-<%@page import="org.apache.commons.lang3.RandomStringUtils"%>
-<%@page import="org.jasypt.util.text.BasicTextEncryptor"%>
-<%@page
-	import="com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator"%>
-<%@page
-	import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
 
-<%@page
-	import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
-<%@page
-	import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.util.Calendar"%>
-
-
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
+<%@page import="java.util.*"%>
 
 <%
 
-   
-
-     PositionDAO positionDAO = PositionDAO.getInstance();
-     List<Position> positionList = new ArrayList<Position>(); 
-     positionList = positionDAO.getPositionList();
-
-    BasicTextEncryptor textEncryptor = new BasicTextEncryptor();   
-    textEncryptor.setPassword(PropertiesConfig.getConfigValue("ENCRYPT_PASSWORD")); 
-      
-    String captcha = RandomStringUtils.randomAlphabetic(4); 
-    String encryptedCaptcha = textEncryptor.encrypt(captcha);
+List<AcessLevel> acessLevelList = new ArrayList<>(); 
 
 
 %>
@@ -117,15 +85,15 @@
 				</div>
 
 				<div class="form-group">
-					<label>Category</label> 
-					<select class="form-control" name="staffposition" required>
+					<label>Category</label> <select class="form-control"
+						name="staffposition" required>
 						<%
                   int count = 1;
-                  if (positionList != null) {
-                      for (Position p : positionList) {
+                  if (acessLevelList != null) {
+                      for (AcessLevel access : acessLevelList) {
                    %>
-							<option value="<%= p.getUuid()%>"><%=p.getPosition()%></option>
-							<%
+						<option value="<%=access.getUuid() %>"><%=access.getDescription() %></option>
+						<%
                           count++;
                       }
                   }

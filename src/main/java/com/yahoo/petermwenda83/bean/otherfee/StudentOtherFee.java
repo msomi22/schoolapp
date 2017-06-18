@@ -6,60 +6,57 @@ package com.yahoo.petermwenda83.bean.otherfee;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 /** 
  * @author peter
  *
  */
-public class StudentOtherFee extends StorableBean{
-	
-	
-	private String studentId;
-	private String otherFeeId;
+@Entity
+@Table( name = "studentotherFee" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentOtherFee extends StorableBeanByUUID{
+
 	private int amountPiad;
 	private String payMode;
 	private Timestamp datePaid;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+	
+	@ManyToOne
+	@JoinColumn(name="otherFeeId", referencedColumnName="uuid")
+	private OtherFee otherFee;
 	
 	/**
 	 * 
 	 */
 	public StudentOtherFee() {
-		studentId = "";
-		otherFeeId = "";
 		amountPiad =0;
 		payMode = "";
 		datePaid = new Timestamp(new Date().getTime());
+		
+		account = new Account();
+		student = new Student();
+		otherFee = new OtherFee();
 	}
 	
-	   /**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-	/**
-	 * @return the otherFeeId
-	 */
-	public String getOtherFeeId() {
-		return otherFeeId;
-	}
-
-	/**
-	 * @param otherFeeId the otherFeeId to set
-	 */
-	public void setOtherFeeId(String otherFeeId) {
-		this.otherFeeId = otherFeeId;
-	}
-
+	
 	/**
 	 * @return the amountPiad
 	 */
@@ -105,13 +102,62 @@ public class StudentOtherFee extends StorableBean{
 	
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/**
+	 * @return the otherFee
+	 */
+	public OtherFee getOtherFee() {
+		return otherFee;
+	}
+
+
+	/**
+	 * @param otherFee the otherFee to set
+	 */
+	public void setOtherFee(OtherFee otherFee) {
+		this.otherFee = otherFee;
+	}
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentOtherFee [studentId=" + studentId + ", otherFeeId=" + otherFeeId + ", amountPiad=" + amountPiad
-				+ ", payMode=" + payMode + ", datePaid=" + datePaid + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "StudentOtherFee [amountPiad=" + amountPiad + ", payMode=" + payMode + ", datePaid=" + datePaid
+				+ ", account=" + account + ", student=" + student + ", otherFee=" + otherFee + ", getUuid()="
+				+ getUuid() + "]";
 	}
 
 

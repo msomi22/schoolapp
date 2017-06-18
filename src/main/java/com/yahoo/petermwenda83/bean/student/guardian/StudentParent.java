@@ -11,7 +11,17 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.student.guardian;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 
 /**
@@ -20,41 +30,37 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class StudentParent extends StorableBean  {
+@Entity
+@Table( name = "studentparent" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentParent extends StorableBeanByUUID  {
 	
-	private String studentId;
 	private String name;
 	private String mobile;
 	private String email;
 	private String lastUpdated;
 	
 	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+	
+	
 	public StudentParent() {
 		super();
-		studentId = "";
 		name = "";
 		mobile = "";
 		email ="";
 		lastUpdated ="";
+		
+		account = new Account();
+		student = new Student();
 	}
 	
-	
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
 	/**
 	 * @return the name
 	 */
@@ -119,15 +125,77 @@ public class StudentParent extends StorableBean  {
 	}
 
 
+	
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		StudentParent studentParent;
+		
+		if(obj instanceof StudentParent) {
+			studentParent = (StudentParent) obj;
+			
+			return getUuid().equals(studentParent.getUuid());
+		}
+		
+		return false;
+	}
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+	
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentParent [studentId=" + studentId + ", name=" + name + ", mobile=" + mobile + ", email=" + email
-				+ ", lastUpdated=" + lastUpdated + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+		return "StudentParent [name=" + name + ", mobile=" + mobile + ", email=" + email + ", lastUpdated="
+				+ lastUpdated + ", account=" + account.getUsername() + ", student=" + student.getRegNo() + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 
 	/**  

@@ -1,8 +1,6 @@
 package com.yahoo.petermwenda83.server.servlet.school;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,23 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
-import org.jasypt.util.text.BasicTextEncryptor;
-
+import org.hibernate.SessionFactory;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.server.cache.CacheVariables;
-import com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator;
+import com.yahoo.petermwenda83.persistence.HibernateUtil;
+import com.yahoo.petermwenda83.persistence.StorageDAO;
+import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
-import com.yahoo.petermwenda83.server.session.SessionStatistics;
-import com.yahoo.petermwenda83.server.session.SessionStatisticsFactory;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 public class Login extends HttpServlet{
 
@@ -43,19 +33,18 @@ public class Login extends HttpServlet{
 
 	final String STATUS_INACTIVE = "0";
 
+	private StorageDAO storageDAO;
+	private SessionFactory sessionFactory;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4366123889354229389L;
 
-	private static StaffDAO staffDAO;
-	private BasicTextEncryptor textEncryptor;
-	private String hiddenCaptchaStr = "";
-	private Cache schoolCache, statisticsCache;
 	private Logger logger;
-	
-	 Map<String,String> onlineUsersMap;
-	 ServletContext context;
+
+	Map<String,String> onlineUsersMap;
+	ServletContext context;
 
 
 	/**
@@ -66,15 +55,12 @@ public class Login extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		CacheManager mgr = CacheManager.getInstance();
-		textEncryptor = new BasicTextEncryptor();
-		textEncryptor.setPassword(FontImageGenerator.SECRET_KEY);
-		schoolCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-		statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
 		logger = Logger.getLogger(this.getClass());
-		staffDAO = StaffDAO.getInstance();
 		onlineUsersMap = new HashMap<String,String>();
 		context = getServletContext();
+		
+		sessionFactory = HibernateUtil.getSessionFactory();
+		storageDAO = new StorageDAOImpl(sessionFactory); 
 
 	}
 
@@ -94,44 +80,25 @@ public class Login extends HttpServlet{
 		session = request.getSession(true);
 
 		String schoolusername = StringUtils.trimToEmpty(request.getParameter("schoolusername"));
-		String staffposition = StringUtils.trimToEmpty(request.getParameter("staffposition"));
+		String staffacesslevel = StringUtils.trimToEmpty(request.getParameter("staffacesslevel"));
 		String staffusername = StringUtils.trimToEmpty(request.getParameter("staffusername"));
 		String staffpassword = StringUtils.trimToEmpty(request.getParameter("staffpassword"));
-		hiddenCaptchaStr = request.getParameter("captchaHidden");
-		String captchaAnswer = request.getParameter("captchaAnswer").trim();
-
-
-		Account school = new Account();
-		Element element;
-		if ((element = schoolCache.get(schoolusername)) != null) {
-			school = (Account) element.getObjectValue();
-
-		}
+		
+		
+		Account school = (Account) storageDAO.get(Account.class, schoolusername);
 
 		if(school!=null){
 
 			Staff staff = null;
-			if(staffDAO.getStaffByUsername(school.getUuid(), staffusername) !=null){
-				staff = staffDAO.getStaffByUsername(school.getUuid(), staffusername);
-			}
-
-			if(staffDAO.getStaffByUsername(school.getUuid(), staffusername)==null){
-				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_WRONG_USER_DETAIL); 
-				response.sendRedirect("index.jsp");
-
-			}
-
-			else  if (!validateCaptcha(hiddenCaptchaStr, captchaAnswer)) {
-				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ACCOUNT_SIGN_IN_BAD_CAPTCHA);
-				response.sendRedirect("index.jsp");
-
-			} else  if (StringUtils.equals(school.getIsActive(), STATUS_INACTIVE)) {
+			staff = (Staff) storageDAO.get(Staff.class, staffusername);
+			
+			if (StringUtils.equals(school.getIsActive(), STATUS_INACTIVE)) {
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_SCHOOL_INACTIVE);
 				response.sendRedirect("index.jsp");
 
 			}
 
-			else if(!StringUtils.equals(staffposition, staff.getPositionUuid())){ 
+			else if(!StringUtils.equals(staffacesslevel, staff.getAcessLevelId())){ 
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_WRONG_USER_DETAIL);
 				response.sendRedirect("index.jsp");
 
@@ -142,19 +109,18 @@ public class Login extends HttpServlet{
 
 				if (StringUtils.equals(SecurityUtil.getMD5Hash(staffpassword), staff.getPassword())) {
 
-					updateCache(school.getUuid(),staff.getUuid());
 
 					onlineUsersMap.put(staff.getUuid(),session.getId());
 					context.setAttribute("onlineUsersMap", onlineUsersMap);
-					
+
 
 					session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID, school.getUuid());
 					session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, school.getUsername());
 					session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_SUCCESS, SessionConstants.SCHOOL_ACCOUNT_LOGIN_SUCCESS); 
 					session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_TIME, String.valueOf(new Date().getTime()));
-					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME, staff.getUserName()); 
+					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME, staff.getUsername()); 
 					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
-					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_POSITION, staffposition);
+					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_POSITION, staffacesslevel);
 					response.sendRedirect("school/schoolIndex.jsp"); 
 
 				}else {
@@ -175,37 +141,7 @@ public class Login extends HttpServlet{
 	}
 
 
-
-	private boolean validateCaptcha(String encodedSystemCaptcha, String userCaptcha) {
-		boolean valid = false;
-		String decodedHiddenCaptcha = "";
-
-		try {
-			decodedHiddenCaptcha = textEncryptor.decrypt(URLDecoder.decode(encodedSystemCaptcha, "UTF-8"));
-
-		} catch (UnsupportedEncodingException e) {
-			logger.error("UnsupportedEncodingException while trying to validate captcha.");
-			logger.error(ExceptionUtils.getStackTrace(e));
-		}
-
-		if (StringUtils.equalsIgnoreCase(decodedHiddenCaptcha, userCaptcha)) {
-			valid = true;
-		}
-
-		return valid;
-	}
-
-	/**
-	 * @param accountuuid
-	 */
-	private void updateCache(String accountuuid,String staffuuid) {
-		SessionStatistics statistics = SessionStatisticsFactory.getSessionStatistics(accountuuid,staffuuid);
-		statisticsCache.put(new Element(accountuuid, statistics));
-
-
-	}
-	
-	
+		
 	/**
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -215,5 +151,5 @@ public class Login extends HttpServlet{
 		doPost(request, response);
 	}
 
-	
+
 }

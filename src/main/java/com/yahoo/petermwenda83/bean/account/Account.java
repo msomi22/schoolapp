@@ -1,28 +1,27 @@
 
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
-
 package com.yahoo.petermwenda83.bean.account;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-/**
- * A school
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+
+/** 
+ * A school Account
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  */
-public class Account extends StorableBean{
+
+@Entity
+@Table(name = "account" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Account extends StorableBeanByUUID{
 	
 	private String isActive;
 	private String name;
@@ -314,6 +313,32 @@ public class Account extends StorableBean{
 	 */
 	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {        
+        boolean isEqual = false;
+		
+		if(obj instanceof Account) {	
+			Account type = (Account)obj;
+			
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+		
+		return isEqual;
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
 	}
 
 

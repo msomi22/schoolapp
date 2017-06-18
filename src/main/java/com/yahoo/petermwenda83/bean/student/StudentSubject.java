@@ -14,7 +14,17 @@ package com.yahoo.petermwenda83.bean.student;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 
 /** 
  * Student's Subject-Class Allocation 
@@ -22,56 +32,33 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  * 
  */
-public class StudentSubject extends StorableBean {
-	
-	private String studentId;
-	private String subjectId;
+@Entity
+@Table( name = "studentsubject" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentSubject extends StorableBeanByUUID {
+
 	private Timestamp allocationDate;
-	
+
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+
+	@ManyToOne
+	@JoinColumn(name="subjectId", referencedColumnName="uuid")
+	private Subject subject;
+
 	public StudentSubject(){
-		   super();
-		   studentId = "";
-		   subjectId = "";
-		   allocationDate = new Timestamp(new Date().getTime());
-	   }
+		super();
+		allocationDate = new Timestamp(new Date().getTime());
 
-	
-
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
+		account = new Account();
+		student = new Student();
+		subject = new Subject();
 	}
-
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
-
-	/**
-	 * @return the subjectId
-	 */
-	public String getSubjectId() {
-		return subjectId;
-	}
-
-
-
-	/**
-	 * @param subjectId the subjectId to set
-	 */
-	public void setSubjectId(String subjectId) {
-		this.subjectId = subjectId;
-	}
-
-
 
 	/**
 	 * @return the allocationDate
@@ -80,8 +67,6 @@ public class StudentSubject extends StorableBean {
 		return allocationDate;
 	}
 
-
-
 	/**
 	 * @param allocationDate the allocationDate to set
 	 */
@@ -89,16 +74,87 @@ public class StudentSubject extends StorableBean {
 		this.allocationDate = allocationDate;
 	}
 
+	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	/**
+	 * @return the subject
+	 */
+	public Subject getSubject() {
+		return subject;
+	}
+
+	/**
+	 * @param subject the subject to set
+	 */
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
+
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		StudentSubject studentSubject;
+		
+		if(obj instanceof StudentSubject) {
+			studentSubject = (StudentSubject) obj;
+			
+			return getUuid().equals(studentSubject.getUuid());
+		}
+		
+		return false;
+	}
 
 
 	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+	
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentSubject [studentId=" + studentId + ", subjectId=" + subjectId + ", allocationDate="
-				+ allocationDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "StudentSubject [allocationDate=" + allocationDate + ", account=" + account.getUsername() + ", student=" + student.getRegNo()
+				+ ", subject=" + subject.getCode() + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 
 

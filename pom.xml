@@ -171,17 +171,7 @@
 	    <version>1.0.19</version>
 	</dependency>
 	
-	<!-- 
-	<dependency>
-	    <groupId>MiddleNumberFor3</groupId>
-	    <artifactId>com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3</artifactId>
-	    <version>1.0</version>
-	    <scope>system</scope>
-	    <systemPath>${project.basedir}/src/main/resources/jars/MiddleNo.jar</systemPath> 
-    </dependency>
-     -->
-    
-
+	
     <!-- Database dependencies -->
    
     <dependency>
@@ -222,6 +212,12 @@
         <groupId>org.ehcache</groupId>
         <artifactId>ehcache</artifactId>
         <version>3.3.1</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-ehcache</artifactId>
+        <version>5.2.9.Final</version>
     </dependency>
     
 	<dependency>

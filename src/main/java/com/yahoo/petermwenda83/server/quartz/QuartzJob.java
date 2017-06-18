@@ -4,35 +4,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.hibernate.SessionFactory;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.yahoo.petermwenda83.bean.account.SmsApi;
-import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
-import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
-import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
-import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
-import com.yahoo.petermwenda83.server.servlet.sms.send.AfricasTalkingGateway;
+import com.yahoo.petermwenda83.persistence.HibernateUtil;
+import com.yahoo.petermwenda83.persistence.StorageDAO;
+import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
+
 
 
 public class QuartzJob implements Job{
 
-	private static SmsSendDAO smsSendDAO;
-	private static SmsApiDAO smsApiDAO;
+	private StorageDAO storageDAO;
+	private SessionFactory sessionFactory;
 	
 	public QuartzJob() {
 		super();
-		smsSendDAO = SmsSendDAO.getInstance();
-		smsApiDAO = SmsApiDAO.getInstance();
+		
+		sessionFactory = HibernateUtil.getSessionFactory();
+		storageDAO = new StorageDAOImpl(sessionFactory); 
+		
 	}
 
 	@Override
@@ -58,71 +53,8 @@ public class QuartzJob implements Job{
 
 	private void checksentSMS() {
 		
-		List<OutGoingSMS> smslist = new ArrayList<>();
-		if(smsSendDAO.getSmsSend() !=null){
-			smslist = smsSendDAO.getSmsSend();
-			if(smslist !=null){
-				for(OutGoingSMS sms : smslist){
-					String phone = sms.getMobile();
-					String message = sms.getMessage(); 
-					String status = sms.getStatus();
-					String accountId = sms.getAccountId();
-
-					if(StringUtils.equalsIgnoreCase(status, "failed")){
-						//send message
-						AfricasTalking africasTalking = new AfricasTalking();
-						// Specify your login credentials
-						if(smsApiDAO.getSmsApi(accountId) !=null){
-							SmsApi smsApi = smsApiDAO.getSmsApi(accountId);  
-							String username = smsApi.getApiPassword();
-							String apiKey   = smsApi.getApiKey();
-							africasTalking.setMessage(message); 
-							africasTalking.setRecipients(phone); 
-							// Create a new instance of our awesome gateway class
-							AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-							try {
-								JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
-								for( int i = 0; i < results.length(); ++i ) {
-									JSONObject result = results.getJSONObject(i);
-
-									//save to database
-									String thestatus ="";
-									String thenumber ="";
-									String themessage ="";
-									String thecost ="";
-
-									thestatus = result.getString("status");
-									thenumber = result.getString("number");
-									themessage = message;
-									thecost = result.getString("cost");
-
-									if(StringUtils.isBlank(thestatus)){
-										thestatus = "failed";
-									}if(StringUtils.isBlank(thenumber)){
-										thenumber = phone;
-									}if(StringUtils.isBlank(thecost)){
-										thecost = "1";
-									}
-									OutGoingSMS outGoingSMS = smsSendDAO.getSmsSend(sms.getUuid());
-									outGoingSMS.setAccountId(accountId); 
-									outGoingSMS.setStatus(thestatus);
-									outGoingSMS.setMobile(thenumber);
-									outGoingSMS.setMessage(themessage.replaceAll("[\r\n]+", " "));
-									outGoingSMS.setSmsCost(thecost);
-									smsSendDAO.updateSmsSend(outGoingSMS);
-
-								}
-
-							}
-
-							catch (Exception e) {
-								e.printStackTrace(); 
-							}
-						}
-					}//end if(smsApiDAO.getSmsApi(schooluuid) !=null){
-				}
-			}
-		}//end if(smsSendDAO.getSmsSend() !=null){
+		
+		
 	}
 
 	/**

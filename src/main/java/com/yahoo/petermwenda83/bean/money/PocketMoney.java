@@ -3,43 +3,48 @@
  */
 package com.yahoo.petermwenda83.bean.money;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 /**
  * @author peter
  *
  */
-public class PocketMoney extends StorableBean{
-	
-	
-	private String studentId;
+@Entity
+@Table( name = "pocketmoney" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class PocketMoney extends StorableBeanByUUID{
+
 	private int amount;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
 	
 	/**
 	 * 
 	 */
 	public PocketMoney() {
-		studentId = "";
 		amount = 0;
+		
+		account = new Account();
+		student = new Student();
 	}
 	
 	
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
 	/**
 	 * @return the amount
 	 */
@@ -56,14 +61,48 @@ public class PocketMoney extends StorableBean{
 	}
 
 
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "PocketMoney [studentId=" + studentId + ", amount=" + amount + ", getUuid()=" + getUuid()
-				+ ", getAccountId()=" + getAccountId() + "]";
+		return "PocketMoney [amount=" + amount + ", account=" + account + ", student=" + student + ", getUuid()="
+				+ getUuid() + "]";
 	}
+
 
 
 	/** 

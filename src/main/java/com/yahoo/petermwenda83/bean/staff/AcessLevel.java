@@ -11,7 +11,13 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.staff;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 
 /**
  * A staff Has A position , Either a Principal ,Deputy, Hod, Teacher , ...
@@ -19,7 +25,10 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class AcessLevel extends StorableBean{
+@Entity
+@Table( name = "acesslevel" )
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
+public class AcessLevel extends StorableBeanByUUID{
 	
 	private String  description;
 	    
@@ -40,6 +49,8 @@ public class AcessLevel extends StorableBean{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	
 
 	@Override
 	public String toString(){
@@ -47,8 +58,6 @@ public class AcessLevel extends StorableBean{
 		builder.append("AcessLevel");
 		builder.append("[getUuid()=");
 		builder.append(getUuid()); 
-		builder.append(", accountId =");
-		builder.append(getAccountId());  
 		builder.append(",description=");
 		builder.append(description);
 		return builder.toString(); 

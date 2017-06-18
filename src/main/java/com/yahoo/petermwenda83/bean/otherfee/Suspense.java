@@ -3,130 +3,38 @@
  */
 package com.yahoo.petermwenda83.bean.otherfee;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.money.StudentFee;
 
 /**
  * @author peter
  *
  */
-public class Suspense extends StorableBean{
+@Entity
+@Table( name = "suspense" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Suspense extends StudentFee{
+
 	
-	private String studentId;
-	private int amountPaid;
-	private String payMode;
-	private String transactionId;
-	private String paidHas;
-	private Timestamp datePaid;
-
-	/**
-	 * 
-	 */
 	public Suspense() {
-		studentId = "";
-		amountPaid = 0;
-		payMode = "";
-		transactionId = "";
-		paidHas = "";
-		datePaid = new Timestamp(new Date().getTime());
+		super();
 	}
 
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-	/**
-	 * @return the amountPaid
-	 */
-	public int getAmountPaid() {
-		return amountPaid;
-	}
-
-	/**
-	 * @param amountPaid the amountPaid to set
-	 */
-	public void setAmountPaid(int amountPaid) {
-		this.amountPaid = amountPaid;
-	}
-
-	/**
-	 * @return the payMode
-	 */
-	public String getPayMode() {
-		return payMode;
-	}
-
-	/**
-	 * @param payMode the payMode to set
-	 */
-	public void setPayMode(String payMode) {
-		this.payMode = payMode;
-	}
-
-	/**
-	 * @return the transactionId
-	 */
-	public String getTransactionId() {
-		return transactionId;
-	}
-
-	/**
-	 * @param transactionId the transactionId to set
-	 */
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	/**
-	 * @return the paidHas
-	 */
-	public String getPaidHas() {
-		return paidHas;
-	}
-
-	/**
-	 * @param paidHas the paidHas to set
-	 */
-	public void setPaidHas(String paidHas) {
-		this.paidHas = paidHas;
-	}
-
-	/**
-	 * @return the datePaid
-	 */
-	public Timestamp getDatePaid() {
-		return datePaid;
-	}
-
-	/**
-	 * @param datePaid the datePaid to set
-	 */
-	public void setDatePaid(Timestamp datePaid) {
-		this.datePaid = datePaid;
-	}
-
-	/**
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Suspense [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
-				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", datePaid=" + datePaid
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "Suspense [getAmountPaid()=" + getAmountPaid() + ", getPayMode()=" + getPayMode()
+				+ ", getTransactionId()=" + getTransactionId() + ", getPaidHas()=" + getPaidHas() + ", getDatePaid()="
+				+ getDatePaid() + ", getAccount()=" + getAccount().getUsername() + ", getStudent()=" + getStudent().getRegNo() + ", getUuid()="
+				+ getUuid() + "]";
 	}
-	
 
 	/**
 	 * 

@@ -292,10 +292,9 @@ ALTER TABLE StudentPrimary OWNER TO school;
 CREATE TABLE AcessLevel (
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
-    accountId text REFERENCES Account(uuid),
     description text
 );
-\COPY AcessLevel(uuid,accountId,description) FROM '/tmp/AcessLevel.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY AcessLevel(uuid,description) FROM '/tmp/AcessLevel.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE AcessLevel OWNER TO school;
 
 

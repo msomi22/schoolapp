@@ -6,15 +6,27 @@ package com.yahoo.petermwenda83.bean.money;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 /**
  * @author peter
  *
  */
-public class StudentFee extends StorableBean{
+@Entity
+@Table( name = "studentfee" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentFee extends StorableBeanByUUID{
 
-	private String studentId;
 	private int amountPaid;
 	private String payMode;
 	private String transactionId;
@@ -22,10 +34,17 @@ public class StudentFee extends StorableBean{
 	private Timestamp datePaid;
 
 	private int amountTokenizer;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
 
 
 	public StudentFee() {
-		studentId = "";
 		amountPaid = 0;
 		payMode = "";
 		transactionId = "";
@@ -33,28 +52,11 @@ public class StudentFee extends StorableBean{
 		datePaid = new Timestamp(new Date().getTime());
 
 		amountTokenizer = 0;
+		
+		account = new Account();
+		student = new Student();
 
 	}
-
-
-
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
 
 	/**
 	 * @return the amountPaid
@@ -164,16 +166,51 @@ public class StudentFee extends StorableBean{
 
 
 
+
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentFee [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
-				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", datePaid=" + datePaid
-				+ ", amountTokenizer=" + amountTokenizer + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "StudentFee [amountPaid=" + amountPaid + ", payMode=" + payMode + ", transactionId=" + transactionId
+				+ ", paidHas=" + paidHas + ", datePaid=" + datePaid + ", amountTokenizer=" + amountTokenizer
+				+ ", account=" + account + ", student=" + student + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 
 

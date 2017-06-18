@@ -11,7 +11,16 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.student;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /**
  * Student's Primary Account Informations
@@ -19,13 +28,24 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class StudentPrimary extends StorableBean {
-	
-	private String studentId;
+@Entity
+@Table( name = "studentprimary" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class StudentPrimary extends StorableBeanByUUID {
+
 	private String schoolName;
 	private String index;
 	private String kcpeyear;
 	private String kcpemark;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+	
 	
 	
 	/**
@@ -33,32 +53,16 @@ public class StudentPrimary extends StorableBean {
 	 */
 	public StudentPrimary() {
 		super();
-		studentId ="";
 		schoolName ="";
 		index ="";
 		kcpeyear ="";
 		kcpemark ="";
+		
+		account = new Account();
+		student = new Student();
 	}
 
 	
-
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
 
 	/**
 	 * @return the schoolName
@@ -133,14 +137,80 @@ public class StudentPrimary extends StorableBean {
 
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		StudentPrimary studentPrimary;
+		
+		if(obj instanceof StudentPrimary) {
+			studentPrimary = (StudentPrimary) obj;
+			
+			return getUuid().equals(studentPrimary.getUuid());
+		}
+		
+		return false;
+	}
+
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+	
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentPrimary [studentId=" + studentId + ", schoolName=" + schoolName + ", index=" + index
-				+ ", kcpeyear=" + kcpeyear + ", kcpemark=" + kcpemark + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "StudentPrimary [schoolName=" + schoolName + ", index=" + index + ", kcpeyear=" + kcpeyear
+				+ ", kcpemark=" + kcpemark + ", account=" + account.getUsername() + ", student=" + student.getRegNo() + ", getUuid()="
+				+ getUuid() + "]";
 	}
+
+
 
 
 

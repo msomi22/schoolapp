@@ -9,46 +9,52 @@
  */
 package com.yahoo.petermwenda83.bean.exam;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.subject.Category;
 
 /**
  *  A grading system in a school
  *  
  *@author peter<a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  */
-public class GradingSystem extends StorableBean{
-	
-	private String categoryId ;
+@Entity
+@Table( name = "gradingsystem" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class GradingSystem extends StorableBeanByUUID{
+
 	private int lowerLimit;
 	private int upperLimit;
 	private String description;
 	private int points;
 	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="categoryId", referencedColumnName="uuid")
+	private Category category;
+	
 	/**
 	 * 
 	 */
 	public GradingSystem() {
-		categoryId = "";
 		lowerLimit = 0;
 		upperLimit = 0;
 		description = "";
 		points = 0;
-	}
-
-
-	/**
-	 * @return the categoryId
-	 */
-	public String getCategoryId() {
-		return categoryId;
-	}
-
-
-	/**
-	 * @param categoryId the categoryId to set
-	 */
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
+		
+		account = new Account();
+		category = new Category();
 	}
 
 
@@ -116,15 +122,50 @@ public class GradingSystem extends StorableBean{
 	}
 
 
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the category
+	 */
+	public Category getCategory() {
+		return category;
+	}
+
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "GradingSystem [categoryId=" + categoryId + ", lowerLimit=" + lowerLimit + ", upperLimit=" + upperLimit
-				+ ", description=" + description + ", points=" + points + ", getUuid()=" + getUuid()
-				+ ", getAccountId()=" + getAccountId() + "]";
+		return "GradingSystem [lowerLimit=" + lowerLimit + ", upperLimit=" + upperLimit + ", description=" + description
+				+ ", points=" + points + ", account=" + account + ", category=" + category + ", getUuid()=" + getUuid()
+				+ "]";
 	}
+
 
 
 	/**  

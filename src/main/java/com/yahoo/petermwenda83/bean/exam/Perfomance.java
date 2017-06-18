@@ -9,7 +9,20 @@
  */
 package com.yahoo.petermwenda83.bean.exam;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 
 /**
  * Student performance in a school
@@ -17,102 +30,57 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author peter<a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Perfomance extends StorableBean{
-
-	private String studentId;
-	private String subjectId;
-	private String streamId;
-	private String classRoomId;
-	private String examId;
+@Entity
+@Table( name = "perfomance" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Perfomance extends StorableBeanByUUID{
+	
 	private int score;
 	private String term;
 	private String year;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+	
+	@ManyToOne
+	@JoinColumn(name="subjectId", referencedColumnName="uuid")
+	private Subject subject;
+	
+	@ManyToOne
+	@JoinColumn(name="classRoomId", referencedColumnName="uuid")
+	private ClassRoom classRoom;
+	
+	@ManyToOne
+	@JoinColumn(name="streamId", referencedColumnName="uuid")
+	private Stream stream;
+	
+	@ManyToOne
+	@JoinColumn(name="examId", referencedColumnName="uuid")
+	private Exam exam;
 
 	/**
 	 * 
 	 */
 	public Perfomance() {
         super();
-        studentId ="";
-        subjectId ="";
-        streamId ="";
-        classRoomId = "";
-        examId = "";
         score = 0;
         term = "";
         year = "";
+        
+        account = new Account();
+		student = new Student();
+		subject = new Subject();
+		classRoom = new ClassRoom();
+		stream = new Stream();
+		exam = new Exam();
 	}
 	
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-	/**
-	 * @return the subjectId
-	 */
-	public String getSubjectId() {
-		return subjectId;
-	}
-
-	/**
-	 * @param subjectId the subjectId to set
-	 */
-	public void setSubjectId(String subjectId) {
-		this.subjectId = subjectId;
-	}
-
-	/**
-	 * @return the streamId
-	 */
-	public String getStreamId() {
-		return streamId;
-	}
-
-	/**
-	 * @param streamId the streamId to set
-	 */
-	public void setStreamId(String streamId) {
-		this.streamId = streamId;
-	}
-
-	/**
-	 * @return the classRoomId
-	 */
-	public String getClassRoomId() {
-		return classRoomId;
-	}
-
-	/**
-	 * @param classRoomId the classRoomId to set
-	 */
-	public void setClassRoomId(String classRoomId) {
-		this.classRoomId = classRoomId;
-	}
-
-	/**
-	 * @return the examId
-	 */
-	public String getExamId() {
-		return examId;
-	}
-
-	/**
-	 * @param examId the examId to set
-	 */
-	public void setExamId(String examId) {
-		this.examId = examId;
-	}
-
+	
 	/**
 	 * @return the score
 	 */
@@ -156,15 +124,117 @@ public class Perfomance extends StorableBean{
 	}
 	
 
+	
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	/**
+	 * @return the subject
+	 */
+	public Subject getSubject() {
+		return subject;
+	}
+
+
+	/**
+	 * @param subject the subject to set
+	 */
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
+
+
+	/**
+	 * @return the classRoom
+	 */
+	public ClassRoom getClassRoom() {
+		return classRoom;
+	}
+
+
+	/**
+	 * @param classRoom the classRoom to set
+	 */
+	public void setClassRoom(ClassRoom classRoom) {
+		this.classRoom = classRoom;
+	}
+
+
+	/**
+	 * @return the stream
+	 */
+	public Stream getStream() {
+		return stream;
+	}
+
+
+	/**
+	 * @param stream the stream to set
+	 */
+	public void setStream(Stream stream) {
+		this.stream = stream;
+	}
+
+
+	/**
+	 * @return the exam
+	 */
+	public Exam getExam() {
+		return exam;
+	}
+
+
+	/**
+	 * @param exam the exam to set
+	 */
+	public void setExam(Exam exam) {
+		this.exam = exam;
+	}
+
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Perfomance [studentId=" + studentId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", classRoomId=" + classRoomId + ", examId=" + examId + ", score=" + score + ", term=" + term
-				+ ", year=" + year + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "Perfomance [score=" + score + ", term=" + term + ", year=" + year + ", account=" + account
+				+ ", student=" + student + ", subject=" + subject + ", classRoom=" + classRoom + ", stream=" + stream
+				+ ", exam=" + exam + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 
 	/**

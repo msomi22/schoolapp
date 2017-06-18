@@ -3,51 +3,54 @@
  */
 package com.yahoo.petermwenda83.bean.exam;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.student.Student;
 
 /**
  * @author peter
  *
  */
-public class Deviation extends StorableBean{
+@Entity
+@Table( name = "deviation" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Deviation extends StorableBeanByUUID{
 	
-	private String studentId;
 	private String year;
 	private double devOne;
 	private double devTwo;
 	private double devThree;
 	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name="studentId", referencedColumnName="uuid")
+	private Student student;
+	
+	
 	/**
 	 * 
 	 */
 	public Deviation() {
-		studentId = "";
 		year = "";
 		devOne = 0;
 		devTwo = 0;
 		devThree = 0;
+		
+		account = new Account();
+		student = new Student();
 	}
 	
-	
-
-	/**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
-
 	/**
 	 * @return the year
 	 */
@@ -103,29 +106,45 @@ public class Deviation extends StorableBean{
 	public void setDevThree(double devThree) {
 		this.devThree = devThree;
 	}
+	
+	
 
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Deviation [ getUuid() = ");
-		builder.append(getUuid());
-		builder.append(", studentId=");
-		builder.append(studentId);
-		builder.append(", accountId=");
-		builder.append(getAccountId());
-		builder.append(", year=");
-		builder.append(year);
-		builder.append(", devOne=");
-		builder.append(devOne);
-		builder.append(", devTwo=");
-		builder.append(devTwo);
-		builder.append(", devThree=");
-		builder.append(devThree);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	@Override
+	public String toString() {
+		return "Deviation [year=" + year + ", devOne=" + devOne + ", devTwo=" + devTwo + ", devThree=" + devThree
+				+ ", account=" + account + ", student=" + student + ", getUuid()=" + getUuid() + "]";
+	}
 
 	
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.bean.staff;
+package com.yahoo.petermwenda83.bean.subject;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -13,41 +13,37 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.student.StudentSubject;
 
 /**
  * @author peter
- *  
+ *
  */
-
 @Entity
-@Table( name = "classteacher" )
+@Table( name = "subcategory" )
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class ClassTeacher extends StorableBeanByUUID{
+public class SubCategory extends StorableBeanByUUID {
 	
 	@ManyToOne
 	@JoinColumn(name="accountId", referencedColumnName="uuid")
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name="teacherId", referencedColumnName="uuid")
-	private Staff staff;
+	@JoinColumn(name="categoryId", referencedColumnName="uuid")
+	private Category category;
 	
 	@ManyToOne
-	@JoinColumn(name="streamId", referencedColumnName="uuid")
-	private Stream stream;
-	
+	@JoinColumn(name="subjectId", referencedColumnName="uuid")
+	private Subject subject;
+
 	/**
 	 * 
 	 */
-	public ClassTeacher() {
-		super();
+	public SubCategory() {
 		account = new Account();
-		staff = new Staff();
-		stream = new Stream();
+		category = new Category();
+		subject = new Subject();
 	}
-
-
 
 	/**
 	 * @return the account
@@ -56,8 +52,6 @@ public class ClassTeacher extends StorableBeanByUUID{
 		return account;
 	}
 
-
-
 	/**
 	 * @param account the account to set
 	 */
@@ -65,41 +59,34 @@ public class ClassTeacher extends StorableBeanByUUID{
 		this.account = account;
 	}
 
-
-
 	/**
-	 * @return the staff
+	 * @return the category
 	 */
-	public Staff getStaff() {
-		return staff;
+	public Category getCategory() {
+		return category;
 	}
 
-
-
 	/**
-	 * @param staff the staff to set
+	 * @param category the category to set
 	 */
-	public void setStaff(Staff staff) {
-		this.staff = staff;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
-
-
 	/**
-	 * @return the stream
+	 * @return the subject
 	 */
-	public Stream getStream() {
-		return stream;
+	public Subject getSubject() {
+		return subject;
 	}
 
-
-
 	/**
-	 * @param stream the stream to set
+	 * @param subject the subject to set
 	 */
-	public void setStream(Stream stream) {
-		this.stream = stream;
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
+	
 
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -108,12 +95,12 @@ public class ClassTeacher extends StorableBeanByUUID{
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		
-		ClassTeacher classTeacher;
+		SubCategory subCategory;
 		
-		if(obj instanceof ClassTeacher) {
-			classTeacher = (ClassTeacher) obj;
+		if(obj instanceof SubCategory) {
+			subCategory = (SubCategory) obj;
 			
-			return getUuid().equals(classTeacher.getUuid());
+			return getUuid().equals(subCategory.getUuid());
 		}
 		
 		return false;
@@ -127,22 +114,16 @@ public class ClassTeacher extends StorableBeanByUUID{
 	public int hashCode() {
 		return getUuid().hashCode();
 	}
-
 	
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "ClassTeacher [account=" + account.getUsername() + ", staff=" + staff.getUsername() + ", stream=" + stream.getDescription() + ", getUuid()="
+		return "SubCategory [account=" + account.getUsername() + ", category=" + category.getDescription() + ", subject=" + subject.getCode() + ", getUuid()="
 				+ getUuid() + "]";
 	}
 
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -720546801232129197L;
 }

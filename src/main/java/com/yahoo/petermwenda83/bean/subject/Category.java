@@ -1,13 +1,7 @@
 /**
- * Copy Right 2016. FasTech Solutions Ltd.
- * 
- * Licensed under the Open Software License, Version 3.0 (the “License”); you may
- * not use this file except in compliance with the License. You may obtain a copy
- * of the License at:
- * http://opensource.org/licenses/OSL-3.0
  * 
  */
-package com.yahoo.petermwenda83.bean.classroom;
+package com.yahoo.petermwenda83.bean.subject;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -20,39 +14,31 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 
-/** 
- *  A class object in a school
- *  
- * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
+/**
+ * @author peter
  *
  */
 @Entity
-@Table( name = "stream" )
+@Table( name = "category" )
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Stream extends StorableBeanByUUID{
-	
+public class Category extends StorableBeanByUUID {
 	
 	private String description;
-	
-	@ManyToOne
+    private int maxNo;
+    
+    @ManyToOne
 	@JoinColumn(name="accountId", referencedColumnName="uuid")
 	private Account account;
-	
-	@ManyToOne
-	@JoinColumn(name="classRoomId", referencedColumnName="uuid")
-	private ClassRoom classRoom;
-	
 
 	/**
 	 * 
 	 */
-	public Stream() {
+	public Category() {
 		description = "";
+		maxNo = 0;
 		
 		account = new Account();
-		classRoom = new ClassRoom();
 	}
-   
 
 	/**
 	 * @return the description
@@ -61,8 +47,6 @@ public class Stream extends StorableBeanByUUID{
 		return description;
 	}
 
-
-
 	/**
 	 * @param description the description to set
 	 */
@@ -70,7 +54,19 @@ public class Stream extends StorableBeanByUUID{
 		this.description = description;
 	}
 
+	/**
+	 * @return the maxNo
+	 */
+	public int getMaxNo() {
+		return maxNo;
+	}
 
+	/**
+	 * @param maxNo the maxNo to set
+	 */
+	public void setMaxNo(int maxNo) {
+		this.maxNo = maxNo;
+	}
 
 	/**
 	 * @return the account
@@ -79,30 +75,41 @@ public class Stream extends StorableBeanByUUID{
 		return account;
 	}
 
-
 	/**
 	 * @param account the account to set
 	 */
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-
+	
 
 	/**
-	 * @return the classRoom
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public ClassRoom getClassRoom() {
-		return classRoom;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		Category category;
+		
+		if(obj instanceof Category) {
+			category = (Category) obj;
+			
+			return getUuid().equals(category.getUuid());
+		}
+		
+		return false;
 	}
 
 
 	/**
-	 * @param classRoom the classRoom to set
+	 * @see java.lang.Object#hashCode()
 	 */
-	public void setClassRoom(ClassRoom classRoom) {
-		this.classRoom = classRoom;
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
 	}
-
+	
 
 
 	/* (non-Javadoc)
@@ -110,15 +117,13 @@ public class Stream extends StorableBeanByUUID{
 	 */
 	@Override
 	public String toString() {
-		return "Stream [description=" + description + ", account=" + account + ", classRoom=" + classRoom
-				+ ", getUuid()=" + getUuid() + "]";
+		return "Category [description=" + description + ", maxNo=" + maxNo + ", account=" + account.getUsername() + ", getUuid()="
+				+ getUuid() + "]";
 	}
-
-
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2355498812294520397L;
-	
+	private static final long serialVersionUID = 1738398339745042349L;
+
 }

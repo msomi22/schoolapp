@@ -6,63 +6,32 @@ package com.yahoo.petermwenda83.bean.otherfee;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author peter
  *
  */
-public class RevertedMoney extends StorableBean{
+@Entity
+@Table( name = "revertedmoney" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class RevertedMoney extends StudentOtherFee{
 	
-	
-	private String studentId;
-	private String otherFeeId;
 	private Timestamp dateReverted;
-	   
 	
 
 	/**
 	 * 
 	 */
 	public RevertedMoney() {
-		studentId = "";
-		otherFeeId = "";
 		dateReverted = new Timestamp(new Date().getTime());
 	}
-     
-
-	   /**
-	 * @return the studentId
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-
-
-	/**
-	 * @param studentId the studentId to set
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
-
-
-	/**
-	 * @return the otherFeeId
-	 */
-	public String getOtherFeeId() {
-		return otherFeeId;
-	}
-
-
-	/**
-	 * @param otherFeeId the otherFeeId to set
-	 */
-	public void setOtherFeeId(String otherFeeId) {
-		this.otherFeeId = otherFeeId;
-	}
-
-
+    
+	
 	/**
 	 * @return the dateReverted
 	 */
@@ -79,13 +48,13 @@ public class RevertedMoney extends StorableBean{
 	}
 
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "RevertedMoney [studentId=" + studentId + ", otherFeeId=" + otherFeeId + ", dateReverted=" + dateReverted
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "RevertedMoney [dateReverted=" + dateReverted + ", getAccount()=" + getAccount().getUsername() + ", getStudent()="
+				+ getStudent() + ", getOtherFee()=" + getOtherFee().getUuid() + ", getUuid()=" + getUuid() + "]";
 	}
 
 

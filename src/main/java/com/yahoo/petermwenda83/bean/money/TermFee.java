@@ -3,19 +3,35 @@
  */
 package com.yahoo.petermwenda83.bean.money;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /** 
  * @author peter
  *
  */
-public class TermFee extends StorableBean{
+@Entity
+@Table( name = "termfee" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class TermFee extends StorableBeanByUUID{
 	
 	
 	private int boaderAmount;
 	private int dayAmount;
 	private String term;
 	private String year;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
 	
 	/** 
 	 * 
@@ -25,6 +41,8 @@ public class TermFee extends StorableBean{
 		dayAmount = 0;
 		term = "";
 		year = "";
+		
+		account = new Account();
 
 	}
 	
@@ -84,14 +102,34 @@ public class TermFee extends StorableBean{
 		this.year = year;
 	}
 
+	
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "TermFee [boaderAmount=" + boaderAmount + ", dayAmount=" + dayAmount + ", term=" + term + ", year="
-				+ year + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ year + ", account=" + account + ", getUuid()=" + getUuid() + "]";
 	}
+
+
 
 	/** 
 	 * 

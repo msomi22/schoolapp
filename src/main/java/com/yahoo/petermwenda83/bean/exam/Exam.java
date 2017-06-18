@@ -9,7 +9,16 @@
  */
 package com.yahoo.petermwenda83.bean.exam;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /** 
  * An exam in a school
@@ -17,11 +26,19 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Exam extends StorableBean{
+@Entity
+@Table( name = "exam" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Exam extends StorableBeanByUUID{
 	
 	private String code;
 	private String description;
 	private int outOf;
+	
+	@ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+	
 	
 	/**
 	 * 
@@ -31,6 +48,8 @@ public class Exam extends StorableBean{
 		code ="";
 		description ="";
 		outOf = 0;
+		
+		account = new Account();
 	}
 	
 
@@ -84,14 +103,29 @@ public class Exam extends StorableBean{
 
 	
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Exam [code=" + code + ", description=" + description + ", outOf=" + outOf + ", getUuid()=" + getUuid()
-				+ ", getAccountId()=" + getAccountId() + "]";
+		return "Exam [code=" + code + ", description=" + description + ", outOf=" + outOf + ", account=" + account
+				+ ", getUuid()=" + getUuid() + "]";
 	}
-
 
 
 	/**

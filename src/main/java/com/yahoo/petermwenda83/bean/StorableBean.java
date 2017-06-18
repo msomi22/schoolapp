@@ -10,75 +10,19 @@
 package com.yahoo.petermwenda83.bean;
 
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.Random;
 
 /***
  * This class represents an object in the School System architecture that can be
  * stored in the RDBMS as well as cached.
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
- * @author <a href="mailto:michael@tawi.mobi">Michael Wakahe</a>
  *
  */
 public class StorableBean implements Serializable {
 
-	private int id;
-	private String uuid;
-	private String accountId;
 	/**
 	 * 
 	 */
-	public StorableBean() {
-		id = 0;
-		uuid = UUID.randomUUID().toString();
-		accountId = "";
-	} 
-	/**
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-	/**
-	 * 
-	 * @return the uuid
-	 */
-	public String getUuid() {
-		return uuid;
-	}
-	/**
-	 * 
-	 * @param uuid
-	 */
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-
-	/**
-	 * @return the accountId
-	 */
-	public String getAccountId() {
-		return accountId;
-	}
-	/**
-	 * @param accountId the accountId to set
-	 */
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6756966885024490524L;
+	public static final long serialVersionUID = new Random().nextLong();
 }

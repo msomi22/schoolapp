@@ -12,7 +12,17 @@ package com.yahoo.petermwenda83.bean.chat;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 
 /** 
  * A chat object
@@ -20,54 +30,41 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Chat extends StorableBean{
+@Entity
+@Table( name = "chat" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Chat extends StorableBeanByUUID{
 	
-	private String senderId;
-	private String receiverId;
 	private String message;
     private String isRead;
     private Timestamp dateSent;
+    
+    @ManyToOne
+	@JoinColumn(name="accountId", referencedColumnName="uuid")
+	private Account account;
+    
+    @ManyToOne
+	@JoinColumn(name="senderId", referencedColumnName="uuid")
+	private Staff staff;
+    
+    @ManyToOne
+   	@JoinColumn(name="receiverId", referencedColumnName="uuid")
+   	private Staff staff2;
    
 	/**
 	 * 
 	 */
 	public Chat() {
-		senderId = "";
-		receiverId = "";
 		message = "";
 		isRead = "";
 		dateSent = new Timestamp(new Date().getTime());
 		
+		account = new Account();
+		staff = new Staff();
+		staff2 = new Staff();
+		
 	}
 	
-	/**
-	 * @return the senderId
-	 */
-	public String getSenderId() {
-		return senderId;
-	}
-
-	/**
-	 * @param senderId the senderId to set
-	 */
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
-	}
-
-	/**
-	 * @return the receiverId
-	 */
-	public String getReceiverId() {
-		return receiverId;
-	}
-
-	/**
-	 * @param receiverId the receiverId to set
-	 */
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
-	}
-
 	/**
 	 * @return the message
 	 */
@@ -111,15 +108,60 @@ public class Chat extends StorableBean{
 	}
 	
 
+
 	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the staff
+	 */
+	public Staff getStaff() {
+		return staff;
+	}
+
+	/**
+	 * @param staff the staff to set
+	 */
+	public void setStaff(Staff staff) {
+		this.staff = staff;
+	}
+
+	/**
+	 * @return the staff2
+	 */
+	public Staff getStaff2() {
+		return staff2;
+	}
+
+	/**
+	 * @param staff2 the staff2 to set
+	 */
+	public void setStaff2(Staff staff2) {
+		this.staff2 = staff2;
+	}
+
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Chat [senderId=" + senderId + ", receiverId=" + receiverId + ", message=" + message + ", isRead="
-				+ isRead + ", dateSent=" + dateSent + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+		return "Chat [message=" + message + ", isRead=" + isRead + ", dateSent=" + dateSent + ", account=" + account
+				+ ", staff=" + staff + ", staff2=" + staff2 + ", getUuid()=" + getUuid() + "]";
 	}
+
 
 
 	/**
