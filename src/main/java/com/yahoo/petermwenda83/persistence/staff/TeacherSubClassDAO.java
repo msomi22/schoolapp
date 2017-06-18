@@ -14,7 +14,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -60,12 +60,12 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubjectClass(java.lang.String)
 	 */
-	public TeacherSubClass getSubjectClass(String teacherUuid) {
-		TeacherSubClass teachersub = null;
+	public TeacherSubject getSubjectClass(String teacherUuid) {
+		TeacherSubject teachersub = null;
         ResultSet rset = null;
      try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubClass WHERE teacherUuid = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject WHERE teacherUuid = ?;");       
      		
      		){
      	
@@ -73,13 +73,13 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	         rset = pstmt.executeQuery();
 	        while(rset.next()){
 	
-	        	teachersub  = beanProcessor.toBean(rset,TeacherSubClass.class);
+	        	teachersub  = beanProcessor.toBean(rset,TeacherSubject.class);
 	   }
      	
      	
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Staff with TeacherSubClass: " + teacherUuid);
+     	  logger.error("SQL Exception when getting Staff with TeacherSubject: " + teacherUuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -90,12 +90,12 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubject(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public TeacherSubClass getSubject(String SubjectUuid, String ClassRoomUuid) {
-		TeacherSubClass teachersub = null;
+	public TeacherSubject getSubject(String SubjectUuid, String ClassRoomUuid) {
+		TeacherSubject teachersub = null;
         ResultSet rset = null;
      try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubClass WHERE SubjectUuid = ? AND ClassRoomUuid = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject WHERE SubjectUuid = ? AND ClassRoomUuid = ?;");       
      		
      		){
      	
@@ -104,7 +104,7 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	         rset = pstmt.executeQuery();
 	        while(rset.next()){
 	
-	        	teachersub  = beanProcessor.toBean(rset,TeacherSubClass.class);
+	        	teachersub  = beanProcessor.toBean(rset,TeacherSubject.class);
 	   }
      	
      	
@@ -121,15 +121,15 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	
 	
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)
 	 */
 	@Override
-	public TeacherSubClass getSubjectClass(TeacherSubClass subClass) {
-		TeacherSubClass teachersub = null;
+	public TeacherSubject getSubjectClass(TeacherSubject subClass) {
+		TeacherSubject teachersub = null;
         ResultSet rset = null;
      try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubClass WHERE teacherUuid = ?"
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject WHERE teacherUuid = ?"
         	      		+ "AND SubjectUuid =? AND ClassRoomUuid =? ;");       
      		
      		){
@@ -140,13 +140,13 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	         rset = pstmt.executeQuery();
 	        while(rset.next()){
 	
-	        	teachersub  = beanProcessor.toBean(rset,TeacherSubClass.class);
+	        	teachersub  = beanProcessor.toBean(rset,TeacherSubject.class);
 	   }
      	
      	
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting  TeacherSubClass: " + subClass);
+     	  logger.error("SQL Exception when getting  TeacherSubject: " + subClass);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -158,19 +158,19 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubjectsANDClassesList(java.lang.String)
 	 */
-	public List<TeacherSubClass> getSubjectsANDClassesList(String teacherUuid) {
-		List<TeacherSubClass> list = null;
+	public List<TeacherSubject> getSubjectsANDClassesList(String teacherUuid) {
+		List<TeacherSubject> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubClass WHERE teacherUuid = ?;");    		   
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject WHERE teacherUuid = ?;");    		   
      	   ) {
          	   pstmt.setString(1, teacherUuid);      
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
-     	       list = beanProcessor.toBeanList(rset, TeacherSubClass.class);
+     	       list = beanProcessor.toBeanList(rset, TeacherSubject.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting TeacherSubClass List with teacherUuid" +teacherUuid); 
+            logger.error("SQLException when getting TeacherSubject List with teacherUuid" +teacherUuid); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
@@ -179,13 +179,13 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#putSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#putSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)
 	 */
-	public boolean putSubjectClass(TeacherSubClass subClass) {
+	public boolean putSubjectClass(TeacherSubject subClass) {
 		boolean success = true; 
 		  
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO TeacherSubClass" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO TeacherSubject" 
 			        		+"(Uuid,TeacherUuid,SubjectUuid,ClassRoomUuid,SysUser,AllocationDate) VALUES (?,?,?,?,?,?);");
     		){
 	            pstmt.setString(1, subClass.getUuid());
@@ -197,7 +197,7 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			logger.error("SQL Exception trying to put TeacherSubClass: "+subClass);
+			logger.error("SQL Exception trying to put TeacherSubject: "+subClass);
             logger.error(ExceptionUtils.getStackTrace(e)); 
             System.out.println(ExceptionUtils.getStackTrace(e));
             success = false;
@@ -207,12 +207,12 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#updateSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#updateSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)
 	 */
-	public boolean updateSubjectClass(TeacherSubClass subClass) {
+	public boolean updateSubjectClass(TeacherSubject subClass) {
 		boolean success = true;		
 		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE TeacherSubClass SET SubjectUuid=?, ClassRoomUuid =?,"
+	             PreparedStatement pstmt = conn.prepareStatement("UPDATE TeacherSubject SET SubjectUuid=?, ClassRoomUuid =?,"
 	             		+ " SysUser =?, AllocationDate = ? WHERE TeacherUuid = ?;");
 	) {           			 	            
 	            pstmt.setString(1, subClass.getSubjectUuid());
@@ -223,7 +223,7 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	            pstmt.executeUpdate();
 
 } catch (SQLException e) {
-    logger.error("SQL Exception when updating TeacherSubClass " + subClass);
+    logger.error("SQL Exception when updating TeacherSubject " + subClass);
     logger.error(ExceptionUtils.getStackTrace(e));
     System.out.println(ExceptionUtils.getStackTrace(e));
     success = false;
@@ -233,14 +233,14 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#deleteSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#deleteSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)
 	 */
 	@Override
-	public boolean deleteSubjectClass(TeacherSubClass subClass) {
+	public boolean deleteSubjectClass(TeacherSubject subClass) {
 		boolean success = true; 
         try(
         	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("DELETE FROM TeacherSubClass WHERE TeacherUuid = ? AND SubjectUuid =? AND ClassRoomUuid =? ;");       
+           	PreparedStatement pstmt = conn.prepareStatement("DELETE FROM TeacherSubject WHERE TeacherUuid = ? AND SubjectUuid =? AND ClassRoomUuid =? ;");       
         		
         		){
         	
@@ -250,7 +250,7 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	         pstmt.executeUpdate();
 	     
         }catch(SQLException e){
-        	 logger.error("SQL Exception when deletting TeacherSubClass " + subClass);
+        	 logger.error("SQL Exception when deletting TeacherSubject " + subClass);
              logger.error(ExceptionUtils.getStackTrace(e));
              success = false;
              
@@ -262,19 +262,19 @@ public class TeacherSubClassDAO extends GenericDAO  implements SchoolTeacherSubC
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubClassDAO#getSubjectClassList()
 	 */
-	public List<TeacherSubClass> getSubjectClassList() {
-		List<TeacherSubClass>  list = null;
+	public List<TeacherSubject> getSubjectClassList() {
+		List<TeacherSubject>  list = null;
 		
 		 try(   
        		Connection conn = dbutils.getConnection();
-       		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM TeacherSubClass;");   
+       		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject;");   
        		ResultSet rset = pstmt.executeQuery();
    		) {
        	
-           list = beanProcessor.toBeanList(rset, TeacherSubClass.class);
+           list = beanProcessor.toBeanList(rset, TeacherSubject.class);
 
        } catch(SQLException e){
-       	logger.error("SQL Exception when getting all TeacherSubClass");
+       	logger.error("SQL Exception when getting all TeacherSubject");
            logger.error(ExceptionUtils.getStackTrace(e));
        }
      

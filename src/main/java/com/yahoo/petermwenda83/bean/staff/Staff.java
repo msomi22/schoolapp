@@ -11,118 +11,209 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.staff;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- * @author peter
+ * Staff Basic Informations 
+ * 
+ * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class Staff extends StorableBean {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5760553114204722579L;
-	private String schoolAccountUuid;
-	private String statusUuid;
-	private String category; 
-	private String positionUuid; 
-	private String userName;
-	private String password;
+public class Staff extends StorableBean{
 
-	
+	private String acessLevelId; 
+	private String staffNo; 
+	private String isActive; 
+	private String firstname;
+	private String middlename;
+	private String lastname;
+	private String gender;
+	private String mobile;
+	private String email; 
+	private String username;
+	private String password;
+	private Timestamp regDate;
 
 	/**
 	 * 
 	 */
 	public Staff() {
 		super();
-		schoolAccountUuid ="";
-		statusUuid ="";
-		category="";
-		positionUuid="";
-		userName="";
-		password="";
+		acessLevelId = "";
+		staffNo ="";
+		isActive ="";
+		firstname ="";
+		middlename ="";
+		lastname ="";
+		gender ="";
+		mobile ="";
+		email ="";
+		username ="";
+		password ="";
+		regDate = new Timestamp(new Date().getTime());
 	}
+
 	
-
 	/**
-	 * @return the schoolAccountUuid
+	 * @return the acessLevelId
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getAcessLevelId() {
+		return acessLevelId;
 	}
 
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param acessLevelId the acessLevelId to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
-	}
-
-    
-	/**
-	 * @return the statusUuid
-	 */
-	public String getStatusUuid() {
-		return statusUuid;
+	public void setAcessLevelId(String acessLevelId) {
+		this.acessLevelId = acessLevelId;
 	}
 
 
 	/**
-	 * @param statusUuid the statusUuid to set
+	 * @return the staffNo
 	 */
-	public void setStatusUuid(String statusUuid) {
-		this.statusUuid = statusUuid;
+	public String getStaffNo() {
+		return staffNo;
 	}
 
 
 	/**
-	 * @return the category
+	 * @param staffNo the staffNo to set
 	 */
-	public String getCategory() {
-		return category;
+	public void setStaffNo(String staffNo) {
+		this.staffNo = staffNo;
 	}
 
 
 	/**
-	 * @param category the category to set
+	 * @return the isActive
 	 */
-	public void setCategory(String category) {
-		this.category = category;
+	public String getIsActive() {
+		return isActive;
 	}
 
 
 	/**
-	 * @return the positionUuid
+	 * @param isActive the isActive to set
 	 */
-	public String getPositionUuid() {
-		return positionUuid;
+	public void setIsActive(String isActive) {
+		this.isActive = isActive;
 	}
 
 
 	/**
-	 * @param positionUuid the positionUuid to set
+	 * @return the firstname
 	 */
-	public void setPositionUuid(String positionUuid) {
-		this.positionUuid = positionUuid;
+	public String getFirstname() {
+		return firstname;
 	}
 
 
 	/**
-	 * @return the userName
+	 * @param firstname the firstname to set
 	 */
-	public String getUserName() {
-		return userName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 
 	/**
-	 * @param userName the userName to set
+	 * @return the middlename
 	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public String getMiddlename() {
+		return middlename;
+	}
+
+
+	/**
+	 * @param middlename the middlename to set
+	 */
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
+
+
+	/**
+	 * @return the lastname
+	 */
+	public String getLastname() {
+		return lastname;
+	}
+
+
+	/**
+	 * @param lastname the lastname to set
+	 */
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+
+	/**
+	 * @return the gender
+	 */
+	public String getGender() {
+		return gender;
+	}
+
+
+	/**
+	 * @param gender the gender to set
+	 */
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+	/**
+	 * @return the mobile
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+
+
+	/**
+	 * @param mobile the mobile to set
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 
@@ -142,25 +233,38 @@ public class Staff extends StorableBean {
 	}
 
 
+	/**
+	 * @return the regDate
+	 */
+	public Timestamp getRegDate() {
+		return regDate;
+	}
+
+
+	/**
+	 * @param regDate the regDate to set
+	 */
+	public void setRegDate(Timestamp regDate) {
+		this.regDate = regDate;
+	}
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Staff [ getUuid() =");
-		builder.append(getUuid());
-		builder.append(", schoolAccountUuid =");
-		builder.append(schoolAccountUuid);
-		builder.append(",statusUuid=");
-		builder.append(statusUuid);
-		builder.append(", category =");
-		builder.append(category);
-		builder.append(", positionUuid =");
-		builder.append(positionUuid);
-		builder.append(", userName =");
-		builder.append(userName);
-		builder.append(", password =");
-		builder.append(password);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "Staff [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", isActive=" + isActive
+				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
+				+ gender + ", mobile=" + mobile + ", email=" + email + ", username=" + username + ", password="
+				+ password + ", regDate=" + regDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
+				+ "]";
+	}
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7717234136342401517L;
 
 }

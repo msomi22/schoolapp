@@ -10,67 +10,62 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  *  
  */
 public class ClassTeacher extends StorableBean{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -720546801232129197L;
-	private String TeacherUuid;
-	private String ClassRoomUuid;
-	
 
+	private String teacherId;
+	private String streamId;
 	/**
 	 * 
 	 */
 	public ClassTeacher() {
-		TeacherUuid = "";
-		ClassRoomUuid = "";
-	}
-	
-
-	/**
-	 * @return the teacherUuid
-	 */
-	public String getTeacherUuid() {
-		return TeacherUuid;
+		teacherId = "";
+		streamId = "";
 	}
 
 
 	/**
-	 * @param teacherUuid the teacherUuid to set
+	 * @return the teacherId
 	 */
-	public void setTeacherUuid(String teacherUuid) {
-		TeacherUuid = teacherUuid;
+	public String getTeacherId() {
+		return teacherId;
 	}
 
 
 	/**
-	 * @return the classRoomUuid
+	 * @param teacherId the teacherId to set
 	 */
-	public String getClassRoomUuid() {
-		return ClassRoomUuid;
+	public void setTeacherId(String teacherId) {
+		this.teacherId = teacherId;
 	}
 
 
 	/**
-	 * @param classRoomUuid the classRoomUuid to set
+	 * @return the streamId
 	 */
-	public void setClassRoomUuid(String classRoomUuid) {
-		ClassRoomUuid = classRoomUuid;
+	public String getStreamId() {
+		return streamId;
 	}
 
 
+	/**
+	 * @param streamId the streamId to set
+	 */
+	public void setStreamId(String streamId) {
+		this.streamId = streamId;
+	}
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("ClassTeacher");
-		builder.append("[getUuid()=");
-		builder.append(getUuid()); 
-		builder.append(",TeacherUuid=");
-		builder.append(TeacherUuid);
-		builder.append(",ClassRoomUuid=");
-		builder.append(ClassRoomUuid);
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "ClassTeacher [teacherId=" + teacherId + ", streamId=" + streamId + ", getUuid()=" + getUuid()
+		+ ", getAccountId()=" + getAccountId() + "]";
+	}
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -720546801232129197L;
 }

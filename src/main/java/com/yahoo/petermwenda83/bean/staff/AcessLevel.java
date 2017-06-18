@@ -14,65 +14,48 @@ package com.yahoo.petermwenda83.bean.staff;
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- * Allocate department to a staff
+ * A staff Has A position , Either a Principal ,Deputy, Hod, Teacher , ...
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class TeacherDepartment extends StorableBean{
+public class AcessLevel extends StorableBean{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1628158762078820579L;
-	private String teacherUuid;
-	private String departmentUuid;
-	/**
-	 * 
-	 */
-	public TeacherDepartment() {
-		teacherUuid ="";
-		departmentUuid ="";
-	}
-	
-	/**
-	 * @return the teacherUuid
-	 */
-	public String getTeacherUuid() {
-		return teacherUuid;
+	private String  description;
+	    
+	public AcessLevel() {
+		description ="";
 	}
 
 	/**
-	 * @param teacherUuid the teacherUuid to set
+	 * @return the description
 	 */
-	public void setTeacherUuid(String teacherUuid) {
-		this.teacherUuid = teacherUuid;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * @return the departmentUuid
+	 * @param description the description to set
 	 */
-	public String getDepartmentUuid() {
-		return departmentUuid;
-	}
-
-	/**
-	 * @param departmentUuid the departmentUuid to set
-	 */
-	public void setDepartmentUuid(String departmentUuid) {
-		this.departmentUuid = departmentUuid;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
-		builder.append("Teacher's Department");
+		builder.append("AcessLevel");
 		builder.append("[getUuid()=");
 		builder.append(getUuid()); 
-		builder.append(",teacherUuid=");
-		builder.append(teacherUuid);
-		builder.append(",departmentUuid=");
-		builder.append(departmentUuid);
+		builder.append(", accountId =");
+		builder.append(getAccountId());  
+		builder.append(",description=");
+		builder.append(description);
 		return builder.toString(); 
 		}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -920169356050037976L;
 }

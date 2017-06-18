@@ -1,6 +1,6 @@
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.TeacherSubClass"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.TeacherSubject"%>
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 

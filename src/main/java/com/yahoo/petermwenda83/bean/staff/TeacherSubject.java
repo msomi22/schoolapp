@@ -9,50 +9,52 @@
  * ADM NO : BS02/009/2012                                    *
  *                                                           *
  *************************************************************/
-package com.yahoo.petermwenda83.bean.student;
+package com.yahoo.petermwenda83.bean.staff;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
 
-/** 
- * Student's Subject-Class Allocation 
- * 
+/**
+ * Teacher Subject-ClassRoom Allocation
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
- * 
+ *
  */
-public class StudentSubject extends StorableBean {
+public class TeacherSubject extends StorableBean {
 	
-	private String studentId;
+	private String teacherId;
 	private String subjectId;
+	private String streamId;
 	private Timestamp allocationDate;
 	
-	public StudentSubject(){
-		   super();
-		   studentId = "";
-		   subjectId = "";
-		   allocationDate = new Timestamp(new Date().getTime());
-	   }
-
+	
+	/**
+	 * 
+	 */
+	public TeacherSubject() {
+		super();
+		teacherId ="";
+		subjectId ="";
+		streamId ="";
+		allocationDate = new Timestamp(new Date().getTime());  
+	}
 	
 
 	/**
-	 * @return the studentId
+	 * @return the teacherId
 	 */
-	public String getStudentId() {
-		return studentId;
+	public String getTeacherId() {
+		return teacherId;
 	}
-
 
 
 	/**
-	 * @param studentId the studentId to set
+	 * @param teacherId the teacherId to set
 	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
+	public void setTeacherId(String teacherId) {
+		this.teacherId = teacherId;
 	}
-
 
 
 	/**
@@ -63,7 +65,6 @@ public class StudentSubject extends StorableBean {
 	}
 
 
-
 	/**
 	 * @param subjectId the subjectId to set
 	 */
@@ -71,6 +72,21 @@ public class StudentSubject extends StorableBean {
 		this.subjectId = subjectId;
 	}
 
+
+	/**
+	 * @return the streamId
+	 */
+	public String getStreamId() {
+		return streamId;
+	}
+
+
+	/**
+	 * @param streamId the streamId to set
+	 */
+	public void setStreamId(String streamId) {
+		this.streamId = streamId;
+	}
 
 
 	/**
@@ -81,7 +97,6 @@ public class StudentSubject extends StorableBean {
 	}
 
 
-
 	/**
 	 * @param allocationDate the allocationDate to set
 	 */
@@ -90,17 +105,19 @@ public class StudentSubject extends StorableBean {
 	}
 
 
-
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "StudentSubject [studentId=" + studentId + ", subjectId=" + subjectId + ", allocationDate="
-				+ allocationDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+		return "TeacherSubject [teacherId=" + teacherId + ", subjectId=" + subjectId + ", streamId=" + streamId
+				+ ", allocationDate=" + allocationDate + ", getUuid()=" + getUuid() + ", getAccountId()="
+				+ getAccountId() + "]";
 	}
 
 
-
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8748801928170289528L;
 }

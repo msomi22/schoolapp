@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
@@ -94,7 +94,7 @@ public class AddStaff extends HttpServlet {
 
        HttpSession session = request.getSession(true);
        
-       String PositionUuid = StringUtils.trimToEmpty(request.getParameter("Position"));
+       String PositionUuid = StringUtils.trimToEmpty(request.getParameter("AcessLevel"));
        String username = StringUtils.trimToEmpty(request.getParameter("username"));
        String employeeNo = StringUtils.trimToEmpty(request.getParameter("employeeNo"));
        String firstname = StringUtils.trimToEmpty(request.getParameter("firstname"));
@@ -212,7 +212,7 @@ public class AddStaff extends HttpServlet {
     	   staff.setUserName(username);
     	   staff.setStatusUuid(STATUS_ACTIVE_UUID); 
     	   
-    	   StaffDetails staffDetail = new StaffDetails();
+    	   Staff staffDetail = new Staff();
     	   staffDetail.setStaffUuid(staff.getUuid()); 
     	   staffDetail.setEmployeeNo(employeeNo);
     	   staffDetail.setFirstName(StringUtils.capitalize(firstname).toLowerCase());

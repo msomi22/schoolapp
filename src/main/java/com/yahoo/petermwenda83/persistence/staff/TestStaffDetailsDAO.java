@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 
 /**
  * @author peter
@@ -92,7 +92,7 @@ public class TestStaffDetailsDAO {
 	@Test
 	public void testGetStaffDetail() {
 		store = new StaffDetailsDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		StaffDetails staff = new StaffDetails();
+		Staff staff = new Staff();
 		staff = store.getStaffDetail(SATFF_UUID);
 		assertEquals(staff.getUuid(),UUID);
 		assertEquals(staff.getStaffUuid(),SATFF_UUID);		
@@ -112,13 +112,13 @@ public class TestStaffDetailsDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#putSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#putSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)}.
 	 */
 	@Ignore
 	@Test
 	public void testPutSStaffDetail() {
 		store = new StaffDetailsDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		StaffDetails s = new StaffDetails();
+		Staff s = new Staff();
 		s.setUuid(SATFF_UUID_NEW);
 		s.setStaffUuid(SATFF_UUID_NEW); 
 		s.setEmployeeNo(EMP_NUMBER_NEW);
@@ -138,13 +138,13 @@ public class TestStaffDetailsDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#updateSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#updateSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)}.
 	 */
 	//@Ignore
 	@Test
 	public void testUpdateSStaffDetail() {
 		store = new StaffDetailsDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		StaffDetails s = new StaffDetails();
+		Staff s = new Staff();
 		s.setUuid(SATFF_UUID_NEW);
 		s.setStaffUuid(SATFF_UUID_NEW); 
 		s.setEmployeeNo(EMP_NUMBER_UPDATE);
@@ -163,13 +163,13 @@ public class TestStaffDetailsDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)}.
 	 */
 	@Ignore
 	@Test
 	public void testDeleteSStaffDetail() {
 		store = new StaffDetailsDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		StaffDetails staff = new StaffDetails();
+		Staff staff = new Staff();
 	}
 
 	/**
@@ -179,8 +179,8 @@ public class TestStaffDetailsDAO {
 	@Test
 	public void testGetSStaffDetailList() {
 		store = new StaffDetailsDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<StaffDetails> list = store.getSStaffDetailList();
-		for (StaffDetails ss : list) {
+		List<Staff> list = store.getSStaffDetailList();
+		for (Staff ss : list) {
 			System.out.println(ss);
 		}
 	}

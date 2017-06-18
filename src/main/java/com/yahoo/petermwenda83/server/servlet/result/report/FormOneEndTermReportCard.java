@@ -61,8 +61,8 @@ import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.Staff;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
@@ -2375,7 +2375,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		    teacherId = classTeacher.getTeacherUuid();
 		    
 		    if(staffDetailsDAO.getStaffDetail(teacherId) !=null){
-				StaffDetails StaffDetail = staffDetailsDAO.getStaffDetail(teacherId); 
+				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacherId); 
 				classTeacherName = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}
 		    
@@ -2392,10 +2392,10 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		String teachername = "";
 		String teacheruuid = "";
 		if(teacherSubClassDAO.getSubject(subjectid, classroomid) !=null){
-			TeacherSubClass teachersub = teacherSubClassDAO.getSubject(subjectid, classroomid);
+			TeacherSubject teachersub = teacherSubClassDAO.getSubject(subjectid, classroomid);
 			teacheruuid = teachersub.getTeacherUuid();
 			if(staffDetailsDAO.getStaffDetail(teacheruuid) !=null){
-				StaffDetails StaffDetail = staffDetailsDAO.getStaffDetail(teacheruuid); 
+				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacheruuid); 
 				teachername = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}	
 		}

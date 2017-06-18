@@ -8,7 +8,7 @@
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.StaffDetails"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>

@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.staff.Position;
+import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 
 /**
  * @author peter
@@ -40,13 +40,13 @@ public class TestPositionDAO {
 	@Test
 	public void testGet() {
 		store = new PositionDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		Position p = new Position();
+		AcessLevel p = new AcessLevel();
 		p = store.get(UUID);
 		assertEquals(p.getPosition(),POSITION);
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#putPosition(com.yahoo.petermwenda83.bean.staff.Position)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#putPosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)}.
 	 */
 	@Ignore
 	@Test
@@ -55,7 +55,7 @@ public class TestPositionDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.Position)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)}.
 	 */
 	@Ignore
 	@Test
@@ -64,7 +64,7 @@ public class TestPositionDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#deletePosition(com.yahoo.petermwenda83.bean.staff.Position)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.PositionDAO#deletePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)}.
 	 */
 	@Ignore
 	@Test
@@ -79,8 +79,8 @@ public class TestPositionDAO {
 	@Test
 	public void testGetPositionList() {
 		store = new PositionDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<Position> list = store.getPositionList();
-		for (Position ss : list) {
+		List<AcessLevel> list = store.getPositionList();
+		for (AcessLevel ss : list) {
 			System.out.println(ss);
 		}
 	}

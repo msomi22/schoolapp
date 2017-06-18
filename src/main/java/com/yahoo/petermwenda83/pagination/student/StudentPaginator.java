@@ -30,19 +30,19 @@ public class StudentPaginator {
 	public final int PAGESIZE = 15;
 	private static StudentUtils studentUtils;
 	private static StudentDAO studentDAO;
-	private String SchoolAccountUuid;
+	private String accountId;
     private Account account;
 	/**
 	 * @param SchoolAccountUuid 
 	 * 
 	 */
-	public StudentPaginator(String SchoolAccountUuid) {
+	public StudentPaginator(String accountId) {
 		account = new Account();
-		account.setUuid(SchoolAccountUuid); 
+		account.setUuid(accountId); 
 		
 	    studentUtils = StudentUtils.getInstance();
 		studentDAO = StudentDAO.getInstance();
-		this.SchoolAccountUuid = SchoolAccountUuid;
+		this.accountId = accountId;
 	}
 	
 	    /**
@@ -143,9 +143,8 @@ public class StudentPaginator {
 	        int totalSize = 0;
 
 	        //get the number of all sessions belonging to this email
-	        totalSize = studentUtils.getStudents(SchoolAccountUuid);
+	        totalSize = studentUtils.getStudents(accountId);
 
-	//TODO: divide by the page size and add one to take care of remainders and what else?
 	        return ((totalSize - 1) / PAGESIZE) + 1;
 	    }
 	    

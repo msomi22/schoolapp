@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 
 /**
  * @author peter
@@ -51,7 +51,7 @@ public class TestTeacherSubClassDAO {
 	@Test
 	public void testGetSubjectClass() {
 		store = new TeacherSubClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		TeacherSubClass t = new TeacherSubClass();
+		TeacherSubject t = new TeacherSubject();
 		t = store.getSubjectClass(TEACHER_UUID); 
 		assertEquals(t.getSubjectUuid(),SUB_UUID);
 	}
@@ -60,21 +60,21 @@ public class TestTeacherSubClassDAO {
 	@Test
 	public void testGetSubjectsANDClassesList() {
 		store = new TeacherSubClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<TeacherSubClass> list = store.getSubjectsANDClassesList(TEACHER_UUID); 	
-		for (TeacherSubClass l : list) {
+		List<TeacherSubject> list = store.getSubjectsANDClassesList(TEACHER_UUID); 	
+		for (TeacherSubject l : list) {
 			System.out.println(l);	
 		}
 		
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#putSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#putSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)}.
 	 */
 	@Ignore
 	@Test
 	public void testPutSubjectClass() {
 		store = new TeacherSubClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		TeacherSubClass t = new TeacherSubClass();
+		TeacherSubject t = new TeacherSubject();
 		t.setTeacherUuid(TEACHER_UUID);
 		t.setSubjectUuid(SUB_UUID_NEW);
 		t.setClassRoomUuid(CLASS_UUID_NEW);
@@ -83,13 +83,13 @@ public class TestTeacherSubClassDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#updateSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#updateSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)}.
 	 */
 	//@Ignore
 	@Test
 	public void testUpdateSubjectClass() {
 		store = new TeacherSubClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		TeacherSubClass t = new TeacherSubClass();
+		TeacherSubject t = new TeacherSubject();
 		t.setTeacherUuid(TEACHER_UUID);
 		t.setSubjectUuid(SUB_UUID_UPDATE);
 		t.setClassRoomUuid(CLASS_UUID_UPDATE);
@@ -98,7 +98,7 @@ public class TestTeacherSubClassDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#deleteSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubClass)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO#deleteSubjectClass(com.yahoo.petermwenda83.bean.staff.TeacherSubject)}.
 	 */
 	@Ignore
 	@Test
@@ -113,8 +113,8 @@ public class TestTeacherSubClassDAO {
 	@Test
 	public void testGetSubjectClassList() {
 		store = new TeacherSubClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<TeacherSubClass> list = store.getSubjectClassList();	
-		for (TeacherSubClass l : list) {
+		List<TeacherSubject> list = store.getSubjectClassList();	
+		for (TeacherSubject l : list) {
 			System.out.println(l);	
 		}
 		

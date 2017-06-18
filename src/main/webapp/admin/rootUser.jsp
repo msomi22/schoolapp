@@ -2,7 +2,7 @@
 <%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.Position"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>

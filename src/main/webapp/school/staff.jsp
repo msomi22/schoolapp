@@ -4,13 +4,13 @@
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.StaffDetails"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.Position"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>

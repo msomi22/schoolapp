@@ -29,15 +29,15 @@ public class BookPaginator {
 	public final int PAGESIZE = 15;
 	private static CommonUtils commonUtils;
 	private static BookDAO bookDAO;
-	private String SchoolAccountUuid;
+	private String accountId;
 	/**
 	 * @param SchoolAccountUuid 
 	 * 
 	 */
-	public BookPaginator(String SchoolAccountUuid) {
+	public BookPaginator(String accountId) {
 		commonUtils = CommonUtils.getInstance();
 		bookDAO = BookDAO.getInstance();
-		this.SchoolAccountUuid = SchoolAccountUuid;
+		this.accountId = accountId;
 	}
 	
 	    /**
@@ -60,7 +60,7 @@ public class BookPaginator {
     */
    public BookPage getFirstPage() {
 	   BookPage page = new BookPage();
-       List<Book> bookList = bookDAO.getBookList(SchoolAccountUuid , 0, PAGESIZE);
+       List<Book> bookList = bookDAO.getBookList(accountId , 0, PAGESIZE);
        page = new BookPage(1, getTotalPage(), PAGESIZE, bookList);	    
        return page;
    }
@@ -79,8 +79,8 @@ public class BookPaginator {
        int  startIndex,sessionCount;
        int totalPage = getTotalPage();
        startIndex = (totalPage - 1) * PAGESIZE;
-       sessionCount = commonUtils.getBookCount(SchoolAccountUuid);
-       bookList = bookDAO.getBookList(SchoolAccountUuid, startIndex, sessionCount); 
+       sessionCount = commonUtils.getBookCount(accountId);
+       bookList = bookDAO.getBookList(accountId, startIndex, sessionCount); 
        page = new BookPage(totalPage, totalPage, PAGESIZE, bookList);
        return page;
    }
@@ -97,7 +97,7 @@ public class BookPaginator {
        int totalPage = getTotalPage();
 
        BookPage page = new BookPage();
-       List<Book> smsList = bookDAO.getBookList(SchoolAccountUuid, currentPage.getPageNum() * PAGESIZE, 
+       List<Book> smsList = bookDAO.getBookList(accountId, currentPage.getPageNum() * PAGESIZE, 
        		((currentPage.getPageNum() * PAGESIZE) + PAGESIZE));
        page = new BookPage(currentPage.getPageNum() + 1, totalPage, PAGESIZE, smsList);
        return page;
@@ -116,7 +116,7 @@ public class BookPaginator {
 
        BookPage page = new BookPage();
        
-       List<Book> smsList = bookDAO.getBookList(SchoolAccountUuid, (currentPage.getPageNum() - 2) * PAGESIZE, 
+       List<Book> smsList = bookDAO.getBookList(accountId, (currentPage.getPageNum() - 2) * PAGESIZE, 
        		((currentPage.getPageNum() - 1) * PAGESIZE));
          page = new BookPage(currentPage.getPageNum() - 1, totalPage, PAGESIZE, smsList);
        return page;
@@ -131,7 +131,7 @@ public class BookPaginator {
   
 		public int getTotalPage() {
 	        int totalSize = 0;
-	        totalSize = commonUtils.getBookCount(SchoolAccountUuid);
+	        totalSize = commonUtils.getBookCount(accountId);
 	        //divide by the page size and add one to take care of remainders and what else?
 	        return ((totalSize - 1) / PAGESIZE) + 1;
 	    }

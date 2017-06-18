@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -70,7 +70,7 @@ public class FindClassTeacher extends HttpServlet{
 		  
 	   }else{
 		   
-		   StaffDetails staff = staffDetailsDAO.getStaffDetailByemployeeNo(employeeNumber);
+		   Staff staff = staffDetailsDAO.getStaffDetailByemployeeNo(employeeNumber);
 		   
 		  if(staffDAO.getStaff(schooluuid, staff.getStaffUuid()) !=null){
 			  

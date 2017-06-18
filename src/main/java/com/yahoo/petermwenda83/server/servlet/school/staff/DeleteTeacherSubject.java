@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -64,11 +64,11 @@ public class DeleteTeacherSubject extends HttpServlet{
     	   
        }else{
 
-    	   TeacherSubClass teacherSubClass = new TeacherSubClass();
-    	   teacherSubClass.setSubjectUuid(subjectId);
-    	   teacherSubClass.setTeacherUuid(teacherUuid); 
-    	   teacherSubClass.setClassRoomUuid(classid); 
-    	   if( teacherSubClassDAO.deleteSubjectClass(teacherSubClass)){
+    	   TeacherSubject teacherSubject = new TeacherSubject();
+    	   teacherSubject.setSubjectUuid(subjectId);
+    	   teacherSubject.setTeacherUuid(teacherUuid); 
+    	   teacherSubject.setClassRoomUuid(classid); 
+    	   if( teacherSubClassDAO.deleteSubjectClass(teacherSubject)){
     		   session.setAttribute(SessionConstants.STAFF_FIND_SUCCESS, DELETE_SUCCESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.STAFF_FIND_ERROR, DELETER_FAILED); 

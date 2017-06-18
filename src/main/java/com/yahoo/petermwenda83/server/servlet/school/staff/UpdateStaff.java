@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
@@ -202,7 +202,7 @@ public class UpdateStaff extends HttpServlet{
     	     staff.setSchoolAccountUuid(schooluuid);
     	     staff.setUserName(username); 
     	   
-    	   StaffDetails staffDetail = staffDetailsDAO.getStaffDetail(staffUuid);
+    	   Staff staffDetail = staffDetailsDAO.getStaffDetail(staffUuid);
     	   staffDetail.setStaffUuid(staff.getUuid()); 
     	   staffDetail.setEmployeeNo(employeeNo);
     	   staffDetail.setFirstName(StringUtils.capitalize(firstname).toLowerCase());

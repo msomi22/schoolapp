@@ -11,8 +11,6 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.subject;
 
-import java.util.Date;
-
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
@@ -23,80 +21,100 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Subject extends StorableBean {
 	
-	  private static final long serialVersionUID = 1L;
-	  private String SubjectCode;
-	  private String SubjectName;
-	  private String SubjectCategory;
+	  private String categoryId;
+	  private String code;
+	  private String numericCode;
+	  private String description;
 	 
-
 	/**
 	 * 
 	 */
 	public Subject() {
 		super();
-		SubjectCode = "";
-		SubjectName = "";
-		SubjectCategory = "";
+		categoryId = "";
+		code = "";
+		numericCode = "";
+		description = "";
 	}
 	
 
-	/**
-	 * @return the subjectCode
+	  /**
+	 * @return the categoryId
 	 */
-	public String getSubjectCode() {
-		return SubjectCode;
+	public String getCategoryId() {
+		return categoryId;
 	}
 
-	/**
-	 * @param subjectCode the subjectCode to set
-	 */
-	public void setSubjectCode(String subjectCode) {
-		SubjectCode = subjectCode;
-	}
 
 	/**
-	 * @return the subjectName
+	 * @param categoryId the categoryId to set
 	 */
-	public String getSubjectName() {
-		return SubjectName;
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
+
 
 	/**
-	 * @param subjectName the subjectName to set
+	 * @return the code
 	 */
-	public void setSubjectName(String subjectName) {
-		SubjectName = subjectName;
+	public String getCode() {
+		return code;
 	}
+
 
 	/**
-	 * @return the subjectCategory
+	 * @param code the code to set
 	 */
-	public String getSubjectCategory() {
-		return SubjectCategory;
+	public void setCode(String code) {
+		this.code = code;
 	}
+
 
 	/**
-	 * @param subjectCategory the subjectCategory to set
+	 * @return the numericCode
 	 */
-	public void setSubjectCategory(String subjectCategory) {
-		SubjectCategory = subjectCategory;
+	public String getNumericCode() {
+		return numericCode;
 	}
 
+
+	/**
+	 * @param numericCode the numericCode to set
+	 */
+	public void setNumericCode(String numericCode) {
+		this.numericCode = numericCode;
+	}
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("[ Subject, ");
-		builder.append("getUuid()=");
-		builder.append(getUuid()); 
-		builder.append(",SubjectName=");
-		builder.append(SubjectName);
-		builder.append(",SubjectCode=");
-		builder.append(SubjectCode);
-		builder.append(", SubjectCategory=");
-		builder.append(SubjectCategory);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "Subject [categoryId=" + categoryId + ", code=" + code + ", numericCode=" + numericCode
+				+ ", description=" + description + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
+				+ "]";
+	}
+
+
+
+	private static final long serialVersionUID = 1L;
 
 }

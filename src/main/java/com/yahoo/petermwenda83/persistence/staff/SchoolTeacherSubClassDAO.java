@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.staff;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 
 /**
  * @author peter
@@ -17,7 +17,7 @@ public interface SchoolTeacherSubClassDAO {
 	 * @param teacherUuid
 	 * @return
 	 */
-	public TeacherSubClass getSubjectClass(String teacherUuid);
+	public TeacherSubject getSubjectClass(String teacherUuid);
 	
 	
 	/**
@@ -27,43 +27,43 @@ public interface SchoolTeacherSubClassDAO {
 	 * @return
 	 */
 	
-	public TeacherSubClass getSubject(String SubjectUuid,String ClassRoomUuid);
+	public TeacherSubject getSubject(String SubjectUuid,String ClassRoomUuid);
 	
 	
 	/**
 	 * @param subClass
 	 * @return
 	 */
-	public TeacherSubClass getSubjectClass(TeacherSubClass subClass);
+	public TeacherSubject getSubjectClass(TeacherSubject subClass);
 	
 	/**
 	 * 
 	 * @param teacherUuid
 	 * @return
 	 */
-	public List<TeacherSubClass> getSubjectsANDClassesList(String teacherUuid);
+	public List<TeacherSubject> getSubjectsANDClassesList(String teacherUuid);
 	 /**
 	  * 
 	  * @param subClass
 	  * @return
 	  */
-	public boolean putSubjectClass(TeacherSubClass subClass);
+	public boolean putSubjectClass(TeacherSubject subClass);
 	  /**
 	   * 
 	   * @param subClass
 	   * @return
 	   */
-	public boolean updateSubjectClass(TeacherSubClass subClass);
+	public boolean updateSubjectClass(TeacherSubject subClass);
 	  /**
 	   * 
 	   * @param subClass
 	   * @return
 	   */
-	public boolean deleteSubjectClass(TeacherSubClass subClass);
+	public boolean deleteSubjectClass(TeacherSubject subClass);
 	  /**
 	   * 
 	   * @return
 	   */
-	public List<TeacherSubClass> getSubjectClassList();
+	public List<TeacherSubject> getSubjectClassList();
 
 }

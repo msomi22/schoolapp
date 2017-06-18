@@ -14,7 +14,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -59,12 +59,12 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#getStaffDetail(java.lang.String)
 	 */
-	public StaffDetails getStaffDetail(String staffUuid) {
-		StaffDetails StaffDetail = null;
+	public Staff getStaffDetail(String staffUuid) {
+		Staff StaffDetail = null;
         ResultSet rset = null;
         try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StaffDetails WHERE staffUuid = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE staffUuid = ?;");       
      		
      		){
      	
@@ -72,11 +72,11 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 StaffDetail  = beanProcessor.toBean(rset,StaffDetails.class);
+	    	 StaffDetail  = beanProcessor.toBean(rset,Staff.class);
 	   }  	
       	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting StaffDetails with staffUuid: " + staffUuid);
+     	  logger.error("SQL Exception when getting Staff with staffUuid: " + staffUuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -88,12 +88,12 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#getStaffDetailByemployeeNo(java.lang.String)
 	 */
 	@Override
-	public StaffDetails getStaffDetailByemployeeNo(String employeeNo) {
-		StaffDetails StaffDetail =  null;
+	public Staff getStaffDetailByemployeeNo(String employeeNo) {
+		Staff StaffDetail =  null;
         ResultSet rset = null;
         try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StaffDetails WHERE employeeNo = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE employeeNo = ?;");       
      		
      		){
      	
@@ -101,11 +101,11 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 StaffDetail  = beanProcessor.toBean(rset,StaffDetails.class);
+	    	 StaffDetail  = beanProcessor.toBean(rset,Staff.class);
 	   }  	
       	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting StaffDetails with employeeNo: " + employeeNo);
+     	  logger.error("SQL Exception when getting Staff with employeeNo: " + employeeNo);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -115,13 +115,13 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#putSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#putSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
-	public boolean putSStaffDetail(StaffDetails staffDetail) {
+	public boolean putSStaffDetail(Staff staffDetail) {
 		boolean success = true; 
 		  
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StaffDetails" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Staff" 
 			        		+"(Uuid,StaffUuid,EmployeeNo,FirstName,LastName,Surname,Gender,NhifNo,"
 			        		+ "NssfNo,Phone,DOB,NationalID,County,SysUser,RegistrationDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
     		){
@@ -143,7 +143,7 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put StaffDetails: "+staffDetail);
+			 logger.error("SQL Exception trying to put Staff: "+staffDetail);
             logger.error(ExceptionUtils.getStackTrace(e)); 
             System.out.println(ExceptionUtils.getStackTrace(e));
             success = false;
@@ -153,12 +153,12 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#updateSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#updateSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
-	public boolean updateSStaffDetail(StaffDetails staffDetail) {
+	public boolean updateSStaffDetail(Staff staffDetail) {
 		boolean success = true; 
 		 try(   Connection conn = dbutils.getConnection();
-	      PreparedStatement pstmt = conn.prepareStatement("UPDATE StaffDetails SET EmployeeNo =?,FirstName =?,LastName =?,"
+	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Staff SET EmployeeNo =?,FirstName =?,LastName =?,"
 			+ "Surname =?,Gender =? , NhifNo =?, NssfNo =?, Phone =?, dOB =?, NationalID =?, County =?,SysUser =?  WHERE StaffUuid = ? ;");
       		){
 			    pstmt.setString(1, staffDetail.getEmployeeNo());
@@ -177,7 +177,7 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			logger.error("SQL Exception trying to update StaffDetails: "+staffDetail);
+			logger.error("SQL Exception trying to update Staff: "+staffDetail);
             logger.error(ExceptionUtils.getStackTrace(e)); 
             System.out.println(ExceptionUtils.getStackTrace(e));
             success = false;
@@ -187,10 +187,10 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	}
 
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.StaffDetails)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
 	@Override
-	public boolean deleteSStaffDetail(StaffDetails staffDetail) {
+	public boolean deleteSStaffDetail(Staff staffDetail) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -198,18 +198,18 @@ public class StaffDetailsDAO extends GenericDAO implements SchoolStaffDetailsDAO
 	 /**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDetailsDAO#getSStaffDetailList()
 	 */
-	public List<StaffDetails> getSStaffDetailList() {
-		 List<StaffDetails> list = null;
+	public List<Staff> getSStaffDetailList() {
+		 List<Staff> list = null;
 		  try(   
 	      		Connection conn = dbutils.getConnection();
-	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StaffDetails ;");   
+	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Staff ;");   
 	      		ResultSet rset = pstmt.executeQuery();
 	  		) {
 	      	
-	          list = beanProcessor.toBeanList(rset, StaffDetails.class);
+	          list = beanProcessor.toBeanList(rset, Staff.class);
 
 	      } catch(SQLException e){
-	      	  logger.error("SQL Exception when getting all StaffDetails");
+	      	  logger.error("SQL Exception when getting all Staff");
 	          logger.error(ExceptionUtils.getStackTrace(e));
 	          System.out.println(ExceptionUtils.getStackTrace(e));
 	      }

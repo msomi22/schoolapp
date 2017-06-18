@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -72,7 +72,7 @@ public class AssignSubjectClass extends HttpServlet{
 		      }else{
 		    	  
 				   for(int i = 0; i<classId.length;i++){
-					   TeacherSubClass subClass = new TeacherSubClass();
+					   TeacherSubject subClass = new TeacherSubject();
 					       subClass.setClassRoomUuid(classId[i]);
 						   subClass.setSubjectUuid(subjectId);
 						   subClass.setTeacherUuid(staffid);

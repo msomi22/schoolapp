@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
 import com.yahoo.petermwenda83.server.session.AdminSessionConstants;
@@ -32,7 +32,7 @@ public class AddRootUser extends HttpServlet{
 	final String ERROR_PHONE_INVALID = "Phone is invalid, phone number must have 10 digits (e.g. 0718953974).";//
     final String ERROR_EMPTY_ACCOUNT = "Please Select an Account.";
     final String ERROR_EMPTY_CATEGORY = "Please Select a Category.";
-    final String ERROR_EMPTY_POSITION = "Please Select a Position";
+    final String ERROR_EMPTY_POSITION = "Please Select a AcessLevel";
     final String ERROR_EMPTY_USERNAME = "Username can't be empty";
     final String ERROR_MAX_USERNAME = "Username can only have character length of 5.";
     final String ERROR_EMPTY_PASSWORD = "Password cant be empty";
@@ -139,7 +139,7 @@ public class AddRootUser extends HttpServlet{
     	   staff.setPassword(principalpassword); 
     	   staff.setStatusUuid(STATUS_ACTIVE_UUID); 
     	   
-    	   StaffDetails staffDetail = new StaffDetails();
+    	   Staff staffDetail = new Staff();
     	   staffDetail.setStaffUuid(staff.getUuid()); 
     	   staffDetail.setEmployeeNo(employeeNo);
     	   staffDetail.setFirstName(StringUtils.capitalize(firstname));

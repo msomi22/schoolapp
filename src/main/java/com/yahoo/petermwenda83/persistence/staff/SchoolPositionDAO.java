@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.staff;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.staff.Position;
+import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 
 /**
  * @author peter
@@ -13,14 +13,14 @@ import com.yahoo.petermwenda83.bean.staff.Position;
  */
 public interface SchoolPositionDAO {
 	
-	public Position get(String Uuid);
+	public AcessLevel get(String Uuid);
 	
-	public boolean putPosition(Position osition);
+	public boolean putPosition(AcessLevel osition);
 	
-	public boolean updatePosition(Position osition);
+	public boolean updatePosition(AcessLevel osition);
 	
-	public boolean deletePosition(Position osition);
+	public boolean deletePosition(AcessLevel osition);
 	
-	public List<Position> getPositionList();
+	public List<AcessLevel> getPositionList();
 
 }

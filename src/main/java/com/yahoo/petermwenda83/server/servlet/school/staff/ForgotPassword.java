@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
@@ -77,7 +77,7 @@ public class ForgotPassword extends HttpServlet{
 			if(staff!=null){
 
 
-				StaffDetails StaffDetail = staffDetailsDAO.getStaffDetail(staff.getUuid());
+				Staff StaffDetail = staffDetailsDAO.getStaffDetail(staff.getUuid());
 				if(StaffDetail!=null){
 					phone = StaffDetail.getPhone();
 					formatedphone = phone.replaceFirst("^0+(?!$)", "");

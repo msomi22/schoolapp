@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.staff.Position;
+import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -52,55 +52,55 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
 	
 
 	@Override
-	public Position get(String Uuid) {
-		Position position = new Position();
+	public AcessLevel get(String Uuid) {
+		AcessLevel acessLevel = new AcessLevel();
         ResultSet rset = null;
      try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Position WHERE Uuid = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE Uuid = ?;");       
      		
      		){
      	     pstmt.setString(1, Uuid);
 	         rset = pstmt.executeQuery();
 	        while(rset.next()){
 	
-	        	position  = beanProcessor.toBean(rset,Position.class);
+	        	acessLevel  = beanProcessor.toBean(rset,AcessLevel.class);
 	   }
      	
      	
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Position with uuid: " + Uuid);
+     	  logger.error("SQL Exception when getting AcessLevel with uuid: " + Uuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
      
-		return position; 
+		return acessLevel; 
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#putPosition(com.yahoo.petermwenda83.bean.staff.Position)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#putPosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
 	 */
 	@Override
-	public boolean putPosition(Position osition) {
+	public boolean putPosition(AcessLevel osition) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.Position)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
 	 */
 	@Override
-	public boolean updatePosition(Position osition) {
+	public boolean updatePosition(AcessLevel osition) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#deletePosition(com.yahoo.petermwenda83.bean.staff.Position)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#deletePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
 	 */
 	@Override
-	public boolean deletePosition(Position osition) {
+	public boolean deletePosition(AcessLevel osition) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -109,16 +109,16 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#getPositionList(java.lang.String)
 	 */
 	@Override
-	public List<Position> getPositionList() {
-		List<Position> list = null;
+	public List<AcessLevel> getPositionList() {
+		List<AcessLevel> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Position;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AcessLevel;");   
 			) {
 			
 			 try(ResultSet rset = pstmt.executeQuery();){
 					
-				 list = beanProcessor.toBeanList(rset, Position.class);
+				 list = beanProcessor.toBeanList(rset, AcessLevel.class);
 				}
 	        
 

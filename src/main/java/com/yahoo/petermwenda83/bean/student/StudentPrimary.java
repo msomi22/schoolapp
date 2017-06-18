@@ -21,58 +21,61 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class StudentPrimary extends StorableBean {
 	
-	/**  
-	 * 
-	 */
-	private static final long serialVersionUID = 46794661890236283L;
-	private String studentUuid;
-	private String schoolname;
+	private String studentId;
+	private String schoolName;
 	private String index;
 	private String kcpeyear;
 	private String kcpemark;
+	
 	
 	/**
 	 * 
 	 */
 	public StudentPrimary() {
 		super();
-		studentUuid ="";
-		schoolname ="";
+		studentId ="";
+		schoolName ="";
 		index ="";
 		kcpeyear ="";
 		kcpemark ="";
 	}
 
+	
+
 	/**
-	 * @return the studentUuid
+	 * @return the studentId
 	 */
-	public String getStudentUuid() {
-		return studentUuid;
+	public String getStudentId() {
+		return studentId;
 	}
 
 
+
 	/**
-	 * @param studentUuid the studentUuid to set
+	 * @param studentId the studentId to set
 	 */
-	public void setStudentUuid(String studentUuid) {
-		this.studentUuid = studentUuid;
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
 
+
 	/**
-	 * @return the schoolname
+	 * @return the schoolName
 	 */
-	public String getSchoolname() {
-		return schoolname;
+	public String getSchoolName() {
+		return schoolName;
 	}
 
 
+
 	/**
-	 * @param schoolname the schoolname to set
+	 * @param schoolName the schoolName to set
 	 */
-	public void setSchoolname(String schoolname) {
-		this.schoolname = schoolname;
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
+
 
 
 	/**
@@ -83,6 +86,7 @@ public class StudentPrimary extends StorableBean {
 	}
 
 
+
 	/**
 	 * @param index the index to set
 	 */
@@ -91,12 +95,14 @@ public class StudentPrimary extends StorableBean {
 	}
 
 
+
 	/**
 	 * @return the kcpeyear
 	 */
 	public String getKcpeyear() {
 		return kcpeyear;
 	}
+
 
 
 	/**
@@ -115,6 +121,8 @@ public class StudentPrimary extends StorableBean {
 		return kcpemark;
 	}
 
+
+
 	/**
 	 * @param kcpemark the kcpemark to set
 	 */
@@ -122,23 +130,22 @@ public class StudentPrimary extends StorableBean {
 		this.kcpemark = kcpemark;
 	}
 
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Primary Detail");
-		builder.append("[getUuid() = ");
-		builder.append(getUuid());
-		builder.append(", studentUuid");
-		builder.append(studentUuid);
-		builder.append(", schoolname =");
-		builder.append(schoolname);
-		builder.append(", index =");
-		builder.append(index);
-		builder.append(", kcpeyear =");
-		builder.append(kcpeyear);
-		builder.append(", kcpemark =");
-		builder.append(kcpemark);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "StudentPrimary [studentId=" + studentId + ", schoolName=" + schoolName + ", index=" + index
+				+ ", kcpeyear=" + kcpeyear + ", kcpemark=" + kcpemark + ", getUuid()=" + getUuid() + ", getAccountId()="
+				+ getAccountId() + "]";
+	}
+
+
+
+	/**  
+	 * 
+	 */
+	private static final long serialVersionUID = 46794661890236283L;
 }

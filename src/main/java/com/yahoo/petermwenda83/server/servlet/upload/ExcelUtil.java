@@ -23,7 +23,7 @@ import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
-import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
@@ -210,7 +210,7 @@ public class ExcelUtil {
 
 
 					ClassRoom clss = roomDAO.getroomByRoomName(schooluuid, classroom);
-					TeacherSubClass ts = new TeacherSubClass();  
+					TeacherSubject ts = new TeacherSubject();  
 					ts.setClassRoomUuid(clss.getUuid());
 					ts.setTeacherUuid(staffId);
 					Subject sub = subjectDAO.getSubjects(subject);

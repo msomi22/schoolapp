@@ -21,7 +21,7 @@ import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.bean.staff.StaffDetails;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
 import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
@@ -421,7 +421,7 @@ public class SendSMS extends HttpServlet{
 					//Teaching staff
 					if(StringUtils.equals(category, "Teaching")){
 						//Non-Teaching staff
-						StaffDetails staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
+						Staff staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
 						TstaffPhone = staffDetail.getPhone();
 						formatedTstaffPhone = TstaffPhone.replaceFirst("^0+(?!$)", "");
 						realTstaffPhone = "+254"+formatedTstaffPhone;
@@ -464,7 +464,7 @@ public class SendSMS extends HttpServlet{
 					//Teaching staff
 					if(StringUtils.equals(category, "Non-Teaching")){
 						//Non-Teaching staff
-						StaffDetails staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
+						Staff staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
 						NTstaffPhone = staffDetail.getPhone();
 						formatedNTstaffPhone = NTstaffPhone.replaceFirst("^0+(?!$)", "");
 						realNTstaffPhone = "+254"+formatedNTstaffPhone;
