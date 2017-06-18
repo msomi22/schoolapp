@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.CatOne;
 import com.yahoo.petermwenda83.bean.exam.CatTwo;
@@ -22,7 +23,6 @@ import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
@@ -285,7 +285,7 @@ public class ExcelUtil {
 	 * @param examConfigDAO
 	 * @throws IOException
 	 */
-	public void saveResults(File uploadedFile,String stffID, SchoolAccount school, ExamEgineDAO examEgineDAO,
+	public void saveResults(File uploadedFile,String stffID, Account school, ExamEgineDAO examEgineDAO,
 			StudentDAO studentDAO, RoomDAO roomDAO, SubjectDAO subjectDAO,ExamConfigDAO examConfigDAO) throws IOException{
 		
 		if(uploadedFile !=null){

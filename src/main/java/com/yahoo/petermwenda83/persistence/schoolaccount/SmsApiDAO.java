@@ -12,7 +12,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /** 
@@ -74,7 +74,7 @@ public class SmsApiDAO extends GenericDAO implements SchoolSmsApiDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsApiDAO#putSmsApi(com.yahoo.petermwenda83.bean.schoolaccount.SmsApi)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsApiDAO#putSmsApi(com.yahoo.petermwenda83.bean.account.SmsApi)
 	 */
 	@Override
 	public boolean putSmsApi(SmsApi smsApi) {
@@ -85,7 +85,7 @@ public class SmsApiDAO extends GenericDAO implements SchoolSmsApiDAO {
       		){
 			   
 	            pstmt.setString(1, smsApi.getUuid());
-	            pstmt.setString(2, smsApi.getSchoolAccountUuid());
+	            //pstmt.setString(2, smsApi.getSchoolAccountUuid());
 	            pstmt.setString(3, smsApi.getApiKey());
 	            pstmt.setString(4, smsApi.getApiPassword()); 
 	            pstmt.executeUpdate();
@@ -100,7 +100,7 @@ public class SmsApiDAO extends GenericDAO implements SchoolSmsApiDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsApiDAO#updateSmsApi(com.yahoo.petermwenda83.bean.schoolaccount.SmsApi)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsApiDAO#updateSmsApi(com.yahoo.petermwenda83.bean.account.SmsApi)
 	 */
 	@Override
 	public boolean updateSmsApi(SmsApi smsApi) {
@@ -113,7 +113,7 @@ public class SmsApiDAO extends GenericDAO implements SchoolSmsApiDAO {
 	            pstmt.setString(1, smsApi.getApiKey());
 	            pstmt.setString(2, smsApi.getApiPassword()); 
 	            pstmt.setString(3, smsApi.getUuid());
-	            pstmt.setString(4, smsApi.getSchoolAccountUuid());
+	            //pstmt.setString(4, smsApi.getSchoolAccountUuid());
                 pstmt.executeUpdate(); 
 
         } catch (SQLException e) {

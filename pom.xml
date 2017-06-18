@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.yahoo.petermwenda83</groupId>
-  <artifactId>schoolnew</artifactId>
+  <artifactId>school</artifactId>
   <version>1.0</version>
   <packaging>war</packaging> 
   <name>School maven app</name> 
@@ -95,6 +95,13 @@
         <artifactId>itextpdf</artifactId>
         <version>5.5.10</version>
     </dependency>
+   
+	<dependency>
+	    <groupId>com.itextpdf</groupId>
+	    <artifactId>itextpdf</artifactId>
+	    <version>5.5.11</version>
+	</dependency>
+    
 
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -107,6 +114,13 @@
         <artifactId>jasypt</artifactId>
         <version>1.9.2</version>
     </dependency>
+   
+	<dependency>
+	    <groupId>org.json</groupId>
+	    <artifactId>json</artifactId>
+	    <version>20160810</version>
+	</dependency>
+    
 
     <dependency>
       <groupId>joda-time</groupId>
@@ -150,23 +164,52 @@
       <artifactId>quartz</artifactId>
       <version>2.2.3</version>
     </dependency>
+   
+	<dependency>
+	    <groupId>org.jfree</groupId>
+	    <artifactId>jfreechart</artifactId>
+	    <version>1.0.19</version>
+	</dependency>
+	
+	<!-- 
+	<dependency>
+	    <groupId>MiddleNumberFor3</groupId>
+	    <artifactId>com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3</artifactId>
+	    <version>1.0</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/resources/jars/MiddleNo.jar</systemPath> 
+    </dependency>
+     -->
+    
 
     <!-- Database dependencies -->
+   
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>5.1.41</version>
     </dependency>
+   
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>9.4-1206-jdbc42</version>
+	</dependency>
+    
+   
+    
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
       <version>5.2.8.Final</version>
     </dependency>
+    
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>5.4.0.Final</version>
     </dependency>
+    
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
@@ -180,13 +223,15 @@
         <artifactId>ehcache</artifactId>
         <version>3.3.1</version>
     </dependency>
-
-    <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-ehcache</artifactId>
-        <version>5.2.9.Final</version>
-    </dependency>
-
+    
+	<dependency>
+	    <groupId>net.sf.ehcache</groupId>
+	    <artifactId>ehcache-core</artifactId>
+	    <version>2.6.11</version>
+	</dependency>
+    
+  
+   
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
@@ -223,18 +268,8 @@
 
     <pluginManagement>
       <plugins>
-
-        <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
-          <version>2.2</version>
-          <configuration>
-            <url>http://localhost:8080/manager/text</url>
-            <server>TomcatServer</server>
-            <username>admin</username>
-            <password>password</password>
-          </configuration>
-        </plugin>
+      
+      <!-- http://0.0.0.0:9990/management -->
 
         <plugin>
           <groupId>org.wildfly.plugins</groupId>
@@ -246,6 +281,7 @@
             <username>man</username>
             <password>man</password>
             <name>school.war</name>
+            
           </configuration>
         </plugin>
 

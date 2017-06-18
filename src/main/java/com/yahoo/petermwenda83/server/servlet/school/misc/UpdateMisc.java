@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 

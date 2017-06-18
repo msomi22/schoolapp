@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -75,7 +75,7 @@ public class UpdateTermFee extends HttpServlet{
 		String securityKey = StringUtils.trimToEmpty(request.getParameter("securityKey"));
 		String schooluuid = StringUtils.trimToEmpty(request.getParameter("schooluuid"));
 		
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		String  schoolusername = "";
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -85,7 +85,7 @@ public class UpdateTermFee extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 		
 		 ExamConfig examConfig = new ExamConfig();

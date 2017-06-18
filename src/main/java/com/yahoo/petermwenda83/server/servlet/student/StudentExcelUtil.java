@@ -19,9 +19,9 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
@@ -213,7 +213,7 @@ public class StudentExcelUtil {
 	 * @throws IOException
 	 * @throws InvalidFormatException 
 	 */
-	public void saveResults(File uploadedFile,SchoolAccount school, RoomDAO roomDAO, PrimaryDAO primaryDAO,
+	public void saveResults(File uploadedFile,Account school, RoomDAO roomDAO, PrimaryDAO primaryDAO,
 			StudentDAO studentDAO, StudentSubjectDAO studentSubjectDAO, SubjectDAO subjectDAO,ExamConfigDAO examConfigDAO) throws IOException, InvalidFormatException{
 
 		if(uploadedFile !=null){

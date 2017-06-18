@@ -11,6 +11,7 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.student;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
@@ -23,133 +24,144 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Student extends StorableBean implements Comparable<Student> {
 	
-
-		private static final long serialVersionUID = -7544635242162355411L;
 		
-		private String schoolAccountUuid;
-		private String statusUuid;
-		private String classRoomUuid;
-		private String admno;
-		private String firstname; // baptism name
+		
+		private String regStream;
+		private String currentStream;
+		private String isActive;
+		private String isAlumni;
+		private String isBoarding;
+		private String regNo;
+		private String firstname;
+		private String middlename;		
 		private String lastname;
-		private String surname;  // family name 
-		private String gender;		
-		private String dOB;
-		private String bcertno;
+		private String gender;
+		private String dob;
+		private String bcertNo;
 		private String county;
 		private String regTerm;
-		private Integer finalYear;
-		private Integer finalTerm;
-		private String sysUser;
-		private String studentType;
-		private Date admissionDate;
+		private String finalYear;
+		private String finalTerm;
+		private String passport;
+		private String lastUpdated;
+		private Timestamp admissionDate;
 		
   
 	
     public Student() {
 		super();
-		schoolAccountUuid = "";
-		statusUuid = "";
-		classRoomUuid = "";
-		admno = "";
+		regStream = "";
+		currentStream = "";
+		isActive = "";
+		isAlumni = "";
+		isBoarding = "";
+		regNo = "";
 		firstname = "";
+		middlename = "";
 		lastname = "";
-		surname = "";
-		gender ="";
-		dOB = "";
-		bcertno = "";
-		county ="";
+		gender = "";
+		dob = "";
+		bcertNo = "";
+		county = "";
 		regTerm = "";
-		finalYear = 0;
-		finalTerm = 0;
-		sysUser = "";
-		studentType = "";
-		admissionDate = new Date();
+		finalYear = "";
+		finalTerm = "";
+		passport = "";
+		lastUpdated = "";
+		admissionDate = new Timestamp(new Date().getTime());
 	
 	}
 	
-	
-
 	/**
-	 * @return the schoolAccountUuid
+	 * @return the regStream
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getRegStream() {
+		return regStream;
 	}
 
-
-
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param regStream the regStream to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setRegStream(String regStream) {
+		this.regStream = regStream;
 	}
 
-
-
 	/**
-	 * @return the statusUuid
+	 * @return the currentStream
 	 */
-	public String getStatusUuid() {
-		return statusUuid;
+	public String getCurrentStream() {
+		return currentStream;
 	}
 
-
-
 	/**
-	 * @param statusUuid the statusUuid to set
+	 * @param currentStream the currentStream to set
 	 */
-	public void setStatusUuid(String statusUuid) {
-		this.statusUuid = statusUuid;
+	public void setCurrentStream(String currentStream) {
+		this.currentStream = currentStream;
 	}
 
-
-
 	/**
-	 * @return the classRoomUuid
+	 * @return the isActive
 	 */
-	public String getClassRoomUuid() {
-		return classRoomUuid;
+	public String getIsActive() {
+		return isActive;
 	}
 
-
-
 	/**
-	 * @param classRoomUuid the classRoomUuid to set
+	 * @param isActive the isActive to set
 	 */
-	public void setClassRoomUuid(String classRoomUuid) {
-		this.classRoomUuid = classRoomUuid;
+	public void setIsActive(String isActive) {
+		this.isActive = isActive;
 	}
 
-
-
 	/**
-	 * @return the admno
+	 * @return the isAlumni
 	 */
-	public String getAdmno() {
-		return admno.substring(0, Math.min(admno.length(), 4));
+	public String getIsAlumni() {
+		return isAlumni;
 	}
 
-
-
 	/**
-	 * @param admno the admno to set
+	 * @param isAlumni the isAlumni to set
 	 */
-	public void setAdmno(String admno) {
-		this.admno = admno;
+	public void setIsAlumni(String isAlumni) {
+		this.isAlumni = isAlumni;
 	}
 
+	/**
+	 * @return the isBoarding
+	 */
+	public String getIsBoarding() {
+		return isBoarding;
+	}
 
+	/**
+	 * @param isBoarding the isBoarding to set
+	 */
+	public void setIsBoarding(String isBoarding) {
+		this.isBoarding = isBoarding;
+	}
+
+	/**
+	 * @return the regNo
+	 */
+	public String getRegNo() {
+		return regNo;
+	}
+
+	/**
+	 * @param regNo the regNo to set
+	 */
+	public void setRegNo(String regNo) {
+		this.regNo = regNo;
+	}
 
 	/**
 	 * @return the firstname
 	 */
 	public String getFirstname() {
-		return firstname.substring(0, Math.min(firstname.length(), 7));
+		return firstname;
 	}
-
-
 
 	/**
 	 * @param firstname the firstname to set
@@ -158,16 +170,26 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.firstname = firstname;
 	}
 
+	/**
+	 * @return the middlename
+	 */
+	public String getMiddlename() {
+		return middlename;
+	}
 
+	/**
+	 * @param middlename the middlename to set
+	 */
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
 
 	/**
 	 * @return the lastname
 	 */
 	public String getLastname() {
-		return lastname.substring(0, Math.min(lastname.length(), 7));
+		return lastname;
 	}
-
-
 
 	/**
 	 * @param lastname the lastname to set
@@ -176,34 +198,12 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.lastname = lastname;
 	}
 
-
-
-	/**
-	 * @return the surname
-	 */
-	public String getSurname() {
-		return surname.substring(0, Math.min(surname.length(), 7));
-	}
-
-
-
-	/**
-	 * @param surname the surname to set
-	 */
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-
-
 	/**
 	 * @return the gender
 	 */
 	public String getGender() {
 		return gender;
 	}
-
-
 
 	/**
 	 * @param gender the gender to set
@@ -212,43 +212,33 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.gender = gender;
 	}
 
-
-
 	/**
-	 * @return the dOB
+	 * @return the dob
 	 */
-	public String getdOB() {
-		return dOB;
+	public String getDob() {
+		return dob;
 	}
 
-
-
 	/**
-	 * @param dOB the dOB to set
+	 * @param dob the dob to set
 	 */
-	public void setdOB(String dOB) {
-		this.dOB = dOB;
+	public void setDob(String dob) {
+		this.dob = dob;
 	}
 
-
-
 	/**
-	 * @return the bcertno
+	 * @return the bcertNo
 	 */
-	public String getBcertno() {
-		return bcertno;
+	public String getBcertNo() {
+		return bcertNo;
 	}
 
-
-
 	/**
-	 * @param bcertno the bcertno to set
+	 * @param bcertNo the bcertNo to set
 	 */
-	public void setBcertno(String bcertno) {
-		this.bcertno = bcertno;
+	public void setBcertNo(String bcertNo) {
+		this.bcertNo = bcertNo;
 	}
-
-
 
 	/**
 	 * @return the county
@@ -257,16 +247,12 @@ public class Student extends StorableBean implements Comparable<Student> {
 		return county;
 	}
 
-
-
 	/**
 	 * @param county the county to set
 	 */
 	public void setCounty(String county) {
 		this.county = county;
 	}
-
-
 
 	/**
 	 * @return the regTerm
@@ -275,8 +261,6 @@ public class Student extends StorableBean implements Comparable<Student> {
 		return regTerm;
 	}
 
-
-
 	/**
 	 * @param regTerm the regTerm to set
 	 */
@@ -284,147 +268,99 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.regTerm = regTerm;
 	}
 
-    
-
 	/**
 	 * @return the finalYear
 	 */
-	public Integer getFinalYear() {
+	public String getFinalYear() {
 		return finalYear;
 	}
-
-
 
 	/**
 	 * @param finalYear the finalYear to set
 	 */
-	public void setFinalYear(Integer finalYear) {
+	public void setFinalYear(String finalYear) {
 		this.finalYear = finalYear;
 	}
-
-    
 
 	/**
 	 * @return the finalTerm
 	 */
-	public Integer getFinalTerm() {
+	public String getFinalTerm() {
 		return finalTerm;
 	}
-
-
 
 	/**
 	 * @param finalTerm the finalTerm to set
 	 */
-	public void setFinalTerm(Integer finalTerm) {
+	public void setFinalTerm(String finalTerm) {
 		this.finalTerm = finalTerm;
 	}
 
-
-
 	/**
-	 * @return the sysUser
+	 * @return the passport
 	 */
-	public String getSysUser() {
-		return sysUser;
+	public String getPassport() {
+		return passport;
 	}
 
-
-
 	/**
-	 * @param sysUser the sysUser to set
+	 * @param passport the passport to set
 	 */
-	public void setSysUser(String sysUser) {
-		this.sysUser = sysUser;
+	public void setPassport(String passport) {
+		this.passport = passport;
 	}
 
-
-
 	/**
-	 * @return the studentType
+	 * @return the lastUpdated
 	 */
-	public String getStudentType() {
-		return studentType;
+	public String getLastUpdated() {
+		return lastUpdated;
 	}
 
-
-
 	/**
-	 * @param studentType the studentType to set
+	 * @param lastUpdated the lastUpdated to set
 	 */
-	public void setStudentType(String studentType) {
-		this.studentType = studentType;
+	public void setLastUpdated(String lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
-
-
 
 	/**
 	 * @return the admissionDate
 	 */
-	public Date getAdmissionDate() {
+	public Timestamp getAdmissionDate() {
 		return admissionDate;
 	}
-
-
 
 	/**
 	 * @param admissionDate the admissionDate to set
 	 */
-	public void setAdmissionDate(Date admissionDate) {
-		this.admissionDate = new Date(admissionDate.getTime());
+	public void setAdmissionDate(Timestamp admissionDate) {
+		this.admissionDate = admissionDate;
+	}
+	
+	
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Student [regStream=" + regStream + ", currentStream=" + currentStream + ", isActive=" + isActive
+				+ ", isAlumni=" + isAlumni + ", isBoarding=" + isBoarding + ", regNo=" + regNo + ", firstname="
+				+ firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob="
+				+ dob + ", bcertNo=" + bcertNo + ", county=" + county + ", regTerm=" + regTerm + ", finalYear="
+				+ finalYear + ", finalTerm=" + finalTerm + ", passport=" + passport + ", lastUpdated=" + lastUpdated
+				+ ", admissionDate=" + admissionDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
+				+ "]";
 	}
 
-
-
-	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Student [getUuid() =");
-		builder.append(getUuid());
-		builder.append(",schoolAccountUuid =");
-		builder.append(schoolAccountUuid);
-		builder.append(",statusUuid =");
-		builder.append(statusUuid);		
-		builder.append(",classRoomUuid =");
-		builder.append(classRoomUuid);		
-		builder.append(",admno =");
-		builder.append(admno);	
-		builder.append(",firstname =");
-		builder.append(firstname);	
-		builder.append(",lastname =");
-		builder.append(lastname);
-		builder.append(",surname =");
-		builder.append(surname);
-		builder.append(",gender =");
-		builder.append(gender);
-		builder.append(",dOB =");
-		builder.append(dOB);
-		builder.append(",bcertno =");
-		builder.append(bcertno);  //
-		builder.append(",county =");
-		builder.append(county);//finalYear
-		builder.append(",regTerm =");
-		builder.append(regTerm);//finalTerm
-		builder.append(",finalYear =");
-		builder.append(finalYear);
-		builder.append(",finalTerm =");
-		builder.append(finalTerm);
-		builder.append(",sysUser =");
-		builder.append(sysUser);
-		builder.append(",studentType =");
-		builder.append(studentType);
-		builder.append(",admissionDate =");
-		builder.append(admissionDate);
-		builder.append("]");
-		return builder.toString(); 
-		}
-
-
-	
 	@Override
 	public int compareTo(Student ss) {
-		return getAdmno().compareTo(((Student) ss).getAdmno());
+		return getRegNo().compareTo(((Student) ss).getRegNo()); 
 	}
 
+
+
+	private static final long serialVersionUID = -7544635242162355411L;
 
 }

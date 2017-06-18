@@ -3,7 +3,7 @@
  */
 package com.yahoo.petermwenda83.persistence.schoolaccount;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 
 /**
  * @author peter

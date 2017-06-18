@@ -25,14 +25,14 @@ import com.yahoo.petermwenda83.server.servlet.util.DbPoolUtil;
  */
 public class GenericDAO {
 
-	
-	 protected DBCredentials dbutils;
+
+	protected DBCredentials dbutils;
 	/**
 	 * @throws SQLException 
 	 * 
 	 */
 	public GenericDAO()  { 
-	dbutils =  DbPoolUtil.getDBCredentials();
+		dbutils =  DbPoolUtil.getDBCredentials();
 	}
 	/**
 	 * 
@@ -45,11 +45,11 @@ public class GenericDAO {
 	public GenericDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		dbutils = new DBCredentials(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
-	
-	 
+
+
 	public void closeConnections() {
 		dbutils.closeConnections();
 	}
-	
+
 
 }

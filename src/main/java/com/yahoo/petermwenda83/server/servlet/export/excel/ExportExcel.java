@@ -23,9 +23,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentHouse;
@@ -108,7 +108,7 @@ public class ExportExcel extends HttpServlet{
         
         classroomuuid = StringUtils.trimToEmpty(request.getParameter("classroomuuid"));
        
-        SchoolAccount school = new SchoolAccount();
+        Account school = new Account();
 	
 		   if(session !=null){
 		   schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -118,7 +118,7 @@ public class ExportExcel extends HttpServlet{
 		   
 		   element = schoolaccountCache.get(schoolusername);
 		   if(element !=null){
-		   school = (SchoolAccount) element.getObjectValue();
+		   school = (Account) element.getObjectValue();
 	 
 		   }
                
@@ -164,7 +164,7 @@ public class ExportExcel extends HttpServlet{
      * @param List<IncomingLog>
      * Method create excelSheets and sends them
      ****/    
-    public void createExcelSheets(List<Student>studentList, SchoolAccount school) throws IOException{    	
+    public void createExcelSheets(List<Student>studentList, Account school) throws IOException{    	
     	 
         XSSFWorkbook xf = new XSSFWorkbook();
         XSSFCreationHelper ch =xf.getCreationHelper();
@@ -200,7 +200,7 @@ public class ExportExcel extends HttpServlet{
         
         XSSFRow r0 = s.createRow(0);
         XSSFCell cell = r0.createCell((short) 0);
-	    cell.setCellValue(ch.createRichTextString(school.getSchoolName()+" : "+roomHash.get(classroomuuid)+" Students List,  TERM " + examConfig.getTerm()+"  "+ examConfig.getYear()));
+	    cell.setCellValue(ch.createRichTextString(school.getName()+" : "+roomHash.get(classroomuuid)+" Students List,  TERM " + examConfig.getTerm()+"  "+ examConfig.getYear()));
 	    cell.setCellStyle(style);
 	    
 	    s.addMergedRegion(new CellRangeAddress(0,0,10,0));//row from,row to,col from, col to

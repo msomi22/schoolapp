@@ -1,11 +1,11 @@
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.ExamConfig"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SmsSend"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.OutGoingSMS"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>

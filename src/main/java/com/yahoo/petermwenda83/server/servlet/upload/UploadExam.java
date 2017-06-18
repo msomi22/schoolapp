@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
@@ -122,10 +122,10 @@ public class UploadExam extends HttpServlet {
 		String schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
 		staffUsername = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
 		String stffID = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-		  SchoolAccount school = new SchoolAccount();
+		  Account school = new Account();
 	       Element element;
 	       if ((element = schoolCache.get(schoolusername)) != null) {
-	    	   school = (SchoolAccount) element.getObjectValue();
+	    	   school = (Account) element.getObjectValue();
 	    	   schooluuid = school.getUuid();
 	        }
 		 

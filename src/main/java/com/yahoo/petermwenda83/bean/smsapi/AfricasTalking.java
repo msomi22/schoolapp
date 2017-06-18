@@ -16,7 +16,7 @@ package com.yahoo.petermwenda83.bean.smsapi;
  *
  */
 public class AfricasTalking {
-	
+
 	private String username;
 	private String apiKey;
 	private String recipients;
@@ -29,7 +29,7 @@ public class AfricasTalking {
 		username = "";
 		apiKey = "";
 		recipients = "";
-	    message = "";
+		message = "";
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class AfricasTalking {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
+
 
 }

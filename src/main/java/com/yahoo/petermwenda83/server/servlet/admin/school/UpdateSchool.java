@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.AdminSessionConstants;
@@ -119,14 +119,13 @@ public class UpdateSchool extends HttpServlet{
     	   
        }else{
     	   
-    	   SchoolAccount account =  accountDAO.get(schooluuid); 
+    	   Account account =  accountDAO.get(schooluuid); 
     	  
-		   account.setSchoolName(schoolname); 
+		   account.setName(schoolname); 
 		   account.setUsername(schoolusername);
 		   account.setMobile(schoolphone); 
 		   account.setEmail(schoolemail); 
-		   account.setDayBoarding(dayBoarding); 
-		   account.setPostalAddress(schoolpostaladdress); 
+		 
 		   account.setTown(schoolhometown); 
 		   
 		   if(accountDAO.update(account) ){ 
@@ -149,7 +148,7 @@ public class UpdateSchool extends HttpServlet{
    
    
 
-private void updateSchoolCache(SchoolAccount accnt) {
+private void updateSchoolCache(Account accnt) {
 	cacheManager.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME).put(new Element(accnt.getUsername(), accnt));
 	cacheManager.getCache(CacheVariables.CACHE_ACCOUNTS_BY_UUID).put(new Element(accnt.getUuid(), accnt));
 }

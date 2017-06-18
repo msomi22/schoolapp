@@ -213,12 +213,13 @@ CREATE TABLE Student(
     regTerm text,  
     finalYear Integer,  
     finalTerm Integer, 
+    passport text,
     lastUpdated text,
     admissionDate timestamp with time zone DEFAULT now()
    
 );
 
-\COPY Student(uuid,accountId,regStream,currentStream,isActive,isAlumni,isBoarding,regNo,firstname,middlename,lastname,gender,dob,bcertNo,county,regTerm,finalYear,finalTerm,lastUpdated) FROM '/tmp/Student.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY Student(uuid,accountId,regStream,currentStream,isActive,isAlumni,isBoarding,regNo,firstname,middlename,lastname,gender,dob,bcertNo,county,regTerm,finalYear,finalTerm,passport,lastUpdated) FROM '/tmp/Student.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE Student OWNER TO school;
 
 

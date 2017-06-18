@@ -18,7 +18,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.jasypt.util.text.BasicTextEncryptor;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -41,7 +41,7 @@ public class Login extends HttpServlet{
 	final String BLANK_FIELDS_NOT_ALLOWED = "blank fields are not allowed.";
 	final String ERROR_SCHOOL_INACTIVE = "You can't login to your school account, call +254718953974 for help.";
 
-	final String STATUS_INACTIVE = "6C03705B-E05E-420B-B5B8-C7EE36643E60";
+	final String STATUS_INACTIVE = "0";
 
 	/**
 	 * 
@@ -101,10 +101,10 @@ public class Login extends HttpServlet{
 		String captchaAnswer = request.getParameter("captchaAnswer").trim();
 
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		Element element;
 		if ((element = schoolCache.get(schoolusername)) != null) {
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 
 		}
 
@@ -125,7 +125,7 @@ public class Login extends HttpServlet{
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ACCOUNT_SIGN_IN_BAD_CAPTCHA);
 				response.sendRedirect("index.jsp");
 
-			} else  if (StringUtils.equals(school.getStatusUuid(), STATUS_INACTIVE)) {
+			} else  if (StringUtils.equals(school.getIsActive(), STATUS_INACTIVE)) {
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_SCHOOL_INACTIVE);
 				response.sendRedirect("index.jsp");
 

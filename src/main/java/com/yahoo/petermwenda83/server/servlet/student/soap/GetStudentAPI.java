@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
@@ -78,7 +78,7 @@ public class GetStudentAPI extends HttpServlet {
 		String schoolusername = new String(username).toString();
 		String admno = new String(admNumber).toString();
 
-		SchoolAccount school;
+		Account school;
 		Student student = new Student();
 		String fullname = "fullname";
 		Date admdate = null;

@@ -14,7 +14,7 @@ public interface SchoolPrimaryDAO {
 	  /**
 	   * 
 	   * @param StudentUuid
-	   * @return Student StudentPrimary SchoolAccount Details
+	   * @return Student StudentPrimary Account Details
 	   */
 	public StudentPrimary getPrimary(String StudentUuid);
 	   /**

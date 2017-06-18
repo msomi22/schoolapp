@@ -22,7 +22,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>

@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
@@ -151,10 +151,10 @@ public class CacheInit extends HttpServlet {
                 accountsCache.initialise();
             }
 
-            List<SchoolAccount> allAccounts = accountDAO.getAllSchools();
+            List<Account> allAccounts = accountDAO.getAllSchools();
 
             if (StringUtils.equals(cacheName, CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME)) {
-                for (SchoolAccount a : allAccounts) {
+                for (Account a : allAccounts) {
                     accountsCache.put(new Element(a.getUsername(), a));		// Username as the key
                 }
             }

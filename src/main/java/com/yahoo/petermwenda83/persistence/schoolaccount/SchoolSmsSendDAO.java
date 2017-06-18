@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.schoolaccount;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 
 /**
  * @author peter
@@ -17,42 +17,42 @@ public interface SchoolSmsSendDAO {
 	 * @param Uuid
 	 * @return
 	 */
-	public SmsSend getSmsSend(String Uuid);
+	public OutGoingSMS getSmsSend(String Uuid);
 	 /**
 	  * 
 	  * @param status
 	  * @return
 	  */
-	public SmsSend getSmsSendByStatus(String status);
+	public OutGoingSMS getSmsSendByStatus(String status);
 	 /**
 	  * 
-	  * @param smsSend
+	  * @param outGoingSMS
 	  * @return
 	  */
-	public boolean putSmsSend(SmsSend smsSend);
+	public boolean putSmsSend(OutGoingSMS outGoingSMS);
 	/**
 	 * 
-	 * @param smsSend
+	 * @param outGoingSMS
 	 * @return
 	 */
-	public boolean updateSmsSend(SmsSend smsSend);
+	public boolean updateSmsSend(OutGoingSMS outGoingSMS);
 	  /**
 	   * 
-	   * @param smsSend
+	   * @param outGoingSMS
 	   * @return
 	   */
-	public boolean deleteSmsSend(SmsSend smsSend);
+	public boolean deleteSmsSend(OutGoingSMS outGoingSMS);
 	  /**
 	   * 
 	   * @return
 	   */
-	public List<SmsSend> getSmsSend();
+	public List<OutGoingSMS> getSmsSend();
 	
 	/**
 	 * 
 	 * @param status
 	 * @return
 	 */
-	public List<SmsSend> getSmsSendList(String status);
+	public List<OutGoingSMS> getSmsSendList(String status);
 
 }

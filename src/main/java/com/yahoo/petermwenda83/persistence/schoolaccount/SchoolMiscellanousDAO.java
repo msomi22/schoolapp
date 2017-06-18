@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.schoolaccount;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
 
 /**
  * @author peter

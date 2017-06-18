@@ -13,7 +13,7 @@ package com.yahoo.petermwenda83.pagination.student;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.utils.StudentUtils;
@@ -31,13 +31,13 @@ public class StudentPaginator {
 	private static StudentUtils studentUtils;
 	private static StudentDAO studentDAO;
 	private String SchoolAccountUuid;
-    private SchoolAccount account;
+    private Account account;
 	/**
 	 * @param SchoolAccountUuid 
 	 * 
 	 */
 	public StudentPaginator(String SchoolAccountUuid) {
-		account = new SchoolAccount();
+		account = new Account();
 		account.setUuid(SchoolAccountUuid); 
 		
 	    studentUtils = StudentUtils.getInstance();

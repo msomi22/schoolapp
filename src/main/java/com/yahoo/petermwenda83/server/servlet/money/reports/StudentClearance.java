@@ -35,6 +35,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.money.PocketMoney;
@@ -42,7 +43,6 @@ import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
 import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
@@ -147,7 +147,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	String studentuuid = StringUtils.trimToEmpty(request.getParameter("studentuuid"));
 	studentuuid = "9703f423-7381-4496-9b8d-2c3ae0ad9b63"; //A195BAF6-D6E7-43A5-B7C9-D6C627A42815// 4F218688-6DE5-4E69-8690-66FBA2F0DC9F
 	
-	SchoolAccount school = new SchoolAccount();
+	Account school = new Account();
 	String schoolusername = "";
 
 	if(session !=null){
@@ -158,7 +158,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
 	element = schoolaccountCache.get(schoolusername);
 	if(element !=null){
-		school = (SchoolAccount) element.getObjectValue();
+		school = (Account) element.getObjectValue();
 	}
 
 	String pdfname =school.getUsername()+"Report.pdf";
@@ -200,8 +200,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
 	PDF_TITLE = "FINANCIAL ANALYSIS REPORT \n";
 
-	PDF_SUBTITLE =     school.getSchoolName()+"\n"
-			+ "P.O BOX "+school.getPostalAddress()+"\n" 
+	PDF_SUBTITLE =     school.getName()+"\n"
+			+ "P.O BOX "+school.getAddress()+"\n" 
 			+ ""+school.getTown().toUpperCase()+ " - KENYA\n" 
 			+ "" + school.getMobile()+"\n"
 			+ "" + school.getEmail()+"\n"; 
@@ -239,7 +239,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	 * @param path2
 	 * @throws DocumentException
 	 */
-	private void populatePDFDocument(SchoolAccount school, ExamConfig exam, TermFee termFee,Student stuudent, String path2) throws DocumentException {
+	private void populatePDFDocument(Account school, ExamConfig exam, TermFee termFee,Student stuudent, String path2) throws DocumentException {
      
 		/**  Algorithm to clear students
 		 *   1)if student has fee balance, they must clear the balance first

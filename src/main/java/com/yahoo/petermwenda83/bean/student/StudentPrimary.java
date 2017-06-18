@@ -14,7 +14,7 @@ package com.yahoo.petermwenda83.bean.student;
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- * Student's Primary SchoolAccount Informations
+ * Student's Primary Account Informations
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *

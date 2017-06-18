@@ -2,7 +2,7 @@
 <%@page import="com.yahoo.petermwenda83.bean.exam.ExamConfig"%>
 
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>

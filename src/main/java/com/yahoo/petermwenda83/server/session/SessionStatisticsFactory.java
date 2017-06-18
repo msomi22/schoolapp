@@ -25,15 +25,15 @@ import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
- 
+
 public class SessionStatisticsFactory {
-	
+
 	private static StaffDAO staffDAO;
 	private static final String onlinestatus = "Online";
 
-    static {
-    	staffDAO = StaffDAO.getInstance();
-    }
+	static {
+		staffDAO = StaffDAO.getInstance();
+	}
 
 	public static SessionStatistics getSessionStatistics(String accountuuid,String staffuuid) {
 		SessionStatistics stats = new SessionStatistics();
@@ -42,24 +42,24 @@ public class SessionStatisticsFactory {
 		Map<String, String> userStatus = new HashMap<>();
 		for(Staff staff : staffList){
 			if(StringUtils.equals(staff.getUuid(), staffuuid)){
-			userStatus.put(staff.getUuid(), onlinestatus);
-			stats.setUserStatus(userStatus); 
+				userStatus.put(staff.getUuid(), onlinestatus);
+				stats.setUserStatus(userStatus); 
 			}
 		}
-		
+
 		String state = "";
 		Map<String, String> uStatus = new HashMap<>();
 		uStatus = stats.getUserStatus(); 
 		if(uStatus.get(staffuuid)!=null){
-		state = uStatus.get(staffuuid);
+			state = uStatus.get(staffuuid);
 		}else{
 			state = "Offline";
 		}
 		//System.out.println("state = " + state);
-	
+
 		return stats;
 	}
 
-    
+
 }
 

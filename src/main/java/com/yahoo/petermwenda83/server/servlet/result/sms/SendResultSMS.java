@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -130,12 +130,12 @@ public class SendResultSMS {
 			String themessage ="";
 			String thecost ="";
 
-			SmsSend smsSend = new SmsSend();
-			smsSend.setStatus("failed");
-			smsSend.setPhoneNo(realphone);
-			smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-			smsSend.setCost("1");
-			smsSendDAO.putSmsSend(smsSend);
+			OutGoingSMS outGoingSMS = new OutGoingSMS();
+			outGoingSMS.setStatus("failed");
+			/*outGoingSMS.setPhoneNo(realphone);
+			outGoingSMS.setMessageId(message.replaceAll("[\r\n]+", " "));
+			outGoingSMS.setCost("1");*/
+			smsSendDAO.putSmsSend(outGoingSMS);
 			//System.out.println("smsSend = "+smsSend);
 
 
@@ -149,12 +149,12 @@ public class SendResultSMS {
 					themessage = message;
 					thecost = result.getString("cost");
 
-					SmsSend smsSend2 = smsSendDAO.getSmsSend(smsSend.getUuid());
-					smsSend2.setStatus(thestatus);
+					OutGoingSMS smsSend2 = smsSendDAO.getSmsSend(outGoingSMS.getUuid());
+					/*smsSend2.setStatus(thestatus);
 					smsSend2.setPhoneNo(thenumber);
 					smsSend2.setMessageId(themessage.replaceAll("[\r\n]+", " "));
 					smsSend2.setCost(thecost);
-					smsSendDAO.updateSmsSend(smsSend2); 
+					smsSendDAO.updateSmsSend(smsSend2); */
 					//System.out.println("smsSend2 = "+smsSend2);
 
 				} 

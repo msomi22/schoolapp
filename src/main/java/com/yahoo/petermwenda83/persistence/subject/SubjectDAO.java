@@ -1,5 +1,5 @@
 /**
- * SchoolAccount Management System
+ * Account Management System
  * This software belong to Peter Mwenda's and Miwgi Ndungu's Company
  * copywrite peter&MigwiSoftwares.co.ltd
  */

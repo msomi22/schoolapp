@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -51,9 +51,9 @@ public class DeleteAllSMS extends HttpServlet{
 			 
 		}else{
 			
-			SmsSend smsSend = new SmsSend();
-			smsSend.setStatus(status);
-			if(smsSendDAO.deleteSmsSend(smsSend)){
+			OutGoingSMS outGoingSMS = new OutGoingSMS();
+			outGoingSMS.setStatus(status);
+			if(smsSendDAO.deleteSmsSend(outGoingSMS)){
 				session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_DELETE_SUCCESS); 
 				
 			}else{

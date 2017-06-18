@@ -16,112 +16,111 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.server.servlet.sms.send.AfricasTalkingGateway;
-import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
 
 
 public class QuartzJob implements Job{
 
 	private static SmsSendDAO smsSendDAO;
 	private static SmsApiDAO smsApiDAO;
-	private static String schooluuid;
 	
-	 
 	public QuartzJob() {
 		super();
 		smsSendDAO = SmsSendDAO.getInstance();
 		smsApiDAO = SmsApiDAO.getInstance();
-		schooluuid = PropertiesConfig.getConfigValue("SCHOOL_ID");
 	}
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		
+
 		try {
-			
-			 if(SystemUtils.IS_OS_WINDOWS){
-				 backUpWin();
-			 }
-			
-			 if(SystemUtils.IS_OS_LINUX){
-				 StartBackup();
-			 }
-			
+
+			if(SystemUtils.IS_OS_WINDOWS){
+				backUpWin();
+			}
+
+			if(SystemUtils.IS_OS_LINUX){
+				StartBackup();
+			}
+
 			checksentSMS();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void checksentSMS() {
-		List<SmsSend> smslist = new ArrayList<>();
+		
+		List<OutGoingSMS> smslist = new ArrayList<>();
 		if(smsSendDAO.getSmsSend() !=null){
-		smslist = smsSendDAO.getSmsSend();
-		if(smslist !=null){
-		for(SmsSend sms : smslist){
-			String phone = sms.getPhoneNo();
-			String message = sms.getMessageId();
-			String status = sms.getStatus();
-			
-			if(StringUtils.equalsIgnoreCase(status, "failed")){
-				 //send message
-				   AfricasTalking africasTalking = new AfricasTalking();
-			       // Specify your login credentials
-				   if(smsApiDAO.getSmsApi(schooluuid) !=null){
-				    SmsApi smsApi = smsApiDAO.getSmsApi(schooluuid); 
-					String username = smsApi.getApiPassword();//africasTalking.getUsername();
-					String apiKey   = smsApi.getApiKey();//africasTalking.getApiKey();
-			        africasTalking.setMessage(message); 
-			        africasTalking.setRecipients(phone); 
-			       // Create a new instance of our awesome gateway class
-			       AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-			       try {
-				          JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
-				          for( int i = 0; i < results.length(); ++i ) {
-				                JSONObject result = results.getJSONObject(i);
-				               
-				                //save to database
-				                String thestatus ="";
-				                String thenumber ="";
-				                String themessage ="";
-				                String thecost ="";
-				                
-				                thestatus = result.getString("status");
-				                thenumber = result.getString("number");
-				                themessage = message;
-				                thecost = result.getString("cost");
-				                
-				                if(StringUtils.isBlank(thestatus)){
-				                	thestatus = "failed";
-				                }if(StringUtils.isBlank(thenumber)){
-				                	thenumber = phone;
-				                }if(StringUtils.isBlank(thecost)){
-				                	thecost = "1";
-				                }
-				                SmsSend smsSend = smsSendDAO.getSmsSend(sms.getUuid());
-				                smsSend.setStatus(thestatus);
-				                smsSend.setPhoneNo(thenumber);
-				                smsSend.setMessageId(themessage.replaceAll("[\r\n]+", " "));
-				                smsSend.setCost(thecost);
-				                smsSendDAO.updateSmsSend(smsSend);
-				                
-					         }
-					         
-					     }
-					     
-					     catch (Exception e) {
-					    	e.printStackTrace(); 
-					      }
-			    }
-		       }//end if(smsApiDAO.getSmsApi(schooluuid) !=null){
-		     }
+			smslist = smsSendDAO.getSmsSend();
+			if(smslist !=null){
+				for(OutGoingSMS sms : smslist){
+					String phone = sms.getMobile();
+					String message = sms.getMessage(); 
+					String status = sms.getStatus();
+					String accountId = sms.getAccountId();
+
+					if(StringUtils.equalsIgnoreCase(status, "failed")){
+						//send message
+						AfricasTalking africasTalking = new AfricasTalking();
+						// Specify your login credentials
+						if(smsApiDAO.getSmsApi(accountId) !=null){
+							SmsApi smsApi = smsApiDAO.getSmsApi(accountId);  
+							String username = smsApi.getApiPassword();
+							String apiKey   = smsApi.getApiKey();
+							africasTalking.setMessage(message); 
+							africasTalking.setRecipients(phone); 
+							// Create a new instance of our awesome gateway class
+							AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+							try {
+								JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
+								for( int i = 0; i < results.length(); ++i ) {
+									JSONObject result = results.getJSONObject(i);
+
+									//save to database
+									String thestatus ="";
+									String thenumber ="";
+									String themessage ="";
+									String thecost ="";
+
+									thestatus = result.getString("status");
+									thenumber = result.getString("number");
+									themessage = message;
+									thecost = result.getString("cost");
+
+									if(StringUtils.isBlank(thestatus)){
+										thestatus = "failed";
+									}if(StringUtils.isBlank(thenumber)){
+										thenumber = phone;
+									}if(StringUtils.isBlank(thecost)){
+										thecost = "1";
+									}
+									OutGoingSMS outGoingSMS = smsSendDAO.getSmsSend(sms.getUuid());
+									outGoingSMS.setAccountId(accountId); 
+									outGoingSMS.setStatus(thestatus);
+									outGoingSMS.setMobile(thenumber);
+									outGoingSMS.setMessage(themessage.replaceAll("[\r\n]+", " "));
+									outGoingSMS.setSmsCost(thecost);
+									smsSendDAO.updateSmsSend(outGoingSMS);
+
+								}
+
+							}
+
+							catch (Exception e) {
+								e.printStackTrace(); 
+							}
+						}
+					}//end if(smsApiDAO.getSmsApi(schooluuid) !=null){
+				}
 			}
 		}//end if(smsSendDAO.getSmsSend() !=null){
 	}
@@ -137,17 +136,17 @@ public class QuartzJob implements Job{
 			Process p = pb.start();
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); 
 			String line = null;
-			
+
 			while((line=br.readLine())!=null){
 				System.out.println(line);
-				
+
 			}
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
-		
+
+
 	}
 
 	/**

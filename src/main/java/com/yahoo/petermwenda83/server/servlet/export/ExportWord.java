@@ -19,7 +19,8 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -70,7 +71,7 @@ public class ExportWord extends HttpServlet{
 		   
 		   classroomuuidToken = StringUtils.trimToEmpty(request.getParameter("classroomuuid"));
 	 
-		   SchoolAccount school = new SchoolAccount();
+		   Account school = new Account();
 		   HttpSession session = request.getSession(false);
 		   
 		   if(session !=null){
@@ -82,7 +83,7 @@ public class ExportWord extends HttpServlet{
 		   
 		   element = schoolaccountCache.get(schoolusername);
 		   if(element !=null){
-		   school = (SchoolAccount) element.getObjectValue();
+		   school = (Account) element.getObjectValue();
 	 
 		   }
 		   

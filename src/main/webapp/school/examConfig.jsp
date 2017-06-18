@@ -11,9 +11,9 @@
 <%@page import="com.yahoo.petermwenda83.bean.exam.Exam"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Miscellanous"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
 

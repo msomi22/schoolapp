@@ -36,10 +36,10 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
@@ -118,7 +118,7 @@ public class FinancialReport extends HttpServlet{
 
 
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		String schoolusername = "";
 
 		if(session !=null){
@@ -129,7 +129,7 @@ public class FinancialReport extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 		String pdfname =school.getUsername()+"financialReport.pdf";
@@ -153,10 +153,9 @@ public class FinancialReport extends HttpServlet{
 
 
 		PDF_TITLE = "FINANCIAL ANALYSIS REPORT \n";
-		// +"TERM :" + examConfig.getTerm() + " YEAR :"+examConfig.getYear()+" TERM FEE "+ nf.format(termFee.getTermAmount())+"\n\n\n";
-
-		PDF_SUBTITLE =     school.getSchoolName()+"\n"
-				+ "P.O BOX "+school.getPostalAddress()+"\n" 
+		
+		PDF_SUBTITLE =     school.getName()+"\n"
+				+ "P.O BOX "+school.getAddress()+"\n" 
 				+ ""+school.getTown().toUpperCase()+ " - KENYA\n" 
 				+ "" + school.getMobile()+"\n"
 				+ "" + school.getEmail()+"\n"; 
@@ -193,7 +192,7 @@ public class FinancialReport extends HttpServlet{
 	 * @param path2
 	 * @throws DocumentException
 	 */
-	private void populatePDFDocument(SchoolAccount school, ExamConfig examConfig2, TermFee termFee,
+	private void populatePDFDocument(Account school, ExamConfig examConfig2, TermFee termFee,
 			 String path2) throws DocumentException {
 
 

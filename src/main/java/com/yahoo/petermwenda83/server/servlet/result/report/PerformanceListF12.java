@@ -48,13 +48,13 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Classes;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
@@ -167,7 +167,7 @@ public class PerformanceListF12 extends HttpServlet {
 		// ServletContext context = getServletContext();
 		response.setContentType("application/pdf");
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		HttpSession session = request.getSession(false);
 
 		if(session !=null){
@@ -182,7 +182,7 @@ public class PerformanceListF12 extends HttpServlet {
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 
@@ -240,8 +240,8 @@ public class PerformanceListF12 extends HttpServlet {
 				.toString();
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
-		schoolname = school.getSchoolName().toUpperCase()+"\n";
-		PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+		schoolname = school.getName().toUpperCase()+"\n";
+		PDF_SUBTITLE =  "P.O BOX "+school.getAddress()+"\n" 
 				+ ""+school.getTown()+" - Kenya\n" 
 				+ "" + school.getMobile()+"\n"
 				+ "" + school.getEmail()+"\n" ;
@@ -276,7 +276,7 @@ public class PerformanceListF12 extends HttpServlet {
 
 
 
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, 
+	private void populatePDFDocument(SessionStatistics statistics, Account school, 
 			String classID,List<Perfomance> pDistinctListGeneral, String realPath) {
 		SimpleDateFormat formatter;
 

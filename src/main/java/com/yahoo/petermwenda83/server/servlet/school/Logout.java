@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -88,12 +88,12 @@ public class Logout extends HttpServlet {
             // Remove the statistics of this user from cache
             String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
             String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-            SchoolAccount school = new SchoolAccount();
+            Account school = new Account();
             
             
             Element element;
             if ((element = accountsCache.get(username)) != null) {
-            	school = (SchoolAccount) element.getObjectValue();
+            	school = (Account) element.getObjectValue();
             }
             statisticsCache.remove(school.getUuid());
             

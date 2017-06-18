@@ -45,13 +45,13 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.BarWeight;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
@@ -65,10 +65,9 @@ import com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
+import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.server.session.SessionStatistics;
-import com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
@@ -187,7 +186,7 @@ public class ClassListF3_4 extends HttpServlet{
 		// ServletContext context = getServletContext();
 		response.setContentType("application/pdf");
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		HttpSession session = request.getSession(false); 
 		schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
 		//stffID = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
@@ -203,7 +202,7 @@ public class ClassListF3_4 extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 
@@ -264,8 +263,8 @@ public class ClassListF3_4 extends HttpServlet{
 				.toString();
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
-		schoolname = school.getSchoolName().toUpperCase()+"\n";
-		PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+		schoolname = school.getName().toUpperCase()+"\n";
+		PDF_SUBTITLE =  "P.O BOX "+school.getAddress()+"\n" 
 				+ ""+school.getTown()+" - Kenya\n" 
 				+ "" + school.getMobile()+"\n"
 				+ "" + school.getEmail()+"\n" ;
@@ -297,7 +296,7 @@ public class ClassListF3_4 extends HttpServlet{
 
 
 
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid2,
+	private void populatePDFDocument(SessionStatistics statistics, Account school, String classroomuuid2,
 			String classID, List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath) {
 
 		Map<String,Double> kswscoreMapgn = new LinkedHashMap<String,Double>();
@@ -725,9 +724,9 @@ public class ClassListF3_4 extends HttpServlet{
 							bioscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(bioscoregn)))));
 							chemscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(chemscoregn)))));
 							matscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(matscoregn)))));
-							MiddleNumberFor3 middle = new MiddleNumberFor3();
+							
 							subjectBiggn = Math.max( (Math.max(physcoregn, bioscoregn)), Math.max(Math.max(physcoregn, bioscoregn), chemscoregn));
-							subjectSmallgn = middle.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
+							subjectSmallgn = PeterMid.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
 							scienceScoregn = (subjectBiggn+subjectSmallgn+matscoregn);
 
 						}
@@ -1322,7 +1321,7 @@ public class ClassListF3_4 extends HttpServlet{
 			Map<String,Double> grandscoremap = new LinkedHashMap<String,Double>(); 
 			double languageScore = 0;double scienceScore = 0;double humanityScore = 0;
 			double techinicalScore = 0;double grandscore = 0;double number = 0.0;
-			MiddleNumberFor3 middle = new MiddleNumberFor3();
+			
 			if(pDistinctList !=null){
 				for(Perfomance s : pDistinctList){                              
 					list = perfomanceDAO.getPerformance(school.getUuid(), classroomuuid, s.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
@@ -1611,7 +1610,7 @@ public class ClassListF3_4 extends HttpServlet{
 							matscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(matscore)))));
 
 							subjectBig = Math.max( (Math.max(physcore, bioscore)), Math.max(Math.max(physcore, bioscore), chemscore));
-							subjectSmall = middle.ComputeMiddle(physcore, bioscore, chemscore);
+							subjectSmall = PeterMid.ComputeMiddle(physcore, bioscore, chemscore);
 							scienceScore = (subjectBig+subjectSmall+matscore);
 
 						}

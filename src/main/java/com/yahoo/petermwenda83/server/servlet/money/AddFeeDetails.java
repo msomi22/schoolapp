@@ -24,13 +24,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -139,7 +139,7 @@ public class AddFeeDetails extends HttpServlet{
 		addparamHash.put("Amountpaid", Amountpaid);
 		addparamHash.put("slipNumber", slipNumber);
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		String  schoolusername = "";
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -149,7 +149,7 @@ public class AddFeeDetails extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 
@@ -292,12 +292,13 @@ public class AddFeeDetails extends HttpServlet{
 
 				//System.out.println(message.replaceAll("[\r\n]+", " "));  
 
-				SmsSend smsSend = new SmsSend();
-				smsSend.setStatus("failed");
-				smsSend.setPhoneNo(realphone);
-				smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-				smsSend.setCost("1");
-				smsSendDAO.putSmsSend(smsSend);
+				OutGoingSMS outGoingSMS = new OutGoingSMS();
+				outGoingSMS.setAccountId(schooluuid);
+				outGoingSMS.setStatus("failed");
+				outGoingSMS.setMobile(realphone);
+				outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+				outGoingSMS.setSmsCost("1");
+				smsSendDAO.putSmsSend(outGoingSMS);
 
 
 				try {
@@ -310,11 +311,12 @@ public class AddFeeDetails extends HttpServlet{
 						themessage = message;
 						thecost = result.getString("cost");
 
-						SmsSend smsSend2 = smsSendDAO.getSmsSend(smsSend.getUuid());
+						OutGoingSMS smsSend2 = smsSendDAO.getSmsSend(outGoingSMS.getUuid());
+						smsSend2.setAccountId(schooluuid);
 						smsSend2.setStatus(thestatus);
-						smsSend2.setPhoneNo(thenumber);
-						smsSend2.setMessageId(themessage.replaceAll("[\r\n]+", " "));
-						smsSend2.setCost(thecost);
+						smsSend2.setMobile(thenumber);
+						smsSend2.setMessage(themessage.replaceAll("[\r\n]+", " "));
+						smsSend2.setSmsCost(thecost);
 						smsSendDAO.updateSmsSend(smsSend2); 
 
 					} 

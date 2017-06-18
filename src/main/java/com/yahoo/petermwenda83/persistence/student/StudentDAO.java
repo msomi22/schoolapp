@@ -15,7 +15,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
@@ -159,9 +159,9 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentByName(com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentByName(com.yahoo.petermwenda83.bean.account.Account, java.lang.String)
 	 */
-	public List<Student> getStudentByName(SchoolAccount schoolaccount, String firstname) {
+	public List<Student> getStudentByName(Account schoolaccount, String firstname) {
 		List<Student> list = new ArrayList<>();
 
         try (
@@ -188,7 +188,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentAdmNo(com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentAdmNo(com.yahoo.petermwenda83.bean.account.Account, java.lang.String)
 	 */
 	@Override
 	public List<Student> getStudentByAdmNo(String schoolaccountUuid, String admno ) {
@@ -373,7 +373,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	 * @param endIndex
 	 * @return
 	 */
-	public List<Student> getStudentList (SchoolAccount schoolaccount , int startIndex , int endIndex){
+	public List<Student> getStudentList (Account schoolaccount , int startIndex , int endIndex){
 		List<Student> studentList = new ArrayList<>();
 		
 		try(

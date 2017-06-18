@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 
 /**
  * @author peter
@@ -63,10 +63,10 @@ public class TestAccountDAO {
 	@Test
 	public void testGetSchoolByUsername() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		SchoolAccount s = new SchoolAccount();
+		Account s = new Account();
 		s = store.getSchoolByUsername(USERNAME);
 		assertEquals(s.getUuid(),SCHOOL_UUID);
-		assertEquals(s.getSchoolName(),SCHOOL_NAME);
+		//assertEquals(s.getSchoolName(),SCHOOL_NAME);
 		assertEquals(s.getUsername(),USERNAME);
 		assertEquals(s.getPassword(),PASSWORD);
 		assertEquals(s.getMobile(),MOBILE);
@@ -74,16 +74,16 @@ public class TestAccountDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#put(com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#put(com.yahoo.petermwenda83.bean.account.Account)}.
 	 */
 	@Ignore
 	@Test
 	public void testPut() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		SchoolAccount s = new SchoolAccount();
+		Account s = new Account();
 		s.setUuid(SCHOOL_UUID_NEW);
-		s.setStatusUuid(STATUS);
-		s.setSchoolName(SCHOOL_NAME_NEW);
+		//s.setStatusUuid(STATUS);
+		//s.setSchoolName(SCHOOL_NAME_NEW);
 		s.setUsername(USERNAME_NEW);
 		s.setPassword(PASSWORD_NEW);
 		s.setMobile(MOBILE_NEW);
@@ -92,15 +92,15 @@ public class TestAccountDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#update(com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#update(com.yahoo.petermwenda83.bean.account.Account)}.
 	 */
 	@Ignore
 	@Test
 	public void testUpdate() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		SchoolAccount s = new SchoolAccount();
+		Account s = new Account();
 		s.setUuid(SCHOOL_UUID_NEW);
-		s.setSchoolName(SCHOOL_NAME_UPDATE);
+		//s.setSchoolName(SCHOOL_NAME_UPDATE);
 		s.setUsername(USERNAME_UPDATE);
 		s.setPassword(PASSWORD_UPDATE);
 		s.setMobile(MOBILE_UPDATE);
@@ -109,13 +109,13 @@ public class TestAccountDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#delete(com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#delete(com.yahoo.petermwenda83.bean.account.Account)}.
 	 */
 	@Ignore
 	@Test
 	public void testDelete() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		//SchoolAccount s = new SchoolAccount();
+		//Account s = new Account();
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class TestAccountDAO {
 	@Test
 	public void testGetAllSchools() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<SchoolAccount> list = store.getAllSchools();	
-		for (SchoolAccount ss : list) {
+		List<Account> list = store.getAllSchools();	
+		for (Account ss : list) {
 			System.out.println(ss);
 		}
 		

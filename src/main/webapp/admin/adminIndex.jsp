@@ -1,5 +1,5 @@
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
@@ -59,15 +59,15 @@ if (session == null) {
     SessionStatistics statistics = new SessionStatistics();
     
     Element element;
-    SchoolAccount schoolAccount = new SchoolAccount();
+    Account account = new Account();
 
      List keys;
-     List<SchoolAccount> schoolList = new ArrayList(); 
+     List<Account> schoolList = new ArrayList(); 
     keys = accountsCache.getKeys();
     for (Object key : keys) {
         element = accountsCache.get(key);
-        schoolAccount = (SchoolAccount) element.getObjectValue();
-        schoolList.add(schoolAccount);
+        account = (Account) element.getObjectValue();
+        schoolList.add(account);
     }
    
 
@@ -221,11 +221,10 @@ if (session == null) {
                 <tbody>
                     <%                                                          
                       int count = 1;
-                         for (SchoolAccount s : schoolList) {
+                         for (Account s : schoolList) {
                           String status = "Active";
 
-                          String statusUuid = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
-                          if(StringUtils.equals(s.getStatusUuid(),statusUuid)){
+                          if(StringUtils.equals(s.getIsActive(),"1")){
                             status = "Active";
                               }else{
                              status = "Inactive";
@@ -253,23 +252,23 @@ if (session == null) {
                     %>
                     <tr>
                         <td width="3%"><%=count%></td>
-                         <td class="center"><%=s.getSchoolName()%></td> 
+                         <td class="center"><%=s.getName()%></td> 
                          <td class="center"><%=s.getUsername()%></td>
                          <td class="center"><%=principalUsername + " "+staffname+""%></td>
-                         <td class="center"><%=studentDAO.getStudentCount(statusUuid,s.getUuid())%></td>
+                         <td class="center"><%=studentDAO.getStudentCount("1",s.getUuid())%></td>
                          <td class="center"><%=s.getMobile()%></td>
                          <td class="center"><%=s.getEmail()%></td>  
-                         <td class="center"><%=s.getPostalAddress()%></td>
+                         <td class="center"><%=s.getAddress()%></td>
                          <td class="center"><%=s.getTown()%></td>  
                          <td class="center"><%=status%></td>  
                          <td class="center">
                                 <form name="edit" method="POST" action="editSchool.jsp"> 
-                                <input type="hidden" name="schoolname" value="<%=s.getSchoolName()%>">
+                                <input type="hidden" name="schoolname" value="<%=s.getName()%>">
                                 <input type="hidden" name="username" value="<%=s.getUsername()%>">
                                 <input type="hidden" name="password" value="<%=s.getPassword()%>">
                                 <input type="hidden" name="mobile" value="<%=s.getMobile()%>">
                                 <input type="hidden" name="email" value="<%=s.getEmail()%>">
-                                <input type="hidden" name="postaladdress" value="<%=s.getPostalAddress()%>">
+                                <input type="hidden" name="postaladdress" value="<%=s.getAddress()%>">
                                 <input type="hidden" name="hometown" value="<%=s.getTown()%>">
                                 <input type="hidden" name="schooluuid" value="<%=s.getUuid()%>">
                                 <input class="btn btn-success" type="submit" name="edit" id="submit" value="Edit School" /> 

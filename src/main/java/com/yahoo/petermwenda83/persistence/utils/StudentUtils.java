@@ -66,7 +66,7 @@ public class StudentUtils extends GenericDAO {
 
  	       
         } catch (SQLException e) {
-            //logger.error("SQLException when getting count of SchoolAccount with SchoolAccountUuid: " + SchoolAccountUuid);
+            //logger.error("SQLException when getting count of Account with SchoolAccountUuid: " + SchoolAccountUuid);
             logger.error(ExceptionUtils.getStackTrace(e));
         }
         

@@ -8,7 +8,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassesDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.Classes"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>

@@ -28,12 +28,12 @@ public class AdminSessionConstants {
 	final public static String ADMIN_SIGN_IN_ERROR_VALUE = "Sorry, the administrator username and/or " +
 			"password are incorrect. Please try again.";
 
-	final public static String SCHOOL_ACCOUNT_ADD_SUCCESS = "SchoolAccount Account Added Successfully";
-	final public static String SCHOOL_ACCOUNT_ADD_KEY = "SchoolAccount Account Add Key";
-	final public static String SCHOOL_ACCOUNT_ADD_ERROR = "SchoolAccount Account Add Error";
-	final public static String SCHOOL_ACCOUNT_UPDATE_ERROR = "SchoolAccount Account Update Error";
-	final public static String SCHOOL_ACCOUNT_UPDATE_SUCCESS = "SchoolAccount Account Update Success";
-	final public static String SCHOOL_ACCOUNT_PARAM = "SchoolAccount Account Parameters";
+	final public static String SCHOOL_ACCOUNT_ADD_SUCCESS = "Account Account Added Successfully";
+	final public static String SCHOOL_ACCOUNT_ADD_KEY = "Account Account Add Key";
+	final public static String SCHOOL_ACCOUNT_ADD_ERROR = "Account Account Add Error";
+	final public static String SCHOOL_ACCOUNT_UPDATE_ERROR = "Account Account Update Error";
+	final public static String SCHOOL_ACCOUNT_UPDATE_SUCCESS = "Account Account Update Success";
+	final public static String SCHOOL_ACCOUNT_PARAM = "Account Account Parameters";
 
 	final public static String PRINCIPAL_ADD_ERROR = "Principal add error";
 	final public static String PRINCIPAL_ADD_SUCCESS = "Principal added Successfully";

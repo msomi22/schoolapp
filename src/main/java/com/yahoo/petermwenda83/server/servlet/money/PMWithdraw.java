@@ -16,9 +16,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.Withdraw;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
@@ -85,7 +85,7 @@ public class PMWithdraw extends HttpServlet{
        Map<String, String> paramHash = new HashMap<>();   
        paramHash.put("amount", amount);  
        
-       SchoolAccount school = new SchoolAccount();
+       Account school = new Account();
 		String  schoolusername = "";
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -95,7 +95,7 @@ public class PMWithdraw extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
        
        if(StringUtils.isBlank(admissionNumber)){

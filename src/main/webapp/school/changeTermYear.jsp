@@ -8,9 +8,9 @@
 <%@page import="com.yahoo.petermwenda83.bean.money.TermFee"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Miscellanous"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>

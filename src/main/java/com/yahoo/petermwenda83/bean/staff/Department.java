@@ -14,7 +14,7 @@ package com.yahoo.petermwenda83.bean.staff;
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- * A department in a SchoolAccount
+ * A department in a Account
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *

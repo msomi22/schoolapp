@@ -46,11 +46,11 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
@@ -62,9 +62,9 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.result.ExamConstants;
 import com.yahoo.petermwenda83.server.servlet.result.PdfUtil;
+import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.server.session.SessionStatistics;
-import com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -79,7 +79,7 @@ public class CatResultF34 extends HttpServlet{
 	private Font timesRomanBold7 = ExamConstants.timesRomanBold7;
 	private Font timesRomanItalic8 = ExamConstants.timesRomanItalic8;
 	private Font timesRomanNormal7 = ExamConstants.timesRomanNormal7;
-	
+
 	private Document document;
 	private PdfWriter writer;
 	private Cache schoolaccountCache, statisticsCache;
@@ -98,7 +98,7 @@ public class CatResultF34 extends HttpServlet{
 	private static ExamConfigDAO examConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static PrimaryDAO primaryDAO;
-	
+
 
 	HashMap<String, String> studentAdmNoHash = new HashMap<String, String>();
 	HashMap<String, String> studNameHash = new HashMap<String, String>();
@@ -120,14 +120,14 @@ public class CatResultF34 extends HttpServlet{
 	double geoscore = 0;String geoscorestr = "";
 	double crescore = 0;String crescorestr = "";
 	double histscore = 0;String histscorestr = "";
-	
+
 
 	String grade = "";String studeadmno = "";String studename = "";String admno = "";
 	double paper1  = 0;double paper2  = 0;double paper3  = 0;
 	double cat1 = 0;  double cat2  = 0;double endterm  = 0;
 	double catTotals  = 0;double catmean  = 0;double examcattotal  = 0;
 	double total  = 0;double pmean  = 0;
-	
+
 
 	String USER= "";
 	String path ="";
@@ -151,7 +151,7 @@ public class CatResultF34 extends HttpServlet{
 		examConfigDAO = ExamConfigDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
-		
+
 		USER = System.getProperty("user.name");
 		path = "/home/"+USER+"/school/logo/logo.png";	}
 
@@ -169,7 +169,7 @@ public class CatResultF34 extends HttpServlet{
 		String classroomuuid = "";
 		String schoolusername = "";
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		HttpSession session = request.getSession(false); 
 		schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
 		String classID = "";
@@ -183,7 +183,7 @@ public class CatResultF34 extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 		ClassRoom clssrom = roomDAO.getroom(school.getUuid(), classroomuuid);
@@ -225,13 +225,13 @@ public class CatResultF34 extends HttpServlet{
 
 		for(Student stu : studentList){
 			studentAdmNoHash.put(stu.getUuid(),stu.getAdmno()); 
-			
+
 			String formatedFirstname = StringUtils.capitalize(stu.getFirstname().toLowerCase());
 			String formatedSurname = StringUtils.capitalize(stu.getLastname().toLowerCase());
-			
+
 			formatedFirstname = formatedFirstname.substring(0, Math.min(formatedFirstname.length(), 10));
 			formatedSurname = formatedSurname.substring(0, Math.min(formatedSurname.length(), 10));
-			
+
 			studNameHash.put(stu.getUuid(),formatedFirstname + " " + formatedSurname );
 		}
 
@@ -244,8 +244,8 @@ public class CatResultF34 extends HttpServlet{
 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
-		schoolname = school.getSchoolName().toUpperCase()+"\n";
-		PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+		schoolname = school.getName().toUpperCase()+"\n";
+		PDF_SUBTITLE =  "P.O BOX "+school.getAddress()+"\n" 
 				+ ""+school.getTown()+" - Kenya\n" 
 				+ "" + school.getMobile()+"\n"
 				+ "" + school.getEmail()+"\n" ;
@@ -277,7 +277,7 @@ public class CatResultF34 extends HttpServlet{
 
 
 
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid, 
+	private void populatePDFDocument(SessionStatistics statistics, Account school, String classroomuuid, 
 			String classID,List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath) {
 
 
@@ -353,7 +353,7 @@ public class CatResultF34 extends HttpServlet{
 			prefaceTable.addCell(contentcell);
 
 			document.add(prefaceTable);
-			
+
 			subAnalysisTable.addCell(new Paragraph("ENTRY",timesRomanBold7));
 			subAnalysisTable.addCell(new Paragraph(" ",timesRomanBold7));
 			subAnalysisTable.addCell(new Paragraph("ENG :\nEntry " + perfomanceDAO.getSubjectCountPerStream(school.getUuid(), ExamConstants.ENG_UUID, classroomuuid,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
@@ -396,7 +396,7 @@ public class CatResultF34 extends HttpServlet{
 
 			double humanityScoregn =0,techinicalScoregn = 0;
 			double scienceScoregn = 0;
-			
+
 
 			//eng
 			double eng_total,eng_grand_total =0;
@@ -412,7 +412,7 @@ public class CatResultF34 extends HttpServlet{
 			double cre_total,cre_grand_total =0;
 			double hist_total,hist_grand_total =0;
 			double geo_total,geo_grand_total =0;
-			
+
 			double totalclassmark = 0;
 			double classmean = 0;
 			int studentcount = 0;
@@ -558,9 +558,9 @@ public class CatResultF34 extends HttpServlet{
 							bioscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(bioscoregn)))));
 							chemscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(chemscoregn)))));
 							matscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(matscoregn)))));
-							MiddleNumberFor3 middle = new MiddleNumberFor3();
+							
 							subjectBiggn = Math.max( (Math.max(physcoregn, bioscoregn)), Math.max(Math.max(physcoregn, bioscoregn), chemscoregn));
-							subjectSmallgn = middle.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
+							subjectSmallgn = PeterMid.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
 							scienceScoregn = (subjectBiggn+subjectSmallgn+matscoregn);
 
 						}
@@ -740,7 +740,7 @@ public class CatResultF34 extends HttpServlet{
 				}
 
 			}
-			
+
 
 			/** end general ###################################################################
 			 * ################################################################################################################################# */
@@ -900,7 +900,7 @@ public class CatResultF34 extends HttpServlet{
 			Map<String,Double> grandscoremap = new LinkedHashMap<String,Double>(); 
 			double languageScore = 0;double scienceScore = 0;double humanityScore = 0;
 			double techinicalScore = 0;double grandscore = 0;double number = 0.0;
-			MiddleNumberFor3 middle = new MiddleNumberFor3();
+			
 			if(pDistinctList !=null){
 				for(Perfomance s : pDistinctList){     
 					listGeneral = perfomanceDAO.getPerformance(school.getUuid(), classroomuuid, s.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
@@ -913,9 +913,9 @@ public class CatResultF34 extends HttpServlet{
 					geoscore = 0;crescore = 0;
 					histscore = 0;
 					cat1  = 0; cat2  = 0;
-			
+
 					for(Perfomance pp : listGeneral){
-					
+
 						if(true){
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.ENG_UUID) ){
 								if(StringUtils.equals(examType, "C1")){
@@ -931,7 +931,7 @@ public class CatResultF34 extends HttpServlet{
 
 
 								}
-								
+
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.KISWA_UUID)){
 								if(StringUtils.equals(examType, "C1")){
@@ -948,14 +948,14 @@ public class CatResultF34 extends HttpServlet{
 
 
 								}
-								
+
 
 							}
 
 							engscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(engscore)))));
 							kswscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(kswscore)))));
 							languageScore = (engscore+kswscore); 
-							
+
 						}       
 						//Sciences
 						//Pick best two if the student take the three
@@ -975,7 +975,7 @@ public class CatResultF34 extends HttpServlet{
 									physcoreMap.put(s.getStudentUuid(),physcore);
 
 								}
-								
+
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BIO_UUID)){
 								if(StringUtils.equals(examType, "C1")){
@@ -989,7 +989,7 @@ public class CatResultF34 extends HttpServlet{
 									bioscoreMap.put(s.getStudentUuid(),bioscore);
 
 								}
-								
+
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CHEM_UUID)){
 								if(StringUtils.equals(examType, "C1")){
@@ -1003,7 +1003,7 @@ public class CatResultF34 extends HttpServlet{
 									chemscorehash.put(s.getStudentUuid(),chemscore);
 
 								}
-								
+
 
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.MATH_UUID)){
@@ -1018,16 +1018,16 @@ public class CatResultF34 extends HttpServlet{
 									matscorehash.put(s.getStudentUuid(),matscore);
 
 								}
-								
+
 							}
 
 							physcore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(physcore)))));
 							bioscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(bioscore)))));
 							chemscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(chemscore)))));
 							matscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(matscore)))));
-					
+
 							subjectBig = Math.max( (Math.max(physcore, bioscore)), Math.max(Math.max(physcore, bioscore), chemscore));
-							subjectSmall = middle.ComputeMiddle(physcore, bioscore, chemscore);
+							subjectSmall = PeterMid.ComputeMiddle(physcore, bioscore, chemscore);
 							scienceScore = (subjectBig+subjectSmall+matscore);
 
 						}
@@ -1047,7 +1047,7 @@ public class CatResultF34 extends HttpServlet{
 									bsscoreMap.put(s.getStudentUuid(),bsscore);
 
 								}
-								
+
 
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.AGR_UUID)){
@@ -1062,7 +1062,7 @@ public class CatResultF34 extends HttpServlet{
 									agriscorehash.put(s.getStudentUuid(),agriscore);
 
 								}
-								
+
 							}     
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.H_S)){
 								if(StringUtils.equals(examType, "C1")){
@@ -1076,7 +1076,7 @@ public class CatResultF34 extends HttpServlet{
 									hscscoreMap.put(s.getStudentUuid(),hscscore);
 
 								}
-								
+
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.COMP_UUID)){
 								if(StringUtils.equals(examType, "C1")){
@@ -1090,7 +1090,7 @@ public class CatResultF34 extends HttpServlet{
 									comscoreMap.put(s.getStudentUuid(),comscore);
 
 								}
-								
+
 
 							} 
 							bsscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(bsscore)))));
@@ -1118,7 +1118,7 @@ public class CatResultF34 extends HttpServlet{
 									geoscoreMap.put(s.getStudentUuid(),geoscore);
 
 								}
-								
+
 
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CRE_UUID)){
@@ -1133,7 +1133,7 @@ public class CatResultF34 extends HttpServlet{
 									crescorehash.put(s.getStudentUuid(),crescore);
 
 								}
-								
+
 
 							}
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.HIST_UUID)){
@@ -1147,7 +1147,7 @@ public class CatResultF34 extends HttpServlet{
 									histscore = cat2;
 									histscoreMap.put(s.getStudentUuid(),histscore);
 								}
-								
+
 							}
 
 							geoscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(geoscore)))));
@@ -1161,7 +1161,7 @@ public class CatResultF34 extends HttpServlet{
 
 
 					grandscore = languageScore+scienceScore+humanityScore+techinicalScore;
-					
+
 					languageScore = 0; scienceScore = 0; humanityScore = 0;techinicalScore = 0;  
 					grandscoremap.put(s.getStudentUuid(), grandscore); 					         
 					grandscore = 0;
@@ -1179,7 +1179,7 @@ public class CatResultF34 extends HttpServlet{
 					}
 				});
 
-				
+
 				eng_total = 0;
 				kis_total = 0;
 				math_total = 0;
@@ -1270,7 +1270,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(physcoreMap.get(uuid)!=null && physcoreMap.get(uuid)!=0){
 						physcore = physcoreMap.get(uuid);
-						 phy_total = physcore;
+						phy_total = physcore;
 						physcorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(physcore))));
 					}else{
 						physcorestr = "";
@@ -1278,7 +1278,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(bioscoreMap.get(uuid)!=null && bioscoreMap.get(uuid)!=0){
 						bioscore = bioscoreMap.get(uuid);
-						 bio_total = bioscore;
+						bio_total = bioscore;
 						bioscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(bioscore))));
 					}else{
 						bioscorestr = "";
@@ -1287,7 +1287,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(chemscorehash.get(uuid)!=null && chemscorehash.get(uuid)!=0){
 						chemscore = chemscorehash.get(uuid);
-						 chem_total = chemscore;
+						chem_total = chemscore;
 						chemscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(chemscore))));
 					}else{
 						chemscorestr = "";
@@ -1297,7 +1297,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(matscorehash.get(uuid)!=null && matscorehash.get(uuid)!=0){
 						matscore = matscorehash.get(uuid);
-						 math_total = matscore;
+						math_total = matscore;
 						matscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(matscore))));
 					}else{
 						matscorestr = "";
@@ -1305,7 +1305,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(histscoreMap.get(uuid)!=null && histscoreMap.get(uuid)!=0){
 						histscore = histscoreMap.get(uuid);
-						  hist_total = histscore;
+						hist_total = histscore;
 						histscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(histscore))));
 					}else{
 						histscorestr = "";
@@ -1314,7 +1314,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(crescorehash.get(uuid)!=null && crescorehash.get(uuid)!=0){
 						crescore = crescorehash.get(uuid);
-						 cre_total = crescore;
+						cre_total = crescore;
 						crescorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(crescore))));
 					}else{
 						crescorestr = "";
@@ -1323,7 +1323,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(geoscoreMap.get(uuid)!=null && geoscoreMap.get(uuid)!=0){
 						geoscore = geoscoreMap.get(uuid);
-						 geo_total = geoscore;
+						geo_total = geoscore;
 						geoscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(geoscore))));
 					}else{
 						geoscorestr = "";
@@ -1332,7 +1332,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(bsscoreMap.get(uuid)!=null && bsscoreMap.get(uuid)!=0){
 						bsscore = bsscoreMap.get(uuid);
-						 bs_total = bsscore;
+						bs_total = bsscore;
 						bsscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(bsscore))));
 					}else{
 						bsscorestr = "";
@@ -1341,7 +1341,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(agriscorehash.get(uuid)!=null && agriscorehash.get(uuid)!=0){
 						agriscore = agriscorehash.get(uuid);
-						 agr_total = agriscore;
+						agr_total = agriscore;
 						agriscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(agriscore))));
 					}else{
 						agriscorestr = "";
@@ -1349,7 +1349,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(hscscoreMap.get(uuid)!=null && hscscoreMap.get(uuid)!=0){
 						hscscore = hscscoreMap.get(uuid);
-						 hmsc_total = hscscore;
+						hmsc_total = hscscore;
 						hscscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(hscscore))));
 					}else{
 						hscscorestr = "";
@@ -1357,7 +1357,7 @@ public class CatResultF34 extends HttpServlet{
 
 					if(comscoreMap.get(uuid)!=null && comscoreMap.get(uuid)!=0){
 						comscore = comscoreMap.get(uuid);
-						 comp_total = comscore;
+						comp_total = comscore;
 						comscorestr = rf2.format((double)Math.round(Double.parseDouble(rf.format(comscore))));
 					}else{
 						comscorestr = "";
@@ -1419,50 +1419,50 @@ public class CatResultF34 extends HttpServlet{
 
 
 					}else if(mean >= gradingSystem.getGradeBplain()){
-						
+
 						gradeCountB++;
 						gB +=gradeCountB;	
 						gradeCountB = 0;
 					}else if(mean >= gradingSystem.getGradeBminus()){
-						
+
 						gradeCountBm++;
 						gBm +=gradeCountBm;	
 						gradeCountBm = 0;
 					}else if(mean >= gradingSystem.getGradeCplus()){
-						
+
 						gradeCountCP++;
 						gCp +=gradeCountCP;	
 						gradeCountCP = 0;
 					}else if(mean >= gradingSystem.getGradeCplain()){
-						
+
 						gradeCountC++;
 						gC +=gradeCountC;	
 						gradeCountC = 0;
 
 					}else if(mean >= gradingSystem.getGradeCminus()){
-									  
+
 						gradeCountCm++;
 						gCm +=gradeCountCm;	
 						gradeCountCm = 0;
 					}else if(mean >= gradingSystem.getGradeDplus()){
-						
+
 						gradeCountDp++;
 						gDp +=gradeCountDp;	
 						gradeCountDp = 0;
 
 					}else if(mean >= gradingSystem.getGradeDplain()){
-						
+
 						gradeCountD++;
 						gD +=gradeCountD;	
 						gradeCountD = 0;
 
 					}else if(mean >= gradingSystem.getGradeDminus()){
-						
+
 						gradeCountDm++;
 						gDm +=gradeCountDm;	
 						gradeCountDm = 0;
 					}else{
-						
+
 						gradeCountE++;
 						gE +=gradeCountE;	
 						gradeCountE = 0;
@@ -1470,7 +1470,7 @@ public class CatResultF34 extends HttpServlet{
 					}
 
 					if(mean ==0){
-						
+
 						gradeCountE++;
 						gE +=gradeCountE;	
 						gradeCountE = 0;
@@ -1630,7 +1630,7 @@ public class CatResultF34 extends HttpServlet{
 				eng_grand_total =0;
 
 			}
-			
+
 			for(int i = 0; i < 3;i++){
 
 				if(i == 0){
@@ -1705,7 +1705,7 @@ public class CatResultF34 extends HttpServlet{
 				}
 
 			}
-			
+
 			eng_grand_total = 0;
 			kis_grand_total = 0;
 			math_grand_total = 0;
@@ -1719,7 +1719,7 @@ public class CatResultF34 extends HttpServlet{
 			agr_grand_total = 0;
 			hmsc_grand_total = 0;
 			comp_grand_total = 0;
-			
+
 			document.add(emptyline);
 			document.add(myTable);  
 			document.add(emptyline);

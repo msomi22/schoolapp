@@ -28,9 +28,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -131,7 +131,7 @@ public class PerClassFinanceReport extends HttpServlet{
 
 
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		String schoolusername = "";
 
 		if(session !=null){
@@ -142,7 +142,7 @@ public class PerClassFinanceReport extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 		examConfig = examConfigDAO.getExamConfig(school.getUuid());
@@ -191,7 +191,7 @@ public class PerClassFinanceReport extends HttpServlet{
 	}
 
 
-	private void createExcelSheets(List<Student> studentList, SchoolAccount school) throws IOException {
+	private void createExcelSheets(List<Student> studentList, Account school) throws IOException {
 
 		XSSFWorkbook xf = new XSSFWorkbook();
 		XSSFCreationHelper ch =xf.getCreationHelper();

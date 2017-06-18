@@ -51,6 +51,8 @@ import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.BarWeight;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
@@ -58,8 +60,6 @@ import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
 import com.yahoo.petermwenda83.bean.staff.StaffDetails;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
@@ -282,7 +282,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		
 		
      
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		
 		String classroomuuid = "";
 		String schoolusername = "";
@@ -299,7 +299,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		net.sf.ehcache.Element element;
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 
@@ -311,8 +311,8 @@ public class FormOneEndTermReportCard extends HttpServlet{
 				statistics = (SessionStatistics) element.getObjectValue();
 			}
 			
-            schoolname = school.getSchoolName().toUpperCase()+"\n";
-			PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+            schoolname = school.getName().toUpperCase()+"\n";
+			PDF_SUBTITLE =  "P.O BOX "+school.getAddress()+"\n" 
 							+ ""+school.getTown()+" - Kenya\n" 
 							+ "" + school.getMobile()+"\n"
 							+ "" + school.getEmail()+"\n" ;
@@ -409,7 +409,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 	 * @param perfomanceListGeneral 
 	 * @param realPath
 	 */
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid, 
+	private void populatePDFDocument(SessionStatistics statistics, Account school, String classroomuuid, 
 			String classID,List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath) {
 		
 	
@@ -1948,7 +1948,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					
 					String schoolfee = "";
 
-				    if(StringUtils.equalsIgnoreCase(school.getDayBoarding(), "YES")){ //Both Day and Boarding
+				    if(StringUtils.equalsIgnoreCase(school.getIsBoarding(), "1")){ 
 				        schoolfee = "BOARDING : " + nf.format(nexttermfee) +"\nDAY : " + nf.format(daynexttermfee);
 				     }else{
 				        schoolfee = " " + nf.format(nexttermfee);
@@ -2413,7 +2413,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 	 * @param barWeight
 	 * @return
 	 */
-	private String classteacherRemarks(SchoolAccount school, String uuid, BarWeight barWeight) {
+	private String classteacherRemarks(Account school, String uuid, BarWeight barWeight) {
 		String classTeacherComent = " ";
 		double T1Weight = 0;
 		double T2Weight = 0;

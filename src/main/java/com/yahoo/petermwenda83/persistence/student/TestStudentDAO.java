@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 
 public class TestStudentDAO {
@@ -143,7 +143,7 @@ public class TestStudentDAO {
 	@Test
 	public void testGetStudentByName() {
 		 store = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		 SchoolAccount schoolaccount = new SchoolAccount();
+		 Account schoolaccount = new Account();
 		 schoolaccount.setUuid(SCHOOL_UUID); 
 		 List<Student> list = store.getStudentByName(schoolaccount, "pe");
 			for (Student l : list) {
@@ -155,7 +155,7 @@ public class TestStudentDAO {
 	@Test
 	public void testGetStudentByAdmNo() {
 		 store = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		 SchoolAccount schoolaccount = new SchoolAccount();
+		 Account schoolaccount = new Account();
 		 schoolaccount.setUuid(SCHOOL_UUID); 
 		 List<Student> list = store.getStudentByAdmNo(SCHOOL_UUID, "ad"); 
 			for (Student l : list) {
@@ -230,7 +230,7 @@ public class TestStudentDAO {
 	@Test
 	public void testGetStudentList() {
 		store = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		 SchoolAccount schoolaccount = new SchoolAccount();
+		 Account schoolaccount = new Account();
 		 schoolaccount.setUuid(SCHOOL_UUID);
 		List<Student> list = store.getStudentList(schoolaccount, 0, 15);
 		for (Student l : list) {

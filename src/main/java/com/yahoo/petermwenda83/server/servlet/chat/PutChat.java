@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.chat.Chat;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.persistence.chat.ChatDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -56,7 +56,7 @@ public class PutChat extends HttpServlet{
 
 		HttpSession session = request.getSession(false);
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 
 		String schoolusername = "";
 		
@@ -69,7 +69,7 @@ public class PutChat extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 		if(school !=null){
 

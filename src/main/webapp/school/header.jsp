@@ -18,7 +18,7 @@
 **/
 %>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.ExamConfig"%>
 <%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
@@ -57,7 +57,7 @@
     String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
     
 
-    SchoolAccount school = new SchoolAccount();
+    Account school = new Account();
     Element element;
    
 
@@ -67,7 +67,7 @@
     String accountuuid = "";
 
     if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
+        school = (Account) element.getObjectValue();
     }
 
    if(school !=null){ 
@@ -129,7 +129,7 @@
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
     
-    schoolname = school.getSchoolName();
+    schoolname = school.getName();
 
   
     HashMap<String, String> classroomHash = new HashMap<String, String>();

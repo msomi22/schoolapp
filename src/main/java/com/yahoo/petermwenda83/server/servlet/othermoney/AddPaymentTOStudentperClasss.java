@@ -18,15 +18,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
 import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -49,22 +49,22 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
 public class AddPaymentTOStudentperClasss extends HttpServlet{
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9049933342629825298L;
 
 	public final static String STATUS_NOT_DEDUCTED = "NOTDEDUCTED";
-	
+
 	final String MONEY_ASSIGNED_ERROR = "Something went wrong while assigning the money";
 	final String MONEY_ASSIGNED_SUCCESS = "The money has been assigned successfully";
 	final String ERROR_MONEY_ALREADY_ASSIGNED = "Payment type already added";
-	
+
 	final String EMPTY_CLASS = "Please select a class";
 	final String EMPTY_MONEY_TYPE = "Please select the type of money";
-	
-	
+
+
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static ExamConfigDAO examConfigDAO;
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
@@ -112,19 +112,19 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 
 	}
-   
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-           throws ServletException, IOException {
 
-       HttpSession session = request.getSession(true);
-  
-       String classUuid = StringUtils.trimToEmpty(request.getParameter("classUuid"));
-       String moneyTypeUuid = StringUtils.trimToEmpty(request.getParameter("moneyTypeUuid"));
-       
-       //System.out.println("classUuid="+classUuid);
-       //System.out.println("moneyTypeUuid="+moneyTypeUuid);
-       
-       SchoolAccount school = new SchoolAccount();
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		HttpSession session = request.getSession(true);
+
+		String classUuid = StringUtils.trimToEmpty(request.getParameter("classUuid"));
+		String moneyTypeUuid = StringUtils.trimToEmpty(request.getParameter("moneyTypeUuid"));
+
+		//System.out.println("classUuid="+classUuid);
+		//System.out.println("moneyTypeUuid="+moneyTypeUuid);
+
+		Account school = new Account();
 		String  schoolusername = "";
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -134,23 +134,23 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
-       
-       if(StringUtils.isBlank(classUuid)){
+
+		if(StringUtils.isBlank(classUuid)){
 			session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_ERROR, EMPTY_CLASS); 
 
 		}else if (StringUtils.isBlank(moneyTypeUuid)){
 			session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_ERROR, EMPTY_MONEY_TYPE); 
 
 		}else{
-			
+
 			ExamConfig examConfig = new ExamConfig();
 			if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
 				examConfig = examConfigDAO.getExamConfig(school.getUuid());
 			}
-			
+
 			//select all student in the given classroom. 
 			List<Student> studentList = new ArrayList<Student>();
 			studentList = studentDAO.getAllStudents(school.getUuid(), classUuid); 
@@ -159,16 +159,16 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 				//start the magic now
 				if (studentOtherMoniesDAO.getStudentOtherMTY(stu.getUuid(), moneyTypeUuid, examConfig.getTerm(), examConfig.getYear()) ==null){
 					//we continue
-					 List<Otherstype> othertypeList = new ArrayList<Otherstype>(); 
-				     othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
-				      HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
-				     
-				     if(othertypeList !=null){
-				     for(Otherstype om : othertypeList){
-				         moneytypeHash.put(om.getUuid(),om.getType());
-				         }
-				       }
-				             
+					List<Otherstype> othertypeList = new ArrayList<Otherstype>(); 
+					othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+					HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
+
+					if(othertypeList !=null){
+						for(Otherstype om : othertypeList){
+							moneytypeHash.put(om.getUuid(),om.getType());
+						}
+					}
+
 
 					double typeAmount = 0;
 					String type = "";
@@ -184,65 +184,65 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 					studentOtherMonies.setAmountPiad(typeAmount); 
 					studentOtherMonies.setTerm(examConfig.getTerm());
 					studentOtherMonies.setYear(examConfig.getYear()); 
-					
+
 					if( studentOtherMoniesDAO.putStudentOtherMonies(studentOtherMonies)){
 						session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_SUCCESS, MONEY_ASSIGNED_SUCCESS); 
 					}else{
 						session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_ERROR, MONEY_ASSIGNED_ERROR); 
 					}
-					
+
 					if(StringUtils.equals(examConfig.getSendSMS(),"ON")){
-					
-					String feebalance = "";
-					
-					//get parent contact and name
-					String phone = "";
-					String formatedphone = "";
-					String realphone = "";
-					String parentname = "";
-					StudentParent studentParent = new StudentParent();
-					if(parentsDAO.getParent(stu.getUuid()) !=null){
-						studentParent = parentsDAO.getParent(stu.getUuid());
-						parentname = studentParent.getFathername();
-						phone = studentParent.getFatherphone();
-						formatedphone = phone.replaceFirst("^0+(?!$)", "");
-						realphone = "+254"+formatedphone;
-					}
 
+						String feebalance = "";
 
-					//get student name
-					Student stuudent = new Student();
-					if(studentDAO.getStudentByuuid(school.getUuid(), stu.getUuid()) !=null){
-						stuudent = studentDAO.getStudentByuuid(school.getUuid(), stu.getUuid());
-					}
-
-					String genderfinder = "";
-					String gender = "";
-
-					if(stuudent != null){
-						studentAdmNoHash.put(stuudent.getUuid(),stuudent.getAdmno()); 
-						String firstNameLowecase = StringUtils.capitalize(stuudent.getFirstname().toLowerCase());
-						String lastNameLowecase = StringUtils.capitalize(stuudent.getLastname().toLowerCase());
-						String formatedFirstname = firstNameLowecase;
-						String formatedLastname = lastNameLowecase;
-						studNameHash.put(stuudent.getUuid(),formatedFirstname + " " + formatedLastname +"\n"); 
-						gender = stuudent.getGender();
-						if(StringUtils.equalsIgnoreCase(gender, "Male")) {
-							genderfinder = "son";
-						}else{
-							genderfinder = "daughter";
+						//get parent contact and name
+						String phone = "";
+						String formatedphone = "";
+						String realphone = "";
+						String parentname = "";
+						StudentParent studentParent = new StudentParent();
+						if(parentsDAO.getParent(stu.getUuid()) !=null){
+							studentParent = parentsDAO.getParent(stu.getUuid());
+							parentname = studentParent.getFathername();
+							phone = studentParent.getFatherphone();
+							formatedphone = phone.replaceFirst("^0+(?!$)", "");
+							realphone = "+254"+formatedphone;
 						}
-						genderfinderHash.put(stuudent.getUuid(), genderfinder);
-					}
+
+
+						//get student name
+						Student stuudent = new Student();
+						if(studentDAO.getStudentByuuid(school.getUuid(), stu.getUuid()) !=null){
+							stuudent = studentDAO.getStudentByuuid(school.getUuid(), stu.getUuid());
+						}
+
+						String genderfinder = "";
+						String gender = "";
+
+						if(stuudent != null){
+							studentAdmNoHash.put(stuudent.getUuid(),stuudent.getAdmno()); 
+							String firstNameLowecase = StringUtils.capitalize(stuudent.getFirstname().toLowerCase());
+							String lastNameLowecase = StringUtils.capitalize(stuudent.getLastname().toLowerCase());
+							String formatedFirstname = firstNameLowecase;
+							String formatedLastname = lastNameLowecase;
+							studNameHash.put(stuudent.getUuid(),formatedFirstname + " " + formatedLastname +"\n"); 
+							gender = stuudent.getGender();
+							if(StringUtils.equalsIgnoreCase(gender, "Male")) {
+								genderfinder = "son";
+							}else{
+								genderfinder = "daughter";
+							}
+							genderfinderHash.put(stuudent.getUuid(), genderfinder);
+						}
 
 
 
 						//get new fee balance
-						
-					    double balance = 0;
-		                balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),school.getUuid(),stuudent.getFinalYear()); 
-		                System.out.println("balance = " + balance);
-		                feebalance = nf.format(balance);
+
+						double balance = 0;
+						balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),school.getUuid(),stuudent.getFinalYear()); 
+						System.out.println("balance = " + balance);
+						feebalance = nf.format(balance);
 
 						//send message
 						AfricasTalking africasTalking = new AfricasTalking();
@@ -269,32 +269,34 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 						String thecost ="";
 
 						//System.out.println(message.replaceAll("[\r\n]+", " "));  
-						SmsSend smsSend = new SmsSend();
+						OutGoingSMS outGoingSMS = new OutGoingSMS();
 						if(realphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-						smsSend.setStatus("failed");
-						smsSend.setPhoneNo(realphone);
-						smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-						smsSend.setCost("1");
-						smsSendDAO.putSmsSend(smsSend);
+							outGoingSMS.setAccountId(school.getUuid()); 
+							outGoingSMS.setStatus("failed");
+							outGoingSMS.setMobile(realphone);
+							outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+							outGoingSMS.setSmsCost("1");
+							smsSendDAO.putSmsSend(outGoingSMS);
 						}
 
 						try {
 							JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
 							for( int i = 0; i < results.length(); ++i ) {
 								JSONObject result = results.getJSONObject(i);
-							
+
 								thestatus = result.getString("status");
 								thenumber = result.getString("number");
 								themessage = message;
 								thecost = result.getString("cost");
-		                        
-								if(smsSend !=null){
-								SmsSend smsSend2 = smsSendDAO.getSmsSend(smsSend.getUuid());
-								smsSend2.setStatus(thestatus);
-								smsSend2.setPhoneNo(thenumber);
-								smsSend2.setMessageId(themessage.replaceAll("[\r\n]+", " "));
-								smsSend2.setCost(thecost);
-								smsSendDAO.updateSmsSend(smsSend2); 
+
+								if(outGoingSMS !=null){
+									OutGoingSMS smsSend2 = smsSendDAO.getSmsSend(outGoingSMS.getUuid());
+									smsSend2.setAccountId(school.getUuid());
+									smsSend2.setStatus(thestatus);
+									smsSend2.setMobile(thenumber);
+									smsSend2.setMessage(themessage.replaceAll("[\r\n]+", " "));
+									smsSend2.setSmsCost(thecost);
+									smsSendDAO.updateSmsSend(smsSend2); 
 								}
 
 							}
@@ -303,37 +305,37 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 
 						catch (Exception e) {
 							e.printStackTrace(); 
-							
+
 						}
-						
+
 					}//end sms send enalbe
-				
-					
+
+
 				}else{
 					//!=null
 					session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_ERROR, ERROR_MONEY_ALREADY_ASSIGNED); 
 				}
-				
-			}//end for loop
-			
-			
-			
-			
-			
-		}
-      
-       response.sendRedirect("asgignPerClass.jsp");  
-	   return; 
-       
-   }
 
-/**
- * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
- */
-@Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-             throws ServletException, IOException {
-         doPost(request, response);
-     }
+			}//end for loop
+
+
+
+
+
+		}
+
+		response.sendRedirect("asgignPerClass.jsp");  
+		return; 
+
+	}
+
+	/**
+	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
 
 }

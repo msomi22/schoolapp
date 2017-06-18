@@ -15,10 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Classes;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.StaffDetails;
@@ -45,12 +45,12 @@ public class SendSMS extends HttpServlet{
 	final String SMS_SEND_NOT_SENT = "Something went wrong, SMSes/Some SMSes were not sent.";
 	final String SMS_SEND_ERROR = "You can't send a blank message.";
 
-	final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
+	final String STATUS_ACTIVE = "1";
 
 	final String DESTINATION_PARENTS = "Parents";
 	final String DESTINATION_TEACHING_STAFF = "Teaching Staff";
 	final String DESTINATION_NON_TEACHING_STAFF = "Non Teaching Staff";
-	
+
 	final String FORM_1 = "C143978A-E021-4015-BC67-5A00D6C910D1";
 	final String FORM_2 = "3E22E428-3155-42F5-B73E-66553ED501C9";
 	final String FORM_3 = "A4BFC2BD-262F-4207-99C8-057D6ADF80C7";
@@ -65,12 +65,12 @@ public class SendSMS extends HttpServlet{
 	private static StaffDAO staffDAO;
 	private static StaffDetailsDAO staffDetailsDAO;
 	private static SmsApiDAO smsApiDAO;
-	
+
 	Classes classes = new Classes();
 	List<ClassRoom> classRoomList  = new ArrayList<>(); 
 	List<Student> studentPerClassList = new ArrayList<Student>();
 	List<StudentParent> parentListPerClass = new ArrayList<StudentParent>();
-	
+
 	String classname= "";
 	String classroomname = "";
 
@@ -102,11 +102,11 @@ public class SendSMS extends HttpServlet{
 
 		String destination = StringUtils.trimToEmpty(request.getParameter("destination"));//Parents,Teaching Staff,Non Teaching Staff
 		message = StringUtils.trimToEmpty(request.getParameter("smsText"));
-		String schoolaccountUuid = StringUtils.trimToEmpty(request.getParameter("schooluuid"));
-		
+		String accountId = StringUtils.trimToEmpty(request.getParameter("schooluuid"));
+
 		if(!StringUtils.isBlank(message)){
 			//common
-			SmsApi smsApi = smsApiDAO.getSmsApi(schoolaccountUuid);
+			SmsApi smsApi = smsApiDAO.getSmsApi(accountId);
 			AfricasTalking africasTalking = new AfricasTalking();
 			String username = smsApi.getApiPassword();//africasTalking.getUsername();
 			String apiKey   = smsApi.getApiKey();//africasTalking.getApiKey();
@@ -117,7 +117,7 @@ public class SendSMS extends HttpServlet{
 				List<StudentParent> parentList = new ArrayList<StudentParent>();
 				List<Student> studentList = new ArrayList<Student>();
 				//get all students for a particular school
-				studentList = studentDAO.getAllStudentList(schoolaccountUuid);//STATUS_ACTIVE
+				studentList = studentDAO.getAllStudentList(accountId);//STATUS_ACTIVE
 				String studentuuid = "";
 				for(Student st : studentList){
 					//get student id where status is active
@@ -141,15 +141,16 @@ public class SendSMS extends HttpServlet{
 							AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
 							//send message to parent now
 							//save to database
-							SmsSend smsSend = new SmsSend();
+							OutGoingSMS outGoingSMS = new OutGoingSMS();
 							if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-								smsSend.setStatus("failed");
-								smsSend.setPhoneNo(realParentphone);
-								smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-								smsSend.setCost("1");
-								smsSendDAO.putSmsSend(smsSend);
+								outGoingSMS.setStatus("failed");
+								outGoingSMS.setAccountId(accountId);
+								outGoingSMS.setMobile(realParentphone);
+								outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+								outGoingSMS.setSmsCost("1"); 
+								smsSendDAO.putSmsSend(outGoingSMS);
 							}
-							sendSmS(gateway,africasTalking,smsSend); 
+							sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
 
 							session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
 
@@ -158,249 +159,253 @@ public class SendSMS extends HttpServlet{
 					}
 				}
 			}else if(StringUtils.equals(destination, FORM_1)){
-				 
-				   if(classesDAO.getClass(destination) !=null){
-				      classes = classesDAO.getClass(destination);
-				      classname = classes.getClassName();
-				   }
-				   
-				   if(roomDAO.getAllRooms(schoolaccountUuid) !=null){
-					   classRoomList = roomDAO.getAllRooms(schoolaccountUuid);
-				   }
-				   for(ClassRoom room : classRoomList){
-					   if(StringUtils.contains(room.getRoomName(), classname)){
-						 
-						  //get students to these classes,Student
-						   if(studentDAO.getAllStudents(schoolaccountUuid, room.getUuid()) !=null){
-						   studentPerClassList = studentDAO.getAllStudents(schoolaccountUuid, room.getUuid());
-						   }
-						   
-						   String studentUuid ="";
-						   for(Student st : studentPerClassList){
-							   studentUuid = st.getUuid();
-							   //get parents for the given students
-							   if(parentsDAO.getParentListByStudent(studentUuid) !=null){
-							     parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
-							   }
-							   //get the parents StudentParent
-							    String parentphone = "";
-								String formatedparentphone = "";
-								String realParentphone = "";
-							   for(StudentParent stup : parentListPerClass){
-								    parentphone = stup.getFatherphone();
-								   
-									formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
-									realParentphone = "+254"+formatedparentphone;
-									//message
-									africasTalking.setMessage(message); 
-									africasTalking.setRecipients(realParentphone); 
-									AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-									//send message to parent now
-									//save to database
-									SmsSend smsSend = new SmsSend();
-									if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-										smsSend.setStatus("failed");
-										smsSend.setPhoneNo(realParentphone);
-										smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-										smsSend.setCost("1");
-										smsSendDAO.putSmsSend(smsSend);
-									}
-									sendSmS(gateway,africasTalking,smsSend); 
 
-									session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
-							   }
-						   }
-						  
-					   }else {
-						   //SMS_SEND_NOT_SENT
-						   session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
-					   }
-					   
-				   }
-				  
+				if(classesDAO.getClass(destination) !=null){
+					classes = classesDAO.getClass(destination);
+					classname = classes.getClassName();
+				}
+
+				if(roomDAO.getAllRooms(accountId) !=null){
+					classRoomList = roomDAO.getAllRooms(accountId);
+				}
+				for(ClassRoom room : classRoomList){
+					if(StringUtils.contains(room.getRoomName(), classname)){
+
+						//get students to these classes,Student
+						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
+							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
+						}
+
+						String studentUuid ="";
+						for(Student st : studentPerClassList){
+							studentUuid = st.getUuid();
+							//get parents for the given students
+							if(parentsDAO.getParentListByStudent(studentUuid) !=null){
+								parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
+							}
+							//get the parents StudentParent
+							String parentphone = "";
+							String formatedparentphone = "";
+							String realParentphone = "";
+							for(StudentParent stup : parentListPerClass){
+								parentphone = stup.getFatherphone();
+
+								formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
+								realParentphone = "+254"+formatedparentphone;
+								//message
+								africasTalking.setMessage(message); 
+								africasTalking.setRecipients(realParentphone); 
+								AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+								//send message to parent now
+								//save to database
+								OutGoingSMS outGoingSMS = new OutGoingSMS();
+								if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
+									outGoingSMS.setStatus("failed");
+									outGoingSMS.setAccountId(accountId);
+									outGoingSMS.setMobile(realParentphone);
+									outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+									outGoingSMS.setSmsCost("1"); 
+									smsSendDAO.putSmsSend(outGoingSMS);
+								}
+								sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
+
+								session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
+							}
+						}
+
+					}else {
+						//SMS_SEND_NOT_SENT
+						session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
+					}
+
+				}
+
 			}else if(StringUtils.equals(destination, FORM_2)){
 
-				 
-				   if(classesDAO.getClass(destination) !=null){
-				      classes = classesDAO.getClass(destination);
-				      classname = classes.getClassName();
-				   }
-				   
-				   if(roomDAO.getAllRooms(schoolaccountUuid) !=null){
-					   classRoomList = roomDAO.getAllRooms(schoolaccountUuid);
-				   }
-				   for(ClassRoom room : classRoomList){
-					   if(StringUtils.contains(room.getRoomName(), classname)){
-						  
-						  //get students to these classes,Student
-						   if(studentDAO.getAllStudents(schoolaccountUuid, room.getUuid()) !=null){
-						   studentPerClassList = studentDAO.getAllStudents(schoolaccountUuid, room.getUuid());
-						   }
-						   String studentUuid ="";
-						   for(Student st : studentPerClassList){
-							   studentUuid = st.getUuid();
-							   //get parents for the given students
-							   if(parentsDAO.getParentListByStudent(studentUuid) !=null){
-							     parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
-							   }
-							   //get the parents StudentParent
-							    String parentphone = "";
-								String formatedparentphone = "";
-								String realParentphone = "";
-							   for(StudentParent stup : parentListPerClass){
-								    parentphone = stup.getFatherphone();
-									formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
-									realParentphone = "+254"+formatedparentphone;
-									//message
-									africasTalking.setMessage(message); 
-									africasTalking.setRecipients(realParentphone); 
-									AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-									//send message to parent now
-									//save to database
-									SmsSend smsSend = new SmsSend();
-									if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-										smsSend.setStatus("failed");
-										smsSend.setPhoneNo(realParentphone);
-										smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-										smsSend.setCost("1");
-										smsSendDAO.putSmsSend(smsSend);
-									}
-									sendSmS(gateway,africasTalking,smsSend); 
 
-									session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
-							   }
-						   }
-						  
-						   
-					   }else {
-						   //SMS_SEND_NOT_SENT
-						   session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
-					   }
-					   
-				   }
-				 
+				if(classesDAO.getClass(destination) !=null){
+					classes = classesDAO.getClass(destination);
+					classname = classes.getClassName();
+				}
+
+				if(roomDAO.getAllRooms(accountId) !=null){
+					classRoomList = roomDAO.getAllRooms(accountId);
+				}
+				for(ClassRoom room : classRoomList){
+					if(StringUtils.contains(room.getRoomName(), classname)){
+
+						//get students to these classes,Student
+						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
+							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
+						}
+						String studentUuid ="";
+						for(Student st : studentPerClassList){
+							studentUuid = st.getUuid();
+							//get parents for the given students
+							if(parentsDAO.getParentListByStudent(studentUuid) !=null){
+								parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
+							}
+							//get the parents StudentParent
+							String parentphone = "";
+							String formatedparentphone = "";
+							String realParentphone = "";
+							for(StudentParent stup : parentListPerClass){
+								parentphone = stup.getFatherphone();
+								formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
+								realParentphone = "+254"+formatedparentphone;
+								//message
+								africasTalking.setMessage(message); 
+								africasTalking.setRecipients(realParentphone); 
+								AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+								//send message to parent now
+								//save to database
+								OutGoingSMS outGoingSMS = new OutGoingSMS();
+								if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
+									outGoingSMS.setStatus("failed");
+									outGoingSMS.setAccountId(accountId);
+									outGoingSMS.setMobile(realParentphone);
+									outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+									outGoingSMS.setSmsCost("1"); 
+									smsSendDAO.putSmsSend(outGoingSMS);
+								}
+								sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
+
+								session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
+							}
+						}
+
+
+					}else {
+						//SMS_SEND_NOT_SENT
+						session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
+					}
+
+				}
+
 			}else if(StringUtils.equals(destination, FORM_3)){
 
-				 
-				   if(classesDAO.getClass(destination) !=null){
-				      classes = classesDAO.getClass(destination);
-				      classname = classes.getClassName();
-				   }
-				   
-				   if(roomDAO.getAllRooms(schoolaccountUuid) !=null){
-					   classRoomList = roomDAO.getAllRooms(schoolaccountUuid);
-				   }
-				   for(ClassRoom room : classRoomList){
-					   if(StringUtils.contains(room.getRoomName(), classname)){
-						   
-						  //get students to these classes,Student
-						   if(studentDAO.getAllStudents(schoolaccountUuid, room.getUuid()) !=null){
-						   studentPerClassList = studentDAO.getAllStudents(schoolaccountUuid, room.getUuid());
-						   }
-						   String studentUuid ="";
-						   for(Student st : studentPerClassList){
-							   studentUuid = st.getUuid();
-							   //get parents for the given students
-							   if(parentsDAO.getParentListByStudent(studentUuid) !=null){
-							     parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
-							   }
-							   //get the parents StudentParent
-							    String parentphone = "";
-								String formatedparentphone = "";
-								String realParentphone = "";
-							   for(StudentParent stup : parentListPerClass){
-								    parentphone = stup.getFatherphone();
-									formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
-									realParentphone = "+254"+formatedparentphone;
-									//message
-									africasTalking.setMessage(message); 
-									africasTalking.setRecipients(realParentphone); 
-									AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-									//send message to parent now
-									//save to database
-									SmsSend smsSend = new SmsSend();
-									if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-										smsSend.setStatus("failed");
-										smsSend.setPhoneNo(realParentphone);
-										smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-										smsSend.setCost("1");
-										smsSendDAO.putSmsSend(smsSend);
-									}
-									sendSmS(gateway,africasTalking,smsSend); 
 
-									session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
-							   }
-						   }
-						  
-						   
-					   }else {
-						   //SMS_SEND_NOT_SENT
-						   session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
-					   }
-					   
-				   }
-				   
+				if(classesDAO.getClass(destination) !=null){
+					classes = classesDAO.getClass(destination);
+					classname = classes.getClassName();
+				}
+
+				if(roomDAO.getAllRooms(accountId) !=null){
+					classRoomList = roomDAO.getAllRooms(accountId);
+				}
+				for(ClassRoom room : classRoomList){
+					if(StringUtils.contains(room.getRoomName(), classname)){
+
+						//get students to these classes,Student
+						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
+							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
+						}
+						String studentUuid ="";
+						for(Student st : studentPerClassList){
+							studentUuid = st.getUuid();
+							//get parents for the given students
+							if(parentsDAO.getParentListByStudent(studentUuid) !=null){
+								parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
+							}
+							//get the parents StudentParent
+							String parentphone = "";
+							String formatedparentphone = "";
+							String realParentphone = "";
+							for(StudentParent stup : parentListPerClass){
+								parentphone = stup.getFatherphone();
+								formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
+								realParentphone = "+254"+formatedparentphone;
+								//message
+								africasTalking.setMessage(message); 
+								africasTalking.setRecipients(realParentphone); 
+								AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+								//send message to parent now
+								//save to database
+								OutGoingSMS outGoingSMS = new OutGoingSMS();
+								if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
+									outGoingSMS.setStatus("failed");
+									outGoingSMS.setAccountId(accountId);
+									outGoingSMS.setMobile(realParentphone);
+									outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+									outGoingSMS.setSmsCost("1"); 
+									smsSendDAO.putSmsSend(outGoingSMS);
+								}
+								sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
+
+								session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
+							}
+						}
+
+
+					}else {
+						//SMS_SEND_NOT_SENT
+						session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
+					}
+
+				}
+
 			}else if(StringUtils.equals(destination, FORM_4)){
-				
-				   if(classesDAO.getClass(destination) !=null){
-				      classes = classesDAO.getClass(destination);
-				      classname = classes.getClassName();
-				   }
-				
-				   if(roomDAO.getAllRooms(schoolaccountUuid) !=null){
-					   classRoomList = roomDAO.getAllRooms(schoolaccountUuid);
-				   }
-				   for(ClassRoom room : classRoomList){
-					   
-					   if(StringUtils.contains(room.getRoomName(), classname)){
-						  
-						  //get students to these classes,Student
-						   if(studentDAO.getAllStudents(schoolaccountUuid, room.getUuid()) !=null){
-						   studentPerClassList = studentDAO.getAllStudents(schoolaccountUuid, room.getUuid());
-						   }
-						   String studentUuid ="";
-						   for(Student st : studentPerClassList){
-							   studentUuid = st.getUuid();
-							   //get parents for the given students
-							   if(parentsDAO.getParentListByStudent(studentUuid) !=null){
-							     parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
-							   }
-							   //get the parents StudentParent
-							    String parentphone = "";
-								String formatedparentphone = "";
-								String realParentphone = "";
-							   for(StudentParent stup : parentListPerClass){
-								    parentphone = stup.getFatherphone();
-									formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
-									realParentphone = "+254"+formatedparentphone;
-									//message
-									africasTalking.setMessage(message); 
-									africasTalking.setRecipients(realParentphone); 
-									AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-									//send message to parent now
-									//save to database
-									SmsSend smsSend = new SmsSend();
-									if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-										smsSend.setStatus("failed");
-										smsSend.setPhoneNo(realParentphone);
-										smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-										smsSend.setCost("1");
-										smsSendDAO.putSmsSend(smsSend);
-									}
-									sendSmS(gateway,africasTalking,smsSend); 
 
-									session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
-							   }
-							   
-						   }
-						  
-					   }else {
-						   //SMS_SEND_NOT_SENT
-						   session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
-					   }
-					   
-				   }
-				   
+				if(classesDAO.getClass(destination) !=null){
+					classes = classesDAO.getClass(destination);
+					classname = classes.getClassName();
+				}
+
+				if(roomDAO.getAllRooms(accountId) !=null){
+					classRoomList = roomDAO.getAllRooms(accountId);
+				}
+				for(ClassRoom room : classRoomList){
+
+					if(StringUtils.contains(room.getRoomName(), classname)){
+
+						//get students to these classes,Student
+						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
+							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
+						}
+						String studentUuid ="";
+						for(Student st : studentPerClassList){
+							studentUuid = st.getUuid();
+							//get parents for the given students
+							if(parentsDAO.getParentListByStudent(studentUuid) !=null){
+								parentListPerClass = parentsDAO.getParentListByStudent(studentUuid); 
+							}
+							//get the parents StudentParent
+							String parentphone = "";
+							String formatedparentphone = "";
+							String realParentphone = "";
+							for(StudentParent stup : parentListPerClass){
+								parentphone = stup.getFatherphone();
+								formatedparentphone = parentphone.replaceFirst("^0+(?!$)", "");
+								realParentphone = "+254"+formatedparentphone;
+								//message
+								africasTalking.setMessage(message); 
+								africasTalking.setRecipients(realParentphone); 
+								AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+								//send message to parent now
+								//save to database
+								OutGoingSMS outGoingSMS = new OutGoingSMS();
+								if(realParentphone !=null && message.replaceAll("[\r\n]+", " ") !=null){
+									outGoingSMS.setStatus("failed");
+									outGoingSMS.setAccountId(accountId);
+									outGoingSMS.setMobile(realParentphone);
+									outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+									outGoingSMS.setSmsCost("1"); 
+									smsSendDAO.putSmsSend(outGoingSMS);
+								}
+								sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
+
+								session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
+							}
+
+						}
+
+					}else {
+						//SMS_SEND_NOT_SENT
+						session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_NOT_SENT); 
+					}
+
+				}
+
 			}
 			else if(StringUtils.equals(destination, DESTINATION_TEACHING_STAFF)){
 
@@ -409,7 +414,7 @@ public class SendSMS extends HttpServlet{
 				String formatedTstaffPhone = "";
 				String realTstaffPhone = "";
 				List<Staff> staffList = new ArrayList<Staff>();
-				staffList = staffDAO.getStaffList(schoolaccountUuid);
+				staffList = staffDAO.getStaffList(accountId);
 				// int count1 = 1;
 				for(Staff stf : staffList){
 					category = stf.getCategory();
@@ -426,15 +431,16 @@ public class SendSMS extends HttpServlet{
 						AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
 						//send message to parent now
 						//save to database
-						SmsSend smsSend = new SmsSend();
+						OutGoingSMS outGoingSMS = new OutGoingSMS();
 						if(realTstaffPhone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-							smsSend.setStatus("failed");
-							smsSend.setPhoneNo(realTstaffPhone);
-							smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-							smsSend.setCost("1");
-							smsSendDAO.putSmsSend(smsSend);
+							outGoingSMS.setStatus("failed");
+							outGoingSMS.setAccountId(accountId);
+							outGoingSMS.setMobile(message.replaceAll("[\r\n]+", " "));
+							outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+							outGoingSMS.setSmsCost("1"); 
+							smsSendDAO.putSmsSend(outGoingSMS);
 						}
-						sendSmS(gateway,africasTalking,smsSend); 
+						sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
 
 
 
@@ -451,7 +457,7 @@ public class SendSMS extends HttpServlet{
 				String formatedNTstaffPhone = "";
 				String realNTstaffPhone = "";
 				List<Staff> staffList = new ArrayList<Staff>();
-				staffList = staffDAO.getStaffList(schoolaccountUuid);
+				staffList = staffDAO.getStaffList(accountId);
 				// int count2 = 1;
 				for(Staff stf : staffList){
 					category = stf.getCategory();
@@ -468,15 +474,16 @@ public class SendSMS extends HttpServlet{
 						AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
 						//send message to parent now
 						//save to database
-						SmsSend smsSend = new SmsSend();
+						OutGoingSMS outGoingSMS = new OutGoingSMS();
 						if(realNTstaffPhone !=null && message.replaceAll("[\r\n]+", " ") !=null){
-							smsSend.setStatus("failed");
-							smsSend.setPhoneNo(realNTstaffPhone);
-							smsSend.setMessageId(message.replaceAll("[\r\n]+", " "));
-							smsSend.setCost("1");
-							smsSendDAO.putSmsSend(smsSend);
+							outGoingSMS.setStatus("failed");
+							outGoingSMS.setAccountId(accountId);
+							outGoingSMS.setMobile(message.replaceAll("[\r\n]+", " "));
+							outGoingSMS.setMessage(message.replaceAll("[\r\n]+", " "));
+							outGoingSMS.setSmsCost("1"); 
+							smsSendDAO.putSmsSend(outGoingSMS);
 						}
-						sendSmS(gateway,africasTalking,smsSend); 
+						sendSmS(gateway,africasTalking,outGoingSMS,accountId); 
 
 
 						session.setAttribute(SessionConstants.SMS_SEND_SUCCESS, SMS_SEND_SUCCESS); 
@@ -504,9 +511,9 @@ public class SendSMS extends HttpServlet{
 	/**
 	 * @param gateway
 	 * @param africasTalking 
-	 * @param smsSend 
+	 * @param outGoingSMS 
 	 */
-	private void sendSmS(AfricasTalkingGateway gateway, AfricasTalking africasTalking, SmsSend smsSend) {
+	private void sendSmS(AfricasTalkingGateway gateway, AfricasTalking africasTalking, OutGoingSMS outGoingSMS, String accountId) {
 		String thestatus ="";
 		String thenumber ="";
 		String themessage ="";
@@ -521,13 +528,16 @@ public class SendSMS extends HttpServlet{
 				themessage = message;
 				thecost = result.getString("cost");
 
-				if(smsSend !=null){
-					SmsSend smsSend2 = smsSendDAO.getSmsSend(smsSend.getUuid());
+				if(outGoingSMS !=null){
+					OutGoingSMS smsSend2 = smsSendDAO.getSmsSend(outGoingSMS.getUuid());
+					smsSend2.setAccountId(accountId); 
 					smsSend2.setStatus(thestatus);
-					smsSend2.setPhoneNo(thenumber);
-					smsSend2.setMessageId(themessage.replaceAll("[\r\n]+", " "));
-					smsSend2.setCost(thecost);
+					smsSend2.setMobile(thenumber);
+					smsSend2.setMessage(themessage.replaceAll("[\r\n]+", " "));
+					smsSend2.setSmsCost(thecost);
 					smsSendDAO.updateSmsSend(smsSend2); 
+					
+					
 				}
 
 			}

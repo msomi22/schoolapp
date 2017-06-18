@@ -14,8 +14,8 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
@@ -56,17 +56,17 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSend(java.lang.String)
 	 */
 	@Override
-	public SmsSend getSmsSend(String Uuid) {
-		SmsSend smsSend = null;
+	public OutGoingSMS getSmsSend(String Uuid) {
+		OutGoingSMS outGoingSMS = null;
         ResultSet rset = null;
         try(
         	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SmsSend WHERE Uuid = ?;");       
+           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OutGoingSMS WHERE Uuid = ?;");       
         		){
         	 pstmt.setString(1, Uuid);
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
-	    	 smsSend  = beanProcessor.toBean(rset,SmsSend.class);
+	    	 outGoingSMS  = beanProcessor.toBean(rset,OutGoingSMS.class);
 	    }
         	
         }catch(SQLException e){
@@ -74,24 +74,24 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
              logger.error(ExceptionUtils.getStackTrace(e));
         }
         
-		return smsSend; 
+		return outGoingSMS; 
 	}
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSendByStatus(java.lang.String)
 	 */
 	@Override
-	public SmsSend getSmsSendByStatus(String status) {
-		SmsSend smsSend = null;
+	public OutGoingSMS getSmsSendByStatus(String status) {
+		OutGoingSMS outGoingSMS = null;
         ResultSet rset = null;
         try(
         	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SmsSend WHERE status = ?;");       
+           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OutGoingSMS WHERE status = ?;");       
         		){
         	 pstmt.setString(1, status);
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
-	    	 smsSend  = beanProcessor.toBean(rset,SmsSend.class);
+	    	 outGoingSMS  = beanProcessor.toBean(rset,OutGoingSMS.class);
 	    }
         	
         }catch(SQLException e){
@@ -99,29 +99,29 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
              logger.error(ExceptionUtils.getStackTrace(e));
         }
         
-		return smsSend; 
+		return outGoingSMS; 
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#putSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#putSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)
 	 */
 	@Override
-	public boolean putSmsSend(SmsSend smsSend) {
+	public boolean putSmsSend(OutGoingSMS outGoingSMS) {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO SmsSend" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO OutGoingSMS" 
 			        		+"(Uuid,Status,PhoneNo,MessageId,Cost) VALUES (?,?,?,?,?);");
        		){
 			   
-	            pstmt.setString(1, smsSend.getUuid());
-	            pstmt.setString(2, smsSend.getStatus());
-	            pstmt.setString(3, smsSend.getPhoneNo());
-	            pstmt.setString(4, smsSend.getMessageId());
-	            pstmt.setString(5, smsSend.getCost());
+	            pstmt.setString(1, outGoingSMS.getUuid());
+	            pstmt.setString(2, outGoingSMS.getStatus());
+	          /*  pstmt.setString(3, outGoingSMS.getPhoneNo());
+	            pstmt.setString(4, outGoingSMS.getMessageId());
+	            pstmt.setString(5, outGoingSMS.getCost());*/
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put SmsSend: "+smsSend);
+			 logger.error("SQL Exception trying to put OutGoingSMS: "+outGoingSMS);
             logger.error(ExceptionUtils.getStackTrace(e)); 
             success = false;
 		 }
@@ -130,24 +130,24 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#updateSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#updateSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)
 	 */
 	@Override
-	public boolean updateSmsSend(SmsSend smsSend) {
+	public boolean updateSmsSend(OutGoingSMS outGoingSMS) {
 		boolean success = true;
         try (  Connection conn = dbutils.getConnection();
-        	   PreparedStatement pstmt = conn.prepareStatement("UPDATE SmsSend SET Status =?,"
+        	   PreparedStatement pstmt = conn.prepareStatement("UPDATE OutGoingSMS SET Status =?,"
         	      + "PhoneNo=?,MessageId=?,Cost=? WHERE Uuid = ?;");
         	) { 
-	           pstmt.setString(1, smsSend.getStatus());
-	            pstmt.setString(2, smsSend.getPhoneNo());
-	            pstmt.setString(3, smsSend.getMessageId());
-	            pstmt.setString(4, smsSend.getCost());
-	            pstmt.setString(5, smsSend.getUuid());
+	           pstmt.setString(1, outGoingSMS.getStatus());
+	           /* pstmt.setString(2, outGoingSMS.getPhoneNo());
+	            pstmt.setString(3, outGoingSMS.getMessageId());
+	            pstmt.setString(4, outGoingSMS.getCost());*/
+	            pstmt.setString(5, outGoingSMS.getUuid());
                 pstmt.executeUpdate(); 
 
         } catch (SQLException e) {
-            logger.error("SQL Exception when updating SmsSend");
+            logger.error("SQL Exception when updating OutGoingSMS");
             logger.error(ExceptionUtils.getStackTrace(e));
             success = false;
         } 
@@ -157,22 +157,22 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#deleteSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#deleteSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)
 	 */
 	@Override
-	public boolean deleteSmsSend(SmsSend smsSend) {
+	public boolean deleteSmsSend(OutGoingSMS outGoingSMS) {
 		boolean success = true; 
         try(
         	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("DELETE FROM SmsSend WHERE Status = ?;");       
+           	PreparedStatement pstmt = conn.prepareStatement("DELETE FROM OutGoingSMS WHERE Status = ?;");       
         		
         		){
         	
-        	 pstmt.setString(1, smsSend.getStatus());
+        	 pstmt.setString(1, outGoingSMS.getStatus());
 	         pstmt.executeUpdate();
 	     
         }catch(SQLException e){
-        	 logger.error("SQL Exception when deletting smsSend" + smsSend);
+        	 logger.error("SQL Exception when deletting smsSend" + outGoingSMS);
              logger.error(ExceptionUtils.getStackTrace(e));
              success = false;
              
@@ -185,21 +185,21 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSend()
 	 */
 	@Override
-	public List<SmsSend> getSmsSendList(String status) {
-		 List<SmsSend> list = null;
+	public List<OutGoingSMS> getSmsSendList(String status) {
+		 List<OutGoingSMS> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM SmsSend WHERE Status = ?;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM OutGoingSMS WHERE Status = ?;");   
 			) {
 			 pstmt.setString(1,status);
 
 			 try(ResultSet rset = pstmt.executeQuery();){
 				 
-				 list = beanProcessor.toBeanList(rset, SmsSend.class);
+				 list = beanProcessor.toBeanList(rset, OutGoingSMS.class);
 				}
 	        
 	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting  SmsSend List");
+	  	 logger.error("SQL Exception when getting  OutGoingSMS List");
 	     logger.error(ExceptionUtils.getStackTrace(e));
 	     System.out.println(ExceptionUtils.getStackTrace(e)); 
 	  }
@@ -210,18 +210,18 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSendList()
 	 */
 	@Override
-	public List<SmsSend> getSmsSend() {
-		List<SmsSend> list =new  ArrayList<>(); 
+	public List<OutGoingSMS> getSmsSend() {
+		List<OutGoingSMS> list =new  ArrayList<>(); 
 		  try(   
 	      		Connection conn = dbutils.getConnection();
-	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM SmsSend ;");   
+	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM OutGoingSMS ;");   
 	      		ResultSet rset = pstmt.executeQuery();
 	  		) {
 	      	
-	          list = beanProcessor.toBeanList(rset, SmsSend.class);
+	          list = beanProcessor.toBeanList(rset, OutGoingSMS.class);
 
 	      } catch(SQLException e){
-	      	  logger.error("SQL Exception when getting all SmsSend");
+	      	  logger.error("SQL Exception when getting all OutGoingSMS");
 	          logger.error(ExceptionUtils.getStackTrace(e));
 	          System.out.println(ExceptionUtils.getStackTrace(e));
 	      }

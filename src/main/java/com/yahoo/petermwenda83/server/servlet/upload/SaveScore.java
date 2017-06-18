@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Classes;
 import com.yahoo.petermwenda83.bean.exam.CatOne;
@@ -26,7 +27,6 @@ import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
@@ -101,7 +101,7 @@ public class SaveScore extends HttpServlet{
 
 		HttpSession session = request.getSession(false);
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		Exam exam = new Exam();
 		int outOf = 0;
 
@@ -119,7 +119,7 @@ public class SaveScore extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 		if(school !=null){
 			

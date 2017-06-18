@@ -37,6 +37,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
@@ -45,7 +46,6 @@ import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
 import com.yahoo.petermwenda83.bean.othermoney.RevertedMoney;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
 import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -165,7 +165,7 @@ public class PrintStatement extends HttpServlet {
 
 		String studentuuid = StringUtils.trimToEmpty(request.getParameter("studentuuid"));
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		String schoolusername = "";
 
 		if(session !=null){
@@ -176,7 +176,7 @@ public class PrintStatement extends HttpServlet {
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
 		Student stuudent = new Student();
@@ -222,8 +222,8 @@ public class PrintStatement extends HttpServlet {
 
 		PDF_TITLE = "STUDENT FEES PAYMENT REPORT";
 
-		PDF_SUBTITLE =     school.getSchoolName()+"\n"
-				+ "P.O BOX "+school.getPostalAddress()+"\n" 
+		PDF_SUBTITLE =     school.getName()+"\n"
+				+ "P.O BOX "+school.getAddress()+"\n" 
 				+ ""+school.getTown().toUpperCase()+ " - Kenya\n" 
 				+ "" + school.getMobile()+"\n"
 				+ "" + school.getEmail()+"\n\n"; 
@@ -259,7 +259,7 @@ public class PrintStatement extends HttpServlet {
 
 	}
 
-	private void populatePDFDocument(SchoolAccount school, ExamConfig examConfig2, Student stuudent,
+	private void populatePDFDocument(Account school, ExamConfig examConfig2, Student stuudent,
 			String path) {
 
 		try {
@@ -374,7 +374,7 @@ public class PrintStatement extends HttpServlet {
 
 
 
-	private void compute(String admYear, String regterm, SchoolAccount school, Student stuudent, ExamConfig examConfig2) throws DocumentException {
+	private void compute(String admYear, String regterm, Account school, Student stuudent, ExamConfig examConfig2) throws DocumentException {
 
 		int nextterm = 0;
 		int nextyear =0;
@@ -983,7 +983,7 @@ public class PrintStatement extends HttpServlet {
 	 * @param newBal 
 	 * @throws DocumentException
 	 */
-	private void computeNext(int nextterm, int nextyear, SchoolAccount school, Student stuudent, ExamConfig examConfig2, double newBal) throws DocumentException {
+	private void computeNext(int nextterm, int nextyear, Account school, Student stuudent, ExamConfig examConfig2, double newBal) throws DocumentException {
      //System.out.println("Balance Token="+newBal); admissionYear  && finalYr <=4 
 		int finalYr = 0;
 		finalYr = finalYear; 
@@ -1006,7 +1006,7 @@ public class PrintStatement extends HttpServlet {
 	 * @param newBal2 
 	 * @throws DocumentException
 	 */
-	private void computeTerm1(int nextterm, int nextyear, SchoolAccount school, Student stuudent, ExamConfig examConfig2, double newBal2) throws DocumentException {
+	private void computeTerm1(int nextterm, int nextyear, Account school, Student stuudent, ExamConfig examConfig2, double newBal2) throws DocumentException {
 
 		String regterm = Integer.toString(nextterm);
 		String admYear = Integer.toString(nextyear);
@@ -1233,7 +1233,7 @@ public class PrintStatement extends HttpServlet {
 	 * @param lastTermfeeBal 
 	 * @throws DocumentException
 	 */
-	private void cmputeMoveTerm2(int nextterm, int nextyear, SchoolAccount school, Student stuudent, ExamConfig examConfig2, double lastTermfeeBal) throws DocumentException {
+	private void cmputeMoveTerm2(int nextterm, int nextyear, Account school, Student stuudent, ExamConfig examConfig2, double lastTermfeeBal) throws DocumentException {
 
 		String regterm = Integer.toString(nextterm);
 		String admYear = Integer.toString(nextyear);
@@ -1461,7 +1461,7 @@ public class PrintStatement extends HttpServlet {
 	 * @param lastTermfeeBal 
 	 * @throws DocumentException
 	 */
-	private void cmputeMoveTerm3(int nextterm, int nextyear, SchoolAccount school, Student stuudent, ExamConfig examConfig2, double lastTermfeeBal) throws DocumentException {
+	private void cmputeMoveTerm3(int nextterm, int nextyear, Account school, Student stuudent, ExamConfig examConfig2, double lastTermfeeBal) throws DocumentException {
 
 		String regterm = Integer.toString(nextterm);
 		String admYear = Integer.toString(nextyear);

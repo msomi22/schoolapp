@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsSend;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 
 /**
  * @author peter
@@ -46,7 +46,7 @@ public class TestSmsSendDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#putSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#putSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)}.
 	 */
 	@Ignore
 	@Test
@@ -55,7 +55,7 @@ public class TestSmsSendDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#updateSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#updateSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)}.
 	 */
 	@Ignore
 	@Test
@@ -64,7 +64,7 @@ public class TestSmsSendDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#deleteSmsSend(com.yahoo.petermwenda83.bean.schoolaccount.SmsSend)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO#deleteSmsSend(com.yahoo.petermwenda83.bean.account.OutGoingSMS)}.
 	 */
 	@Ignore
 	@Test
@@ -79,8 +79,8 @@ public class TestSmsSendDAO {
 	@Test
 	public final void testGetSmsSend() {
 		store = new SmsSendDAO(databaseName, Host, databaseUsername, databasePassword, databasePort); 
-		List<SmsSend> list = store.getSmsSendList("");
-		for (SmsSend ss : list) {
+		List<OutGoingSMS> list = store.getSmsSendList("");
+		for (OutGoingSMS ss : list) {
 			System.out.println(ss);
 		}
 	}

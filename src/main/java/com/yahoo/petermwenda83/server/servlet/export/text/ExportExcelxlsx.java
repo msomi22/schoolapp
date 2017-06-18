@@ -22,9 +22,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
@@ -115,7 +115,7 @@ public class ExportExcelxlsx extends HttpServlet{
 		subjectuuidToken = StringUtils.trimToEmpty(request.getParameter("subjectuuidToken"));
 		//System.out.println("classroomuuidToken="+classroomuuidToken);
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		HttpSession session = request.getSession(false);
 
 		if(session !=null){
@@ -127,7 +127,7 @@ public class ExportExcelxlsx extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 
 		}
 

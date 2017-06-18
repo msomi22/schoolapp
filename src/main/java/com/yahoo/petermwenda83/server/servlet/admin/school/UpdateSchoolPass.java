@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
@@ -84,7 +84,7 @@ public class UpdateSchoolPass extends HttpServlet{
          }else{
         	
         	 //System.out.println("schoolpassword = " +  schoolpassword);
-        	 SchoolAccount account =  accountDAO.get(schooluuid); 
+        	 Account account =  accountDAO.get(schooluuid); 
         	 account.setPassword(SecurityUtil.getMD5Hash(newpassowrd)); 
         	 updateSchoolCache(account);
   		       if(accountDAO.update(account) ){ 
@@ -108,7 +108,7 @@ public class UpdateSchoolPass extends HttpServlet{
    /**
  * @param accnt
  */
-private void updateSchoolCache(SchoolAccount accnt) {
+private void updateSchoolCache(Account accnt) {
    	cacheManager.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME).put(new Element(accnt.getUsername(), accnt));
    	cacheManager.getCache(CacheVariables.CACHE_ACCOUNTS_BY_UUID).put(new Element(accnt.getUuid(), accnt));
    }

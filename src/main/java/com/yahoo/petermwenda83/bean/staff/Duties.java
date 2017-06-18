@@ -14,7 +14,7 @@ package com.yahoo.petermwenda83.bean.staff;
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- *  Teachers' Duties in a SchoolAccount
+ *  Teachers' Duties in a Account
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */

@@ -32,47 +32,47 @@ import org.apache.log4j.Logger;
  *
  */
 public class PropertiesConfig extends HttpServlet {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8894737966457928235L;
 
 	private final Logger logger = Logger.getLogger(this.getClass());
-	
+
 	private static String configFile = "";
-	
+
 	// Values in config file to be retained in a HashMap
 	private static final HashMap<String,String> configHash = new HashMap<>(); 
-	
+
 	/**
 	 * @param config
 	 * @throws ServletException
 	 * @see javax.servlet.Servlet#init(ServletConfig)
 	 */
-        @Override
+	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		
+
 		configFile = getServletContext().getRealPath("/") + getInitParameter("config-file");
 		initConfigHash();
-		
+
 	}
-        
+
 
 	/**
-      * @param request 
-      * @param response 
-      * @throws ServletException 
-      * @throws IOException 
-      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @param request 
+	 * @param response 
+	 * @throws ServletException 
+	 * @throws IOException 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-        @Override
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect("index.jsp");
 	}
 
-	
+
 	/**  
 	 * @param configAttribute
 	 * @return 		the String value of the attribute we seek
@@ -80,28 +80,28 @@ public class PropertiesConfig extends HttpServlet {
 	public static String getConfigValue(String configAttribute) {
 		return configHash.get(configAttribute);
 	}
-	
-	
+
+
 	/**
 	 * Populate the internal HashMap which will hold configuration keys and values
 	 */
 	private void initConfigHash() {
 		PropertiesConfiguration config;		
 		String key;
-		
+
 		try {
 			config = new PropertiesConfiguration();
 			config.setListDelimiter('|');	// our array delimiter
 			config.setFileName(configFile); 
 			config.load();
-			
+
 			Iterator<String> keys = config.getKeys();
-			
+
 			while(keys.hasNext()) {
 				key = keys.next();
 				configHash.put(key, (String)config.getProperty(key));
 			}
-			
+
 		} catch (ConfigurationException e) {
 			logger.error("ConfigurationException when trying to initialize configuration HashMap");
 			logger.error(ExceptionUtils.getStackTrace(e));	

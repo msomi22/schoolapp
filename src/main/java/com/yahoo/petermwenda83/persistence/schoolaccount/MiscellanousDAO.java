@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /** 
@@ -69,7 +69,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	   }
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting SchoolAccount with Uuid: " + Uuid);
+     	  logger.error("SQL Exception when getting Account with Uuid: " + Uuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -100,7 +100,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	   }
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting SchoolAccount with key: " + key);
+     	  logger.error("SQL Exception when getting Account with key: " + key);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -130,7 +130,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	   }
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting SchoolAccount with schoolAccountUuid: " + schoolAccountUuid);
+     	  logger.error("SQL Exception when getting Account with schoolAccountUuid: " + schoolAccountUuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -140,7 +140,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#putMiscellanous(com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#putMiscellanous(com.yahoo.petermwenda83.bean.account.Miscellanous)
 	 */
 	@Override
 	public boolean putMiscellanous(Miscellanous misc) {
@@ -150,7 +150,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Miscellanous (Uuid,SchoolAccountUuid,Key,Value) VALUES (?,?,?,?);");
     		){
 	            pstmt.setString(1, misc.getUuid());
-	            pstmt.setString(2, misc.getSchoolAccountUuid());
+	           // pstmt.setString(2, misc.getSchoolAccountUuid());
 	            pstmt.setString(3, misc.getKey());
 	            pstmt.setString(4, misc.getValue());
 	            pstmt.executeUpdate();
@@ -167,7 +167,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#updateMiscellanous(com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous)
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#updateMiscellanous(com.yahoo.petermwenda83.bean.account.Miscellanous)
 	 */
 	@Override
 	public boolean updateMiscellanous(Miscellanous misc) {
@@ -176,7 +176,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Miscellanous SET Value =? WHERE SchoolAccountUuid =? AND Uuid =?;");
       		){
 	            pstmt.setString(1, misc.getValue());
-	            pstmt.setString(2, misc.getSchoolAccountUuid());
+	           /// pstmt.setString(2, misc.getSchoolAccountUuid());
 	            pstmt.setString(3, misc.getUuid());
 	            pstmt.executeUpdate();
 			 

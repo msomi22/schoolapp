@@ -26,42 +26,42 @@ import com.yahoo.petermwenda83.persistence.DBCredentials;
  */
 public class DbPoolUtil extends HttpServlet {
 
-	
+
 	private static DBCredentials dBCredentials; 
-	
+
 	private Logger logger = Logger.getLogger(this.getClass());
-	
-	
+
+
 	/**
-     * @param config
-     * @throws ServletException
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        
-        dBCredentials = new DBCredentials();
-    }
-    
-    
-    /**
-     * @return the database credentials class
-     */
-    public static DBCredentials getDBCredentials() {
-    	return dBCredentials;
-    }
-    
-    
-    /**
-     * 
-     */
-    @Override
-    public void destroy() {
+	 * @param config
+	 * @throws ServletException
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		dBCredentials = new DBCredentials();
+	}
+
+
+	/**
+	 * @return the database credentials class
+	 */
+	public static DBCredentials getDBCredentials() {
+		return dBCredentials;
+	}
+
+
+	/**
+	 * 
+	 */
+	@Override
+	public void destroy() {
 		logger.info("Now shutting down database pools.");
-    	
+
 		dBCredentials.closeConnections();		
 	} 
-    
-    
-    private static final long serialVersionUID = -7899535368789138778L;
+
+
+	private static final long serialVersionUID = -7899535368789138778L;
 }

@@ -5,7 +5,7 @@
 <%@page import="com.yahoo.petermwenda83.bean.staff.Position"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
@@ -51,7 +51,7 @@ if (session == null) {
 
 
      AccountDAO accountDAO = AccountDAO.getInstance();
-     List<SchoolAccount> schoolList = new ArrayList(); 
+     List<Account> schoolList = new ArrayList(); 
      schoolList = accountDAO.getAllSchools();
 %>
 
@@ -184,9 +184,9 @@ if (session == null) {
                                <%
                                     int acount = 1;
                                     if (schoolList != null) {
-                                        for (SchoolAccount ac : schoolList) {
+                                        for (Account ac : schoolList) {
                                 %>
-                                <option value="<%= ac.getUuid()%>"><%=ac.getSchoolName()%></option>
+                                <option value="<%= ac.getUuid()%>"><%=ac.getName()%></option>
                                 <%
                                             acount++;
                                         }

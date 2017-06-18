@@ -15,6 +15,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
@@ -22,9 +25,6 @@ import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
 import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
-import com.yahoo.petermwenda83.bean.schoolaccount.SmsApi;
 import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -189,16 +189,16 @@ public class AddSchool extends HttpServlet{
 	 	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, NAME_ERROR); 
 		   
 	   }else{
-		   SchoolAccount account = new SchoolAccount();
+		   Account account = new Account();
 		   account.setUuid(account.getUuid()); 
-		   account.setStatusUuid(STATUS_ACTIVE_UUID);		   
-		   account.setSchoolName(StringUtils.capitalize(schoolname)); 
+		  // account.setStatusUuid(STATUS_ACTIVE_UUID);		   
+		  // account.setSchoolName(StringUtils.capitalize(schoolname)); 
 		   account.setUsername(schoolusername);
 		   account.setPassword(SecurityUtil.getMD5Hash(schoolpassword));
 		   account.setMobile(schoolphone); 
 		   account.setEmail(schoolemail); 
-		   account.setDayBoarding(dayBoarding); 
-		   account.setPostalAddress(schoolpostaladdress); 
+		   //account.setDayBoarding(dayBoarding); 
+		   //account.setPostalAddress(schoolpostaladdress); 
 		   account.setTown(StringUtils.capitalize(schoolhometown)); 
 		  
 		   
@@ -290,7 +290,7 @@ public class AddSchool extends HttpServlet{
 	    	   String [] value = {"Tue 03, April, 2016","Wed 07, May, 2016 "," for the fantastic term, it has been awesome to see you grow and develop, hope you have a wonderful holiday.For your performance, all we can say is ..."};
 	    	   for(int i=0; i<key.length;i++){
 	    		   Miscellanous misc = new Miscellanous();
-				   misc.setSchoolAccountUuid(account.getUuid());
+				   misc.setAccountId(account.getUuid());
 				   misc.setKey(key[i]); 
 				   misc.setValue(value[i]);
 				   miscellanousDAO.putMiscellanous(misc);
@@ -311,7 +311,7 @@ public class AddSchool extends HttpServlet{
 	    	   SmsApi smsApi = new SmsApi();
 			   smsApi.setApiKey("QWERTYUIOPASDFGHJKLZXCVBNM");
 			   smsApi.setApiPassword("QWERTY"); 
-			   smsApi.setSchoolAccountUuid(account.getUuid());
+			   smsApi.setAccountId(account.getUuid());
 			   smsApiDAO.putSmsApi(smsApi);
 	    	   
 			   
@@ -333,7 +333,7 @@ public class AddSchool extends HttpServlet{
    
    
 
-private void updateStudentCache(SchoolAccount accnt) {
+private void updateStudentCache(Account accnt) {
 	cacheManager.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME).put(new Element(accnt.getUsername(), accnt));
 	cacheManager.getCache(CacheVariables.CACHE_ACCOUNTS_BY_UUID).put(new Element(accnt.getUuid(), accnt));
 }

@@ -20,7 +20,7 @@ import java.util.Map;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
- 
+
 public class SessionStatistics implements Serializable {
 
 	//They are used to keep userId against online status
@@ -86,4 +86,3 @@ public class SessionStatistics implements Serializable {
 
 }
 
- 

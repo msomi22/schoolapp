@@ -31,7 +31,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.student.PrimaryDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.student.StudentPrimary"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount"%>
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
@@ -83,16 +83,16 @@
     SessionStatistics statistics = new SessionStatistics();
     
 
-    SchoolAccount school = new SchoolAccount();
+    Account school = new Account();
     Element element;
    
 
     if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
+        school = (Account) element.getObjectValue();
     }
 
      String accountuuid = school.getUuid();
-     String schoolname = school.getSchoolName();
+     String schoolname = school.getName();
 
 
     ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();

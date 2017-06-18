@@ -25,9 +25,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -100,7 +100,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 		classroomuuid = StringUtils.trimToEmpty(request.getParameter("classroomuuid"));
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
@@ -110,7 +110,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 
 		}
 
@@ -142,7 +142,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 	 * @param List<IncomingLog>
 	 * Method create excelSheets and sends them
 	 ****/    
-	public void createExcelSheets(List<Student>studentList, SchoolAccount school) throws IOException{    	
+	public void createExcelSheets(List<Student>studentList, Account school) throws IOException{    	
 
 		XSSFWorkbook xf = new XSSFWorkbook();
 		XSSFCreationHelper ch =xf.getCreationHelper();

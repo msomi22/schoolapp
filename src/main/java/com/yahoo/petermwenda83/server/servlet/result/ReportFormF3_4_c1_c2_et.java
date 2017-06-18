@@ -51,6 +51,8 @@ import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.BarWeight;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
@@ -60,8 +62,6 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
-import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
-import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
 import com.yahoo.petermwenda83.bean.staff.StaffDetails;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubClass;
@@ -90,9 +90,10 @@ import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.money.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.result.sms.SendResultSMS;
+import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.server.session.SessionStatistics;
-import com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3;
+
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -249,7 +250,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		response.setContentType("application/pdf");
 		
 
-		SchoolAccount school = new SchoolAccount();
+		Account school = new Account();
 		HttpSession session = request.getSession(false);
 
 		if(session !=null){
@@ -268,11 +269,11 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
-			school = (SchoolAccount) element.getObjectValue();
+			school = (Account) element.getObjectValue();
 		}
 
-		    schoolname = school.getSchoolName().toUpperCase()+"\n";
-			PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+		    schoolname = school.getName().toUpperCase()+"\n";
+			PDF_SUBTITLE =  "P.O BOX "+school.getAddress()+"\n" 
 							+ ""+school.getTown()+" - Kenya\n" 
 							+ "" + school.getMobile()+"\n"
 							+ "" + school.getEmail()+"\n" ;
@@ -394,7 +395,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param perfomanceListGeneral 
 	 * @param realPath
 	 */
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid2,
+	private void populatePDFDocument(SessionStatistics statistics, Account school, String classroomuuid2,
 			String classID, List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath) {
 
 		Map<String,Double> kswscoreMapgn = new LinkedHashMap<String,Double>();
@@ -750,9 +751,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 								
 							}
 
-							MiddleNumberFor3 middle = new MiddleNumberFor3();
 							subjectBiggn = Math.max( (Math.max(physcoregn, bioscoregn)), Math.max(Math.max(physcoregn, bioscoregn), chemscoregn));
-							subjectSmallgn = middle.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
+							subjectSmallgn = PeterMid.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
 							scienceScoregn = (subjectBiggn+subjectSmallgn+matscoregn);
 						}
 
@@ -1180,9 +1180,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 
 
-
-
-			MiddleNumberFor3 middle = new MiddleNumberFor3();
 			List<Perfomance> list = new ArrayList<>();
 			Map<String,Double> grandscoremap = new LinkedHashMap<String,Double>(); 
 			double languageScore = 0;
@@ -1486,7 +1483,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 
 							subjectBig = Math.max( (Math.max(physcore, bioscore)), Math.max(Math.max(physcore, bioscore), chemscore));
-							subjectSmall = middle.ComputeMiddle(physcore, bioscore, chemscore);
+							subjectSmall = PeterMid.ComputeMiddle(physcore, bioscore, chemscore);
 							scienceScore = (subjectBig+subjectSmall+matscore);
 						}
 
@@ -2837,7 +2834,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					 String schoolfee = "";
 					
 
-				    if(StringUtils.equalsIgnoreCase(school.getDayBoarding(), "YES")){ //Both Day and Boarding
+				    if(StringUtils.equalsIgnoreCase(school.getIsBoarding(), "1")){
 				        schoolfee = "BOARDING : " + boarderfee +"\nDAY : " + dayfee;
 				     }else{
 				        schoolfee = " " + boarderfee;
@@ -3305,7 +3302,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param barWeight
 	 * @return
 	 */
-	private String classteacherRemarks(SchoolAccount school, String uuid, BarWeight barWeight) {
+	private String classteacherRemarks(Account school, String uuid, BarWeight barWeight) {
 		String classTeacherComent = " ";
 		double T1Weight = 0;
 		double T2Weight = 0;
