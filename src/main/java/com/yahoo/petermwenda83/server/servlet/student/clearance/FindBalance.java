@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.money.StudentClearance;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.money.StudentClearanceDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
@@ -49,7 +49,7 @@ public class FindBalance extends HttpServlet{
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	String [] terms;
 	List<StudentFee> studentFeeList;
-	List<StudentOtherMonies> othermoneyList;
+	List<StudentOtherFee> othermoneyList;
 	
 
 	String feeStudentType = "";
@@ -162,7 +162,7 @@ public class FindBalance extends HttpServlet{
 					   }
 					
 					    if(othermoneyList!=null){
-						for(StudentOtherMonies otherMoney :othermoneyList){
+						for(StudentOtherFee otherMoney :othermoneyList){
 							otherPaid += otherMoney.getAmountPiad();
 						}
 				       }

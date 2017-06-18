@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.othermoney;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.othermoney.RevertedMoney;
+import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 
 /**
  * @author peter

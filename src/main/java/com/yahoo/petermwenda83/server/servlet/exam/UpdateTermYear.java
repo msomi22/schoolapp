@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -41,7 +41,7 @@ public class UpdateTermYear extends HttpServlet{
 
 
 	TermFee termFee;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 /*
 	private String[] examcodeArray;
 	private List<String> examcodeList;
@@ -120,13 +120,13 @@ public class UpdateTermYear extends HttpServlet{
 		}else{
 
 
-			ExamConfig examConfig = examConfigDAO.getExamConfig(schoolAccountUuid);
-			updatTermFee(examConfig,year);
-			examConfig.setTerm(term);
-			examConfig.setYear(year);
+			SysConfig sysConfig = examConfigDAO.getExamConfig(schoolAccountUuid);
+			updatTermFee(sysConfig,year);
+			sysConfig.setTerm(term);
+			sysConfig.setYear(year);
 
-			if(examConfigDAO.updateExamConfig(examConfig)){
-				session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS +" Confirm please!! [ new Term is " + examConfig.getTerm() +" and new Year is " + examConfig.getYear() + " ]"); 
+			if(examConfigDAO.updateExamConfig(sysConfig)){
+				session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS +" Confirm please!! [ new Term is " + sysConfig.getTerm() +" and new Year is " + sysConfig.getYear() + " ]"); 
 
 
 			}else{
@@ -147,7 +147,7 @@ public class UpdateTermYear extends HttpServlet{
 	 * @param examConf
 	 * @param year2 
 	 */
-	private void updatTermFee(ExamConfig examConf, String year) {
+	private void updatTermFee(SysConfig examConf, String year) {
 		if(Integer.parseInt(year) > Integer.parseInt(examConf.getYear())){
 			String [] terms = {"1","2","3"};
 			double [] fee = {14000,7000,3000};

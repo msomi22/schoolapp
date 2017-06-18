@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
  
 /**  
@@ -59,12 +59,12 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#getOtherstype(java.lang.String)
 	 */
 	@Override
-	public Otherstype getOtherstype(String Uuid) {
-		Otherstype otherstype = null;
+	public OtherFee getOtherstype(String Uuid) {
+		OtherFee otherFee = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Otherstype WHERE Uuid = ?;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE Uuid = ?;");       
         		
         		){
         	
@@ -72,36 +72,36 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 otherstype  = beanProcessor.toBean(rset,Otherstype.class);
+	    	 otherFee  = beanProcessor.toBean(rset,OtherFee.class);
 	   }
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting Otherstype with Uuid: " + Uuid );
+        	 logger.error("SQL Exception when getting OtherFee with Uuid: " + Uuid );
              logger.error(ExceptionUtils.getStackTrace(e));
              System.out.println(ExceptionUtils.getStackTrace(e));
         }
-		return otherstype; 
+		return otherFee; 
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#putOtherstype(com.yahoo.petermwenda83.bean.othermoney.Otherstype)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#putOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)
 	 */
 	@Override
-	public boolean putOtherstype(Otherstype otherstype) {
+	public boolean putOtherstype(OtherFee otherFee) {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Otherstype" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO OtherFee" 
 			        		+"(Uuid,SchoolAccountUuid,Type,Term,Year) VALUES (?,?,?,?,?);");
        		){
 			   
-	            pstmt.setString(1, otherstype.getUuid());
-	            pstmt.setString(2, otherstype.getSchoolAccountUuid());
-	            pstmt.setString(3, otherstype.getType());
-	            pstmt.setString(4, otherstype.getTerm());
-	            pstmt.setString(5, otherstype.getYear());
+	            pstmt.setString(1, otherFee.getUuid());
+	            pstmt.setString(2, otherFee.getSchoolAccountUuid());
+	            pstmt.setString(3, otherFee.getType());
+	            pstmt.setString(4, otherFee.getTerm());
+	            pstmt.setString(5, otherFee.getYear());
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put otherstype: "+otherstype);
+			 logger.error("SQL Exception trying to put otherFee: "+otherFee);
              logger.error(ExceptionUtils.getStackTrace(e)); 
              System.out.println(ExceptionUtils.getStackTrace(e));
             success = false;
@@ -110,28 +110,28 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.othermoney.Otherstype)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)
 	 */
 	@Override
-	public boolean updteOtherstype(Otherstype otherstype) {
+	public boolean updteOtherstype(OtherFee otherFee) {
 		boolean success = true;
 		
 		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE Otherstype SET Type = ?,Term =? ,"
+	             PreparedStatement pstmt = conn.prepareStatement("UPDATE OtherFee SET Type = ?,Term =? ,"
 	             		+ "Year =? WHERE Uuid =? AND SchoolAccountUuid =?;");
 	               ) {           			 	            
 			   
 	           
 			  
-	            pstmt.setString(1, otherstype.getType());
-	            pstmt.setString(2, otherstype.getTerm());
-	            pstmt.setString(3, otherstype.getYear());	 
-	            pstmt.setString(4, otherstype.getUuid());
-	            pstmt.setString(5, otherstype.getSchoolAccountUuid());
+	            pstmt.setString(1, otherFee.getType());
+	            pstmt.setString(2, otherFee.getTerm());
+	            pstmt.setString(3, otherFee.getYear());	 
+	            pstmt.setString(4, otherFee.getUuid());
+	            pstmt.setString(5, otherFee.getSchoolAccountUuid());
 	            pstmt.executeUpdate();
 
 } catch (SQLException e) {
-      logger.error("SQL Exception when updating Otherstype " + otherstype);
+      logger.error("SQL Exception when updating OtherFee " + otherFee);
       logger.error(ExceptionUtils.getStackTrace(e));
       System.out.println(ExceptionUtils.getStackTrace(e));
       success = false;
@@ -144,11 +144,11 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#getOtherstypeList()
 	 */
 	@Override
-	public List<Otherstype> getOtherstypeList(String schoolAccountUuid,String term,String year) {
-		List<Otherstype> list = null;
+	public List<OtherFee> getOtherstypeList(String schoolAccountUuid,String term,String year) {
+		List<OtherFee> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Otherstype WHERE"
+        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE"
         		 		+ " SchoolAccountUuid = ? AND Term = ? AND Year = ?;");
      	   ) {
          	   pstmt.setString(1, schoolAccountUuid);      
@@ -156,10 +156,10 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
         	   pstmt.setString(3, year); 
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
-     	       list = beanProcessor.toBeanList(rset, Otherstype.class);
+     	       list = beanProcessor.toBeanList(rset, OtherFee.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting Otherstype  List"); 
+            logger.error("SQLException when getting OtherFee  List"); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
@@ -171,20 +171,20 @@ public class OtherstypeDAO extends GenericDAO implements SchoolOtherstypeDAO {
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherstypeDAO#gettypeList(java.lang.String)
 	 */
 	@Override
-	public List<Otherstype> gettypeList(String schoolAccountUuid) {
-		List<Otherstype> list = null;
+	public List<OtherFee> gettypeList(String schoolAccountUuid) {
+		List<OtherFee> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Otherstype WHERE"
+        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE"
         		 		+ " SchoolAccountUuid = ?;");
      	   ) {
          	   pstmt.setString(1, schoolAccountUuid);      
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
-     	       list = beanProcessor.toBeanList(rset, Otherstype.class);
+     	       list = beanProcessor.toBeanList(rset, OtherFee.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting Otherstype  List"); 
+            logger.error("SQLException when getting OtherFee  List"); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }

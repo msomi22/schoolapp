@@ -25,7 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentHouse;
@@ -53,7 +53,7 @@ public class ExportExcel extends HttpServlet{
     HashMap<String, String> houseHash = new HashMap<String, String>();
 
     private Cache schoolaccountCache;
-    ExamConfig examConfig;
+    SysConfig sysConfig;
    
 
     private static StudentDAO studentDAO;
@@ -122,7 +122,7 @@ public class ExportExcel extends HttpServlet{
 	 
 		   }
                
-		    examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		    sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		    
 		   
 		    List<Student> studentList = new ArrayList<>();
@@ -200,7 +200,7 @@ public class ExportExcel extends HttpServlet{
         
         XSSFRow r0 = s.createRow(0);
         XSSFCell cell = r0.createCell((short) 0);
-	    cell.setCellValue(ch.createRichTextString(school.getName()+" : "+roomHash.get(classroomuuid)+" Students List,  TERM " + examConfig.getTerm()+"  "+ examConfig.getYear()));
+	    cell.setCellValue(ch.createRichTextString(school.getName()+" : "+roomHash.get(classroomuuid)+" Students List,  TERM " + sysConfig.getTerm()+"  "+ sysConfig.getYear()));
 	    cell.setCellStyle(style);
 	    
 	    s.addMergedRegion(new CellRangeAddress(0,0,10,0));//row from,row to,col from, col to

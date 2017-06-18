@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 
 /**
  * @author peter
@@ -53,7 +53,7 @@ public class TestStudentOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#putStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#putStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)}.
 	 */
 	@Ignore
 	@Test
@@ -62,7 +62,7 @@ public class TestStudentOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#updateStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#updateStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)}.
 	 */
 	@Ignore
 	@Test
@@ -71,7 +71,7 @@ public class TestStudentOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#deleteStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO#deleteStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)}.
 	 */
 	@Ignore
 	@Test
@@ -86,9 +86,9 @@ public class TestStudentOtherMoniesDAO {
 	@Test
 	public final void testGetStudentOtherMoniesList() {
 		store = new StudentOtherMoniesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<StudentOtherMonies> list = store.getStudentOtherMonies("e4d9a770-9fda-4f4e-b7b4-19de9dfa6d04","480f89b4-0152-43dd-b278-f6fcd91112dc");
+		/*List<StudentOtherFee> list = store.getStudentOtherMonies("e4d9a770-9fda-4f4e-b7b4-19de9dfa6d04","480f89b4-0152-43dd-b278-f6fcd91112dc");
 		double total = 0;
-		for (StudentOtherMonies l : list) {
+		for (StudentOtherFee l : list) {
 			double amount = l.getAmountPiad();
 			total+=amount;
 		}
@@ -102,8 +102,8 @@ public class TestStudentOtherMoniesDAO {
 	@Test
 	public final void testGetStudentOtherMoniesDistinct() {
 		store = new StudentOtherMoniesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<StudentOtherMonies> list = store.getStudentOtherList("6092f611-2b44-4073-a803-2e3a1374bb8c", "1", "2016");
-		for (StudentOtherMonies l : list) {
+		List<StudentOtherFee> list = store.getStudentOtherList("6092f611-2b44-4073-a803-2e3a1374bb8c", "1", "2016");
+		for (StudentOtherFee l : list) {
 			System.out.println("list="+l);	
 		}
 		

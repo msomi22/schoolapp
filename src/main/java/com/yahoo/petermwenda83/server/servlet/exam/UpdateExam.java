@@ -85,7 +85,7 @@ public class UpdateExam extends HttpServlet{
 				}
 			}
 
-			response.sendRedirect("examConfig.jsp"); 
+			response.sendRedirect("sysConfig.jsp"); 
 			return;
 		}
 	}

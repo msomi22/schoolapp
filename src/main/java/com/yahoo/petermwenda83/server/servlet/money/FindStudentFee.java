@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -76,9 +76,9 @@ public class FindStudentFee extends HttpServlet{
 		  
 	   }else{
 		   
-		   ExamConfig examConfig = new ExamConfig();
+		   SysConfig sysConfig = new SysConfig();
 		   if(examConfigDAO.getExamConfig(schoolUuid) !=null){
-			   examConfig = examConfigDAO.getExamConfig(schoolUuid);
+			   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
 		   }
 		 
            
@@ -91,8 +91,8 @@ public class FindStudentFee extends HttpServlet{
 		  
            List<StudentFee> studentfeeList = new ArrayList<StudentFee>();
            
-           if(studentFeeDAO.getStudentFeeByStudentUuidList(schoolUuid, student.getUuid(),examConfig.getTerm(),examConfig.getYear()) !=null){
-        	   studentfeeList = studentFeeDAO.getStudentFeeByStudentUuidList(schoolUuid, student.getUuid(),examConfig.getTerm(),examConfig.getYear());
+           if(studentFeeDAO.getStudentFeeByStudentUuidList(schoolUuid, student.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+        	   studentfeeList = studentFeeDAO.getStudentFeeByStudentUuidList(schoolUuid, student.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
         	   feeListHash.put("studentfeeList", studentfeeList);
         	 
            }

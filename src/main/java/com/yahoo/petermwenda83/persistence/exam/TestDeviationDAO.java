@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.exam.Deviation;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 
 /**
  * @author peter

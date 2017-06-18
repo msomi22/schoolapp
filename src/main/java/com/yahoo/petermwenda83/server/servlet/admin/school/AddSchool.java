@@ -20,11 +20,11 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.Exam;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -204,17 +204,17 @@ public class AddSchool extends HttpServlet{
 		   
 		   Calendar calendar = Calendar.getInstance();
 		   final int YEAR = calendar.get(Calendar.YEAR);
-		   ExamConfig examConfig = new ExamConfig();
-    	   examConfig.setSchoolAccountUuid(account.getUuid());
-    	   examConfig.setTerm("1");
-    	   examConfig.setYear(""+YEAR);
-    	   examConfig.setExam("C1");
-    	   examConfig.setExamMode("ON");
-    	   examConfig.seteTFone("OFF");
-    	   examConfig.seteT("OFF");
-    	   examConfig.seteTCtwo("OFF");
-    	   examConfig.seteTConetwo("ON");
-    	   examConfig.setSendSMS("OFF");  
+		   SysConfig sysConfig = new SysConfig();
+    	   sysConfig.setSchoolAccountUuid(account.getUuid());
+    	   sysConfig.setTerm("1");
+    	   sysConfig.setYear(""+YEAR);
+    	   sysConfig.setExam("C1");
+    	   sysConfig.setExamMode("ON");
+    	   sysConfig.seteTFone("OFF");
+    	   sysConfig.seteT("OFF");
+    	   sysConfig.seteTCtwo("OFF");
+    	   sysConfig.seteTConetwo("ON");
+    	   sysConfig.setSendSMS("OFF");  
     	   
     	   GradingSystem gradingSystem = new GradingSystem();
     	   gradingSystem.setSchoolAccountUuid(account.getUuid()); 
@@ -237,7 +237,7 @@ public class AddSchool extends HttpServlet{
     	   
     	  
 		   
-		   if(accountDAO.put(account) && examConfigDAO.putExamConfig(examConfig) && gradingSystemDAO.putGradingSystem(gradingSystem)){	
+		   if(accountDAO.put(account) && examConfigDAO.putExamConfig(sysConfig) && gradingSystemDAO.putGradingSystem(gradingSystem)){	
 			   
 			   for(int i=0;i<defaultClasses.length;i++){
 	    		   ClassRoom room = new ClassRoom();
@@ -260,7 +260,7 @@ public class AddSchool extends HttpServlet{
 				   TermFee termFee = new TermFee();
 				   termFee.setSchoolAccountUuid(account.getUuid());
 				   termFee.setTerm(terms[i]); 
-				   termFee.setYear(examConfig.getYear());  
+				   termFee.setYear(sysConfig.getYear());  
 				   termFee.setTermAmount(fee[i]);
 				   termFee.setDayAmount(dayfee[i]); 
 				   termFeeDAO.putFee(termFee);
@@ -269,18 +269,18 @@ public class AddSchool extends HttpServlet{
 			   String type =  "Trip-Coast";
 			   double amount = 2500;
 			 
-			   Otherstype otherstype = new Otherstype();
-			   otherstype = new Otherstype();
-			   otherstype.setSchoolAccountUuid(account.getUuid());
-	    	   otherstype.setType(type);	    	  
-	    	   otherstype.setTerm("1");
-	    	   otherstype.setYear("2016"); 
+			   OtherFee otherFee = new OtherFee();
+			   otherFee = new OtherFee();
+			   otherFee.setSchoolAccountUuid(account.getUuid());
+	    	   otherFee.setType(type);	    	  
+	    	   otherFee.setTerm("1");
+	    	   otherFee.setYear("2016"); 
 	    	   
-	    	   if(otherstypeDAO.putOtherstype(otherstype)){
+	    	   if(otherstypeDAO.putOtherstype(otherFee)){
 	    		   TermOtherMonies termOtherMonies = new  TermOtherMonies();
 	    		   termOtherMonies = new TermOtherMonies();
 	    		   termOtherMonies.setSchoolAccountUuid(account.getUuid());
-	    		   termOtherMonies.setOtherstypeUuid(otherstype.getUuid()); 
+	    		   termOtherMonies.setOtherstypeUuid(otherFee.getUuid()); 
 	    		   termOtherMonies.setAmount(amount);
 	    		   termOtherMoniesDAO.putTermOtherMonies(termOtherMonies);
 	    	   }

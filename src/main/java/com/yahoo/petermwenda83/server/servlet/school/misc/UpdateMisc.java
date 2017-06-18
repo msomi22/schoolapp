@@ -76,7 +76,7 @@ public class UpdateMisc extends HttpServlet{
     	   
        }
        
-       response.sendRedirect("examConfig.jsp");  
+       response.sendRedirect("sysConfig.jsp");  
 	   return;
        
        

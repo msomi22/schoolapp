@@ -18,12 +18,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.CatOne;
 import com.yahoo.petermwenda83.bean.exam.CatTwo;
 import com.yahoo.petermwenda83.bean.exam.EndTerm;
 import com.yahoo.petermwenda83.bean.exam.Exam;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
@@ -146,10 +146,10 @@ public class SaveScore extends HttpServlet{
 					classroom = classRoom.getRoomName();
 				}
 
-				List<Classes> classesList = new ArrayList<>();
+				List<Stream> classesList = new ArrayList<>();
 				classesList = classesDAO.getClassList();
 				String classesUuid = "";
-				for(Classes clss : classesList){
+				for(Stream clss : classesList){
 					if(StringUtils.contains(classroom, clss.getClassName())){
 						classesUuid = clss.getUuid();
 					}
@@ -163,11 +163,11 @@ public class SaveScore extends HttpServlet{
 
 				String term = "",year = "" , examtype = "";
 				if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-					ExamConfig examConfig = examConfigDAO.getExamConfig(school.getUuid());
-					term = examConfig.getTerm();
-					year = examConfig.getYear();
-					examtype = examConfig.getExam();
-					exam = examDAO.getExamByName(examConfig.getExam()); 
+					SysConfig sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+					term = sysConfig.getTerm();
+					year = sysConfig.getYear();
+					examtype = sysConfig.getExam();
+					exam = examDAO.getExamByName(sysConfig.getExam()); 
 					if(exam !=null){
 					   outOf = exam.getOutOf();
 					    }

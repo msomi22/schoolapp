@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.Withdraw;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -52,7 +52,7 @@ public class PMWithdraw extends HttpServlet{
 	 private static StudentDAO studentDAO;
 	 private static PMoneyDAO pMoneyDAO;
 	 private static ExamConfigDAO examConfigDAO;
-	 ExamConfig examConfig;
+	 SysConfig sysConfig;
 	 private Cache schoolaccountCache;	
 
 	/**  
@@ -128,12 +128,12 @@ public class PMWithdraw extends HttpServlet{
 		   }
 		   
 		   if(StringUtils.equals(student.getStatusUuid(),statusUuid)){
-		   examConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
 		   Withdraw w = new Withdraw();
     	   w.setStudentUuid(student.getUuid());
     	   w.setSystemUser(systemuser);
-    	   w.setTerm(examConfig.getTerm());
-           w.setYear(examConfig.getYear());
+    	   w.setTerm(sysConfig.getTerm());
+           w.setYear(sysConfig.getYear());
            
     	   
     	   if(pMoneyDAO.deductBalance(w, Double.parseDouble(amount))){ 

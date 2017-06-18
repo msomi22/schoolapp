@@ -56,7 +56,7 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.BarWeight;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.money.TermFee;
@@ -113,7 +113,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 	private Cache schoolaccountCache, statisticsCache;
 
 	private Logger logger;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	//String stffID = "";
 	
 	
@@ -303,7 +303,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		}
 
 
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
         
 			SessionStatistics statistics = new SessionStatistics();
@@ -322,10 +322,10 @@ public class FormOneEndTermReportCard extends HttpServlet{
 				
 
 			List<Perfomance> pDistinctListGeneral = new ArrayList<Perfomance>();
-			pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear());
+			pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,sysConfig.getTerm(),sysConfig.getYear());
 			
 			List<Perfomance> pDistinctList = new ArrayList<Perfomance>(); 
-			pDistinctList = perfomanceDAO.getPerfomanceListDistinct(school.getUuid(), classroomuuid,examConfig.getTerm(),examConfig.getYear());
+			pDistinctList = perfomanceDAO.getPerfomanceListDistinct(school.getUuid(), classroomuuid,sysConfig.getTerm(),sysConfig.getYear());
 			// Class performance end
 			
 			List<Student> studentList = new ArrayList<Student>(); 
@@ -525,7 +525,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 			List<Perfomance> listGeneral = new ArrayList<>();
 			if(pDistinctListGeneral !=null){
 				for(Perfomance pD : pDistinctListGeneral){     
-					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
+					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),sysConfig.getTerm(),sysConfig.getYear());
 
 					engscoregn = 0;
 					kswscoregn = 0;
@@ -781,33 +781,33 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					MEANMapgn.put(uuid,meangn);
 					
 					Deviation dev;
-					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-						dev = deviationDAO.getDev(uuid, examConfig.getYear());
+					if(deviationDAO.getDev(uuid, sysConfig.getYear()) !=null){
+						dev = deviationDAO.getDev(uuid, sysConfig.getYear());
 					}else{
 						dev = new Deviation();
 					}
 					
 					
 					
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						dev.setStudentUuid(uuid);
-						dev.setYear(examConfig.getYear());
+						dev.setYear(sysConfig.getYear());
 						dev.setDevOne(meangn);
-						deviationDAO.putDev(dev,uuid,examConfig.getYear());
+						deviationDAO.putDev(dev,uuid,sysConfig.getYear());
 						
 						
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						dev.setStudentUuid(uuid);
-						dev.setYear(examConfig.getYear());
+						dev.setYear(sysConfig.getYear());
 						dev.setDevTwo(meangn);
-						deviationDAO.putDev(dev,uuid,examConfig.getYear());
+						deviationDAO.putDev(dev,uuid,sysConfig.getYear());
 						
 						
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						dev.setStudentUuid(uuid);
-						dev.setYear(examConfig.getYear());
+						dev.setYear(sysConfig.getYear());
 						dev.setDevThree(meangn); 
-						deviationDAO.putDev(dev,uuid,examConfig.getYear());
+						deviationDAO.putDev(dev,uuid,sysConfig.getYear());
 						
 					}
 					
@@ -887,7 +887,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 
 				
 				for(Perfomance s : pDistinctList){                              
-					list = perfomanceDAO.getPerformance(school.getUuid(), classroomuuid, s.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
+					list = perfomanceDAO.getPerformance(school.getUuid(), classroomuuid, s.getStudentUuid(),sysConfig.getTerm(),sysConfig.getYear());
 					engscore = 0;
 					kswscore = 0;
 					matscore = 0;
@@ -1452,7 +1452,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 
 					
 
-					PdfPCell contheader = new PdfPCell(new Paragraph(("TERM " +examConfig.getTerm() + ": YEAR " + examConfig.getYear() +"\n" +("CLASS : " + roomHash.get(classroomuuid) +"\n")) +"",timesRomanNormal7));
+					PdfPCell contheader = new PdfPCell(new Paragraph(("TERM " +sysConfig.getTerm() + ": YEAR " + sysConfig.getYear() +"\n" +("CLASS : " + roomHash.get(classroomuuid) +"\n")) +"",timesRomanNormal7));
 					contheader.setBackgroundColor(Colormagenta);
 					contheader.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -1626,7 +1626,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					gradeTable.addCell(new Paragraph("D-",timesRomanNormal7));
 					gradeTable.addCell(new Paragraph("E",timesRomanNormal7));
 					
-					if(StringUtils.equals(examConfig.getSendSMS(),"ON")){
+					if(StringUtils.equals(sysConfig.getSendSMS(),"ON")){
 						sendResultSMS.sendToParents(smsApiDAO,smsSendDAO,studentDAO,parentsDAO,uuid,school.getUuid(),engscorestr,kswscorestr,matscorestr,
 								physcorestr,bioscorestr,chemscorestr,bsscorestr,comscorestr,
 								hscscorestr,agriscorestr,geoscorestr,crescorestr,histscorestr,mean);
@@ -1901,7 +1901,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					//fee balance
 					//admdate  admTerm
 					
-					String currentTermstr = examConfig.getTerm();
+					String currentTermstr = sysConfig.getTerm();
 					String correctTermstr = "";
 					int correctTermint = 0;
 					int currentTermint = Integer.parseInt(currentTermstr); 
@@ -1942,7 +1942,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					comments = miscellanousDAO.getKey(school.getUuid(),"HEAD_TEACHER_REMARKS");
 					comment = comments.getValue();
 					
-					TermFee termFeenex = termFeeDAO.getFee(school.getUuid(),correctTermstr,examConfig.getYear()); 
+					TermFee termFeenex = termFeeDAO.getFee(school.getUuid(),correctTermstr,sysConfig.getYear()); 
 					double nexttermfee = termFeenex.getTermAmount(); 
 					double daynexttermfee = termFeenex.getDayAmount(); 
 					
@@ -2151,8 +2151,8 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					
 					
 					BarWeight barWeight = new BarWeight();
-					if(barWeightDAO.getBarWeight(school.getUuid(), uuid, examConfig.getYear()) !=null){
-                		barWeight = barWeightDAO.getBarWeight(school.getUuid(), uuid, examConfig.getYear()); 
+					if(barWeightDAO.getBarWeight(school.getUuid(), uuid, sysConfig.getYear()) !=null){
+                		barWeight = barWeightDAO.getBarWeight(school.getUuid(), uuid, sysConfig.getYear()); 
                 	}
 					
 					//  get last term mean, and this term mean, find deviation and out the comment
@@ -2161,20 +2161,20 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					Deviation means = new Deviation();
 					String lastyr = "";
 					
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						//get current year
 						String thisyear = "";
 						int lastyear = 0;
 						
-						if(examConfig !=null){
-							thisyear = examConfig.getYear();
+						if(sysConfig !=null){
+							thisyear = sysConfig.getYear();
 							lastyear = Integer.parseInt(thisyear) - 1;
 						}
 						
 						lastyr = Integer.toString(lastyear); 
 						
 					}else{
-						lastyr = examConfig.getYear();
+						lastyr = sysConfig.getYear();
 					}
 					
 				
@@ -2186,11 +2186,11 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					//System.out.println("My Object = "+means);
 					
 					//get last term mean 
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						lastTermMean = means.getDevThree();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						lastTermMean = means.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						lastTermMean = means.getDevTwo();
 					}
 					//now we haave our last term deviation in the variable  'lastTermMean'
@@ -2198,14 +2198,14 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					// we get this term mean
 					double thstermMean = 0;
 					Deviation thisterMmeanObj = new Deviation();
-					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-					  thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
+					if(deviationDAO.getDev(uuid, sysConfig.getYear()) !=null){
+					  thisterMmeanObj = deviationDAO.getDev(uuid, sysConfig.getYear());
 					}
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						thstermMean = thisterMmeanObj.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						thstermMean = thisterMmeanObj.getDevTwo();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						thstermMean = thisterMmeanObj.getDevThree();
 					}
 					
@@ -2424,10 +2424,10 @@ public class FormOneEndTermReportCard extends HttpServlet{
 			T3Weight = barWeight.getWeightThree();
 		}
 
-		if(StringUtils.equalsIgnoreCase(examConfig.getTerm(), "1")){
+		if(StringUtils.equalsIgnoreCase(sysConfig.getTerm(), "1")){
 
 			BarWeight barweightLastYR = new BarWeight();
-			int lastyear = (Integer.parseInt(examConfig.getYear())-1);
+			int lastyear = (Integer.parseInt(sysConfig.getYear())-1);
 
 			if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Integer.toString(lastyear)) !=null){
 				barweightLastYR = barWeightDAO.getBarWeight(school.getUuid(), uuid, Integer.toString(lastyear)); 
@@ -2453,7 +2453,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 			}
 
 
-		}else if(StringUtils.equalsIgnoreCase(examConfig.getTerm(), "2")){
+		}else if(StringUtils.equalsIgnoreCase(sysConfig.getTerm(), "2")){
 
 
 			if(T2Weight > T1Weight && T1Weight !=0){
@@ -2472,7 +2472,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 				classTeacherComent = "you have dropped! Put more effort please.";
 			}
 
-		}else if(StringUtils.equalsIgnoreCase(examConfig.getTerm(), "3")){
+		}else if(StringUtils.equalsIgnoreCase(sysConfig.getTerm(), "3")){
 
 			if(T3Weight > T2Weight && T2Weight !=0){
 				//you have improved
@@ -2560,41 +2560,41 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		boolean saved = false;
 		
 		BarWeight barWeight;
-		if(barWeightDAO.getBarWeight(schooluuid, studentuuid, examConfig.getYear())==null){
+		if(barWeightDAO.getBarWeight(schooluuid, studentuuid, sysConfig.getYear())==null){
 			 barWeight = new BarWeight();
 		}else{
-			 barWeight = barWeightDAO.getBarWeight(schooluuid, studentuuid, examConfig.getYear());
+			 barWeight = barWeightDAO.getBarWeight(schooluuid, studentuuid, sysConfig.getYear());
 		}
 	
 		
 		double weight = 0;
 		weight =  ((mean/100)*12);
 		
-		if(StringUtils.equals(examConfig.getTerm(), "1")){
+		if(StringUtils.equals(sysConfig.getTerm(), "1")){
 			barWeight.setWeightOne(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
 			barWeight.setStudentUuid(studentuuid);
-			barWeight.setTerm(examConfig.getTerm());
-			barWeight.setYear(examConfig.getYear());
-			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
+			barWeight.setTerm(sysConfig.getTerm());
+			barWeight.setYear(sysConfig.getYear());
+			barWeightDAO.put(barWeight,schooluuid,studentuuid,sysConfig.getYear());
 			saved = true;
 			
-		}else if (StringUtils.equals(examConfig.getTerm(), "2")){
+		}else if (StringUtils.equals(sysConfig.getTerm(), "2")){
 			barWeight.setWeightTwo(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
 			barWeight.setStudentUuid(studentuuid);
-			barWeight.setTerm(examConfig.getTerm());
-			barWeight.setYear(examConfig.getYear());
-			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
+			barWeight.setTerm(sysConfig.getTerm());
+			barWeight.setYear(sysConfig.getYear());
+			barWeightDAO.put(barWeight,schooluuid,studentuuid,sysConfig.getYear());
 			saved = true;
 			
-		}else if (StringUtils.equals(examConfig.getTerm(), "3")){
+		}else if (StringUtils.equals(sysConfig.getTerm(), "3")){
 			barWeight.setWeightThree(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
 			barWeight.setStudentUuid(studentuuid);
-			barWeight.setTerm(examConfig.getTerm());
-			barWeight.setYear(examConfig.getYear());
-			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
+			barWeight.setTerm(sysConfig.getTerm());
+			barWeight.setYear(sysConfig.getYear());
+			barWeightDAO.put(barWeight,schooluuid,studentuuid,sysConfig.getYear());
 			saved = true;
 		}
 		

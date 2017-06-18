@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -36,7 +36,7 @@ public class UpdateExamConfig extends HttpServlet{
 	
 	
 	TermFee termFee;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	
 	private String[] examcodeArray;
 	private List<String> examcodeList;
@@ -127,17 +127,17 @@ public class UpdateExamConfig extends HttpServlet{
       }else{
     	   
     	
-       ExamConfig examConfig = examConfigDAO.getExamConfig(schoolAccountUuid);
-       examConfig.setExam(exam);
-       examConfig.setExamMode(exammode); 
-       examConfig.setSendSMS(sendSmsEnable);
-       examConfig.seteTFone(eTFone);
+       SysConfig sysConfig = examConfigDAO.getExamConfig(schoolAccountUuid);
+       sysConfig.setExam(exam);
+       sysConfig.setExamMode(exammode); 
+       sysConfig.setSendSMS(sendSmsEnable);
+       sysConfig.seteTFone(eTFone);
        
-       examConfig.seteT(eT);
-       examConfig.seteTCtwo(eTCtwo);
-       examConfig.seteTConetwo(eTConetwo); 
+       sysConfig.seteT(eT);
+       sysConfig.seteTCtwo(eTCtwo);
+       sysConfig.seteTConetwo(eTConetwo); 
        
-       if(examConfigDAO.updateExamConfig(examConfig)){
+       if(examConfigDAO.updateExamConfig(sysConfig)){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS); 
     	   
     	   
@@ -148,7 +148,7 @@ public class UpdateExamConfig extends HttpServlet{
        
        }
        
-        response.sendRedirect("examConfig.jsp"); 
+        response.sendRedirect("sysConfig.jsp"); 
 	   return;
    }
    

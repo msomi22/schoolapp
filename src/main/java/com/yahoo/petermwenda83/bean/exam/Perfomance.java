@@ -19,23 +19,12 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Perfomance extends StorableBean{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5213605489119414121L;
-	private String schoolAccountUuid;
-	private String teacherUuid;
-	private String studentUuid;
-	private String subjectUuid;
-	private String classRoomUuid;
-	private String ClassesUuid;
-	private double catOne;
-	private double catTwo;
-	private double endTerm;
-	private double paperOne;
-	private double paperTwo;
-	private double paperThree; 
-	//private double score; 
+	private String studentId;
+	private String subjectId;
+	private String streamId;
+	private String classRoomId;
+	private String examId;
+	private int score;
 	private String term;
 	private String year;
 
@@ -44,270 +33,98 @@ public class Perfomance extends StorableBean{
 	 */
 	public Perfomance() {
         super();
-        schoolAccountUuid ="";
-        teacherUuid ="";
-        studentUuid ="";
-        subjectUuid ="";
-        classRoomUuid = "";
-        ClassesUuid = "";
-        catOne = 0.0;
-        catTwo = 0.0;
-        endTerm = 0.0;
-        paperOne = 0.0;
-        paperTwo = 0.0;
-        paperThree = 0.0;
-        //totals = 0.0;
-        term ="";
-      	year ="";
-      	
+        studentId ="";
+        subjectId ="";
+        streamId ="";
+        classRoomId = "";
+        examId = "";
+        score = 0;
+        term = "";
+        year = "";
 	}
 	
-	
-
-
 	/**
-	 * @return the schoolAccountUuid
+	 * @return the studentId
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getStudentId() {
+		return studentId;
 	}
 
-
-
-
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param studentId the studentId to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
-
-
-
 	/**
-	 * @return the teacherUuid
+	 * @return the subjectId
 	 */
-	public String getTeacherUuid() {
-		return teacherUuid;
+	public String getSubjectId() {
+		return subjectId;
 	}
 
-
-
-
 	/**
-	 * @param teacherUuid the teacherUuid to set
+	 * @param subjectId the subjectId to set
 	 */
-	public void setTeacherUuid(String teacherUuid) {
-		this.teacherUuid = teacherUuid;
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
 	}
 
-
-
-
 	/**
-	 * @return the studentUuid
+	 * @return the streamId
 	 */
-	public String getStudentUuid() {
-		return studentUuid;
+	public String getStreamId() {
+		return streamId;
 	}
 
-
-
-
 	/**
-	 * @param studentUuid the studentUuid to set
+	 * @param streamId the streamId to set
 	 */
-	public void setStudentUuid(String studentUuid) {
-		this.studentUuid = studentUuid;
+	public void setStreamId(String streamId) {
+		this.streamId = streamId;
 	}
 
-
-
-
 	/**
-	 * @return the subjectUuid
+	 * @return the classRoomId
 	 */
-	public String getSubjectUuid() {
-		return subjectUuid;
+	public String getClassRoomId() {
+		return classRoomId;
 	}
 
-
-
-
 	/**
-	 * @param subjectUuid the subjectUuid to set
+	 * @param classRoomId the classRoomId to set
 	 */
-	public void setSubjectUuid(String subjectUuid) {
-		this.subjectUuid = subjectUuid;
+	public void setClassRoomId(String classRoomId) {
+		this.classRoomId = classRoomId;
 	}
 
-
 	/**
-	 * @return the classRoomUuid
+	 * @return the examId
 	 */
-	public String getClassRoomUuid() {
-		return classRoomUuid;
+	public String getExamId() {
+		return examId;
 	}
 
-
-
-
 	/**
-	 * @param classRoomUuid the classRoomUuid to set
+	 * @param examId the examId to set
 	 */
-	public void setClassRoomUuid(String classRoomUuid) {
-		this.classRoomUuid = classRoomUuid;
+	public void setExamId(String examId) {
+		this.examId = examId;
 	}
 
-
-
-
 	/**
-	 * @return the classesUuid
+	 * @return the score
 	 */
-	public String getClassesUuid() {
-		return ClassesUuid;
+	public int getScore() {
+		return score;
 	}
 
-
-
-
 	/**
-	 * @param classesUuid the classesUuid to set
+	 * @param score the score to set
 	 */
-	public void setClassesUuid(String classesUuid) {
-		ClassesUuid = classesUuid;
-	}
-
-
-
-
-	/**
-	 * @return the catOne
-	 */
-	public double getCatOne() {
-		return catOne;
-	}
-
-
-
-
-	/**
-	 * @param catOne the catOne to set
-	 */
-	public void setCatOne(double catOne) {
-		this.catOne = catOne;
-	}
-
-
-
-
-	/**
-	 * @return the catTwo
-	 */
-	public double getCatTwo() {
-		return catTwo;
-	}
-
-
-
-
-	/**
-	 * @param catTwo the catTwo to set
-	 */
-	public void setCatTwo(double catTwo) {
-		this.catTwo = catTwo;
-	}
-
-
-
-
-	/**
-	 * @return the endTerm
-	 */
-	public double getEndTerm() {
-		return endTerm;
-	}
-
-
-
-
-	/**
-	 * @param endTerm the endTerm to set
-	 */
-	public void setEndTerm(double endTerm) {
-		this.endTerm = endTerm;
-	}
-
-
-
-
-	/**
-	 * @return the paperOne
-	 */
-	public double getPaperOne() {
-		return paperOne;
-	}
-
-
-
-
-	/**
-	 * @param paperOne the paperOne to set
-	 */
-	public void setPaperOne(double paperOne) {
-		this.paperOne = paperOne;
-	}
-
-
-
-
-	/**
-	 * @return the paperTwo
-	 */
-	public double getPaperTwo() {
-		return paperTwo;
-	}
-
-
-
-
-	/**
-	 * @param paperTwo the paperTwo to set
-	 */
-	public void setPaperTwo(double paperTwo) {
-		this.paperTwo = paperTwo;
-	}
-
-
-
-
-	/**
-	 * @return the paperThree
-	 */
-	public double getPaperThree() {
-		return paperThree;
-	}
-
-
-
-
-	/**
-	 * @param paperThree the paperThree to set
-	 */
-	public void setPaperThree(double paperThree) {
-		this.paperThree = paperThree;
-	}
-
-
-
-
-	/**
-	 * @return the totals
-	 */
-	public double getTotals() {
-		return (  getCatOne()+getCatTwo()  )/2   + getEndTerm();
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	/**
@@ -317,18 +134,12 @@ public class Perfomance extends StorableBean{
 		return term;
 	}
 
-
-
-
 	/**
 	 * @param term the term to set
 	 */
 	public void setTerm(String term) {
 		this.term = term;
 	}
-
-
-
 
 	/**
 	 * @return the year
@@ -337,52 +148,27 @@ public class Perfomance extends StorableBean{
 		return year;
 	}
 
-
-
-
 	/**
 	 * @param year the year to set
 	 */
 	public void setYear(String year) {
 		this.year = year;
 	}
-
-
-	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Performance, [");
-		builder.append("schoolAccountUuid =");
-		builder.append(schoolAccountUuid);
-		builder.append(",teacherUuid=");
-		builder.append(teacherUuid);
-		builder.append(", studentUuid =");
-		builder.append(studentUuid); 
-		builder.append(", subjectUuid =");
-		builder.append(subjectUuid); 
-		builder.append(", classRoomUuid =");
-		builder.append(classRoomUuid);
-		builder.append(", ClassesUuid =");
-		builder.append(ClassesUuid);
-		builder.append(", catOne =");
-		builder.append(catOne);
-		builder.append(", catTwo =");
-		builder.append(catTwo);
-		builder.append(", endTerm =");
-		builder.append(endTerm);
-		builder.append(", paperOne =");
-		builder.append(paperOne);
-		builder.append(", paperTwo =");
-		builder.append(paperTwo);
-		builder.append(", paperThree =");
-		builder.append(paperThree);
-		builder.append(", term =");
-		builder.append(term);
-		builder.append(", year =");
-		builder.append(year);
-		builder.append("]");
-		return builder.toString(); 
-		}
 	
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Perfomance [studentId=" + studentId + ", subjectId=" + subjectId + ", streamId=" + streamId
+				+ ", classRoomId=" + classRoomId + ", examId=" + examId + ", score=" + score + ", term=" + term
+				+ ", year=" + year + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5213605489119414121L;
 }

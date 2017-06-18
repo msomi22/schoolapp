@@ -49,7 +49,7 @@ public class TestOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#AddOtherMonies(com.yahoo.petermwenda83.bean.othermoney.OtherMonies, double)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#AddOtherMonies(com.yahoo.petermwenda83.bean.otherfee.OtherMonies, double)}.
 	 */
 	@Ignore
 	@Test
@@ -58,7 +58,7 @@ public class TestOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#deductOtherMonies(com.yahoo.petermwenda83.bean.othermoney.OtherMonies, double)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#deductOtherMonies(com.yahoo.petermwenda83.bean.otherfee.OtherMonies, double)}.
 	 */
 	@Test
 	public final void testDeductOtherMonies() {
@@ -66,7 +66,7 @@ public class TestOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#changeOtherMoniesStatus(com.yahoo.petermwenda83.bean.othermoney.OtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherMoniesDAO#changeOtherMoniesStatus(com.yahoo.petermwenda83.bean.otherfee.OtherMonies)}.
 	 */
 	@Ignore
 	@Test

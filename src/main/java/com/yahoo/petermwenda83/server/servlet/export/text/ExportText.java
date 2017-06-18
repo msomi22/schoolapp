@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
@@ -47,7 +47,7 @@ public class ExportText extends HttpServlet{
      
 	 private Cache schoolaccountCache;
 	 private Logger logger;	
-	 ExamConfig examConfig;
+	 SysConfig sysConfig;
 	 
 	 private static final int BYTES_DOWNLOAD = 1024;
 	 private String subjectCode = "";
@@ -123,7 +123,7 @@ public class ExportText extends HttpServlet{
 	 
 		   }
 		   
-		   examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		   sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		   
 		   List<Student> studentList = new ArrayList<>();
 		   studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuidToken);
@@ -143,7 +143,7 @@ public class ExportText extends HttpServlet{
 		  
 	     subjectCode = subjectCodeHash.get(subjectuuidToken).replaceAll(" ", "_"); 
 	 	 classCode = roomHash.get(classroomuuidToken).replaceAll(" ", "_");  
-	 	 examCode = examConfig.getExam();
+	 	 examCode = sysConfig.getExam();
 		   
 		 response.setHeader("Content-Disposition","attachment; filename="+subjectCode+"."+classCode+"."+examCode+".txt");
 		   

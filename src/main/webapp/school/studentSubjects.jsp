@@ -10,7 +10,7 @@
 <%@page import="com.yahoo.petermwenda83.bean.student.StudentSubject"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.ExamConfig"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>

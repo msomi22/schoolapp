@@ -9,6 +9,7 @@
  */
 package com.yahoo.petermwenda83.bean.book;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
@@ -22,87 +23,80 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class StudentBook extends StorableBean{
 	
-	
-	String studentUuid;
-	String bookUuid;
-	String borrowStatus;
-	Date borrowDate;
-    String returnDate;
+	private String studentId;
+	private String bookId;
+	private String hasReturned;
+	private String returnDate;
+	private Timestamp borrowDate;
 
 	/**
 	 * 
 	 */
 	public StudentBook() {
-		studentUuid = "";
-		bookUuid = "";
-		borrowStatus = "";
-		borrowDate = new Date();
+		studentId = "";
+		bookId = "";
+		hasReturned = "";
 		returnDate = "";
+		borrowDate = new Timestamp(new Date().getTime()); 
+		
 	}
 	
-	/**
-	 * @return the studentUuid
-	 */
-	public String getStudentUuid() {
-		return studentUuid;
-	}
 
 	/**
-	 * @param studentUuid the studentUuid to set
+	 * @return the studentId
 	 */
-	public void setStudentUuid(String studentUuid) {
-		this.studentUuid = studentUuid;
+	public String getStudentId() {
+		return studentId;
 	}
 
-	/**
-	 * @return the bookUuid
-	 */
-	public String getBookUuid() {
-		return bookUuid;
-	}
 
 	/**
-	 * @param bookUuid the bookUuid to set
+	 * @param studentId the studentId to set
 	 */
-	public void setBookUuid(String bookUuid) {
-		this.bookUuid = bookUuid;
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
-	/**
-	 * @return the borrowStatus
-	 */
-	public String getBorrowStatus() {
-		return borrowStatus;
-	}
 
 	/**
-	 * @param borrowStatus the borrowStatus to set
+	 * @return the bookId
 	 */
-	public void setBorrowStatus(String borrowStatus) {
-		this.borrowStatus = borrowStatus;
-	}
-    
-	/**
-	 * @return the borrowDate
-	 */
-	public Date getBorrowDate() {
-		return borrowDate;
+	public String getBookId() {
+		return bookId;
 	}
 
+
 	/**
-	 * @param borrowDate the borrowDate to set
+	 * @param bookId the bookId to set
 	 */
-	public void setBorrowDate(Date borrowDate) {
-		this.borrowDate = borrowDate;
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
 	}
 
-	
+
+	/**
+	 * @return the hasReturned
+	 */
+	public String getHasReturned() {
+		return hasReturned;
+	}
+
+
+	/**
+	 * @param hasReturned the hasReturned to set
+	 */
+	public void setHasReturned(String hasReturned) {
+		this.hasReturned = hasReturned;
+	}
+
+
 	/**
 	 * @return the returnDate
 	 */
 	public String getReturnDate() {
 		return returnDate;
 	}
+
 
 	/**
 	 * @param returnDate the returnDate to set
@@ -111,26 +105,36 @@ public class StudentBook extends StorableBean{
 		this.returnDate = returnDate;
 	}
 
-	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("StudentBook");
-		builder.append("[getUuid()=");
-		builder.append(getUuid()); 
-		builder.append(",studentUuid=");
-		builder.append(studentUuid);
-		builder.append(",bookUuid=");
-		builder.append(bookUuid);
-		builder.append(",borrowStatus=");
-		builder.append(borrowStatus);
-		builder.append(",borrowDate=");
-		builder.append(borrowDate);
-		builder.append(",returnDate=");
-		builder.append(returnDate);
-		builder.append("]");
-		return builder.toString(); 
-		}
+
+	/**
+	 * @return the borrowDate
+	 */
+	public Timestamp getBorrowDate() {
+		return borrowDate;
+	}
+
+
+	/**
+	 * @param borrowDate the borrowDate to set
+	 */
+	public void setBorrowDate(Timestamp borrowDate) {
+		this.borrowDate = borrowDate;
+	}
+
+
 	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "StudentBook [studentId=" + studentId + ", bookId=" + bookId + ", hasReturned=" + hasReturned
+				+ ", returnDate=" + returnDate + ", borrowDate=" + borrowDate + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+
 	/**
 	 * 
 	 */

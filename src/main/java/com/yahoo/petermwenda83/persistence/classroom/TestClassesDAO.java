@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 
 /**
  * @author peter
@@ -40,7 +40,7 @@ public class TestClassesDAO {
 	@Test
 	public void testGetClassString() {
 		store = new ClassesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		Classes c = new Classes();
+		Stream c = new Stream();
 		c = store.getClass(UUID);
 		assertEquals(c.getClassName(),CLASS_NAME);
 	}
@@ -52,7 +52,7 @@ public class TestClassesDAO {
 	@Test
 	public void testPutClass() {
 		store = new ClassesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		Classes c = new Classes();
+		Stream c = new Stream();
 		c.setUuid(UUID_NEW);
 		c.setClassName(CLASS_NAME_NEW); 
 		assertTrue(store.putClass(c)); 
@@ -66,7 +66,7 @@ public class TestClassesDAO {
 	@Test
 	public void testUpdateClass() {
 		store = new ClassesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		Classes c = new Classes();
+		Stream c = new Stream();
 		c.setUuid(UUID_NEW);
 		c.setClassName(CLASS_NAME_UPDATE); 
 		assertTrue(store.updateClass(c));  
@@ -77,8 +77,8 @@ public class TestClassesDAO {
 	@Test
 	public void testGetClassList() {
 		store = new ClassesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<Classes> list = store.getClassList();
-		for (Classes c : list) {
+		List<Stream> list = store.getClassList();
+		for (Stream c : list) {
 			System.out.println(c);
 		}
 	}

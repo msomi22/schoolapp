@@ -18,58 +18,53 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  *
  */
 public class Exam extends StorableBean{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2625893752188549331L;
 	
-	private String examName;
-	private String schoolAccountUuid;
+	private String code;
+	private String description;
 	private int outOf;
-	
-	
 	
 	/**
 	 * 
 	 */
 	public Exam() {
 		super();
-		examName ="";
-		schoolAccountUuid ="";
+		code ="";
+		description ="";
 		outOf = 0;
 	}
 	
-	/**
-	 * @return the examName
-	 */
-	public String getExamName() {
-		return examName;
-	}
 
 	/**
-	 * @param examName the examName to set
+	 * @return the code
 	 */
-	public void setExamName(String examName) {
-		this.examName = examName;
+	public String getCode() {
+		return code;
 	}
 
-	/**
-	 * @return the schoolAccountUuid
-	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
-	}
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param code the code to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setCode(String code) {
+		this.code = code;
 	}
-	
-	
-	
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 
 	/**
 	 * @return the outOf
@@ -78,6 +73,7 @@ public class Exam extends StorableBean{
 		return outOf;
 	}
 
+
 	/**
 	 * @param outOf the outOf to set
 	 */
@@ -85,18 +81,23 @@ public class Exam extends StorableBean{
 		this.outOf = outOf;
 	}
 
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Exam [ getUuid() = ");
-		builder.append(getUuid());
-		builder.append(",schoolAccountUuid=");
-		builder.append(schoolAccountUuid);//outOf
-		builder.append(",examName=");
-		builder.append(examName);
-		builder.append(",outOf=");
-		builder.append(outOf);
-		builder.append("]");
-		return builder.toString(); 
-		}
+
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Exam [code=" + code + ", description=" + description + ", outOf=" + outOf + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2625893752188549331L;
+	
 	
 }

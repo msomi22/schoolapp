@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.othermoney.RevertedMoney;
+import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -80,7 +80,7 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#putstudentUuid(com.yahoo.petermwenda83.bean.othermoney.RevertedMoney)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#putstudentUuid(com.yahoo.petermwenda83.bean.otherfee.RevertedMoney)
 	 */
 	@Override
 	public boolean putstudentUuid(RevertedMoney revertedMoney) {

@@ -37,7 +37,7 @@ public class TestStudentOtherMoniesClosingBalDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesClosingBalDAO#putStudentOtherMoniesClosingBal(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMoniesClosingBal)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesClosingBalDAO#putStudentOtherMoniesClosingBal(com.yahoo.petermwenda83.bean.otherfee.StudentOtherMoniesClosingBal)}.
 	 */
 	@Test
 	public final void testPutStudentOtherMoniesClosingBal() {
@@ -45,7 +45,7 @@ public class TestStudentOtherMoniesClosingBalDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesClosingBalDAO#updateStudentOtherMoniesClosingBal(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMoniesClosingBal)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesClosingBalDAO#updateStudentOtherMoniesClosingBal(com.yahoo.petermwenda83.bean.otherfee.StudentOtherMoniesClosingBal)}.
 	 */
 	@Test
 	public final void testUpdateStudentOtherMoniesClosingBal() {

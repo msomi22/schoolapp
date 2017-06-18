@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -26,10 +26,10 @@ import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
 public class StudentBalance {
 
 	private SimpleDateFormat yearformatter;
-	private ExamConfig termConfig;
+	private SysConfig termConfig;
 	private String admYear;
 	private List<StudentFee> studentFeeList;
-	private List<StudentOtherMonies> othermoneyList;
+	private List<StudentOtherFee> othermoneyList;
 	//private TermFee termFee;
 	private String [] terms;
 	private String currentYear;
@@ -43,7 +43,7 @@ public class StudentBalance {
 	 */
 	public StudentBalance() {
 		yearformatter = new SimpleDateFormat("yyyy");
-		termConfig = new ExamConfig();
+		termConfig = new SysConfig();
 		admYear = "";
 		studentFeeList = new ArrayList<>();
 		othermoneyList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class StudentBalance {
 					//System.out.println("feeStudentType " + feeStudentType);
 				}
 
-				for(StudentOtherMonies otherMoney :othermoneyList){
+				for(StudentOtherFee otherMoney :othermoneyList){
 					otherPaid += otherMoney.getAmountPiad();
 					//System.out.println("otherPaid = " + otherPaid +" Term " + otherMoney.getTerm());
 				}

@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /** 
@@ -50,12 +50,12 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#getClass(java.lang.String)
 	 */
-	public Classes getClass(String Uuid) {
-		Classes Classes = null;
+	public Stream getClass(String Uuid) {
+		Stream Stream = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Classes WHERE Uuid = ?;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE Uuid = ?;");       
         		
         		){
         	
@@ -63,28 +63,28 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 Classes  = beanProcessor.toBean(rset,Classes.class);
+	    	 Stream  = beanProcessor.toBean(rset,Stream.class);
 	   }
         	
         	
         	
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting Classes with Uuid: " + Uuid);
+        	 logger.error("SQL Exception when getting Stream with Uuid: " + Uuid);
              logger.error(ExceptionUtils.getStackTrace(e));
              System.out.println(ExceptionUtils.getStackTrace(e));
         }
-		return Classes; 
+		return Stream; 
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#putClass(com.yahoo.petermwenda83.bean.classroom.Classes)
+	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#putClass(com.yahoo.petermwenda83.bean.classroom.Stream)
 	 */
 	@Override
-	public boolean putClass(Classes Class) {
+	public boolean putClass(Stream Class) {
 		boolean success = true;
 		
 		  try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Classes" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Stream" 
 			        		+"(Uuid, className) VALUES (?,?);");
 		             ){
 			   
@@ -93,7 +93,7 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-		   logger.error("SQL Exception trying to put Classes "+Class);
+		   logger.error("SQL Exception trying to put Stream "+Class);
            logger.error(ExceptionUtils.getStackTrace(e)); 
            System.out.println(ExceptionUtils.getStackTrace(e));
            success = false;
@@ -103,14 +103,14 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#updateClass(com.yahoo.petermwenda83.bean.classroom.Classes)
+	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#updateClass(com.yahoo.petermwenda83.bean.classroom.Stream)
 	 */
 	@Override
-	public boolean updateClass(Classes Class) {
+	public boolean updateClass(Stream Class) {
 		boolean success = true;
 		
 		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE Classes SET ClassName = ?"
+	             PreparedStatement pstmt = conn.prepareStatement("UPDATE Stream SET ClassName = ?"
 			        + "WHERE Uuid = ?;");
 	               ) {           			 	            
 	            pstmt.setString(1, Class.getClassName());
@@ -118,7 +118,7 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	            pstmt.executeUpdate();
 
     } catch (SQLException e) {
-      logger.error("SQL Exception when updating Classes " + Class);
+      logger.error("SQL Exception when updating Stream " + Class);
       logger.error(ExceptionUtils.getStackTrace(e));
       System.out.println(ExceptionUtils.getStackTrace(e));
       success = false;
@@ -130,18 +130,18 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#getClassList()
 	 */
 	@Override
-	public List<Classes> getClassList() {
-		List<Classes>  list = null;
+	public List<Stream> getClassList() {
+		List<Stream>  list = null;
 		 try(   
  		Connection conn = dbutils.getConnection();
- 		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Classes ;");   
+ 		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Stream ;");   
  		ResultSet rset = pstmt.executeQuery();
 		  ) {
  	
-      list = beanProcessor.toBeanList(rset, Classes.class);
+      list = beanProcessor.toBeanList(rset, Stream.class);
 
     } catch(SQLException e){
- 	   logger.error("SQL Exception when getting all Classes");
+ 	   logger.error("SQL Exception when getting all Stream");
        logger.error(ExceptionUtils.getStackTrace(e));
        System.out.println(ExceptionUtils.getStackTrace(e));
     }

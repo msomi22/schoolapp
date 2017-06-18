@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
@@ -50,7 +50,7 @@ public class UpdateFeeDetails extends HttpServlet{
 	private static StudentFeeDAO studentFeeDAO;
 	private static ExamConfigDAO examConfigDAO;
 	private Cache schoolaccountCache;
-    ExamConfig examConfig;
+    SysConfig sysConfig;
     
 	/**  
     *
@@ -133,7 +133,7 @@ public class UpdateFeeDetails extends HttpServlet{
        
        
 
-  	   examConfig = examConfigDAO.getExamConfig(school.getUuid());
+  	   sysConfig = examConfigDAO.getExamConfig(school.getUuid());
   	   double balance = 0;
 	   double oldamount = Double.parseDouble(amountpaidold);
 	   double amountTodeduct = Double.parseDouble(amounttodeduct);
@@ -150,8 +150,8 @@ public class UpdateFeeDetails extends HttpServlet{
 			       studentFee.setSystemUser(systemUser);
 			       studentFee.setSchoolAccountUuid(schoolUuid);
 			       studentFee.setStudentUuid(studentUuid);
-			       studentFee.setTerm(examConfig.getTerm());
-			       studentFee.setYear(examConfig.getYear());
+			       studentFee.setTerm(sysConfig.getTerm());
+			       studentFee.setYear(sysConfig.getYear());
 			       
 			       if(studentFeeDAO.updateStudentFee(studentFee)){ 
 			    	   session.setAttribute(SessionConstants.STUDENT_FEE_ADD_SUCCESS, SUCCESS_TRANSACTION_UPDATED);

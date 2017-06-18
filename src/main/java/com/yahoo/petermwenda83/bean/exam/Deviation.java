@@ -11,40 +11,42 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Deviation extends StorableBean{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4304459493382193867L;
-	private String studentUuid;
+	private String studentId;
 	private String year;
 	private double devOne;
 	private double devTwo;
 	private double devThree;
-
+	
 	/**
 	 * 
 	 */
 	public Deviation() {
-		studentUuid = "";
+		studentId = "";
 		year = "";
 		devOne = 0;
 		devTwo = 0;
 		devThree = 0;
 	}
 	
-	/**
-	 * @return the studentUuid
-	 */
-	public String getStudentUuid() {
-		return studentUuid;
-	}
+	
 
 	/**
-	 * @param studentUuid the studentUuid to set
+	 * @return the studentId
 	 */
-	public void setStudentUuid(String studentUuid) {
-		this.studentUuid = studentUuid;
+	public String getStudentId() {
+		return studentId;
 	}
+
+
+
+	/**
+	 * @param studentId the studentId to set
+	 */
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
+
 
 	/**
 	 * @return the year
@@ -102,15 +104,17 @@ public class Deviation extends StorableBean{
 		this.devThree = devThree;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("Deviation [ getUuid() = ");
 		builder.append(getUuid());
-		builder.append(", studentUuid=");
-		builder.append(studentUuid);
+		builder.append(", studentId=");
+		builder.append(studentId);
+		builder.append(", accountId=");
+		builder.append(getAccountId());
 		builder.append(", year=");
 		builder.append(year);
 		builder.append(", devOne=");
@@ -123,4 +127,10 @@ public class Deviation extends StorableBean{
 		return builder.toString(); 
 		}
 
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4304459493382193867L;
 }

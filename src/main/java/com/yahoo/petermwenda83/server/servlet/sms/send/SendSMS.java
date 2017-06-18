@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.StaffDetails;
@@ -66,7 +66,7 @@ public class SendSMS extends HttpServlet{
 	private static StaffDetailsDAO staffDetailsDAO;
 	private static SmsApiDAO smsApiDAO;
 
-	Classes classes = new Classes();
+	Stream stream = new Stream();
 	List<ClassRoom> classRoomList  = new ArrayList<>(); 
 	List<Student> studentPerClassList = new ArrayList<Student>();
 	List<StudentParent> parentListPerClass = new ArrayList<StudentParent>();
@@ -161,8 +161,8 @@ public class SendSMS extends HttpServlet{
 			}else if(StringUtils.equals(destination, FORM_1)){
 
 				if(classesDAO.getClass(destination) !=null){
-					classes = classesDAO.getClass(destination);
-					classname = classes.getClassName();
+					stream = classesDAO.getClass(destination);
+					classname = stream.getClassName();
 				}
 
 				if(roomDAO.getAllRooms(accountId) !=null){
@@ -171,7 +171,7 @@ public class SendSMS extends HttpServlet{
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
 
-						//get students to these classes,Student
+						//get students to these stream,Student
 						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
 							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
 						}
@@ -224,8 +224,8 @@ public class SendSMS extends HttpServlet{
 
 
 				if(classesDAO.getClass(destination) !=null){
-					classes = classesDAO.getClass(destination);
-					classname = classes.getClassName();
+					stream = classesDAO.getClass(destination);
+					classname = stream.getClassName();
 				}
 
 				if(roomDAO.getAllRooms(accountId) !=null){
@@ -234,7 +234,7 @@ public class SendSMS extends HttpServlet{
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
 
-						//get students to these classes,Student
+						//get students to these stream,Student
 						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
 							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
 						}
@@ -286,8 +286,8 @@ public class SendSMS extends HttpServlet{
 
 
 				if(classesDAO.getClass(destination) !=null){
-					classes = classesDAO.getClass(destination);
-					classname = classes.getClassName();
+					stream = classesDAO.getClass(destination);
+					classname = stream.getClassName();
 				}
 
 				if(roomDAO.getAllRooms(accountId) !=null){
@@ -296,7 +296,7 @@ public class SendSMS extends HttpServlet{
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
 
-						//get students to these classes,Student
+						//get students to these stream,Student
 						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
 							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
 						}
@@ -347,8 +347,8 @@ public class SendSMS extends HttpServlet{
 			}else if(StringUtils.equals(destination, FORM_4)){
 
 				if(classesDAO.getClass(destination) !=null){
-					classes = classesDAO.getClass(destination);
-					classname = classes.getClassName();
+					stream = classesDAO.getClass(destination);
+					classname = stream.getClassName();
 				}
 
 				if(roomDAO.getAllRooms(accountId) !=null){
@@ -358,7 +358,7 @@ public class SendSMS extends HttpServlet{
 
 					if(StringUtils.contains(room.getRoomName(), classname)){
 
-						//get students to these classes,Student
+						//get students to these stream,Student
 						if(studentDAO.getAllStudents(accountId, room.getUuid()) !=null){
 							studentPerClassList = studentDAO.getAllStudents(accountId, room.getUuid());
 						}

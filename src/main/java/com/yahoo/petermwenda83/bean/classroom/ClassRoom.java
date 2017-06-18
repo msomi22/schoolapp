@@ -18,69 +18,51 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  *
  */
 public class ClassRoom  extends StorableBean{
-	
-	/** 
-	 *  
-	 */
-	private static final long serialVersionUID = 6259060888065917342L;
-	private String SchoolAccountUuid;
-	private String RoomName;
+
+	private String description;
 	
 	/**
 	 * 
 	 */
 	public ClassRoom() {
 		super();
-		SchoolAccountUuid ="";
-		RoomName ="";
+		description ="";
 		
 	}
 	
 	
-	/**
-	 * @return the roomName
-	 */
-	public String getRoomName() {
-		return RoomName;
-	}
-
 
 	/**
-	 * @param roomName the roomName to set
+	 * @return the description
 	 */
-	public void setRoomName(String roomName) {
-		RoomName = roomName;
+	public String getDescription() {
+		return description;
 	}
 
 
 
 	/**
-	 * @return the schoolAccountUuid
+	 * @param description the description to set
 	 */
-	public String getSchoolAccountUuid() {
-		return SchoolAccountUuid;
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
+
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @see java.lang.Object#toString()
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		SchoolAccountUuid = schoolAccountUuid;
-	}
-
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("[ ClassRoom");
-		builder.append(",getUuid()=");
-		builder.append( getUuid());
-		builder.append(", SchoolAccountUuid =");
-		builder.append(SchoolAccountUuid);
-		builder.append(", RoomName =");
-		builder.append(RoomName);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "ClassRoom [description=" + description + ", getUuid()=" + getUuid() + ", getAccountId()="
+				+ getAccountId() + "]";
+	}
 
 
+
+	/** 
+	 *  
+	 */
+	private static final long serialVersionUID = 6259060888065917342L;
 }

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -31,7 +31,7 @@ public class DeleteStudent extends HttpServlet{
 	
 	private static ExamConfigDAO examConfigDAO;
 	private static PerfomanceDAO perfomanceDAO;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 
 
@@ -64,16 +64,16 @@ public class DeleteStudent extends HttpServlet{
 		   
 	   }else{
        
-       examConfig = new ExamConfig();
+       sysConfig = new SysConfig();
 		if(examConfigDAO.getExamConfig(schooluuid) !=null){
-			examConfig = examConfigDAO.getExamConfig(schooluuid);
+			sysConfig = examConfigDAO.getExamConfig(schooluuid);
 		}
 		
 		Perfomance perfomance = new Perfomance();
 		perfomance.setSchoolAccountUuid(schooluuid);
 		perfomance.setStudentUuid(studentuuid); 
-		perfomance.setTerm(examConfig.getTerm()); 
-		perfomance.setYear(examConfig.getYear());
+		perfomance.setTerm(sysConfig.getTerm()); 
+		perfomance.setYear(sysConfig.getYear());
 		
 		if(perfomanceDAO.deletePerfomance(perfomance)){
 			 session.setAttribute(SessionConstants.STUENT_DELETE_SUCCESS, SUCCESS_STUDENT_DELETED);
@@ -84,7 +84,7 @@ public class DeleteStudent extends HttpServlet{
        
 	   }
        
-       response.sendRedirect("examConfig.jsp");  
+       response.sendRedirect("sysConfig.jsp");  
        return;
    }
    

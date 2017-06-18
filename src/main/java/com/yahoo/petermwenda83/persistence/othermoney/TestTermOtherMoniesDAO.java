@@ -37,7 +37,7 @@ public class TestTermOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#putTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#putTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)}.
 	 */
 	@Test
 	public final void testPutTermOtherMonies() {
@@ -45,7 +45,7 @@ public class TestTermOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#updateTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#updateTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)}.
 	 */
 	@Test
 	public final void testUpdateTermOtherMonies() {
@@ -53,7 +53,7 @@ public class TestTermOtherMoniesDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#deleteTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO#deleteTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)}.
 	 */
 	@Test
 	public final void testDeleteTermOtherMonies() {

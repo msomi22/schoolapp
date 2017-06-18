@@ -9,6 +9,7 @@
  */
 package com.yahoo.petermwenda83.bean.chat;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
@@ -21,55 +22,51 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Chat extends StorableBean{
 	
-	private String senderUuid;
-	private String receiverUuid;
+	private String senderId;
+	private String receiverId;
 	private String message;
-	private Date dateSent;
-    private String mgsStatus;
-
+    private String isRead;
+    private Timestamp dateSent;
+   
 	/**
 	 * 
 	 */
 	public Chat() {
-		senderUuid = "";
-		receiverUuid = "";
+		senderId = "";
+		receiverId = "";
 		message = "";
-		dateSent = new Date();
-		mgsStatus = "";
+		isRead = "";
+		dateSent = new Timestamp(new Date().getTime());
+		
 	}
 	
-	
 	/**
-	 * @return the senderUuid
+	 * @return the senderId
 	 */
-	public String getSenderUuid() {
-		return senderUuid;
+	public String getSenderId() {
+		return senderId;
 	}
 
-
 	/**
-	 * @param senderUuid the senderUuid to set
+	 * @param senderId the senderId to set
 	 */
-	public void setSenderUuid(String senderUuid) {
-		this.senderUuid = senderUuid;
+	public void setSenderId(String senderId) {
+		this.senderId = senderId;
 	}
 
-
 	/**
-	 * @return the receiverUuid
+	 * @return the receiverId
 	 */
-	public String getReceiverUuid() {
-		return receiverUuid;
+	public String getReceiverId() {
+		return receiverId;
 	}
 
-
 	/**
-	 * @param receiverUuid the receiverUuid to set
+	 * @param receiverId the receiverId to set
 	 */
-	public void setReceiverUuid(String receiverUuid) {
-		this.receiverUuid = receiverUuid;
+	public void setReceiverId(String receiverId) {
+		this.receiverId = receiverId;
 	}
-
 
 	/**
 	 * @return the message
@@ -78,7 +75,6 @@ public class Chat extends StorableBean{
 		return message;
 	}
 
-
 	/**
 	 * @param message the message to set
 	 */
@@ -86,61 +82,46 @@ public class Chat extends StorableBean{
 		this.message = message;
 	}
 
+	/**
+	 * @return the isRead
+	 */
+	public String getIsRead() {
+		return isRead;
+	}
+
+	/**
+	 * @param isRead the isRead to set
+	 */
+	public void setIsRead(String isRead) {
+		this.isRead = isRead;
+	}
 
 	/**
 	 * @return the dateSent
 	 */
-	public Date getDateSent() {
-		return new Date(dateSent.getTime());
+	public Timestamp getDateSent() {
+		return dateSent;
 	}
-
 
 	/**
 	 * @param dateSent the dateSent to set
 	 */
-	public void setDateSent(Date date) {
-		if(date != null) {
-			dateSent = new Date(date.getTime());
-		}	
+	public void setDateSent(Timestamp dateSent) {
+		this.dateSent = dateSent;
 	}
-
-
-	/**
-	 * @return the mgsStatus
-	 */
-	public String getMgsStatus() {
-		return mgsStatus;
-	}
-
-
-	/**
-	 * @param mgsStatus the mgsStatus to set
-	 */
-	public void setMgsStatus(String mgsStatus) {
-		this.mgsStatus = mgsStatus;
-	}
-
-
-	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Chat");
-		builder.append("[getUuid()=");
-		builder.append(getUuid()); 
-		builder.append(",senderUuid=");
-		builder.append(senderUuid);
-		builder.append(",receiverUuid=");
-		builder.append(receiverUuid);
-		builder.append(",message=");
-		builder.append(message);
-		builder.append(",dateSent=");
-		builder.append(dateSent);
-		builder.append(",mgsStatus=");
-		builder.append(mgsStatus);
-		builder.append("]");
-		return builder.toString(); 
-		}
 	
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Chat [senderId=" + senderId + ", receiverId=" + receiverId + ", message=" + message + ", isRead="
+				+ isRead + ", dateSent=" + dateSent + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
+				+ "]";
+	}
+
+
 	/**
 	 * 
 	 */

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
@@ -73,7 +73,7 @@ public class AddStudentBacic extends HttpServlet{
 	private static StudentSubjectDAO studentSubjectDAO;
 	private static SubjectDAO subjectDAO;
 	private static ExamConfigDAO examConfigDAO;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	
 
 	/**  
@@ -203,9 +203,9 @@ public class AddStudentBacic extends HttpServlet{
 		     
 	   }else{
 		   
-		   examConfig = new ExamConfig();
+		   sysConfig = new SysConfig();
 			if(examConfigDAO.getExamConfig(schooluuid) !=null){
-				examConfig = examConfigDAO.getExamConfig(schooluuid);
+				sysConfig = examConfigDAO.getExamConfig(schooluuid);
 			}
 			
 			 Calendar calendar = Calendar.getInstance();
@@ -224,7 +224,7 @@ public class AddStudentBacic extends HttpServlet{
 		   student.setdOB(dobaddDay+"/"+dobaddMonth+"/"+dobaddYear);
 		   student.setBcertno(BcertNo);
 		   student.setCounty(County); 
-		   student.setRegTerm(examConfig.getTerm());  
+		   student.setRegTerm(sysConfig.getTerm());  
 		   student.setFinalYear(YEAR+3); 
 		   student.setFinalTerm(3); 
 		   student.setSysUser(systemuser); 

@@ -20,7 +20,7 @@ import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.CatOne;
 import com.yahoo.petermwenda83.bean.exam.CatTwo;
 import com.yahoo.petermwenda83.bean.exam.EndTerm;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
@@ -562,7 +562,7 @@ public class PerClassExcelUtil {
 				String exam = "";
 
 				String filename = uploadedFile.getName().replaceAll("_", " "); 
-				ExamConfig  examConfig = examConfigDAO.getExamConfig(school.getUuid());
+				SysConfig  sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 				String [] parts = filename.split("\\.");
 				classroom = parts[0]; 
 				exam = parts[1];
@@ -840,98 +840,98 @@ public class PerClassExcelUtil {
 								catOne.setClassRoomUuid(clssRoom.getUuid()); 
 								catOne.setClassesUuid(classesuuid);
 								catOne.setStudentUuid(studentuuid);
-								catOne.setTerm(examConfig.getTerm());
-								catOne.setYear(examConfig.getYear()); 
+								catOne.setTerm(sysConfig.getTerm());
+								catOne.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), mathcode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalmat));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), bscode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalbs));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), geocode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalgeo));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), crecode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalcre));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), histcode)){
 									
 									catOne.setSubjectUuid(sub.getUuid()); 
 									catOne.setCatOne(Double.parseDouble(finalhst));
-									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catOne,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}
@@ -963,98 +963,98 @@ public class PerClassExcelUtil {
 								catwo.setClassRoomUuid(clssRoom.getUuid()); 
 								catwo.setClassesUuid(classesuuid);
 								catwo.setStudentUuid(studentuuid);
-								catwo.setTerm(examConfig.getTerm());
-								catwo.setYear(examConfig.getYear()); 
+								catwo.setTerm(sysConfig.getTerm());
+								catwo.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), mathcode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalmat));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), bscode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalbs));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), geocode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalgeo));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), crecode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalcre));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), histcode)){
 									
 									catwo.setSubjectUuid(sub.getUuid()); 
 									catwo.setCatTwo(Double.parseDouble(finalhst));
-									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(catwo,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}
@@ -1085,98 +1085,98 @@ public class PerClassExcelUtil {
 								endterm.setClassRoomUuid(clssRoom.getUuid()); 
 								endterm.setClassesUuid(classesuuid);
 								endterm.setStudentUuid(studentuuid);
-								endterm.setTerm(examConfig.getTerm());
-								endterm.setYear(examConfig.getYear()); 
+								endterm.setTerm(sysConfig.getTerm());
+								endterm.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									//System.out.println(sub.getSubjectCode() + " = "+ finalkis);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), mathcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalmat);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalmat));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalphy);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbio);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalchm);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), bscode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbs);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalbs));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalagr);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcmp);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhsc);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), geocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalgeo);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalgeo));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), crecode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcre);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalcre));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), histcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhst);
 									endterm.setSubjectUuid(sub.getUuid()); 
 									endterm.setEndTerm(Double.parseDouble(finalhst));
-									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(endterm,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}
@@ -1204,98 +1204,98 @@ public class PerClassExcelUtil {
 								p1.setClassRoomUuid(clssRoom.getUuid()); 
 								p1.setClassesUuid(classesuuid);
 								p1.setStudentUuid(studentuuid);
-								p1.setTerm(examConfig.getTerm());
-								p1.setYear(examConfig.getYear()); 
+								p1.setTerm(sysConfig.getTerm());
+								p1.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									//System.out.println(sub.getSubjectCode() + " = "+ finalkis);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), mathcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalmat);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalmat));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalphy);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbio);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalchm);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), bscode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbs);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalbs));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalagr);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcmp);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhsc);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), geocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalgeo);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalgeo));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), crecode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcre);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalcre));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), histcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhst);
 									p1.setSubjectUuid(sub.getUuid()); 
 									p1.setPaperOne(Double.parseDouble(finalhst));
-									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p1,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 								}
 
 							}else if(StringUtils.equalsIgnoreCase(exam, "p2")){
@@ -1320,98 +1320,98 @@ public class PerClassExcelUtil {
 								p2.setClassRoomUuid(clssRoom.getUuid()); 
 								p2.setClassesUuid(classesuuid);
 								p2.setStudentUuid(studentuuid);
-								p2.setTerm(examConfig.getTerm());
-								p2.setYear(examConfig.getYear()); 
+								p2.setTerm(sysConfig.getTerm());
+								p2.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									//System.out.println(sub.getSubjectCode() + " = "+ finalkis);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), mathcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalmat);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalmat));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalphy);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbio);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalchm);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), bscode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbs);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalbs));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalagr);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcmp);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhsc);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), geocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalgeo);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalgeo));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), crecode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcre);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalcre));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), histcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhst);
 									p2.setSubjectUuid(sub.getUuid()); 
 									p2.setPaperTwo(Double.parseDouble(finalhst));
-									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p2,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}
@@ -1436,63 +1436,63 @@ public class PerClassExcelUtil {
 								p3.setClassRoomUuid(clssRoom.getUuid()); 
 								p3.setClassesUuid(classesuuid);
 								p3.setStudentUuid(studentuuid);
-								p3.setTerm(examConfig.getTerm());
-								p3.setYear(examConfig.getYear()); 
+								p3.setTerm(sysConfig.getTerm());
+								p3.setYear(sysConfig.getYear()); 
 
 								if(StringUtils.equals(sub.getSubjectCode(), engscode)){
 
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finaleng));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), kisscode)){
 									//System.out.println(sub.getSubjectCode() + " = "+ finalkis);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalkis));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), phycode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalphy);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalphy));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), biocode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalbio);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalbio));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), chemcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalchm);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalchm));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), agrcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalagr);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalagr));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), compcode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalcmp);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalcmp));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}else if(StringUtils.equals(sub.getSubjectCode(), hsccode)){
 									//System.out.println(sub.getSubjectCode() + " = " + finalhsc);
 									p3.setSubjectUuid(sub.getUuid()); 
 									p3.setPaperThree(Double.parseDouble(finalhsc));
-									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),examConfig.getTerm(),examConfig.getYear());	
+									examEgineDAO.putScore(p3,school.getUuid(),clssRoom.getUuid(),studentuuid,sub.getUuid(),sysConfig.getTerm(),sysConfig.getYear());	
 
 
 								}

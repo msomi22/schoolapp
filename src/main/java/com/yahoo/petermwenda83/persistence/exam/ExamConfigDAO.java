@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -53,12 +53,12 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#getExamConfig(java.lang.String)
 	 */
 	@Override
-	public ExamConfig getExamConfig(String schoolAccountUuid) {
-		ExamConfig examConfig = null;
+	public SysConfig getExamConfig(String schoolAccountUuid) {
+		SysConfig sysConfig = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ExamConfig"
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SysConfig"
 						+ " WHERE SchoolAccountUuid = ?;");       
 
 				){
@@ -67,47 +67,47 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
-				examConfig  = beanProcessor.toBean(rset,ExamConfig.class);
+				sysConfig  = beanProcessor.toBean(rset,SysConfig.class);
 			}
 
 
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting ExamConfig: " + examConfig);
+			logger.error("SQL Exception when getting SysConfig: " + sysConfig);
 			logger.error(ExceptionUtils.getStackTrace(e));
 
 		}
 
-		return examConfig; 
+		return sysConfig; 
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#putExamConfig(com.yahoo.petermwenda83.bean.exam.ExamConfig)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#putExamConfig(com.yahoo.petermwenda83.bean.exam.SysConfig)
 	 */
 	@Override
-	public boolean putExamConfig(ExamConfig examConfig) {
+	public boolean putExamConfig(SysConfig sysConfig) {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ExamConfig" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO SysConfig" 
 			        		+"(Uuid,SchoolAccountUuid,Term,Year,Exam,ExamMode,eTFone,eT,eTCtwo,eTConetwo,SendSMS) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
        		){
 			
-			    pstmt.setString(1, examConfig.getUuid());
-			    pstmt.setString(2, examConfig.getSchoolAccountUuid());
-			    pstmt.setString(3, examConfig.getTerm());
-	            pstmt.setString(4, examConfig.getYear());
-	            pstmt.setString(5, examConfig.getExam());
-	            pstmt.setString(6, examConfig.getExamMode());
-	            pstmt.setString(7, examConfig.geteTFone());
-	            pstmt.setString(8, examConfig.geteT());
-	            pstmt.setString(9, examConfig.geteTCtwo());
-	            pstmt.setString(10, examConfig.geteTConetwo());
-	            pstmt.setString(11, examConfig.getSendSMS());
+			    pstmt.setString(1, sysConfig.getUuid());
+			    pstmt.setString(2, sysConfig.getSchoolAccountUuid());
+			    pstmt.setString(3, sysConfig.getTerm());
+	            pstmt.setString(4, sysConfig.getYear());
+	            pstmt.setString(5, sysConfig.getExam());
+	            pstmt.setString(6, sysConfig.getExamMode());
+	            pstmt.setString(7, sysConfig.geteTFone());
+	            pstmt.setString(8, sysConfig.geteT());
+	            pstmt.setString(9, sysConfig.geteTCtwo());
+	            pstmt.setString(10, sysConfig.geteTConetwo());
+	            pstmt.setString(11, sysConfig.getSendSMS());
 	           
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put ExamConfig: "+examConfig);
+			 logger.error("SQL Exception trying to put SysConfig: "+sysConfig);
              logger.error(ExceptionUtils.getStackTrace(e)); 
              success = false;
 		 }
@@ -117,29 +117,29 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#updateExamConfig(com.yahoo.petermwenda83.bean.exam.ExamConfig)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#updateExamConfig(com.yahoo.petermwenda83.bean.exam.SysConfig)
 	 */
 	@Override
-	public boolean updateExamConfig(ExamConfig examConfig) {
+	public boolean updateExamConfig(SysConfig sysConfig) {
 		boolean success = true;
         try (  Connection conn = dbutils.getConnection();
-        	PreparedStatement pstmt = conn.prepareStatement("UPDATE ExamConfig SET Term=?,"
+        	PreparedStatement pstmt = conn.prepareStatement("UPDATE SysConfig SET Term=?,"
         			+ "Year=?,Exam =?, ExamMode=?,eTFone =?,eT =?,eTCtwo =?,eTConetwo =?,SendSMS=? WHERE SchoolAccountUuid = ?;");
         	) { 
-	            pstmt.setString(1, examConfig.getTerm());
-	            pstmt.setString(2, examConfig.getYear());
-	            pstmt.setString(3, examConfig.getExam());
-	            pstmt.setString(4, examConfig.getExamMode());
-	            pstmt.setString(5, examConfig.geteTFone());
-	            pstmt.setString(6, examConfig.geteT());
-	            pstmt.setString(7, examConfig.geteTCtwo());
-	            pstmt.setString(8, examConfig.geteTConetwo());
-	            pstmt.setString(9, examConfig.getSendSMS());
-	            pstmt.setString(10, examConfig.getSchoolAccountUuid());
+	            pstmt.setString(1, sysConfig.getTerm());
+	            pstmt.setString(2, sysConfig.getYear());
+	            pstmt.setString(3, sysConfig.getExam());
+	            pstmt.setString(4, sysConfig.getExamMode());
+	            pstmt.setString(5, sysConfig.geteTFone());
+	            pstmt.setString(6, sysConfig.geteT());
+	            pstmt.setString(7, sysConfig.geteTCtwo());
+	            pstmt.setString(8, sysConfig.geteTConetwo());
+	            pstmt.setString(9, sysConfig.getSendSMS());
+	            pstmt.setString(10, sysConfig.getSchoolAccountUuid());
                 pstmt.executeUpdate(); 
 
         } catch (SQLException e) {
-            logger.error("SQL Exception when updating ExamConfig" + examConfig);
+            logger.error("SQL Exception when updating SysConfig" + sysConfig);
             logger.error(ExceptionUtils.getStackTrace(e));
             success = false;
         } 
@@ -151,22 +151,22 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamConfigDAO#getExamConfigList(java.lang.String)
 	 */
 	@Override
-	public List<ExamConfig> getExamConfigList(String schoolAccountUuid) {
-		 List<ExamConfig> list = null;
+	public List<SysConfig> getExamConfigList(String schoolAccountUuid) {
+		 List<SysConfig> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ExamConfig WHERE SchoolAccountUuid = ?;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM SysConfig WHERE SchoolAccountUuid = ?;");   
 			) {
 			 pstmt.setString(1,schoolAccountUuid);
 
 			 try(ResultSet rset = pstmt.executeQuery();){
 					
-				 list = beanProcessor.toBeanList(rset, ExamConfig.class);
+				 list = beanProcessor.toBeanList(rset, SysConfig.class);
 			}
 	        
 
 	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting ExamConfig List");
+	  	 logger.error("SQL Exception when getting SysConfig List");
 	     logger.error(ExceptionUtils.getStackTrace(e));
 	     System.out.println(ExceptionUtils.getStackTrace(e)); 
 	  }

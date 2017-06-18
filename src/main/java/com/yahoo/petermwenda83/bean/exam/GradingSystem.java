@@ -18,257 +18,118 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class GradingSystem extends StorableBean{
 	
-	/**  
-	 * 
-	 */
-	private static final long serialVersionUID = 8278712625087888708L;
-	private String schoolAccountUuid ;
-	private int GradeAplain;
-	private int GradeAminus;
-	private int GradeBplus;
-	private int GradeBplain;
-	private int GradeBminus;
-	private int GradeCplus;
-	private int GradeCplain;
-	private int GradeCminus;
-	private int GradeDplus;
-	private int GradeDplain;
-	private int GradeDminus;
-	private int GradeE;
-
+	private String categoryId ;
+	private int lowerLimit;
+	private int upperLimit;
+	private String description;
+	private int points;
+	
 	/**
 	 * 
 	 */
 	public GradingSystem() {
-		schoolAccountUuid = "";
-		GradeAplain = 0;
-		GradeAminus = 0;
-		GradeBplus = 0;
-		GradeBminus = 0;
-		GradeCplus = 0;
-		GradeCplain = 0;
-		GradeCminus = 0;
-		GradeDplus = 0;
-		GradeDplain = 0;
-		GradeDminus = 0;
-		GradeE = 0;
-		
+		categoryId = "";
+		lowerLimit = 0;
+		upperLimit = 0;
+		description = "";
+		points = 0;
 	}
+
 
 	/**
-	 * @return the schoolAccountUuid
+	 * @return the categoryId
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getCategoryId() {
+		return categoryId;
 	}
+
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param categoryId the categoryId to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
+
 
 	/**
-	 * @return the gradeAplain
+	 * @return the lowerLimit
 	 */
-	public int getGradeAplain() {
-		return GradeAplain;
+	public int getLowerLimit() {
+		return lowerLimit;
 	}
+
 
 	/**
-	 * @param gradeAplain the gradeAplain to set
+	 * @param lowerLimit the lowerLimit to set
 	 */
-	public void setGradeAplain(int gradeAplain) {
-		GradeAplain = gradeAplain;
+	public void setLowerLimit(int lowerLimit) {
+		this.lowerLimit = lowerLimit;
 	}
+
 
 	/**
-	 * @return the gradeAminus
+	 * @return the upperLimit
 	 */
-	public int getGradeAminus() {
-		return GradeAminus;
+	public int getUpperLimit() {
+		return upperLimit;
 	}
+
 
 	/**
-	 * @param gradeAminus the gradeAminus to set
+	 * @param upperLimit the upperLimit to set
 	 */
-	public void setGradeAminus(int gradeAminus) {
-		GradeAminus = gradeAminus;
+	public void setUpperLimit(int upperLimit) {
+		this.upperLimit = upperLimit;
 	}
+
 
 	/**
-	 * @return the gradeBplus
+	 * @return the description
 	 */
-	public int getGradeBplus() {
-		return GradeBplus;
+	public String getDescription() {
+		return description;
 	}
+
 
 	/**
-	 * @param gradeBplus the gradeBplus to set
+	 * @param description the description to set
 	 */
-	public void setGradeBplus(int gradeBplus) {
-		GradeBplus = gradeBplus;
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
 
 	/**
-	 * @return the gradeBplain
+	 * @return the points
 	 */
-	public int getGradeBplain() {
-		return GradeBplain;
+	public int getPoints() {
+		return points;
 	}
+
 
 	/**
-	 * @param gradeBplain the gradeBplain to set
+	 * @param points the points to set
 	 */
-	public void setGradeBplain(int gradeBplain) {
-		GradeBplain = gradeBplain;
+	public void setPoints(int points) {
+		this.points = points;
 	}
+
 
 	/**
-	 * @return the gradeBminus
+	 * @see java.lang.Object#toString()
 	 */
-	public int getGradeBminus() {
-		return GradeBminus;
-	}
-
-	/**
-	 * @param gradeBminus the gradeBminus to set
-	 */
-	public void setGradeBminus(int gradeBminus) {
-		GradeBminus = gradeBminus;
-	}
-
-	/**
-	 * @return the gradeCplus
-	 */
-	public int getGradeCplus() {
-		return GradeCplus;
-	}
-
-	/**
-	 * @param gradeCplus the gradeCplus to set
-	 */
-	public void setGradeCplus(int gradeCplus) {
-		GradeCplus = gradeCplus;
-	}
-
-	/**
-	 * @return the gradeCplain
-	 */
-	public int getGradeCplain() {
-		return GradeCplain;
-	}
-
-	/**
-	 * @param gradeCplain the gradeCplain to set
-	 */
-	public void setGradeCplain(int gradeCplain) {
-		GradeCplain = gradeCplain;
-	}
-
-	/**
-	 * @return the gradeCminus
-	 */
-	public int getGradeCminus() {
-		return GradeCminus;
-	}
-
-	/**
-	 * @param gradeCminus the gradeCminus to set
-	 */
-	public void setGradeCminus(int gradeCminus) {
-		GradeCminus = gradeCminus;
-	}
-
-	/**
-	 * @return the gradeDplus
-	 */
-	public int getGradeDplus() {
-		return GradeDplus;
-	}
-
-	/**
-	 * @param gradeDplus the gradeDplus to set
-	 */
-	public void setGradeDplus(int gradeDplus) {
-		GradeDplus = gradeDplus;
-	}
-
-	/**
-	 * @return the gradeDplain
-	 */
-	public int getGradeDplain() {
-		return GradeDplain;
-	}
-
-	/**
-	 * @param gradeDplain the gradeDplain to set
-	 */
-	public void setGradeDplain(int gradeDplain) {
-		GradeDplain = gradeDplain;
-	}
-
-	/**
-	 * @return the gradeDminus
-	 */
-	public int getGradeDminus() {
-		return GradeDminus;
-	}
-
-	/**
-	 * @param gradeDminus the gradeDminus to set
-	 */
-	public void setGradeDminus(int gradeDminus) {
-		GradeDminus = gradeDminus;
-	}
-
-	/**
-	 * @return the gradeE
-	 */
-	public int getGradeE() {
-		return GradeE;
-	}
-
-	/**
-	 * @param gradeE the gradeE to set
-	 */
-	public void setGradeE(int gradeE) {
-		GradeE = gradeE;
-	}
-
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Grading Sysem [ getUuid() =");
-		builder.append(getUuid());
-		builder.append(", schoolAccountUuid =");
-		builder.append(schoolAccountUuid);
-		builder.append(",GradeAplain=");
-		builder.append(GradeAplain);
-		builder.append(", GradeAminus =");
-		builder.append(GradeAminus);
-		builder.append(", GradeBplus =");
-		builder.append(GradeBplus);
-		builder.append(", GradeBminus =");
-		builder.append(GradeBminus);
-		builder.append(", GradeCplus =");
-		builder.append(GradeCplus);
-		builder.append(", GradeCplain =");
-		builder.append(GradeCplain);
-		builder.append(", GradeCminus =");
-		builder.append(GradeCminus);
-		builder.append(", GradeDplus =");
-		builder.append(GradeDplus);
-		builder.append(", GradeDplain =");
-		builder.append(GradeDplain);
-		builder.append(", GradeDminus =");
-		builder.append(GradeDminus);
-		builder.append(", GradeE =");
-		builder.append(GradeE);
-		builder.append("]");
-		return builder.toString();   
-		
-		}
+	public String toString() {
+		return "GradingSystem [categoryId=" + categoryId + ", lowerLimit=" + lowerLimit + ", upperLimit=" + upperLimit
+				+ ", description=" + description + ", points=" + points + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+	/**  
+	 * 
+	 */
+	private static final long serialVersionUID = 8278712625087888708L;
 
 }

@@ -21,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
@@ -224,8 +224,8 @@ public class StudentExcelUtil {
 			XSSFSheet mySheet = (XSSFSheet) myWorkBook.getSheetAt(0);
 			int totalRow = mySheet.getLastRowNum();
 			
-			ExamConfig examConfig = new ExamConfig();
-			examConfig = examConfigDAO.getExamConfig(school.getUuid()); 
+			SysConfig sysConfig = new SysConfig();
+			sysConfig = examConfigDAO.getExamConfig(school.getUuid()); 
 			try{
 				
 				String classroom = "";
@@ -302,7 +302,7 @@ public class StudentExcelUtil {
 	    				student.setLastname(StringUtils.capitalize(middlename.toLowerCase()));
 	    				student.setGender(gender);
 	    				student.setdOB("1"+"/"+"12"+"/"+YEAR);
-	    				student.setRegTerm(examConfig.getTerm());  
+	    				student.setRegTerm(sysConfig.getTerm());  
 	    				student.setFinalYear(YEAR+3); 
 	    				student.setFinalTerm(3); 
 	    				student.setSysUser("ADMIN");  

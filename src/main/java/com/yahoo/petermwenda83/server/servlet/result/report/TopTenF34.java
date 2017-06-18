@@ -41,9 +41,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -81,7 +81,7 @@ public class TopTenF34 extends HttpServlet {
 	private Document document;
 	private PdfWriter writer;
 	private Logger logger;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	GradingSystem gradingSystem;
 
 	private String PDF_SUBTITLE ="";
@@ -194,20 +194,20 @@ public class TopTenF34 extends HttpServlet {
 
 
 
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
 		
 		//if exm mode = on , exam is full(p1,p2,p3)
-				if(StringUtils.equals(examConfig.getExamMode().toUpperCase(), "ON")){ 
+				if(StringUtils.equals(sysConfig.getExamMode().toUpperCase(), "ON")){ 
 					examID = "4BE8AD46-EAE8-4151-BD18-CB23CF904DDB";
 				}else{
 					examID = "1678664C-D955-4FA7-88C2-9461D3F1E782";
 				}
 				
 		
-		EndTermOnly = examConfig.geteT();
-		EndTermAndC2 = examConfig.geteTCtwo();
-		EndTermC1AndC2 = examConfig.geteTConetwo();
+		EndTermOnly = sysConfig.geteT();
+		EndTermAndC2 = sysConfig.geteTCtwo();
+		EndTermC1AndC2 = sysConfig.geteTConetwo();
 
 		SessionStatistics statistics = new SessionStatistics();
 		if ((element = statisticsCache.get(schoolusername)) != null) {
@@ -216,8 +216,8 @@ public class TopTenF34 extends HttpServlet {
 
 		List<Perfomance> pDistinctListGeneral = new ArrayList<Perfomance>();
 		
-		if(perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear())!=null){
-			pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear());
+		if(perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,sysConfig.getTerm(),sysConfig.getYear())!=null){
+			pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,sysConfig.getTerm(),sysConfig.getYear());
 		}
 
 		List<Student> studentList = new ArrayList<Student>(); 
@@ -244,7 +244,7 @@ public class TopTenF34 extends HttpServlet {
 		
 		String classname = "";
 		if(classesDAO.getClass(classID) !=null){
-		   Classes cls = classesDAO.getClass(classID);
+		   Stream cls = classesDAO.getClass(classID);
 		   classname = cls.getClassName();
 		 }
 		
@@ -267,7 +267,7 @@ public class TopTenF34 extends HttpServlet {
 
 		title = "_____________________________________ \n"
 
-				+ " End of Term:"+examConfig.getTerm()+",Year:"+examConfig.getYear()+" Top ten list for: "+classname+"\n";
+				+ " End of Term:"+sysConfig.getTerm()+",Year:"+sysConfig.getYear()+" Top ten list for: "+classname+"\n";
 
 
 		document = new Document(PageSize.A4, 46, 46, 64, 64);
@@ -519,7 +519,7 @@ public class TopTenF34 extends HttpServlet {
 			List<Perfomance> listGeneral = new ArrayList<>();
 			if(pDistinctListGeneral !=null){
 				for(Perfomance pD : pDistinctListGeneral){     
-					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
+					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),sysConfig.getTerm(),sysConfig.getYear());
 
 					engscoregn = 0;
 					kswscoregn = 0;
@@ -1163,20 +1163,20 @@ public class TopTenF34 extends HttpServlet {
 					Deviation means = new Deviation();
 					String lastyr = "";
 					
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						//get current year
 						String thisyear = "";
 						int lastyear = 0;
 						
-						if(examConfig !=null){
-							thisyear = examConfig.getYear();
+						if(sysConfig !=null){
+							thisyear = sysConfig.getYear();
 							lastyear = Integer.parseInt(thisyear) - 1;
 						}
 						
 						lastyr = Integer.toString(lastyear); 
 						
 					}else{
-						lastyr = examConfig.getYear();
+						lastyr = sysConfig.getYear();
 					}
 					
 				
@@ -1188,11 +1188,11 @@ public class TopTenF34 extends HttpServlet {
 					//System.out.println("My Object = "+means);
 					
 					//get last term mean 
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						lastTermMean = means.getDevThree();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						lastTermMean = means.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						lastTermMean = means.getDevTwo();
 					}
 					//now we haave our last term deviation in the variable  'lastTermMean'
@@ -1200,14 +1200,14 @@ public class TopTenF34 extends HttpServlet {
 					// we get this term mean
 					double thstermMean = 0;
 					Deviation thisterMmeanObj = new Deviation();
-					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-					  thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
+					if(deviationDAO.getDev(uuid, sysConfig.getYear()) !=null){
+					  thisterMmeanObj = deviationDAO.getDev(uuid, sysConfig.getYear());
 					}
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						thstermMean = thisterMmeanObj.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						thstermMean = thisterMmeanObj.getDevTwo();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						thstermMean = thisterMmeanObj.getDevThree();
 					}
 					
@@ -1302,20 +1302,20 @@ public class TopTenF34 extends HttpServlet {
 						Deviation means = new Deviation();
 						String lastyr = "";
 						
-						if(StringUtils.equals(examConfig.getTerm(), "1")){
+						if(StringUtils.equals(sysConfig.getTerm(), "1")){
 							//get current year
 							String thisyear = "";
 							int lastyear = 0;
 							
-							if(examConfig !=null){
-								thisyear = examConfig.getYear();
+							if(sysConfig !=null){
+								thisyear = sysConfig.getYear();
 								lastyear = Integer.parseInt(thisyear) - 1;
 							}
 							
 							lastyr = Integer.toString(lastyear); 
 							
 						}else{
-							lastyr = examConfig.getYear();
+							lastyr = sysConfig.getYear();
 						}
 						
 					
@@ -1327,11 +1327,11 @@ public class TopTenF34 extends HttpServlet {
 						//System.out.println("My Object = "+means);
 						
 						//get last term mean 
-						if(StringUtils.equals(examConfig.getTerm(), "1")){
+						if(StringUtils.equals(sysConfig.getTerm(), "1")){
 							lastTermMean = means.getDevThree();
-						}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+						}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 							lastTermMean = means.getDevOne();
-						}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+						}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 							lastTermMean = means.getDevTwo();
 						}
 						//now we haave our last term deviation in the variable  'lastTermMean'
@@ -1339,14 +1339,14 @@ public class TopTenF34 extends HttpServlet {
 						// we get this term mean
 						double thstermMean = 0;
 						Deviation thisterMmeanObj = new Deviation();
-						if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-						  thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
+						if(deviationDAO.getDev(uuid, sysConfig.getYear()) !=null){
+						  thisterMmeanObj = deviationDAO.getDev(uuid, sysConfig.getYear());
 						}
-						if(StringUtils.equals(examConfig.getTerm(), "1")){
+						if(StringUtils.equals(sysConfig.getTerm(), "1")){
 							thstermMean = thisterMmeanObj.getDevOne();
-						}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+						}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 							thstermMean = thisterMmeanObj.getDevTwo();
-						}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+						}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 							thstermMean = thisterMmeanObj.getDevThree();
 						}
 						

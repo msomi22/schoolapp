@@ -37,7 +37,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#putOtherstype(com.yahoo.petermwenda83.bean.othermoney.Otherstype)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#putOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
 	 */
 	@Test
 	public final void testPutOtherstype() {
@@ -45,7 +45,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.othermoney.Otherstype)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
 	 */
 	@Test
 	public final void testUpdteOtherstype() {

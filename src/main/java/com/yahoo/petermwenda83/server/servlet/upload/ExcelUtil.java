@@ -19,7 +19,7 @@ import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.CatOne;
 import com.yahoo.petermwenda83.bean.exam.CatTwo;
 import com.yahoo.petermwenda83.bean.exam.EndTerm;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
@@ -299,7 +299,7 @@ public class ExcelUtil {
    	    String outof = "";
    	    
    	    
-   	    ExamConfig  examConfig = examConfigDAO.getExamConfig(school.getUuid());
+   	    SysConfig  sysConfig = examConfigDAO.getExamConfig(school.getUuid());
         String filename = uploadedFile.getName().replaceAll("_", " "); 
    		
    		String [] parts = filename.split("\\.");
@@ -435,9 +435,9 @@ public class ExcelUtil {
 							catOne.setSubjectUuid(subjectuuid);
 							catOne.setStudentUuid(studentuuid);
 							catOne.setCatOne((score/i_outof)*30);  // convert to 30
-							catOne.setTerm(examConfig.getTerm());
-							catOne.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(catOne,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());	
+							catOne.setTerm(sysConfig.getTerm());
+							catOne.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(catOne,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());	
 							//System.out.println("catOne="+catOne);
 						}else if(StringUtils.equalsIgnoreCase(exam, "c2")){
 							
@@ -453,9 +453,9 @@ public class ExcelUtil {
 							catwo.setSubjectUuid(subjectuuid);
 							catwo.setStudentUuid(studentuuid);
 							catwo.setCatTwo((score/i_outof)*30); // convert to 30
-							catwo.setTerm(examConfig.getTerm());
-							catwo.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(catwo,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());
+							catwo.setTerm(sysConfig.getTerm());
+							catwo.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(catwo,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());
 
 						}else if(StringUtils.equalsIgnoreCase(exam, "et")){
 							
@@ -471,9 +471,9 @@ public class ExcelUtil {
 							endterm.setSubjectUuid(subjectuuid);
 							endterm.setStudentUuid(studentuuid);
 							endterm.setEndTerm((score/i_outof)*70); //convert to 70
-							endterm.setTerm(examConfig.getTerm());
-							endterm.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(endterm,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());
+							endterm.setTerm(sysConfig.getTerm());
+							endterm.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(endterm,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());
 
 						}else if(StringUtils.equalsIgnoreCase(exam, "p1")){
 							
@@ -544,9 +544,9 @@ public class ExcelUtil {
 							p1.setSubjectUuid(subjectuuid);
 							p1.setStudentUuid(studentuuid);
 							p1.setPaperOne(score); 
-							p1.setTerm(examConfig.getTerm());
-							p1.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(p1,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());
+							p1.setTerm(sysConfig.getTerm());
+							p1.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(p1,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());
 
 						}else if(StringUtils.equalsIgnoreCase(exam, "p2")){
 							
@@ -616,9 +616,9 @@ public class ExcelUtil {
 							p2.setSubjectUuid(subjectuuid);
 							p2.setStudentUuid(studentuuid);
 							p2.setPaperTwo(score); 
-							p2.setTerm(examConfig.getTerm());
-							p2.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(p2,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());
+							p2.setTerm(sysConfig.getTerm());
+							p2.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(p2,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());
 
 						}else if(StringUtils.equalsIgnoreCase(exam, "p3")){
 							
@@ -687,9 +687,9 @@ public class ExcelUtil {
 							p3.setSubjectUuid(subjectuuid);
 							p3.setStudentUuid(studentuuid);
 							p3.setPaperThree(score); 
-							p3.setTerm(examConfig.getTerm());
-							p3.setYear(examConfig.getYear()); 
-							examEgineDAO.putScore(p3,school.getUuid(),classuuid,studentuuid,subjectuuid,examConfig.getTerm(),examConfig.getYear());
+							p3.setTerm(sysConfig.getTerm());
+							p3.setYear(sysConfig.getYear()); 
+							examEgineDAO.putScore(p3,school.getUuid(),classuuid,studentuuid,subjectuuid,sysConfig.getTerm(),sysConfig.getYear());
 
 						}
 

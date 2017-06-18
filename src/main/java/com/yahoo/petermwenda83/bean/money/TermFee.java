@@ -11,46 +11,50 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class TermFee extends StorableBean{
 	
-	 /** 
-	 * 
-	 */
-	private static final long serialVersionUID = 3556481789932595293L;
-	private String schoolAccountUuid;
+	
+	private int boaderAmount;
+	private int dayAmount;
 	private String term;
 	private String year;
-	private double termAmount;
-	private double dayAmount;
+	
 	/** 
 	 * 
 	 */
 	public TermFee() {
-		schoolAccountUuid = "";
+		boaderAmount = 0;
+		dayAmount = 0;
 		term = "";
 		year = "";
-		termAmount = 0.0;
-		dayAmount = 0.0;
 
 	}
 	
-	
-	
-	/**
-	 * @return the schoolAccountUuid
+	 /**
+	 * @return the boaderAmount
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public int getBoaderAmount() {
+		return boaderAmount;
 	}
-
-
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param boaderAmount the boaderAmount to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setBoaderAmount(int boaderAmount) {
+		this.boaderAmount = boaderAmount;
 	}
 
+	/**
+	 * @return the dayAmount
+	 */
+	public int getDayAmount() {
+		return dayAmount;
+	}
 
+	/**
+	 * @param dayAmount the dayAmount to set
+	 */
+	public void setDayAmount(int dayAmount) {
+		this.dayAmount = dayAmount;
+	}
 
 	/**
 	 * @return the term
@@ -59,16 +63,12 @@ public class TermFee extends StorableBean{
 		return term;
 	}
 
-
-
 	/**
 	 * @param term the term to set
 	 */
 	public void setTerm(String term) {
 		this.term = term;
 	}
-
-
 
 	/**
 	 * @return the year
@@ -77,8 +77,6 @@ public class TermFee extends StorableBean{
 		return year;
 	}
 
-
-
 	/**
 	 * @param year the year to set
 	 */
@@ -86,63 +84,18 @@ public class TermFee extends StorableBean{
 		this.year = year;
 	}
 
-
-
 	/**
-	 * @return the termAmount
+	 * @see java.lang.Object#toString()
 	 */
-	public double getTermAmount() {
-		return termAmount;
-	}
-
-
-
-	/**
-	 * @param termAmount the termAmount to set
-	 */
-	public void setTermAmount(double termAmount) {
-		this.termAmount = termAmount;
-	}
-
-   
-
-
-	/**
-	 * @return the dayAmount
-	 */
-	public double getDayAmount() {
-		return dayAmount;
-	}
-
-
-
-	/**
-	 * @param dayAmount the dayAmount to set
-	 */
-	public void setDayAmount(double dayAmount) {
-		this.dayAmount = dayAmount;
-	}
-
-
-
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Term Fee");
-		builder.append(",[getUuid() = ");
-		builder.append(getUuid());
-		builder.append(", schoolAccountUuid =");
-		builder.append(schoolAccountUuid); 
-		builder.append(", term =");
-		builder.append(term);
-		builder.append(", year =");
-		builder.append(year);
-		builder.append(", termAmount =");
-		builder.append(termAmount);
-		builder.append(", dayAmount =");
-		builder.append(dayAmount);
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "TermFee [boaderAmount=" + boaderAmount + ", dayAmount=" + dayAmount + ", term=" + term + ", year="
+				+ year + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+	/** 
+	 * 
+	 */
+	private static final long serialVersionUID = 3556481789932595293L;
 
 }

@@ -48,9 +48,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.classroom.Classes;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Deviation;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -91,7 +91,7 @@ public class PerformanceListF34 extends HttpServlet{
 	private Cache schoolaccountCache, statisticsCache;
 
 	private Logger logger;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	GradingSystem gradingSystem;
 
 	private String PDF_SUBTITLE ="";
@@ -184,12 +184,12 @@ public class PerformanceListF34 extends HttpServlet{
 
 
 
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
 
-		EndTermOnly = examConfig.geteT();
-		EndTermAndC2 = examConfig.geteTCtwo();
-		EndTermC1AndC2 = examConfig.geteTConetwo();
+		EndTermOnly = sysConfig.geteT();
+		EndTermAndC2 = sysConfig.geteTCtwo();
+		EndTermC1AndC2 = sysConfig.geteTConetwo();
 
 		SessionStatistics statistics = new SessionStatistics();
 		if ((element = statisticsCache.get(schoolusername)) != null) {
@@ -197,7 +197,7 @@ public class PerformanceListF34 extends HttpServlet{
 		}
 
 		List<Perfomance> pDistinctListGeneral = new ArrayList<Perfomance>();
-		pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear());
+		pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,sysConfig.getTerm(),sysConfig.getYear());
 
 		List<Student> studentList = new ArrayList<Student>(); 
 		studentList = studentDAO.getAllStudentList(school.getUuid());
@@ -215,9 +215,9 @@ public class PerformanceListF34 extends HttpServlet{
 			studentStreamHash.put(stu.getUuid(), stu.getClassRoomUuid());
 		}
 
-		List<Classes> classesList = new ArrayList<Classes>(); 
+		List<Stream> classesList = new ArrayList<Stream>(); 
 		classesList = classesDAO.getClassList(); 
-		for(Classes c : classesList){
+		for(Stream c : classesList){
 			roomHash.put(c.getUuid() , c.getClassName());
 		}
 
@@ -243,7 +243,7 @@ public class PerformanceListF34 extends HttpServlet{
 
 		title = "_____________________________________ \n"
 
-					+ " End of Term:"+examConfig.getTerm()+",Year:"+examConfig.getYear()+" Performance List For: "+roomHash.get(classID)+"\n";
+					+ " End of Term:"+sysConfig.getTerm()+",Year:"+sysConfig.getYear()+" Performance List For: "+roomHash.get(classID)+"\n";
 
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 
@@ -363,22 +363,22 @@ public class PerformanceListF34 extends HttpServlet{
 
 			subAnalysisTable.addCell(new Paragraph("ENTRY",timesRomanBold7));
 			subAnalysisTable.addCell(new Paragraph(" ",timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("ENG :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("KISW :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.KISWA_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("MATH :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.MATH_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("ENG :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("KISW :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.KISWA_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("MATH :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.MATH_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
 
-			subAnalysisTable.addCell(new Paragraph("BIO :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.BIO_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("CHEM :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.CHEM_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("PHY :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.PHY_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("BIO :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.BIO_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("CHEM :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.CHEM_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("PHY :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.PHY_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
 
-			subAnalysisTable.addCell(new Paragraph("BS :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.BS_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("COMP :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.COMP_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("HSC :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.H_S , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("AGR :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.AGR_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("BS :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.BS_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("COMP :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.COMP_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("HSC :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.H_S , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("AGR :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.AGR_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
 
-			subAnalysisTable.addCell(new Paragraph("GEO :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.GEO_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("CRE :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.CRE_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
-			subAnalysisTable.addCell(new Paragraph("HIST :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.HIST_UUID , classID,examConfig.getTerm(),examConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("GEO :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.GEO_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("CRE :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.CRE_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
+			subAnalysisTable.addCell(new Paragraph("HIST :\nEntry " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(),ExamConstants.HIST_UUID , classID,sysConfig.getTerm(),sysConfig.getYear()),timesRomanBold7));
 
 			subAnalysisTable.addCell(new Paragraph("TOTAL",timesRomanBold7));
 			//eng,kis,math,bio,chem,phy,bs,comp,hsc,agr,geo,cre,hist
@@ -571,7 +571,7 @@ public class PerformanceListF34 extends HttpServlet{
 			List<Perfomance> listGeneral = new ArrayList<>();
 			if(pDistinctListGeneral !=null){
 				for(Perfomance pD : pDistinctListGeneral){     
-					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
+					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),sysConfig.getTerm(),sysConfig.getYear());
 
 					engscoregn = 0;	kswscoregn = 0;
 					matscoregn = 0;	physcoregn = 0;
@@ -1402,20 +1402,20 @@ public class PerformanceListF34 extends HttpServlet{
 					Deviation means = new Deviation();
 					String lastyr = "";
 
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						//get current year
 						String thisyear = "";
 						int lastyear = 0;
 
-						if(examConfig !=null){
-							thisyear = examConfig.getYear();
+						if(sysConfig !=null){
+							thisyear = sysConfig.getYear();
 							lastyear = Integer.parseInt(thisyear) - 1;
 						}
 
 						lastyr = Integer.toString(lastyear); 
 
 					}else{
-						lastyr = examConfig.getYear();
+						lastyr = sysConfig.getYear();
 					}
 
 
@@ -1427,11 +1427,11 @@ public class PerformanceListF34 extends HttpServlet{
 					//System.out.println("My Object = "+means);
 
 					//get last term mean 
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						lastTermMean = means.getDevThree();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						lastTermMean = means.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						lastTermMean = means.getDevTwo();
 					}
 					//now we haave our last term deviation in the variable  'lastTermMean'
@@ -1439,14 +1439,14 @@ public class PerformanceListF34 extends HttpServlet{
 					// we get this term mean
 					double thstermMean = 0;
 					Deviation thisterMmeanObj = new Deviation();
-					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-						thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
+					if(deviationDAO.getDev(uuid, sysConfig.getYear()) !=null){
+						thisterMmeanObj = deviationDAO.getDev(uuid, sysConfig.getYear());
 					}
-					if(StringUtils.equals(examConfig.getTerm(), "1")){
+					if(StringUtils.equals(sysConfig.getTerm(), "1")){
 						thstermMean = thisterMmeanObj.getDevOne();
-					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "2")){
 						thstermMean = thisterMmeanObj.getDevTwo();
-					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+					}else if(StringUtils.equals(sysConfig.getTerm(), "3")){
 						thstermMean = thisterMmeanObj.getDevThree();
 					}
 
@@ -1663,23 +1663,23 @@ public class PerformanceListF34 extends HttpServlet{
 				PdfPCell BarChartHeader = new PdfPCell();
 				DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-				dataset.setValue((eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "ENG");
-				dataset.setValue((kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "KIS");
-				dataset.setValue((math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "MAT");
+				dataset.setValue((eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "ENG");
+				dataset.setValue((kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "KIS");
+				dataset.setValue((math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "MAT");
 
-				dataset.setValue((bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "BIO");
-				dataset.setValue((chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "CHE");
-				dataset.setValue((phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "PHY");
+				dataset.setValue((bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "BIO");
+				dataset.setValue((chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "CHE");
+				dataset.setValue((phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "PHY");
 
-				dataset.setValue((bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "BS");
-				dataset.setValue((comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "CMP");
-				dataset.setValue((hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "HSC");
-				dataset.setValue((agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "AGR");
+				dataset.setValue((bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "BS");
+				dataset.setValue((comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "CMP");
+				dataset.setValue((hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "HSC");
+				dataset.setValue((agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "AGR");
 
 				//eng,kis,math,   bio,chem,phy,   bs,comp,hsc,agr,  geo,cre,hist
-				dataset.setValue((geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "GEO");
-				dataset.setValue((cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "CRE");
-				dataset.setValue((hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,examConfig.getTerm(),examConfig.getYear())*100))*12, "Pnts", "HST");
+				dataset.setValue((geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "GEO");
+				dataset.setValue((cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "CRE");
+				dataset.setValue((hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())*100))*12, "Pnts", "HST");
 
 
 				//CONTROL
@@ -1764,24 +1764,24 @@ public class PerformanceListF34 extends HttpServlet{
 				}if(i == 1){
 					subAnalysisTable.addCell(new Paragraph(studentcount+" ",timesRomanNormal7)); 
 					subAnalysisTable.addCell(new Paragraph("MEAN ",timesRomanNormal7));
-					//System.out.println("eng " + eng_grand_total + " / " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear()) +" = "+   eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear())));
+					//System.out.println("eng " + eng_grand_total + " / " + perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear()) +" = "+   eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())));
 
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(halfUP.format(hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(halfUP.format(hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
 					subAnalysisTable.addCell(new Paragraph(halfUP.format(classmean)+" ",timesRomanNormal7));
 				}
@@ -1789,22 +1789,22 @@ public class PerformanceListF34 extends HttpServlet{
 					subAnalysisTable.addCell(new Paragraph(" ",timesRomanNormal7)); 
 					subAnalysisTable.addCell(new Paragraph("GRADE ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(computeGrade(eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(eng_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.ENG_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(kis_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.KISWA_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(math_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.MATH_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(computeGrade(bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(bio_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BIO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(chem_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CHEM_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(phy_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.PHY_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(computeGrade(bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(bs_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.BS_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(comp_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.COMP_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(hmsc_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.H_S, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(agr_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.AGR_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
-					subAnalysisTable.addCell(new Paragraph(computeGrade(geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
-					subAnalysisTable.addCell(new Paragraph(computeGrade(hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,examConfig.getTerm(),examConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(geo_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.GEO_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(cre_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.CRE_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
+					subAnalysisTable.addCell(new Paragraph(computeGrade(hist_grand_total/(perfomanceDAO.getSubjectCountPerClass(school.getUuid(), ExamConstants.HIST_UUID, classID,sysConfig.getTerm(),sysConfig.getYear())))+" ",timesRomanNormal7));
 
 					subAnalysisTable.addCell(new Paragraph(computeGrade(classmean)+" ",timesRomanNormal7));
 				}

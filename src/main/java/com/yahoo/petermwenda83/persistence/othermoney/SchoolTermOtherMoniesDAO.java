@@ -2,7 +2,7 @@ package com.yahoo.petermwenda83.persistence.othermoney;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 
 public interface SchoolTermOtherMoniesDAO {
 	/**

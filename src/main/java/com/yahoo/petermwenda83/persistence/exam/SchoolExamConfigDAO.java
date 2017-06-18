@@ -5,7 +5,7 @@ package com.yahoo.petermwenda83.persistence.exam;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 
 /**
  * @author peter
@@ -18,28 +18,28 @@ public interface SchoolExamConfigDAO {
 	 * @param schoolAccountUuid
 	 * @return
 	 */
-	public ExamConfig getExamConfig(String schoolAccountUuid);
+	public SysConfig getExamConfig(String schoolAccountUuid);
 	
 	/**
 	 * 
-	 * @param examConfig
+	 * @param sysConfig
 	 * @return
 	 */
-	public boolean  putExamConfig(ExamConfig examConfig);
+	public boolean  putExamConfig(SysConfig sysConfig);
 	
 	 /**
 	  * 
-	  * @param examConfig
+	  * @param sysConfig
 	  * @return
 	  */
-	public boolean  updateExamConfig(ExamConfig examConfig);
+	public boolean  updateExamConfig(SysConfig sysConfig);
 	
 	  /**
 	   * 
 	   * @param schoolAccountUuid
 	   * @return
 	   */
-	public List<ExamConfig>  getExamConfigList(String schoolAccountUuid);
+	public List<SysConfig>  getExamConfigList(String schoolAccountUuid);
 	
 	
 	

@@ -27,7 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -48,7 +48,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 	
 	HashMap<String, String> roomHash = new HashMap<String, String>();
 	private Cache schoolaccountCache;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 
 	private static StudentDAO studentDAO;
@@ -114,7 +114,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 		}
 
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 
 
 		List<Student> studentList = new ArrayList<>();
@@ -127,7 +127,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 		}
          
 		classCode = roomHash.get(classroomuuid).replaceAll(" ", "_");  
-		examCode = examConfig.getExam();
+		examCode = sysConfig.getExam();
 
 		response.setHeader("Content-Disposition","attachment; filename="+classCode+"."+examCode+".xlsx");
 		
@@ -189,7 +189,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 		//LOOP SUBJECTS
 	         String outof = "";
 	         String exam = "";
-	         exam = examConfig.getExam();
+	         exam = sysConfig.getExam();
 	         if(StringUtils.equalsIgnoreCase(exam, "C1")){
 	        	 outof = "30";
 	         }else if(StringUtils.equalsIgnoreCase(exam, "C2")){

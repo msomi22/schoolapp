@@ -1,13 +1,13 @@
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.ExamConfig"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.othermoney.Otherstype"%>
+<%@page import="com.yahoo.petermwenda83.bean.otherfee.OtherFee"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies"%>
+<%@page import="com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies"%>
 
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>

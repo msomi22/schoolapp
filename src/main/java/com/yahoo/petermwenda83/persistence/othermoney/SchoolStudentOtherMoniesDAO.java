@@ -2,7 +2,7 @@ package com.yahoo.petermwenda83.persistence.othermoney;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 
 public interface SchoolStudentOtherMoniesDAO {
 	/**
@@ -10,7 +10,7 @@ public interface SchoolStudentOtherMoniesDAO {
 	 * @param studentUuid
 	 * @return
 	 */
-	public StudentOtherMonies getStudentOtherMonies(String studentUuid,String otherstypeUuid);
+	public StudentOtherFee getStudentOtherMonies(String studentUuid,String otherstypeUuid);
 	
 	
 	/**
@@ -23,7 +23,7 @@ public interface SchoolStudentOtherMoniesDAO {
 	 */
 	 
 	
-	public StudentOtherMonies getStudentOtherMTY(String studentUuid,String otherstypeUuid, String term,String year);
+	public StudentOtherFee getStudentOtherMTY(String studentUuid,String otherstypeUuid, String term,String year);
 	
 	/**
 	 * 
@@ -33,7 +33,7 @@ public interface SchoolStudentOtherMoniesDAO {
 	 * @param Year
 	 * @return
 	 */
-	public List<StudentOtherMonies> getStudentOtherMoniesList(String studentUuid,String otherstypeUuid);
+	public List<StudentOtherFee> getStudentOtherMoniesList(String studentUuid,String otherstypeUuid);
 	
 	/**
 	 * 
@@ -41,7 +41,7 @@ public interface SchoolStudentOtherMoniesDAO {
 	 * @param classRoomUuid
 	 * @return
 	 */
-	public List<StudentOtherMonies> getStudentOtherMoniesDistinct(String studentUuid);
+	public List<StudentOtherFee> getStudentOtherMoniesDistinct(String studentUuid);
 	
 	/**
 	 * 
@@ -52,29 +52,29 @@ public interface SchoolStudentOtherMoniesDAO {
 	 * @return
 	 */
 	
-	public List<StudentOtherMonies> getStudentOtherList(String studentUuid,String Term,String Year); 
+	public List<StudentOtherFee> getStudentOtherList(String studentUuid,String Term,String Year); 
 	/**
 	 * 
-	 * @param studentOtherMonies
+	 * @param studentOtherFee
 	 * @return
 	 */
-	public boolean putStudentOtherMonies(StudentOtherMonies studentOtherMonies);
+	public boolean putStudentOtherMonies(StudentOtherFee studentOtherFee);
 	/**
 	 * 
-	 * @param studentOtherMonies
+	 * @param studentOtherFee
 	 * @return
 	 */
-	public boolean updateStudentOtherMonies(StudentOtherMonies studentOtherMonies);
+	public boolean updateStudentOtherMonies(StudentOtherFee studentOtherFee);
 	/**
 	 * 
-	 * @param studentOtherMonies
+	 * @param studentOtherFee
 	 * @return
 	 */
-	public boolean deleteStudentOtherMonies(StudentOtherMonies studentOtherMonies);
+	public boolean deleteStudentOtherMonies(StudentOtherFee studentOtherFee);
 	/**
 	 * 
 	 * @return
 	 */
-	public List<StudentOtherMonies> getStudentOtherMoniesList();
+	public List<StudentOtherFee> getStudentOtherMoniesList();
 
 }

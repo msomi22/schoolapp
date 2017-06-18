@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -52,7 +52,7 @@ public class PMDeposit extends HttpServlet{
 	 private static StudentDAO studentDAO;
 	 private static PMoneyDAO pMoneyDAO;
 	 private static ExamConfigDAO examConfigDAO;
-	 ExamConfig examConfig;
+	 SysConfig sysConfig;
 	 private Cache schoolaccountCache;	
 
 	/**  
@@ -128,12 +128,12 @@ public class PMDeposit extends HttpServlet{
 			   
 		   }
 		   if(StringUtils.equals(student.getStatusUuid(),statusUuid)){
-		   examConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
 		   Deposit d = new Deposit();
     	   d.setStudentUuid(student.getUuid());
     	   d.setSystemUser(systemuser);
-    	   d.setTerm(examConfig.getTerm());
-           d.setYear(examConfig.getYear());
+    	   d.setTerm(sysConfig.getTerm());
+           d.setYear(sysConfig.getYear());
     	   
     	   if(pMoneyDAO.addBalance(d, Double.parseDouble(amount))){ 
     		   session.setAttribute(SessionConstants.STUDENT_FIND_SUCCESS, SUCCESS_DEPOSIT_SUCCESSFUL);

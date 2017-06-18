@@ -180,7 +180,7 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 	        
 
 	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting ExamConfig List");
+	  	 logger.error("SQL Exception when getting SysConfig List");
 	     logger.error(ExceptionUtils.getStackTrace(e));
 	     System.out.println(ExceptionUtils.getStackTrace(e)); 
 	  }

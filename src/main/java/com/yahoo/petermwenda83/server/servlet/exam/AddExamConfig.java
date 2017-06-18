@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -66,14 +66,14 @@ public class AddExamConfig extends HttpServlet{
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EXAM_CONGIGURED); 
     	   
        }else{
-    	   ExamConfig examConfig = new ExamConfig();
-    	   examConfig.setSchoolAccountUuid(schoolAccountUuid);
-    	   examConfig.setTerm(term);
-    	   examConfig.setYear(Year);
-    	   examConfig.setExam(exam);
-    	   examConfig.setExamMode(examMode);
-    	   examConfig.setSendSMS("OFF");
-    	   if(examConfigDAO.putExamConfig(examConfig)){ 
+    	   SysConfig sysConfig = new SysConfig();
+    	   sysConfig.setSchoolAccountUuid(schoolAccountUuid);
+    	   sysConfig.setTerm(term);
+    	   sysConfig.setYear(Year);
+    	   sysConfig.setExam(exam);
+    	   sysConfig.setExamMode(examMode);
+    	   sysConfig.setSendSMS("OFF");
+    	   if(examConfigDAO.putExamConfig(sysConfig)){ 
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, ERROR_ECAMC_ADD_ADD_SUCCESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_ECAMC_ADD_ERROR);

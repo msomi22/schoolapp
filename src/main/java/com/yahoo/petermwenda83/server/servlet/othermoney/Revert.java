@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.othermoney.RevertedMoney;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
@@ -67,9 +67,9 @@ public class Revert extends HttpServlet{
        String term = StringUtils.trimToEmpty(request.getParameter("term"));
        String year = StringUtils.trimToEmpty(request.getParameter("year"));
       
-	   ExamConfig examConfig = new ExamConfig();
+	   SysConfig sysConfig = new SysConfig();
 		if(examConfigDAO.getExamConfig(schooluuid) !=null){
-			examConfig = examConfigDAO.getExamConfig(schooluuid);
+			sysConfig = examConfigDAO.getExamConfig(schooluuid);
 		}
 	
        
@@ -82,30 +82,30 @@ public class Revert extends HttpServlet{
 	   }else if(StringUtils.isBlank(amount)){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED); 
 			   
-	   }else if(!StringUtils.equals(term, examConfig.getTerm())){
+	   }else if(!StringUtils.equals(term, sysConfig.getTerm())){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED_WRONG_TERM_YEAR); 
 			   
-	   }else if(!StringUtils.equals(year, examConfig.getYear())){
+	   }else if(!StringUtils.equals(year, sysConfig.getYear())){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED_WRONG_TERM_YEAR); 
 			   
 	   }else{
 		   
 		   
 		   double theamount = Double.parseDouble(amount);
-		   StudentOtherMonies studentOtherMonies = new StudentOtherMonies();
-		   studentOtherMonies.setStudentUuid(studentuuid);
-		   studentOtherMonies.setOtherstypeUuid(typeuuid);
+		   StudentOtherFee studentOtherFee = new StudentOtherFee();
+		   studentOtherFee.setStudentUuid(studentuuid);
+		   studentOtherFee.setOtherstypeUuid(typeuuid);
 		   
 		   RevertedMoney revertedMoney = new RevertedMoney();
 		   revertedMoney.setStudentUuid(studentuuid); 
 		   revertedMoney.setOtherstypeUuid(typeuuid);
 		   revertedMoney.setAmount(theamount);
-		   revertedMoney.setTerm(examConfig.getTerm());
-		   revertedMoney.setYear(examConfig.getYear());
+		   revertedMoney.setTerm(sysConfig.getTerm());
+		   revertedMoney.setYear(sysConfig.getYear());
 	
 		   revertedMoneyDAO.putstudentUuid(revertedMoney);
 		   
-		   if(studentOtherMoniesDAO.deleteStudentOtherMonies(studentOtherMonies)){ 
+		   if(studentOtherMoniesDAO.deleteStudentOtherMonies(studentOtherFee)){ 
 			   session.setAttribute(SessionConstants.STUDENT_FEE_ADD_SUCCESS, SUCCESS_TRANS_REVERTED); 
 		   }else{
 			   session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED);  

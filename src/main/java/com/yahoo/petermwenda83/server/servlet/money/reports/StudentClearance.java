@@ -36,13 +36,13 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.money.PocketMoney;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
@@ -82,7 +82,7 @@ public class StudentClearance extends HttpServlet{
 	private PdfWriter writer;
 
 	private Logger logger;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 	private String PDF_TITLE ="";
 	private String PDF_SUBTITLE ="";
@@ -102,7 +102,7 @@ public class StudentClearance extends HttpServlet{
 
 
 	TermOtherMonies termOtherMonies;
-	StudentOtherMonies studentOtherMonies;
+	StudentOtherFee studentOtherFee;
 
 	String USER= "";
 	String path ="";
@@ -165,16 +165,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
 	response.setHeader("Content-Disposition", "inline; filename= \"" +pdfname);
 
-	examConfig = new ExamConfig();
+	sysConfig = new SysConfig();
 	if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 	}
 
 
 
 	TermFee termFee = new TermFee();
-	if(termFeeDAO.getFee(school.getUuid(),examConfig.getTerm(),examConfig.getYear()) !=null){
-		termFee = termFeeDAO.getFee(school.getUuid(),examConfig.getTerm(),examConfig.getYear());
+	if(termFeeDAO.getFee(school.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+		termFee = termFeeDAO.getFee(school.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
 	}
 
 	Student stuudent = new Student();
@@ -216,7 +216,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		writer.setBoxSize("art", new Rectangle(36, 54, 459, 588));
 		writer.setPageEvent(event);
 
-		populatePDFDocument(school,examConfig,termFee,stuudent,path);
+		populatePDFDocument(school,sysConfig,termFee,stuudent,path);
 
 
 	} catch (DocumentException e) {
@@ -239,7 +239,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	 * @param path2
 	 * @throws DocumentException
 	 */
-	private void populatePDFDocument(Account school, ExamConfig exam, TermFee termFee,Student stuudent, String path2) throws DocumentException {
+	private void populatePDFDocument(Account school, SysConfig exam, TermFee termFee,Student stuudent, String path2) throws DocumentException {
      
 		/**  Algorithm to clear students
 		 *   1)if student has fee balance, they must clear the balance first
@@ -316,15 +316,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		double other_m_totals = 0;
 		
        //get other payments
-		List<StudentOtherMonies>  stuOthermoniList = new ArrayList<>(); 
-		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),examConfig.getTerm(),examConfig.getYear()) !=null){
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),examConfig.getTerm(),examConfig.getYear());
+		List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
+		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
 		}  
 		
 		
         //calculate other payments
 		if(stuOthermoniList !=null){
-			for(StudentOtherMonies som  : stuOthermoniList){
+			for(StudentOtherFee som  : stuOthermoniList){
 				other_m_amount = som.getAmountPiad();
 				other_m_totals +=other_m_amount;
 			}
@@ -332,8 +332,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		
 		//get fee payments for this term
 		List<StudentFee> feelist = new ArrayList<>();
-		if(studentFeeDAO.getStudentFeeByStudentUuidList(school.getUuid(),stuudent.getUuid(),examConfig.getTerm(),examConfig.getYear()) !=null){
-			feelist = studentFeeDAO.getStudentFeeByStudentUuidList(school.getUuid(),stuudent.getUuid(),examConfig.getTerm(),examConfig.getYear());
+		if(studentFeeDAO.getStudentFeeByStudentUuidList(school.getUuid(),stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+			feelist = studentFeeDAO.getStudentFeeByStudentUuidList(school.getUuid(),stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
           
 		}
 		
@@ -350,11 +350,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
 		// we should find previous term balance or over payments
 		String previuosyear = "";
-		String currentyear = examConfig.getYear();
+		String currentyear = sysConfig.getYear();
 		int currentyearint = Integer.parseInt(currentyear);
 		int previousyearint = 0;
 
-		String currenttermStr = examConfig.getTerm();
+		String currenttermStr = sysConfig.getTerm();
 		int currenttermint = Integer.parseInt(currenttermStr);// can either be 1, 2, or 3
 		int previousterm = currenttermint - 1;// if c = 3 , p = 2 // if c = 2 , p = 1 // if c = 1 p = 3
 		if(previousterm == 0){
@@ -362,7 +362,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			previousyearint = currentyearint - 1;
 			previuosyear = Integer.toString(previousyearint);
 		}else{
-			previuosyear = examConfig.getYear();
+			previuosyear = sysConfig.getYear();
 		}
 		String previoustermStr = Integer.toString(previousterm);
 		
@@ -396,8 +396,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 				   Deposit d = new Deposit();
 				   d.setStudentUuid(stuudent.getUuid());  
 		    	   d.setSystemUser("Auto-add");
-		    	   d.setTerm(examConfig.getTerm());
-		           d.setYear(examConfig.getYear());
+		    	   d.setTerm(sysConfig.getTerm());
+		           d.setYear(sysConfig.getYear());
 		           if(pMoneyDAO.addBalance(d,overpayment)){
 		        	 
 		           }

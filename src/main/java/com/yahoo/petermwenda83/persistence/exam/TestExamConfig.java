@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 
 public class TestExamConfig {
 	
@@ -45,7 +45,7 @@ public class TestExamConfig {
 	@Test
 	public void testGetExamConfig() {
 		store = new ExamConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort); 
-		ExamConfig e = new ExamConfig();
+		SysConfig e = new SysConfig();
 		e = store.getExamConfig(SCHOOL_UUID);
 		assertEquals(e.getUuid(),UUID);
 		assertEquals(e.getSchoolAccountUuid(),SCHOOL_UUID);
@@ -58,7 +58,7 @@ public class TestExamConfig {
 	@Test
 	public void testPutExamConfig() {
 		store = new ExamConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort); 
-		ExamConfig e = new ExamConfig();
+		SysConfig e = new SysConfig();
 		e.setUuid(UUID_NEW);
 		e.setSchoolAccountUuid(SCHOOL_UUID);
 		e.setYear(YEAR_NEW);
@@ -71,7 +71,7 @@ public class TestExamConfig {
 	@Test
 	public void testUpdateExamConfig() {
 		store = new ExamConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		ExamConfig e = new ExamConfig();
+		SysConfig e = new SysConfig();
 		e.setUuid(UUID_NEW);
 		e.setSchoolAccountUuid(SCHOOL_UUID);
 		e.setYear(YEAR_UPDATE);
@@ -84,8 +84,8 @@ public class TestExamConfig {
 	@Test
 	public void testGetExamConfigList() {
 		store = new ExamConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort); 
-		List<ExamConfig> list = store.getExamConfigList(SCHOOL_UUID);
-		for (ExamConfig e : list) {
+		List<SysConfig> list = store.getExamConfigList(SCHOOL_UUID);
+		for (SysConfig e : list) {
 			System.out.println(e);
 		}
 	}

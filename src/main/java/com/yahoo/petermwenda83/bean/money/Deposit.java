@@ -11,42 +11,56 @@
  *************************************************************/
 package com.yahoo.petermwenda83.bean.money;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  * @author peter
  *
  */
 public class Deposit extends PocketMoney {
 	
-	/** 
-	 * 
-	 */
-	private static final long serialVersionUID = 7582945268897264721L;
+	
+	private Timestamp depositDate;
 	
 	public Deposit() {
 		super();
+		depositDate = new Timestamp(new Date().getTime());
 	}
 
 	
 
+	/**
+	 * @return the depositDate
+	 */
+	public Timestamp getDepositDate() {
+		return depositDate;
+	}
+
+
+
+	/**
+	 * @param depositDate the depositDate to set
+	 */
+	public void setDepositDate(Timestamp depositDate) {
+		this.depositDate = depositDate;
+	}
+
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Deposit");
-		builder.append("[getUuid() = ");
-		builder.append(getUuid());
-		builder.append(",getStudentUuid() =");
-		builder.append(getStudentUuid());
-		builder.append(", getAmount()=");
-		builder.append(getAmount());
-		builder.append(", getSystemUser()=");
-		builder.append(getSystemUser());
-		builder.append(", getDateCommitted()=");
-		builder.append(getDateCommitted());
-		builder.append(", getTerm()=");
-		builder.append(getTerm());
-		builder.append(", getYear()=");
-		builder.append(getYear());
-		builder.append("]");
-		return builder.toString(); 
-		}
+	public String toString() {
+		return "Deposit [depositDate=" + depositDate + ", getStudentId()=" + getStudentId() + ", getAmount()="
+				+ getAmount() + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+
+	/** 
+	 * 
+	 */
+	private static final long serialVersionUID = 7582945268897264721L;
 }

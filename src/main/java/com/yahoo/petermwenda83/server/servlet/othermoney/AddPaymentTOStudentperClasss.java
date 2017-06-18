@@ -21,12 +21,12 @@ import org.json.JSONObject;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -146,9 +146,9 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 
 		}else{
 
-			ExamConfig examConfig = new ExamConfig();
+			SysConfig sysConfig = new SysConfig();
 			if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-				examConfig = examConfigDAO.getExamConfig(school.getUuid());
+				sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 			}
 
 			//select all student in the given classroom. 
@@ -157,14 +157,14 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 			for(Student stu : studentList){
 				//stu.getUuid();
 				//start the magic now
-				if (studentOtherMoniesDAO.getStudentOtherMTY(stu.getUuid(), moneyTypeUuid, examConfig.getTerm(), examConfig.getYear()) ==null){
+				if (studentOtherMoniesDAO.getStudentOtherMTY(stu.getUuid(), moneyTypeUuid, sysConfig.getTerm(), sysConfig.getYear()) ==null){
 					//we continue
-					List<Otherstype> othertypeList = new ArrayList<Otherstype>(); 
+					List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
 					othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
 					HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 
 					if(othertypeList !=null){
-						for(Otherstype om : othertypeList){
+						for(OtherFee om : othertypeList){
 							moneytypeHash.put(om.getUuid(),om.getType());
 						}
 					}
@@ -178,20 +178,20 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 						type = moneytypeHash.get(termOtherMonies.getOtherstypeUuid());
 					}
 
-					StudentOtherMonies studentOtherMonies = new StudentOtherMonies();
-					studentOtherMonies.setStudentUuid(stu.getUuid());
-					studentOtherMonies.setOtherstypeUuid(moneyTypeUuid);
-					studentOtherMonies.setAmountPiad(typeAmount); 
-					studentOtherMonies.setTerm(examConfig.getTerm());
-					studentOtherMonies.setYear(examConfig.getYear()); 
+					StudentOtherFee studentOtherFee = new StudentOtherFee();
+					studentOtherFee.setStudentUuid(stu.getUuid());
+					studentOtherFee.setOtherstypeUuid(moneyTypeUuid);
+					studentOtherFee.setAmountPiad(typeAmount); 
+					studentOtherFee.setTerm(sysConfig.getTerm());
+					studentOtherFee.setYear(sysConfig.getYear()); 
 
-					if( studentOtherMoniesDAO.putStudentOtherMonies(studentOtherMonies)){
+					if( studentOtherMoniesDAO.putStudentOtherMonies(studentOtherFee)){
 						session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_SUCCESS, MONEY_ASSIGNED_SUCCESS); 
 					}else{
 						session.setAttribute(SessionConstants.STUDENT_ADD_OTHER_MONIES_ADD_ERROR, MONEY_ASSIGNED_ERROR); 
 					}
 
-					if(StringUtils.equals(examConfig.getSendSMS(),"ON")){
+					if(StringUtils.equals(sysConfig.getSendSMS(),"ON")){
 
 						String feebalance = "";
 
@@ -251,7 +251,7 @@ public class AddPaymentTOStudentperClasss extends HttpServlet{
 						String username = smsApi.getApiPassword();//africasTalking.getUsername();
 						String apiKey   = smsApi.getApiKey();//africasTalking.getApiKey();
 						String message = "";
-						message = "HI " + parentname + ", your " + genderfinderHash.get(stu.getUuid())+ " " + studNameHash.get(stu.getUuid()) + " Adm.No " + studentAdmNoHash.get(stu.getUuid()) + " has been added additional charges  of type " + type + " ,amount " + nf.format(typeAmount) + " Term " + examConfig.getTerm() + " Year " + examConfig.getYear() +", Fee balance is " + feebalance;
+						message = "HI " + parentname + ", your " + genderfinderHash.get(stu.getUuid())+ " " + studNameHash.get(stu.getUuid()) + " Adm.No " + studentAdmNoHash.get(stu.getUuid()) + " has been added additional charges  of type " + type + " ,amount " + nf.format(typeAmount) + " Term " + sysConfig.getTerm() + " Year " + sysConfig.getYear() +", Fee balance is " + feebalance;
 
 
 						africasTalking.setMessage(message); 

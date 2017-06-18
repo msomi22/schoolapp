@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
@@ -40,7 +40,7 @@ public class UpdateNewPayment  extends HttpServlet{
 	private static ExamConfigDAO examConfigDAO;
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
 	private static OtherstypeDAO otherstypeDAO;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 	private Cache schoolaccountCache;
 	/**  
 	 *
@@ -83,9 +83,9 @@ public class UpdateNewPayment  extends HttpServlet{
 
 
 
-		examConfig = new ExamConfig();
+		sysConfig = new SysConfig();
 		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			examConfig = examConfigDAO.getExamConfig(school.getUuid());
+			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		if(StringUtils.isBlank(type)){
@@ -102,14 +102,14 @@ public class UpdateNewPayment  extends HttpServlet{
 			   
 		 }else{
 			
-			Otherstype otherstype = new Otherstype();
+			OtherFee otherFee = new OtherFee();
 			if(otherstypeDAO.getOtherstype(OtherstypeUuid) !=null){
-			otherstype = otherstypeDAO.getOtherstype(OtherstypeUuid);
-			otherstype.setUuid(OtherstypeUuid);
-			otherstype.setSchoolAccountUuid(school.getUuid()); 
-			otherstype.setTerm(examConfig.getTerm());
-			otherstype.setYear(examConfig.getYear()); 
-			otherstype.setType(type); 
+			otherFee = otherstypeDAO.getOtherstype(OtherstypeUuid);
+			otherFee.setUuid(OtherstypeUuid);
+			otherFee.setSchoolAccountUuid(school.getUuid()); 
+			otherFee.setTerm(sysConfig.getTerm());
+			otherFee.setYear(sysConfig.getYear()); 
+			otherFee.setType(type); 
 			}
 			
 			TermOtherMonies termOtherMonies = new TermOtherMonies();
@@ -120,7 +120,7 @@ public class UpdateNewPayment  extends HttpServlet{
 			termOtherMonies.setSchoolAccountUuid(school.getUuid());
 			}
 			
-		     if(otherstypeDAO.updteOtherstype(otherstype) && termOtherMoniesDAO.updateTermOtherMonies(termOtherMonies)){
+		     if(otherstypeDAO.updteOtherstype(otherFee) && termOtherMoniesDAO.updateTermOtherMonies(termOtherMonies)){
 			  session.setAttribute(SessionConstants.OTHER_MONIES_ADD_SUCESS, MONEY_ASSIGNED_SUCCESS); 
 		     }else{
 		      session.setAttribute(SessionConstants.OTHER_MONIES_ADD_ERROR, MONEY_ASSIGNED_ERROR); 

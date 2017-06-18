@@ -2,7 +2,7 @@ package com.yahoo.petermwenda83.persistence.othermoney;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 
 public interface SchoolOtherstypeDAO {
 	/**
@@ -10,19 +10,19 @@ public interface SchoolOtherstypeDAO {
 	 * @param Uuid
 	 * @return
 	 */
-	public Otherstype getOtherstype(String Uuid);
+	public OtherFee getOtherstype(String Uuid);
 	/**
 	 * 
-	 * @param otherstype
+	 * @param otherFee
 	 * @return
 	 */
-	public boolean putOtherstype(Otherstype otherstype);
+	public boolean putOtherstype(OtherFee otherFee);
 	/**
 	 * 
-	 * @param otherstype
+	 * @param otherFee
 	 * @return
 	 */
-	public boolean updteOtherstype(Otherstype otherstype);
+	public boolean updteOtherstype(OtherFee otherFee);
 	/**
 	 * 
 	 * @param schoolAccountUuid
@@ -31,7 +31,7 @@ public interface SchoolOtherstypeDAO {
 	 * @return
 	 */
 	
-	public List<Otherstype> getOtherstypeList(String schoolAccountUuid,String term,String year);
+	public List<OtherFee> getOtherstypeList(String schoolAccountUuid,String term,String year);
 	
 	/**
 	 * 
@@ -39,6 +39,6 @@ public interface SchoolOtherstypeDAO {
 	 * @return
 	 */
 	
-	public List<Otherstype> gettypeList(String schoolAccountUuid);
+	public List<OtherFee> gettypeList(String schoolAccountUuid);
 
 }

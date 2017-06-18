@@ -9,6 +9,9 @@
  */
 package com.yahoo.petermwenda83.bean.book;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /** 
@@ -19,70 +22,40 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class Book extends StorableBean{
 	
-	
-	  String schoolAccountUuid;
-	  String ISBN;
-	  String author;
-	  String publisher;
-	  String title;
-	  String bookStatus;
-	  String borrowStatus;
+	  private String isbn;
+	  private String author;
+	  private String publisher;
+	  private String title;
+	  private String isAvailable;
+	  private String category;
+	  private Timestamp dateAdded;
 
 	/**
 	 * 
 	 */
 	public Book() {
-		 schoolAccountUuid = "";
-		 ISBN = "";
+		 isbn = "";
 		 author = "";
 		 publisher = "";
 		 title = "";
-		 bookStatus = "";
-		 borrowStatus = "";
+		 isAvailable = "";
+		 category = "";
+		 dateAdded = new Timestamp(new Date().getTime()); 
 	}
 	
-	
-	
-	
-	/**
-	 * @return the schoolAccountUuid
+	  /**
+	 * @return the isbn
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getIsbn() {
+		return isbn;
 	}
 
-
-
-
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param isbn the isbn to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
-
-
-
-
-	/**
-	 * @return the iSBN
-	 */
-	public String getISBN() {
-		return ISBN;
-	}
-
-
-
-
-	/**
-	 * @param iSBN the iSBN to set
-	 */
-	public void setISBN(String iSBN) {
-		ISBN = iSBN;
-	}
-
-
-
 
 	/**
 	 * @return the author
@@ -91,18 +64,12 @@ public class Book extends StorableBean{
 		return author;
 	}
 
-
-
-
 	/**
 	 * @param author the author to set
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-
-
-
 
 	/**
 	 * @return the publisher
@@ -111,18 +78,12 @@ public class Book extends StorableBean{
 		return publisher;
 	}
 
-
-
-
 	/**
 	 * @param publisher the publisher to set
 	 */
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
 	}
-
-
-
 
 	/**
 	 * @return the title
@@ -131,9 +92,6 @@ public class Book extends StorableBean{
 		return title;
 	}
 
-
-
-
 	/**
 	 * @param title the title to set
 	 */
@@ -141,74 +99,59 @@ public class Book extends StorableBean{
 		this.title = title;
 	}
 
-
-
-
 	/**
-	 * @return the bookStatus
+	 * @return the isAvailable
 	 */
-	public String getBookStatus() {
-		return bookStatus;
+	public String getIsAvailable() {
+		return isAvailable;
 	}
 
-
-
-
 	/**
-	 * @param bookStatus the bookStatus to set
+	 * @param isAvailable the isAvailable to set
 	 */
-	public void setBookStatus(String bookStatus) {
-		this.bookStatus = bookStatus;
+	public void setIsAvailable(String isAvailable) {
+		this.isAvailable = isAvailable;
 	}
 
-
-
-
 	/**
-	 * @return the borrowStatus
+	 * @return the category
 	 */
-	public String getBorrowStatus() {
-		return borrowStatus;
+	public String getCategory() {
+		return category;
 	}
 
-
-
-
 	/**
-	 * @param borrowStatus the borrowStatus to set
+	 * @param category the category to set
 	 */
-	public void setBorrowStatus(String borrowStatus) {
-		this.borrowStatus = borrowStatus;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
+	/**
+	 * @return the dateAdded
+	 */
+	public Timestamp getDateAdded() {
+		return dateAdded;
+	}
 
+	/**
+	 * @param dateAdded the dateAdded to set
+	 */
+	public void setDateAdded(Timestamp dateAdded) {
+		this.dateAdded = dateAdded;
+	}
 
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("StudentBook");
-		builder.append("[getUuid()=");
-		builder.append(getUuid()); 
-		builder.append(",schoolAccountUuid=");
-		builder.append(schoolAccountUuid);
-		builder.append(",ISBN=");
-		builder.append(ISBN);
-		builder.append(",author=");
-		builder.append(author);
-		builder.append(",publisher=");
-		builder.append(publisher);
-		builder.append(",title=");
-		builder.append(title);
-		builder.append(",bookStatus=");
-		builder.append(bookStatus);
-		builder.append(",borrowStatus=");
-		builder.append(borrowStatus);
-		builder.append("]");
-		return builder.toString(); 
-		}
-	
-	  /**
+	public String toString() {
+		return "Book [isbn=" + isbn + ", author=" + author + ", publisher=" + publisher + ", title=" + title
+				+ ", isAvailable=" + isAvailable + ", category=" + category + ", dateAdded=" + dateAdded
+				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+	/**
 		 * 
 		 */
 		private static final long serialVersionUID = 2519971559271467654L;

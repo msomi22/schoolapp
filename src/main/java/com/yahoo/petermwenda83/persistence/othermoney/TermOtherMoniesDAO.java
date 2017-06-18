@@ -13,7 +13,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**  
@@ -118,7 +118,7 @@ public class TermOtherMoniesDAO extends GenericDAO implements SchoolTermOtherMon
 
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#putTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#putTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)
 	 */
 	@Override
 	public boolean putTermOtherMonies(TermOtherMonies termOtherMonies) {
@@ -146,7 +146,7 @@ public class TermOtherMoniesDAO extends GenericDAO implements SchoolTermOtherMon
 	}
 
 	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#updateTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#updateTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)
 	 */
 	@Override
 	public boolean updateTermOtherMonies(TermOtherMonies termOtherMonies) {
@@ -176,7 +176,7 @@ public class TermOtherMoniesDAO extends GenericDAO implements SchoolTermOtherMon
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#deleteTermOtherMonies(com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolTermOtherMoniesDAO#deleteTermOtherMonies(com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies)
 	 */
 	@Override
 	public boolean deleteTermOtherMonies(TermOtherMonies termOtherMonies) {

@@ -37,7 +37,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -68,7 +68,7 @@ public class FinancialReport extends HttpServlet{
 	private PdfWriter writer;
 
 	private Logger logger;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 	private String PDF_TITLE ="";
 	private String PDF_SUBTITLE ="";
@@ -136,16 +136,16 @@ public class FinancialReport extends HttpServlet{
 
 		response.setHeader("Content-Disposition", "inline; filename= \"" +pdfname);
 
-		examConfig = new ExamConfig();
+		sysConfig = new SysConfig();
 		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			examConfig = examConfigDAO.getExamConfig(school.getUuid());
+			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		}
 
 
 
 		TermFee termFee = new TermFee();
-		if(termFeeDAO.getFee(school.getUuid(),examConfig.getTerm(),examConfig.getYear()) !=null){
-			termFee = termFeeDAO.getFee(school.getUuid(),examConfig.getTerm(),examConfig.getYear());
+		if(termFeeDAO.getFee(school.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+			termFee = termFeeDAO.getFee(school.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
 		}
 
 
@@ -170,7 +170,7 @@ public class FinancialReport extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(36, 54, 459, 588));
 			writer.setPageEvent(event);
 
-			populatePDFDocument(school,examConfig,termFee,path);
+			populatePDFDocument(school,sysConfig,termFee,path);
 
 
 		} catch (DocumentException e) {
@@ -192,7 +192,7 @@ public class FinancialReport extends HttpServlet{
 	 * @param path2
 	 * @throws DocumentException
 	 */
-	private void populatePDFDocument(Account school, ExamConfig examConfig2, TermFee termFee,
+	private void populatePDFDocument(Account school, SysConfig examConfig2, TermFee termFee,
 			 String path2) throws DocumentException {
 
 
@@ -222,7 +222,7 @@ public class FinancialReport extends HttpServlet{
 		preface.add(createImage(path2));
 		preface.add(new Paragraph(PDF_TITLE, smallBold));
 		preface.add(new Paragraph(PDF_SUBTITLE, normalText));
-		preface.add(new Paragraph("PRINTED ON :"+formattedDate + " FOR YEAR :"+examConfig.getYear()+"\n\n", smallBold));
+		preface.add(new Paragraph("PRINTED ON :"+formattedDate + " FOR YEAR :"+sysConfig.getYear()+"\n\n", smallBold));
 
 
 		PdfPTable FinanceReportTable = new PdfPTable(2);  
@@ -371,19 +371,19 @@ public class FinancialReport extends HttpServlet{
 		double yeartotalpaid = 0;
 		
 		String currentyear = "";
-		currentyear = examConfig.getYear();
+		currentyear = sysConfig.getYear();
 		int currentyearint = Integer.parseInt(currentyear);
 		int prevyear = currentyearint - 1;
 		
 		TermFee termoneFee = new TermFee();
-		if(termFeeDAO.getFee(school.getUuid(),"1",examConfig.getYear()) !=null){
-			termoneFee = termFeeDAO.getFee(school.getUuid(),"1",examConfig.getYear());
+		if(termFeeDAO.getFee(school.getUuid(),"1",sysConfig.getYear()) !=null){
+			termoneFee = termFeeDAO.getFee(school.getUuid(),"1",sysConfig.getYear());
 			termOneFee = termoneFee.getTermAmount();
 		}
 
 		List<StudentFee> studentfeeListTerm1 = new ArrayList<StudentFee>();
-		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"1",examConfig.getYear()) !=null){
-			studentfeeListTerm1 = studentFeeDAO.getStudentFeeList(school.getUuid(),"1",examConfig.getYear());      	 
+		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"1",sysConfig.getYear()) !=null){
+			studentfeeListTerm1 = studentFeeDAO.getStudentFeeList(school.getUuid(),"1",sysConfig.getYear());      	 
 
 		}
 		
@@ -423,15 +423,15 @@ public class FinancialReport extends HttpServlet{
 
 
 		TermFee termtwoFee = new TermFee();
-		if(termFeeDAO.getFee(school.getUuid(),"2",examConfig.getYear()) !=null){
-			termtwoFee = termFeeDAO.getFee(school.getUuid(),"2",examConfig.getYear());
+		if(termFeeDAO.getFee(school.getUuid(),"2",sysConfig.getYear()) !=null){
+			termtwoFee = termFeeDAO.getFee(school.getUuid(),"2",sysConfig.getYear());
 			termTwoFee = termtwoFee.getTermAmount();
 		}
         
 		// TERM 2
 		List<StudentFee> studentfeeListTerm2 = new ArrayList<StudentFee>();
-		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"2",examConfig.getYear()) !=null){
-			studentfeeListTerm2 = studentFeeDAO.getStudentFeeList(school.getUuid(),"2",examConfig.getYear());      	 
+		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"2",sysConfig.getYear()) !=null){
+			studentfeeListTerm2 = studentFeeDAO.getStudentFeeList(school.getUuid(),"2",sysConfig.getYear());      	 
 
 		}
 
@@ -467,15 +467,15 @@ public class FinancialReport extends HttpServlet{
 	
 		
 		TermFee termthreeFee = new TermFee();
-		if(termFeeDAO.getFee(school.getUuid(),"3",examConfig.getYear()) !=null){
-			termthreeFee = termFeeDAO.getFee(school.getUuid(),"3",examConfig.getYear());
+		if(termFeeDAO.getFee(school.getUuid(),"3",sysConfig.getYear()) !=null){
+			termthreeFee = termFeeDAO.getFee(school.getUuid(),"3",sysConfig.getYear());
 			termThreeFee = termthreeFee.getTermAmount();
 		}
 
          //TERM 3
 		List<StudentFee> studentfeeListTerm3 = new ArrayList<StudentFee>();
-		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"3",examConfig.getYear()) !=null){
-			studentfeeListTerm3 = studentFeeDAO.getStudentFeeList(school.getUuid(),"3",examConfig.getYear());      	 
+		if(studentFeeDAO.getStudentFeeList(school.getUuid(),"3",sysConfig.getYear()) !=null){
+			studentfeeListTerm3 = studentFeeDAO.getStudentFeeList(school.getUuid(),"3",sysConfig.getYear());      	 
 
 		} 
 		if(studentfeeListTerm3 !=null){

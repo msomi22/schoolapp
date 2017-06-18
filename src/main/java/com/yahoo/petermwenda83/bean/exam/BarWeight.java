@@ -17,74 +17,34 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class BarWeight extends StorableBean{
 	
-
-	private String schoolAccountUuid;
-	private String studentUuid;
-	private String term;
+	private String studentId;
 	private String year;
-	private double weightOne;
-	private double weightTwo;
-	private double weightThree;
-
-	/**
-	 * 
-	 */
+	private double meanOne;
+	private double meanTwo;
+	private double meanhree;
+	
 	public BarWeight() {
-		schoolAccountUuid = "";
-		studentUuid = "";
-		term = "";
+		studentId = "";
 		year = "";
-		weightOne = 0;
-		weightTwo = 0;
-		weightThree = 0;
+		meanOne = 0;
+		meanTwo = 0;
+		meanhree = 0;
 	}
 	
 	
 	/**
-	 * @return the schoolAccountUuid
+	 * @return the studentId
 	 */
-	public String getSchoolAccountUuid() {
-		return schoolAccountUuid;
+	public String getStudentId() {
+		return studentId;
 	}
 
 
 	/**
-	 * @param schoolAccountUuid the schoolAccountUuid to set
+	 * @param studentId the studentId to set
 	 */
-	public void setSchoolAccountUuid(String schoolAccountUuid) {
-		this.schoolAccountUuid = schoolAccountUuid;
-	}
-
-
-	/**
-	 * @return the studentUuid
-	 */
-	public String getStudentUuid() {
-		return studentUuid;
-	}
-
-
-	/**
-	 * @param studentUuid the studentUuid to set
-	 */
-	public void setStudentUuid(String studentUuid) {
-		this.studentUuid = studentUuid;
-	}
-
-
-	/**
-	 * @return the term
-	 */
-	public String getTerm() {
-		return term;
-	}
-
-
-	/**
-	 * @param term the term to set
-	 */
-	public void setTerm(String term) {
-		this.term = term;
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
 
@@ -105,78 +65,63 @@ public class BarWeight extends StorableBean{
 
 
 	/**
-	 * @return the weightOne
+	 * @return the meanOne
 	 */
-	public double getWeightOne() {
-		return weightOne;
+	public double getMeanOne() {
+		return meanOne;
 	}
 
 
 	/**
-	 * @param weightOne the weightOne to set
+	 * @param meanOne the meanOne to set
 	 */
-	public void setWeightOne(double weightOne) {
-		this.weightOne = weightOne;
+	public void setMeanOne(double meanOne) {
+		this.meanOne = meanOne;
 	}
 
 
 	/**
-	 * @return the weightTwo
+	 * @return the meanTwo
 	 */
-	public double getWeightTwo() {
-		return weightTwo;
+	public double getMeanTwo() {
+		return meanTwo;
 	}
 
 
 	/**
-	 * @param weightTwo the weightTwo to set
+	 * @param meanTwo the meanTwo to set
 	 */
-	public void setWeightTwo(double weightTwo) {
-		this.weightTwo = weightTwo;
+	public void setMeanTwo(double meanTwo) {
+		this.meanTwo = meanTwo;
 	}
 
 
 	/**
-	 * @return the weightThree
+	 * @return the meanhree
 	 */
-	public double getWeightThree() {
-		return weightThree;
+	public double getMeanhree() {
+		return meanhree;
 	}
 
 
 	/**
-	 * @param weightThree the weightThree to set
+	 * @param meanhree the meanhree to set
 	 */
-	public void setWeightThree(double weightThree) {
-		this.weightThree = weightThree;
+	public void setMeanhree(double meanhree) {
+		this.meanhree = meanhree;
 	}
 
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("Weight [ getUuid() = ");
-		builder.append(getUuid());
-		builder.append(", schoolAccountUuid=");
-		builder.append(schoolAccountUuid);
-		builder.append(", studentUuid=");
-		builder.append(studentUuid);
-		builder.append(", term=");
-		builder.append(term);
-		builder.append(", year=");
-		builder.append(year);
-		builder.append(", weightOne=");
-		builder.append(weightOne);
-		builder.append(", weightTwo=");
-		builder.append(weightTwo);
-		builder.append(", weightThree=");
-		builder.append(weightThree);
-		builder.append("]");
-		return builder.toString(); 
-		}
-	
+	@Override
+	public String toString() {
+		return "BarWeight [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
+				+ ", meanhree=" + meanhree + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
 	/**
 	 * 
 	 */

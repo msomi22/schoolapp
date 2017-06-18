@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
-import com.yahoo.petermwenda83.bean.othermoney.Otherstype;
-import com.yahoo.petermwenda83.bean.othermoney.TermOtherMonies;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
@@ -34,9 +34,9 @@ public class NewPayment extends HttpServlet{
 	final String ERROR_AMOUNT_INVALID = "Invalid amount, amount ranges from KSH 100 - KSH 100,000";
 	final String ERROR_AMOUNT_NUMERIC = "Amount can only be numeric";
 	
-	Otherstype otherstype;
+	OtherFee otherFee;
 	TermOtherMonies termOtherMonies;
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 	/**  
     *
@@ -78,18 +78,18 @@ public class NewPayment extends HttpServlet{
 		   
 	   }else{
     	   
-    	   examConfig = new ExamConfig();
-    	   examConfig = examConfigDAO.getExamConfig(schooluuid);
+    	   sysConfig = new SysConfig();
+    	   sysConfig = examConfigDAO.getExamConfig(schooluuid);
     	   
-    	   otherstype = new Otherstype();
-    	   otherstype.setType(type); 
-    	   otherstype.setSchoolAccountUuid(schooluuid);
-    	   otherstype.setTerm(examConfig.getTerm());
-    	   otherstype.setYear(examConfig.getYear()); 
-    	   if(otherstypeDAO.putOtherstype(otherstype)){
+    	   otherFee = new OtherFee();
+    	   otherFee.setType(type); 
+    	   otherFee.setSchoolAccountUuid(schooluuid);
+    	   otherFee.setTerm(sysConfig.getTerm());
+    	   otherFee.setYear(sysConfig.getYear()); 
+    	   if(otherstypeDAO.putOtherstype(otherFee)){
     		   termOtherMonies = new TermOtherMonies();
     		   termOtherMonies.setSchoolAccountUuid(schooluuid);
-    		   termOtherMonies.setOtherstypeUuid(otherstype.getUuid()); 
+    		   termOtherMonies.setOtherstypeUuid(otherFee.getUuid()); 
     		   termOtherMonies.setAmount(Double.parseDouble(amount));
     		   if(termOtherMoniesDAO.putTermOtherMonies(termOtherMonies)){
     			   session.setAttribute(SessionConstants.OTHER_MONIES_ADD_SUCESS, SessionConstants.OTHER_MONIES_ADD_SUCESS); 

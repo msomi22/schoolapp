@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.money.PocketMoney;
 import com.yahoo.petermwenda83.bean.money.Withdraw;
@@ -45,7 +45,7 @@ public class FindStudentPM extends HttpServlet{
     private static StudentDAO studentDAO;
     private static PMoneyDAO pMoneyDAO;
     private static ExamConfigDAO examConfigDAO;
-    ExamConfig examConfig;
+    SysConfig sysConfig;
 
 
 	/**  
@@ -80,7 +80,7 @@ public class FindStudentPM extends HttpServlet{
 		  
 	   }else{
 		   
-		   examConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
 		   
 		   Student student = new Student();
 		   if(studentDAO.getStudentObjByadmNo(schoolUuid, admissionNumber) !=null){

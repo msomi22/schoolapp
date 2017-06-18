@@ -127,7 +127,7 @@ public class AddGradeScale extends HttpServlet{
        
        
        session.setAttribute(SessionConstants.GRADE_PARAM, paramHash);
-       response.sendRedirect("examConfig.jsp");  
+       response.sendRedirect("sysConfig.jsp");  
 	   return;
        
    }

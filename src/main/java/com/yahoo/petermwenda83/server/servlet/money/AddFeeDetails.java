@@ -27,10 +27,10 @@ import org.json.JSONObject;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -91,7 +91,7 @@ public class AddFeeDetails extends HttpServlet{
 
     
 
-	ExamConfig examConfig = new ExamConfig();
+	SysConfig sysConfig = new SysConfig();
 	double Studentbalance = 0;
 	double Accumstudentbalance = 0;
 
@@ -192,7 +192,7 @@ public class AddFeeDetails extends HttpServlet{
 
 
 			if(examConfigDAO.getExamConfig(schooluuid) !=null){
-				examConfig = examConfigDAO.getExamConfig(schooluuid);
+				sysConfig = examConfigDAO.getExamConfig(schooluuid);
 			}
 			
 			//get student 
@@ -215,8 +215,8 @@ public class AddFeeDetails extends HttpServlet{
 				studentFee.setStudentUuid(studentuuid);
 				studentFee.setTransactionID("KE " + slipNumber.toUpperCase() + "-" + new Date()); 
 				studentFee.setAmountPaid(amountTopay);  
-				studentFee.setTerm(examConfig.getTerm());
-				studentFee.setYear(examConfig.getYear());
+				studentFee.setTerm(sysConfig.getTerm());
+				studentFee.setYear(sysConfig.getYear());
 				studentFee.setStudentType(studentType); 
 				studentFee.setSystemUser(systemuser);
 
@@ -227,7 +227,7 @@ public class AddFeeDetails extends HttpServlet{
 					session.setAttribute(SessionConstants.STUDENT_FIND_ERROR, UNEXPECTED_ERROR);
 				}
 				
-				if(StringUtils.equals(examConfig.getSendSMS(),"ON")){
+				if(StringUtils.equals(sysConfig.getSendSMS(),"ON")){
 
 				//get parent contact and name
 				String phone = "";
@@ -273,7 +273,7 @@ public class AddFeeDetails extends HttpServlet{
 				String username = smsApi.getApiPassword();//africasTalking.getUsername();
 				String apiKey   = smsApi.getApiKey();//africasTalking.getApiKey();
 				String message = "";
-				message = "HI " + parentname + ", your " + genderfinderHash.get(studentuuid)+ " " + studNameHash.get(studentuuid) + " Adm.No " + studentAdmNoHash.get(studentuuid) + "  has paid fee of amount " + nf.format(amountTopay) + " Term " + examConfig.getTerm() + " Year " + examConfig.getYear() + "  , Fee balance is " + feebalance;
+				message = "HI " + parentname + ", your " + genderfinderHash.get(studentuuid)+ " " + studNameHash.get(studentuuid) + " Adm.No " + studentAdmNoHash.get(studentuuid) + "  has paid fee of amount " + nf.format(amountTopay) + " Term " + sysConfig.getTerm() + " Year " + sysConfig.getYear() + "  , Fee balance is " + feebalance;
 
 
 				africasTalking.setMessage(message); 

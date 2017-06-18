@@ -10,7 +10,7 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOtherMoniesDAO {
@@ -52,12 +52,12 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherMonies(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public StudentOtherMonies getStudentOtherMonies(String studentUuid,String otherstypeUuid) {
-		StudentOtherMonies studentOtherMonies = null;
+	public StudentOtherFee getStudentOtherMonies(String studentUuid,String otherstypeUuid) {
+		StudentOtherFee studentOtherFee = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherMonies WHERE studentUuid =? AND otherstypeUuid =?;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE studentUuid =? AND otherstypeUuid =?;");       
         		
         		){
         	
@@ -66,15 +66,15 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 studentOtherMonies  = beanProcessor.toBean(rset,StudentOtherMonies.class);
+	    	 studentOtherFee  = beanProcessor.toBean(rset,StudentOtherFee.class);
 	   }
        	
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting StudentOtherMonies for studentUuid: " + studentUuid );
+        	 logger.error("SQL Exception when getting StudentOtherFee for studentUuid: " + studentUuid );
              logger.error(ExceptionUtils.getStackTrace(e));
              System.out.println(ExceptionUtils.getStackTrace(e));
         }
-		return studentOtherMonies; 
+		return studentOtherFee; 
 	}
 	
 	
@@ -82,12 +82,12 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherMTY(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public StudentOtherMonies getStudentOtherMTY(String studentUuid, String otherstypeUuid, String term, String year) {
-		StudentOtherMonies studentOtherMonies = null;
+	public StudentOtherFee getStudentOtherMTY(String studentUuid, String otherstypeUuid, String term, String year) {
+		StudentOtherFee studentOtherFee = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherMonies WHERE studentUuid =?"
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE studentUuid =?"
            	      		+ " AND otherstypeUuid =? AND term =? AND year =?;");       
         		
         		){
@@ -99,17 +99,17 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
-	    	 studentOtherMonies  = beanProcessor.toBean(rset,StudentOtherMonies.class);
+	    	 studentOtherFee  = beanProcessor.toBean(rset,StudentOtherFee.class);
 	   }
         	
         	
         	
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting StudentOtherMonies for studentUuid: " + studentUuid );
+        	 logger.error("SQL Exception when getting StudentOtherFee for studentUuid: " + studentUuid );
              logger.error(ExceptionUtils.getStackTrace(e));
              System.out.println(ExceptionUtils.getStackTrace(e));
         }
-		return studentOtherMonies; 
+		return studentOtherFee; 
 	}
 
 
@@ -117,11 +117,11 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherList(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherMonies> getStudentOtherList(String studentUuid,String Term, String Year) {
-		 List<StudentOtherMonies> List = null;
+	public List<StudentOtherFee> getStudentOtherList(String studentUuid,String Term, String Year) {
+		 List<StudentOtherFee> List = null;
 			try(
 					Connection conn = dbutils.getConnection();
-					PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherMonies WHERE "
+					PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE "
 							+ "studentUuid = ? AND Term =? AND Year =?;");
 					) {
 				psmt.setString(1, studentUuid);
@@ -129,10 +129,10 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 				psmt.setString(3, Year);
 				try(ResultSet rset = psmt.executeQuery();){
 				
-					List = beanProcessor.toBeanList(rset, StudentOtherMonies.class);
+					List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 				}
 			} catch (SQLException e) {
-				logger.error("SQLException when trying to get StudentOtherMonies List for studentUuid " +studentUuid);
+				logger.error("SQLException when trying to get StudentOtherFee List for studentUuid " +studentUuid);
 	            logger.error(ExceptionUtils.getStackTrace(e));
 	            System.out.println(ExceptionUtils.getStackTrace(e)); 
 		    }
@@ -141,26 +141,26 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#putStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#putStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)
 	 */
 	@Override
-	public boolean putStudentOtherMonies(StudentOtherMonies studentOtherMonies) {
+	public boolean putStudentOtherMonies(StudentOtherFee studentOtherFee) {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentOtherMonies" 
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentOtherFee" 
 			        		+"(Uuid,StudentUuid,OtherstypeUuid,AmountPiad,Term,Year) VALUES (?,?,?,?,?,?);");
      		){
 			   
-	            pstmt.setString(1, studentOtherMonies.getUuid());
-	            pstmt.setString(2, studentOtherMonies.getStudentUuid());
-	            pstmt.setString(3, studentOtherMonies.getOtherstypeUuid());
-	            pstmt.setDouble(4, studentOtherMonies.getAmountPiad());
-	            pstmt.setString(5, studentOtherMonies.getTerm());
-	            pstmt.setString(6, studentOtherMonies.getYear());
+	            pstmt.setString(1, studentOtherFee.getUuid());
+	            pstmt.setString(2, studentOtherFee.getStudentUuid());
+	            pstmt.setString(3, studentOtherFee.getOtherstypeUuid());
+	            pstmt.setDouble(4, studentOtherFee.getAmountPiad());
+	            pstmt.setString(5, studentOtherFee.getTerm());
+	            pstmt.setString(6, studentOtherFee.getYear());
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			logger.error("SQL Exception trying to put StudentOtherMonies: "+studentOtherMonies);
+			logger.error("SQL Exception trying to put StudentOtherFee: "+studentOtherFee);
             logger.error(ExceptionUtils.getStackTrace(e)); 
             System.out.println(ExceptionUtils.getStackTrace(e));
             success = false;
@@ -171,26 +171,26 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#updateStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#updateStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)
 	 */
 	@Override
-	public boolean updateStudentOtherMonies(StudentOtherMonies studentOtherMonies) {
+	public boolean updateStudentOtherMonies(StudentOtherFee studentOtherFee) {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentOtherMonies SET AmountPiad = ?,Term =?,Year =? WHERE StudentUuid =?"
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentOtherFee SET AmountPiad = ?,Term =?,Year =? WHERE StudentUuid =?"
 						+ "AND OtherstypeUuid =?;");
      		){
 			   
 	           
-	            pstmt.setDouble(1, studentOtherMonies.getAmountPiad());
-	            pstmt.setString(2, studentOtherMonies.getTerm());
-	            pstmt.setString(3, studentOtherMonies.getYear());
-	            pstmt.setString(4, studentOtherMonies.getStudentUuid());
-	            pstmt.setString(5, studentOtherMonies.getOtherstypeUuid());
+	            pstmt.setDouble(1, studentOtherFee.getAmountPiad());
+	            pstmt.setString(2, studentOtherFee.getTerm());
+	            pstmt.setString(3, studentOtherFee.getYear());
+	            pstmt.setString(4, studentOtherFee.getStudentUuid());
+	            pstmt.setString(5, studentOtherFee.getOtherstypeUuid());
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
-			logger.error("SQL Exception trying to put StudentOtherMonies: "+studentOtherMonies);
+			logger.error("SQL Exception trying to put StudentOtherFee: "+studentOtherFee);
            logger.error(ExceptionUtils.getStackTrace(e)); 
            System.out.println(ExceptionUtils.getStackTrace(e));
           success = false;
@@ -201,24 +201,24 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#deleteStudentOtherMonies(com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#deleteStudentOtherMonies(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)
 	 */
 	@Override
-	public boolean deleteStudentOtherMonies(StudentOtherMonies studentOtherMonies) {
+	public boolean deleteStudentOtherMonies(StudentOtherFee studentOtherFee) {
 		boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
-	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentOtherMonies"
+	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentOtherFee"
 	         	      		+ " WHERE StudentUuid =? AND OtherstypeUuid =?;");       
 	      		
 	      		){
 	      	
-	    	     pstmt.setString(1, studentOtherMonies.getStudentUuid());
-	             pstmt.setString(2, studentOtherMonies.getOtherstypeUuid());
+	    	     pstmt.setString(1, studentOtherFee.getStudentUuid());
+	             pstmt.setString(2, studentOtherFee.getOtherstypeUuid());
 		         pstmt.executeUpdate();
 		     
 	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting studentOtherMonies : " +studentOtherMonies);
+	      	   logger.error("SQL Exception when deletting studentOtherFee : " +studentOtherFee);
 	           logger.error(ExceptionUtils.getStackTrace(e));
 	           System.out.println(ExceptionUtils.getStackTrace(e));
 	           success = false;
@@ -232,15 +232,15 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherMoniesList()
 	 */
 	@Override
-	public List<StudentOtherMonies> getStudentOtherMoniesList() {
-		List<StudentOtherMonies>  list = null;		
+	public List<StudentOtherFee> getStudentOtherMoniesList() {
+		List<StudentOtherFee>  list = null;		
 		 try(   
       		Connection conn = dbutils.getConnection();
-      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentOtherMonies;");          		
+      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee;");          		
   		) {			     
 			 try( ResultSet rset = pstmt.executeQuery();){
 	     	       
-		  list = beanProcessor.toBeanList(rset, StudentOtherMonies.class);
+		  list = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 	         	   }
 			
          
@@ -259,17 +259,17 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherMoniesDistinct(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherMonies> getStudentOtherMoniesDistinct(String studentUuid) {
-		List<StudentOtherMonies> list = null;
+	public List<StudentOtherFee> getStudentOtherMoniesDistinct(String studentUuid) {
+		List<StudentOtherFee> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT otherstypeUuid FROM StudentOtherMonies WHERE"
+        		 PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT otherstypeUuid FROM StudentOtherFee WHERE"
         		 		+ " studentUuid = ?;");
      	   ) {
          	   pstmt.setString(1, studentUuid);      
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
-     	       list = beanProcessor.toBeanList(rset, StudentOtherMonies.class);
+     	       list = beanProcessor.toBeanList(rset, StudentOtherFee.class);
          	   }
         } catch (SQLException e) {
             logger.error("SQLException when getting DISTINCT Student OtherMonies List"); 
@@ -284,18 +284,18 @@ public class StudentOtherMoniesDAO extends GenericDAO implements SchoolStudentOt
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherMoniesDAO#getStudentOtherMonies(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherMonies> getStudentOtherMoniesList(String studentUuid, String otherstypeUuid) {
-		List<StudentOtherMonies> list = null;
+	public List<StudentOtherFee> getStudentOtherMoniesList(String studentUuid, String otherstypeUuid) {
+		List<StudentOtherFee> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherMonies WHERE"
+        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE"
         		 		+ " studentUuid = ? AND otherstypeUuid = ?;");
      	   ) {
          	   pstmt.setString(1, studentUuid);  
          	   pstmt.setString(2, otherstypeUuid);  
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
-     	       list = beanProcessor.toBeanList(rset, StudentOtherMonies.class);
+     	       list = beanProcessor.toBeanList(rset, StudentOtherFee.class);
          	   }
         } catch (SQLException e) {
             logger.error("SQLException when getting  Student OtherMonies List"); 

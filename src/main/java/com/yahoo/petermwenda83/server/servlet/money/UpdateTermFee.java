@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -88,9 +88,9 @@ public class UpdateTermFee extends HttpServlet{
 			school = (Account) element.getObjectValue();
 		}
 		
-		 ExamConfig examConfig = new ExamConfig();
+		 SysConfig sysConfig = new SysConfig();
 			if(examConfigDAO.getExamConfig(schooluuid) !=null){
-				examConfig = examConfigDAO.getExamConfig(schooluuid);
+				sysConfig = examConfigDAO.getExamConfig(schooluuid);
 			}
 
 		if(StringUtils.isBlank(Term)){
@@ -99,10 +99,10 @@ public class UpdateTermFee extends HttpServlet{
 		}else if(StringUtils.isBlank(Year)){
 			session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, EMPTY_YEAR); 
 
-		}else if(!StringUtils.equals(Term, examConfig.getTerm())){
+		}else if(!StringUtils.equals(Term, sysConfig.getTerm())){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_FEE_NOT_UPDATED_WRONG_TERM_YEAR); 
 			   
-	   }else if(!StringUtils.equals(Year, examConfig.getYear())){
+	   }else if(!StringUtils.equals(Year, sysConfig.getYear())){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_FEE_NOT_UPDATED_WRONG_TERM_YEAR); 
 			   
 	   }else if(StringUtils.isBlank(BAmount)){

@@ -30,7 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.bean.exam.ExamConfig;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
@@ -53,7 +53,7 @@ public class PerClassFinanceReport extends HttpServlet{
 
 	final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
 
-	ExamConfig examConfig;
+	SysConfig sysConfig;
 
 	Locale locale = new Locale("en","KE"); 
 	NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
@@ -145,7 +145,7 @@ public class PerClassFinanceReport extends HttpServlet{
 			school = (Account) element.getObjectValue();
 		}
 
-		examConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 
 		List<Student> studentList = new ArrayList<>();
 		studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuid);
@@ -162,9 +162,9 @@ public class PerClassFinanceReport extends HttpServlet{
 
 
 		
-		examConfig = new ExamConfig();
+		sysConfig = new SysConfig();
 		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			examConfig = examConfigDAO.getExamConfig(school.getUuid());
+			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
@@ -223,7 +223,7 @@ public class PerClassFinanceReport extends HttpServlet{
 
 		XSSFRow r0 = s.createRow(0);
 		XSSFCell cell = r0.createCell((short) 0);
-		cell.setCellValue(ch.createRichTextString(roomHash.get(classroomuuid)+" Fee Payment Analysis,  TERM " + examConfig.getTerm()+"  "+ examConfig.getYear()));
+		cell.setCellValue(ch.createRichTextString(roomHash.get(classroomuuid)+" Fee Payment Analysis,  TERM " + sysConfig.getTerm()+"  "+ sysConfig.getYear()));
 		cell.setCellStyle(style);
 
 		s.addMergedRegion(new CellRangeAddress(0,0,3,0));//row from,row to,col from, col to

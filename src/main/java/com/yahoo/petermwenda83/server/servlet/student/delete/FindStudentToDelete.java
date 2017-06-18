@@ -70,7 +70,7 @@ public class FindStudentToDelete extends HttpServlet{
 	   }
 
        session.setAttribute(SessionConstants.STUENT_DELETE_PARAM, paramHash); 
-       response.sendRedirect("examConfig.jsp");  
+       response.sendRedirect("sysConfig.jsp");  
        return;
 	
    }
