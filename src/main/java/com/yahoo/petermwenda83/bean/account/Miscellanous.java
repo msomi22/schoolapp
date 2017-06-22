@@ -100,7 +100,7 @@ public class Miscellanous extends StorableBeanByUUID{
 	public boolean equals(Object obj) {
 		boolean isEqual = false;
 
-		if(obj instanceof SmsApi) {	
+		if(obj instanceof Miscellanous) {	
 			Miscellanous type = (Miscellanous)obj;
 
 			isEqual = type.getUuid().equals(getUuid());		

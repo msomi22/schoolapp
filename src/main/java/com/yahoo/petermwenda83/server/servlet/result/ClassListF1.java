@@ -39,7 +39,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
-import com.yahoo.petermwenda83.persistence.HibernateUtil;
+import com.yahoo.petermwenda83.persistence.AppHibernateUtil;
 import com.yahoo.petermwenda83.persistence.StorageDAO;
 import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -114,7 +114,7 @@ public class ClassListF1 extends HttpServlet{
 		super.init(config);
 		logger = Logger.getLogger(this.getClass());
 		
-		sessionFactory = HibernateUtil.getSessionFactory();
+		sessionFactory = AppHibernateUtil.getSessionFactory();
 		storageDAO = new StorageDAOImpl(sessionFactory); 
 		
 

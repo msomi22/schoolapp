@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.staff.Staff;
-import com.yahoo.petermwenda83.persistence.HibernateUtil;
+import com.yahoo.petermwenda83.persistence.AppHibernateUtil;
 import com.yahoo.petermwenda83.persistence.StorageDAO;
 import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
@@ -59,7 +59,7 @@ public class Login extends HttpServlet{
 		onlineUsersMap = new HashMap<String,String>();
 		context = getServletContext();
 		
-		sessionFactory = HibernateUtil.getSessionFactory();
+		sessionFactory = AppHibernateUtil.getSessionFactory();
 		storageDAO = new StorageDAOImpl(sessionFactory); 
 
 	}
@@ -80,7 +80,7 @@ public class Login extends HttpServlet{
 		session = request.getSession(true);
 
 		String schoolusername = StringUtils.trimToEmpty(request.getParameter("schoolusername"));
-		String staffacesslevel = StringUtils.trimToEmpty(request.getParameter("staffacesslevel"));
+		String staffacesslevel = StringUtils.trimToEmpty(request.getParameter("staffposition"));
 		String staffusername = StringUtils.trimToEmpty(request.getParameter("staffusername"));
 		String staffpassword = StringUtils.trimToEmpty(request.getParameter("staffpassword"));
 		
@@ -122,6 +122,8 @@ public class Login extends HttpServlet{
 					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
 					request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_POSITION, staffacesslevel);
 					response.sendRedirect("school/schoolIndex.jsp"); 
+					
+					logger.info("success "); 
 
 				}else {
 					session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_WRONG_USER_DETAIL);

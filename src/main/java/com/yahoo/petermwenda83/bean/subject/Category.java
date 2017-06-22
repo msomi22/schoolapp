@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 
-/**
+/** 
  * @author peter
  *
  */

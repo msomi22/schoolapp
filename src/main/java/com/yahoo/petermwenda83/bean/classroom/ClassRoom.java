@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 
-/**
+/** 
  *  A stream object in a school
  *  
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>

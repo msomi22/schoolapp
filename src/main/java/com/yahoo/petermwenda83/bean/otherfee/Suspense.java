@@ -11,7 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 
-/**
+/** 
  * @author peter
  *
  */

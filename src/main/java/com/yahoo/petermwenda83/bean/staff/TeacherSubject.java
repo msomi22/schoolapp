@@ -28,7 +28,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 
 
-/**
+/** 
  * Teacher Subject-ClassRoom Allocation
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *

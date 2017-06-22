@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,6 +15,8 @@ import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.staff.AcessLevel;
+import com.yahoo.petermwenda83.persistence.AppHibernateUtil;
 import com.yahoo.petermwenda83.persistence.StorageDAO;
 import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
 
@@ -40,8 +41,11 @@ public class TestStorageImpl {
 	@Before
 	public void setUp() throws Exception {
 		try {
-            // Create the SessionFactory from hibernate.cfg.xml            
-			sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+            // Create the SessionFactory from hibernate.cfg.xml   
+			
+			//sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+			
+			sessionFactory = AppHibernateUtil.getSessionFactory();
         	
 			storageDAO = new StorageDAOImpl(sessionFactory);
 			
@@ -137,7 +141,21 @@ public class TestStorageImpl {
 	public void testGetAll() {
 			
 		List<StorableBeanByUUID> list = storageDAO.getAll(Account.class);
+		List<StorableBeanByUUID> list2 = storageDAO.getAll(AcessLevel.class);
 		assertEquals(list.size(), 2);
+		
+		//System.out.println("******************************AcessLevel List " + list2.size());
+		
+		list2.forEach(access -> {
+			AcessLevel accessLevel = (AcessLevel) access;
+			System.out.println("*****************" + accessLevel); 
+		});
+		
+		/*for(StorableBeanByUUID obj : list2){
+			AcessLevel access = (AcessLevel) obj;
+			System.out.println("*****************" + access.getDescription()); 
+		}*/
+		
 		
 		System.out.println("1st Account is " + list.get(0));
 	}

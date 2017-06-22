@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 
 <%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
+<%@page import="com.yahoo.petermwenda83.bean.StorableBeanByUUID"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+
+<%@page import="com.yahoo.petermwenda83.persistence.StorageDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.StorageDAOImpl"%>
+<%@page import="com.yahoo.petermwenda83.persistence.AppHibernateUtil"%>
+
+<%@page import="org.hibernate.SessionFactory"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
@@ -10,9 +17,15 @@
 
 <%
 
-List<AcessLevel> acessLevelList = new ArrayList<>(); 
+SessionFactory sessionFactory = AppHibernateUtil.getSessionFactory();
+
+StorageDAO storageDAO = new StorageDAOImpl(sessionFactory); 
 
 
+List<StorableBeanByUUID> list = storageDAO.getAll(AcessLevel.class); 
+
+
+//http://localhost:8080/school/
 %>
 
 
@@ -47,7 +60,7 @@ List<AcessLevel> acessLevelList = new ArrayList<>();
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
-			<p class="login-box-msg">Sign in here</p>
+			<p class="login-box-msg">Sign in here</p> 
 
 
 			<%
@@ -80,7 +93,7 @@ List<AcessLevel> acessLevelList = new ArrayList<>();
 			<form action="schoolLogin" method="post">
 
 				<div class="form-group has-feedback">
-					<input type="text" class="form-control" placeholder="Username">
+					<input type="text" class="form-control" name="schoolusername" placeholder="School Username"> 
 					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 
@@ -88,22 +101,27 @@ List<AcessLevel> acessLevelList = new ArrayList<>();
 					<label>Category</label> <select class="form-control"
 						name="staffposition" required>
 						<%
-                  int count = 1;
-                  if (acessLevelList != null) {
-                      for (AcessLevel access : acessLevelList) {
-                   %>
-						<option value="<%=access.getUuid() %>"><%=access.getDescription() %></option>
-						<%
-                          count++;
-                      }
-                  }
-                 %>
+						int count = 1;
+						 for(StorableBeanByUUID object : list){
+							 AcessLevel acessLevel = (AcessLevel) object;
+							 %>
+							 <option value="<%=acessLevel.getUuid() %>"><%=acessLevel.getDescription() %></option>
+							 <%
+							 
+							 count++;
+						 }
+                        %>
 					</select>
+				</div>
+				
+				<div class="form-group has-feedback">
+					<input type="text" class="form-control" name="staffusername" placeholder="Staff Username"> 
+					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 
 
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password">
+					<input type="password" class="form-control" name="staffpassword" placeholder="Password"> 
 					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 

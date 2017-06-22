@@ -24,7 +24,7 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 
 
-/**
+/** 
  * Manages Student's Parent/Relative --During admission
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>

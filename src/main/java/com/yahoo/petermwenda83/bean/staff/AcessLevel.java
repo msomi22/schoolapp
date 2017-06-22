@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 
-/**
+/** 
  * A staff Has A position , Either a Principal ,Deputy, Hod, Teacher , ...
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
@@ -49,6 +49,34 @@ public class AcessLevel extends StorableBeanByUUID{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {        
+        boolean isEqual = false;
+		
+		if(obj instanceof AcessLevel) {	
+			AcessLevel type = (AcessLevel)obj;
+			
+			isEqual = type.getUuid().equals(getUuid());		
+		}
+		
+		return isEqual;
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return getUuid().hashCode();
+	}
+
+
 	
 	
 

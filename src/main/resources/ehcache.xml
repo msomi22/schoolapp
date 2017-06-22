@@ -2,7 +2,7 @@
 	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
 	monitoring="autodetect" dynamicConfig="true">
 
-	<diskStore path="java.io.tmpdir/School" />
+	<diskStore path="java.io.tmpdir/schoolnew" />
 
     <defaultCache
             name="defaut"

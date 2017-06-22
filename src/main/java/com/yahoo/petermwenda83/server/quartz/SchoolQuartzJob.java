@@ -8,7 +8,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.yahoo.petermwenda83.persistence.HibernateUtil;
+import com.yahoo.petermwenda83.persistence.AppHibernateUtil;
 import com.yahoo.petermwenda83.persistence.StorageDAO;
 import com.yahoo.petermwenda83.persistence.StorageDAOImpl;
 
@@ -25,7 +25,7 @@ public class SchoolQuartzJob implements Job{
 		
 		   super();
 	      
-		   sessionFactory = HibernateUtil.getSessionFactory();
+		   sessionFactory = AppHibernateUtil.getSessionFactory();
 		   storageDAO = new StorageDAOImpl(sessionFactory); 
 	       
 		

@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 
-/**
+/** 
  * Exam/Term configuration object
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>

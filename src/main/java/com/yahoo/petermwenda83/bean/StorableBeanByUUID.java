@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-/**
+/** 
  * An object that can be persisted with its primary key as an uuid.
  * <p>
  * 

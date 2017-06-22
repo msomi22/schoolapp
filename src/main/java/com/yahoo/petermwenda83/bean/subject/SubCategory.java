@@ -13,9 +13,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.student.StudentSubject;
 
-/**
+/** 
  * @author peter
  *
  */
@@ -23,6 +22,7 @@ import com.yahoo.petermwenda83.bean.student.StudentSubject;
 @Table( name = "subcategory" )
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SubCategory extends StorableBeanByUUID {
+	
 	
 	@ManyToOne
 	@JoinColumn(name="accountId", referencedColumnName="uuid")
@@ -125,5 +125,10 @@ public class SubCategory extends StorableBeanByUUID {
 		return "SubCategory [account=" + account.getUsername() + ", category=" + category.getDescription() + ", subject=" + subject.getCode() + ", getUuid()="
 				+ getUuid() + "]";
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8695012456366367048L;
 
 }

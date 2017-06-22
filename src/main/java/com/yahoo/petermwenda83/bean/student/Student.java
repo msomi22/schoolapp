@@ -26,7 +26,7 @@ import com.yahoo.petermwenda83.bean.StorableBeanByUUID;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.SmsApi;
 
-/**
+/** 
  * Has Student;s Basic details 
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>

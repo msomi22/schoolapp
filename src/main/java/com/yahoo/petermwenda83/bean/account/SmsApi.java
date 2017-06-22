@@ -130,7 +130,7 @@ public class SmsApi extends StorableBeanById{
 	 */
 	@Override
 	public int hashCode() {
-		return getUuid().hashCode();
+		return uuid.hashCode();
 	}
 
 	/**
