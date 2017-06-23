@@ -57,27 +57,25 @@ public class ChatDAO extends GenericDAO implements SchoolChatDAO {
 	 * @see com.yahoo.petermwenda83.persistence.chat.SchoolChatDAO#getChat(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Chat getChat(String senderUuid, String receiverUuid) {
+	public Chat getChat(String senderId,String receiverId) {
 		Chat chat = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Chat WHERE senderUuid = ? AND receiverUuid =? ;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Chat WHERE senderId = ? AND receiverId =? ;");       
         		
         		){
         	
-        	 pstmt.setString(1, senderUuid);
-        	 pstmt.setString(2, receiverUuid);
+        	 pstmt.setString(1, senderId);
+        	 pstmt.setString(2, receiverId);
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
 	    	 chat  = beanProcessor.toBean(rset,Chat.class);
 	   }
         	
-        	
-        	
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting Chat for senderID : " + senderUuid +" and receiverID"+ receiverUuid);
+        	 logger.error("SQL Exception when getting Chat for senderId " + senderId + " and receiverId " + receiverId);
              logger.error(ExceptionUtils.getStackTrace(e));
              System.out.println(ExceptionUtils.getStackTrace(e));
         }
@@ -93,15 +91,16 @@ public class ChatDAO extends GenericDAO implements SchoolChatDAO {
 		
 		  try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Chat" 
-			        		+"(Uuid,SenderUuid,ReceiverUuid,Message,DateSent,MgsStatus) VALUES (?,?,?,?,?,?);");
+			        		+"(uuid,accountId,senderId,receiverId,message,isRead,dateSent) VALUES (?,?,?,?,?,?,?);");
 		             ){
 			   
 	            pstmt.setString(1, chat.getUuid());
-	            pstmt.setString(2, chat.getSenderUuid());
-	            pstmt.setString(3, chat.getReceiverUuid());	  
-	            pstmt.setString(4, chat.getMessage());	  
-	            pstmt.setTimestamp(5, new Timestamp(chat.getDateSent().getTime()));
-	            pstmt.setString(6, chat.getMgsStatus());	  
+	            pstmt.setString(2, chat.getAccountId());
+	            pstmt.setString(3, chat.getSenderId());	  
+	            pstmt.setString(4, chat.getReceiverId());
+	            pstmt.setString(5, chat.getMessage());	  
+	            pstmt.setString(6, chat.getIsRead());	
+	            pstmt.setTimestamp(7, new Timestamp(chat.getDateSent().getTime()));
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
@@ -118,21 +117,21 @@ public class ChatDAO extends GenericDAO implements SchoolChatDAO {
 	 * @see com.yahoo.petermwenda83.persistence.chat.SchoolChatDAO#deleteChat(com.yahoo.petermwenda83.bean.chat.Chat)
 	 */
 	@Override
-	public boolean deleteChat(Chat chat) {
+	public boolean deleteChat(String senderId,String receiverId) {
 		boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
 	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Chat"
-	         	      		+ " WHERE senderUuid = ? AND receiverUuid =?;");       
+	         	      		+ " WHERE senderId = ? AND receiverId =?;");       
 	      		
 	      		){
 	      	
-	      	     pstmt.setString(1, chat.getSenderUuid());
-	      	     pstmt.setString(2, chat.getReceiverUuid());
+	      	     pstmt.setString(1, senderId);
+	      	     pstmt.setString(2, receiverId);
 		         pstmt.executeUpdate();
 		     
 	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting Chat : " +chat);
+	      	   logger.error("SQL Exception when deletting Chat senderId " + senderId + " receiverId " + receiverId);
 	           logger.error(ExceptionUtils.getStackTrace(e));
 	           System.out.println(ExceptionUtils.getStackTrace(e));
 	           success = false;
@@ -146,22 +145,23 @@ public class ChatDAO extends GenericDAO implements SchoolChatDAO {
 	 * @see com.yahoo.petermwenda83.persistence.chat.SchoolChatDAO#getChatList(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<Chat> getChatList(Chat chat) {
+	public List<Chat> getChatList(String senderId,String receiverId) {
 		List<Chat> list = null;
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Chat WHERE senderUuid = ? AND receiverUuid =? OR senderUuid = ? AND receiverUuid =?;");    		   
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Chat WHERE (senderId = ? AND receiverId =?) OR "
+     	         		+ "(receiverId = ? AND senderId =?) ;");    		   
      	   ) {
-         	   pstmt.setString(1, chat.getSenderUuid());    
-         	   pstmt.setString(2, chat.getReceiverUuid()); 
-         	   pstmt.setString(3, chat.getReceiverUuid());    
-        	   pstmt.setString(4, chat.getSenderUuid()); 
+         	   pstmt.setString(1, senderId);    
+         	   pstmt.setString(2, receiverId); 
+         	   pstmt.setString(3, receiverId);    
+        	   pstmt.setString(4, senderId); 
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
      	       list = beanProcessor.toBeanList(rset, Chat.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting Chat List for Chat " + chat ); 
+            logger.error("SQLException when getting Chat List for senderId " + senderId + " and receiverId " + receiverId); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
@@ -169,29 +169,6 @@ public class ChatDAO extends GenericDAO implements SchoolChatDAO {
 	
 	}
 
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.chat.SchoolChatDAO#getChatList(java.lang.String)
-	 */
-	@Override
-	public List<Chat> getChatList(String senderUuid) {
-		List<Chat> list = null;
-     
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Chat WHERE senderUuid = ?;");    		   
-     	   ) {
-         	   pstmt.setString(1, senderUuid);    
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, Chat.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting Chat List for senderID " + senderUuid); 
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-        return list;
 	
-	}
 
 }

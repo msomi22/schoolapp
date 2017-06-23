@@ -14,36 +14,30 @@ import com.yahoo.petermwenda83.bean.book.StudentBook;
 public interface SchoolStudentBookDAO {
 	/**
 	 * 
-	 * @param studentUuid
+	 * @param accountId
+	 * @param bookId
+	 * @param hasReturned
 	 * @return
 	 */
-	public StudentBook getStudentBookByStatus(String ISBookUuidBN,String borrowStatus);
+	public StudentBook getStudentBook(String bookId, String hasReturned);
 	/**
 	 * 
-	 * @param studentUuid
-	 * @param borrowStatus
+	 * @param accountId
+	 * @param studentId
+	 * @param bookId
+	 * @param hasReturned
 	 * @return
 	 */
-	public StudentBook getStudentBook(String studentUuid,String BookUuid);
+	public StudentBook getStudentBook(String studentId, String bookId, String hasReturned);
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @param hasReturned
+	 * @return
+	 */
+	public List<StudentBook> getStudentBooks(String studentId, String hasReturned);
 	
-	/**
-	 * 
-	 * @param studentUuid
-	 * @return
-	 */
-	public List<StudentBook> getStudentBookByStudentId(String studentUuid,String borrowStatus);
-	/**
-	 * 
-	 * @param ISBN
-	 * @return
-	 */
-	public StudentBook getStudentBookByUuid(String BookUuid);
-	/**
-	 * 
-	 * @param borrowStatus
-	 * @return
-	 */
-	public StudentBook getStudentBookByBorrowStatus(String borrowStatus);
 	/**
 	 * 
 	 * @param studentBook
@@ -58,14 +52,17 @@ public interface SchoolStudentBookDAO {
 	public boolean ReturnBook(StudentBook studentBook);
 	/**
 	 * 
-	 * @param studentBook
+	 * @param accountId
+	 * @param bookId
 	 * @return
 	 */
-	public boolean deleteStudentBook(StudentBook studentBook);
+	public boolean deleteStudentBook(String accountId,String bookId);
 	/**
 	 * 
+	 * @param accountId
+	 * @param studentId
 	 * @return
 	 */
-	public List<StudentBook> getStudentBookList(String borrowStatus);
+	public List<StudentBook> getStudentBookList(String accountId,String studentId);
 
 }

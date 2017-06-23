@@ -23,25 +23,18 @@ public interface SchoolChatDAO {
 	/**
 	 * Get the chat object for the given senderuuid and receiveruuid
 	 * 
-	 * @param senderuuid This is the sender ID
-	 * @param receiveruuid This is the recipient ID
+	 * @param senderId This is the sender ID
+	 * @param receiverId This is the recipient ID
 	 * @return the {@link Chat} Object
 	 */
-	public Chat getChat(String senderuuid,String receiveruuid);
+	public Chat getChat(String senderId,String receiverId);
 	
-	/**
-	 * 
-	 * @param chat The chat object
-	 * @return A List of type {@link Chat} 
-	 */
-	 
-	public List<Chat> getChatList(Chat chat);
 	/**
 	 * 
 	 * @param senderuuid The sender ID
 	 * @return A {@link List} of type {@link Chat} for the given sender ID
 	 */
-	public List<Chat> getChatList(String senderuuid);
+	public List<Chat> getChatList(String senderId,String receiverId);
 	/**
 	 * 
 	 * @param chat The chat object
@@ -53,6 +46,6 @@ public interface SchoolChatDAO {
 	 * @param chat The chat object
 	 * @return Whether the {@link Chat} was deleted  successfully
 	 */
-	public boolean deleteChat(Chat chat);
+	public boolean deleteChat(String senderId,String receiverId);
 
 }

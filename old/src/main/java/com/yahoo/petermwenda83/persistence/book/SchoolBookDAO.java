@@ -12,13 +12,6 @@ import com.yahoo.petermwenda83.bean.book.Book;
  *
  */
 public interface SchoolBookDAO {
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param ISBN
-	 * @return
-	 */
-	public Book getBookByISBN(String schoolAccountUuid,String ISBN);
 	
 	/**
 	 * 
@@ -27,21 +20,21 @@ public interface SchoolBookDAO {
 	 * @return
 	 */
 	
-	public Book getBookByUUID(String schoolAccountUuid,String Uuid);
+	public Book getBookById(String accountId,String uuid);
 	/**
 	 * 
 	 * @param schoolAccountUuid
 	 * @param BookStatus
 	 * @return
 	 */
-	public Book getBookByBookStatus(String ISBN,String BookStatus);
+	public Book isBookAvailable(String accountId, String uuid, String isAvailable);
 	/**
 	 * 
 	 * @param schoolAccountUuid
 	 * @param BorrowStatus
 	 * @return
 	 */
-	public Book getBookByBorrowStatus(String ISBN,String BorrowStatus);
+	public Book getBookCategory(String accountId, String uuid, String category);
 	/**
 	 * 
 	 * @param book
@@ -59,13 +52,13 @@ public interface SchoolBookDAO {
 	  * @param book
 	  * @return
 	  */
-	public boolean deleteBook(Book book);
+	public boolean deleteBook(String accountId,String uuid);
 	/**
 	 * 
 	 * @param schoolAccountUuid
 	 * @return
 	 */
-	public List<Book> getBookList(String schoolAccountUuid);
+	public List<Book> getBookList(String accountId);
 	/**
 	 * 
 	 * @param schoolAccountUuid
@@ -73,6 +66,6 @@ public interface SchoolBookDAO {
 	 * @param endIndex
 	 * @return
 	 */
-	public List<Book> getBookList(String schoolAccountUuid, int startIndex , int endIndex);
+	public List<Book> getBookList(String accountId, int startIndex , int endIndex);
 
 }
