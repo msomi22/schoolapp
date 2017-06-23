@@ -1,0 +1,97 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+
+<hibernate-configuration>
+	<session-factory>
+	    <!-- SQL dialect -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<!-- Connection settings -->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
+		<property name="hibernate.connection.username">school</property>
+		<property name="hibernate.connection.password">AllaManO1</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/schooldb</property>
+
+		<property name="connection_pool_size">2</property>
+		<property name="statement_cache.size">2</property>
+		
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">false</property>
+		
+		<property name="use_outer_join">true</property>
+
+		<!-- Drop and re-create all database on startup -->
+		<!-- <property name="hibernate.hbm2ddl.auto">create-drop</property>  -->
+		
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="current_session_context_class">thread</property>
+
+
+		<!-- Add 2nd Level Cache including query caching -->
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="org.ehcache.configurationResourceName">/ehcache.xml</property>
+
+
+		<!-- Mapped classes -->
+		<mapping class="com.yahoo.petermwenda83.bean.account.Account" />
+		<mapping class="com.yahoo.petermwenda83.bean.account.OutGoingSMS" />
+		<mapping class="com.yahoo.petermwenda83.bean.account.SmsApi" />
+		<mapping class="com.yahoo.petermwenda83.bean.account.Miscellanous" />
+		<mapping class="com.yahoo.petermwenda83.bean.staff.AcessLevel" />
+		
+		<!-- 
+		<mapping class="com.yahoo.petermwenda83.bean.student.StudentPrimary" />
+		<mapping class="com.yahoo.petermwenda83.bean.student.Student" />
+		<mapping class="com.yahoo.petermwenda83.bean.student.StudentSubject" />
+		<mapping class="com.yahoo.petermwenda83.bean.student.guardian.StudentParent" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.subject.Category" />
+		<mapping class="com.yahoo.petermwenda83.bean.subject.SubCategory" />
+		<mapping class="com.yahoo.petermwenda83.bean.subject.Subject" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.staff.Staff" />
+		<mapping class="com.yahoo.petermwenda83.bean.staff.ClassTeacher" />
+		<mapping class="com.yahoo.petermwenda83.bean.staff.TeacherSubject" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.money.StudentFee" />
+		<mapping class="com.yahoo.petermwenda83.bean.otherfee.Suspense" />
+		<mapping class="com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee" />
+		<mapping class="com.yahoo.petermwenda83.bean.otherfee.RevertedMoney" />
+		<mapping class="com.yahoo.petermwenda83.bean.otherfee.OtherFee" />
+		<mapping class="com.yahoo.petermwenda83.bean.money.TermFee" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.money.PocketMoney" />
+		<mapping class="com.yahoo.petermwenda83.bean.money.Deposit" />
+		<mapping class="com.yahoo.petermwenda83.bean.money.Withdraw" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.exam.SysConfig" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.exam.Perfomance" />
+		<mapping class="com.yahoo.petermwenda83.bean.exam.GradingSystem" />
+		<mapping class="com.yahoo.petermwenda83.bean.exam.Exam" />
+		<mapping class="com.yahoo.petermwenda83.bean.exam.Deviation" />
+		<mapping class="com.yahoo.petermwenda83.bean.exam.BarWeight" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.classroom.Stream" />
+		<mapping class="com.yahoo.petermwenda83.bean.classroom.ClassRoom" />
+		
+		
+		<mapping class="com.yahoo.petermwenda83.bean.book.StudentBook" />
+		<mapping class="com.yahoo.petermwenda83.bean.book.Book" />
+		
+		<mapping class="com.yahoo.petermwenda83.bean.chat.Chat" />
+		
+		 -->
+		
+		
+		
+		
+		
+
+	</session-factory>
+</hibernate-configuration>
