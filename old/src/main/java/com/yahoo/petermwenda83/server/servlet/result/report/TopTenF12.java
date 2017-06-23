@@ -50,10 +50,10 @@ import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
-import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.DeviationDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
@@ -98,12 +98,12 @@ public class TopTenF12 extends HttpServlet{
 
 	private static PerfomanceDAO perfomanceDAO;
 	private static StudentDAO studentDAO;
-	private static RoomDAO roomDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static StreamDAO streamDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static DeviationDAO deviationDAO;
 	private static PrimaryDAO primaryDAO;
-	private static ClassesDAO classesDAO;
+	private static ClassDAO classDAO;
 	
 
 	String schoolusername = "";
@@ -157,12 +157,12 @@ public class TopTenF12 extends HttpServlet{
 		statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
 		perfomanceDAO = PerfomanceDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		deviationDAO = DeviationDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
-		classesDAO = ClassesDAO.getInstance();
+		classDAO = ClassDAO.getInstance();
 		
 		USER = System.getProperty("user.name");
 		path = "/home/"+USER+"/school/logo/logo.png";
@@ -200,7 +200,7 @@ public class TopTenF12 extends HttpServlet{
 
 
 
-		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
 		
 		 EndTermOnly = sysConfig.geteT();
@@ -236,14 +236,14 @@ public class TopTenF12 extends HttpServlet{
 		}
 		
 		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = roomDAO.getAllRooms(school.getUuid()); 
+		classroomList = streamDAO.getAllRooms(school.getUuid()); 
 		for(ClassRoom c : classroomList){
 			roomHash.put(c.getUuid() , c.getRoomName());
 		}
 		
 		String classname = "";
-		if(classesDAO.getClass(classID) !=null){
-		   Stream cls = classesDAO.getClass(classID);
+		if(classDAO.getClass(classID) !=null){
+		   Stream cls = classDAO.getClass(classID);
 		   classname = cls.getClassName();
 		 }
 		

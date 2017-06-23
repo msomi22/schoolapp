@@ -24,7 +24,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
 import com.yahoo.petermwenda83.bean.subject.Subject;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
@@ -72,7 +72,7 @@ public class AddStudentBacic extends HttpServlet{
 	private static PrimaryDAO primaryDAO;
 	private static StudentSubjectDAO studentSubjectDAO;
 	private static SubjectDAO subjectDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	SysConfig sysConfig;
 	
 
@@ -88,7 +88,7 @@ public class AddStudentBacic extends HttpServlet{
        primaryDAO = PrimaryDAO.getInstance();
        studentSubjectDAO = StudentSubjectDAO.getInstance();
        subjectDAO = SubjectDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
    }
    
    protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -204,8 +204,8 @@ public class AddStudentBacic extends HttpServlet{
 	   }else{
 		   
 		   sysConfig = new SysConfig();
-			if(examConfigDAO.getExamConfig(schooluuid) !=null){
-				sysConfig = examConfigDAO.getExamConfig(schooluuid);
+			if(sysConfigDAO.getExamConfig(schooluuid) !=null){
+				sysConfig = sysConfigDAO.getExamConfig(schooluuid);
 			}
 			
 			 Calendar calendar = Calendar.getInstance();

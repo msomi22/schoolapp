@@ -1,7 +1,7 @@
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>

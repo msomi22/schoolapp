@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 /** 
@@ -36,7 +36,7 @@ public class AddRoom extends HttpServlet{
 	private String [] validClassNames;
 	private String [] A_Z;
 	
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	ClassRoom classRoom;
 
 	/**    
@@ -47,7 +47,7 @@ public class AddRoom extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       roomDAO = RoomDAO.getInstance();
+       streamDAO = StreamDAO.getInstance();
        validClassNames = new String[] {"FORM 1","FORM 2","FORM 3","FORM 4"};
        A_Z = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
        //validClassNamesList =  Arrays.asList(validClassNames);
@@ -76,7 +76,7 @@ public class AddRoom extends HttpServlet{
       }else if(!lengthValid(roomname)){
 	 	   session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_NAME_INVALID); 
 		   
-	   }else if(roomDAO.getroomByRoomName(schooluuid, roomname) !=null){
+	   }else if(streamDAO.getroomByRoomName(schooluuid, roomname) !=null){
     	   session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_EXIST); 
     	   
        }else{
@@ -85,7 +85,7 @@ public class AddRoom extends HttpServlet{
     	    classRoom.setSchoolAccountUuid(schooluuid);
     	    classRoom.setRoomName(roomname.toUpperCase());
     	    
-    	    if(roomDAO.putroom(classRoom)){
+    	    if(streamDAO.putroom(classRoom)){
     	    	session.setAttribute(SessionConstants.ROOM_REG_SUCCESS, SUCCESS_ROOM_ADD); 
     	    }else{
     	    	session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_ADD); 

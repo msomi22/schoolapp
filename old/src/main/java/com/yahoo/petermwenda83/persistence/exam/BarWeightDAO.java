@@ -24,22 +24,22 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 	private static BarWeightDAO barWeightDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	public static BarWeightDAO getInstance(){
-		
+
 		if(barWeightDAO == null){ 
 			barWeightDAO = new BarWeightDAO();		
 		}
 		return barWeightDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public BarWeightDAO() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -50,18 +50,18 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolBarWeightDAO#getBarWeight(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public BarWeight getBarWeight(String schoolAccountUuid, String studentUuid,String year) {
+	public BarWeight getBarWeight(String accountId,String studentId,String year) {
 		BarWeight barWeight = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM BarWeight"
-						+ " WHERE schoolAccountUuid = ? AND studentUuid =? AND year =?;");       
+						+ " WHERE accountId = ? AND studentId =? AND year =?;");       
 
 				){
 
-			pstmt.setString(1, schoolAccountUuid); 
-			pstmt.setString(2, studentUuid); 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, studentId); 
 			pstmt.setString(3, year); 
 			rset = pstmt.executeQuery();
 			while(rset.next()){
@@ -74,47 +74,47 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 			logger.error(ExceptionUtils.getStackTrace(e));
 
 		}
-     
+
 		return barWeight; 
 	}
-	
+
 
 	@Override
-	public boolean ExistBarWeight(String schoolAccountUuid, String studentUuid, String year) {
+	public boolean ExistBarWeight(String accountId,String studentId,String year) {
 		boolean studentexist = false;
-		
-		String the_schoolAccountUuid = "";
-		String the_studentUuid = "";
-		String the_year = "";
-		
+
+		String dbAccountId = "";
+		String dbStudentId = "";
+		String dbYear = "";
+
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM BarWeight"
-						+ " WHERE schoolAccountUuid = ? AND studentUuid =? AND year =?;");       
+						+ " WHERE accountId = ? AND studentId =? AND year =?;");       
 
 				){
 
-			pstmt.setString(1, schoolAccountUuid); 
-			pstmt.setString(2, studentUuid); 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, studentId); 
 			pstmt.setString(3, year); 
 			rset = pstmt.executeQuery();
-			 
-            if(rset.next()){
-            	the_schoolAccountUuid = rset.getString("schoolAccountUuid");
-            	the_studentUuid = rset.getString("studentUuid");
-            	the_year = rset.getString("year");
-				
-				studentexist = (the_schoolAccountUuid != schoolAccountUuid&&
-						        the_studentUuid != studentUuid && 
-								the_year != year ) ? true : false;
-				
+
+			if(rset.next()){
+				dbAccountId = rset.getString("accountId");
+				dbStudentId = rset.getString("studentId");
+				dbYear = rset.getString("year");
+
+				studentexist = (dbAccountId != accountId &&
+						dbStudentId != studentId && 
+						dbYear != year ) ? true : false;
+
 			}
 
 		}catch(SQLException e){
-			 logger.error("SQL Exception when getting BarWeight: ");
-			 logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
+			logger.error("SQL Exception when getting BarWeight: ");
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
 
 		}
 
@@ -125,86 +125,59 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolBarWeightDAO#put(com.yahoo.petermwenda83.bean.exam.BarWeight)
 	 */
 	@Override
-	public boolean put(BarWeight weight,String schoolAccountUuid, String studentUuid, String year) {
+	public boolean put(BarWeight weight,String accountId,String studentId,String year) {
 		boolean success = true;
-		if(!ExistBarWeight(schoolAccountUuid,studentUuid,year)){
-		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO BarWeight" 
-			        		+"(Uuid,SchoolAccountUuid,StudentUuid,Year,WeightOne,WeightTwo,WeightThree) VALUES (?,?,?,?,?,?,?);");
-      		){
-			   
-			    pstmt.setString(1, weight.getUuid());
-			    pstmt.setString(2, weight.getSchoolAccountUuid());
-			    pstmt.setString(3, weight.getStudentUuid());
-	            pstmt.setString(4, weight.getYear());
-	            pstmt.setDouble(5, weight.getWeightOne());
-	            pstmt.setDouble(6, weight.getWeightTwo());
-	            pstmt.setDouble(7, weight.getWeightThree());
-	           
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put BarWeight: "+weight);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
-             success = false;
-		 }
-		 
+		if(!ExistBarWeight(accountId,studentId,year)){
+			try(   Connection conn = dbutils.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO BarWeight" 
+							+"(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) VALUES (?,?,?,?,?,?,?);");
+					){
+
+				pstmt.setString(1, weight.getUuid());
+				pstmt.setString(2, accountId);
+				pstmt.setString(3, studentId);
+				pstmt.setString(4, year);
+				pstmt.setDouble(5, weight.getMeanOne());
+				pstmt.setDouble(6, weight.getMeanOne());
+				pstmt.setDouble(7, weight.getMeanThree());
+
+				pstmt.executeUpdate();
+
+			}catch(SQLException e){
+				logger.error("SQL Exception trying to put BarWeight: " + weight);
+				logger.error(ExceptionUtils.getStackTrace(e)); 
+				System.out.println(ExceptionUtils.getStackTrace(e));
+				success = false;
+			}
+
 		}else{
 
-			 try (  Connection conn = dbutils.getConnection();
-	        	PreparedStatement pstmt = conn.prepareStatement("UPDATE BarWeight SET WeightOne=?,"
-	        			+ "WeightTwo=?,WeightThree =? WHERE SchoolAccountUuid = ? AND StudentUuid =?"
-	        			+ "AND Year = ?;");
-	        	) { 
-		            pstmt.setDouble(1, weight.getWeightOne());
-		            pstmt.setDouble(2, weight.getWeightTwo());
-		            pstmt.setDouble(3, weight.getWeightThree());
-		            pstmt.setString(4, weight.getSchoolAccountUuid());
-				    pstmt.setString(5, weight.getStudentUuid());
-		            pstmt.setString(6, weight.getYear());
-	                pstmt.executeUpdate(); 
+			try (  Connection conn = dbutils.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement("UPDATE BarWeight SET meanOne=?,"
+							+ "meanTwo=?,meanThree =? WHERE accountId = ? AND studentId =?"
+							+ "AND year = ?;");
+					) { 
+				pstmt.setDouble(1, weight.getMeanOne());
+				pstmt.setDouble(2, weight.getMeanOne());
+				pstmt.setDouble(3, weight.getMeanThree());
+				pstmt.setString(4, accountId);
+				pstmt.setString(5, studentId);
+				pstmt.setString(6, year);
+				pstmt.executeUpdate(); 
 
-	        } catch (SQLException e) {
-	            logger.error("SQL Exception when updating BarWeight" + weight);
-	            logger.error(ExceptionUtils.getStackTrace(e));
-	            System.out.println(ExceptionUtils.getStackTrace(e));
-	            success = false;
-	        } 
-			
-			
+			} catch (SQLException e) {
+				logger.error("SQL Exception when updating BarWeight" + weight);
+				logger.error(ExceptionUtils.getStackTrace(e));
+				System.out.println(ExceptionUtils.getStackTrace(e));
+				success = false;
+			} 
+
+
 		}
-		
+
 		return success;
 	}
 
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolBarWeightDAO#update(com.yahoo.petermwenda83.bean.exam.BarWeight)
-	 */
-	@Override
-	public boolean update(BarWeight weight) {
-		boolean success = true;
-        try (  Connection conn = dbutils.getConnection();
-        	PreparedStatement pstmt = conn.prepareStatement("UPDATE BarWeight SET WeightOne=?,"
-        			+ "WeightTwo=?,WeightThree =? WHERE SchoolAccountUuid = ? AND StudentUuid =?"
-        			+ "AND Year = ?;");
-        	) { 
-	            pstmt.setDouble(1, weight.getWeightOne());
-	            pstmt.setDouble(2, weight.getWeightTwo());
-	            pstmt.setDouble(3, weight.getWeightThree());
-	            pstmt.setString(4, weight.getSchoolAccountUuid());
-			    pstmt.setString(5, weight.getStudentUuid());
-	            pstmt.setString(6, weight.getYear());
-                pstmt.executeUpdate(); 
-
-        } catch (SQLException e) {
-            logger.error("SQL Exception when updating BarWeight" + weight);
-            logger.error(ExceptionUtils.getStackTrace(e));
-            success = false;
-        } 
-        
-        return success;
-	}
-
+	
 
 }

@@ -66,10 +66,10 @@ import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.BarWeightDAO;
 import com.yahoo.petermwenda83.persistence.exam.DeviationDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
@@ -127,8 +127,8 @@ public class FormOneEndTermReportCard extends HttpServlet{
 	private static ParentsDAO parentsDAO;
 	
 	private static StudentDAO studentDAO;
-	private static RoomDAO roomDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static StreamDAO streamDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static TeacherSubClassDAO teacherSubClassDAO;
@@ -240,8 +240,8 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		perfomanceDAO = PerfomanceDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 	
 		termFeeDAO = TermFeeDAO.getInstance();
@@ -303,7 +303,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 		}
 
 
-		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
         
 			SessionStatistics statistics = new SessionStatistics();
@@ -363,7 +363,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 			}
 
 			List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-			classroomList = roomDAO.getAllRooms(school.getUuid()); 
+			classroomList = streamDAO.getAllRooms(school.getUuid()); 
 			for(ClassRoom c : classroomList){
 				roomHash.put(c.getUuid() , c.getRoomName());
 			}
@@ -1921,7 +1921,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					
 					double balance = 0;
 					String feebalance = "";
-					balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdaterMap.get(uuid),admtermMap.get(uuid),uuid,school.getUuid(),finalyearMap.get(uuid)); 
+					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdaterMap.get(uuid),admtermMap.get(uuid),uuid,school.getUuid(),finalyearMap.get(uuid)); 
 					//System.out.println("balance = " + balance + " admTerm " + admtermMap.get(uuid) + " adm no " + studentAdmNoHash.get(uuid));
 					feebalance = nf.format(balance);
 					

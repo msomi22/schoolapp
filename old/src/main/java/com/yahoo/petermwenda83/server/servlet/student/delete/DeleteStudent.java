@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -29,7 +29,7 @@ public class DeleteStudent extends HttpServlet{
 	final String ERROR_STUDENT_NOT_DELETED = "Something went wrong while deleting student's exam data.";
 	final String SUCCESS_STUDENT_DELETED = "The student was successfully deleted form exam register.";
 	
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static PerfomanceDAO perfomanceDAO;
 	SysConfig sysConfig;
 
@@ -43,7 +43,7 @@ public class DeleteStudent extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
        perfomanceDAO = PerfomanceDAO.getInstance();
    }
    
@@ -65,8 +65,8 @@ public class DeleteStudent extends HttpServlet{
 	   }else{
        
        sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(schooluuid) !=null){
-			sysConfig = examConfigDAO.getExamConfig(schooluuid);
+		if(sysConfigDAO.getExamConfig(schooluuid) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(schooluuid);
 		}
 		
 		Perfomance perfomance = new Perfomance();

@@ -29,8 +29,8 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -52,8 +52,8 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 
 	private static StudentDAO studentDAO;
-	private static RoomDAO roomDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static StreamDAO streamDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	private String classroomuuid = "";
 	String schoolusername = "";
@@ -75,8 +75,8 @@ public class ExportStudentPerClass  extends HttpServlet{
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 
 		studentDAO = StudentDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		
 	}
 
@@ -114,14 +114,14 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 		}
 
-		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 
 
 		List<Student> studentList = new ArrayList<>();
 		studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuid);
 
 		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = roomDAO.getAllRooms(school.getUuid()); 
+		classroomList = streamDAO.getAllRooms(school.getUuid()); 
 		for(ClassRoom c : classroomList){
 			roomHash.put(c.getUuid() , c.getRoomName());
 		}

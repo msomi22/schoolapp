@@ -24,8 +24,8 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
@@ -58,9 +58,9 @@ public class UploadExcel extends HttpServlet{
 	
 	
 	private static StudentDAO studentDAO;
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	private static SubjectDAO subjectDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static PrimaryDAO primaryDAO;
 	private static StudentSubjectDAO studentSubjectDAO;
 	
@@ -84,9 +84,9 @@ public class UploadExcel extends HttpServlet{
 	       CacheManager mgr = CacheManager.getInstance();
 	       schoolCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 	       studentDAO = StudentDAO.getInstance();
-	       roomDAO = RoomDAO.getInstance();
+	       streamDAO = StreamDAO.getInstance();
 	       subjectDAO = SubjectDAO.getInstance();
-	       examConfigDAO = ExamConfigDAO.getInstance();
+	       sysConfigDAO = SysConfigDAO.getInstance();
 	       primaryDAO = PrimaryDAO.getInstance();
 	       studentSubjectDAO = StudentSubjectDAO.getInstance();
 	       studentExcelUtil = new StudentExcelUtil();
@@ -141,13 +141,13 @@ public class UploadExcel extends HttpServlet{
 			    	if(item!=null){
 			    		  uploadedFile = processUploadedFiles(item);
 			    		  String feedback = "";
-			    		  if(studentExcelUtil.processUploadedFiles(uploadedFile,schooluuid,studentDAO,roomDAO) !=null){
-			    	         feedback = studentExcelUtil.processUploadedFiles(uploadedFile,schooluuid,studentDAO,roomDAO);
+			    		  if(studentExcelUtil.processUploadedFiles(uploadedFile,schooluuid,studentDAO,streamDAO) !=null){
+			    	         feedback = studentExcelUtil.processUploadedFiles(uploadedFile,schooluuid,studentDAO,streamDAO);
 			    		  }
 			    		   session.setAttribute(UPLOAD_FEEDBACK,"<p class='error'>"+feedback+"<p>");
 			    		    // Process the file into the database if it is ok
 			    	       if(StringUtils.equals(feedback, UPLOAD_SUCCESS)) {
-			    	    		studentExcelUtil.saveResults(uploadedFile,school,roomDAO,primaryDAO, studentDAO, studentSubjectDAO, subjectDAO, examConfigDAO);
+			    	    		studentExcelUtil.saveResults(uploadedFile,school,streamDAO,primaryDAO, studentDAO, studentSubjectDAO, subjectDAO, sysConfigDAO);
 			    	         }
 			    	      
 			    	}	

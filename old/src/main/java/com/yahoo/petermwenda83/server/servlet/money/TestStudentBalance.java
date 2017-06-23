@@ -7,7 +7,7 @@ import java.util.Date;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
@@ -25,7 +25,7 @@ public class TestStudentBalance {
 	final int databasePort = 5432;
 	
 	private TermFeeDAO termFeeDAO;
-	private ExamConfigDAO examConfigDAO;
+	private SysConfigDAO sysConfigDAO;
 	private StudentFeeDAO studentFeeDAO;
 	private StudentOtherMoniesDAO studentOtherMoniesDAO;
 	
@@ -36,18 +36,18 @@ public class TestStudentBalance {
 	private final int FINAL_YEAR = 2019;
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.server.servlet.money.StudentBalance#findBalance(com.yahoo.petermwenda83.persistence.money.TermFeeDAO, com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO, com.yahoo.petermwenda83.persistence.money.StudentFeeDAO, com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO, java.util.Date, java.lang.String, java.lang.String, java.lang.String, int)}.
+	 * Test method for {@link com.yahoo.petermwenda83.server.servlet.money.StudentBalance#findBalance(com.yahoo.petermwenda83.persistence.money.TermFeeDAO, com.yahoo.petermwenda83.persistence.exam.SysConfigDAO, com.yahoo.petermwenda83.persistence.money.StudentFeeDAO, com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO, java.util.Date, java.lang.String, java.lang.String, java.lang.String, int)}.
 	 */
 	//@Ignore
 	@Test
 	public void testFindBalance() {
 		termFeeDAO = new TermFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		examConfigDAO = new ExamConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		sysConfigDAO = new SysConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		studentFeeDAO = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		studentOtherMoniesDAO = new StudentOtherMoniesDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		
 		StudentBalance studentBalance = new StudentBalance();
-		System.out.println("Balance: " + studentBalance.findBalance(termFeeDAO, examConfigDAO, studentFeeDAO,
+		System.out.println("Balance: " + studentBalance.findBalance(termFeeDAO, sysConfigDAO, studentFeeDAO,
 				studentOtherMoniesDAO, ADMISSION_DATE, REG_TERM, STUDENT_UUID, SCHOOL_UUID, FINAL_YEAR));
 		
 		

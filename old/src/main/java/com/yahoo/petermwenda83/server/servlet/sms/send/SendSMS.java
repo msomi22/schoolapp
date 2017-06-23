@@ -24,8 +24,8 @@ import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
-import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
@@ -57,8 +57,8 @@ public class SendSMS extends HttpServlet{
 	final String FORM_4 = "14E56350-08DA-45CC-97D9-C225AF74A7AD";
 
 	private static ParentsDAO parentsDAO;
-	private static RoomDAO roomDAO;
-	private static ClassesDAO classesDAO;
+	private static StreamDAO streamDAO;
+	private static ClassDAO classDAO;
 
 	private static StudentDAO studentDAO;
 	private static SmsSendDAO smsSendDAO;
@@ -89,8 +89,8 @@ public class SendSMS extends HttpServlet{
 		staffDAO = StaffDAO.getInstance();
 		smsSendDAO = SmsSendDAO.getInstance();
 		staffDAO = StaffDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
-		classesDAO = ClassesDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		classDAO = ClassDAO.getInstance();
 		smsApiDAO = SmsApiDAO.getInstance();
 
 	}
@@ -160,13 +160,13 @@ public class SendSMS extends HttpServlet{
 				}
 			}else if(StringUtils.equals(destination, FORM_1)){
 
-				if(classesDAO.getClass(destination) !=null){
-					stream = classesDAO.getClass(destination);
+				if(classDAO.getClass(destination) !=null){
+					stream = classDAO.getClass(destination);
 					classname = stream.getClassName();
 				}
 
-				if(roomDAO.getAllRooms(accountId) !=null){
-					classRoomList = roomDAO.getAllRooms(accountId);
+				if(streamDAO.getAllRooms(accountId) !=null){
+					classRoomList = streamDAO.getAllRooms(accountId);
 				}
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
@@ -223,13 +223,13 @@ public class SendSMS extends HttpServlet{
 			}else if(StringUtils.equals(destination, FORM_2)){
 
 
-				if(classesDAO.getClass(destination) !=null){
-					stream = classesDAO.getClass(destination);
+				if(classDAO.getClass(destination) !=null){
+					stream = classDAO.getClass(destination);
 					classname = stream.getClassName();
 				}
 
-				if(roomDAO.getAllRooms(accountId) !=null){
-					classRoomList = roomDAO.getAllRooms(accountId);
+				if(streamDAO.getAllRooms(accountId) !=null){
+					classRoomList = streamDAO.getAllRooms(accountId);
 				}
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
@@ -285,13 +285,13 @@ public class SendSMS extends HttpServlet{
 			}else if(StringUtils.equals(destination, FORM_3)){
 
 
-				if(classesDAO.getClass(destination) !=null){
-					stream = classesDAO.getClass(destination);
+				if(classDAO.getClass(destination) !=null){
+					stream = classDAO.getClass(destination);
 					classname = stream.getClassName();
 				}
 
-				if(roomDAO.getAllRooms(accountId) !=null){
-					classRoomList = roomDAO.getAllRooms(accountId);
+				if(streamDAO.getAllRooms(accountId) !=null){
+					classRoomList = streamDAO.getAllRooms(accountId);
 				}
 				for(ClassRoom room : classRoomList){
 					if(StringUtils.contains(room.getRoomName(), classname)){
@@ -346,13 +346,13 @@ public class SendSMS extends HttpServlet{
 
 			}else if(StringUtils.equals(destination, FORM_4)){
 
-				if(classesDAO.getClass(destination) !=null){
-					stream = classesDAO.getClass(destination);
+				if(classDAO.getClass(destination) !=null){
+					stream = classDAO.getClass(destination);
 					classname = stream.getClassName();
 				}
 
-				if(roomDAO.getAllRooms(accountId) !=null){
-					classRoomList = roomDAO.getAllRooms(accountId);
+				if(streamDAO.getAllRooms(accountId) !=null){
+					classRoomList = streamDAO.getAllRooms(accountId);
 				}
 				for(ClassRoom room : classRoomList){
 

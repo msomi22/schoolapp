@@ -28,9 +28,9 @@ import com.yahoo.petermwenda83.bean.exam.PaperOne;
 import com.yahoo.petermwenda83.bean.exam.PaperThree;
 import com.yahoo.petermwenda83.bean.exam.PaperTwo;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.classroom.ClassesDAO;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -53,9 +53,9 @@ public class SaveScore extends HttpServlet{
 	private Cache schoolaccountCache;
 	private static ExamEgineDAO examEgineDAO;
 	private static StudentDAO studentDAO;
-	private static ExamConfigDAO examConfigDAO;
-	private static RoomDAO roomDAO;
-	private static ClassesDAO classesDAO;
+	private static SysConfigDAO sysConfigDAO;
+	private static StreamDAO streamDAO;
+	private static ClassDAO classDAO;
 	private static ExamDAO examDAO;
 	
 	   //languages
@@ -89,9 +89,9 @@ public class SaveScore extends HttpServlet{
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 		examEgineDAO = ExamEgineDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
-		roomDAO = RoomDAO.getInstance(); 
-		classesDAO = ClassesDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
+		streamDAO = StreamDAO.getInstance(); 
+		classDAO = ClassDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 	}
 
@@ -141,13 +141,13 @@ public class SaveScore extends HttpServlet{
 			if(!StringUtils.isBlank(score) && !StringUtils.isBlank(admNo) && !StringUtils.isBlank(classid) && !StringUtils.isBlank(subjectid)){
 				
 				String classroom = "";
-				if(roomDAO.getroom(school.getUuid(), classid) !=null){
-					ClassRoom classRoom = roomDAO.getroom(school.getUuid(), classid);
+				if(streamDAO.getroom(school.getUuid(), classid) !=null){
+					ClassRoom classRoom = streamDAO.getroom(school.getUuid(), classid);
 					classroom = classRoom.getRoomName();
 				}
 
 				List<Stream> classesList = new ArrayList<>();
-				classesList = classesDAO.getClassList();
+				classesList = classDAO.getClassList();
 				String classesUuid = "";
 				for(Stream clss : classesList){
 					if(StringUtils.contains(classroom, clss.getClassName())){
@@ -162,8 +162,8 @@ public class SaveScore extends HttpServlet{
 				}
 
 				String term = "",year = "" , examtype = "";
-				if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-					SysConfig sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+				if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+					SysConfig sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 					term = sysConfig.getTerm();
 					year = sysConfig.getYear();
 					examtype = sysConfig.getExam();

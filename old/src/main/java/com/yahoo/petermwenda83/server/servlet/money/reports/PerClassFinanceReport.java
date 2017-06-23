@@ -32,8 +32,8 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
@@ -62,12 +62,12 @@ public class PerClassFinanceReport extends HttpServlet{
 
 	private static StudentFeeDAO studentFeeDAO;
 	private static StudentDAO studentDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private StudentBalance studentBal;
 	
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	private final String SPREADSHEET_NAME = ".xlsx";
 	private static final long serialVersionUID = 3896751907947782599L;
 	private static int pageno;
@@ -103,9 +103,9 @@ public class PerClassFinanceReport extends HttpServlet{
 		CacheManager mgr = CacheManager.getInstance();
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 		studentDAO = StudentDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 		studentBal = new StudentBalance();
 
@@ -145,7 +145,7 @@ public class PerClassFinanceReport extends HttpServlet{
 			school = (Account) element.getObjectValue();
 		}
 
-		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 
 		List<Student> studentList = new ArrayList<>();
 		studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuid);
@@ -163,12 +163,12 @@ public class PerClassFinanceReport extends HttpServlet{
 
 		
 		sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = roomDAO.getAllRooms(school.getUuid()); 
+		classroomList = streamDAO.getAllRooms(school.getUuid()); 
 		for(ClassRoom c : classroomList){
 			roomHash.put(c.getUuid() , c.getRoomName());
 		}
@@ -269,7 +269,7 @@ public class PerClassFinanceReport extends HttpServlet{
 				NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 				double balance = 0;
 				String feebalance = "";
-                balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stu.getAdmissionDate(),stu.getRegTerm(),stu.getUuid(),school.getUuid(),stu.getFinalYear()); 
+                balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stu.getAdmissionDate(),stu.getRegTerm(),stu.getUuid(),school.getUuid(),stu.getFinalYear()); 
                 feebalance = nf.format(balance);
 
 

@@ -44,7 +44,7 @@ import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -93,7 +93,7 @@ public class StudentClearance extends HttpServlet{
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static StudentDAO studentDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static PMoneyDAO pMoneyDAO;
 	
@@ -127,7 +127,7 @@ public void init(ServletConfig config) throws ServletException {
 	schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 	studentDAO = StudentDAO.getInstance();
 	pMoneyDAO = PMoneyDAO.getInstance();
-	examConfigDAO = ExamConfigDAO.getInstance();
+	sysConfigDAO = SysConfigDAO.getInstance();
 	termFeeDAO = TermFeeDAO.getInstance();
 	studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 	
@@ -166,8 +166,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	response.setHeader("Content-Disposition", "inline; filename= \"" +pdfname);
 
 	sysConfig = new SysConfig();
-	if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-		sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+	if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 	}
 
 

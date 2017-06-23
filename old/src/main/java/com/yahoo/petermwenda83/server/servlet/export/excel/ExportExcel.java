@@ -30,8 +30,8 @@ import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentHouse;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentHouseDAO;
 import com.yahoo.petermwenda83.persistence.student.HouseDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
@@ -58,8 +58,8 @@ public class ExportExcel extends HttpServlet{
 
     private static StudentDAO studentDAO;
     private static StudentHouseDAO studentHouseDAO;
-    private static RoomDAO roomDAO;
-    private static ExamConfigDAO examConfigDAO;
+    private static StreamDAO streamDAO;
+    private static SysConfigDAO sysConfigDAO;
     private static PrimaryDAO primaryDAO;
     private static HouseDAO houseDAO;
     private String classroomuuid = "";
@@ -79,10 +79,10 @@ public class ExportExcel extends HttpServlet{
 	    schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 	    
 	    studentDAO = StudentDAO.getInstance();
-	    examConfigDAO = ExamConfigDAO.getInstance();
+	    sysConfigDAO = SysConfigDAO.getInstance();
 	    studentHouseDAO = StudentHouseDAO.getInstance();
 	    primaryDAO = PrimaryDAO.getInstance();
-	    roomDAO = RoomDAO.getInstance();
+	    streamDAO = StreamDAO.getInstance();
 	    houseDAO = HouseDAO.getInstance();
 	    studentHouseDAO = StudentHouseDAO.getInstance();
 	    
@@ -122,14 +122,14 @@ public class ExportExcel extends HttpServlet{
 	 
 		   }
                
-		    sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		    sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		    
 		   
 		    List<Student> studentList = new ArrayList<>();
 	        studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuid);
 	        
 	        List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-	          classroomList = roomDAO.getAllRooms(school.getUuid()); 
+	          classroomList = streamDAO.getAllRooms(school.getUuid()); 
 	           for(ClassRoom c : classroomList){
 	                roomHash.put(c.getUuid() , c.getRoomName());
 	          }

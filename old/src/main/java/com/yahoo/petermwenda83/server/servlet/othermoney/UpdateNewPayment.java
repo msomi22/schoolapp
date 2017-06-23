@@ -17,7 +17,7 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -37,7 +37,7 @@ public class UpdateNewPayment  extends HttpServlet{
 	final String MONEY_ASSIGNED_ERROR = "Something went wrong while updated the details.";
 	final String ERROR_AMOUNT_INVALID = "Invalid amount.";
 
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
 	private static OtherstypeDAO otherstypeDAO;
 	SysConfig sysConfig;
@@ -50,7 +50,7 @@ public class UpdateNewPayment  extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
 		otherstypeDAO = OtherstypeDAO.getInstance();
 		
@@ -84,8 +84,8 @@ public class UpdateNewPayment  extends HttpServlet{
 
 
 		sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		if(StringUtils.isBlank(type)){

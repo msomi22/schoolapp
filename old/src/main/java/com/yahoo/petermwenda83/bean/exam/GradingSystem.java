@@ -18,7 +18,7 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  */
 public class GradingSystem extends StorableBean{
 	
-	private String categoryId ;
+	private String categoryId;
 	private int lowerLimit;
 	private int upperLimit;
 	private String description;

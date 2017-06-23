@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 public class AddExamConfig extends HttpServlet{
@@ -24,7 +24,7 @@ public class AddExamConfig extends HttpServlet{
 	final String ERROR_ECAMC_ADD_ERROR = "An error occured while adding Term configurations"; 
 	final String ERROR_ECAMC_ADD_ADD_SUCCESS = "Term configurations added successfully"; 
 	
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	/**  
     *
@@ -34,7 +34,7 @@ public class AddExamConfig extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
       
    }
    
@@ -62,7 +62,7 @@ public class AddExamConfig extends HttpServlet{
       }else if(StringUtils.isEmpty(examMode)){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EMPTY_EXAM_MODE); 
     	   
-       }else if(examConfigDAO.getExamConfig(schoolAccountUuid) !=null){
+       }else if(sysConfigDAO.getExamConfig(schoolAccountUuid) !=null){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EXAM_CONGIGURED); 
     	   
        }else{
@@ -73,7 +73,7 @@ public class AddExamConfig extends HttpServlet{
     	   sysConfig.setExam(exam);
     	   sysConfig.setExamMode(examMode);
     	   sysConfig.setSendSMS("OFF");
-    	   if(examConfigDAO.putExamConfig(sysConfig)){ 
+    	   if(sysConfigDAO.putExamConfig(sysConfig)){ 
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, ERROR_ECAMC_ADD_ADD_SUCCESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_ECAMC_ADD_ERROR);

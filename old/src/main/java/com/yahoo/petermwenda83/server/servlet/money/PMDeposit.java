@@ -20,7 +20,7 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -51,7 +51,7 @@ public class PMDeposit extends HttpServlet{
 	
 	 private static StudentDAO studentDAO;
 	 private static PMoneyDAO pMoneyDAO;
-	 private static ExamConfigDAO examConfigDAO;
+	 private static SysConfigDAO sysConfigDAO;
 	 SysConfig sysConfig;
 	 private Cache schoolaccountCache;	
 
@@ -65,7 +65,7 @@ public class PMDeposit extends HttpServlet{
        super.init(config);
        studentDAO = StudentDAO.getInstance();
        pMoneyDAO = PMoneyDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
        CacheManager mgr = CacheManager.getInstance();
 	   schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 
@@ -128,7 +128,7 @@ public class PMDeposit extends HttpServlet{
 			   
 		   }
 		   if(StringUtils.equals(student.getStatusUuid(),statusUuid)){
-		   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   sysConfig = sysConfigDAO.getExamConfig(schoolUuid);
 		   Deposit d = new Deposit();
     	   d.setStudentUuid(student.getUuid());
     	   d.setSystemUser(systemuser);

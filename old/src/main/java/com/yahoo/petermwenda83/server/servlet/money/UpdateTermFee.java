@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
@@ -45,7 +45,7 @@ public class UpdateTermFee extends HttpServlet{
 	final String ERROR_FEE_NOT_UPDATED_WRONG_TERM_YEAR = "Fee not updated, confirm the term and year.";
 	
 	private static TermFeeDAO termFeeDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private Cache schoolaccountCache;	
 
 	/**  
@@ -57,7 +57,7 @@ public class UpdateTermFee extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		termFeeDAO = TermFeeDAO.getInstance();
-		 examConfigDAO = ExamConfigDAO.getInstance();
+		 sysConfigDAO = SysConfigDAO.getInstance();
 		CacheManager mgr = CacheManager.getInstance();
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 
@@ -89,8 +89,8 @@ public class UpdateTermFee extends HttpServlet{
 		}
 		
 		 SysConfig sysConfig = new SysConfig();
-			if(examConfigDAO.getExamConfig(schooluuid) !=null){
-				sysConfig = examConfigDAO.getExamConfig(schooluuid);
+			if(sysConfigDAO.getExamConfig(schooluuid) !=null){
+				sysConfig = sysConfigDAO.getExamConfig(schooluuid);
 			}
 
 		if(StringUtils.isBlank(Term)){

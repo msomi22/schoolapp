@@ -53,16 +53,17 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExam(java.lang.String)
 	 */
 	@Override
-	public Exam getExam(String uuid) {
+	public Exam getExam(String accountId,String uuid) {
 		Exam exam = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Exam"
-						+ " WHERE uuid = ?;");       
+						+ " WHERE accountId =? AND uuid = ?;");       
 				){
 
-			pstmt.setString(1, uuid); 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, uuid); 
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -70,7 +71,7 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting Exam with id: " + uuid);
+			logger.error("SQL Exception when getting Exam with id " + uuid);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 
@@ -83,16 +84,17 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExamByName(java.lang.String)
 	 */
 	@Override
-	public Exam getExamByName(String examName) {
+	public Exam getExamByCode(String accountId,String code) {
 		Exam exam = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Exam"
-						+ " WHERE examName = ?;");       
+						+ " WHERE accountId =? AND code = ?;");       
 				){
 
-			pstmt.setString(1, examName); 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, code); 
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -100,7 +102,7 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting Exam with examName: " + examName);
+			logger.error("SQL Exception when getting Exam with code " + code);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 
@@ -108,32 +110,39 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 
 		return exam; 
 	}
-
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#updateExam(com.yahoo.petermwenda83.bean.exam.Exam)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExamByName(java.lang.String)
 	 */
 	@Override
-	public boolean updateExam(Exam exam) {
-		boolean success = true;
-		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE Exam SET OutOf = ?"
-			        + "WHERE SchoolAccountUuid = ? AND Uuid = ?;");
-	               ) {           			 	            
-	            pstmt.setInt(1, exam.getOutOf());
-	            pstmt.setString(2, exam.getSchoolAccountUuid());
-	            pstmt.setString(3, exam.getUuid());       
-	            pstmt.executeUpdate();
-	
-	  } catch (SQLException e) {
-	    logger.error("SQL Exception when updating update Exam  " + exam);
-	    logger.error(ExceptionUtils.getStackTrace(e));
-	    System.out.println(ExceptionUtils.getStackTrace(e));
-	    success = false;
-	 } 
-		
-		return success;
-	}
+	public Exam getExamByDesc(String accountId,String description) {
+		Exam exam = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Exam"
+						+ " WHERE accountId =? AND description = ?;");       
+				){
 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, description); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				exam  = beanProcessor.toBean(rset,Exam.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Exam with description " + description);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+
+		}
+
+		return exam; 
+	}
+	
+	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#putExam(com.yahoo.petermwenda83.bean.exam.Exam)
 	 */
@@ -143,13 +152,14 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 		
 		  try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Exam" 
-			        		+"(Uuid, SchoolAccountUuid,ExamName,OutOf) VALUES (?,?,?,?);");
+			        		+"(uuid,accountId,code,description,outOf) VALUES (?,?,?,?,?);");
 		             ){
 			   
 	            pstmt.setString(1, exam.getUuid());
-	            pstmt.setString(2, exam.getSchoolAccountUuid());
-	            pstmt.setString(3, exam.getExamName());	  
-	            pstmt.setInt(4, exam.getOutOf());
+	            pstmt.setString(2, exam.getAccountId());
+	            pstmt.setString(3, exam.getCode());	  
+	            pstmt.setString(4, exam.getDescription());	  
+	            pstmt.setInt(5, exam.getOutOf());
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
@@ -162,17 +172,47 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 		return success;
 	}
 
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#updateExam(com.yahoo.petermwenda83.bean.exam.Exam)
+	 */
+	@Override
+	public boolean updateExam(Exam exam) {
+		boolean success = true;
+		  try (  Connection conn = dbutils.getConnection();
+	             PreparedStatement pstmt = conn.prepareStatement("UPDATE Exam SET code = ?,"
+			        + "description=?, outOf=? WHERE accountId = ? AND uuid = ?;");
+	               ) {   
+			  
+	            pstmt.setString(1, exam.getCode());
+	            pstmt.setString(2, exam.getDescription());
+	            pstmt.setInt(3, exam.getOutOf());
+	            pstmt.setString(4, exam.getAccountId());
+	            pstmt.setString(5, exam.getUuid());       
+	            pstmt.executeUpdate();
+	
+	  } catch (SQLException e) {
+	    logger.error("SQL Exception when updating update Exam  " + exam);
+	    logger.error(ExceptionUtils.getStackTrace(e));
+	    System.out.println(ExceptionUtils.getStackTrace(e));
+	    success = false;
+	 } 
+		
+		return success;
+	}
+
+	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExamList(java.lang.String)
 	 */
 	@Override
-	public List<Exam> getExamList(String schoolAccountUuid) {
+	public List<Exam> getExamList(String accountId) {
 		 List<Exam> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Exam WHERE schoolAccountUuid = ?;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Exam WHERE accountId = ?;");   
 			) {
-			 pstmt.setString(1,schoolAccountUuid);
+			 pstmt.setString(1,accountId);
 
 			 try(ResultSet rset = pstmt.executeQuery();){
 				 list = beanProcessor.toBeanList(rset, Exam.class);
@@ -180,7 +220,7 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 	        
 
 	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting SysConfig List");
+	  	 logger.error("SQL Exception when getting Exam List for accountId " + accountId);
 	     logger.error(ExceptionUtils.getStackTrace(e));
 	     System.out.println(ExceptionUtils.getStackTrace(e)); 
 	  }

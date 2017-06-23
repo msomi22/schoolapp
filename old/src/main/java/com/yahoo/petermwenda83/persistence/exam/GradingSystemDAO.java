@@ -7,10 +7,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
@@ -45,22 +47,24 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 	public GradingSystemDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
+	
 
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#getGradingSystem(java.lang.String)
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#getGradingSystem(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public GradingSystem getGradingSystem(String schoolAccountUuid) {
+	public GradingSystem getGradingSystem(String accountId, String uuid) {
 		GradingSystem gradingSystem = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM GradingSystem"
-						+ " WHERE SchoolAccountUuid = ?;");       
+						+ " WHERE accountId = ? AND uuid =?;");       
 
 				){
 
-			pstmt.setString(1, schoolAccountUuid); 
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, uuid); 
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -70,7 +74,7 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting GradingSystem with schoolAccountUuid: " + schoolAccountUuid);
+			logger.error("SQL Exception when getting GradingSystem with accountId " + accountId);
 			logger.error(ExceptionUtils.getStackTrace(e));
 
 		}
@@ -78,7 +82,8 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 		return gradingSystem; 
 	}
 
-	/* (non-Javadoc)
+	
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#putGradingSystem(com.yahoo.petermwenda83.bean.exam.GradingSystem)
 	 */
 	@Override
@@ -86,26 +91,17 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO GradingSystem" 
-			        		+"(Uuid,SchoolAccountUuid,GradeAplain,GradeAminus,GradeBplus,GradeBplain,"
-			        		+ "GradeBminus,GradeCplus,GradeCplain,GradeCminus,GradeDplus,GradeDplain,"
-			        		+ "GradeDminus,GradeE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+			        		+"(uuid,accountId,categoryId,lowerLimit,upperLimit,description,points)"
+			        		+ " VALUES (?,?,?,?,?,?,?);");
       		){
 			   
 			    pstmt.setString(1, gradingSystem.getUuid());
-			    pstmt.setString(2, gradingSystem.getSchoolAccountUuid());
-			    pstmt.setInt(3, gradingSystem.getGradeAplain());
-	            pstmt.setInt(4, gradingSystem.getGradeAminus());
-	            pstmt.setInt(5, gradingSystem.getGradeBplus());
-	            pstmt.setInt(6, gradingSystem.getGradeBplain());
-	            pstmt.setInt(7, gradingSystem.getGradeBminus());
-	            pstmt.setInt(8, gradingSystem.getGradeCplus());
-	            pstmt.setInt(9, gradingSystem.getGradeCplain());
-	            pstmt.setInt(10, gradingSystem.getGradeCminus());
-	            pstmt.setInt(11, gradingSystem.getGradeDplus());
-	            pstmt.setInt(12, gradingSystem.getGradeDplain());
-	            pstmt.setInt(13, gradingSystem.getGradeDminus());
-	            pstmt.setInt(14, gradingSystem.getGradeE());
-	           
+			    pstmt.setString(2, gradingSystem.getAccountId());
+			    pstmt.setString(3, gradingSystem.getCategoryId());
+	            pstmt.setInt(4, gradingSystem.getLowerLimit());
+	            pstmt.setInt(5, gradingSystem.getUpperLimit());
+	            pstmt.setString(6, gradingSystem.getDescription());
+	            pstmt.setInt(7, gradingSystem.getPoints());	            
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
@@ -119,33 +115,23 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 		return success;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#updateGradingSystem(com.yahoo.petermwenda83.bean.exam.GradingSystem)
 	 */
 	@Override
 	public boolean updateGradingSystem(GradingSystem gradingSystem) {
 		boolean success = true;
         try (  Connection conn = dbutils.getConnection();
-        	PreparedStatement pstmt = conn.prepareStatement("UPDATE GradingSystem SET GradeAplain =?,"
-        			+ "GradeAminus =?,GradeBplus =?,GradeBplain=?,GradeBminus =?,GradeCplus =?,"
-        			+ "GradeCplain =?,GradeCminus =?,GradeDplus =?,GradeDplain =?,GradeDminus =?,"
-        			+ "GradeE =?  WHERE SchoolAccountUuid = ? AND Uuid =?;");
+        	PreparedStatement pstmt = conn.prepareStatement("UPDATE GradingSystem SET lowerLimit =?,"
+        			+ "upperLimit =?,description =?,points=? WHERE accountId = ? AND uuid =?;");
         	) { 
         	   
-			    pstmt.setInt(1, gradingSystem.getGradeAplain());
-	            pstmt.setInt(2, gradingSystem.getGradeAminus());
-	            pstmt.setInt(3, gradingSystem.getGradeBplus());
-	            pstmt.setInt(4, gradingSystem.getGradeBplain());
-	            pstmt.setInt(5, gradingSystem.getGradeBminus());
-	            pstmt.setInt(6, gradingSystem.getGradeCplus());
-	            pstmt.setInt(7, gradingSystem.getGradeCplain());
-	            pstmt.setInt(8, gradingSystem.getGradeCminus());
-	            pstmt.setInt(9, gradingSystem.getGradeDplus());
-	            pstmt.setInt(10, gradingSystem.getGradeDplain());
-	            pstmt.setInt(11, gradingSystem.getGradeDminus());
-	            pstmt.setInt(12, gradingSystem.getGradeE());	            
-			    pstmt.setString(13, gradingSystem.getSchoolAccountUuid());
-			    pstmt.setString(14, gradingSystem.getUuid());
+	        	pstmt.setInt(1, gradingSystem.getLowerLimit());
+	            pstmt.setInt(2, gradingSystem.getUpperLimit());
+	            pstmt.setString(3, gradingSystem.getDescription());
+	            pstmt.setInt(4, gradingSystem.getPoints());
+	            pstmt.setString(5, gradingSystem.getAccountId());
+	            pstmt.setString(6, gradingSystem.getUuid());
                 pstmt.executeUpdate(); 
 
         } catch (SQLException e) {
@@ -156,6 +142,33 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
         } 
         
         return success;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#getGradingSystemList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<GradingSystem> getGradingSystemList(String accountId, String categoryId) {
+		 List<GradingSystem> list = null;
+		 try(   
+	  		Connection conn = dbutils.getConnection();
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM GradingSystem WHERE accountId = ? AND categoryId =?;");   
+			) {
+			 pstmt.setString(1,accountId);
+			 pstmt.setString(2,categoryId);
+
+			 try(ResultSet rset = pstmt.executeQuery();){
+				 list = beanProcessor.toBeanList(rset, GradingSystem.class);
+			}
+	        
+
+	  } catch(SQLException e){
+	  	 logger.error("SQL Exception when getting GradingSystem List for accountId " + accountId + " and categoryId " + categoryId);
+	     logger.error(ExceptionUtils.getStackTrace(e));
+	     System.out.println(ExceptionUtils.getStackTrace(e)); 
+	  }
+		return list;
 	}
 
 }

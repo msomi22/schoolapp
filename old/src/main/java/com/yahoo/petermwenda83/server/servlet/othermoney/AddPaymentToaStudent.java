@@ -30,7 +30,7 @@ import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -65,7 +65,7 @@ public class AddPaymentToaStudent extends HttpServlet{
 
 
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
 
 	private static StudentFeeDAO studentFeeDAO;
@@ -100,7 +100,7 @@ public class AddPaymentToaStudent extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
 
 		studentFeeDAO = StudentFeeDAO.getInstance();
@@ -143,8 +143,8 @@ public class AddPaymentToaStudent extends HttpServlet{
 
 
 		sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		if(StringUtils.isBlank(OtherstypeUuid)){
@@ -242,7 +242,7 @@ public class AddPaymentToaStudent extends HttpServlet{
 
 				//get new fee balance
 			 double balance = 0;
-             balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),school.getUuid(),stuudent.getFinalYear()); 
+             balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),school.getUuid(),stuudent.getFinalYear()); 
              System.out.println("balance = " + balance);
              feebalance = nf.format(balance);
 

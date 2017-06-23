@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -42,7 +42,7 @@ public class FindStudentFee extends HttpServlet{
     
     private static StudentDAO studentDAO;
     private static StudentFeeDAO studentFeeDAO;
-    private static ExamConfigDAO examConfigDAO;
+    private static SysConfigDAO sysConfigDAO;
    
 	/**  
     *
@@ -54,7 +54,7 @@ public class FindStudentFee extends HttpServlet{
        super.init(config);
        studentDAO = StudentDAO.getInstance();
        studentFeeDAO = StudentFeeDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
       
    }
    
@@ -77,8 +77,8 @@ public class FindStudentFee extends HttpServlet{
 	   }else{
 		   
 		   SysConfig sysConfig = new SysConfig();
-		   if(examConfigDAO.getExamConfig(schoolUuid) !=null){
-			   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   if(sysConfigDAO.getExamConfig(schoolUuid) !=null){
+			   sysConfig = sysConfigDAO.getExamConfig(schoolUuid);
 		   }
 		 
            

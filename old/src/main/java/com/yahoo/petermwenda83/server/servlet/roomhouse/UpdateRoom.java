@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 /**
@@ -35,7 +35,7 @@ public class UpdateRoom extends HttpServlet{
 	final String ERROR_ROOM_UPDATE = "Error occured while updating class-room";
 	final String SUCCESS_ROOM_UPDATE = "Class-room updated successfully";
 	
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	ClassRoom classRoom;
 	private String [] validClassNames;
 	private String [] A_Z;
@@ -49,7 +49,7 @@ public class UpdateRoom extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       roomDAO = RoomDAO.getInstance();
+       streamDAO = StreamDAO.getInstance();
        validClassNames = new String[] {"FORM 1","FORM 2","FORM 3","FORM 4"};
        A_Z = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
        //validClassNamesList =  Arrays.asList(validClassNames);
@@ -79,15 +79,15 @@ public class UpdateRoom extends HttpServlet{
        }else if(!lengthValid(roomname)){
 	 	   session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_NAME_INVALID); 
 		   
-	   }else if(roomDAO.getroomByRoomName(schooluuid, roomname) !=null){
+	   }else if(streamDAO.getroomByRoomName(schooluuid, roomname) !=null){
     	   session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_EXIST); 
     	   
        }else{
     	   
-    	   classRoom = roomDAO.getroom(schooluuid, roomuuid);
+    	   classRoom = streamDAO.getroom(schooluuid, roomuuid);
     	   classRoom.setRoomName(roomname.toUpperCase()); 
     	   
-    	   if(roomDAO.updateroom(classRoom)){
+    	   if(streamDAO.updateroom(classRoom)){
     		   session.setAttribute(SessionConstants.ROOM_REG_SUCCESS, SUCCESS_ROOM_UPDATE); 
     	   }else{
     		   session.setAttribute(SessionConstants.ROOM_REG_ERROR, ERROR_ROOM_UPDATE); 

@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.money.StudentClearance;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentClearanceDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -38,7 +38,7 @@ public class FindStudentClear extends HttpServlet{
 	
 	private static StudentClearanceDAO studentClearanceDAO;
 	private static StudentDAO studentDAO;
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	HashMap<String, String> roomHash = new HashMap<String, String>();
 	
 	/**  
@@ -51,7 +51,7 @@ public class FindStudentClear extends HttpServlet{
        super.init(config);
        studentClearanceDAO = StudentClearanceDAO.getInstance();
        studentDAO = StudentDAO.getInstance();
-       roomDAO = RoomDAO.getInstance();
+       streamDAO = StreamDAO.getInstance();
    }
    
    
@@ -76,7 +76,7 @@ public class FindStudentClear extends HttpServlet{
 		    formatter = new SimpleDateFormat("yyyy");
 		    
 		    List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-			classroomList = roomDAO.getAllRooms(schooluuid); 
+			classroomList = streamDAO.getAllRooms(schooluuid); 
 			for(ClassRoom c : classroomList){
 				roomHash.put(c.getUuid() , c.getRoomName());
 			}

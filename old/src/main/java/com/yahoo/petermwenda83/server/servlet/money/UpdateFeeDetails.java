@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
@@ -48,7 +48,7 @@ public class UpdateFeeDetails extends HttpServlet{
 	final String EMPTY_AMOUNT = "Amount can't be empty";
 	
 	private static StudentFeeDAO studentFeeDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private Cache schoolaccountCache;
     SysConfig sysConfig;
     
@@ -63,7 +63,7 @@ public class UpdateFeeDetails extends HttpServlet{
        studentFeeDAO = StudentFeeDAO.getInstance();
        CacheManager mgr = CacheManager.getInstance();
        schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
       
    }
    
@@ -133,7 +133,7 @@ public class UpdateFeeDetails extends HttpServlet{
        
        
 
-  	   sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+  	   sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
   	   double balance = 0;
 	   double oldamount = Double.parseDouble(amountpaidold);
 	   double amountTodeduct = Double.parseDouble(amounttodeduct);

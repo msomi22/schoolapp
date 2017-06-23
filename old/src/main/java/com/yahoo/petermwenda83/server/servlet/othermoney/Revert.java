@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -39,7 +39,7 @@ public class Revert extends HttpServlet{
 	
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static RevertedMoneyDAO revertedMoneyDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	/**  
     *
     * @param config
@@ -50,7 +50,7 @@ public class Revert extends HttpServlet{
        super.init(config);
        studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
        revertedMoneyDAO = RevertedMoneyDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
        
    }
    
@@ -68,8 +68,8 @@ public class Revert extends HttpServlet{
        String year = StringUtils.trimToEmpty(request.getParameter("year"));
       
 	   SysConfig sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(schooluuid) !=null){
-			sysConfig = examConfigDAO.getExamConfig(schooluuid);
+		if(sysConfigDAO.getExamConfig(schooluuid) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(schooluuid);
 		}
 	
        

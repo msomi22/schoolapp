@@ -26,8 +26,8 @@ import com.yahoo.petermwenda83.bean.exam.PaperTwo;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -85,7 +85,7 @@ public class ExcelUtil {
 	 * @return the feedback of having inspected the file, whether it was proper
 	 * @throws IOException 
 	 */
-	protected String inspectResultFile(File file,String schooluuid,String staffId,RoomDAO roomDAO,SubjectDAO subjectDAO,TeacherSubClassDAO teacherSubClassDAO,StudentDAO studentDAO) throws IOException {
+	protected String inspectResultFile(File file,String schooluuid,String staffId,StreamDAO streamDAO,SubjectDAO subjectDAO,TeacherSubClassDAO teacherSubClassDAO,StudentDAO studentDAO) throws IOException {
 		
 		String feedback = UploadExam.UPLOAD_SUCCESS;
 		// Creating Input Stream 
@@ -123,7 +123,7 @@ public class ExcelUtil {
 				return ("subject code \"" + subject + "\" not found! ");
 			}
 
-			if(roomDAO.getroomByRoomName(schooluuid, classroom) ==null){
+			if(streamDAO.getroomByRoomName(schooluuid, classroom) ==null){
 				return ("class code \"" + classroom + "\" not found! ");
 			}
 
@@ -209,7 +209,7 @@ public class ExcelUtil {
 					}
 
 
-					ClassRoom clss = roomDAO.getroomByRoomName(schooluuid, classroom);
+					ClassRoom clss = streamDAO.getroomByRoomName(schooluuid, classroom);
 					TeacherSubject ts = new TeacherSubject();  
 					ts.setClassRoomUuid(clss.getUuid());
 					ts.setTeacherUuid(staffId);
@@ -280,13 +280,13 @@ public class ExcelUtil {
 	 * @param school
 	 * @param examEgineDAO
 	 * @param studentDAO
-	 * @param roomDAO
+	 * @param streamDAO
 	 * @param subjectDAO
-	 * @param examConfigDAO
+	 * @param sysConfigDAO
 	 * @throws IOException
 	 */
 	public void saveResults(File uploadedFile,String stffID, Account school, ExamEgineDAO examEgineDAO,
-			StudentDAO studentDAO, RoomDAO roomDAO, SubjectDAO subjectDAO,ExamConfigDAO examConfigDAO) throws IOException{
+			StudentDAO studentDAO, StreamDAO streamDAO, SubjectDAO subjectDAO,SysConfigDAO sysConfigDAO) throws IOException{
 		
 		if(uploadedFile !=null){
 		
@@ -299,7 +299,7 @@ public class ExcelUtil {
    	    String outof = "";
    	    
    	    
-   	    SysConfig  sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+   	    SysConfig  sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
         String filename = uploadedFile.getName().replaceAll("_", " "); 
    		
    		String [] parts = filename.split("\\.");
@@ -381,7 +381,7 @@ public class ExcelUtil {
 			                
 			                
 						     if(classroom !=null){
-						    	 room = roomDAO.getroomByRoomName(school.getUuid(), classroom); 
+						    	 room = streamDAO.getroomByRoomName(school.getUuid(), classroom); 
 						     }
 						     if(subject !=null){
 						    	subjct = subjectDAO.getSubjects(subject);	

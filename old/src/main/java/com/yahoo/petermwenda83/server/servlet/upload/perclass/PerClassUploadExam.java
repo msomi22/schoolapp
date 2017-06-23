@@ -24,8 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -62,10 +62,10 @@ public class PerClassUploadExam extends HttpServlet {
 
 	private static StudentDAO studentDAO;
 	private static ExamEgineDAO examEgineDAO;
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	private static SubjectDAO subjectDAO;
 	private static TeacherSubClassDAO teacherSubClassDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	String classuuid = "";
 	String room = "";
@@ -97,10 +97,10 @@ public class PerClassUploadExam extends HttpServlet {
 		schoolCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 		studentDAO = StudentDAO.getInstance();
 		examEgineDAO = ExamEgineDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
 		teacherSubClassDAO = TeacherSubClassDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 
 	}
 
@@ -153,14 +153,14 @@ public class PerClassUploadExam extends HttpServlet {
 						String feedback = "";
 
 						if(uploadedFile !=null){
-							feedback = perClassExcelUtil.inspectResultFile(uploadedFile,schooluuid,stffID,roomDAO, subjectDAO,teacherSubClassDAO,studentDAO);
+							feedback = perClassExcelUtil.inspectResultFile(uploadedFile,schooluuid,stffID,streamDAO, subjectDAO,teacherSubClassDAO,studentDAO);
 						}
 						session.setAttribute(UPLOAD_FEEDBACK,"<p class='error'>"+feedback+"<p>");
 
 						// Process the file into the database if it is ok
 						if(StringUtils.equals(feedback, UPLOAD_SUCCESS)) {
 							if(uploadedFile !=null){
-								perClassExcelUtil.saveResults(uploadedFile, stffID, school, examEgineDAO, studentDAO, roomDAO, subjectDAO, examConfigDAO); 
+								perClassExcelUtil.saveResults(uploadedFile, stffID, school, examEgineDAO, studentDAO, streamDAO, subjectDAO, sysConfigDAO); 
 							}
 						}
 

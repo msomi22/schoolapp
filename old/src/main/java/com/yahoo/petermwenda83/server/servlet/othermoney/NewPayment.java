@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -30,7 +30,7 @@ public class NewPayment extends HttpServlet{
 	
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
 	private static OtherstypeDAO otherstypeDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	final String ERROR_AMOUNT_INVALID = "Invalid amount, amount ranges from KSH 100 - KSH 100,000";
 	final String ERROR_AMOUNT_NUMERIC = "Amount can only be numeric";
 	
@@ -48,7 +48,7 @@ public class NewPayment extends HttpServlet{
        super.init(config);
        termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
        otherstypeDAO = OtherstypeDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
        
    }
    
@@ -79,7 +79,7 @@ public class NewPayment extends HttpServlet{
 	   }else{
     	   
     	   sysConfig = new SysConfig();
-    	   sysConfig = examConfigDAO.getExamConfig(schooluuid);
+    	   sysConfig = sysConfigDAO.getExamConfig(schooluuid);
     	   
     	   otherFee = new OtherFee();
     	   otherFee.setType(type); 

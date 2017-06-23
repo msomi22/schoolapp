@@ -12,35 +12,17 @@ import com.yahoo.petermwenda83.bean.exam.Exam;
  *
  */
 public interface SchoolExamDAO {
-	/**
-	 * 
-	 * @param uuid
-	 * @return
-	 */
-	public Exam getExam(String uuid);
-	/**
-	 * 
-	 * @param examName
-	 * @return
-	 */
-	public Exam getExamByName(String examName);
-	/**
-	 * 
-	 * @param exam
-	 * @return
-	 */
-	public boolean updateExam(Exam exam);
-	/**
-	 * 
-	 * @param exam
-	 * @return
-	 */
+	
+	public Exam getExam(String accountId,String uuid);
+	
+	public Exam getExamByCode(String accountId,String code);
+	
+	public Exam getExamByDesc(String accountId,String description);
+
 	public boolean putExam(Exam exam);
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @return
-	 */
-	public List<Exam> getExamList(String schoolAccountUuid);
+	
+	public boolean updateExam(Exam exam);
+	
+	public List<Exam> getExamList(String accountId);
 
 }

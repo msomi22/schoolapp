@@ -26,8 +26,8 @@ import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.student.House;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
@@ -70,10 +70,10 @@ public class AddSchool extends HttpServlet{
 	private final String STATUS_ACTIVE_UUID = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
 	private static AccountDAO accountDAO;
 	private CacheManager cacheManager;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static HouseDAO houseDAO;
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static MiscellanousDAO miscellanousDAO;
 	private static ExamDAO examDAO;
@@ -96,10 +96,10 @@ public class AddSchool extends HttpServlet{
        emailValidator = EmailValidator.getInstance();
        accountDAO = AccountDAO.getInstance();
        cacheManager = CacheManager.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
        gradingSystemDAO = GradingSystemDAO.getInstance();
        houseDAO = HouseDAO.getInstance();
-       roomDAO = RoomDAO.getInstance();
+       streamDAO = StreamDAO.getInstance();
        termFeeDAO = TermFeeDAO.getInstance();
        miscellanousDAO = MiscellanousDAO.getInstance();
        examDAO = ExamDAO.getInstance();
@@ -237,13 +237,13 @@ public class AddSchool extends HttpServlet{
     	   
     	  
 		   
-		   if(accountDAO.put(account) && examConfigDAO.putExamConfig(sysConfig) && gradingSystemDAO.putGradingSystem(gradingSystem)){	
+		   if(accountDAO.put(account) && sysConfigDAO.putExamConfig(sysConfig) && gradingSystemDAO.putGradingSystem(gradingSystem)){	
 			   
 			   for(int i=0;i<defaultClasses.length;i++){
 	    		   ClassRoom room = new ClassRoom();
 	        	   room.setSchoolAccountUuid(account.getUuid());
 	        	   room.setRoomName(defaultClasses[i]);
-	        	   roomDAO.putroom(room);
+	        	   streamDAO.putroom(room);
 	    	   }
 			   
 			   for(int i=0;i<defaultHouse.length;i++){

@@ -21,14 +21,14 @@ public class BarWeight extends StorableBean{
 	private String year;
 	private double meanOne;
 	private double meanTwo;
-	private double meanhree;
+	private double meanThree;
 	
 	public BarWeight() {
 		studentId = "";
 		year = "";
 		meanOne = 0;
 		meanTwo = 0;
-		meanhree = 0;
+		meanThree = 0;
 	}
 	
 	
@@ -97,18 +97,18 @@ public class BarWeight extends StorableBean{
 
 
 	/**
-	 * @return the meanhree
+	 * @return the meanThree
 	 */
-	public double getMeanhree() {
-		return meanhree;
+	public double getMeanThree() {
+		return meanThree;
 	}
 
 
 	/**
-	 * @param meanhree the meanhree to set
+	 * @param meanThree the meanThree to set
 	 */
-	public void setMeanhree(double meanhree) {
-		this.meanhree = meanhree;
+	public void setMeanThree(double meanThree) {
+		this.meanThree = meanThree;
 	}
 
 
@@ -118,7 +118,7 @@ public class BarWeight extends StorableBean{
 	@Override
 	public String toString() {
 		return "BarWeight [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
-				+ ", meanhree=" + meanhree + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", meanThree=" + meanThree + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

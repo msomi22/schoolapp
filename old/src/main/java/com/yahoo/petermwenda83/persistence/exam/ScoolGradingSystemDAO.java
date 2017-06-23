@@ -3,6 +3,8 @@
  */
 package com.yahoo.petermwenda83.persistence.exam;
 
+import java.util.List;
+
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 
 /**
@@ -12,10 +14,18 @@ import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 public interface ScoolGradingSystemDAO {
 	/**
 	 * 
-	 * @param schoolAccountUuid
+	 * @param accountId
+	 * @param uuid
 	 * @return
 	 */
-	public GradingSystem getGradingSystem(String schoolAccountUuid);
+	public GradingSystem getGradingSystem(String accountId, String uuid);
+	/**
+	 * 
+	 * @param accountId
+	 * @param categoryId
+	 * @return
+	 */
+	public List<GradingSystem> getGradingSystemList(String accountId, String categoryId);
 	 /**
 	  * 
 	  * @param gradingSystem

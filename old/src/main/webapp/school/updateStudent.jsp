@@ -1,5 +1,5 @@
 
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 <%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>

@@ -47,8 +47,8 @@ import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
@@ -104,9 +104,9 @@ public class PrintStatement extends HttpServlet {
 
 	private static StudentFeeDAO studentFeeDAO;
 	private static StudentDAO studentDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
-	private static RoomDAO roomDAO;
+	private static StreamDAO streamDAO;
 	//private static StudentAmountDAO studentAmountDAO;
 	private static RevertedMoneyDAO revertedMoneyDAO;
 
@@ -147,9 +147,9 @@ public class PrintStatement extends HttpServlet {
 		CacheManager mgr = CacheManager.getInstance();
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 		studentDAO = StudentDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
-		roomDAO = RoomDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
 		
@@ -205,12 +205,12 @@ public class PrintStatement extends HttpServlet {
 
 
 		SysConfig sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		}
 
 		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = roomDAO.getAllRooms(school.getUuid()); 
+		classroomList = streamDAO.getAllRooms(school.getUuid()); 
 		for(ClassRoom c : classroomList){
 			roomHash.put(c.getUuid() , c.getRoomName());
 		}

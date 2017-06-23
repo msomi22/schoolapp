@@ -1,11 +1,11 @@
 
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassesDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.Stream"%>
 
 

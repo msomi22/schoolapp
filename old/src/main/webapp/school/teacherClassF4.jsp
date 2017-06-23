@@ -1,4 +1,4 @@
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
@@ -13,7 +13,7 @@
 <%@page import="com.yahoo.petermwenda83.bean.staff.ClassTeacher"%>
 
 
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.RoomDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>

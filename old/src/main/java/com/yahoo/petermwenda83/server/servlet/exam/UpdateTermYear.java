@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -36,7 +36,7 @@ public class UpdateTermYear extends HttpServlet{
 	private static final long serialVersionUID = 7880606806285167190L;
 
 
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 
 
@@ -67,7 +67,7 @@ public class UpdateTermYear extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		/*examcodeArray = new String[] {"C1", "C2", "ET", "P1","P2","P3"};
 		examcodeList = Arrays.asList(examcodeArray);
 
@@ -120,12 +120,12 @@ public class UpdateTermYear extends HttpServlet{
 		}else{
 
 
-			SysConfig sysConfig = examConfigDAO.getExamConfig(schoolAccountUuid);
+			SysConfig sysConfig = sysConfigDAO.getExamConfig(schoolAccountUuid);
 			updatTermFee(sysConfig,year);
 			sysConfig.setTerm(term);
 			sysConfig.setYear(year);
 
-			if(examConfigDAO.updateExamConfig(sysConfig)){
+			if(sysConfigDAO.updateExamConfig(sysConfig)){
 				session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS +" Confirm please!! [ new Term is " + sysConfig.getTerm() +" and new Year is " + sysConfig.getYear() + " ]"); 
 
 

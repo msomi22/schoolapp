@@ -26,8 +26,8 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
 import com.yahoo.petermwenda83.bean.subject.Subject;
-import com.yahoo.petermwenda83.persistence.classroom.RoomDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
@@ -61,12 +61,12 @@ public class StudentExcelUtil {
 	 * @param file
 	 * @param schooluuid
 	 * @param studentDAO
-	 * @param roomDAO
+	 * @param streamDAO
 	 * @return
 	 * @throws IOException
 	 * @throws InvalidFormatException 
 	 */
-	String processUploadedFiles(File file,String schooluuid,StudentDAO studentDAO, RoomDAO roomDAO) throws IOException, InvalidFormatException {
+	String processUploadedFiles(File file,String schooluuid,StudentDAO studentDAO, StreamDAO streamDAO) throws IOException, InvalidFormatException {
 		String feedback = UploadExcel.UPLOAD_SUCCESS;
 		
 		if(file !=null){
@@ -148,7 +148,7 @@ public class StudentExcelUtil {
 							return ("Student with admission number " + admno.replace(".0", "") + " on line " + count + " already exist.");
 						}
 						
-						if(roomDAO.getroomByRoomName(schooluuid, classroom) ==null){
+						if(streamDAO.getroomByRoomName(schooluuid, classroom) ==null){
 							return ("Classroom " + classroom + " not found.");
 						}
 						if(!categoryList.contains(stydentType)) {
@@ -204,17 +204,17 @@ public class StudentExcelUtil {
 	/**
 	 * @param uploadedFile
 	 * @param school
-	 * @param roomDAO
+	 * @param streamDAO
 	 * @param primaryDAO
 	 * @param studentDAO
 	 * @param studentSubjectDAO
 	 * @param subjectDAO
-	 * @param examConfigDAO
+	 * @param sysConfigDAO
 	 * @throws IOException
 	 * @throws InvalidFormatException 
 	 */
-	public void saveResults(File uploadedFile,Account school, RoomDAO roomDAO, PrimaryDAO primaryDAO,
-			StudentDAO studentDAO, StudentSubjectDAO studentSubjectDAO, SubjectDAO subjectDAO,ExamConfigDAO examConfigDAO) throws IOException, InvalidFormatException{
+	public void saveResults(File uploadedFile,Account school, StreamDAO streamDAO, PrimaryDAO primaryDAO,
+			StudentDAO studentDAO, StudentSubjectDAO studentSubjectDAO, SubjectDAO subjectDAO,SysConfigDAO sysConfigDAO) throws IOException, InvalidFormatException{
 
 		if(uploadedFile !=null){
 			
@@ -225,7 +225,7 @@ public class StudentExcelUtil {
 			int totalRow = mySheet.getLastRowNum();
 			
 			SysConfig sysConfig = new SysConfig();
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid()); 
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid()); 
 			try{
 				
 				String classroom = "";
@@ -253,8 +253,8 @@ public class StudentExcelUtil {
 		    				classroom = classroomCell+""; 
 		    				ClassRoom classRoom = new ClassRoom();
 		    				
-		    				if(roomDAO.getroomByRoomName(school.getUuid(), classroom) !=null){
-		    				 classRoom = roomDAO.getroomByRoomName(school.getUuid(), classroom);
+		    				if(streamDAO.getroomByRoomName(school.getUuid(), classroom) !=null){
+		    				 classRoom = streamDAO.getroomByRoomName(school.getUuid(), classroom);
 		    				}
 		    				if(classRoom !=null){
 		    				 classroomuuid = classRoom.getUuid();

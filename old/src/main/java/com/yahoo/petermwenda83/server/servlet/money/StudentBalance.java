@@ -14,7 +14,7 @@ import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
@@ -53,14 +53,14 @@ public class StudentBalance {
 
 	}
 
-	public double findBalance(TermFeeDAO termFeeDAO, ExamConfigDAO examConfigDAO, StudentFeeDAO studentFeeDAO,
+	public double findBalance(TermFeeDAO termFeeDAO, SysConfigDAO sysConfigDAO, StudentFeeDAO studentFeeDAO,
 			StudentOtherMoniesDAO studentOtherMoniesDAO, Date admissiondate, String studentRegTerm, String studentuuid, String schooluuid,int finalYear) {
 		//System.out.println("START: " + new Date());
 		double balance = 0;
 		double amountPaid = 0;
 		double otherPaid = 0;
 		admYear = yearformatter.format(admissiondate);
-		termConfig = examConfigDAO.getExamConfig(schooluuid);
+		termConfig = sysConfigDAO.getExamConfig(schooluuid);
 		//termFee = termFeeDAO.getFee(schooluuid,termConfig.getTerm(), termConfig.getYear());
 		currentYear = termConfig.getYear();
 		currentTerm = termConfig.getTerm();

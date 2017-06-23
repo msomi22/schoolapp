@@ -23,7 +23,7 @@ import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.money.PocketMoney;
 import com.yahoo.petermwenda83.bean.money.Withdraw;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -44,7 +44,7 @@ public class FindStudentPM extends HttpServlet{
     
     private static StudentDAO studentDAO;
     private static PMoneyDAO pMoneyDAO;
-    private static ExamConfigDAO examConfigDAO;
+    private static SysConfigDAO sysConfigDAO;
     SysConfig sysConfig;
 
 
@@ -58,7 +58,7 @@ public class FindStudentPM extends HttpServlet{
        super.init(config);
        studentDAO = StudentDAO.getInstance();
        pMoneyDAO = PMoneyDAO.getInstance();
-       examConfigDAO = ExamConfigDAO.getInstance();
+       sysConfigDAO = SysConfigDAO.getInstance();
    }
    
    protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -80,7 +80,7 @@ public class FindStudentPM extends HttpServlet{
 		  
 	   }else{
 		   
-		   sysConfig = examConfigDAO.getExamConfig(schoolUuid);
+		   sysConfig = sysConfigDAO.getExamConfig(schoolUuid);
 		   
 		   Student student = new Student();
 		   if(studentDAO.getStudentObjByadmNo(schoolUuid, admissionNumber) !=null){

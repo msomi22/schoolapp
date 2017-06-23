@@ -22,74 +22,15 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
  */
 public interface SchoolPerfomanceDAO {
 	
-	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param classRoomUuid
-	 * @param studentUuid
-	 * @param Term
-	 * @param Year
-	 * @return
-	 */
 	 
-	public List<Perfomance> getPerformance(String schoolAccountUuid,String classRoomUuid,String studentUuid,String Term,String Year); 
+	public List<Perfomance> getStreamPerformance(String accountId,String examId,String studentId,String streamId,String term,String year); 
 	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param classRoomUuid
-	 * @param studentUuid
-	 * @param Term
-	 * @param Year
-	 * @return
-	 */
-	public List<Perfomance> getPerformanceGeneral(String schoolAccountUuid,String ClassesUuid,String studentUuid,String Term,String Year); 
+	public List<Perfomance> getClassPerformance(String accountId,String examId,String studentId,String classRoomId,String term,String year); 
 
-	   /**
-	    * 
-	    * @param perfomance
-	    * @return
-	    */
-	public boolean deletePerfomance(Perfomance perfomance);
-	 
+	public boolean deletePerfomance(String accountId,String examId,String studentId,String term,String year);
 	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param classRoomUuid
-	 * @return
-	 */
-	public List<Perfomance> getPerfomanceListDistinct(String schoolAccountUuid,String classRoomUuid,String Term,String Year);
+	public List<Perfomance> getStreamSubjectPerfomance(String accountId,String examId,String subjectId,String streamId,String term,String year);
 	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param classRoomUuid
-	 * @return
-	 */
-	public List<Perfomance> getPerfomanceListDistinctGeneral(String schoolAccountUuid,String ClassesUuid,String Term,String Year);
-	
-	/**
-	 * 
-	 * @param subjectUuid
-	 * @param streamUuid
-	 * @param term
-	 * @param year
-	 * @return
-	 */
-	public int getSubjectCountPerStream(String accountUuid,String subjectUuid, String streamUuid,String term,String year);
-	/**
-	 * 
-	 * @param subjectUuid
-	 * @param classUuid
-	 * @param term
-	 * @param year
-	 * @return
-	 */
-	public int getSubjectCountPerClass(String accountUuid,String subjectUuid, String classUuid,String term,String year);
-	
-	
-	
+	public List<Perfomance> getClassSubjectPerfomance(String accountId,String examId,String subjectId,String classRoomId,String term,String year);
 	
 }

@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
@@ -30,7 +30,7 @@ public class GetStudentAPI extends HttpServlet {
 	private static AccountDAO accountDAO;
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static StudentFeeDAO studentFeeDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 
 
@@ -47,7 +47,7 @@ public class GetStudentAPI extends HttpServlet {
 
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 
 	}
@@ -106,7 +106,7 @@ public class GetStudentAPI extends HttpServlet {
 					double balance = 0;
 					String feebalance = "";
 					StudentBalance studentBal = new StudentBalance();
-					balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdate,admterm,studentuuid,schooluuid,finalyear); 
+					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdate,admterm,studentuuid,schooluuid,finalyear); 
 					feebalance = nf.format(balance);
 
 					//PREPARE OUTPUT.     

@@ -41,7 +41,7 @@ import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.persistence.exam.ExamConfigDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -79,7 +79,7 @@ public class FinancialReport extends HttpServlet{
 	private Cache schoolaccountCache;
 	private static StudentFeeDAO studentFeeDAO;
 	private static StudentDAO studentDAO;
-	private static ExamConfigDAO examConfigDAO;
+	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 
 	String USER= "";
@@ -99,7 +99,7 @@ public class FinancialReport extends HttpServlet{
 		CacheManager mgr = CacheManager.getInstance();
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
 		studentDAO = StudentDAO.getInstance();
-		examConfigDAO = ExamConfigDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 
 		USER = System.getProperty("user.name");
@@ -137,8 +137,8 @@ public class FinancialReport extends HttpServlet{
 		response.setHeader("Content-Disposition", "inline; filename= \"" +pdfname);
 
 		sysConfig = new SysConfig();
-		if(examConfigDAO.getExamConfig(school.getUuid()) !=null){
-			sysConfig = examConfigDAO.getExamConfig(school.getUuid());
+		if(sysConfigDAO.getExamConfig(school.getUuid()) !=null){
+			sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 		}
 
 

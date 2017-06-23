@@ -64,98 +64,92 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 	}
 	
 	
-	
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerformance(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getStreamPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<Perfomance> getPerformance(String schoolAccountUuid,String classRoomUuid,String studentUuid,String Term,String Year) {
+	public List<Perfomance> getStreamPerformance(String accountId, String examId, String studentId, String streamId,
+			String term, String year) {
 		List<Perfomance> list = new ArrayList<>();
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE SchoolAccountUuid = ? AND"
-     	         		+ " classRoomUuid = ? AND studentUuid = ? AND Term = ? AND Year = ?;");    		   
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         		+ " examId = ? AND studentId = ? AND streamId =? AND term = ? AND year = ?;");    		   
      	   ) {
-         	   pstmt.setString(1, schoolAccountUuid);      
-         	   pstmt.setString(2, classRoomUuid);  
-         	   pstmt.setString(3, studentUuid);  
-         	   pstmt.setString(4, Term); 
-       	       pstmt.setString(5, Year); 
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(3, studentId);  
+         	   pstmt.setString(4, streamId); 
+         	   pstmt.setString(5, term); 
+       	       pstmt.setString(6, year); 
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
      	       list = beanProcessor.toBeanList(rset, Perfomance.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting Perfomance List for student" +studentUuid+ " of school" + schoolAccountUuid +" and classroom" +classRoomUuid); 
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-        return list;
-	}
-	
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerformanceGeneral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public List<Perfomance> getPerformanceGeneral(String schoolAccountUuid, String classesuuid, String studentUuid,
-			String Term, String Year) {
-		List<Perfomance> list = new ArrayList<>();
-
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE SchoolAccountUuid = ? AND"
-     	         		+ " classesuuid = ? AND studentUuid = ? AND Term = ? AND Year = ?;");    		   
-     	   ) {
-         	   pstmt.setString(1, schoolAccountUuid);      
-         	   pstmt.setString(2, classesuuid);  
-         	   pstmt.setString(3, studentUuid);  
-         	   pstmt.setString(4, Term); 
-       	       pstmt.setString(5, Year); 
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting Perfomance List for student" +studentUuid+ " of school" + schoolAccountUuid +" and classroom" +classesuuid); 
+            logger.error("SQLException when getting Stream Perfomance List"); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
         return list;
 	}
 
-	
-
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#deletePerfomance(com.yahoo.petermwenda83.bean.exam.Perfomance)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getClassPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean deletePerfomance(Perfomance perfomance) {
+	public List<Perfomance> getClassPerformance(String accountId, String examId, String studentId, String classRoomId,
+			String term, String year) {
+		List<Perfomance> list = new ArrayList<>();
+
+        try (
+        		 Connection conn = dbutils.getConnection();
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         		+ " examId = ? AND studentId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
+     	   ) {
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(3, studentId);  
+         	   pstmt.setString(4, classRoomId); 
+         	   pstmt.setString(5, term); 
+       	       pstmt.setString(6, year); 
+         	   try( ResultSet rset = pstmt.executeQuery();){
+     	       
+     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
+         	   }
+        } catch (SQLException e) {
+            logger.error("SQLException when getting class Perfomance List"); 
+            logger.error(ExceptionUtils.getStackTrace(e));
+            System.out.println(ExceptionUtils.getStackTrace(e));
+        }
+        return list;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#deletePerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean deletePerfomance(String accountId, String examId, String studentId, String term, String year) {
 		boolean success = true;
-		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Perfomance"
-						+ " WHERE SchoolAccountUuid = ? AND StudentUuid = ? AND Term = ? AND Year = ?;");       
+						+ " WHERE accountId = ? AND examId = ? AND studentId = ? AND term = ? AND year =?;");       
 
 				){
 
-			pstmt.setString(1, perfomance.getSchoolAccountUuid()); 
-			pstmt.setString(2, perfomance.getStudentUuid()); 
-			pstmt.setString(3, perfomance.getTerm()); 
-			pstmt.setString(4, perfomance.getYear()); 
-			rset = pstmt.executeQuery();
-			while(rset.next()){
-
-				perfomance  = beanProcessor.toBean(rset,Perfomance.class);
-			}
-
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, examId); 
+			pstmt.setString(3, studentId); 
+			pstmt.setString(4, term); 
+			pstmt.setString(5, year); 
+			pstmt.executeUpdate();
 
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when deleting  Perfomance: " + perfomance);
+			logger.error("SQL Exception when deleting  Perfomance for studentId " + studentId);
 			logger.error(ExceptionUtils.getStackTrace(e));
 
 		}
@@ -163,129 +157,66 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		return success; 
 	}
 
-	
-	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerfomanceListDistinct(java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getStreamSubjectPerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<Perfomance> getPerfomanceListDistinct(String schoolAccountUuid, String classRoomUuid,String Term,String Year) {
-		List<Perfomance> list = null;
-        try (
-        		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT studentuuid FROM perfomance WHERE"
-        		 		+ " SchoolAccountUuid = ? AND classRoomUuid = ? AND Term = ? AND Year = ?;");
-     	   ) {
-         	   pstmt.setString(1, schoolAccountUuid);      
-         	   pstmt.setString(2, classRoomUuid);
-         	   pstmt.setString(3, Term); 
-        	   pstmt.setString(4, Year); 
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting DISTINCT StudentUuid List  of Perfomance for school" + schoolAccountUuid +" and classroom" +classRoomUuid); 
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-      
-        return list;
-	}
-	
-	
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerfomanceListDistinctGeneral(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public List<Perfomance> getPerfomanceListDistinctGeneral(String schoolAccountUuid, String ClassesUuid, String Term,
-			String Year) {
+	public List<Perfomance> getStreamSubjectPerfomance(String accountId, String examId, String subjectId,
+			String streamId, String term, String year) {
 		List<Perfomance> list = new ArrayList<>();
+
         try (
         		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT DISTINCT studentuuid FROM perfomance WHERE"
-        		 		+ " SchoolAccountUuid = ? AND ClassesUuid = ? AND Term = ? AND Year = ?;");
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         		+ " examId = ? AND subjectId = ? AND streamId =? AND term = ? AND year = ?;");    		   
      	   ) {
-         	   pstmt.setString(1, schoolAccountUuid);      
-         	   pstmt.setString(2, ClassesUuid);
-         	   pstmt.setString(3, Term); 
-        	   pstmt.setString(4, Year); 
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(3, subjectId);  
+         	   pstmt.setString(4, streamId); 
+         	   pstmt.setString(5, term); 
+       	       pstmt.setString(6, year); 
          	   try( ResultSet rset = pstmt.executeQuery();){
      	       
      	       list = beanProcessor.toBeanList(rset, Perfomance.class);
          	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting DISTINCT StudentUuid List  of Perfomance for school" + schoolAccountUuid +" and classroom" +ClassesUuid); 
+            logger.error("SQLException when getting stream subject Perfomance List"); 
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
-      
         return list;
 	}
-	/**
-	 * @see ke.co.fastech.primaryschool.persistence.exam.SchoolPerformanceDAO#getSubjectCountPerStream(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public int getSubjectCountPerStream(String accountUuid,String subjectUuid, String streamUuid, String term, String year) {
-		int count = 0;
-		ResultSet rset = null;
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM perfomance WHERE SchoolAccountUuid =? AND subjectuuid =? AND classRoomUuid =? AND term =? AND year =?;");    		   
- 	    ) {
-        	   
-        	
-        	pstmt.setString(1, accountUuid);
-        	pstmt.setString(2, subjectUuid);
-        	pstmt.setString(3, streamUuid);
-        	pstmt.setString(4, term);
-        	pstmt.setString(5, year);
-        	rset = pstmt.executeQuery();
-        
-          	  while(rset.next()){
-   	       		count = rset.getInt("count");
-          	  }
-   	       	
-        } catch (SQLException e) {
-            logger.error("SQLException when getting count from performance:");
-            logger.error(ExceptionUtils.getStackTrace(e));
-        }
-		
-		return count;
-	}
 
 	/**
-	 * @see ke.co.fastech.primaryschool.persistence.exam.SchoolPerformanceDAO#getSubjectCountPerClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getClassSubjectPerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public int getSubjectCountPerClass(String accountUuid,String subjectUuid, String classUuid, String term, String year) {
-		int count = 0;
-		ResultSet rset = null;
+	public List<Perfomance> getClassSubjectPerfomance(String accountId, String examId, String subjectId,
+			String classRoomId, String term, String year) {
+		List<Perfomance> list = new ArrayList<>();
+
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM perfomance WHERE SchoolAccountUuid =? AND subjectuuid =? AND ClassesUuid =? AND term =? AND year =?;");    		   
- 	    ) {
-        	   
-        	
-        	pstmt.setString(1, accountUuid);
-        	pstmt.setString(2, subjectUuid);
-        	pstmt.setString(3, classUuid);
-        	pstmt.setString(4, term);
-        	pstmt.setString(5, year);
-        	rset = pstmt.executeQuery();
-        	
-        	while(rset.next()){
-   	       		count = rset.getInt("count");
-          	  }
-
- 	       
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         		+ " examId = ? AND subjectId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
+     	   ) {
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(3, subjectId);  
+         	   pstmt.setString(4, classRoomId); 
+         	   pstmt.setString(5, term); 
+       	       pstmt.setString(6, year); 
+         	   try( ResultSet rset = pstmt.executeQuery();){
+     	       
+     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
+         	   }
         } catch (SQLException e) {
-            logger.error("SQLException when getting count from performance:");
+            logger.error("SQLException when getting class subject Perfomance List"); 
             logger.error(ExceptionUtils.getStackTrace(e));
+            System.out.println(ExceptionUtils.getStackTrace(e));
         }
-		
-		return count;
+        return list;
 	}
 
 
