@@ -1,0 +1,29 @@
+ssh administrator@192.168.0.171
+svn checkout http://github.com/TawiKenya/BabbleSMS
+svn --username msomi22 checkout http://github.com/TawiKenya/BabbleSMS
+svn checkout https://github.com/msomi22/ChristianUnion
+
+sshfs administrator@192.168.0.171:/home/administrator/svn ~/svn1
+scp AirTimeGW.zip administrator@tawi.mobi:~
+
+svn --username msomi22 commit -m 
+
+rm -fr BabbleSMS.war*
+
+sshfs administrator@192.168.0.50:/home/administrator/storage ~/Storage
+
+peter@peter-laptop
+
+sudo apt-get remove openssh-client openssh-server
+sudo apt-get install openssh-client openssh-server
+
+inxi -Sr
+
+sshfs root@192.168.43.1:/storage/sdcard0 /home/peter/phone/
+sudo chown -R peter  pray.odt
+~/.dropbox-dist/dropboxd
+
+http://framebox.org/uuDJ-jYbrjx
+https://github.com/msomi22/School
+
+ svn revert --depth infinity bootstrap/

@@ -1,10 +1,15 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
 
-/target/
+new/target/
+old/target/
 
-.project
-.settings/
-.classpath
+new/.project
+new/.settings/
+new/.classpath
+
+old/.project
+old/.settings/
+old/.classpath
 
 
 

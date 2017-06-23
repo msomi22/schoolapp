@@ -1,0 +1,41 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    su
+  
+    su – postgres
+
+    psql template1
+
+    CREATE USER school WITH PASSWORD 'AllaManO1';
+    ALTER ROLE school WITH CREATEDB;
+    CREATE DATABASE  schooldb;
+    GRANT ALL PRIVILEGES ON DATABASE  schooldb to  school;
+    ALTER DATABASE schooldb OWNER to school;
+
+  
+

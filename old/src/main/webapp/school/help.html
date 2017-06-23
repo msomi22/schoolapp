@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../img/favicon.ico">
+
+    <title>FastPro V3</title>
+ 
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-theme.min.css">
+</head> 
+<body>
+<div class="container">
+<h1 class="small"> Fee Balance SOAP API, you can user HTTPRequester in firefox to consume the API. </h1>
+<div class="well">
+
+   URL 
+  <code>
+      http://localhost:8080/school-new/school/getStudentAPI 
+  </code>
+    
+     <br>
+    SOAP Code 
+     <br>
+   
+    <textarea cols="50" rows="16" readonly>  
+            <?xml version='1.0'?>                
+              <SOAP-ENV:Envelope>                            
+                <SOAP-ENV:Body>                       
+                   <Username type='xsi:string'>       
+                     jabbss (School username)             
+                   </Username>                         
+                   <admNo type='xsi:string'>             
+                     3388   (Student admission number)                 
+                   </admNo>                         
+                </SOAP-ENV:Body>                     
+             </SOAP-ENV:Envelope> 
+      </textarea>
+
+</div>
+</div>
+
+</body>
+</html>
