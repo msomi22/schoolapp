@@ -30,7 +30,7 @@ public class UpdatePassword extends HttpServlet{
 	 */
 	
 	private static StaffDAO staffDAO;
-	//private static StaffDetailsDAO staffDetailsDAO;
+	//private static StaffDAO staffDetailsDAO;
 	
 	final String ERROR_EMPTY_FIELD = "Empty fields not allowed" ;
 	final String PASS_MISMATCH = "Password mismatch" ;
@@ -49,7 +49,7 @@ public class UpdatePassword extends HttpServlet{
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
        staffDAO = StaffDAO.getInstance();
-       //staffDetailsDAO = StaffDetailsDAO.getInstance();
+       //staffDetailsDAO = StaffDAO.getInstance();
    }
    
    protected void doPost(HttpServletRequest request, HttpServletResponse response)

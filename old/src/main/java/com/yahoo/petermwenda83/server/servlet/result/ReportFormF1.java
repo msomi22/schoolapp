@@ -80,7 +80,7 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -131,7 +131,7 @@ public class ReportFormF1 extends HttpServlet{
 	private static TermFeeDAO termFeeDAO;
 	private static TeacherSubClassDAO teacherSubClassDAO;
 
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	private static ClassTeacherDAO classTeacherDAO;
 
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
@@ -243,7 +243,7 @@ public class ReportFormF1 extends HttpServlet{
 
 		termFeeDAO = TermFeeDAO.getInstance();
 		teacherSubClassDAO = TeacherSubClassDAO.getInstance();
-		staffDetailsDAO = StaffDetailsDAO.getInstance();
+		staffDAO = StaffDAO.getInstance();
 		classTeacherDAO = ClassTeacherDAO.getInstance();
 		parentsDAO = ParentsDAO.getInstance();
 
@@ -3336,8 +3336,8 @@ public class ReportFormF1 extends HttpServlet{
 			ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByclassId(classroomuuid);
 			teacherId = classTeacher.getTeacherUuid();
 
-			if(staffDetailsDAO.getStaffDetail(teacherId) !=null){
-				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacherId); 
+			if(staffDAO.getStaffDetail(teacherId) !=null){
+				Staff StaffDetail = staffDAO.getStaffDetail(teacherId); 
 				classTeacherName = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}
 
@@ -3358,8 +3358,8 @@ public class ReportFormF1 extends HttpServlet{
 		if(teacherSubClassDAO.getSubject(subjectid, classroomid) !=null){
 			TeacherSubject teachersub = teacherSubClassDAO.getSubject(subjectid, classroomid);
 			teacheruuid = teachersub.getTeacherUuid();
-			if(staffDetailsDAO.getStaffDetail(teacheruuid) !=null){
-				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacheruuid); 
+			if(staffDAO.getStaffDetail(teacheruuid) !=null){
+				Staff StaffDetail = staffDAO.getStaffDetail(teacheruuid); 
 				teachername = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}	
 		}

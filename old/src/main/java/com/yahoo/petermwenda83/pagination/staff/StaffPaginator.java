@@ -60,7 +60,7 @@ public class StaffPaginator {
     */
    public StaffPage getFirstPage() {
 	   StaffPage page = new StaffPage();
-       List<Staff> staffList = staffDAO.getStaffList(accountId , 0, PAGESIZE);
+       List<Staff> staffList = staffDAO.getStaff(accountId , 0, PAGESIZE);
        page = new StaffPage(1, getTotalPage(), PAGESIZE, staffList);	    
        return page;
    }
@@ -80,7 +80,7 @@ public class StaffPaginator {
        int totalPage = getTotalPage();
        startIndex = (totalPage - 1) * PAGESIZE;
        sessionCount = commonUtils.getStaffCount(accountId);
-       staffList = staffDAO.getStaffList(accountId, startIndex, sessionCount); 
+       staffList = staffDAO.getStaff(accountId, startIndex, sessionCount); 
        page = new StaffPage(totalPage, totalPage, PAGESIZE, staffList);
        return page;
    }
@@ -97,7 +97,7 @@ public class StaffPaginator {
        int totalPage = getTotalPage();
 
        StaffPage page = new StaffPage();
-       List<Staff> staffList = staffDAO.getStaffList(accountId, currentPage.getPageNum() * PAGESIZE, 
+       List<Staff> staffList = staffDAO.getStaff(accountId, currentPage.getPageNum() * PAGESIZE, 
        		((currentPage.getPageNum() * PAGESIZE) + PAGESIZE));
 
        page = new StaffPage(currentPage.getPageNum() + 1, totalPage, PAGESIZE, staffList);
@@ -118,7 +118,7 @@ public class StaffPaginator {
 
        StaffPage page = new StaffPage();
        
-       List<Staff> staffList = staffDAO.getStaffList(accountId, (currentPage.getPageNum() - 2) * PAGESIZE, 
+       List<Staff> staffList = staffDAO.getStaff(accountId, (currentPage.getPageNum() - 2) * PAGESIZE, 
        		((currentPage.getPageNum() - 1) * PAGESIZE));
 
        page = new StaffPage(currentPage.getPageNum() - 1, totalPage, PAGESIZE, staffList);

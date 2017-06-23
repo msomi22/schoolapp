@@ -9,7 +9,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>

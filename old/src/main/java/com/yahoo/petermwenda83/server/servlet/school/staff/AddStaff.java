@@ -20,7 +20,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -72,7 +72,7 @@ public class AddStaff extends HttpServlet {
 	
 	private static StaffDAO staffDAO;
 	private EmailValidator emailValidator;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 
 	/**
     *
@@ -84,7 +84,7 @@ public class AddStaff extends HttpServlet {
        super.init(config);
        staffDAO = StaffDAO.getInstance();
        emailValidator = EmailValidator.getInstance();
-       staffDetailsDAO = StaffDetailsDAO.getInstance();
+       staffDAO = StaffDAO.getInstance();
    }
    
    
@@ -195,7 +195,7 @@ public class AddStaff extends HttpServlet {
        }else if(staffDAO.getStaffByPosition(schoolAccountUuid, DeputyprincipalId) !=null){
     	   session.setAttribute(SessionConstants.STAFF_ADD_ERROR, ERROR_DPRINCIPAL_EXIST); 
     	   
-       }else if(staffDetailsDAO.getStaffDetailByemployeeNo(employeeNo) !=null){ 
+       }else if(staffDAO.getStaffDetailByemployeeNo(employeeNo) !=null){ 
     	   session.setAttribute(SessionConstants.STAFF_ADD_ERROR,STAFF_EMP_NO_EXIST );  
     	   
        }else if(staffDAO.getStaffByUsername(schoolAccountUuid, username) !=null){ 
@@ -227,7 +227,7 @@ public class AddStaff extends HttpServlet {
     	   staffDetail.setCounty(StringUtils.capitalize(county).toLowerCase());
     	   staffDetail.setSysUser(sysUser);
     	   
-    	   if(staffDAO.putStaff(staff) && staffDetailsDAO.putSStaffDetail(staffDetail)){
+    	   if(staffDAO.putStaff(staff) && staffDAO.putSStaffDetail(staffDetail)){
     		   session.setAttribute(SessionConstants.STAFF_ADD_SUCCESS, STAFF_ADD_SUCSESS); 
     		   paramHash.clear();
     	   }else{

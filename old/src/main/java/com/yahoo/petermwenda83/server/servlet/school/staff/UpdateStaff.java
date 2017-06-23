@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -32,7 +32,7 @@ public class UpdateStaff extends HttpServlet{
 	 */
 	
 	private static StaffDAO staffDAO;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	
 	final  String pos_Pricipal =(String)  PropertiesConfig.getConfigValue("POSITION_PRINCIPAL"); 
 	final  String pos_Deputy_Pricipal =(String)  PropertiesConfig.getConfigValue("POSITION_DEPUTY"); 
@@ -86,7 +86,7 @@ public class UpdateStaff extends HttpServlet{
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
        staffDAO = StaffDAO.getInstance();
-       staffDetailsDAO = StaffDetailsDAO.getInstance();
+       staffDAO = StaffDAO.getInstance();
    }
    
    protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -186,7 +186,7 @@ public class UpdateStaff extends HttpServlet{
        }/*else if(staffDAO.getStaffByPosition(schooluuid, DeputyprincipalId) !=null){
     	   session.setAttribute(SessionConstants.STAFF_ADD_ERROR, ERROR_DPRINCIPAL_EXIST); 
     	   
-       }else if(staffDetailsDAO.getStaffDetailByemployeeNo(employeeNo) !=null){ 
+       }else if(staffDAO.getStaffDetailByemployeeNo(employeeNo) !=null){ 
     	   session.setAttribute(SessionConstants.STAFF_ADD_ERROR,STAFF_EMP_NO_EXIST );  
     	   
        }else if(staffDAO.getStaffByUsername(schooluuid, username) !=null){ 
@@ -202,7 +202,7 @@ public class UpdateStaff extends HttpServlet{
     	     staff.setSchoolAccountUuid(schooluuid);
     	     staff.setUserName(username); 
     	   
-    	   Staff staffDetail = staffDetailsDAO.getStaffDetail(staffUuid);
+    	   Staff staffDetail = staffDAO.getStaffDetail(staffUuid);
     	   staffDetail.setStaffUuid(staff.getUuid()); 
     	   staffDetail.setEmployeeNo(employeeNo);
     	   staffDetail.setFirstName(StringUtils.capitalize(firstname).toLowerCase());
@@ -217,7 +217,7 @@ public class UpdateStaff extends HttpServlet{
     	   staffDetail.setCounty(StringUtils.capitalize(county).toLowerCase());
     	   staffDetail.setSysUser(sysUser);
     	   
-    	   if(staffDetailsDAO.updateSStaffDetail(staffDetail) && staffDAO.updateStaff(staff)){ 
+    	   if(staffDAO.updateSStaffDetail(staffDetail) && staffDAO.updateStaff(staff)){ 
     		   session.setAttribute(SessionConstants.STAFF_UPDATE_SUCCESS, STAFF_UPDATE_SUCSESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.STAFF_UPDATE_ERROR, STAFF_UPDATE_ERROR); 

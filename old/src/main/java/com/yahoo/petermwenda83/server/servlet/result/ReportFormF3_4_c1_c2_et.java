@@ -82,7 +82,7 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -131,7 +131,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static TeacherSubClassDAO teacherSubClassDAO;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static MiscellanousDAO miscellanousDAO;
@@ -218,7 +218,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 		teacherSubClassDAO = TeacherSubClassDAO.getInstance();
-		staffDetailsDAO = StaffDetailsDAO.getInstance();
+		staffDAO = StaffDAO.getInstance();
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
@@ -3261,8 +3261,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		    ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByclassId(classroomuuid);
 		    teacherId = classTeacher.getTeacherUuid();
 		    
-		    if(staffDetailsDAO.getStaffDetail(teacherId) !=null){
-				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacherId); 
+		    if(staffDAO.getStaffDetail(teacherId) !=null){
+				Staff StaffDetail = staffDAO.getStaffDetail(teacherId); 
 				classTeacherName = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}
 		    
@@ -3281,8 +3281,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		if(teacherSubClassDAO.getSubject(subjectid, classroomid) !=null){
 			TeacherSubject teachersub = teacherSubClassDAO.getSubject(subjectid, classroomid);
 			teacheruuid = teachersub.getTeacherUuid();
-			if(staffDetailsDAO.getStaffDetail(teacheruuid) !=null){
-				Staff StaffDetail = staffDetailsDAO.getStaffDetail(teacheruuid); 
+			if(staffDAO.getStaffDetail(teacheruuid) !=null){
+				Staff StaffDetail = staffDAO.getStaffDetail(teacheruuid); 
 				teachername = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}	
 		}

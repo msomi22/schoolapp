@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.session.AdminSessionConstants;
 
 /**
@@ -28,7 +28,7 @@ public class AddRootUser extends HttpServlet{
 	
 	
 	private static StaffDAO staffDAO;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	final String ERROR_PHONE_INVALID = "Phone is invalid, phone number must have 10 digits (e.g. 0718953974).";//
     final String ERROR_EMPTY_ACCOUNT = "Please Select an Account.";
     final String ERROR_EMPTY_CATEGORY = "Please Select a Category.";
@@ -57,7 +57,7 @@ public class AddRootUser extends HttpServlet{
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
        staffDAO = StaffDAO.getInstance();
-       staffDetailsDAO = StaffDetailsDAO.getInstance();
+       staffDAO = StaffDAO.getInstance();
    }
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -154,7 +154,7 @@ public class AddRootUser extends HttpServlet{
     	   staffDetail.setCounty(StringUtils.capitalize(county));
     	   staffDetail.setSysUser("Admin");
     	   
-    	   if(staffDAO.putStaff(staff) && staffDetailsDAO.putSStaffDetail(staffDetail)){
+    	   if(staffDAO.putStaff(staff) && staffDAO.putSStaffDetail(staffDetail)){
     		   session.setAttribute(AdminSessionConstants.PRINCIPAL_ADD_SUCCESS, SUCCESS_PRINCIPAL_ADDED);  
     	   }else{
     		   session.setAttribute(AdminSessionConstants.PRINCIPAL_ADD_ERROR, ERROR_PRINCIPAL_NOT_ADDED);  

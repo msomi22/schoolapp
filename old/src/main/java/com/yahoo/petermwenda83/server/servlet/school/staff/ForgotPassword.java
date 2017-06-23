@@ -22,7 +22,7 @@ import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.servlet.sms.send.AfricasTalkingGateway;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -37,7 +37,7 @@ public class ForgotPassword extends HttpServlet{
 	final String SUCCESS_PASSWORD_RESET = "New password has been sent to your phone";
 
 	private static StaffDAO staffDAO;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	private static SmsSendDAO smsSendDAO;
 
 
@@ -50,7 +50,7 @@ public class ForgotPassword extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		staffDAO = StaffDAO.getInstance();
-		staffDetailsDAO = StaffDetailsDAO.getInstance();
+		staffDAO = StaffDAO.getInstance();
 		smsSendDAO = SmsSendDAO.getInstance();
 	}
 
@@ -77,7 +77,7 @@ public class ForgotPassword extends HttpServlet{
 			if(staff!=null){
 
 
-				Staff StaffDetail = staffDetailsDAO.getStaffDetail(staff.getUuid());
+				Staff StaffDetail = staffDAO.getStaffDetail(staff.getUuid());
 				if(StaffDetail!=null){
 					phone = StaffDetail.getPhone();
 					formatedphone = phone.replaceFirst("^0+(?!$)", "");

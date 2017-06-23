@@ -50,7 +50,7 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParent(java.lang.String)
 	 */
 	@Override
-	public StudentParent getParent(String studentUuid) {
+	public StudentParent getParent(String accountId, String studentId) {
 		StudentParent studentParent = null;
 		ResultSet rset = null;
 		
@@ -156,7 +156,7 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#deleteParent(com.yahoo.petermwenda83.bean.student.guardian.StudentParent)
 	 */
 	@Override
-	public boolean deleteParent(StudentParent parent) {
+	public boolean deleteParent(String accountId, String studentId) {
 		boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
@@ -181,7 +181,7 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParentList()
 	 */
 	@Override
-	public List<StudentParent> getParentList() {
+	public List<StudentParent> getParents(String accountId) {
 		List<StudentParent> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
@@ -199,38 +199,13 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	  return list;
 	}
 
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParentListByStudent(java.lang.String)
-	 */
-	@Override
-	public List<StudentParent> getParentListByStudent(String studentUuid) {
-		List<StudentParent> list = null;
-		 try(   
-	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentParent WHERE studentUuid = ?;");   
-			) {
-			 pstmt.setString(1,studentUuid);
-
-			 try(ResultSet rset = pstmt.executeQuery();){
-					
-				 list = beanProcessor.toBeanList(rset, StudentParent.class);
-			}
-	        
-	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting Parent List By StudentUuid " +studentUuid);
-	     logger.error(ExceptionUtils.getStackTrace(e));
-	     System.out.println(ExceptionUtils.getStackTrace(e)); 
-	  }
-
-		
-		return list;
-	}
+	
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParentList(int, int)
 	 */
 	@Override
-	public List<StudentParent> getParentList(int startIndex, int endIndex) {
+	public List<StudentParent> getParents(String accountId,int startIndex, int endIndex) {
 		List<StudentParent> parentList = null;
 		try(
 				Connection conn = dbutils.getConnection();

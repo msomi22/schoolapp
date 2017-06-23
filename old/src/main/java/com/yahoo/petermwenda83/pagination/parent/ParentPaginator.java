@@ -28,12 +28,14 @@ public class ParentPaginator {
 	public final int PAGESIZE = 15;
 	private static CommonUtils commonUtils;
 	private static ParentsDAO parentsDAO;
+	private String accountId;
 	/**
 	 * 
 	 */
-	public ParentPaginator() {
+	public ParentPaginator(String accountId) {
 		commonUtils = CommonUtils.getInstance();
 		parentsDAO = ParentsDAO.getInstance();
+		this.accountId = accountId;
 	}
 	
 	    /**
@@ -55,7 +57,7 @@ public class ParentPaginator {
     */
    public ParentPage getFirstPage() {
 	   ParentPage page = new ParentPage();
-       List<StudentParent> parentList = parentsDAO.getParentList(0, PAGESIZE);
+       List<StudentParent> parentList = parentsDAO.getParents(accountId, 0, PAGESIZE);
        page = new ParentPage(1, getTotalPage(), PAGESIZE, parentList);	    
        return page;
    }
@@ -75,7 +77,7 @@ public class ParentPaginator {
        int totalPage = getTotalPage();
        startIndex = (totalPage - 1) * PAGESIZE;
        sessionCount = commonUtils.getParentCount();
-       parentList = parentsDAO.getParentList(startIndex, sessionCount); 
+       parentList = parentsDAO.getParents(accountId, startIndex, sessionCount); 
        page = new ParentPage(totalPage, totalPage, PAGESIZE, parentList);
        return page;
    }
@@ -92,7 +94,7 @@ public class ParentPaginator {
        int totalPage = getTotalPage();
 
        ParentPage page = new ParentPage();
-       List<StudentParent> parentList = parentsDAO.getParentList(currentPage.getPageNum() * PAGESIZE, 
+       List<StudentParent> parentList = parentsDAO.getParents(accountId, currentPage.getPageNum() * PAGESIZE, 
        		((currentPage.getPageNum() * PAGESIZE) + PAGESIZE));
 
        page = new ParentPage(currentPage.getPageNum() + 1, totalPage, PAGESIZE, parentList);
@@ -113,7 +115,7 @@ public class ParentPaginator {
 
        ParentPage page = new ParentPage();
        
-       List<StudentParent> parentList = parentsDAO.getParentList( (currentPage.getPageNum() - 2) * PAGESIZE, 
+       List<StudentParent> parentList = parentsDAO.getParents(accountId, (currentPage.getPageNum() - 2) * PAGESIZE, 
        		((currentPage.getPageNum() - 1) * PAGESIZE));
 
        page = new ParentPage(currentPage.getPageNum() - 1, totalPage, PAGESIZE, parentList);

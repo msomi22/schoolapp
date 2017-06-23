@@ -30,7 +30,7 @@ import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.StaffDetailsDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -63,7 +63,7 @@ public class SendSMS extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static SmsSendDAO smsSendDAO;
 	private static StaffDAO staffDAO;
-	private static StaffDetailsDAO staffDetailsDAO;
+	private static StaffDAO staffDAO;
 	private static SmsApiDAO smsApiDAO;
 
 	Stream stream = new Stream();
@@ -88,7 +88,7 @@ public class SendSMS extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		staffDAO = StaffDAO.getInstance();
 		smsSendDAO = SmsSendDAO.getInstance();
-		staffDetailsDAO = StaffDetailsDAO.getInstance();
+		staffDAO = StaffDAO.getInstance();
 		roomDAO = RoomDAO.getInstance();
 		classesDAO = ClassesDAO.getInstance();
 		smsApiDAO = SmsApiDAO.getInstance();
@@ -421,7 +421,7 @@ public class SendSMS extends HttpServlet{
 					//Teaching staff
 					if(StringUtils.equals(category, "Teaching")){
 						//Non-Teaching staff
-						Staff staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
+						Staff staffDetail = staffDAO.getStaffDetail(stf.getUuid()); 
 						TstaffPhone = staffDetail.getPhone();
 						formatedTstaffPhone = TstaffPhone.replaceFirst("^0+(?!$)", "");
 						realTstaffPhone = "+254"+formatedTstaffPhone;
@@ -464,7 +464,7 @@ public class SendSMS extends HttpServlet{
 					//Teaching staff
 					if(StringUtils.equals(category, "Non-Teaching")){
 						//Non-Teaching staff
-						Staff staffDetail = staffDetailsDAO.getStaffDetail(stf.getUuid()); 
+						Staff staffDetail = staffDAO.getStaffDetail(stf.getUuid()); 
 						NTstaffPhone = staffDetail.getPhone();
 						formatedNTstaffPhone = NTstaffPhone.replaceFirst("^0+(?!$)", "");
 						realNTstaffPhone = "+254"+formatedNTstaffPhone;

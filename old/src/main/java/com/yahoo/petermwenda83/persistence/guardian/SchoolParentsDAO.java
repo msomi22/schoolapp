@@ -16,7 +16,7 @@ public interface SchoolParentsDAO {
     * @param studentUuid
     * @return
     */
-	public StudentParent getParent(String studentUuid); 
+	public StudentParent getParent(String accountId, String studentId); 
 	 
 	  /**
 	   * 
@@ -32,34 +32,25 @@ public interface SchoolParentsDAO {
 	 * @return
 	 */
 	public boolean updateParent(StudentParent parent);
-	
-	 
+
 	 /**
 	  * 
 	  * @param parent
 	  * @return
 	  */
-	public boolean deleteParent(StudentParent parent);
+	public boolean deleteParent(String accountId, String studentId);
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public List<StudentParent> getParentList();
+	public List<StudentParent> getParents(String accountId);
 	
 	/**
 	 * 
 	 * @param studentUuid
 	 * @return
 	 */
-	public List<StudentParent> getParentListByStudent(String studentUuid);
-	/**
-	 * 
-	 * @param startIndex
-	 * @param endIndex
-	 * @return
-	 */
-	public List<StudentParent> getParentList( int startIndex , int endIndex);
-	
+	public List<StudentParent> getParents(String accountId,int startIndex, int endIndex);
 	
 }
