@@ -47,24 +47,6 @@
     SessionStatistics statistics = new SessionStatistics();
     
 
-    SchoolAccount school = new SchoolAccount();
-    Element element;
-   
-
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
-    }
-
-    accountuuid = school.getUuid();
-    String schoolname = school.getSchoolName();
-
-    ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();
-    ExamConfig examConfig = examConfigDAO.getExamConfig(accountuuid);
-
-     PositionDAO positionDAO = PositionDAO.getInstance();
-     List<Position> positionList = new ArrayList<Position>(); 
-     positionList = positionDAO.getPositionList();
 
 
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
@@ -201,7 +183,7 @@
         <!-- panel start -->
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Add staff : TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear()%></h3>
+              <h3 class="panel-title">Add staff </h3>
             </div>
             <div class="panel-body">
               
@@ -212,17 +194,7 @@
                         <div class="col-sm-9">
                             <select name="Position" class="form-control" required>
                                 <option value="">Please select one</option> 
-                                 <%
-                                    int count = 1;
-                                    if (positionList != null) {
-                                        for (Position p : positionList) {
-                                %>
-                                <option value="<%= p.getUuid()%>"><%=p.getPosition()%></option>
-                                <%
-                                            count++;
-                                        }
-                                    }
-                                %>
+                                 
                             </select>                           
                           
                         </div>

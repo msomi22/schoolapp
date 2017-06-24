@@ -82,20 +82,20 @@ public class BorrowBook extends HttpServlet{
        }else if(StringUtils.isBlank(schooluuid)){
     	   session.setAttribute(SessionConstants.BOOK_BORROW_ERROR,ERROR_SOMETHING_WENT_WRONG ); 
     	   
-       }else if(bookDAO.getBookByBorrowStatus(bookisbn, BORROW_STATUS_BORROWED) !=null){
+       }/*else if(bookDAO.getBookByBorrowStatus(bookisbn, BORROW_STATUS_BORROWED) !=null){
     	   session.setAttribute(SessionConstants.BOOK_BORROW_ERROR, BOOK_NOT_AVALILABLE); 
     	   
        }else if(bookDAO.getBookByBookStatus(bookisbn,BOOK_STATUS_REFERENCE ) !=null){
     	   session.setAttribute(SessionConstants.BOOK_BORROW_ERROR, BOOK__REFERENCE); 
     	   
-       }else if(studentBookDAO.getStudentBook(bookuuid,BORROW_STATUS_BORROWED) !=null){
+       }*/else if(studentBookDAO.getStudentBook(bookuuid,BORROW_STATUS_BORROWED) !=null){
     	   session.setAttribute(SessionConstants.BOOK_BORROW_ERROR, BOOK_NOT_AVALILABLE); 
     	   
        }else{
     	   Book book;
     	   Student student;
     	   StudentBook studentBook;
-    	   student = studentDAO.getStudentObjByadmNo(schooluuid, studentAdmNo);
+    	   /*student = studentDAO.getStudentObjByadmNo(schooluuid, studentAdmNo);
     	   if(student !=null){
     		   if(StringUtils.equals(student.getStatusUuid(),statusUuid)){
     		   studentBook = new StudentBook();
@@ -118,7 +118,7 @@ public class BorrowBook extends HttpServlet{
     	   }else{
     		   session.setAttribute(SessionConstants.BOOK_BORROW_ERROR,ERROR_STUDENT_ADMNO_NOT_FOUND ); 
     	   }
-    	   
+    	   */
        }
        
        response.sendRedirect("lib.jsp");  

@@ -122,28 +122,13 @@ public class ExportText extends HttpServlet{
 		   school = (Account) element.getObjectValue();
 	 
 		   }
-		   
-		   sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
-		   
+		 
 		   List<Student> studentList = new ArrayList<>();
-		   studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuidToken);
-		   
-		   List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-	         classroomList = streamDAO.getAllRooms(school.getUuid()); 
-	          for(ClassRoom c : classroomList){
-	             roomHash.put(c.getUuid() , c.getRoomName());
-	        }
-	          
-	      List<Subject> subjectList = new ArrayList<Subject>(); 
-	      subjectList = subjectDAO.getAllSubjects(); 
-	      for(Subject s : subjectList){
-	         subjectCodeHash.put(s.getUuid() , s.getSubjectCode());
-	      }    
-
+		  
 		  
 	     subjectCode = subjectCodeHash.get(subjectuuidToken).replaceAll(" ", "_"); 
 	 	 classCode = roomHash.get(classroomuuidToken).replaceAll(" ", "_");  
-	 	 examCode = sysConfig.getExam();
+	 	 //examCode = sysConfig.getExam();
 		   
 		 response.setHeader("Content-Disposition","attachment; filename="+subjectCode+"."+classCode+"."+examCode+".txt");
 		   
@@ -151,7 +136,7 @@ public class ExportText extends HttpServlet{
 			   
 		   OutputStream os = response.getOutputStream();
 		   for(Student s : studentList){
-			   studentAdmno = s.getAdmno();
+			   //studentAdmno = s.getAdmno();
 			   content = studentAdmno+",\n"; 
 			  
 		            InputStream input = new ByteArrayInputStream(content.getBytes("UTF8")); 

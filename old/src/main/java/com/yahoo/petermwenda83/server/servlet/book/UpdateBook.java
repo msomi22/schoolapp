@@ -94,7 +94,7 @@ public class UpdateBook extends HttpServlet{
        }else{
     	   
     	   
-    	   book = bookDAO.getBookByUUID(schooluuid, bookuuid);
+    	   /*book = bookDAO.getBookByUUID(schooluuid, bookuuid);
            book.setISBN(isbn);
            book.setAuthor(author);
            book.setPublisher(publisher);
@@ -105,7 +105,7 @@ public class UpdateBook extends HttpServlet{
         	   session.setAttribute(SessionConstants.BOOK_UPDATE_SUCCESS, SUCCESS_BOOK_UPDATED); 
            }else{
         	   session.setAttribute(SessionConstants.BOOK_UPDATE_ERROR, ERROR_SOMETHING_WENT_WRONG); 
-           }    
+           }    */
        }
       
 	response.sendRedirect("lib.jsp");  

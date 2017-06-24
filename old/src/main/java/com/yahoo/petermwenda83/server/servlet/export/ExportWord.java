@@ -88,7 +88,7 @@ public class ExportWord extends HttpServlet{
 		   }
 		   
 		   List<Student> studentList = new ArrayList<>();
-		   studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuidToken);
+		  // studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuidToken);
 		  
 		   XWPFDocument document = new XWPFDocument(); 
 		   PrintWriter out = response.getWriter();

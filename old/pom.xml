@@ -171,44 +171,15 @@
 	    <version>1.0.19</version>
 	</dependency>
 	
-	<!-- 
-	<dependency>
-	    <groupId>MiddleNumberFor3</groupId>
-	    <artifactId>com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3</artifactId>
-	    <version>1.0</version>
-	    <scope>system</scope>
-	    <systemPath>${project.basedir}/src/main/resources/jars/MiddleNo.jar</systemPath> 
-    </dependency>
-     -->
-    
+	
 
     <!-- Database dependencies -->
-   
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.41</version>
-    </dependency>
-   
+  
 	<dependency>
 	    <groupId>org.postgresql</groupId>
 	    <artifactId>postgresql</artifactId>
 	    <version>9.4-1206-jdbc42</version>
 	</dependency>
-    
-   
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>5.2.8.Final</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>5.4.0.Final</version>
-    </dependency>
     
     <dependency>
       <groupId>com.zaxxer</groupId>
@@ -243,7 +214,7 @@
     <developers>
         <developer>
             <name>Peter Mwenda</name>
-            <id>michael</id>
+            <id>Njeru</id>
             <email>mwendapeter72@gmail.com</email>
             <organization>AppleTech Ltd</organization>
             <roles>
@@ -268,9 +239,7 @@
 
     <pluginManagement>
       <plugins>
-      
-      <!-- http://0.0.0.0:9990/management -->
-
+     
         <plugin>
           <groupId>org.wildfly.plugins</groupId>
           <artifactId>wildfly-maven-plugin</artifactId>

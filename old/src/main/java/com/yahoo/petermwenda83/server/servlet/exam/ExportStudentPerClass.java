@@ -114,7 +114,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 		}
 
-		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
+		/*sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
 
 
 		List<Student> studentList = new ArrayList<>();
@@ -127,11 +127,11 @@ public class ExportStudentPerClass  extends HttpServlet{
 		}
          
 		classCode = roomHash.get(classroomuuid).replaceAll(" ", "_");  
-		examCode = sysConfig.getExam();
+		examCode = sysConfig.getExam();*/
 
 		response.setHeader("Content-Disposition","attachment; filename="+classCode+"."+examCode+".xlsx");
 		
-		createExcelSheets(studentList,school);
+		//createExcelSheets(studentList,school);
 	}
 
 
@@ -189,7 +189,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 		//LOOP SUBJECTS
 	         String outof = "";
 	         String exam = "";
-	         exam = sysConfig.getExam();
+	        // exam = sysConfig.getExam();
 	         if(StringUtils.equalsIgnoreCase(exam, "C1")){
 	        	 outof = "30";
 	         }else if(StringUtils.equalsIgnoreCase(exam, "C2")){
@@ -276,7 +276,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 		if(studentList != null){
 			for(Student stu :studentList){
 				final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
-				if(StringUtils.equals(stu.getStatusUuid(), STATUS_ACTIVE)){
+				if(StringUtils.equals("", STATUS_ACTIVE)){
 					
 					formatedFirstname =  StringUtils.capitalize(stu.getFirstname().toLowerCase());
 					formatedLastname = StringUtils.capitalize(stu.getLastname().toLowerCase());
@@ -288,7 +288,7 @@ public class ExportStudentPerClass  extends HttpServlet{
 
 					//get message  
 					XSSFCell c2 = r.createCell(1);        	
-					c2.setCellValue(ch.createRichTextString(stu.getAdmno()));
+					c2.setCellValue(ch.createRichTextString(""));
                     //languages
 					XSSFCell c3 = r.createCell(2);
 					c3.setCellValue(" ");        		   	     

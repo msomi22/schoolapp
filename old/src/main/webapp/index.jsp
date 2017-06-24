@@ -31,18 +31,7 @@
 
 <%
 
-   
-
-     PositionDAO positionDAO = PositionDAO.getInstance();
-     List<Position> positionList = new ArrayList<Position>(); 
-     positionList = positionDAO.getPositionList();
-
-    BasicTextEncryptor textEncryptor = new BasicTextEncryptor();   
-    textEncryptor.setPassword(PropertiesConfig.getConfigValue("ENCRYPT_PASSWORD")); 
-      
-    String captcha = RandomStringUtils.randomAlphabetic(4); 
-    String encryptedCaptcha = textEncryptor.encrypt(captcha);
-
+  
 
 %>
 
@@ -118,17 +107,7 @@
 				<div class="form-group">
 					<label>Category</label> <select class="form-control"
 						name="staffposition" required>
-						<%
-                   int count = 1;
-                  if (positionList != null) {
-                      for (Position p : positionList) {
-                   %>
-						<option value="<%= p.getUuid()%>"><%=p.getPosition()%></option>
-						<%
-                          count++;
-                      }
-                  } 
-                 %>
+						
 					</select>
 				</div>
 

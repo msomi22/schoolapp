@@ -117,7 +117,7 @@ public class UpdateTermYear extends HttpServlet{
 		}else if(!StringUtils.equals(termYearSecKey, PropertiesConfig.getConfigValue("TY_SECURITY_KEY"))){
 			session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_INCORRECT_SEC_KEY); 
 
-		}else{
+		}else{/*
 
 
 			SysConfig sysConfig = sysConfigDAO.getExamConfig(schoolAccountUuid);
@@ -134,7 +134,7 @@ public class UpdateTermYear extends HttpServlet{
 
 			}
 
-		}
+		*/}
 
 		response.sendRedirect("prepareCommitt.jsp");  
 		return;
@@ -153,13 +153,7 @@ public class UpdateTermYear extends HttpServlet{
 			double [] fee = {14000,7000,3000};
 			double [] dayfee = {5000,4000,3000};
 			for(int i=0; i<terms.length;i++){
-				TermFee termFee = new TermFee();
-				termFee.setSchoolAccountUuid(examConf.getSchoolAccountUuid()); 
-				termFee.setTerm(terms[i]); 
-				termFee.setYear(year);  
-				termFee.setTermAmount(fee[i]);
-				termFee.setDayAmount(dayfee[i]); 
-				termFeeDAO.putFee(termFee);
+				
 			}
 		}
 

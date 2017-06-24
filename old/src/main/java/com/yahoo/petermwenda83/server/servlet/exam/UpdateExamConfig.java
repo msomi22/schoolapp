@@ -124,7 +124,7 @@ public class UpdateExamConfig extends HttpServlet{
        }else if(StringUtils.isEmpty(schoolAccountUuid)){
    	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EMPTY_FIELD); 
    	   
-      }else{
+      }else{/*
     	   
     	
        SysConfig sysConfig = sysConfigDAO.getExamConfig(schoolAccountUuid);
@@ -146,7 +146,7 @@ public class UpdateExamConfig extends HttpServlet{
     	    
        }
        
-       }
+       */}
        
         response.sendRedirect("sysConfig.jsp"); 
 	   return;

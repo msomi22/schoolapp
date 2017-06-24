@@ -71,7 +71,7 @@ public class UpdateExam extends HttpServlet{
 		}else if(Integer.parseInt(outOf) < 30 || Integer.parseInt(outOf) > 100){  
 			session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, INVALID_OUT_OF); 
 
-		}else{
+		}else{/*
 
 			if(examDAO.getExam(uuid) !=null){
 				Exam exam = examDAO.getExam(uuid);
@@ -87,7 +87,7 @@ public class UpdateExam extends HttpServlet{
 
 			response.sendRedirect("sysConfig.jsp"); 
 			return;
-		}
+		*/}
 	}
 
 

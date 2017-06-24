@@ -101,20 +101,20 @@ public class AddBook extends HttpServlet{
        }else if(StringUtils.isBlank(schooluuid)){
     	   session.setAttribute(SessionConstants.BOOK_ADD_ERROR, ERROR_SOMETHING_WENT_WRONG); 
     	   
-       }else if(bookDAO.getBookByISBN(schooluuid, isbn) !=null){
+       }/*else if(bookDAO.getBookByISBN(schooluuid, isbn) !=null){
     	   session.setAttribute(SessionConstants.BOOK_ADD_ERROR, ERROR_BOOK_EXIST); 
     	   
-       }else{
+       }*/else{
     	   
     	   
-    	   book = new Book();
+    	  /* book = new Book();
     	   book.setSchoolAccountUuid(schooluuid);
            book.setISBN(isbn);
            book.setAuthor(author);
            book.setPublisher(publisher);
            book.setTitle(title);
            book.setBookStatus(bookstatus);
-           book.setBorrowStatus(BORROW_STATUS_AVAILABLE);
+           book.setBorrowStatus(BORROW_STATUS_AVAILABLE);*/
            
            if(bookDAO.putBook(book)){
         	   session.setAttribute(SessionConstants.BOOK_ADD_SUCCESS, SUCCESS_BOOK_ADDED); 

@@ -13,7 +13,6 @@ package com.yahoo.petermwenda83.pagination.student;
 
 import java.util.List;
 
-import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.utils.StudentUtils;
@@ -31,15 +30,11 @@ public class StudentPaginator {
 	private static StudentUtils studentUtils;
 	private static StudentDAO studentDAO;
 	private String accountId;
-    private Account account;
 	/**
 	 * @param SchoolAccountUuid 
 	 * 
 	 */
 	public StudentPaginator(String accountId) {
-		account = new Account();
-		account.setUuid(accountId); 
-		
 	    studentUtils = StudentUtils.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		this.accountId = accountId;
@@ -65,7 +60,7 @@ public class StudentPaginator {
     */
    public StudentPage getFirstPage() {
 	   StudentPage page = new StudentPage();
-       List<Student> stuList = studentDAO.getStudentList(account , 0, PAGESIZE);
+       List<Student> stuList = studentDAO.getAllStudent(accountId , 0, PAGESIZE);
        page = new StudentPage(1, getTotalPage(), PAGESIZE, stuList);	    
        return page;
    }
@@ -84,8 +79,8 @@ public class StudentPaginator {
        int  startIndex,sessionCount;
        int totalPage = getTotalPage();
        startIndex = (totalPage - 1) * PAGESIZE;
-       sessionCount = studentUtils.getIncomingCount(account.getUuid());
-       stuList = studentDAO.getStudentList(account, startIndex, sessionCount); 
+       sessionCount = studentUtils.getIncomingCount(accountId);
+       stuList = studentDAO.getAllStudent(accountId, startIndex, sessionCount); 
        page = new StudentPage(totalPage, totalPage, PAGESIZE, stuList);
        return page;
    }
@@ -102,7 +97,7 @@ public class StudentPaginator {
        int totalPage = getTotalPage();
 
        StudentPage page = new StudentPage();
-       List<Student> smsList = studentDAO.getStudentList(account, currentPage.getPageNum() * PAGESIZE, 
+       List<Student> smsList = studentDAO.getAllStudent(accountId, currentPage.getPageNum() * PAGESIZE, 
        		((currentPage.getPageNum() * PAGESIZE) + PAGESIZE));
 
        page = new StudentPage(currentPage.getPageNum() + 1, totalPage, PAGESIZE, smsList);
@@ -123,7 +118,7 @@ public class StudentPaginator {
 
        StudentPage page = new StudentPage();
        
-       List<Student> smsList = studentDAO.getStudentList(account, (currentPage.getPageNum() - 2) * PAGESIZE, 
+       List<Student> smsList = studentDAO.getAllStudent(accountId, (currentPage.getPageNum() - 2) * PAGESIZE, 
        		((currentPage.getPageNum() - 1) * PAGESIZE));
 
        page = new StudentPage(currentPage.getPageNum() - 1, totalPage, PAGESIZE, smsList);

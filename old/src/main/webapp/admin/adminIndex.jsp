@@ -85,9 +85,6 @@ if (session == null) {
      StaffDAO staffDAO = StaffDAO.getInstance();
      List<Staff> staffList = new ArrayList(); 
 
-     StaffDetailsDAO staffDetailsDAO = StaffDetailsDAO.getInstance();
-     
-     
      
 
 
@@ -222,45 +219,19 @@ if (session == null) {
                     <%                                                          
                       int count = 1;
                          for (Account s : schoolList) {
-                          String status = "Active";
-
-                          if(StringUtils.equals(s.getIsActive(),"1")){
-                            status = "Active";
-                              }else{
-                             status = "Inactive";
-                               }
-
-                           StaffDetails staffDetails = new StaffDetails();
-                           staffList = staffDAO.getStaffList(s.getUuid()); 
-                           for(Staff staff : staffList){
-                            
-
-                           if(StringUtils.equals(staff.getPositionUuid(), principalUuid)) {
-                              principalUsername = staff.getUserName();
-                            
-                              staffDetails = staffDetailsDAO.getStaffDetail(staff.getUuid());
-
-                              if(staffDetails != null) {
-                                  staffname = "";
-                                  staffname = "("+staffDetails.getSurname()+" "+staffDetails.getFirstName()+" "+staffDetails.getLastName()+")";
-
-                              }else{
-                                staffname = "";
-                              }
-                           }
-                         }     
+                             
                     %>
                     <tr>
                         <td width="3%"><%=count%></td>
-                         <td class="center"><%=s.getName()%></td> 
-                         <td class="center"><%=s.getUsername()%></td>
-                         <td class="center"><%=principalUsername + " "+staffname+""%></td>
-                         <td class="center"><%=studentDAO.getStudentCount("1",s.getUuid())%></td>
-                         <td class="center"><%=s.getMobile()%></td>
-                         <td class="center"><%=s.getEmail()%></td>  
-                         <td class="center"><%=s.getAddress()%></td>
-                         <td class="center"><%=s.getTown()%></td>  
-                         <td class="center"><%=status%></td>  
+                         <td class="center"><%=s.getName() %></td> 
+                         <td class="center"><%=s.getUsername() %></td>
+                         <td class="center"><%=principalUsername + " "+staffname+"" %></td>
+                         <td class="center"><%=""%></td>
+                         <td class="center"><%=s.getMobile() %></td>
+                         <td class="center"><%=s.getEmail() %></td>  
+                         <td class="center"><%=s.getAddress() %></td>
+                         <td class="center"><%=s.getTown() %></td>  
+                         <td class="center"><%="" %></td>  
                          <td class="center">
                                 <form name="edit" method="POST" action="editSchool.jsp"> 
                                 <input type="hidden" name="schoolname" value="<%=s.getName()%>">

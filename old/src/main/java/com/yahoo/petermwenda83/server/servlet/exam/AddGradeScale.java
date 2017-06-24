@@ -45,77 +45,13 @@ public class AddGradeScale extends HttpServlet{
        HttpSession session = request.getSession(true);
        
        String schoolAccountUuid = StringUtils.trimToEmpty(request.getParameter("schooluuid"));
-       String A = StringUtils.trimToEmpty(request.getParameter("A"));
-       String Am = StringUtils.trimToEmpty(request.getParameter("A-"));
-       String Bp = StringUtils.trimToEmpty(request.getParameter("B+"));
-       String B = StringUtils.trimToEmpty(request.getParameter("B"));
-       String Bm = StringUtils.trimToEmpty(request.getParameter("B-"));
-       String Cp = StringUtils.trimToEmpty(request.getParameter("C+"));
-       String C = StringUtils.trimToEmpty(request.getParameter("C"));
-       String Cm = StringUtils.trimToEmpty(request.getParameter("C-"));
-       String Dp = StringUtils.trimToEmpty(request.getParameter("D+"));
-       String D = StringUtils.trimToEmpty(request.getParameter("D"));
-       String Dm = StringUtils.trimToEmpty(request.getParameter("D-"));
-       String E = StringUtils.trimToEmpty(request.getParameter("E"));
-       Map<String, String> paramHash = new HashMap<>();    	
-	   paramHash.put("A", A);
-	   paramHash.put("Am", Am);
-	   paramHash.put("Bp", Bp);
-	   paramHash.put("B", B);
-	   paramHash.put("Bm", Bm);
-	   paramHash.put("Cp", Cp);
-	   paramHash.put("C", C);
-	   paramHash.put("Cm", Cm);
-	   paramHash.put("Dp", Dp);
-	   paramHash.put("D", D);
-	   paramHash.put("Dm", Dm);
-	   paramHash.put("E", E);
        
-	   if(StringUtils.isEmpty(A) || !isNumeric(A) || Integer.parseInt(A)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
+       Map<String, String> paramHash = new HashMap<>();    	
+	  
+	   
     	   
-       }else if(StringUtils.isEmpty(Am) ||!isNumeric(Am) || Integer.parseInt(Am)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(B) ||!isNumeric(B) || Integer.parseInt(B)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(Bm) ||!isNumeric(Bm) || Integer.parseInt(Bm)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(Cp) ||!isNumeric(Cp) || Integer.parseInt(Cp)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(C) ||!isNumeric(C) || Integer.parseInt(C)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(Cm) ||!isNumeric(Cm) || Integer.parseInt(Cm)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(D) ||!isNumeric(D) || Integer.parseInt(D)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(Dm) ||!isNumeric(Dm) || Integer.parseInt(Dm)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else if(StringUtils.isEmpty(E) ||!isNumeric(E) || Integer.parseInt(E)>100){
-    	   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_EMPTY_FIRLD); 
-    	   
-       }else{
+       if(true){/*
     	   GradingSystem gradingSystem = gradingSystemDAO.getGradingSystem(schoolAccountUuid);
-    	   gradingSystem.setSchoolAccountUuid(schoolAccountUuid); 
-    	   gradingSystem.setGradeAplain(Integer.parseInt(A));
-    	   gradingSystem.setGradeAminus(Integer.parseInt(Am));
-    	   gradingSystem.setGradeBplus(Integer.parseInt(Bp));
-    	   gradingSystem.setGradeBplain(Integer.parseInt(B));
-    	   gradingSystem.setGradeBminus(Integer.parseInt(Bm));
-    	   gradingSystem.setGradeCplus(Integer.parseInt(Cp));
-    	   gradingSystem.setGradeCplain(Integer.parseInt(C));
-    	   gradingSystem.setGradeCminus(Integer.parseInt(Cm));
-    	   gradingSystem.setGradeDplus(Integer.parseInt(Dp));
-    	   gradingSystem.setGradeDplain(Integer.parseInt(D));
-    	   gradingSystem.setGradeDminus(Integer.parseInt(Dm));
-    	   gradingSystem.setGradeE(Integer.parseInt(E)); 
     	   
     	   if(gradingSystemDAO.updateGradingSystem(gradingSystem)){ 
     		   session.setAttribute(SessionConstants.GRADE_ADD_SUCCESS, ERROR_SCALE_ADD_SUCCESS); 
@@ -123,7 +59,7 @@ public class AddGradeScale extends HttpServlet{
     		   session.setAttribute(SessionConstants.GRADE_ADD_ERROR, ERROR_SCALE_ADD_ERROR); 
     	   }
     	   
-       }
+       */}
        
        
        session.setAttribute(SessionConstants.GRADE_PARAM, paramHash);

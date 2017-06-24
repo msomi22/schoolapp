@@ -26,14 +26,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
-import com.yahoo.petermwenda83.bean.student.House;
 import com.yahoo.petermwenda83.bean.student.Student;
-import com.yahoo.petermwenda83.bean.student.StudentHouse;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
-import com.yahoo.petermwenda83.persistence.student.StudentHouseDAO;
-import com.yahoo.petermwenda83.persistence.student.HouseDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -57,11 +53,9 @@ public class ExportExcel extends HttpServlet{
    
 
     private static StudentDAO studentDAO;
-    private static StudentHouseDAO studentHouseDAO;
     private static StreamDAO streamDAO;
     private static SysConfigDAO sysConfigDAO;
     private static PrimaryDAO primaryDAO;
-    private static HouseDAO houseDAO;
     private String classroomuuid = "";
     String schoolusername = "";
     private ServletOutputStream out;
@@ -80,11 +74,9 @@ public class ExportExcel extends HttpServlet{
 	    
 	    studentDAO = StudentDAO.getInstance();
 	    sysConfigDAO = SysConfigDAO.getInstance();
-	    studentHouseDAO = StudentHouseDAO.getInstance();
 	    primaryDAO = PrimaryDAO.getInstance();
 	    streamDAO = StreamDAO.getInstance();
-	    houseDAO = HouseDAO.getInstance();
-	    studentHouseDAO = StudentHouseDAO.getInstance();
+	   
 	    
     }
 
@@ -122,30 +114,10 @@ public class ExportExcel extends HttpServlet{
 	 
 		   }
                
-		    sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
-		    
+		   
 		   
 		    List<Student> studentList = new ArrayList<>();
-	        studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuid);
 	        
-	        List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-	          classroomList = streamDAO.getAllRooms(school.getUuid()); 
-	           for(ClassRoom c : classroomList){
-	                roomHash.put(c.getUuid() , c.getRoomName());
-	          }
-	           
-	           List<StudentHouse> studentHouseList = new ArrayList<StudentHouse>(); 
-	               studentHouseList = studentHouseDAO.getHouseList();
-		           for(StudentHouse sh : studentHouseList){
-		        	   studentHouseHash.put(sh.getStudentUuid() , sh.getHouseUuid());
-		          }
-		           
-		        List<House> houseList = new ArrayList<House>(); 
-		        houseList = houseDAO.getHouseList(school.getUuid());
-			           for(House h : houseList){
-			        	   houseHash.put(h.getUuid() , h.getHouseName()); 
-			     }
-	           
             String fileName = new StringBuffer(StringUtils.trimToEmpty("StudentsList"))
                 .append("_")
                 .append(roomHash.get(classroomuuid))
@@ -262,20 +234,20 @@ public class ExportExcel extends HttpServlet{
         if(studentList != null){
           for(Student stu :studentList){
         	 final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
-        	  if(StringUtils.equals(stu.getStatusUuid(), STATUS_ACTIVE)){
+        	  if(StringUtils.equals("", STATUS_ACTIVE)){
         		  //System.out.println("status="+stu.getStatusUuid());
         	  String schoolname = "";
         	  String index = "";
         	  String year = "";
         	  String mark = "";
         	  String room = "";
-        	  StudentPrimary primary = primaryDAO.getPrimary(stu.getUuid());
+        	 /* StudentPrimary primary = primaryDAO.getPrimary(stu.getUuid());
         	  if(primary !=null){
         		  schoolname = primary.getSchoolname(); 
         		  index = primary.getIndex();
         		  year = primary.getKcpeyear();
         		  mark = primary.getKcpemark();
-        	  }
+        	  }*/
         	 
         	  if(houseHash.get(studentHouseHash.get(stu.getUuid()))!=null){
         		  room = houseHash.get(studentHouseHash.get(stu.getUuid()));
@@ -284,7 +256,7 @@ public class ExportExcel extends HttpServlet{
         	  
 				formatedFirstname =  StringUtils.capitalize(stu.getFirstname().toLowerCase());
 				formatedLastname = StringUtils.capitalize(stu.getLastname().toLowerCase());
-				formatedSurname = StringUtils.capitalize(stu.getSurname().toLowerCase());
+				//formatedSurname = StringUtils.capitalize(stu.getSurname().toLowerCase());
         	  
         	  
         	  
@@ -295,7 +267,7 @@ public class ExportExcel extends HttpServlet{
         	      
         	    //get message  
         	  XSSFCell c2 = r.createCell(1);        	
-        	      c2.setCellValue(ch.createRichTextString(stu.getAdmno()));
+        	      c2.setCellValue(ch.createRichTextString(""));
         	      
         	 //get phone numbers
         	      XSSFCell c3 = r.createCell(2);

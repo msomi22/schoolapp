@@ -45,37 +45,7 @@
     SessionStatistics statistics = new SessionStatistics();
     
 
-    SchoolAccount school = new SchoolAccount();
-    Element element;
-   
-
-    int incount = 0;  // Generic counter
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
-    }
-
-    String accountuuid = school.getUuid();
-    String schoolname = school.getSchoolName();
-
-    ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();
-    ExamConfig examConfig = examConfigDAO.getExamConfig(accountuuid);
-
-    String stffID ="";
-    stffID = request.getParameter("staffid");
-    String classroomuuid = "";
-    classroomuuid = request.getParameter("classroomuuid");
-
-    HashMap<String, String> roomHash = new HashMap<String, String>();
-     RoomDAO roomDAO = RoomDAO.getInstance();
-     List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-     classroomList = roomDAO.getAllRooms(accountuuid); 
-      for(ClassRoom c : classroomList){
-           roomHash.put(c.getUuid() , c.getRoomName());
-      }
     
-
-
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
    
@@ -150,7 +120,7 @@
       <!-- panel start -->
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Exam panel: <%=roomHash.get(classroomuuid)%> , TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear()%></h3>
+              <h3 class="panel-title">Exam panel: </h3>
             </div>
             <div class="panel-body">
               
@@ -166,59 +136,6 @@
                 </thead>   
                 <tbody >  
 
-                          <% if(StringUtils.equals(examConfig.getExamMode(), "ON")) {%>
-
-                    <td width="10%" class="center">    
-                    <form  class=""   action="classListF3_4" method="POST" target="_blank">
-                     <fieldset>                     
-                     <input type="hidden" name="examID" value="4BE8AD46-EAE8-4151-BD18-CB23CF904DDB" > 
-                     <input type="hidden" name="staffid" value="<%=stffID%>" >      
-                     <input type="hidden" name="classID" value="A4BFC2BD-262F-4207-99C8-057D6ADF80C7" >  <!--F3 -->     
-                     <button type="submit" name="Report" value="Report"   class="btn btn-primary">(P1,P2,P3) Performance List</button> 
-                     </fieldset>
-                     </form>                                      
-                    </td> 
-
-                      <td width="10%" class="center">                              
-                     <form  class=""   action="reportFormF3_4_p1_p2_p3" method="POST" target="_blank">
-                     <fieldset>                     
-                     <input type="hidden" name="examID" value="4BE8AD46-EAE8-4151-BD18-CB23CF904DDB" >   
-                     <input type="hidden" name="staffid" value="<%=stffID%>" >    
-                     <input type="hidden" name="classID" value="A4BFC2BD-262F-4207-99C8-057D6ADF80C7" >  <!--F3 -->     
-                     <button type="submit" name="Report" value="Report"   class="btn btn-primary">(P1,P2,P3) Report Form</button> 
-                     </fieldset>
-                     </form>                                            
-                    </td> 
-
-                        <%} else {%>
-
-
-
-                    <td width="10%" class="center">                              
-                    <form  class=""   action="classListF3_4" method="POST" target="_blank">
-                     <fieldset>
-                     <input type="hidden" name="examID" value="1678664C-D955-4FA7-88C2-9461D3F1E782" > 
-                     <input type="hidden" name="staffid" value="<%=stffID%>" >    
-                     <input type="hidden" name="classID" value="A4BFC2BD-262F-4207-99C8-057D6ADF80C7" >  <!--F3 -->     
-                     <button type="submit" name="Report" value="Report"   class="btn btn-primary">(C1,C2,ET) Performance List</button> 
-                     </fieldset>
-                     </form>                                             
-                    </td> 
-
-                  
-
-                    <td width="10%" class="center">                              
-                    <form  class=""   action="reportFormF3_4_c1_c2_et" method="POST" target="_blank">
-                     <fieldset>
-                     <input type="hidden" name="examID" value="1678664C-D955-4FA7-88C2-9461D3F1E782" >  
-                     <input type="hidden" name="staffid" value="<%=stffID%>" >   
-                     <input type="hidden" name="classID" value="A4BFC2BD-262F-4207-99C8-057D6ADF80C7" >  <!--F3 -->     
-                     <button type="submit" name="Report" value="Report"   class="btn btn-primary">(C1,C2,ET) Report Form</button> 
-                     </fieldset>
-                     </form>                                         
-                    </td> 
-
-                     <%}%>
 
                 </tbody>                  
             </table>  

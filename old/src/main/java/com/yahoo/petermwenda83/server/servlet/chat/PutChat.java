@@ -85,12 +85,12 @@ public class PutChat extends HttpServlet{
 				//System.out.println("senderIds = " + senderIds);
 				//System.out.println("receiverIds = " + receiverIds);
 			
-				chat.setSenderUuid(StringUtils.stripToEmpty(senderIds));
+				/*chat.setSenderUuid(StringUtils.stripToEmpty(senderIds));
 				chat.setReceiverUuid(StringUtils.stripToEmpty(receiverIds));
 				chat.setMessage(StringUtils.stripToEmpty(message));
 				chat.setMgsStatus("Sent");
 				chat.setDateSent(new Date());
-				chatDAO.putChat(chat); 
+				chatDAO.putChat(chat); */
 			}
 			
 		}

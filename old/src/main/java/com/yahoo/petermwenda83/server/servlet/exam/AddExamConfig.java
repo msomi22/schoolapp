@@ -62,11 +62,11 @@ public class AddExamConfig extends HttpServlet{
       }else if(StringUtils.isEmpty(examMode)){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EMPTY_EXAM_MODE); 
     	   
-       }else if(sysConfigDAO.getExamConfig(schoolAccountUuid) !=null){
+       }/*else if(sysConfigDAO.getExamConfig(schoolAccountUuid) !=null){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EXAM_CONGIGURED); 
     	   
-       }else{
-    	   SysConfig sysConfig = new SysConfig();
+       }*/else{
+    	   /*SysConfig sysConfig = new SysConfig();
     	   sysConfig.setSchoolAccountUuid(schoolAccountUuid);
     	   sysConfig.setTerm(term);
     	   sysConfig.setYear(Year);
@@ -77,7 +77,7 @@ public class AddExamConfig extends HttpServlet{
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_SUCCESS, ERROR_ECAMC_ADD_ADD_SUCCESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_ECAMC_ADD_ERROR);
-    	   }
+    	   }*/
     	   
      }
        

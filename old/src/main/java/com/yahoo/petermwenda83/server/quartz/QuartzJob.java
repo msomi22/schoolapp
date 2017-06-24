@@ -21,7 +21,6 @@ import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
-import com.yahoo.petermwenda83.server.servlet.sms.send.AfricasTalkingGateway;
 
 
 public class QuartzJob implements Job{
@@ -79,8 +78,8 @@ public class QuartzJob implements Job{
 							africasTalking.setMessage(message); 
 							africasTalking.setRecipients(phone); 
 							// Create a new instance of our awesome gateway class
-							AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-							try {
+							//AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
+							try {/*
 								JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
 								for( int i = 0; i < results.length(); ++i ) {
 									JSONObject result = results.getJSONObject(i);
@@ -113,7 +112,7 @@ public class QuartzJob implements Job{
 
 								}
 
-							}
+							*/}
 
 							catch (Exception e) {
 								e.printStackTrace(); 

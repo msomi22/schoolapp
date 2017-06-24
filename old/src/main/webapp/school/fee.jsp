@@ -11,8 +11,6 @@
 <%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.otherfee.OtherFee"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.money.TermFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.money.TermFee"%>
@@ -58,73 +56,6 @@
     Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
     
 
-    SchoolAccount school = new SchoolAccount();
-    Element element;
-   
-
-    int incount = 0;  // Generic counter
-    String accountuuid = "";
-    String schoolname = "";
-   
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
-    }
-     
-     if(school !=null){
-      accountuuid = school.getUuid();
-      schoolname = school.getSchoolName();
-      }
-
-    ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();
-    ExamConfig examConfig = new ExamConfig();
-    if(examConfigDAO.getExamConfig(accountuuid) !=null){
-        examConfig = examConfigDAO.getExamConfig(accountuuid);
-       }
-
-
-
-     StudentOtherMoniesDAO studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
-     List<StudentOtherMonies> stuOthermoniList = new ArrayList<StudentOtherMonies>(); 
-
-     TermOtherMoniesDAO termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
-     List<TermOtherMonies> termOtherMoniesList = new ArrayList<TermOtherMonies>(); 
-     termOtherMoniesList = termOtherMoniesDAO.getTermOtherMoniesList(accountuuid);  
-
-      HashMap<String, Double> tomHash = new HashMap<String, Double>(); 
-     for(TermOtherMonies toml: termOtherMoniesList){
-       tomHash.put(toml.getOtherstypeUuid(),toml.getAmount());
-       }
-
-
-      
-      
-      
-     OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
-     List<Otherstype> othertypeList = new ArrayList<Otherstype>(); 
-     othertypeList = otherstypeDAO.gettypeList(accountuuid);  
-
-      HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
-      HashMap<String, String> termHash = new HashMap<String, String>(); 
-      HashMap<String, String> yearHash = new HashMap<String, String>(); 
-
-      
-    TermFeeDAO termFeeDAO = TermFeeDAO.getInstance();
-
-    TermFee termFee  = new TermFee();
-
-    if(termFeeDAO.getFee(accountuuid,examConfig.getTerm(),examConfig.getYear()) !=null){
-           termFee = termFeeDAO.getFee(accountuuid,examConfig.getTerm(),examConfig.getYear());
-       }
-   
-
-     if(othertypeList !=null){
-     for(Otherstype om : othertypeList){
-         moneytypeHash.put(om.getUuid(),om.getType());
-         termHash.put(om.getUuid(),om.getTerm());
-         yearHash.put(om.getUuid(),om.getYear());
-         }
-       }
              
       
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
@@ -140,15 +71,6 @@
     NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
 
-    String schoolfee = "";
-
-    if(StringUtils.equalsIgnoreCase(school.getDayBoarding(), "YES")){
-        schoolfee = " BOARDING FEE: " + nf.format(termFee.getTermAmount()) + " " + " DAY FEE: " + nf.format(termFee.getDayAmount());
-     }else{
-        schoolfee = " FEE: " + nf.format(termFee.getTermAmount());
-    }
-
-    
    
  %>
 
@@ -219,96 +141,12 @@
     <div class="col-sm-9">
         <div class="breadcrumb">
          <h4><small> 
-         <%=schoolname%> :FEE MANAGEMENT PANEL FOR: TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear() %>  <%=schoolfee%>  
+           
          </small></h4>   
        </div>
 
 
 
-
-
-                <%             
-
-                  HashMap<String, Student> studentParamHash = (HashMap<String, Student>) session.getAttribute(SessionConstants.STUENT_PARAM_F);
-                  HashMap<String, List<StudentFee> > feeParamHash = (HashMap<String, List<StudentFee> >) session.getAttribute(SessionConstants.FEE_PARAM);
-
-                            if (studentParamHash == null) {
-                             studentParamHash = new HashMap<String, Student>();
-                            }
-
-                            if (feeParamHash == null) {
-                             feeParamHash = new HashMap<String, List<StudentFee> >();
-                            }
-
-
-                            Student student = new Student();
-                            student = studentParamHash.get("studentObj");
-                              
-
-                            List<StudentFee> studentfeeList = new ArrayList<StudentFee>();
-                            studentfeeList = feeParamHash.get("studentfeeList");
-                            
-
-                               
-                         
-                         
-                               String fullname = "";
-
-                               String formatedFirstname = "";
-                               String formatedLastname = "";
-                               String formatedSurname = "";
-                               String studentType = "";
-
-                   
-
-                                String admNumber =""; 
-                               String studentuuid ="";                            
-
-                     if(student !=null){
-
-                         admNumber = student.getAdmno();
-                         studentuuid = student.getUuid();
-                         studentType = student.getStudentType();
-                                   
-                         formatedFirstname = StringUtils.capitalize(student.getFirstname().toLowerCase());
-                         formatedLastname = StringUtils.capitalize(student.getLastname().toLowerCase());
-                         formatedSurname = StringUtils.capitalize(student.getSurname().toLowerCase()); 
-
-                         fullname = formatedFirstname +" "+formatedLastname+" "+formatedSurname + "(" + studentType + ")";
- 
-                       }
-                     
-                      
-
-                                String addError = "";
-                                String addsuccess = "";
-                                session = request.getSession(false);
-                                addError = (String) session.getAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR);
-                                addsuccess = (String) session.getAttribute(SessionConstants.STUDENT_FEE_ADD_SUCCESS); 
-
-                                if (StringUtils.isNotEmpty(addError)) {
-                                      %>
-                                     <div class="alert alert-danger">
-                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                       <strong>Warning!</strong> <%out.println(addError);%> 
-                                     </div>         
-                                      <%                              
-                                    session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, null);
-                                  } 
-                                   else if (StringUtils.isNotEmpty(addsuccess)) {
-                                      %>
-                                     <div class="alert alert-success">
-                                      <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                       <strong>Success!</strong> <%out.println(addsuccess);%> 
-                                     </div>         
-                                      <%                      
-                                    session.setAttribute(SessionConstants.STUDENT_FEE_ADD_SUCCESS, null);
-                                  } 
-
-
-
-                      %>
-      
 
 
 
@@ -317,7 +155,7 @@
           <div class="panel panel-info">
             <div class="panel-heading">
               <h3 class="panel-title"> 
-                 FEE MANAGEMENT FOR: TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear() %>  <%=schoolfee%> 
+                 FEE MANAGEMENT FOR: 
               </h3>
             </div>
             <div class="panel-body">
@@ -349,7 +187,7 @@
                                </td> 
 
                                <td width="10%" class="center">                                
-                               <input type="hidden" name="schooluuid" value="<%=accountuuid%>">
+                               <input type="hidden" name="schooluuid" value="<%=""%>">
                                 <input class="btn btn-success" type="submit" name="view" id="submit" value="Find" />                                                         
                                </td> 
                                </form> 
@@ -374,14 +212,14 @@
                 <tbody >
                     <%  
                                out.println("<tr>"); 
-                               out.println("<td width=\"10%\" class=\"center\">" + admNumber + "</td>");  
-                               out.println("<td width=\"10%\" class=\"center\">" + fullname + "</td>");    
+                               out.println("<td width=\"10%\" class=\"center\">" + "" + "</td>");  
+                               out.println("<td width=\"10%\" class=\"center\">" + "" + "</td>");    
                              
                     %> 
                               
                                <td width="10%" class="center">    
                                <form name="view" method="POST" action="printStatement" target="_blank">                             
-                               <input type="hidden" name="studentuuid" value="<%=studentuuid%>">
+                               <input type="hidden" name="studentuuid" value="<%="" %>">
                                <input class="btn btn-success" type="submit" name="view" id="submit" value="Print" />
                                </form>      
                                </td>
@@ -408,48 +246,7 @@
                     </tr>
                 </thead>   
                 <tbody >
-                    <%     
-                              double total = 0;
-                              double totalpaid = 0;
-                             
-                               int count = 1;
-                         if(studentfeeList !=null){
-                       for(StudentFee sfee : studentfeeList){
-
-                               total = sfee.getAmountPaid();
-                               totalpaid = totalpaid + total;
-                               out.println("<tr>"); 
-                               out.println("<td width=\"3%\" >" + count + "</td>"); 
-                               out.println("<td class=\"center\">" +  nf.format(total) + "</td>"); 
-                               out.println("<td class=\"center\">" +  sfee.getTransactionID() + "</td>");
-                               out.println("<td class=\"center\">" +  sfee.getDatePaid() + "</td>"); 
-                               %>
-                               <td class="center">
-                                <form name="view" method="POST" action="updatefee.jsp"> 
-                                <input type="hidden" name="transactionid" value="<%=sfee.getTransactionID()%>">
-                                <input type="hidden" name="amountpaid" value="<%=sfee.getAmountPaid()%>">
-                                <input type="hidden" name="studentuuid" value="<%=sfee.getStudentUuid()%>">
-                                <input type="hidden" name="fullname" value="<%=fullname%>">
-                                 <input type="hidden" name="admNumber" value="<%=admNumber%>">
-                                <input class="btn btn-success" type="submit" name="view" id="submit" value="Edit" /> 
-                                </form>                          
-                               </td>    
-
-                                  
-
-
-
-          
-                                <%
-                               count++;
-                            
-                           }                           
-                           }                   
-                  
-                             %> 
-
-                               
-
+                    
                 </tbody>                                 
             </table>  
 
@@ -463,12 +260,7 @@
                     </tr>
                 </thead>   
                 <tbody >
-                    <%  
-                              
-                               out.println("<tr>"); 
-                               out.println("<td class=\"center\">" +  nf.format(totalpaid) + "</td>"); 
-                             
-                    %> 
+                   
 
                 </tbody>
 
@@ -534,86 +326,7 @@
                     </tr>
                 </thead>   
                 <tbody >
-                    <%   
-                         
-                         
-
-                          String othermoney ="";
-                          String itemterm ="";
-                          String itemyear ="";
-
-                          double itemcost = 0;
-                          double amountpaid = 0;
-                          double amountpaidTotal = 0;
-                          double mysombalance = 0;
-                          double mysombalancetotal = 0;
-                        
-                            
-             List<StudentOtherMonies> stuOthermoniDistinctList = new ArrayList<StudentOtherMonies>(); 
-              stuOthermoniDistinctList = studentOtherMoniesDAO.getStudentOtherMoniesDistinct(studentuuid);
-                    if(stuOthermoniDistinctList !=null){
-
-                      int count22 = 1;
-                       for(StudentOtherMonies somdisticnt : stuOthermoniDistinctList){                               
-                          
-                           if(studentOtherMoniesDAO.getStudentOtherMoniesList(studentuuid,somdisticnt.getOtherstypeUuid()) !=null){
-                              stuOthermoniList = studentOtherMoniesDAO.getStudentOtherMoniesList(studentuuid,somdisticnt.getOtherstypeUuid());
-                                
-                                 amountpaid = 0;
-                                 amountpaidTotal = 0;
-                                 itemcost = 0;
-                                 mysombalance = 0;
-                                 mysombalancetotal = 0;
-
-                                
-                                for(StudentOtherMonies sotheO : stuOthermoniList){
-
-                                   itemterm = termHash.get(sotheO.getOtherstypeUuid());
-                                   itemyear = yearHash.get(sotheO.getOtherstypeUuid());
-                                  
-                                   amountpaid = sotheO.getAmountPiad();
-                                   amountpaidTotal+=amountpaid;
-                                   othermoney = moneytypeHash.get(sotheO.getOtherstypeUuid());
-                                   itemcost = tomHash.get(sotheO.getOtherstypeUuid());
-                                   mysombalance = itemcost - amountpaidTotal;
-                                   mysombalancetotal+=mysombalance;
-
-                                   out.println("<tr>"); 
-                                   out.println("<td width=\"3%\" >" + count22 + "</td>"); 
-                                   out.println("<td class=\"center\">" + othermoney  + "</td>"); 
-                                   out.println("<td class=\"center\">" + itemcost + "</td>");
-                                   out.println("<td class=\"center\">" + itemterm + "</td>");
-                                   out.println("<td class=\"center\">" + itemyear + "</td>");
-                                   out.println("<td class=\"center\">" + amountpaid + "</td>");
-                                   out.println("<td class=\"center\">" + sotheO.getTerm() + "</td>");
-                                   out.println("<td class=\"center\">" + sotheO.getYear() + "</td>");
-
-                                   %>
-                               <td class="center">
-                               <form name="view" method="POST" action="revert">                             
-                               <input type="hidden" name="studentuuid" value="<%=studentuuid%>">
-                               <input type="hidden" name="typeuuid" value="<%=sotheO.getOtherstypeUuid()%>">
-                               <input type="hidden" name="schooluuid" value="<%=accountuuid%>">
-                               <input type="hidden" name="amount" value="<%=itemcost%>">
-                               <input type="hidden" name="term" value="<%=itemterm%>">
-                               <input type="hidden" name="year" value="<%=itemyear%>">
-                               <input class="btn btn-success" type="submit" name="view" id="submit" value="Revert" />
-                               </form>  
-                               </td>   </tr>
-
-                                   <%
-                                  
-
-                                   
-
-                                     }            
-                                 }
-                                  count22++;
-                              }
-                          }
-
-                             %> 
-
+                    
                                
 
                 </tbody>                                 

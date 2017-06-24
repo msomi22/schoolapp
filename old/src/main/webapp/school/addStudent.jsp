@@ -54,48 +54,6 @@
 
    
 
-    
-
-    SchoolAccount school = new SchoolAccount();
-    Element element;
-   
-
-    int incount = 0;  // Generic counter
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (SchoolAccount) element.getObjectValue();
-    }
-
-    accountuuid = school.getUuid();
-    String schoolname = school.getSchoolName();
-
-    ExamConfigDAO examConfigDAO = ExamConfigDAO.getInstance();
-    ExamConfig examConfig = examConfigDAO.getExamConfig(accountuuid);
-
-    RoomDAO roomDAO = RoomDAO.getInstance();
-    List<ClassRoom> classList = new ArrayList<ClassRoom>();
-    classList = roomDAO.getAllRooms(accountuuid);
-
-     StudentDAO studentDAO = StudentDAO.getInstance();
-     Student student = studentDAO.getStudentADmNo(accountuuid);
-
-      int admno = 0; 
-      String studentadm = student.getAdmno();
-      admno = NumberUtils.toInt(studentadm);
-      if(admno <=0){
-          final  String INITIAL_ADM_NO =(String)  PropertiesConfig.getConfigValue("INITIAL_ADM_NO");
-          admno = NumberUtils.toInt(INITIAL_ADM_NO);
-       }else{
-            admno = NumberUtils.toInt(studentadm);
-        }
-     
-     admno = admno + 1;
-     String newAdmno = ""+admno;
-      
-    
-    
-    
-
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
    
@@ -183,7 +141,7 @@
 
     <div class="col-sm-9">
         <div class="breadcrumb">
-           STUDENT REGISTRATION : TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear()%>
+           STUDENT REGISTRATION 
        </div>
 
      
@@ -235,7 +193,7 @@
       <!-- panel start -->
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title"> STUDENT REGISTRATION : TERM <%=examConfig.getTerm()%>:<%=examConfig.getYear()%> </h3>
+              <h3 class="panel-title"> STUDENT REGISTRATION :  </h3>
             </div>
             <div class="panel-body">
              
@@ -249,18 +207,7 @@
                                             <select name="classroomUuid" class="form-control" required>
 
                                                 <option value="">Please select one</option> 
-                                                 <%
-                                                    int count = 1;
-                                                    if (classList != null) {
-                                                        for (ClassRoom cl : classList) {
-                                                %>
-                                                <option value="<%=cl.getUuid()%>"><%=cl.getRoomName()%></option>
-                                                <%
-                                                            count++;
-                                                        }
-                                                    }
-                                                %>
-                                                
+                                                 
                                             </select>                           
                                           
                                         </div>
@@ -272,7 +219,7 @@
                                         <label class="col-sm-3 control-label" for="name">Admission Number*:</label>
                                         <div class="col-sm-9">
                                          <input class="form-control" id="receiver" type="text" name="admNO" 
-                                            value="<%=newAdmno%>" required> 
+                                            value="" required> 
 
                                         </div>
                                     </div>  

@@ -131,27 +131,14 @@ public class ExportExcelxlsx extends HttpServlet{
 
 		}
 
-		sysConfig = sysConfigDAO.getExamConfig(school.getUuid());
+		
 
 		List<Student> studentList = new ArrayList<>();
-		studentList = studentDAO.getAllStudents(school.getUuid(), classroomuuidToken);
-
-		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = streamDAO.getAllRooms(school.getUuid()); 
-		for(ClassRoom c : classroomList){
-			roomHash.put(c.getUuid() , c.getRoomName());
-		}
-
-		List<Subject> subjectList = new ArrayList<Subject>(); 
-		subjectList = subjectDAO.getAllSubjects(); 
-		for(Subject s : subjectList){
-			subjectCodeHash.put(s.getUuid() , s.getSubjectCode());
-		}    
-
+		
 
 		subjectCode = subjectCodeHash.get(subjectuuidToken).replaceAll(" ", "_"); 
 		classCode = roomHash.get(classroomuuidToken).replaceAll(" ", "_");  
-		examCode = sysConfig.getExam();
+		//examCode = sysConfig.getExam();
 
 		response.setHeader("Content-Disposition","attachment; filename="+subjectCode+"."+classCode+"."+examCode+".xlsx");
 
@@ -189,26 +176,7 @@ public class ExportExcelxlsx extends HttpServlet{
 			//subjectuuidToken
 
 			for(Student s : studentList){
-				final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
-				if(StringUtils.equals(s.getStatusUuid(), STATUS_ACTIVE)){
-					if(studentSubjectDAO.getsubject(s.getUuid(), subjectuuidToken) !=null){
-						studentAdmno = s.getAdmno();
-
-						//System.out.println(studentAdmno); 
-
-						XSSFRow r = sheet.createRow(i);
-
-						XSSFCell c2 = r.createCell(0);        	
-						c2.setCellValue(ch.createRichTextString(studentAdmno));
-
-						XSSFCell c3 = r.createCell(1);
-
-						c3.setCellValue(ch.createRichTextString(" "));   
-
-
-						i++;
-					}
-				}
+				
 			}
 
 			xf.write(out);

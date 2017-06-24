@@ -83,7 +83,7 @@ public class ReturnBook extends HttpServlet{
     	   Date dateNow = new Date(); 
     	   dateStri = formatter.format(dateNow);  
     	   
-    	   studentBook = new StudentBook();
+    	   /*studentBook = new StudentBook();
     	   studentBook.setStudentUuid(studentuuid);
     	   studentBook.setBookUuid(bookuuid); 
     	   studentBook.setReturnDate(dateStri);  
@@ -98,7 +98,7 @@ public class ReturnBook extends HttpServlet{
     		   session.setAttribute(SessionConstants.BOOK_RETURN_SUCCESS, SUCCESS_BOOK_RETURN); 
     	   }else{
     		   session.setAttribute(SessionConstants.BOOK_RETURN_ERROR, ERROR_BOOK_RETURN+"3"); 
-    	   }
+    	   }*/
     	   
        }
        
