@@ -12,23 +12,13 @@ import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
  *
  */
 public interface SchoolRevertedMoneyDAO {
-	/**
-	 * 
-	 * @param studentUuid
-	 * @return
-	 */
-	public RevertedMoney getRevertedMoney(String studentUuid);
-	 /**
-	  * 
-	  * @param revertedMoney
-	  * @return
-	  */
-	public boolean putstudentUuid(RevertedMoney revertedMoney);
-	/**
-	 * 
-	 * @param studentUuid
-	 * @return
-	 */
-	public List<RevertedMoney> getRevertedMoneyList(String studentUuid);
+	
+	public RevertedMoney getRevertedMoney(String accountId, String studentId, String uuid);
+	
+	public boolean putRevertedMoney(RevertedMoney revertedMoney);
+	
+	public boolean deleteRevertedMoney(String accountId, String studentId, String uuid);
+	
+	public List<RevertedMoney> getRevertedMoneyList(String studentId, int startIndex, int endIndex);
 
 }

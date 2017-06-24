@@ -13,41 +13,12 @@ import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
  */
 public interface SchoolClassTeacherDAO {
 	
-	/**
-	 * 
-	 * @param TeacherUuid
-	 * @return
-	 */
-	public ClassTeacher getClassTeacherByteacherId(String TeacherUuid);
+	public ClassTeacher getClassTeacher(String accountId, String streamId);
 	
-	/**
-	 * 
-	 * @param TeacherUuid
-	 * @return
-	 */
-	public ClassTeacher getClassTeacherByclassId(String ClassRoomUuid);
-	 /**
-	  * 
-	  * @param Teacher
-	  * @return
-	  */
 	public boolean putClassTeacher(ClassTeacher Teacher);
-	  /**
-	   * 
-	   * @param Teacher
-	   * @return
-	   */
-	public boolean updateClassTeacher(ClassTeacher Teacher);
-	   /**
-	    * 
-	    * @param Teacher
-	    * @return
-	    */
-	public boolean deleteClassTeacher(ClassTeacher Teacher);
-	   /**
-	    * 
-	    * @return
-	    */
-	public List<ClassTeacher> getClassTeacherList();
+	
+	public boolean deleteClassTeacher(String accountId, String uuid);
+	
+	public List<ClassTeacher> getClassTeacherList(String accountId);
 
 }

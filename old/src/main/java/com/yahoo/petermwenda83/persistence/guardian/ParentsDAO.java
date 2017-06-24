@@ -23,22 +23,22 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	private static ParentsDAO parentsDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	public static ParentsDAO getInstance(){
-		
+
 		if(parentsDAO == null){
 			parentsDAO = new ParentsDAO();		
 		}
 		return parentsDAO;
 	}
-	
+
 	/** 
 	 * 
 	 */
 	public ParentsDAO() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -53,24 +53,25 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	public StudentParent getParent(String accountId, String studentId) {
 		StudentParent studentParent = null;
 		ResultSet rset = null;
-		
-		  try(   Connection conn = dbutils.getConnection();
-				 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM studentParent"
-						+ " WHERE studentUuid =?;");
-		         ){
-			  pstmt.setString(1, studentUuid); 
-		      rset = pstmt.executeQuery();
-		     while(rset.next()){
-		    	 studentParent  = beanProcessor.toBean(rset,StudentParent.class);
-		   }
-	        	
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to get studentParent with studentuuid: "+studentUuid);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
-    
-		 }
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM studentParent"
+						+ " WHERE accountId =? AND studentId =?;");
+				){
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, studentId); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				studentParent  = beanProcessor.toBean(rset,StudentParent.class);
+			}
+
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to get studentParent with studentId: "+studentId);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+
+		}
 		return studentParent;
 	}
 
@@ -79,39 +80,30 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	 */
 	@Override
 	public boolean putParent(StudentParent parent) {
-		 boolean success = true;
-			
-		  try(   Connection conn = dbutils.getConnection();
+		boolean success = true;
+
+		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentParent" 
-			        		+"(Uuid, StudentUuid,Fathername,Fatherphone,FatherEmail,FatherID,Fatheroccupation,Mothername,"
-			        		+ "Motherphone,MotherEmail,MotherID,Motheroccupation,RelativeName,RelativePhone) VALUES "
-			        		+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-		             ){
-			   
-	            pstmt.setString(1, parent.getUuid());
-	            pstmt.setString(2, parent.getStudentUuid());	            
-	            pstmt.setString(3, parent.getFathername());	       
-	            pstmt.setString(4, parent.getFatherphone());
-	            pstmt.setString(5, parent.getFatherEmail());	       
-	            pstmt.setString(6, parent.getFatherID());
-	            pstmt.setString(7, parent.getFatheroccupation());		            
-	            pstmt.setString(8, parent.getMothername());
-	            pstmt.setString(9, parent.getMotherphone());	       
-	            pstmt.setString(10, parent.getMotherEmail());
-	            pstmt.setString(11, parent.getMotherID());	       
-	            pstmt.setString(12, parent.getMotheroccupation());	     
-	            pstmt.setString(13, parent.getRelativeName());	       
-	            pstmt.setString(14, parent.getRelativePhone());
-	            
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put StudentParent: "+parent);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
-             success = false;
-		 }
-		
+						+"(uuid, accountId, studentId, name, mobile, email, lastUpdated) VALUES "
+						+ "(?,?,?,?,?,?,?);");
+				){
+
+			pstmt.setString(1, parent.getUuid());
+			pstmt.setString(2, parent.getAccountId());	            
+			pstmt.setString(3, parent.getStudentId());	       
+			pstmt.setString(4, parent.getName());
+			pstmt.setString(5, parent.getMobile());	       
+			pstmt.setString(6, parent.getEmail());
+			pstmt.setString(7, parent.getLastUpdated());		            
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put StudentParent: "+parent);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
 		return success;
 	}
 
@@ -121,60 +113,55 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	@Override
 	public boolean updateParent(StudentParent parent) {
 		boolean success = true;
-		
-		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentParent SET Fathername = ?,Fatherphone = ?,FatherEmail = ?,"
-	             		+ "FatherID =?,Fatheroccupation =?,Mothername =?,Motherphone =?,MotherEmail=?,MotherID =?,Motheroccupation=?,"
-	             		+ "RelativeName =?,RelativePhone =? WHERE StudentUuid = ?;");
-	               ) {      			 	                       
-	            pstmt.setString(1, parent.getFathername());	       
-	            pstmt.setString(2, parent.getFatherphone());
-	            pstmt.setString(3, parent.getFatherEmail());	       
-	            pstmt.setString(4, parent.getFatherID());
-	            pstmt.setString(5, parent.getFatheroccupation());		            
-	            pstmt.setString(6, parent.getMothername());
-	            pstmt.setString(7, parent.getMotherphone());	       
-	            pstmt.setString(8, parent.getMotherEmail());
-	            pstmt.setString(9, parent.getMotherID());	       
-	            pstmt.setString(10, parent.getMotheroccupation());	     
-	            pstmt.setString(11, parent.getRelativeName());	       
-	            pstmt.setString(12, parent.getRelativePhone());
-	            pstmt.setString(13, parent.getStudentUuid());	
-	            pstmt.executeUpdate();
 
-    } catch (SQLException e) {
-      logger.error("SQL Exception when updating update StudentParent " + parent);
-      logger.error(ExceptionUtils.getStackTrace(e));
-      System.out.println(ExceptionUtils.getStackTrace(e));
-      success = false;
-   } 
-		
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentParent SET name = ?, mobile = ?, email = ?,"
+						+ "lastUpdated =? WHERE accountId = ? AND studentId =? ;");
+				) {   
+
+			pstmt.setString(1, parent.getName());
+			pstmt.setString(2, parent.getMobile());	       
+			pstmt.setString(3, parent.getEmail());
+			pstmt.setString(4, parent.getLastUpdated());
+			pstmt.setString(5, parent.getAccountId());	            
+			pstmt.setString(6, parent.getStudentId());	 
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating update StudentParent " + parent);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
 		return success;
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#deleteParent(com.yahoo.petermwenda83.bean.student.guardian.StudentParent)
+	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#deleteParent(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean deleteParent(String accountId, String studentId) {
 		boolean success = true; 
-	      try(
-	      		  Connection conn = dbutils.getConnection();
-	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentParent"
-	         	      		+ " WHERE StudentUuid =?;");       
-	      		){
-	      	
-	      	     pstmt.setString(1, parent.getStudentUuid());
-		         pstmt.executeUpdate();
-	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting StudentParent : " +parent);
-	           logger.error(ExceptionUtils.getStackTrace(e));
-	           System.out.println(ExceptionUtils.getStackTrace(e));
-	           success = false;
-	           
-	      }
-	      
-			return success;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentParent"
+						+ " WHERE accountId =? AND studentId =?;");       
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.executeUpdate();
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting parent for studentId : " +studentId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
 	/**
@@ -183,47 +170,53 @@ public class ParentsDAO extends GenericDAO  implements SchoolParentsDAO {
 	@Override
 	public List<StudentParent> getParents(String accountId) {
 		List<StudentParent> list = null;
-		 try(   
-	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentParent;");   
-	  		ResultSet rset = pstmt.executeQuery();
-			) {
-	  	
-	      list = beanProcessor.toBeanList(rset, StudentParent.class);
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentParent WHERE accountId =?;");   
+				) {
 
-	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting Parent List");
-	     logger.error(ExceptionUtils.getStackTrace(e));
-	     System.out.println(ExceptionUtils.getStackTrace(e)); 
-	  }
-	  return list;
+			pstmt.setString(1,accountId);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, StudentParent.class);
+			}
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting Parent List");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+		return list;
 	}
 
-	
+
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParentList(int, int)
+	 * @see com.yahoo.petermwenda83.persistence.guardian.SchoolParentsDAO#getParents(java.lang.String, int, int)
 	 */
 	@Override
 	public List<StudentParent> getParents(String accountId,int startIndex, int endIndex) {
 		List<StudentParent> parentList = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentParent LIMIT ? OFFSET ? ;");
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentParent WHERE accountId =? LIMIT ? OFFSET ? ;");
 				) {
-			psmt.setInt(1, endIndex - startIndex);
-			psmt.setInt(2, startIndex);
 			
+			psmt.setString(1, accountId);
+			psmt.setInt(2, endIndex - startIndex);
+			psmt.setInt(3, startIndex);
+
 			try(ResultSet rset = psmt.executeQuery();){
 				parentList = beanProcessor.toBeanList(rset, StudentParent.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get a parentList.");
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e)); 
-	    }
-		
+			logger.error("SQLException when trying to get a parentList for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
 		return parentList;		
 	}
-	
+
 }

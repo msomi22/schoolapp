@@ -36,7 +36,7 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.money.StudentBalance;
@@ -64,7 +64,7 @@ public class PerClassFinanceReport extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private StudentBalance studentBal;
 	
 	private static StreamDAO streamDAO;
@@ -106,7 +106,7 @@ public class PerClassFinanceReport extends HttpServlet{
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		studentBal = new StudentBalance();
 
 		USER = System.getProperty("user.name");
@@ -269,7 +269,7 @@ public class PerClassFinanceReport extends HttpServlet{
 				NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 				double balance = 0;
 				String feebalance = "";
-                balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stu.getAdmissionDate(),stu.getRegTerm(),stu.getUuid(),school.getUuid(),stu.getFinalYear()); 
+                balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherFeeDAO,stu.getAdmissionDate(),stu.getRegTerm(),stu.getUuid(),school.getUuid(),stu.getFinalYear()); 
                 feebalance = nf.format(balance);
 
 

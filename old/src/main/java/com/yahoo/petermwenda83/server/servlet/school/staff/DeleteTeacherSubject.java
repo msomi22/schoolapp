@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
-import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 /**    
@@ -29,7 +29,7 @@ public class DeleteTeacherSubject extends HttpServlet{
 	final String ERROR_EMPTY_FIELDS = "Something went wrong while deleting the subject, try again later.";
 	final String DELETER_FAILED = "Something went wrong while deleting the subject, try again later.";
 	final String DELETE_SUCCESS = "The subject was deleted successfully.";
-	private static TeacherSubClassDAO teacherSubClassDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
 
 
 	/**    
@@ -40,7 +40,7 @@ public class DeleteTeacherSubject extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       teacherSubClassDAO = TeacherSubClassDAO.getInstance();
+       teacherSubjectDAO = TeacherSubjectDAO.getInstance();
        
    }
    
@@ -68,7 +68,7 @@ public class DeleteTeacherSubject extends HttpServlet{
     	   teacherSubject.setSubjectUuid(subjectId);
     	   teacherSubject.setTeacherUuid(teacherUuid); 
     	   teacherSubject.setClassRoomUuid(classid); 
-    	   if( teacherSubClassDAO.deleteSubjectClass(teacherSubject)){
+    	   if( teacherSubjectDAO.deleteSubjectClass(teacherSubject)){
     		   session.setAttribute(SessionConstants.STAFF_FIND_SUCCESS, DELETE_SUCCESS); 
     	   }else{
     		   session.setAttribute(SessionConstants.STAFF_FIND_ERROR, DELETER_FAILED); 

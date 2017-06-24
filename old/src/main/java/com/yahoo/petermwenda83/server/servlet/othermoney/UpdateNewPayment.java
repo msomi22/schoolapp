@@ -18,7 +18,7 @@ import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.TermOtherMonies;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -39,7 +39,7 @@ public class UpdateNewPayment  extends HttpServlet{
 
 	private static SysConfigDAO sysConfigDAO;
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
-	private static OtherstypeDAO otherstypeDAO;
+	private static OtherFeeDAO otherFeeDAO;
 	SysConfig sysConfig;
 	private Cache schoolaccountCache;
 	/**  
@@ -52,7 +52,7 @@ public class UpdateNewPayment  extends HttpServlet{
 		super.init(config);
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
-		otherstypeDAO = OtherstypeDAO.getInstance();
+		otherFeeDAO = OtherFeeDAO.getInstance();
 		
 		CacheManager mgr = CacheManager.getInstance();
 		schoolaccountCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
@@ -103,8 +103,8 @@ public class UpdateNewPayment  extends HttpServlet{
 		 }else{
 			
 			OtherFee otherFee = new OtherFee();
-			if(otherstypeDAO.getOtherstype(OtherstypeUuid) !=null){
-			otherFee = otherstypeDAO.getOtherstype(OtherstypeUuid);
+			if(otherFeeDAO.getOtherstype(OtherstypeUuid) !=null){
+			otherFee = otherFeeDAO.getOtherstype(OtherstypeUuid);
 			otherFee.setUuid(OtherstypeUuid);
 			otherFee.setSchoolAccountUuid(school.getUuid()); 
 			otherFee.setTerm(sysConfig.getTerm());
@@ -120,7 +120,7 @@ public class UpdateNewPayment  extends HttpServlet{
 			termOtherMonies.setSchoolAccountUuid(school.getUuid());
 			}
 			
-		     if(otherstypeDAO.updteOtherstype(otherFee) && termOtherMoniesDAO.updateTermOtherMonies(termOtherMonies)){
+		     if(otherFeeDAO.updteOtherstype(otherFee) && termOtherMoniesDAO.updateTermOtherMonies(termOtherMonies)){
 			  session.setAttribute(SessionConstants.OTHER_MONIES_ADD_SUCESS, MONEY_ASSIGNED_SUCCESS); 
 		     }else{
 		      session.setAttribute(SessionConstants.OTHER_MONIES_ADD_ERROR, MONEY_ASSIGNED_ERROR); 

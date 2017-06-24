@@ -21,7 +21,7 @@ public class TestOtherstypeDAO {
 	final int databasePort = 5432;
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#OtherstypeDAO(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO#OtherstypeDAO(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)}.
 	 */
 	@Test
 	public final void testOtherstypeDAOStringStringStringStringInt() {
@@ -29,7 +29,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#getOtherstype(java.lang.String)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO#getOtherstype(java.lang.String)}.
 	 */
 	@Test
 	public final void testGetOtherstype() {
@@ -37,7 +37,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#putOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO#putOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
 	 */
 	@Test
 	public final void testPutOtherstype() {
@@ -45,7 +45,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO#updteOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)}.
 	 */
 	@Test
 	public final void testUpdteOtherstype() {
@@ -53,7 +53,7 @@ public class TestOtherstypeDAO {
 	}
 
 	/**
-	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO#getOtherstypeList(java.lang.String, java.lang.String, java.lang.String)}.
+	 * Test method for {@link com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO#getOtherstypeList(java.lang.String, java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public final void testGetOtherstypeList() {

@@ -75,13 +75,13 @@ import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
-import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
@@ -129,12 +129,12 @@ public class ReportFormF1 extends HttpServlet{
 	private static SysConfigDAO sysConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
-	private static TeacherSubClassDAO teacherSubClassDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
 
 	private static StaffDAO staffDAO;
 	private static ClassTeacherDAO classTeacherDAO;
 
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static MiscellanousDAO miscellanousDAO;
 	private static BarWeightDAO barWeightDAO;
@@ -242,12 +242,12 @@ public class ReportFormF1 extends HttpServlet{
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 
 		termFeeDAO = TermFeeDAO.getInstance();
-		teacherSubClassDAO = TeacherSubClassDAO.getInstance();
+		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		staffDAO = StaffDAO.getInstance();
 		classTeacherDAO = ClassTeacherDAO.getInstance();
 		parentsDAO = ParentsDAO.getInstance();
 
-		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
 		barWeightDAO = BarWeightDAO.getInstance();
@@ -2883,7 +2883,7 @@ public class ReportFormF1 extends HttpServlet{
 					String feebalance = "";
 					StudentBalance studentBal = new StudentBalance();
 					//admtermMap finalyearMap
-					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdaterMap.get(uuid),admtermMap.get(uuid),uuid,school.getUuid(),finalyearMap.get(uuid)); 
+					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherFeeDAO,admdaterMap.get(uuid),admtermMap.get(uuid),uuid,school.getUuid(),finalyearMap.get(uuid)); 
 					//System.out.println("balance = " + balance + " admTerm " + admtermMap.get(uuid) + " adm no " + studentAdmNoHash.get(uuid));
 					feebalance = nf.format(balance);
 					
@@ -3355,8 +3355,8 @@ public class ReportFormF1 extends HttpServlet{
 	private String findSubTecher(String subjectid, String classroomid) {
 		String teachername = "";
 		String teacheruuid = "";
-		if(teacherSubClassDAO.getSubject(subjectid, classroomid) !=null){
-			TeacherSubject teachersub = teacherSubClassDAO.getSubject(subjectid, classroomid);
+		if(teacherSubjectDAO.getSubject(subjectid, classroomid) !=null){
+			TeacherSubject teachersub = teacherSubjectDAO.getSubject(subjectid, classroomid);
 			teacheruuid = teachersub.getTeacherUuid();
 			if(staffDAO.getStaffDetail(teacheruuid) !=null){
 				Staff StaffDetail = staffDAO.getStaffDetail(teacheruuid); 

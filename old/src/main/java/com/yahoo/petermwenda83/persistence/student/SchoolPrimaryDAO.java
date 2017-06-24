@@ -11,34 +11,15 @@ import com.yahoo.petermwenda83.bean.student.StudentPrimary;
  *
  */
 public interface SchoolPrimaryDAO {
-	  /**
-	   * 
-	   * @param StudentUuid
-	   * @return Student StudentPrimary Account Details
-	   */
-	public StudentPrimary getPrimary(String StudentUuid);
-	   /**
-	    * 
-	    * @param Primary
-	    * @return
-	    */
-	public boolean putPrimary(StudentPrimary Primary);
-	   /**
-	    * 
-	    * @param Primary
-	    * @return
-	    */
-	public boolean updatePrimary(StudentPrimary Primary);
-	    /**
-	     * 
-	     * @param Primary
-	     * @return
-	     */
-	public boolean deletePrimary(StudentPrimary Primary);
-	    /**
-	     * 
-	     * @return
-	     */
-	public List<StudentPrimary> getAllPrimary();
+	
+	public StudentPrimary getStudentPrimary(String accountId,String studentId);
+	 
+	public boolean putStudentPrimary(StudentPrimary Primary);
+	  
+	public boolean updateStudentPrimary(StudentPrimary Primary);
+	   
+	public boolean deleteStudentPrimary(String accountId,String studentId);
+	  
+	public List<StudentPrimary> getStudentPrimary(String accountId);
 
 }

@@ -1,5 +1,5 @@
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.TeacherSubject"%>
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>

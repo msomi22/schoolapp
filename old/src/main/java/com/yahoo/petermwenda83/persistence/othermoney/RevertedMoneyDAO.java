@@ -32,13 +32,13 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 	public static RevertedMoneyDAO getInstance() {
 		if(revertedMoneyDAO == null){
 			revertedMoneyDAO = new RevertedMoneyDAO();		
-			}
+		}
 		return revertedMoneyDAO;
 	}
-	
+
 	public RevertedMoneyDAO() {
 		super();
-		
+
 	}
 
 
@@ -51,86 +51,118 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 	 */
 	public RevertedMoneyDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort){
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		
+
 	}
+
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#getRevertedMoney(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#getRevertedMoney(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public RevertedMoney getRevertedMoney(String studentUuid) {
+	public RevertedMoney getRevertedMoney(String accountId, String studentId, String uuid) {
 		RevertedMoney revertedMoney = null;
-        ResultSet rset = null;
-         try(
-        	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentUuid = ?;");       
-        		){
-        	 pstmt.setString(1, studentUuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 revertedMoney  = beanProcessor.toBean(rset,RevertedMoney.class);
-	   }
-       	
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting Reverted Money for studentUuid: " + studentUuid );
-             logger.error(ExceptionUtils.getStackTrace(e));
-             System.out.println(ExceptionUtils.getStackTrace(e));
-        }
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE accountId = ? AND studentId = ? AND uuid =?;");       
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, uuid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				revertedMoney  = beanProcessor.toBean(rset,RevertedMoney.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Reverted Money for studentId  " + studentId );
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
 		return revertedMoney; 
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#putRevertedMoney(com.yahoo.petermwenda83.bean.otherfee.RevertedMoney)
+	 */
+	@Override
+	public boolean putRevertedMoney(RevertedMoney revertedMoney) {
+		boolean success = true;
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO RevertedMoney" 
+						+"(uuid, accountId, studentId, otherFeeId, dateReverted) VALUES (?,?,?,?,?);");
+				){
+
+			pstmt.setString(1, revertedMoney.getUuid());
+			pstmt.setString(2, revertedMoney.getAccountId());
+			pstmt.setString(3, revertedMoney.getStudentId());
+			pstmt.setString(4, revertedMoney.getOtherFeeId());
+			pstmt.setTimestamp(5, revertedMoney.getDateReverted());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put RevertedMoney " + revertedMoney);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+
+		return success;
 	}
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#putstudentUuid(com.yahoo.petermwenda83.bean.otherfee.RevertedMoney)
 	 */
 	@Override
-	public boolean putstudentUuid(RevertedMoney revertedMoney) {
+	public boolean deleteRevertedMoney(String accountId, String studentId, String uuid) {
 		boolean success = true;
-		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO RevertedMoney" 
-			        		+"(Uuid,studentUuid,otherstypeUuid,amount,term,year) VALUES (?,?,?,?,?,?);");
-      		){
-			   
-	            pstmt.setString(1, revertedMoney.getUuid());
-	            pstmt.setString(2, revertedMoney.getStudentUuid());
-	            pstmt.setString(3, revertedMoney.getOtherstypeUuid());
-	            pstmt.setDouble(4, revertedMoney.getAmount());
-	            pstmt.setString(5, revertedMoney.getTerm());
-	            pstmt.setString(6, revertedMoney.getYear());
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			logger.error("SQL Exception trying to put RevertedMoney: "+revertedMoney);
-            logger.error(ExceptionUtils.getStackTrace(e)); 
-            System.out.println(ExceptionUtils.getStackTrace(e));
-            success = false;
-		 }
-		
-		
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM RevertedMoney WHERE accountId =? AND studentId =? AND uuid =?;");
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, uuid);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to delete RevertedMoney for studentId  " + studentId + " with id " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+
 		return success;
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#getRevertedMoneyList(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#getRevertedMoneyList(java.lang.String, int, int)
 	 */
 	@Override
-	public List<RevertedMoney> getRevertedMoneyList(String studentUuid) {
+	public List<RevertedMoney> getRevertedMoneyList(String studentId, int startIndex, int endIndex) {
 		List<RevertedMoney> list = null;
-        try (
-        		 Connection conn = dbutils.getConnection();
-        		 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentUuid = ?;");
-     	   ) {
-         	   pstmt.setString(1, studentUuid);      
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, RevertedMoney.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting RevertedMoney  List"); 
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-      
-        return list;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ? LIMIT ? OFFSET ?;");
+				) {
+			pstmt.setString(1, studentId);    
+			pstmt.setInt(2, endIndex - startIndex);
+			pstmt.setInt(3, startIndex);
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, RevertedMoney.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting RevertedMoney  List for studentId " +  studentId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
 	}
 
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
 <%@page import="org.apache.commons.lang3.RandomStringUtils"%>
 <%@page import="org.jasypt.util.text.BasicTextEncryptor"%>

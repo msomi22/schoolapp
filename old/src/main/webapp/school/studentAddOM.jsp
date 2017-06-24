@@ -3,7 +3,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.otherfee.OtherFee"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO"%>

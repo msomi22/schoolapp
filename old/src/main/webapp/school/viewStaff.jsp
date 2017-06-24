@@ -10,7 +10,7 @@
 <%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.PositionDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>

@@ -27,7 +27,7 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
-import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
@@ -65,7 +65,7 @@ public class UploadExam extends HttpServlet {
 	private static ExamEgineDAO examEgineDAO;
 	private static StreamDAO streamDAO;
 	private static SubjectDAO subjectDAO;
-	private static TeacherSubClassDAO teacherSubClassDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static SysConfigDAO sysConfigDAO;
 	
 	String classuuid = "";
@@ -102,7 +102,7 @@ public class UploadExam extends HttpServlet {
        examEgineDAO = ExamEgineDAO.getInstance();
        streamDAO = StreamDAO.getInstance();
        subjectDAO = SubjectDAO.getInstance();
-       teacherSubClassDAO = TeacherSubClassDAO.getInstance();
+       teacherSubjectDAO = TeacherSubjectDAO.getInstance();
        sysConfigDAO = SysConfigDAO.getInstance();
        
    }
@@ -159,7 +159,7 @@ public class UploadExam extends HttpServlet {
 		    		 String feedback = "";
 		    	       
 		    	       if(uploadedFile !=null){
-		    	    	   feedback = excelUtil.inspectResultFile(uploadedFile,schooluuid,stffID,streamDAO, subjectDAO,teacherSubClassDAO,studentDAO);
+		    	    	   feedback = excelUtil.inspectResultFile(uploadedFile,schooluuid,stffID,streamDAO, subjectDAO,teacherSubjectDAO,studentDAO);
 		    	       }
 		    	      
 		    	      // System.out.println("Feedback = "+feedback+"\n");

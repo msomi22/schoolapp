@@ -31,7 +31,7 @@ import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
@@ -80,7 +80,7 @@ public class AddSchool extends HttpServlet{
 	
 	
 	private static TermOtherMoniesDAO termOtherMoniesDAO;
-	private static OtherstypeDAO otherstypeDAO;
+	private static OtherFeeDAO otherFeeDAO;
 	private static SmsApiDAO smsApiDAO;
 	
 
@@ -104,7 +104,7 @@ public class AddSchool extends HttpServlet{
        miscellanousDAO = MiscellanousDAO.getInstance();
        examDAO = ExamDAO.getInstance();
        termOtherMoniesDAO = TermOtherMoniesDAO.getInstance();
-       otherstypeDAO = OtherstypeDAO.getInstance();
+       otherFeeDAO = OtherFeeDAO.getInstance();
        smsApiDAO = SmsApiDAO.getInstance();
    }
    
@@ -276,7 +276,7 @@ public class AddSchool extends HttpServlet{
 	    	   otherFee.setTerm("1");
 	    	   otherFee.setYear("2016"); 
 	    	   
-	    	   if(otherstypeDAO.putOtherstype(otherFee)){
+	    	   if(otherFeeDAO.putOtherstype(otherFee)){
 	    		   TermOtherMonies termOtherMonies = new  TermOtherMonies();
 	    		   termOtherMonies = new TermOtherMonies();
 	    		   termOtherMonies.setSchoolAccountUuid(account.getUuid());

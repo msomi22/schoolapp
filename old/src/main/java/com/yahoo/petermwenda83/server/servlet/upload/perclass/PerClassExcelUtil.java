@@ -29,7 +29,7 @@ import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
-import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 
@@ -65,7 +65,7 @@ public class PerClassExcelUtil {
 	 * @return the feedback of having inspected the file, whether it was proper
 	 * @throws IOException 
 	 */
-	protected String inspectResultFile(File file,String schooluuid,String staffId,StreamDAO streamDAO,SubjectDAO subjectDAO,TeacherSubClassDAO teacherSubClassDAO,StudentDAO studentDAO) throws IOException {
+	protected String inspectResultFile(File file,String schooluuid,String staffId,StreamDAO streamDAO,SubjectDAO subjectDAO,TeacherSubjectDAO teacherSubjectDAO,StudentDAO studentDAO) throws IOException {
 
 		String feedback = PerClassUploadExam.UPLOAD_SUCCESS;
 		// Creating Input Stream 

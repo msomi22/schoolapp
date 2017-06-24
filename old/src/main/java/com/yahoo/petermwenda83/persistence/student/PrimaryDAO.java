@@ -25,21 +25,21 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 	private static PrimaryDAO primaryDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	public static PrimaryDAO getInstance(){
 		if(primaryDAO == null){
 			primaryDAO = new PrimaryDAO();		
 		}
 		return primaryDAO;
 	}
-	
+
 	/**  
 	 * 
 	 */
 	public PrimaryDAO() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -53,27 +53,27 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#getPrimary(java.lang.String)
 	 */
 	@Override
-	public StudentPrimary getPrimary(String StudentUuid) {
+	public StudentPrimary getStudentPrimary(String accountId,String studentId) {
 		StudentPrimary primary = null;
 		ResultSet rset = null;
-		
-		  try(   Connection conn = dbutils.getConnection();
-				 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentPrimary"
-						+ " WHERE StudentUuid =?;");
-		         ){
-			  pstmt.setString(1, StudentUuid); 
-		      rset = pstmt.executeQuery();
-		     while(rset.next()){
-		    	 primary  = beanProcessor.toBean(rset,StudentPrimary.class);
-		   }
-	        	
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to get Student Primary Info with StudentUuid: "+StudentUuid);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
-    
-		 }
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentPrimary"
+						+ " WHERE accountId =? AND studentId =?;");
+				){
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, studentId); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				primary  = beanProcessor.toBean(rset,StudentPrimary.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to get Student Primary Info for studentId " + studentId);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+
+		}
 		return primary;
 	}
 
@@ -81,29 +81,30 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#putPrimary(com.yahoo.petermwenda83.bean.student.StudentPrimary)
 	 */
 	@Override
-	public boolean putPrimary(StudentPrimary Primary) {
+	public boolean putStudentPrimary(StudentPrimary Primary) {
 		boolean success = true;
-		
-		  try(   Connection conn = dbutils.getConnection();
+
+		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentPrimary" 
-			        		+"(Uuid, StudentUuid, SchoolName,Index,KcpeYear,KcpeMark) VALUES (?,?,?,?,?,?);");
-		             ){
-			   
-	            pstmt.setString(1, Primary.getUuid());
-	            pstmt.setString(2, Primary.getStudentUuid());
-	            pstmt.setString(3, Primary.getSchoolname());	       
-	            pstmt.setString(4, Primary.getIndex());
-	            pstmt.setString(5, Primary.getKcpeyear());
-	            pstmt.setString(6, Primary.getKcpemark());
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put StudentPrimary: "+Primary);
-           logger.error(ExceptionUtils.getStackTrace(e)); 
-           System.out.println(ExceptionUtils.getStackTrace(e));
-          success = false;
-		 }
-		
+						+"(uuid,accountId,studentId,schoolName,index,kcpeYear,kcpeMark) VALUES (?,?,?,?,?,?,?);");
+				){
+
+			pstmt.setString(1, Primary.getUuid());
+			pstmt.setString(2, Primary.getAccountId());
+			pstmt.setString(3, Primary.getStudentId());
+			pstmt.setString(4, Primary.getSchoolName());	       
+			pstmt.setString(5, Primary.getIndex());
+			pstmt.setString(6, Primary.getKcpeyear());
+			pstmt.setString(7, Primary.getKcpemark());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put StudentPrimary  " + Primary);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
 		return success;
 	}
 
@@ -111,77 +112,85 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#updatePrimary(com.yahoo.petermwenda83.bean.student.StudentPrimary)
 	 */
 	@Override
-	public boolean updatePrimary(StudentPrimary Primary) {
+	public boolean updateStudentPrimary(StudentPrimary Primary) {
 		boolean success = true;
-		
-		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentPrimary SET Schoolname = ?,Index = ?,Kcpeyear = ?,"
-			        + "Kcpemark =? WHERE StudentUuid = ?;");
-	               ) {           			 	            
-	            pstmt.setString(1, Primary.getSchoolname());	       
-	            pstmt.setString(2, Primary.getIndex());
-	            pstmt.setString(3, Primary.getKcpeyear());
-	            pstmt.setString(4, Primary.getKcpemark());
-	            pstmt.setString(5, Primary.getStudentUuid());
-	            pstmt.executeUpdate();
 
-    } catch (SQLException e) {
-      logger.error("SQL Exception when updating StudentPrimary " + Primary);
-      logger.error(ExceptionUtils.getStackTrace(e));
-      System.out.println(ExceptionUtils.getStackTrace(e));
-      success = false;
-   } 
-		
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentPrimary SET schoolName = ?,index = ?,kcpeYear = ?,"
+						+ "kcpeMark =? WHERE accountId = ? AND studentId =?;");
+				) {           			 	            
+
+
+			pstmt.setString(1, Primary.getSchoolName());	       
+			pstmt.setString(2, Primary.getIndex());
+			pstmt.setString(3, Primary.getKcpeyear());
+			pstmt.setString(4, Primary.getKcpemark());
+			pstmt.setString(5, Primary.getAccountId());
+			pstmt.setString(6, Primary.getStudentId());	           
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating StudentPrimary " + Primary);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
 		return success;
 	}
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#deletePrimary(com.yahoo.petermwenda83.bean.student.StudentPrimary)
 	 */
 	@Override
-	public boolean deletePrimary(StudentPrimary Primary) {
+	public boolean deleteStudentPrimary(String accountId,String studentId) {
 		boolean success = true; 
-	      try(
-	      		  Connection conn = dbutils.getConnection();
-	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentPrimary"
-	         	      		+ " WHERE StudentUuid =?;");       
-	      		
-	      		){
-	      	
-	      	     pstmt.setString(1, Primary.getStudentUuid());
-		         pstmt.executeUpdate();
-		     
-	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting StudentPrimary : " +Primary);
-	           logger.error(ExceptionUtils.getStackTrace(e));
-	           System.out.println(ExceptionUtils.getStackTrace(e));
-	           success = false;
-	           
-	      }
-	      
-			return success;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentPrimary"
+						+ " WHERE accountId =? AND studentId =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting studentId  " + studentId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
+
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#getAllPrimary()
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolPrimaryDAO#getStudentPrimary(java.lang.String)
 	 */
 	@Override
-	public List<StudentPrimary> getAllPrimary() {
+	public List<StudentPrimary> getStudentPrimary(String accountId) {
 		List<StudentPrimary> list = null;
-		 try(   
-	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentPrimary;");   
-	  		ResultSet rset = pstmt.executeQuery();
-			) {
-	  	
-	      list = beanProcessor.toBeanList(rset, StudentPrimary.class);
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM StudentPrimary WHERE accountId =?;");   
+				) {
 
-	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting List of Student's Primary Details");
-	     logger.error(ExceptionUtils.getStackTrace(e));
-	     System.out.println(ExceptionUtils.getStackTrace(e)); 
-	  }
-	  return list;
+			pstmt.setString(1,accountId);
+			try(ResultSet rset = pstmt.executeQuery();){
+				list = beanProcessor.toBeanList(rset, StudentPrimary.class);
+			}
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting List of Student's Primary Details for accountId " + accountId );
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+		return list;
 	}
 
 }

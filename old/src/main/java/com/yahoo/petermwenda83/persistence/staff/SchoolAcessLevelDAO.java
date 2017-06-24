@@ -11,15 +11,15 @@ import com.yahoo.petermwenda83.bean.staff.AcessLevel;
  * @author peter
  *
  */
-public interface SchoolPositionDAO {
+public interface SchoolAcessLevelDAO {
 	
-	public AcessLevel get(String Uuid);
+	public AcessLevel get(String uuid);
 	
-	public boolean putPosition(AcessLevel osition);
+	public boolean putPosition(AcessLevel acessLevel);
 	
-	public boolean updatePosition(AcessLevel osition);
+	public boolean updatePosition(AcessLevel acessLevel);
 	
-	public boolean deletePosition(AcessLevel osition);
+	public boolean deletePosition(String uuid);
 	
 	public List<AcessLevel> getPositionList();
 

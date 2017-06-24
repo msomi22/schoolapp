@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
@@ -22,11 +23,11 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  * 
  */
 public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
-	
+
 	private static StaffDAO staffDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	/**
 	 * 
 	 * @return subjectDAO
@@ -37,7 +38,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		}
 		return staffDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -55,61 +56,64 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	public StaffDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort){
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
-	
+
+
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffDetail(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaff(java.lang.String, java.lang.String)
 	 */
-	public Staff getStaff(String accountId, String Uuid) {
+	public Staff getStaff(String accountId, String uuid) {
 		Staff StaffDetail = null;
-        ResultSet rset = null;
-        try(
-     		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE staffUuid = ?;");       
-     		
-     		){
-     	
-     	 pstmt.setString(1, staffUuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 StaffDetail  = beanProcessor.toBean(rset,Staff.class);
-	   }  	
-      	
-     }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Staff with staffUuid: " + staffUuid);
-          logger.error(ExceptionUtils.getStackTrace(e));
-          System.out.println(ExceptionUtils.getStackTrace(e));
-     }
-     
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND uuid =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				StaffDetail  = beanProcessor.toBean(rset,Staff.class);
+			}  	
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with uuid " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return StaffDetail; 
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffDetailByemployeeNo(java.lang.String)
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByStaffNo(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Staff getStaffByStaffNo(String accountId, String staffNo) {
 		Staff StaffDetail =  null;
-        ResultSet rset = null;
-        try(
-     		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE employeeNo = ?;");       
-     		
-     		){
-     	
-     	 pstmt.setString(1, employeeNo);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 StaffDetail  = beanProcessor.toBean(rset,Staff.class);
-	   }  	
-      	
-     }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Staff with employeeNo: " + employeeNo);
-          logger.error(ExceptionUtils.getStackTrace(e));
-          System.out.println(ExceptionUtils.getStackTrace(e));
-     }
-     
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND staffNo =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, staffNo);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				StaffDetail  = beanProcessor.toBean(rset,Staff.class);
+			}  	
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with staffNo: " + staffNo);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return StaffDetail; 
 	}
 
@@ -119,36 +123,36 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	 */
 	public boolean putStaff(Staff staff) {
 		boolean success = true; 
-		  
-		 try(   Connection conn = dbutils.getConnection();
+
+		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Staff" 
-			        		+"(Uuid,StaffUuid,EmployeeNo,FirstName,LastName,Surname,Gender,NhifNo,"
-			        		+ "NssfNo,Phone,DOB,NationalID,County,SysUser,RegistrationDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-    		){
-	            pstmt.setString(1, staff.getUuid());
-	            pstmt.setString(2, staff.getStaffUuid());
-	            pstmt.setString(3, staff.getEmployeeNo());
-	            pstmt.setString(4, staff.getFirstName());
-	            pstmt.setString(5, staff.getLastName());
-	            pstmt.setString(6, staff.getSurname());
-	            pstmt.setString(7, staff.getGender());	            
-	            pstmt.setString(8, staff.getNhifNo());
-	            pstmt.setString(9, staff.getNssfNo());
-	            pstmt.setString(10, staff.getPhone());
-	            pstmt.setString(11, staff.getdOB());
-	            pstmt.setString(12, staff.getNationalID());
-	            pstmt.setString(13, staff.getCounty());
-	            pstmt.setString(14, staff.getSysUser());
-	            pstmt.setTimestamp(15, new Timestamp(staff.getRegistrationDate().getTime()));
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put staff: " + staff);
-            logger.error(ExceptionUtils.getStackTrace(e)); 
-            System.out.println(ExceptionUtils.getStackTrace(e));
-            success = false;
-		 }	
+						+"(uuid, accountId, acessLevelId, staffNo, isActive, firstname, middlename, lastname, gender,"
+						+ "mobile, email, username, password, regDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+				){
 		
+			pstmt.setString(1, staff.getUuid());
+			pstmt.setString(2, staff.getAccountId());
+			pstmt.setString(3, staff.getAcessLevelId());
+			pstmt.setString(4, staff.getStaffNo());
+			pstmt.setString(5, staff.getIsActive());
+			pstmt.setString(6, staff.getFirstname());
+			pstmt.setString(7, staff.getMiddlename());	            
+			pstmt.setString(8, staff.getLastname());
+			pstmt.setString(9, staff.getGender());
+			pstmt.setString(10, staff.getMobile());
+			pstmt.setString(11, staff.getEmail());
+			pstmt.setString(12, staff.getUsername());
+			pstmt.setString(13, staff.getPassword());
+			pstmt.setTimestamp(14, new Timestamp(staff.getRegDate().getTime()));
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put staff: " + staff);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}	
+
 		return success;
 	}
 
@@ -157,36 +161,38 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	 */
 	public boolean updateStaff(Staff staff) {
 		boolean success = true; 
-		 try(   Connection conn = dbutils.getConnection();
-	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Staff SET EmployeeNo =?,FirstName =?,LastName =?,"
-			+ "Surname =?,Gender =? , NhifNo =?, NssfNo =?, Phone =?, dOB =?, NationalID =?, County =?,SysUser =?  WHERE StaffUuid = ? ;");
-      		){
-			    pstmt.setString(1, staff.getEmployeeNo());
-	            pstmt.setString(2, staff.getFirstName());
-	            pstmt.setString(3, staff.getLastName());
-	            pstmt.setString(4, staff.getSurname());
-	            pstmt.setString(5, staff.getGender());	            
-	            pstmt.setString(6, staff.getNhifNo());
-	            pstmt.setString(7, staff.getNssfNo());
-	            pstmt.setString(8, staff.getPhone());
-	            pstmt.setString(9, staff.getdOB());
-	            pstmt.setString(10, staff.getNationalID());
-	            pstmt.setString(11, staff.getCounty());
-	            pstmt.setString(12, staff.getSysUser());
-	            pstmt.setString(13, staff.getStaffUuid());	            
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			logger.error("SQL Exception trying to update staff " + staff);
-            logger.error(ExceptionUtils.getStackTrace(e)); 
-            System.out.println(ExceptionUtils.getStackTrace(e));
-            success = false;
-		 }
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Staff SET acessLevelId =?, staffNo =?, isActive =?,"
+						+ "firstname =?, middlename =? , lastname =?, gender =?, mobile =?, email =?, username =?, password =? "
+						+ "WHERE uuid = ? AND accountId =? ;");
+				){
 		
+			pstmt.setString(1, staff.getAcessLevelId());
+			pstmt.setString(2, staff.getStaffNo());
+			pstmt.setString(3, staff.getIsActive());
+			pstmt.setString(4, staff.getFirstname());
+			pstmt.setString(5, staff.getMiddlename());	            
+			pstmt.setString(6, staff.getLastname());
+			pstmt.setString(7, staff.getGender());
+			pstmt.setString(8, staff.getMobile());
+			pstmt.setString(9, staff.getEmail());
+			pstmt.setString(10, staff.getUsername());
+			pstmt.setString(11, staff.getPassword());  
+			pstmt.setString(12, staff.getUuid());
+			pstmt.setString(13, staff.getAccountId());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to update staff " + staff);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
 		return success;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
 	@Override
@@ -195,51 +201,61 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		return false;
 	}
 
-	 /**
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getSStaffDetailList()
 	 */
 	public List<Staff> getStaff(String accountId) {
-		 List<Staff> list = null;
-		  try(   
-	      		Connection conn = dbutils.getConnection();
-	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Staff ;");   
-	      		ResultSet rset = pstmt.executeQuery();
-	  		) {
-	      	
-	          list = beanProcessor.toBeanList(rset, Staff.class);
+		List<Staff> list = null;
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId =? ;");   
+				) {
 
-	      } catch(SQLException e){
-	      	  logger.error("SQL Exception when getting all Staff");
-	          logger.error(ExceptionUtils.getStackTrace(e));
-	          System.out.println(ExceptionUtils.getStackTrace(e));
-	      }
-	   
+			pstmt.setString(1,accountId);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, Staff.class);
+			}
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all Staff");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return list;
 	}
 
-	
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaff(java.lang.String, int, int)
 	 */
 	@Override
 	public List<Staff> getStaff(String accountId, int startIndex, int endIndex) {
-		 List<Staff> list = null;
-		  try(   
-	      		Connection conn = dbutils.getConnection();
-	      		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Staff ;");   
-	      		ResultSet rset = pstmt.executeQuery();
-	  		) {
-	      	
-	          list = beanProcessor.toBeanList(rset, Staff.class);
+		List<Staff> staffList = new ArrayList<>();
 
-	      } catch(SQLException e){
-	      	  logger.error("SQL Exception when getting all Staff");
-	          logger.error(ExceptionUtils.getStackTrace(e));
-	          System.out.println(ExceptionUtils.getStackTrace(e));
-	      }
-	   
-		return list;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Staff WHERE "
+						+ "accountId = ? LIMIT ? OFFSET ? ;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setInt(2, endIndex - startIndex);
+			psmt.setInt(3, startIndex);
+
+			try(ResultSet rset = psmt.executeQuery();){
+
+				staffList = beanProcessor.toBeanList(rset, Staff.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a staff list  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return staffList;		
 	}
 
-	
+
 }

@@ -15,7 +15,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
@@ -25,26 +24,26 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  *
  */
 public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
-     
+
 	private static StudentDAO studentDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	public static StudentDAO getInstance(){
-		
+
 		if(studentDAO == null){
 			studentDAO = new StudentDAO();		
 		}
 		return studentDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public StudentDAO() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -55,422 +54,400 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudent(java.lang.String)
 	 */
-	
+
 	@Override
-	public Student getStudentByuuid(String schoolaccountUuid,String Uuid) {
+	public Student getStudentById(String accountId,String uuid) {
 		Student student = null;
-        ResultSet rset = null;
-        try(
-        		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE SchoolAccountUuid =? AND Uuid = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, schoolaccountUuid);
-        	 pstmt.setString(2, Uuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 student  = beanProcessor.toBean(rset,Student.class);
-	   }
-        		
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting an users with uuid: " + Uuid);
-             logger.error(ExceptionUtils.getStackTrace(e));
-             System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-       
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId =? AND uuid = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				student  = beanProcessor.toBean(rset,Student.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting student with uuid " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return student; 
 	}
-	
-	
+
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentADmNo(java.lang.String)
 	 */
 	@Override
-	public Student getStudentADmNo(String schoolaccountUuid) {
+	public int getNextregNo(String accountId) {
 		Student student = new Student();
-        ResultSet rset = null;
-        try(
-        		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT admNo FROM Student WHERE SchoolAccountUuid = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, schoolaccountUuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 student  = beanProcessor.toBean(rset,Student.class);
-	   }
-        		
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when student admno for school " + schoolaccountUuid);
-             logger.error(ExceptionUtils.getStackTrace(e));
-             System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-        int admno = NumberUtils.toInt(student.getAdmno());
-        if(admno <=0){
-        	//System.out.println("admno less equal zero="+admno);
-        }else{
-        	//System.out.println("admno greater zero="+admno);
-        }
-        
-		return student; 
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT admNo FROM Student WHERE accountId = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				student  = beanProcessor.toBean(rset,Student.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting next regNo for account " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		int admno = NumberUtils.toInt(student.getRegNo());
+
+		return admno + 1; 
 	}
 
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudents(java.lang.String)
 	 */
-	
+
 	@Override
-	public Student getStudentObjByadmNo(String schoolaccountUuid,String admno) {
+	public Student getStudentByregNo(String accountId,String regNo) {
 		Student student = null;
-        ResultSet rset = null;
-        try(
-        		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE SchoolAccountUuid =? AND admno = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, schoolaccountUuid);
-        	 pstmt.setString(2, admno);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 student  = beanProcessor.toBean(rset,Student.class);
-	   }
-        	
-        	
-        	
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting an users with admno: " + admno);
-             logger.error(ExceptionUtils.getStackTrace(e));
-             System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-        
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId =? AND regNo = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, regNo);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				student  = beanProcessor.toBean(rset,Student.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting student with regNo: " + regNo);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return student; 
 	}
-	
 
-	
-	
 
-	
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentByName(com.yahoo.petermwenda83.bean.account.Account, java.lang.String)
-	 */
-	public List<Student> getStudentByName(Account schoolaccount, String firstname) {
-		List<Student> list = new ArrayList<>();
-
-        try (
-        	   Connection conn = dbutils.getConnection();
-     	       PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE SchoolAccountUuid = ? "
-     	       		+ "AND firstname ILIKE ?;");    		   
-     	   ) {
-         	   pstmt.setString(1, schoolaccount.getUuid());           
-         	   pstmt.setString(2, "%" + firstname + "%");
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, Student.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting Student of " + schoolaccount  +
-            " and student name '" + firstname +  "'"); 
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-                
-        Collections.sort(list);
-        return list;
-	}
-	
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentAdmNo(com.yahoo.petermwenda83.bean.account.Account, java.lang.String)
 	 */
 	@Override
-	public List<Student> getStudentByAdmNo(String schoolaccountUuid, String admno ) {
+	public List<Student> searchStudent(String accountId, String query) {
 		List<Student> list = null;
 
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	       PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE SchoolAccountUuid = ? "
-     	       		+ "AND admno ILIKE ? ORDER BY admno ASC LIMIT ? OFFSET ?;;");    		   
-     	   ) {
-         	   pstmt.setString(1, schoolaccountUuid);           
-         	   pstmt.setString(2, "%" + admno.toUpperCase() + "%");
-         	   pstmt.setInt(3, 15);
-         	   pstmt.setInt(4, 0);
-         	   try( ResultSet rset = pstmt.executeQuery();){
-     	       
-     	       list = beanProcessor.toBeanList(rset, Student.class);
-         	   }
-        } catch (SQLException e) {
-            logger.error("SQLException when getting Student of " + schoolaccountUuid  +
-            " and student admno '" + admno +  "'");
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e));
-        }
-                
-        Collections.sort(list);
-        return list;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId = ? AND "
+						+ "(regNo ILIKE ? OR firstname ILIKE ? middlename ILIKE ? lastname ILIKE ? OR bcertNo ILIKE ?) ORDER BY "
+						+ "regNo ASC LIMIT ? OFFSET ?;;");    		   
+				) {
+			pstmt.setString(1, accountId);           
+			pstmt.setString(2, "%" + query + "%");
+			pstmt.setString(3, "%" + query + "%");
+			pstmt.setString(4, "%" + query + "%");
+			pstmt.setString(5, "%" + query + "%");
+			pstmt.setString(6, "%" + query + "%");
+			pstmt.setInt(7, 15);
+			pstmt.setInt(8, 0);
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, Student.class);
+
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when searching for student with accountId " + accountId + " and query '" + query +  "'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		Collections.sort(list);
+		return list;
 	}
-	
-	
+
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#putStudents(com.yahoo.petermwenda83.bean.student.Student)
 	 */
 	@Override
-	public boolean putStudents(Student student) {
+	public boolean putStudent(Student student) {
 		boolean success = true;
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Student (uuid, accountId, regStream, currentStream , "
+						+ "isActive, isAlumni, isBoarding, regNo, firstname, middlename, lastname, gender, dob, bcertNo, county, "
+						+ "regTerm, finalYear, finalTerm, passport, lastUpdated, admissionDate)"
+						+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+				){
 		
-		  try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Student" 
-			        		+"(Uuid,SchoolAccountUuid,StatusUuid,ClassRoomUuid,AdmNo,Firstname, Lastname,Surname,"
-			        		+ "Gender,DOB,Bcertno,County,RegTerm,finalYear,FinalTerm,SysUser,StudentType,AdmissionDate)"
-			        		+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-		){
-			   
-	            pstmt.setString(1, student.getUuid());
-	            pstmt.setString(2, student.getSchoolAccountUuid());
-	            pstmt.setString(3, student.getStatusUuid());
-	            pstmt.setString(4, student.getClassRoomUuid());
-	            pstmt.setString(5, student.getAdmno());
-	            pstmt.setString(6, student.getFirstname());
-	            pstmt.setString(7, student.getLastname());
-	            pstmt.setString(8, student.getSurname());
-	            pstmt.setString(9, student.getGender());
-	            pstmt.setString(10, student.getdOB());
-	            pstmt.setString(11, student.getBcertno());
-	            pstmt.setString(12, student.getCounty());
-	            pstmt.setString(13, student.getRegTerm());
-	            pstmt.setInt(14, student.getFinalYear());
-	            pstmt.setInt(15, student.getFinalTerm());
-	            pstmt.setString(16, student.getSysUser());
-	            pstmt.setString(17, student.getStudentType());
-	            pstmt.setTimestamp(18, new Timestamp(student.getAdmissionDate().getTime()));
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put Student: "+student);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             System.out.println(ExceptionUtils.getStackTrace(e));
-             success = false;
-		 }
-		
+			pstmt.setString(1, student.getUuid());
+			pstmt.setString(2, student.getAccountId());
+			pstmt.setString(3, student.getRegStream());
+			pstmt.setString(4, student.getCurrentStream());
+			pstmt.setString(5, student.getIsActive());
+			pstmt.setString(6, student.getIsAlumni());
+			pstmt.setString(7, student.getIsBoarding());
+			pstmt.setString(8, student.getRegNo());
+			pstmt.setString(9, student.getFirstname());
+			pstmt.setString(10, student.getMiddlename());
+			pstmt.setString(11, student.getLastname());
+			pstmt.setString(12, student.getGender());
+			pstmt.setString(13, student.getDob());
+			pstmt.setString(14, student.getBcertNo());
+			pstmt.setString(15, student.getCounty());
+			pstmt.setString(16, student.getRegTerm());
+			pstmt.setString(17, student.getFinalYear());
+			pstmt.setString(13, student.getFinalTerm());
+			pstmt.setString(19, student.getPassport());
+			pstmt.setString(20, student.getLastUpdated());
+			pstmt.setTimestamp(21, new Timestamp(student.getAdmissionDate().getTime()));
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put Student  " + student);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
 		return success;
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#editStudents(com.yahoo.petermwenda83.bean.student.Student)
 	 */
 	@Override
-	public boolean updateStudents(Student student) {
+	public boolean updateStudent(Student student) {
 		boolean success = true;
-		
-		  try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE Student SET ClassRoomUuid =?, Firstname =?," 
-			        +"Lastname =?,Surname =?,Gender =?,DOB =?,"
-			        + "Bcertno =?,County =?,SysUser=?,StatusUuid =?,Admno =?,finalYear =?,FinalTerm =?,StudentType =? WHERE Uuid = ? AND SchoolAccountUuid = ?;");
-		){
-			  
-			    pstmt.setString(1, student.getClassRoomUuid());
-	            pstmt.setString(2, student.getFirstname());
-	            pstmt.setString(3, student.getLastname());
-	            pstmt.setString(4, student.getSurname());
-	            pstmt.setString(5, student.getGender());
-	            pstmt.setString(6, student.getdOB());
-	            pstmt.setString(7, student.getBcertno());
-	            pstmt.setString(8, student.getCounty());
-	            pstmt.setString(9, student.getSysUser());
-	            pstmt.setString(10, student.getStatusUuid());
-	            pstmt.setString(11, student.getAdmno());
-	            pstmt.setInt(12, student.getFinalYear());
-	            pstmt.setInt(13, student.getFinalTerm());
-	            pstmt.setString(14, student.getStudentType());
-	            pstmt.setString(15, student.getUuid());
-	            pstmt.setString(16, student.getSchoolAccountUuid());
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put Student: "+student);
-             logger.error(ExceptionUtils.getStackTrace(e));  
-             System.out.println(ExceptionUtils.getStackTrace(e));
-             success = false;
-		 }
-		 
-		
-		
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Student SET regStream =?, currentStream =?, isActive =?, isAlumni =?, "
+						+ "isBoarding =?, regNo =?, firstname =?, middlename =?, lastname=?, gender =?, dob =?, bcertNo =?, county =?, "
+						+ "regTerm =?, finalYear=?, finalTerm=?, passport=?, lastUpdated=? WHERE uuid = ? AND accountId = ?;");
+				){
+			
+			
+			pstmt.setString(1, student.getRegStream());
+			pstmt.setString(2, student.getCurrentStream());
+			pstmt.setString(3, student.getIsActive());
+			pstmt.setString(4, student.getIsAlumni());
+			pstmt.setString(5, student.getIsBoarding());
+			pstmt.setString(6, student.getRegNo());
+			pstmt.setString(7, student.getFirstname());
+			pstmt.setString(8, student.getMiddlename());
+			pstmt.setString(9, student.getLastname());
+			pstmt.setString(10, student.getGender());
+			pstmt.setString(11, student.getDob());
+			pstmt.setString(12, student.getBcertNo());
+			pstmt.setString(13, student.getCounty());
+			pstmt.setString(14, student.getRegTerm());
+			pstmt.setString(15, student.getFinalYear());
+			pstmt.setString(16, student.getFinalTerm());
+			pstmt.setString(17, student.getPassport());
+			pstmt.setString(18, student.getLastUpdated());
+			pstmt.setString(19, student.getUuid());
+			pstmt.setString(20, student.getAccountId());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put Student: "+student);
+			logger.error(ExceptionUtils.getStackTrace(e));  
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+
+
 		return success;
 	}
+	
+	
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#deleteStudents(com.yahoo.petermwenda83.bean.student.Student)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#deleteStudent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean deleteStudents(Student student) {
-		 boolean success = true; 
-	      try(
-	      		  Connection conn = dbutils.getConnection();
-	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Student"
-	         	     + " WHERE Admno = ? AND SchoolAccountUuid =?; ");       
-	      		
-	      		){
-	      	
-	      	 pstmt.setString(1, student.getAdmno());
-	      	 pstmt.setString(2, student.getSchoolAccountUuid());
-		     pstmt.executeUpdate();
-		     
-	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting student : " +student);
-	           logger.error(ExceptionUtils.getStackTrace(e));
-	           System.out.println(ExceptionUtils.getStackTrace(e));
-	           success = false;
-	           
-	      }
-	      
-			return success;
-	}
-	
-	/** Get all students in a particular classroom
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudents(java.lang.String, java.lang.String)
-	 * @return List of students per class
-	 */
-	public List<Student> getAllStudents(String schoolaccountUuid,String classRoomUuid) {
-	List<Student> list = null;
+	public boolean deleteStudent(String accountId,String uuid) {
+		boolean success = true; 
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Student"
+						+ " WHERE accountId = ? AND uuid =?; ");       
 
-	 try(   
-  		Connection conn = dbutils.getConnection();
-  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Student WHERE SchoolAccountUuid = ? AND classRoomUuid =? ORDER BY Admno ASC;");   
-		) {
-		 pstmt.setString(1,schoolaccountUuid);
-		 pstmt.setString(2,classRoomUuid);
-		 
-		 try(ResultSet rset = pstmt.executeQuery();){
-				
-			 list = beanProcessor.toBeanList(rset, Student.class);
-			}
-        
+				){
 
-  } catch(SQLException e){
-   	 logger.error("SQL Exception when getting all Student");
-     logger.error(ExceptionUtils.getStackTrace(e));
-     System.out.println(ExceptionUtils.getStackTrace(e)); 
-  }
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			pstmt.executeUpdate();
 
-	
-	return list;
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting student uuid " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
 	
 	/**
-	 * @param schoolaccount
-	 * @param startIndex
-	 * @param endIndex
-	 * @return
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentByStream(java.lang.String, java.lang.String)
 	 */
-	public List<Student> getStudentList (Account schoolaccount , int startIndex , int endIndex){
+	public List<Student> getStudentByStream(String accountId,String currentStream) {
+		List<Student> list = null;
+
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId = ? AND currentStream =? ORDER BY regNo ASC;");   
+				) {
+			pstmt.setString(1,accountId);
+			pstmt.setString(2,currentStream);
+
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, Student.class);
+			}
+
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all Student");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+
+		return list;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudent(java.lang.String, int, int)
+	 */
+	public List<Student> getAllStudent(String accountId, int startIndex , int endIndex){
 		List<Student> studentList = new ArrayList<>();
-		
+
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
-						+ "SchoolAccountUuid = ? ORDER BY Admno DESC LIMIT ? OFFSET ? ;");
+						+ "accountId = ? ORDER BY regNo DESC LIMIT ? OFFSET ? ;");
 				) {
-			psmt.setString(1, schoolaccount.getUuid());
+			psmt.setString(1, accountId);
 			psmt.setInt(2, endIndex - startIndex);
 			psmt.setInt(3, startIndex);
-			
+
 			try(ResultSet rset = psmt.executeQuery();){
-			
+
 				studentList = beanProcessor.toBeanList(rset, Student.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get a Student List with an index and offset.");
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e)); 
-	    }
-		
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
 		return studentList;		
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudentList(java.lang.String)
-	 */
-	public List<Student> getAllStudentList(String schoolaccountUuid) {
-     List<Student> studentList = new ArrayList<>();
-		try(
-				Connection conn = dbutils.getConnection();
-				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
-						+ "SchoolAccountUuid = ?  ORDER BY Admno ASC;");
-				) {
-			psmt.setString(1, schoolaccountUuid);
-			try(ResultSet rset = psmt.executeQuery();){
-			
-				studentList = beanProcessor.toBeanList(rset, Student.class);
-			}
-		} catch (SQLException e) {
-			logger.error("SQLException when trying to get a Student List for school"+schoolaccountUuid);
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e)); 
-	    }
-		
-		return studentList;
-	}
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentCount(java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#activeCount(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public int getStudentCount(String statusuuid,String schoolaccountUuid) {
+	public int activeCount(String accountId, String isActive) {
 		int count = 0;
 		ResultSet rset = null;
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE statusuuid =? AND schoolaccountUuid =?;");    		   
- 	    ) {
-        	pstmt.setString(1, statusuuid);
-        	pstmt.setString(2, schoolaccountUuid);
-        	rset = pstmt.executeQuery();
-        	
-        	while(rset.next()){
-   	       		count = rset.getInt("count");
-          	  }
-        } catch (SQLException e) {
-            logger.error("SQLException Student count for schoolaccountUuid " + schoolaccountUuid);
-            logger.error(ExceptionUtils.getStackTrace(e));
-        }
-		
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isActive =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, isActive);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting active student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 		return count;
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentCount(java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#alumniCount(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public int getStudentCount(String statusuuid, String studenttype, String schoolaccountUuid) {
+	public int alumniCount(String accountId, String isAlumni) {
 		int count = 0;
 		ResultSet rset = null;
-        try (
-        		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE statusuuid =? AND studenttype =? AND schoolaccountUuid =?;");    		   
- 	    ) {
-        	pstmt.setString(1, statusuuid);
-        	pstmt.setString(2, studenttype);
-        	pstmt.setString(3, schoolaccountUuid);
-        	rset = pstmt.executeQuery();
-        	
-        	while(rset.next()){
-   	       		count = rset.getInt("count");
-          	  }
-        } catch (SQLException e) {
-            logger.error("SQLException Student count for studenttype " + studenttype);
-            logger.error(ExceptionUtils.getStackTrace(e));
-        }
-		
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isAlumni =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, isAlumni);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting alumni student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+	
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#dayCount(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int dayCount(String accountId, String isBoarding) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isBoarding =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, isBoarding);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting day student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 		return count;
 	}
 

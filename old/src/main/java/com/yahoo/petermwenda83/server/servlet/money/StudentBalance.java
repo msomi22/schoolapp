@@ -17,7 +17,7 @@ import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 
 /**
  * @author peter
@@ -54,7 +54,7 @@ public class StudentBalance {
 	}
 
 	public double findBalance(TermFeeDAO termFeeDAO, SysConfigDAO sysConfigDAO, StudentFeeDAO studentFeeDAO,
-			StudentOtherMoniesDAO studentOtherMoniesDAO, Date admissiondate, String studentRegTerm, String studentuuid, String schooluuid,int finalYear) {
+			StudentOtherFeeDAO studentOtherFeeDAO, Date admissiondate, String studentRegTerm, String studentuuid, String schooluuid,int finalYear) {
 		//System.out.println("START: " + new Date());
 		double balance = 0;
 		double amountPaid = 0;
@@ -88,7 +88,7 @@ public class StudentBalance {
 				
 				//start finding the balance here
 				studentFeeList = studentFeeDAO.getStudentFeeByStudentUuidList(schooluuid, studentuuid, term, year);
-				othermoneyList = studentOtherMoniesDAO.getStudentOtherList(studentuuid, term, year);
+				othermoneyList = studentOtherFeeDAO.getStudentOtherList(studentuuid, term, year);
 				TermFee admTermFee = new TermFee();
 				admTermFee = termFeeDAO.getFee(schooluuid,term, year);
 				//System.out.println("[ TermFee = " + admTermFee.getTermAmount() +" Term " + admTermFee.getTerm()+" ]");

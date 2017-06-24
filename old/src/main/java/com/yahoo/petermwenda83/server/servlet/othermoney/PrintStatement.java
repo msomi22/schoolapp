@@ -51,9 +51,9 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.result.PdfUtil;
@@ -110,7 +110,7 @@ public class PrintStatement extends HttpServlet {
 	//private static StudentAmountDAO studentAmountDAO;
 	private static RevertedMoneyDAO revertedMoneyDAO;
 
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 
 
 	TermOtherMonies termOtherMonies;
@@ -150,7 +150,7 @@ public class PrintStatement extends HttpServlet {
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
 		
 		USER = System.getProperty("user.name");
@@ -332,9 +332,9 @@ public class PrintStatement extends HttpServlet {
 			reveertTable.setWidths(new int[]{8,35,40,35,35});   
 			reveertTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 			
-			OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+			OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 			List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-			othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+			othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 			HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 
 			if(othertypeList !=null){
@@ -457,7 +457,7 @@ public class PrintStatement extends HttpServlet {
 					double other_m_totals = 0;
 					
 					List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-					stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+					stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 					if(stuOthermoniList !=null){
 						
 						for(StudentOtherFee som  : stuOthermoniList){
@@ -526,9 +526,9 @@ public class PrintStatement extends HttpServlet {
 			OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 			OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+			OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 			List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-			othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+			othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 			HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 
 			if(othertypeList !=null){
@@ -542,7 +542,7 @@ public class PrintStatement extends HttpServlet {
 
 
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 
 
 			String somtype = "";
@@ -653,7 +653,7 @@ public class PrintStatement extends HttpServlet {
 					double other_m_totals = 0;
 					
 					List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-					stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+					stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 					if(stuOthermoniList !=null){
 						
 						for(StudentOtherFee som  : stuOthermoniList){
@@ -726,9 +726,9 @@ public class PrintStatement extends HttpServlet {
 			OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 			OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+			OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 			List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-			othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+			othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 			HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 			if(othertypeList !=null){
 				for(OtherFee om : othertypeList){
@@ -736,8 +736,8 @@ public class PrintStatement extends HttpServlet {
 				}
 			}
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
-				stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
+				stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 			}  
 
 
@@ -854,7 +854,7 @@ public class PrintStatement extends HttpServlet {
 					double other_m_totals = 0;
 					
 					List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-					stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+					stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 					if(stuOthermoniList !=null){
 						
 						for(StudentOtherFee som  : stuOthermoniList){
@@ -925,9 +925,9 @@ public class PrintStatement extends HttpServlet {
 			OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 			OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+			OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 			List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-			othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+			othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 			HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 			if(othertypeList !=null){
 				for(OtherFee om : othertypeList){
@@ -935,8 +935,8 @@ public class PrintStatement extends HttpServlet {
 				}
 			}
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
-				stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
+				stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 			}  
 
 
@@ -1086,7 +1086,7 @@ public class PrintStatement extends HttpServlet {
 			double other_m_totals = 0;
 			
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 			if(stuOthermoniList !=null){
 				
 				for(StudentOtherFee som  : stuOthermoniList){
@@ -1175,9 +1175,9 @@ public class PrintStatement extends HttpServlet {
 		OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 		OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+		OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 		List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-		othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+		othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 		HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 		if(othertypeList !=null){
 			for(OtherFee om : othertypeList){
@@ -1185,8 +1185,8 @@ public class PrintStatement extends HttpServlet {
 			}
 		}
 		List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+		if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 		}  
 
 
@@ -1313,7 +1313,7 @@ public class PrintStatement extends HttpServlet {
 			double other_m_totals = 0;
 			
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 			if(stuOthermoniList !=null){
 				
 				for(StudentOtherFee som  : stuOthermoniList){
@@ -1398,9 +1398,9 @@ public class PrintStatement extends HttpServlet {
 		OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 		OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+		OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 		List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-		othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+		othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 		HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 		if(othertypeList !=null){
 			for(OtherFee om : othertypeList){
@@ -1408,8 +1408,8 @@ public class PrintStatement extends HttpServlet {
 			}
 		}
 		List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+		if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 		}  
 
 
@@ -1539,7 +1539,7 @@ public class PrintStatement extends HttpServlet {
 			double other_m_totals = 0;
 			
 			List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 			if(stuOthermoniList !=null){
 				
 				for(StudentOtherFee som  : stuOthermoniList){
@@ -1626,9 +1626,9 @@ public class PrintStatement extends HttpServlet {
 		OtherPayTable.setWidths(new int[]{8,35,40,35,35});   
 		OtherPayTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		OtherstypeDAO otherstypeDAO = OtherstypeDAO.getInstance();
+		OtherFeeDAO otherFeeDAO = OtherFeeDAO.getInstance();
 		List<OtherFee> othertypeList = new ArrayList<OtherFee>(); 
-		othertypeList = otherstypeDAO.gettypeList(school.getUuid());  
+		othertypeList = otherFeeDAO.gettypeList(school.getUuid());  
 		HashMap<String, String> moneytypeHash = new HashMap<String, String>(); 
 		if(othertypeList !=null){
 			for(OtherFee om : othertypeList){
@@ -1636,8 +1636,8 @@ public class PrintStatement extends HttpServlet {
 			}
 		}
 		List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
+		if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear) !=null){
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),regterm,admYear);
 		}  
 
 

@@ -18,7 +18,7 @@ public class PocketMoney extends StorableBean{
 	/**
 	 * 
 	 */
-	public PocketMoney() {
+	protected PocketMoney() {
 		studentId = "";
 		amount = 0;
 	}

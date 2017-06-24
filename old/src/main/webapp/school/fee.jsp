@@ -5,10 +5,10 @@
 <%@page import="com.yahoo.petermwenda83.persistence.money.StudentFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.money.StudentFee"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherstypeDAO"%>
+<%@page import="com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.otherfee.OtherFee"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.othermoney.TermOtherMoniesDAO"%>

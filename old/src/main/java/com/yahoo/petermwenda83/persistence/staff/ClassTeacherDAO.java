@@ -50,18 +50,18 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 
     
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacher(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacher(java.lang.String, java.lang.String)
 	 */
-	
-	public ClassTeacher getClassTeacherByteacherId(String TeacherUuid) {
+	public ClassTeacher getClassTeacher(String accountId, String streamId) {
 		ClassTeacher classTeacher =null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE TeacherUuid = ?;");       
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId = ? AND streamId =?;");       
 
 				){
-			pstmt.setString(1, TeacherUuid);
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, streamId);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -69,7 +69,7 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting classTeacher with TeacherUuid: " + TeacherUuid);
+			logger.error("SQL Exception when getting classTeacher with streamId " + streamId);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
@@ -77,52 +77,25 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 		return classTeacher; 
 	}
     
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacherByclassId(java.lang.String)
-	 */
-	@Override
-	public ClassTeacher getClassTeacherByclassId(String ClassRoomUuid) {
-		ClassTeacher classTeacher =null;
-		ResultSet rset = null;
-		try(
-				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE ClassRoomUuid = ?;");       
-
-				){
-			pstmt.setString(1, ClassRoomUuid);
-			rset = pstmt.executeQuery();
-			while(rset.next()){
-
-				classTeacher  = beanProcessor.toBean(rset,ClassTeacher.class);
-			}
-
-
-
-		}catch(SQLException e){
-			logger.error("SQL Exception when getting classTeacher with ClassRoomUuid: " + ClassRoomUuid);
-			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e));
-		}
-
-		return classTeacher; 
-	}
+	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#putClassTeacher(com.yahoo.petermwenda83.bean.staff.ClassTeacher)
 	 */
-	public boolean putClassTeacher(ClassTeacher Teacher) {
+	public boolean putClassTeacher(ClassTeacher classTeacher) {
 		boolean success = true; 
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ClassTeacher" 
-						+"(Uuid,TeacherUuid,ClassRoomUuid) VALUES (?,?,?);");
+						+"(uuid,accountId,teacherId,streamId) VALUES (?,?,?,?);");
 				){
-			pstmt.setString(1, Teacher.getUuid());
-			pstmt.setString(2, Teacher.getTeacherUuid());
-			pstmt.setString(3, Teacher.getClassRoomUuid());	                      
+			pstmt.setString(1, classTeacher.getUuid());
+			pstmt.setString(2, classTeacher.getAccountId());
+			pstmt.setString(3, classTeacher.getTeacherId());	 
+			pstmt.setString(4, classTeacher.getStreamId());	 
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
-			logger.error("SQL Exception trying to put ClassTeacher: "+Teacher);
+			logger.error("SQL Exception trying to put classTeacher " + classTeacher);
 			logger.error(ExceptionUtils.getStackTrace(e)); 
 			System.out.println(ExceptionUtils.getStackTrace(e));
 			success = false;
@@ -132,46 +105,24 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#updateClassTeacher(com.yahoo.petermwenda83.bean.staff.ClassTeacher)
-	 */
-	public boolean updateClassTeacher(ClassTeacher Teacher) {
-		boolean success = true;		
-		try (  Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassTeacher SET ClassRoomUuid=? WHERE TeacherUuid = ?;");
-				) {           			 	            
-			pstmt.setString(1, Teacher.getClassRoomUuid());
-			pstmt.setString(2, Teacher.getTeacherUuid());	           
-			pstmt.executeUpdate();
-
-		} catch (SQLException e) {
-			logger.error("SQL Exception when updating ClassTeacher " + Teacher);
-			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e));
-			success = false;
-		} 
-
-		return success;
-	}
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#deleteClassTeacher(com.yahoo.petermwenda83.bean.staff.ClassTeacher)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#deleteClassTeacher(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean deleteClassTeacher(ClassTeacher Teacher) {
+	public boolean deleteClassTeacher(String accountId, String uuid) {
 		boolean success = true; 
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ClassTeacher"
-						+ " WHERE ClassRoomUuid =? AND TeacherUuid=? ;");       
+						+ " WHERE accountId =? AND uuid=? ;");       
 
 				){
 
-			pstmt.setString(1, Teacher.getClassRoomUuid());
-			pstmt.setString(2, Teacher.getTeacherUuid());
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when deletting Teacher : " +Teacher);
+			logger.error("SQL Exception when deletting ClassTeacher with id  " + uuid);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 			success = false;
@@ -184,23 +135,24 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacherList()
 	 */
-	public List<ClassTeacher> getClassTeacherList() {
+	public List<ClassTeacher> getClassTeacherList(String accountId) {
 		List<ClassTeacher> list = null;
 		try(   
 				Connection conn = dbutils.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher;");   
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId =? ;");   
 				) {
 
+			pstmt.setString(1,accountId);
+			
 			try(ResultSet rset = pstmt.executeQuery();){
 
 				list = beanProcessor.toBeanList(rset, ClassTeacher.class);
 			}
 
-
 		} catch(SQLException e){
-			logger.error("SQL Exception when getting all ClassTeacher ");
+			logger.error("SQL Exception when getting all ClassTeacher for accountId " + accountId);
 			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
 
 		return list;

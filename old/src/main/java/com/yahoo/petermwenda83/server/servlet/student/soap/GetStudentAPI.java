@@ -19,7 +19,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.servlet.money.StudentBalance;
@@ -28,7 +28,7 @@ public class GetStudentAPI extends HttpServlet {
 
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
@@ -45,7 +45,7 @@ public class GetStudentAPI extends HttpServlet {
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 
-		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
@@ -106,7 +106,7 @@ public class GetStudentAPI extends HttpServlet {
 					double balance = 0;
 					String feebalance = "";
 					StudentBalance studentBal = new StudentBalance();
-					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdate,admterm,studentuuid,schooluuid,finalyear); 
+					balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherFeeDAO,admdate,admterm,studentuuid,schooluuid,finalyear); 
 					feebalance = nf.format(balance);
 
 					//PREPARE OUTPUT.     

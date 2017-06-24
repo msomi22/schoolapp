@@ -15,74 +15,19 @@ import com.yahoo.petermwenda83.bean.money.Withdraw;
  */
 public interface SchoolPMoneyDAO {
 	
-	/**
-	 * 
-	 * @param studedntUuid
-	 * @return
-	 */
-	public PocketMoney getMoney(String StudentUuid);
-	/**
-	 * 
-	 * @param studedntUuid
-	 * @return
-	 */
+	public PocketMoney getPocketMoney(String accountId,String studentId);
 	
-	public boolean studentExist(String StudentUuid);
+	public boolean studentExist(String accountId,String studentId);
 	
-	/**
-	 * 
-	 * @param money
-	 * @param amount
-	 * @return
-	 */
-	public boolean hasBalance(PocketMoney money,double amount);
-	 /**
-	  * 
-	  * @param money
-	  * @param amount
-	  * @return
-	  */
-	public boolean addBalance(PocketMoney money,double amount);
-	 /**
-	  * 
-	  * @param money
-	  * @param amount
-	  * @return
-	  */
-	public boolean deductBalance(PocketMoney money,double amount);
-	  /**
-	   * 
-	   * @param StudentUuid
-	   * @param Term
-	   * @param Year
-	   * @return
-	   */
-	  
-	public List<Withdraw> getWithdrawList(String StudentUuid,String Term,String Year);
-	  /**
-	   * 
-	   * @param StudentUuidString
-	   * @param Term
-	   * @param Year
-	   * @return
-	   */
-	   
-	public List<Deposit> getDepositList(String StudentUuid,String Term,String Year);
+	public boolean hasBalance(String accountId, String studentId, double amount);
 	
-	/**
-	   * 
-	   * @param studedntUuid
-	   * @return
-	   */
-	public List<Withdraw> getWithdrawList(String StudentUuid);
-	  /**
-	   * 
-	   * @param studedntUuid
-	   * @return
-	   */
-	public List<Deposit> getDepositList(String StudentUuidString);
+	public boolean addBalance(PocketMoney pocketMoney, String accountId, String studentId, double amount);
 	
-	
+	public boolean deductBalance(PocketMoney pocketMoney, String accountId, String studentId, double amount);
+	 
+	public List<Withdraw> getWithdrawList(String accountId,String studentId, int startIndex , int endIndex);
+	 
+	public List<Deposit> getDepositList(String accountId,String studentId, int startIndex , int endIndex);
 	
 
 }

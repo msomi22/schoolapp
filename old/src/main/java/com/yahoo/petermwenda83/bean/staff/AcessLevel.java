@@ -47,8 +47,6 @@ public class AcessLevel extends StorableBean{
 		builder.append("AcessLevel");
 		builder.append("[getUuid()=");
 		builder.append(getUuid()); 
-		builder.append(", accountId =");
-		builder.append(getAccountId());  
 		builder.append(",description=");
 		builder.append(description);
 		return builder.toString(); 

@@ -1,0 +1,24 @@
+/**
+ * 
+ */
+package com.yahoo.petermwenda83.persistence.othermoney;
+
+import java.util.List;
+
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
+
+/**
+ * @author peter
+ *
+ */
+public interface SchoolStudentOtherFeeDAO {
+	
+	public StudentOtherFee getStudentOtherFee(String accountId, String studentId , String otherFeeId);
+	
+	public boolean putStudentOtherFee(StudentOtherFee studentOtherFee);
+	
+	public boolean updateStudentOtherFee(StudentOtherFee studentOtherFee);
+	
+	public List<StudentOtherFee> StudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex);
+
+}

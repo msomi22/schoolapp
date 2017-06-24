@@ -6,43 +6,14 @@ import com.yahoo.petermwenda83.bean.money.TermFee;
 
 public interface SchoolTermFeeDAO {
 	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param Term
-	 * @param Year
-	 * @return
-	 */
-	public TermFee getFee(String schoolAccountUuid,String Term,String Year);
+	public TermFee getFee(String accountId, String term,String year);
 	
+	public boolean termFeeAded(String accountId, String term,String year);
 	
+	public boolean putFee(TermFee termFee,String accountId, String term,String year);
 	
-	/**
-	 * @param schoolAccountUuid
-	 * @param Term
-	 * @param Year
-	 * @return
-	 */
-	public boolean TermFee(String schoolAccountUuid,String Term,String Year);
-	
-	/**
-	 * 
-	 * @param termFee
-	 * @return
-	 */
-	public boolean putFee(TermFee termFee);
-	
-	/**
-	 * 
-	 * @param termFee
-	 * @return
-	 */
 	public boolean updateFee(TermFee termFee); 
-	/**
-	 * 
-	 * @param termFee
-	 * @return
-	 */
-	public List<TermFee> getTermFeeList(String schoolAccountUuid); 
+	
+	public List<TermFee> getTermFeeList(String accountId, int startIndex , int endIndex); 
 
 }

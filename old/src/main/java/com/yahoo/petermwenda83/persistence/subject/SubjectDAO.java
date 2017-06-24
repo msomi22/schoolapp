@@ -30,18 +30,18 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 	private static SubjectDAO subjectDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	/**
 	 * 
 	 * @return subjectDAO
 	 */
 	public static SubjectDAO getInstance(){
 		if(subjectDAO == null){
-		subjectDAO = new SubjectDAO();		
+			subjectDAO = new SubjectDAO();		
 		}
 		return subjectDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -59,32 +59,32 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 	public SubjectDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort){
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
-	
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#getSubject(com.yahoo.petermwenda83.bean.student.StudentSubject.SubjectUi, com.yahoo.petermwenda83.view.InfoBsic, java.lang.String)
 	 */
 	@Override
-	public Subject getSubject(String uuid) {
+	public Subject getSubjectById(String accountId,String uuid) {
 		Subject Subject = null;
-        ResultSet rset = null;
-        try(
-        	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE Uuid = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, uuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	Subject  = beanProcessor.toBean(rset,Subject.class);
-	    }
-        	
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting an subject with uuid: " + uuid);
-             logger.error(ExceptionUtils.getStackTrace(e));
-        }
-        
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE accountId = ? AND"
+						+ " uuid =?;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				Subject  = beanProcessor.toBean(rset,Subject.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting subject with uuid '" + uuid + "' for account '" + accountId+"'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 		return Subject; 
 	}
 
@@ -92,55 +92,60 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#getSubjects(java.lang.String)
 	 */
 	@Override
-	public Subject getSubjects(String subjectcode) {
+	public Subject getSubject(String accountId,String query) {
 		Subject Subject = null;
-        ResultSet rset = null;
-        try(
-        	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE Subjectcode = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, subjectcode);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	    	Subject  = beanProcessor.toBean(rset,Subject.class);
-	     }
-        	
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting a subject with subjectcode: " + subjectcode);
-             logger.error(ExceptionUtils.getStackTrace(e));
-        }
-        
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE accountId = ? AND"
+						+ " code =? AND numericCode =? AND description =?;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, query);
+			pstmt.setString(3, query);
+			pstmt.setString(4, query);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				Subject  = beanProcessor.toBean(rset,Subject.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting subject with query '" + query + "' for account '" + accountId+"'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 		return Subject; 
 	}
 
-	
-	
+
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#putSubject(com.yahoo.petermwenda83.bean.student.Subject)
 	 */
 	@Override
 	public boolean putSubject(Subject subject) {
 		boolean success = true;
-		 try(   Connection conn = dbutils.getConnection();
+		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Subject" 
-			        		+"(Uuid,SubjectCode,SubjectName,SubjectCategory) VALUES (?,?,?,?);");
-        		){
-			   
-	            pstmt.setString(1, subject.getUuid());
-	            pstmt.setString(2, subject.getSubjectCode());
-	            pstmt.setString(3, subject.getSubjectName());
-	            pstmt.setString(4, subject.getSubjectCategory());
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-			 logger.error("SQL Exception trying to put Subject: "+subject);
-             logger.error(ExceptionUtils.getStackTrace(e)); 
-             success = false;
-		 }
-		
-		
+						+"(uuid,accountId,categoryId,code,numericCode,description) VALUES (?,?,?,?,?,?);");
+				){
+
+			pstmt.setString(1, subject.getUuid());
+			pstmt.setString(2, subject.getAccountId());
+			pstmt.setString(3, subject.getCategoryId());
+			pstmt.setString(4, subject.getCode());
+			pstmt.setString(5, subject.getNumericCode());
+			pstmt.setString(6, subject.getDescription());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put Subject: "+subject);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			success = false;
+		}
+
+
 		return success;
 	}
 
@@ -149,80 +154,84 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#editSubject(com.yahoo.petermwenda83.bean.student.Subject, java.lang.String)
 	 */
 	@Override
-	public boolean editSubject(Subject subject,String uuid) {
+	public boolean updateSubject(Subject subject) {
 		boolean success = true;
-        try (  Connection conn = dbutils.getConnection();
-        	   PreparedStatement pstmt = conn.prepareStatement("UPDATE Subject SET SubjectCode=?,"
-        			+ "SubjectName=?, SubjectCategory=? WHERE Uuid = ?;");
-        	) { 
-	            pstmt.setString(1, subject.getSubjectCode());
-	            pstmt.setString(2, subject.getSubjectName());
-	            pstmt.setString(3, subject.getSubjectCategory());
-	            pstmt.setString(4, subject.getUuid());
-                pstmt.executeUpdate(); 
-
-        } catch (SQLException e) {
-            logger.error("SQL Exception when updating Subject with uuid " + subject);
-            logger.error(ExceptionUtils.getStackTrace(e));
-            success = false;
-        } 
-        
-        return success;
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Subject SET categoryId=?,"
+						+ "code=?, numericCode=?, description=? WHERE uuid = ? AND accountId =?;");
+				) { 
 		
+			pstmt.setString(1, subject.getCategoryId());
+			pstmt.setString(2, subject.getCode());
+			pstmt.setString(3, subject.getNumericCode());
+			pstmt.setString(4, subject.getDescription());
+			pstmt.setString(5, subject.getUuid());
+			pstmt.setString(6, subject.getAccountId());
+			pstmt.executeUpdate(); 
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating Subject " + subject);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
+		return success;
+
 	}
 
-	
-	
+
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#deleteStudent(com.yahoo.petermwenda83.bean.student.Subject)
 	 */
 	@Override
-	public boolean deleteStudent(Subject subject) {
+	public boolean deleteSubject(String accountId,String uuid) {
 		boolean success = true; 
-        try(
-        	Connection conn = dbutils.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Subject WHERE Uuid = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, subject.getUuid());
-	         pstmt.executeUpdate();
-	     
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when deletting: " + subject);
-             logger.error(ExceptionUtils.getStackTrace(e));
-             success = false;
-             
-        }
-        
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Subject WHERE accountId= ? AND uuid = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting subject with id " + uuid + " for account " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
 		return success; 
 	}
 
-	
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubjectDAO#getAllStudent()
 	 */
 	@Override
-	public List<Subject> getAllSubjects() {
+	public List<Subject> getSubjects(String accountId) {
 		List<Subject>  list = null;		
-		 try(   
-       		Connection conn = dbutils.getConnection();
-       		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Subject;");          		
-   		) {			     
-			 try( ResultSet rset = pstmt.executeQuery();){
-				    list = beanProcessor.toBeanList(rset, Subject.class);
-	         	   }
+		try(   
+			 Connection conn = dbutils.getConnection();
+			 PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE accountId =?;");          		
+				) {	
+			pstmt.setString(1, accountId);
 			
-          
-
-       } catch(SQLException e){
-       	logger.error("SQL Exception when getting all Subject");
-           logger.error(ExceptionUtils.getStackTrace(e));
-       }
-     
+			try(ResultSet rset = pstmt.executeQuery();){
+			
+				list = beanProcessor.toBeanList(rset, Subject.class);
+			}
 		
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all Subject");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 		return list;
 	}
 
-	
+
 }

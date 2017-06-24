@@ -47,22 +47,22 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
     
-	
+
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#getsubject(com.yahoo.petermwenda83.bean.student.StudentSubject)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#StudentSubject(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public StudentSubject getsubject(String studentuuid,String SubjectUuid) {
+	public StudentSubject studentSubject(String studentId,String subjectId) {
 		StudentSubject studentsub = null;
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentSubject WHERE StudentUuid = ? AND SubjectUuid = ?;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentSubject WHERE studentId = ? AND subjectId = ?;");       
         		
         		){
         	
-        	 pstmt.setString(1, studentuuid);
-        	 pstmt.setString(2, SubjectUuid);
+        	 pstmt.setString(1, studentId);
+        	 pstmt.setString(2, subjectId);
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	
@@ -70,7 +70,7 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 	   }
         		
         }catch(SQLException e){
-        	 logger.error("SQL Exception when getting Subjects for student " +studentuuid +"with SubjectUuid"+SubjectUuid);
+        	 logger.error("SQL Exception when getting Subjects for studentId " + studentId + " and subjectId " + subjectId);
              logger.error(ExceptionUtils.getStackTrace(e));
         }
        
@@ -79,22 +79,22 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 
 	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#getstudentSub(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#getStudentSubjects(java.lang.String)
 	 */
-	public List<StudentSubject> getstudentSubList(String studentuuid) {
+	public List<StudentSubject> getStudentSubjects(String studentId) {
 		List<StudentSubject>  subjectlist = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentSubject WHERE "
-						+ "studentuuid = ?;");
+						+ "studentId = ?;");
 				) {
-			psmt.setString(1, studentuuid);
+			psmt.setString(1, studentId);
 			try(ResultSet rset = psmt.executeQuery();){
 			
 				subjectlist = beanProcessor.toBeanList(rset, StudentSubject.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get student subject List for " + studentuuid);
+			logger.error("SQLException when trying to get student subject List for studentId " + studentId);
             logger.error(ExceptionUtils.getStackTrace(e));
             System.out.println(ExceptionUtils.getStackTrace(e)); 
 	    }
@@ -102,22 +102,23 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 		return subjectlist;
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#putstudentSub(com.yahoo.petermwenda83.bean.student.StudentSubject)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#putStudentSubject(com.yahoo.petermwenda83.bean.student.StudentSubject)
 	 */
 	@Override
-	public boolean putstudentSub(StudentSubject studentSub) {
+	public boolean putStudentSubject(StudentSubject studentSub) {
 		boolean success = true;
 		
 		  try(   Connection conn = dbutils.getConnection();
 				 PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentSubject" 
-			        		+"(Uuid, StudentUuid, SubjectUuid,SysUser,AllocationDate) VALUES (?,?,?,?,?);");
+			        		+"(uuid, accountId ,studentId, subjectId, allocationDate) VALUES (?,?,?,?,?);");
 		){
 			   
 	            pstmt.setString(1, studentSub.getUuid());
-	            pstmt.setString(2, studentSub.getStudentUuid());
-	            pstmt.setString(3, studentSub.getSubjectUuid());
-	            pstmt.setString(4, studentSub.getSysUser());
+	            pstmt.setString(2, studentSub.getAccountId());
+	            pstmt.setString(3, studentSub.getStudentId());
+	            pstmt.setString(4, studentSub.getSubjectId());
 	            pstmt.setTimestamp(5, new Timestamp(studentSub.getAllocationDate().getTime()));
 	            pstmt.executeUpdate();
 			 
@@ -133,54 +134,27 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 		return success;
 	}
 
+
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#updatestudentSub(com.yahoo.petermwenda83.bean.student.StudentSubject)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#deleteStudentSubject(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean updatestudentSub(StudentSubject studentSub) {
-		boolean success = true;
-		
-		  try (   Connection conn = dbutils.getConnection();
-	               PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentSubject SET SubjectUuid=?,SysUser = ?,"
-	               		+ "AllocationDate = ? WHERE StudentUuid = ? AND Uuid = ?;");
-	          ) {
-	        
-	            pstmt.setString(1, studentSub.getSubjectUuid());
-	            pstmt.setString(2, studentSub.getSysUser());
-	            pstmt.setTimestamp(3, new Timestamp(studentSub.getAllocationDate().getTime()));
-	            pstmt.setString(4, studentSub.getStudentUuid());
-	            pstmt.setString(5, studentSub.getUuid());
-	            pstmt.executeUpdate();
-
-     } catch (SQLException e) {
-      logger.error("SQL Exception when updating StudentSubject " + studentSub);
-      logger.error(ExceptionUtils.getStackTrace(e));
-      System.out.println(ExceptionUtils.getStackTrace(e));
-      success = false;
-     } 
-		
-	 return success;
-	}
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#deletestudentSub(com.yahoo.petermwenda83.bean.student.StudentSubject)
-	 */
-	@Override
-	public boolean deletestudentSub(StudentSubject studentSub) {
+	public boolean deleteStudentSubject(String accountId,String studentId) {
 		 boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
 	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentSubject"
-	         	      		+ " WHERE StudentUuid = ? AND SubjectUuid =?;");       
+	         	      		+ " WHERE accountId = ? AND studentId =?;");       
 	      		
 	      		){
 	      	
-	      	 pstmt.setString(1, studentSub.getStudentUuid());
-	      	 pstmt.setString(2, studentSub.getSubjectUuid()); 
+	      	 pstmt.setString(1, accountId);
+	      	 pstmt.setString(2, studentId); 
 		     pstmt.executeUpdate();
 		     
 	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting studentSubject : " +studentSub);
+	      	   logger.error("SQL Exception when deletting studentSubject for studentId " + studentId);
 	           logger.error(ExceptionUtils.getStackTrace(e));
 	           System.out.println(ExceptionUtils.getStackTrace(e));
 	           success = false;
@@ -190,31 +164,35 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 			return success;
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#getstudentSubListBySubID(java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#deleteStudentSubject(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentSubject> getstudentSubListBySubID(String SubjectUuid) {
-		List<StudentSubject>  subjectlist = null;
-		try(
-				Connection conn = dbutils.getConnection();
-				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentSubject WHERE "
-						+ "SubjectUuid = ?;");
-				) {
-			psmt.setString(1, SubjectUuid);
-			try(ResultSet rset = psmt.executeQuery();){
-			
-				subjectlist = beanProcessor.toBeanList(rset, StudentSubject.class);
-			}
-		} catch (SQLException e) {
-			logger.error("SQLException when trying to get StudentSubject " + SubjectUuid);
-            logger.error(ExceptionUtils.getStackTrace(e));
-            System.out.println(ExceptionUtils.getStackTrace(e)); 
-	    }
-		
-		return subjectlist;
+	public boolean deleteStudentSubject(String accountId, String studentId, String subjectId) {
+		 boolean success = true; 
+	      try(
+	      		  Connection conn = dbutils.getConnection();
+	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentSubject"
+	         	      		+ " WHERE accountId = ? AND studentId =? AND subjectId =? ;");       
+	      		
+	      		){
+	      	
+	      	 pstmt.setString(1, accountId);
+	      	 pstmt.setString(2, studentId); 
+	      	 pstmt.setString(3, subjectId); 
+		     pstmt.executeUpdate();
+		     
+	      }catch(SQLException e){
+	      	   logger.error("SQL Exception when deletting studentSubject for studentId " + studentId);
+	           logger.error(ExceptionUtils.getStackTrace(e));
+	           System.out.println(ExceptionUtils.getStackTrace(e));
+	           success = false;
+	           
+	      }
+	      
+			return success;
 	}
 
-	
 	
 }

@@ -38,7 +38,7 @@ import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -79,7 +79,7 @@ public class AddFeeDetails extends HttpServlet{
 
 
 
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
@@ -107,7 +107,7 @@ public class AddFeeDetails extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
@@ -262,7 +262,7 @@ public class AddFeeDetails extends HttpServlet{
 					genderfinderHash.put(stuudent.getUuid(), genderfinder);
 				}
                 double balance = 0;
-                balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherMoniesDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),schooluuid,stuudent.getFinalYear()); 
+                balance = studentBal.findBalance(termFeeDAO,sysConfigDAO,studentFeeDAO,studentOtherFeeDAO,stuudent.getAdmissionDate(),stuudent.getRegTerm(),stuudent.getUuid(),schooluuid,stuudent.getFinalYear()); 
                 System.out.println("balance = " + balance);
                 feebalance = nf.format(balance);
                 

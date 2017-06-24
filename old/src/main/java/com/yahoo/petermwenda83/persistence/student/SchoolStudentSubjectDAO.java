@@ -12,42 +12,17 @@ import com.yahoo.petermwenda83.bean.student.StudentSubject;
  */
 public interface SchoolStudentSubjectDAO {
 	
-	    /**
-	     * 
-	     * @param studentSub
-	     * @return
-	     */
-	    public StudentSubject getsubject(String studentuuid,String SubjectUuid);
-	    /**
-	     * 
-	     * @param studentuuid
-	     * @return
-	     */
-		public List<StudentSubject> getstudentSubList(String studentuuid);
-		/**
-		 * 
-		 * @param SubjectUuid
-		 * @return
-		 */
-		public List<StudentSubject> getstudentSubListBySubID(String SubjectUuid);
-		 /**
-		  * 
-		  * @param studentSub
-		  * @return
-		  */
-		public boolean putstudentSub(StudentSubject studentSub);
-		 /**
-		  * 
-		  * @param studentSub
-		  * @return
-		  */
-		public boolean  updatestudentSub(StudentSubject studentSub);
-		  /**
-		   * 
-		   * @param studentSub
-		   * @return
-		   */
-		public boolean deletestudentSub(StudentSubject studentSub);
+	    public StudentSubject studentSubject(String studentId,String subjectId);
+	    
+		public List<StudentSubject> getStudentSubjects(String studentId);
+		
+		public boolean putStudentSubject(StudentSubject studentSub);
+		
+		public boolean deleteStudentSubject(String accountId,String studentId); 
+		
+		public boolean deleteStudentSubject(String accountId,String studentId,String subjectId); 
+		
+		
 		 
 
 }

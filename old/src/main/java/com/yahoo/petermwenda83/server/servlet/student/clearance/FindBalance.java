@@ -29,7 +29,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.money.StudentClearanceDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -46,7 +46,7 @@ public class FindBalance extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	String [] terms;
 	List<StudentFee> studentFeeList;
 	List<StudentOtherFee> othermoneyList;
@@ -67,7 +67,7 @@ public class FindBalance extends HttpServlet{
        studentDAO = StudentDAO.getInstance();
        termFeeDAO = TermFeeDAO.getInstance();
        studentFeeDAO = StudentFeeDAO.getInstance();
-       studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+       studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
        terms = new String [] {"1","2","3"};
        studentFeeList = new ArrayList<>();
 	   othermoneyList = new ArrayList<>();
@@ -143,8 +143,8 @@ public class FindBalance extends HttpServlet{
 						if(studentFeeDAO.getStudentFeeByStudentUuidList(schooluuid, studentuuid, term, year) !=null){
 						studentFeeList = studentFeeDAO.getStudentFeeByStudentUuidList(schooluuid, studentuuid, term, year);
 						}
-						if(studentOtherMoniesDAO.getStudentOtherList(studentuuid, term, year) !=null){
-						othermoneyList = studentOtherMoniesDAO.getStudentOtherList(studentuuid, term, year);
+						if(studentOtherFeeDAO.getStudentOtherList(studentuuid, term, year) !=null){
+						othermoneyList = studentOtherFeeDAO.getStudentOtherList(studentuuid, term, year);
 						}
 						TermFee admTermFee = new TermFee();
 						if(termFeeDAO.getFee(schooluuid,term, year) !=null){

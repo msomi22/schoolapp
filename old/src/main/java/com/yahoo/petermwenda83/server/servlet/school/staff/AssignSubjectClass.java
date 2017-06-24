@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
-import com.yahoo.petermwenda83.persistence.staff.TeacherSubClassDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 public class AssignSubjectClass extends HttpServlet{
@@ -29,7 +29,7 @@ public class AssignSubjectClass extends HttpServlet{
 	final String ERROR_EMPTY_CLASS = "Please select atleast one class .";
 	final String SUCCESS_ASSIGN_OK = "Subject-Class assiged successfuly."; 
 	
-	private static TeacherSubClassDAO teacherSubClassDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
 	
 	
 
@@ -41,7 +41,7 @@ public class AssignSubjectClass extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       teacherSubClassDAO = TeacherSubClassDAO.getInstance();
+       teacherSubjectDAO = TeacherSubjectDAO.getInstance();
        
    }
    
@@ -77,10 +77,10 @@ public class AssignSubjectClass extends HttpServlet{
 						   subClass.setSubjectUuid(subjectId);
 						   subClass.setTeacherUuid(staffid);
 						   subClass.setSysUser(systemuser);
-				   if(teacherSubClassDAO.getSubject(subjectId,classId[i]) !=null){ 
+				   if(teacherSubjectDAO.getSubject(subjectId,classId[i]) !=null){ 
 		    		     session.setAttribute(SessionConstants.STAFF_FIND_ERROR, ERROR_SUB_TAKEN);    
 		    	        }else{
-		    	        	if(teacherSubClassDAO.putSubjectClass(subClass)){
+		    	        	if(teacherSubjectDAO.putSubjectClass(subClass)){
 		    		        	   session.setAttribute(SessionConstants.STAFF_FIND_SUCCESS, SUCCESS_ASSIGN_OK); 
 		    				   }else{
 		    					   session.setAttribute(SessionConstants.STAFF_FIND_ERROR, ERROR_ASSIGN_FAILED); 

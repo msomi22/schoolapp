@@ -16,43 +16,18 @@ import com.yahoo.petermwenda83.bean.subject.Subject;
  *
  */
 public interface SchoolSubjectDAO {
-	/**
-	 * @param uuid
-	 * 
-	 */
-	public  Subject getSubject(String uuid);
-	  /**
-	   * 
-	   * @param subjectcode
-	   * 
-	   */
-	public  Subject getSubjects(String subjectcode);
-	 /**
-	  * 
-	  * @param subject
-	  * 
-	  */
+
+	public  Subject getSubjectById(String accountId,String uuid);
+	
+	public  Subject getSubject(String accountId,String query);
+	
 	public boolean putSubject(Subject subject);
 	
-	/**
-	 * 
-	 * @param subject
-	 * 
-	 */
-	public boolean editSubject(Subject subject,String uuid);
+	public boolean updateSubject(Subject subject);
 	
-	/**
-	 * 
-	 * @param subject
-	 * 
-	 */
-	public boolean deleteStudent(Subject subject);
+	public boolean deleteSubject(String accountId,String uuid);
 	
-	/**
-	 * 
-	 * @return AllSubjects
-	 */
-	public List<Subject> getAllSubjects();
+	public List<Subject> getSubjects(String accountId);
 	
 	
 	

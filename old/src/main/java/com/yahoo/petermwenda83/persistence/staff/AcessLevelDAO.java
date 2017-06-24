@@ -20,31 +20,31 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  * @author peter
  *
  */
-public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
+public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 
-	private static PositionDAO positionDAO;
+	private static AcessLevelDAO acessLevelDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
 	
-	public static PositionDAO getInstance(){
+	public static AcessLevelDAO getInstance(){
 		
-		if(positionDAO == null){
-			positionDAO = new PositionDAO();		
+		if(acessLevelDAO == null){
+			acessLevelDAO = new AcessLevelDAO();		
 		}
-		return positionDAO;
+		return acessLevelDAO;
 	}
 	
 	/**
 	 * 
 	 */
-	public PositionDAO() { 
+	public AcessLevelDAO() { 
 		super();
 	}
 	
 	/**
 	 * 
 	 */
-	public PositionDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
+	public AcessLevelDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
 
@@ -52,15 +52,15 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
 	
 
 	@Override
-	public AcessLevel get(String Uuid) {
+	public AcessLevel get(String uuid) {
 		AcessLevel acessLevel = new AcessLevel();
         ResultSet rset = null;
      try(
      		      Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE Uuid = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE uuid = ?;");       
      		
      		){
-     	     pstmt.setString(1, Uuid);
+     	     pstmt.setString(1, uuid);
 	         rset = pstmt.executeQuery();
 	        while(rset.next()){
 	
@@ -70,7 +70,7 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
      	
      	
      }catch(SQLException e){
-     	  logger.error("SQL Exception when getting AcessLevel with uuid: " + Uuid);
+     	  logger.error("SQL Exception when getting AcessLevel with uuid: " + uuid);
           logger.error(ExceptionUtils.getStackTrace(e));
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
@@ -78,35 +78,9 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
 		return acessLevel; 
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#putPosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
-	 */
-	@Override
-	public boolean putPosition(AcessLevel osition) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
-	 */
-	@Override
-	public boolean updatePosition(AcessLevel osition) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#deletePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
-	 */
-	@Override
-	public boolean deletePosition(AcessLevel osition) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolPositionDAO#getPositionList(java.lang.String)
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#getPositionList(java.lang.String)
 	 */
 	@Override
 	public List<AcessLevel> getPositionList() {
@@ -130,6 +104,24 @@ public class PositionDAO extends GenericDAO implements SchoolPositionDAO {
 
 		
 		return list;
+	}
+
+	@Override
+	public boolean putPosition(AcessLevel acessLevel) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updatePosition(AcessLevel acessLevel) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deletePosition(String uuid) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

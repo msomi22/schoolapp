@@ -19,7 +19,7 @@ import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 /** 
@@ -37,7 +37,7 @@ public class Revert extends HttpServlet{
 	final String ERROR_TRANS_NOT_REVERTED_WRONG_TERM_YEAR = "Transaction not reverted, confirm the term and year.";
 	
 	
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static RevertedMoneyDAO revertedMoneyDAO;
 	private static SysConfigDAO sysConfigDAO;
 	/**  
@@ -48,7 +48,7 @@ public class Revert extends HttpServlet{
    @Override
    public void init(ServletConfig config) throws ServletException {
        super.init(config);
-       studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+       studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
        revertedMoneyDAO = RevertedMoneyDAO.getInstance();
        sysConfigDAO = SysConfigDAO.getInstance();
        
@@ -73,7 +73,7 @@ public class Revert extends HttpServlet{
 		}
 	
        
-       if(studentOtherMoniesDAO.getStudentOtherMonies(studentuuid, typeuuid) ==null){
+       if(studentOtherFeeDAO.getStudentOtherMonies(studentuuid, typeuuid) ==null){
 		     session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED); 
 		   
 	   }else if(StringUtils.isBlank(schooluuid)){
@@ -105,7 +105,7 @@ public class Revert extends HttpServlet{
 	
 		   revertedMoneyDAO.putstudentUuid(revertedMoney);
 		   
-		   if(studentOtherMoniesDAO.deleteStudentOtherMonies(studentOtherFee)){ 
+		   if(studentOtherFeeDAO.deleteStudentOtherMonies(studentOtherFee)){ 
 			   session.setAttribute(SessionConstants.STUDENT_FEE_ADD_SUCCESS, SUCCESS_TRANS_REVERTED); 
 		   }else{
 			   session.setAttribute(SessionConstants.STUDENT_FEE_ADD_ERROR, ERROR_TRANS_NOT_REVERTED);  

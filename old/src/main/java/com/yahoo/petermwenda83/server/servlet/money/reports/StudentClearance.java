@@ -48,7 +48,7 @@ import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.PMoneyDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.result.PdfUtil;
@@ -90,7 +90,7 @@ public class StudentClearance extends HttpServlet{
 	Locale locale = new Locale("en","KE"); 
 	NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
-	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static StudentDAO studentDAO;
 	private static SysConfigDAO sysConfigDAO;
@@ -129,7 +129,7 @@ public void init(ServletConfig config) throws ServletException {
 	pMoneyDAO = PMoneyDAO.getInstance();
 	sysConfigDAO = SysConfigDAO.getInstance();
 	termFeeDAO = TermFeeDAO.getInstance();
-	studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
+	studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 	
 	USER = System.getProperty("user.name");
 	path = "/home/"+USER+"/school/logo/logo.png";
@@ -317,8 +317,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		
        //get other payments
 		List<StudentOtherFee>  stuOthermoniList = new ArrayList<>(); 
-		if(studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
-			stuOthermoniList = studentOtherMoniesDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
+		if(studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear()) !=null){
+			stuOthermoniList = studentOtherFeeDAO.getStudentOtherList(stuudent.getUuid(),sysConfig.getTerm(),sysConfig.getYear());
 		}  
 		
 		
