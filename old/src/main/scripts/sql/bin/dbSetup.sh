@@ -50,9 +50,9 @@ export PGHOST=$DB_HOST
 export PGPASSWORD=$DB_PASSWORD
 
 # Copy data to be imported into the Linux temporary folder
-cp -fr ../etc/sql/data/* /tmp
+cp -fr ../data/* /tmp
 
-psql -f ../etc/sql/tables.postgres.sql -d postgres
+psql -f ../tables.postgres.sql -d postgres
 
 #psql -f ../etc/sql/tables.quartz.sql -d postgres
 

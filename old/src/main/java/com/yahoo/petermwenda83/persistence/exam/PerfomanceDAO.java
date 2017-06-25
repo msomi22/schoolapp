@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
@@ -71,15 +70,15 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 	@Override
 	public List<Perfomance> getStreamPerformance(String accountId, String examId, String studentId, String streamId,
 			String term, String year) {
-		List<Perfomance> list = new ArrayList<>();
+		List<Perfomance> list = null;
 
         try (
         		 Connection conn = dbutils.getConnection();
      	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
-     	         		+ " examId = ? AND studentId = ? AND streamId =? AND term = ? AND year = ?;");    		   
+     	         		+ " examId=? AND studentId = ? AND streamId =? AND term = ? AND year = ?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);      
-         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(2, examId); 
          	   pstmt.setString(3, studentId);  
          	   pstmt.setString(4, streamId); 
          	   pstmt.setString(5, term); 
@@ -102,15 +101,15 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 	@Override
 	public List<Perfomance> getClassPerformance(String accountId, String examId, String studentId, String classRoomId,
 			String term, String year) {
-		List<Perfomance> list = new ArrayList<>();
+		List<Perfomance> list = null;
 
         try (
         		 Connection conn = dbutils.getConnection();
      	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
-     	         		+ " examId = ? AND studentId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
+     	         		+ " examId=? AND studentId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
      	   ) {
-         	   pstmt.setString(1, accountId);      
-         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(1, accountId);   
+         	   pstmt.setString(2, examId); 
          	   pstmt.setString(3, studentId);  
          	   pstmt.setString(4, classRoomId); 
          	   pstmt.setString(5, term); 
@@ -136,7 +135,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Perfomance"
-						+ " WHERE accountId = ? AND examId = ? AND studentId = ? AND term = ? AND year =?;");       
+						+ " WHERE accountId = ? AND  examId=? AND  studentId = ? AND term = ? AND year =?;");       
 
 				){
 
@@ -163,15 +162,15 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 	@Override
 	public List<Perfomance> getStreamSubjectPerfomance(String accountId, String examId, String subjectId,
 			String streamId, String term, String year) {
-		List<Perfomance> list = new ArrayList<>();
+		List<Perfomance> list = null;
 
         try (
         		 Connection conn = dbutils.getConnection();
      	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
-     	         		+ " examId = ? AND subjectId = ? AND streamId =? AND term = ? AND year = ?;");    		   
+     	         		+ " examId=? AND  subjectId = ? AND streamId =? AND term = ? AND year = ?;");    		   
      	   ) {
-         	   pstmt.setString(1, accountId);      
-         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(1, accountId);  
+         	   pstmt.setString(2, examId); 
          	   pstmt.setString(3, subjectId);  
          	   pstmt.setString(4, streamId); 
          	   pstmt.setString(5, term); 
@@ -194,15 +193,15 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 	@Override
 	public List<Perfomance> getClassSubjectPerfomance(String accountId, String examId, String subjectId,
 			String classRoomId, String term, String year) {
-		List<Perfomance> list = new ArrayList<>();
+		List<Perfomance> list = null;
 
         try (
         		 Connection conn = dbutils.getConnection();
      	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
-     	         		+ " examId = ? AND subjectId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
+     	         		+ " examId=? AND subjectId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
      	   ) {
-         	   pstmt.setString(1, accountId);      
-         	   pstmt.setString(2, examId);  
+         	   pstmt.setString(1, accountId);  
+         	   pstmt.setString(2, examId); 
          	   pstmt.setString(3, subjectId);  
          	   pstmt.setString(4, classRoomId); 
          	   pstmt.setString(5, term); 
