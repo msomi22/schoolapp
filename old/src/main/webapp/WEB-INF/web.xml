@@ -50,7 +50,7 @@
 
 	<servlet-mapping>
 		<servlet-name>TestPerformance</servlet-name>
-		<url-pattern>/testPerformance</url-pattern>
+		<url-pattern>/school/testPerformance</url-pattern> 
 	</servlet-mapping>
 
 

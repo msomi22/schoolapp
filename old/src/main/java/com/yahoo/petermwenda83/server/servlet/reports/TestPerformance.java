@@ -29,12 +29,15 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.Test3ObjectComparator;
 
 /**   http://localhost:8080/school/school/testPerformance
  * 
@@ -50,6 +53,7 @@ public class TestPerformance extends HttpServlet{
 	private static SubCategoryDAO subCategoryDAO;
 	private static CategoryDAO categoryDAO;
 	private static StudentDAO studentDAO;
+	private static ExamDAO examDAO;
 
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 7, Font.NORMAL);
@@ -61,6 +65,9 @@ public class TestPerformance extends HttpServlet{
 
 	private String PDF_SUBTITLE ="";
 	private Logger logger;
+	
+	private static final String[] exams = { "D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A",
+	"16C4BF00-941C-40E4-9891-272D5F0979A1" };
 
 	/**   
 	 *
@@ -75,6 +82,7 @@ public class TestPerformance extends HttpServlet{
 		subCategoryDAO = SubCategoryDAO.getInstance();
 		categoryDAO = CategoryDAO.getInstance(); 
 		studentDAO = StudentDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -133,182 +141,227 @@ public class TestPerformance extends HttpServlet{
 	 * @param args
 	 */
 	public void populatePDFDocument(String accountId) {
-		//Timeit.code(() -> compute());
+		Timeit.code(() -> compute());
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void compute() {
 
-
-		 accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		//String studentId = "4F218688-6DE5-4E69-8690-66FBA2F0DC9F";
+		String accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
 		String streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
 		String term = "1";
 		String year = "2016";
-		List<Perfomance> perfomanceList = null;
-
-		String[] exams = { "D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A",
-		"16C4BF00-941C-40E4-9891-272D5F0979A1" };
-
-		try {
-			document.open();
-
-			document.add(new Paragraph("peter *****************************"));
-			logger.info("*************************************************************");
-
-			System.out.println("******************************************************************"); 
-
-			List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
-
-			for(Student student : studentsList ){
-
-				//Student student = studentDAO.getStudentById(accountId, studentId);
-
-				document.add(new Paragraph("Firstname: " + student.getFirstname()));
-				document.add(new Paragraph("Middlename: " + student.getMiddlename()));
-				document.add(new Paragraph("Lastname: " + student.getLastname()));
-				document.add(new Paragraph("RegNo: " + student.getRegNo())); 
 
 
-				//perfomanceList = perfomanceDAO.getStreamPerformance(accountId, exams[0], studentId, streamId, term, year);
-				HashMap<String,List<Perfomance>> perfomancesMap = new HashMap<>();
+		List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
 
-				for( int i = 0; i < exams.length; i++){
-					perfomanceList = perfomanceDAO.getStreamPerformance(accountId, exams[i], student.getUuid(), streamId, term, year);
+		if(exams.length == 3){
 
+			List<Test3Object> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
 
-					List<Perfomance> selectedLanguagesList = new ArrayList<>();
-					List<Perfomance> selectedSciencesList = new ArrayList<>();
-					List<Perfomance> selectedHumanitiesList = new ArrayList<>();
-					List<Perfomance> selectedTechnicalsList = new ArrayList<>();
-					List<Perfomance> finalPerfomanceList = new ArrayList<>();
-					List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
+			Collections.sort(performanceList, new Test3ObjectComparator());
+			Collections.reverse(performanceList);
 
-					if (perfomanceList.size() >= 1) {
-						int languagesCount = 0;
-						int sciencesCount = 0;
-						int humanitiesCount = 0;
-
-						for (Perfomance perfomance : perfomanceList) {
-
-							perfomance.getExamId();
-							perfomance.getStudentId();
-							perfomance.getSubjectId();
+			for(Test3Object test3Object : performanceList){
+				
+				List<Perfomance> exam1 = test3Object.getExam1();
+				List<Perfomance> exam2 = test3Object.getExam2();
+				List<Perfomance> exam3 = test3Object.getExam3(); 
 
 
-							String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
-							String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
-							String subject = subjectDAO.getSubjectById(accountId, perfomance.getSubjectId()).getDescription();
+				System.out.println("****************************************************************************************");
+				System.out.println("Student: " + test3Object.getStudentId() + " , Score : " + test3Object.getTotalScore()); 
+				System.out.println("_______________________________________________________________________________________");
 
-							if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
-								selectedLanguagesList.add(perfomance);
-								languagesCount++;
+				exam1.forEach(e1 -> {
+					String subject = subjectDAO.getSubjectById(accountId, e1.getSubjectId()).getDescription();
+					
+					System.out.println("exam 1 sub: " + subject + " , score: " + e1.getScore());
+				});
+				
+				System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
-								if (languagesCount > 2) {
-									Collections.sort(selectedLanguagesList, new PerformanceComparator());
-									removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
+				exam2.forEach(e2 -> {
+					String subject = subjectDAO.getSubjectById(accountId, e2.getSubjectId()).getDescription();
+					
+					System.out.println("exam 2 sub: " + subject + " , score: " + e2.getScore());
+				});
+				
+				System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
-								}
-							}
+				exam3.forEach(e3 -> {
+					String subject = subjectDAO.getSubjectById(accountId, e3.getSubjectId()).getDescription();
+					
+					System.out.println("exam 3 sub: " + subject + " , score: " + e3.getScore());
+				});
+				
+				System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
-							if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
-								selectedSciencesList.add(perfomance);
-								sciencesCount++;
-
-								if (sciencesCount > 2) {
-									Collections.sort(selectedSciencesList, new PerformanceComparator());	
-									Perfomance removedScience = selectedSciencesList.remove(0);
-									selectedTechnicalsList.add(removedScience);
-									//removedSubjectsPerfomanceList.add(removedScience)
-
-
-								}
-							}
-
-							if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
-								selectedHumanitiesList.add(perfomance);
-								humanitiesCount++;
-
-								if (humanitiesCount > 1) {
-									Collections.sort(selectedHumanitiesList, new PerformanceComparator());
-									selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
-
-								}
-							}
-
-							if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
-								selectedTechnicalsList.add(perfomance);
-
-
-							}
-
-							if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
-								finalPerfomanceList.add(perfomance);
-
-
-							}
-
-							//System.out.println("score = " + perfomance.getScore() + " ** " + subject + "(" + desc + ")");
-
-						}
-
-						Collections.sort(selectedTechnicalsList, new PerformanceComparator());
-
-						if(selectedTechnicalsList.size() > 0){
-							Perfomance highestTechnical = selectedTechnicalsList.remove(selectedTechnicalsList.size()-1);
-							//System.out.println("highestTechnical score = " + highestTechnical.getScore());
-							removedSubjectsPerfomanceList.addAll(selectedTechnicalsList);
-							finalPerfomanceList.add(highestTechnical);
-						}
-
-						finalPerfomanceList.addAll(selectedLanguagesList);
-						finalPerfomanceList.addAll(selectedSciencesList);
-						finalPerfomanceList.addAll(selectedHumanitiesList);
-
-						System.out.println("-------final----" + removedSubjectsPerfomanceList.size()); 
-						//finalPerfomanceList.forEach(p->System.out.println("Subject:::" + p.getSubjectId() + ":::score:::" + p.getScore()));
-
-						perfomancesMap.put(exams[i], finalPerfomanceList);
-
-					}
-
-
-				}
-
-
-
-				/*document.add(new Paragraph("Series 1: " + " s1 ")); 
-			document.add(new Paragraph("Series 2: " + " s2 ")); 
-			document.add(new Paragraph("Series 3: " + " s3 ")); 
-				 */
-
-				for(int i = 0; i< exams.length; i++){
-					List<Perfomance> mylist = null;
-
-					if(perfomancesMap.get(exams[i]) != null){
-						mylist = perfomancesMap.get(exams[i]);
-
-						System.out.println(getTotalsPerExam(mylist)); 
-						document.add(new Paragraph("Series  " + i + ":" + getTotalsPerExam(mylist))); 
-						//System.out.println(mylist); 
-						System.out.println("__________________________________________________________"); 
-					}
-
-
-				}
-
-				document.newPage();
 
 			}
 
-			document.close();
 
-		}catch(DocumentException e) {
-			logger.error("DocumentException while writing into the document");
-			logger.error(ExceptionUtils.getStackTrace(e));
-		}  
+
+
+		}
+
 
 	
-
 	}
 
 	
+	/**
+	 * @param accountId
+	 * @param streamId
+	 * @param term
+	 * @param year
+	 * @param studentsList
+	 */
+	private static List<Test3Object> getStudentScore(String accountId, String streamId, String term, String year,
+			List<Student> studentsList) {
+
+		List<Test3Object> test3ObjectList = new ArrayList<>();
+		List<Perfomance> exam1;
+		List<Perfomance> exam2;
+		List<Perfomance> exam3;
+		
+		for(Student student : studentsList ){
+
+			exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
+			exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
+			exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
+
+			Test3Performance totalExam1 = null;
+			Test3Performance totalExam2 = null;
+			Test3Performance totalExam3 = null;
+			 totalExam1 = findExamTotal(accountId, exam1);
+			 totalExam2 = findExamTotal(accountId, exam2);
+			 totalExam3 = findExamTotal(accountId, exam3);
+
+
+			int totals = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();
+
+			Test3Object test3Object = new Test3Object();
+			test3Object.setExam1(totalExam1.getPerfomanceList());
+			test3Object.setExam2(totalExam2.getPerfomanceList());
+			test3Object.setExam3(totalExam3.getPerfomanceList());
+			test3Object.setStudentId(student.getUuid());
+			test3Object.setTotalScore(totals); 
+
+			test3ObjectList.add(test3Object);
+
+		}
+
+		return test3ObjectList;
+	}
+
+
+	/**
+	 * @param accountId
+	 * @param exam1
+	 */
+	private static Test3Performance findExamTotal(String accountId, List<Perfomance> exam1) {
+		
+		List<Perfomance> finalPerfomanceList = new ArrayList<>();
+		List<Perfomance> perfomanceList = new ArrayList<>();
+		
+		
+		if(!exam1.isEmpty()){
+
+			int languagesCount = 0;
+			int sciencesCount = 0;
+			int humanitiesCount = 0;
+
+			List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
+			List<Perfomance> selectedLanguagesList = new ArrayList<>();
+			List<Perfomance> selectedSciencesList = new ArrayList<>();
+			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
+			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
+
+			
+			
+			for (Perfomance perfomance : exam1) {
+				
+				perfomanceList.add(perfomance);
+				
+
+				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
+				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+
+				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
+					selectedLanguagesList.add(perfomance);
+					languagesCount++;
+
+
+					if (languagesCount > 2) {
+						Collections.sort(selectedLanguagesList, new PerformanceComparator());
+						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
+
+					}
+				}
+
+				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
+					selectedSciencesList.add(perfomance);
+					sciencesCount++;
+
+					if (sciencesCount > 2) {
+						Collections.sort(selectedSciencesList, new PerformanceComparator());	
+						selectedTechnicalsList.add(selectedSciencesList.remove(0));
+
+					}
+				}
+
+				if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
+					selectedHumanitiesList.add(perfomance);
+					humanitiesCount++;
+
+					if (humanitiesCount > 1) {
+						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
+						selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
+
+					}
+				}
+
+				if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
+					selectedTechnicalsList.add(perfomance);
+
+
+				}
+
+				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
+					finalPerfomanceList.add(perfomance);
+
+
+				}
+
+			}
+
+           			//some code here
+			Collections.sort(selectedTechnicalsList, new PerformanceComparator());
+
+			if(selectedTechnicalsList.size() > 0){
+				Perfomance highestTechnical = selectedTechnicalsList.remove(selectedTechnicalsList.size()-1);
+				finalPerfomanceList.add(highestTechnical);
+
+			}
+
+			finalPerfomanceList.addAll(selectedLanguagesList);
+			finalPerfomanceList.addAll(selectedSciencesList);
+			finalPerfomanceList.addAll(selectedHumanitiesList);
+
+		}
+
+		Test3Performance test3Performance = new Test3Performance();
+		test3Performance.setPerfomanceList(perfomanceList); 
+		test3Performance.setTotal(getTotalsPerExam(finalPerfomanceList)); 
+		
+		
+		return test3Performance;
+	}
+
+
 
 	/**
 	 * @param perfomanceList
@@ -323,6 +376,8 @@ public class TestPerformance extends HttpServlet{
 
 		return totalPoints;
 	}
+
+
 
 
 	/**
