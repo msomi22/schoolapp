@@ -322,6 +322,8 @@ public class TestPerformance extends HttpServlet{
 					Map<String,Integer> exam1 = test3Object.getExam1();
 					Map<String,Integer> exam2 = test3Object.getExam2();
 					Map<String,Integer> exam3 = test3Object.getExam3(); 
+					
+					
 
 					//getSubjectById(accountId, e1.getSubjectId()).getDescription();
 					List<Subject> subjects = subjectDAO.getSubjects(accountId);
@@ -333,8 +335,6 @@ public class TestPerformance extends HttpServlet{
 						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 						String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
 						
-						
-
 						if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
 							exam1Score = "";
 						}
@@ -346,6 +346,7 @@ public class TestPerformance extends HttpServlet{
 						}
 						
 						String examAverage = findExamAverage(exam1Score,exam2Score,exam3Score);
+						
 						
 						String avgrade = getGrade(examAverage,subject.getUuid(),accountId);
 						String avgpoints = String.valueOf(getPoints(examAverage,subject.getUuid(),accountId));
@@ -398,7 +399,7 @@ public class TestPerformance extends HttpServlet{
 						examTable.addCell(new Paragraph("" + average,timesRomanNarmal6));
 						examTable.addCell(new Paragraph("" + remarks,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(initials,timesRomanNarmal6));
-
+						
 
 					});
 
