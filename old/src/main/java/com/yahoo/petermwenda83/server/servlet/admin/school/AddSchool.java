@@ -135,18 +135,6 @@ public class AddSchool extends HttpServlet{
        }else if(!Wordlength(schoolusername)){
 	 	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, NAME_ERROR); 
 		   
-	   }else if(accountDAO.getSchoolByUsername(schoolusername) !=null){
-    	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, ERROR_SCHOOL_USERNAME_EXIST); 
-    	   
-       }else if(accountDAO.getSchoolByName(schoolname) !=null){
-    	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, ERROR_SCHOOL_NAME_EXIST); 
-    	   
-       }else if(accountDAO.getSchoolByPhone(schoolphone) !=null){
-    	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, ERROR_SCHOOL_PHONE_EXIST); 
-    	   
-       }else if(accountDAO.getSchoolByEmail(schoolemail) !=null){
-    	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, ERROR_SCHOOL_EMAIL_EXIST); 
-    	   
        }else if(StringUtils.isBlank(schoolpassword)){
     	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_ADD_ERROR, ERROR_EMPTY_SCHOOL_PASSWORD); 
     	   

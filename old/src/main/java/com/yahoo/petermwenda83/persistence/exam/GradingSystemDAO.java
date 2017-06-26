@@ -153,7 +153,7 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 		 List<GradingSystem> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM GradingSystem WHERE accountId = ? AND categoryId =?;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM GradingSystem WHERE accountId = ? AND categoryId =? ORDER BY points DESC ;");   
 			) {
 			 pstmt.setString(1,accountId);
 			 pstmt.setString(2,categoryId);

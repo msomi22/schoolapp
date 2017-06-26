@@ -84,7 +84,7 @@ public class UpdateSchoolPass extends HttpServlet{
          }else{
         	
         	 //System.out.println("schoolpassword = " +  schoolpassword);
-        	 Account account =  accountDAO.get(schooluuid); 
+        	 Account account =  accountDAO.getAccountById(schooluuid); 
         	 account.setPassword(SecurityUtil.getMD5Hash(newpassowrd)); 
         	 updateSchoolCache(account);
   		       if(accountDAO.update(account) ){ 

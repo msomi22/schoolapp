@@ -9,9 +9,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
+import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
@@ -33,6 +35,7 @@ public class Test3 {
 	static final String databasePassword = "AllaManO1";
 	static final int databasePort = 5432;
 
+	private static GradingSystemDAO gradingSystemDAO;
 	private static PerfomanceDAO perfomanceDAO;
 	private static SubjectDAO subjectDAO;
 	private static SubCategoryDAO subCategoryDAO;
@@ -44,6 +47,7 @@ public class Test3 {
 	"16C4BF00-941C-40E4-9891-272D5F0979A1" };
 
 	static {
+		gradingSystemDAO = new GradingSystemDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		perfomanceDAO = new PerfomanceDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		subjectDAO = new SubjectDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		subCategoryDAO = new SubCategoryDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
@@ -86,9 +90,9 @@ public class Test3 {
 			int count = 0;
 			for(Test3Object test3Object : performanceList){
 				
-				List<Perfomance> exam1 = test3Object.getExam1();
+				/*List<Perfomance> exam1 = test3Object.getExam1();
 				List<Perfomance> exam2 = test3Object.getExam2();
-				List<Perfomance> exam3 = test3Object.getExam3(); 
+				List<Perfomance> exam3 = test3Object.getExam3(); */
 /*
 
 				System.out.println("****************************************************************************************");
@@ -164,9 +168,9 @@ public class Test3 {
 			int totals = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();
 
 			Test3Object test3Object = new Test3Object();
-			test3Object.setExam1(totalExam1.getPerfomanceList());
+			/*test3Object.setExam1(totalExam1.getPerfomanceList());
 			test3Object.setExam2(totalExam2.getPerfomanceList());
-			test3Object.setExam3(totalExam3.getPerfomanceList());
+			test3Object.setExam3(totalExam3.getPerfomanceList());*/
 			test3Object.setStudentId(student.getUuid());
 			test3Object.setTotalScore(totals); 
 
@@ -274,7 +278,7 @@ public class Test3 {
 		}
 
 		Test3Performance test3Performance = new Test3Performance();
-		test3Performance.setPerfomanceList(perfomanceList); 
+		//test3Performance.setPerfomanceList(perfomanceList); 
 		test3Performance.setTotal(getTotalsPerExam(finalPerfomanceList)); 
 		
 		
@@ -289,13 +293,52 @@ public class Test3 {
 	 */
 	public static int getTotalsPerExam(List<Perfomance> perfomanceList){
 		int totalPoints = 0;
-
+		
 		for( Perfomance perfomance : perfomanceList ){
-			totalPoints += perfomance.getScore();
+			int point = getPoints(perfomance.getScore(),perfomance.getSubjectId(),perfomance.getAccountId());
+			
+			totalPoints += point;
 		}
 
 		return totalPoints;
 	}
+	
+	
+  public static int getPoints(int score, String subjectId, String accountId){
+		
+
+		int points = 0;
+	
+		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		String categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
+		List<GradingSystem> gradingSystemList = new ArrayList<>();
+		
+		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
+		
+		if(gradingSystemList.isEmpty()){
+			
+			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
+		
+		}
+		
+		System.out.println("gradingSystemList: " + gradingSystemList.size()); 
+		
+		
+		
+		for(GradingSystem gradingSystem : gradingSystemList){
+			
+			if(score <= gradingSystem.getUpperLimit() &&  score >= gradingSystem.getLowerLimit()){
+				
+				points = gradingSystem.getPoints();
+				
+			}
+		
+		}
+		
+		
+		return points;
+	}
+
 
 
 

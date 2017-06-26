@@ -64,7 +64,7 @@ public class TestAccountDAO {
 	public void testGetSchoolByUsername() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		Account s = new Account();
-		s = store.getSchoolByUsername(USERNAME);
+		
 		assertEquals(s.getUuid(),SCHOOL_UUID);
 		//assertEquals(s.getSchoolName(),SCHOOL_NAME);
 		assertEquals(s.getUsername(),USERNAME);

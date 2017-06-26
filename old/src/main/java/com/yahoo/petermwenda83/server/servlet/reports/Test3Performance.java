@@ -3,10 +3,8 @@
  */
 package com.yahoo.petermwenda83.server.servlet.reports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author peter
@@ -15,14 +13,14 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
 public class Test3Performance {
 	
 	private int total;
-	private List<Perfomance> perfomanceList;
+	private Map<String,Integer> perfomanceMap;
 
 	/**
 	 * 
 	 */
 	public Test3Performance() {
 		total = 0;
-		perfomanceList = new ArrayList<>();
+		perfomanceMap = new HashMap<>(); 
 	}
 
 	public int getTotal() {
@@ -33,12 +31,18 @@ public class Test3Performance {
 		this.total = total;
 	}
 
-	public List<Perfomance> getPerfomanceList() {
-		return perfomanceList;
+	/**
+	 * @return the perfomanceMap
+	 */
+	public Map<String, Integer> getPerfomanceMap() {
+		return perfomanceMap;
 	}
 
-	public void setPerfomanceList(List<Perfomance> perfomanceList) {
-		this.perfomanceList = perfomanceList;
+	/**
+	 * @param perfomanceMap the perfomanceMap to set
+	 */
+	public void setPerfomanceMap(Map<String, Integer> perfomanceMap) {
+		this.perfomanceMap = perfomanceMap;
 	}
 
 	/**
@@ -46,8 +50,10 @@ public class Test3Performance {
 	 */
 	@Override
 	public String toString() {
-		return "Test3Performance [total=" + total + ", perfomanceList=" + perfomanceList + "]";
+		return "Test3Performance [total=" + total + ", perfomanceMap=" + perfomanceMap + "]";
 	}
+
+	
 
 	
 }

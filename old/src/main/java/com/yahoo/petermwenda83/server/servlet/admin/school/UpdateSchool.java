@@ -119,7 +119,7 @@ public class UpdateSchool extends HttpServlet{
     	   
        }else{
     	   
-    	   Account account =  accountDAO.get(schooluuid); 
+    	   Account account =  accountDAO.getAccountById(schooluuid); 
     	  
 		   account.setName(schoolname); 
 		   account.setUsername(schoolusername);

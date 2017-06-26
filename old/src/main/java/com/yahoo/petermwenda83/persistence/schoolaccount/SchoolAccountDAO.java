@@ -13,41 +13,24 @@ import com.yahoo.petermwenda83.bean.account.Account;
  */
 public interface SchoolAccountDAO {
 	/**
-	 * @param Uuid
+	 * 
+	 * @param uuid
 	 * @return
 	 */
-	public Account get(String Uuid);
+	public Account getAccountById(String uuid);
+	/**
+	 * 
+	 * @param credentials
+	 * @return
+	 */
+	public Account getAccount(String credentials);
 	
-	/**
-	 * 
-	 * @param Username
-	 * @return the SchoolName
-	 */
-	public Account getSchoolByUsername(String Username);
-	/**
-	 * 
-	 * @param mobile
-	 * @return
-	 */
-	public Account getSchoolByPhone(String mobile);
-	/**
-	 * 
-	 * @param email
-	 * @return
-	 */
-	public Account getSchoolByEmail(String email);
-	/**
-	 * 
-	 * @param schoolName
-	 * @return
-	 */
-	public Account getSchoolByName(String schoolName);
 	/**
 	 * 
 	 * @param school
 	 * @return
 	 */
-	public Account getSchool(String Uuid,String password);
+	public Account getSchool(String uuid,String password);
 	/**
 	 * 
 	 * @param school
