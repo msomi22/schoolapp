@@ -65,7 +65,7 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 	 */
 	@Override
 	public Subject getSubjectById(String accountId,String uuid) {
-		Subject Subject = null;
+		Subject subject = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
@@ -77,7 +77,7 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 			pstmt.setString(2, uuid);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
-				Subject  = beanProcessor.toBean(rset,Subject.class);
+				subject  = beanProcessor.toBean(rset,Subject.class);
 			}
 
 		}catch(SQLException e){
@@ -85,7 +85,7 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
-		return Subject; 
+		return subject; 
 	}
 
 	/**

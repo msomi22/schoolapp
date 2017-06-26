@@ -4,8 +4,6 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 
 
-
-
 	<servlet>
 		<servlet-name>Log4jInit</servlet-name>
 		<servlet-class>com.yahoo.petermwenda83.server.servlet.init.Log4jInit</servlet-class>
@@ -43,10 +41,21 @@
 	</servlet>
 
 
+
+
 	<servlet>
-		<servlet-name>FontImageGenerator</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator</servlet-class>
+		<servlet-name>TestPerformance</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.TestPerformance</servlet-class>
 	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TestPerformance</servlet-name>
+		<url-pattern>/testPerformance</url-pattern>
+	</servlet-mapping>
+
+
+
+
 
 
 	<error-page>

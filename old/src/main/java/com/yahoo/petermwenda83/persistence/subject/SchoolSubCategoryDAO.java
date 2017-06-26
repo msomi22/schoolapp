@@ -13,7 +13,7 @@ import com.yahoo.petermwenda83.bean.subject.SubCategory;
  */
 public interface SchoolSubCategoryDAO {
 	
-	public SubCategory getSubCategory(String accountId,String uuid);
+	public SubCategory getSubCategory(String accountId,String subjectId);
 	
 	public SubCategory getSubCategory(String accountId,String categoryId,String subjectId);
 	

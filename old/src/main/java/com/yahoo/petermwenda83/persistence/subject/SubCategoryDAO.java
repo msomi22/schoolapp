@@ -3,7 +3,15 @@
  */
 package com.yahoo.petermwenda83.persistence.subject;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+
+import org.apache.commons.dbutils.BeanProcessor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.subject.SubCategory;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
@@ -13,39 +21,121 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  *
  */
 public class SubCategoryDAO extends GenericDAO implements SchoolSubCategoryDAO {
+	
+	private static SubCategoryDAO subCategoryDAO;
+	private Logger logger = Logger.getLogger(this.getClass());
+	private BeanProcessor beanProcessor = new BeanProcessor();
+
+	/**
+	 * 
+	 * @return SubCategoryDAO
+	 */
+	public static SubCategoryDAO getInstance(){
+		if(subCategoryDAO == null){
+			subCategoryDAO = new SubCategoryDAO();		
+		}
+		return subCategoryDAO;
+	}
 
 	/**
 	 * 
 	 */
 	public SubCategoryDAO() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @param databaseName
+	 * @param Host
+	 * @param databaseUsername
+	 * @param databasePassword
+	 * @param databasePort
+	 */
+	public SubCategoryDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort){
+		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
+	}
+
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubCategoryDAO#getSubCategory(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public SubCategory getSubCategory(String accountId, String uuid) {
-		// TODO Auto-generated method stub
-		return null;
+	public SubCategory getSubCategory(String accountId, String subjectId) {
+		SubCategory subCategory = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SubCategory WHERE accountId = ? AND"
+						+ " subjectId =?;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, subjectId);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				subCategory  = beanProcessor.toBean(rset,SubCategory.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting SubCategory with subjectId '" + subjectId + "' for account '" + accountId+"'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return subCategory; 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubCategoryDAO#getSubCategory(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public SubCategory getSubCategory(String accountId, String categoryId, String subjectId) {
-		// TODO Auto-generated method stub
-		return null;
+		SubCategory subCategory = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SubCategory WHERE accountId = ? AND"
+						+ " categoryId =? AND subjectId =?;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, categoryId);
+			pstmt.setString(3, subjectId);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				subCategory  = beanProcessor.toBean(rset,SubCategory.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting SubCategory with subjectId '" + subjectId + "' for categoryId '" + categoryId +"'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return subCategory; 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubCategoryDAO#getSubCategoryList(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public List<SubCategory> getSubCategoryList(String accountId, String categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<SubCategory>  list = null;		
+		try(   
+			 Connection conn = dbutils.getConnection();
+			 PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM SubCategory WHERE accountId =? AND categoryId =?;");          		
+				) {	
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, categoryId);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+			
+				list = beanProcessor.toBeanList(rset, SubCategory.class);
+			}
+		
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting SubCategory List for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
 	}
 
 	/* (non-Javadoc)
