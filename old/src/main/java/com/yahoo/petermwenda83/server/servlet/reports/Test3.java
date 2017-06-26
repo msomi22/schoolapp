@@ -83,12 +83,13 @@ public class Test3 {
 			Collections.sort(performanceList, new Test3ObjectComparator());
 			Collections.reverse(performanceList);
 
+			int count = 0;
 			for(Test3Object test3Object : performanceList){
 				
 				List<Perfomance> exam1 = test3Object.getExam1();
 				List<Perfomance> exam2 = test3Object.getExam2();
 				List<Perfomance> exam3 = test3Object.getExam3(); 
-
+/*
 
 				System.out.println("****************************************************************************************");
 				System.out.println("Student: " + test3Object.getStudentId() + " , Score : " + test3Object.getTotalScore()); 
@@ -116,12 +117,13 @@ public class Test3 {
 					System.out.println("exam 3 sub: " + subject + " , score: " + e3.getScore());
 				});
 				
-				System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");*/
 
+				count++;
 
 			}
 
-
+			System.out.println("countcountcountcountcountcount: " + count);
 
 
 		}

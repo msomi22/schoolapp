@@ -79,7 +79,7 @@ public class Test2 {
 
 		List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
 
-		List<FinalPerfomance> finalPerfomancesList = new ArrayList<>();
+		
 		HashMap<String,List<FinalPerfomance>> finalPerfomancesMap = new HashMap<>();
 		
 		
@@ -87,6 +87,9 @@ public class Test2 {
 		
 		
 		for( int i = 0; i < exams.length; i++){
+			List<FinalPerfomance> finalPerfomancesList = new ArrayList<>();
+			List<FinalPerfomance> averagePerfomancesList = new ArrayList<>();
+			int totScore = 0;
 			for(Student student : studentsList ){
 				List<Perfomance> selectedLanguagesList = new ArrayList<>();
 				List<Perfomance> selectedSciencesList = new ArrayList<>();
@@ -182,21 +185,46 @@ public class Test2 {
 
 					FinalPerfomance finalPerfomance = new FinalPerfomance();
 					finalPerfomance.setPerfomanceList(finalPerfomanceList);
+					totScore += getTotalsPerExam(finalPerfomanceList);
 					finalPerfomance.setTotalScore(getTotalsPerExam(finalPerfomanceList));
 					finalPerfomancesList.add(finalPerfomance);
 
+
 				}
 				
-				finalPerfomancesMap.put(exams[i], finalPerfomancesList);
 			}
+			
+			//System.out.println("------" + exams[i] + "-----" + finalPerfomancesList.get(0).getTotalScore());
+			
+			finalPerfomancesMap.put(exams[i], finalPerfomancesList);
+			
+			
 			
 			
 		}
 
-
+        List<Integer> averagesList = new ArrayList<>();
+        int count = 0;
+        for(Student student : studentsList){
+        	int av = 0;
+        	int averaged = 0;
+        	for(int i = 0; i < exams.length; i++){
+        		
+        		if(finalPerfomancesMap.get(exams[i]).size() > 0){
+        		av += finalPerfomancesMap.get(exams[i]).get(count).getTotalScore();
+        		averaged++;
+        		}
+        	}
+        	
+        	av = av / averaged;
+        	System.out.println("++++++++++++++++av    " + av);
+        	count++;
+        }
 
 		System.out.println("count---" + finalPerfomancesMap.size() );
-		System.out.println("count---" + finalPerfomancesMap.get("16C4BF00-941C-40E4-9891-272D5F0979A1").size() );
+		
+		
+		
 
 	}
 
