@@ -190,8 +190,25 @@ public class TestPerformance extends HttpServlet{
 				Collections.sort(performanceList, new Test3ObjectComparator());
 				Collections.reverse(performanceList);
 
-
+				int position = 1;
+				int prevposition = 1;
+				double total = 0;
+				double prevtotal =0;
+				String pos = "";
+				
 				for(Test3Object test3Object : performanceList){
+					
+
+					int mainPoint = test3Object.getTotalScore();
+
+					total = mainPoint;
+					
+					if(total == prevtotal){
+						pos = String.valueOf(position-prevposition++);
+					}else{
+						prevposition = 1;
+						pos =  String.valueOf(position);
+					}
 
 
 					document.add(new Paragraph( account.getName().toUpperCase(),timesRomanNarmal8));  
@@ -205,9 +222,6 @@ public class TestPerformance extends HttpServlet{
 					Student student = studentDAO.getStudentById(accountId, test3Object.getStudentId()); 
 
 					String currentClass = "4 N";
-
-					int mainPoint = test3Object.getTotalScore();
-
 
 					String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
 
@@ -243,15 +257,15 @@ public class TestPerformance extends HttpServlet{
 					termPhrase.add(new Chunk("\n"));
 
 					termPhrase.add(new Chunk("Overall position : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" ",  timesRomanNarmal6));
-					termPhrase.add(new Chunk("                  Out of : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" ",  timesRomanNarmal6)); 
+					termPhrase.add(new Chunk(" "+ pos,  timesRomanNarmal6));
+					termPhrase.add(new Chunk("                Out of : ",  timesRomanNarmal8));
+					termPhrase.add(new Chunk(" "+performanceList.size(),  timesRomanNarmal6)); 
 					termPhrase.add(new Chunk("\n"));
 
 					termPhrase.add(new Chunk("Stream position : ",  timesRomanNarmal8));
 					termPhrase.add(new Chunk(" ",  timesRomanNarmal6));
 					termPhrase.add(new Chunk("                   Out of : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" ",  timesRomanNarmal6));
+					termPhrase.add(new Chunk(" ",  timesRomanNarmal6)); 
 					termPhrase.add(new Chunk("\n"));
 
 					Phrase outofPhrase = new Phrase();
@@ -473,8 +487,11 @@ public class TestPerformance extends HttpServlet{
 						count++;
 
 					}
-
-
+					
+					
+					position++;
+					prevtotal=total;
+					
 					document.add(examTable);
 
 					document.newPage();
