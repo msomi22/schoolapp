@@ -194,7 +194,6 @@ public class TestPerformance extends HttpServlet{
 				for(Test3Object test3Object : performanceList){
 
 
-
 					document.add(new Paragraph( account.getName().toUpperCase(),timesRomanNarmal8));  
 
 					document.add(new Paragraph(school, timesRomanNarmal6));
@@ -208,7 +207,7 @@ public class TestPerformance extends HttpServlet{
 					String currentClass = "4 N";
 
 					int mainPoint = test3Object.getTotalScore();
-					
+
 
 					String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
 
@@ -245,7 +244,7 @@ public class TestPerformance extends HttpServlet{
 
 					termPhrase.add(new Chunk("Overall position : ",  timesRomanNarmal8));
 					termPhrase.add(new Chunk(" ",  timesRomanNarmal6));
-					termPhrase.add(new Chunk("                   Out of : ",  timesRomanNarmal8));
+					termPhrase.add(new Chunk("                  Out of : ",  timesRomanNarmal8));
 					termPhrase.add(new Chunk(" ",  timesRomanNarmal6)); 
 					termPhrase.add(new Chunk("\n"));
 
@@ -322,11 +321,12 @@ public class TestPerformance extends HttpServlet{
 					Map<String,Integer> exam1 = test3Object.getExam1();
 					Map<String,Integer> exam2 = test3Object.getExam2();
 					Map<String,Integer> exam3 = test3Object.getExam3(); 
-					
-					
+
+
 
 					//getSubjectById(accountId, e1.getSubjectId()).getDescription();
 					List<Subject> subjects = subjectDAO.getSubjects(accountId);
+
 
 					subjects.forEach(subject -> {
 
@@ -334,7 +334,7 @@ public class TestPerformance extends HttpServlet{
 						String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 						String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
-						
+
 						if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
 							exam1Score = "";
 						}
@@ -344,93 +344,122 @@ public class TestPerformance extends HttpServlet{
 						if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 							exam3Score = "";
 						}
-						
+
 						String examAverage = findExamAverage(exam1Score,exam2Score,exam3Score);
-						
-						
+
+
 						String avgrade = getGrade(examAverage,subject.getUuid(),accountId);
 						String avgpoints = String.valueOf(getPoints(examAverage,subject.getUuid(),accountId));
-						
+
 						String remarks = getRemarks(examAverage,subject.getUuid(),accountId); 
-                  
+
 						String exam1Grade = getGrade(exam1Score,subject.getUuid(),accountId);
 						String exam1Points = String.valueOf(getPoints(exam1Score,subject.getUuid(),accountId));
-						
+
 						if(StringUtils.equals(exam1Points, "0")){
 							exam1Points = "";
 						}
-						
+
 						String exam2Grade = getGrade(exam2Score,subject.getUuid(),accountId);
 						String exam2Points = String.valueOf(getPoints(exam2Score,subject.getUuid(),accountId));
-						
+
 						if(StringUtils.equals(exam2Points, "0")){
 							exam2Points = "";
 						}
-						
+
 						String exam3Grade = getGrade(exam3Score,subject.getUuid(),accountId);
 						String exam3Points = String.valueOf(getPoints(exam3Score,subject.getUuid(),accountId));
-						
+
 						if(StringUtils.equals(exam3Points, "0")){
 							exam3Points = "";
 						}
-						
-						String initials = getInitials(accountId,streamId,subject.getUuid()); 
-						
-						
 
-						
+						String initials = getInitials(accountId,streamId,subject.getUuid()); 
+
+
 						examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
 
-						String score1 = exam1Score + " " + exam1Points +  " " + exam1Grade;
-						examTable.addCell(new Paragraph(""+score1,timesRomanNarmal6));
+						String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
+						examTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
 
 
-						String score2 = exam2Score + " " + exam2Points +  " " + exam2Grade;
-						examTable.addCell(new Paragraph(""+score2,timesRomanNarmal6));
+						String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
+						examTable.addCell(new Paragraph(" " + score2,timesRomanNarmal6));
+
+						String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
+						examTable.addCell(new Paragraph(" " + score3,timesRomanNarmal6));
 
 
+						String average = examAverage + " " + avgrade +  " " + avgpoints;
 
-						String score3 = exam3Score + " " + exam3Points +  " " + exam3Grade;
-						examTable.addCell(new Paragraph(""+score3,timesRomanNarmal6));
-
-
-						String average = examAverage + " " + avgpoints +  " " + avgrade;
-
-						examTable.addCell(new Paragraph("" + average,timesRomanNarmal6));
-						examTable.addCell(new Paragraph("" + remarks,timesRomanNarmal6));
+						examTable.addCell(new Paragraph(" " + average,timesRomanNarmal6));
+						examTable.addCell(new Paragraph(" " + remarks,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(initials,timesRomanNarmal6));
-						
+
 
 					});
 
-					String[] headers = { "TOTAL", "OUT OF", "MEAN SCORE", "MEAN GRADE" };
+					String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
 					int count = 0;
 
 					for(String header : headers){
 
 						examTable.addCell(new Paragraph(header,timesRomanNarmal8));
 
+						//TODO
+						String exm1 = "0";
+						String exm2 = "0";
+						String exm3 = "0";
+						exm1 = String.valueOf(test3Object.getExam1Total());
+						exm2 = String.valueOf(test3Object.getExam2Total());
+						exm3 = String.valueOf(test3Object.getExam3Total());
+						
+						String ex1Grade = getGrade(exm1,"x",accountId);
+						String ex2Grade = getGrade(exm2,"x",accountId);
+						String ex3Grade = getGrade(exm3,"x",accountId);
+						
+						String exa1Point = String.valueOf(getPoints(exm1,"x",accountId));
+						String exa2Point = String.valueOf(getPoints(exm2,"x",accountId));
+						String exa3Point = String.valueOf(getPoints(exm3,"x",accountId));
+						
+						if(StringUtils.equals(exm1, "0") || StringUtils.equals(exa1Point, "0")){
+							exm1 = "";
+							exa1Point = "";
+						}
+						
+						if(StringUtils.equals(exm2, "0") || StringUtils.equals(exa2Point, "0")){
+							exm2 = "";
+							exa2Point = "";
+						}
+						
+						if(StringUtils.equals(exm3, "0") || StringUtils.equals(exa3Point, "0")){
+							exm3 = "";
+							exa3Point = "";
+						}
+
+						
+						//TOTAL
 						if(count == 0){ 
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exm1 ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+mainPoint ,timesRomanNarmal6));
 						}
-
+						//MEAN GRADE
 						else if(count == 1){ 
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+getGradeMain(mainPoint,accountId)  ,timesRomanNarmal6));
 						}
-
+						//MEAN SCORE
 						else if(count == 2){ 
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
+							examTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
 							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
 						}
-
+						//OUT OF
 						else{ 
 							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
 							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
@@ -438,8 +467,10 @@ public class TestPerformance extends HttpServlet{
 							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
 						}
 
+						//set other columns to blank
 						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+						count++;
 
 					}
 
@@ -521,6 +552,9 @@ public class TestPerformance extends HttpServlet{
 			test3Object.setExam3(totalExam3.getPerfomanceMap()); 
 			test3Object.setStudentId(student.getUuid());
 			test3Object.setTotalScore(totals); 
+			test3Object.setExam1Total(totalExam1.getTotal());
+			test3Object.setExam2Total(totalExam2.getTotal());
+			test3Object.setExam3Total(totalExam3.getTotal());
 
 			test3ObjectList.add(test3Object);
 
@@ -649,7 +683,7 @@ public class TestPerformance extends HttpServlet{
 
 		return totalPoints;
 	}
-	
+
 
 
 	/**
@@ -663,12 +697,17 @@ public class TestPerformance extends HttpServlet{
 		if(value.length() == 0){
 			value = "0";
 		}
-		
-		int score = Integer.parseInt(value);
-		
-		int points = 0;
 
-		String categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
+		int score = Integer.parseInt(value);
+
+		int points = 0;
+		String categoryId = "";
+		
+		if(subjectDAO.getSubjectById(accountId, subjectId) != null){
+			 categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
+		}
+		
+		
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
@@ -693,8 +732,8 @@ public class TestPerformance extends HttpServlet{
 		return points;
 	}
 
-	
-	
+
+
 	/**
 	 * @param score
 	 * @param subjectId
@@ -702,15 +741,19 @@ public class TestPerformance extends HttpServlet{
 	 * @return
 	 */
 	public String getGrade(String value, String subjectId, String accountId){
-         
+
 		if(value.length() == 0){
 			value = "0";
 		}
-		
+
 		int score = Integer.parseInt(value);
 		String grade = "";
-
-		String categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
+		String categoryId = "";
+        
+		if(subjectDAO.getSubjectById(accountId, subjectId) != null){
+			categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
+		}
+	    
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
@@ -734,16 +777,16 @@ public class TestPerformance extends HttpServlet{
 
 		return grade;
 	}
-	
-	
+
+
 	/**
 	 * @param score
 	 * @return
 	 */
 	public String getGradeMain(int mean, String accountId) {
-        
+
 		String grade = "";
-		
+
 		int point = (int) mean / 7; 
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
@@ -754,7 +797,7 @@ public class TestPerformance extends HttpServlet{
 		for(GradingSystem gradingSystem : gradingSystemList){
 
 			if(point == gradingSystem.getPoints()){
-				
+
 				grade = gradingSystem.getDescription();
 
 			}
@@ -775,26 +818,26 @@ public class TestPerformance extends HttpServlet{
 	 * @return
 	 */
 	private String findExamAverage(String exam1Score, String exam2Score, String exam3Score) {
-		
+
 		if(exam1Score.length() == 0){
 			exam1Score = "0";
 		}
-		
+
 		if(exam2Score.length() == 0){
 			exam2Score = "0";
 		}
-		
+
 		if(exam3Score.length() == 0){
 			exam3Score = "0";
 		}
-		
+
 		double sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
 		double mean = Math.ceil(sum/3);
-		
+
 		return String.valueOf((int)mean); 
 	}
 
-	
+
 
 
 	/**
@@ -806,13 +849,13 @@ public class TestPerformance extends HttpServlet{
 	private String getRemarks(String examAverage, String uuid, String accountId) {
 
 		String remark = "";
-		
+
 		if(examAverage.length() == 0){
 			examAverage = "0";
 		}
-		
+
 		int score = Integer.valueOf(examAverage);
-		
+
 		if (score >= 80) {
 			remark = "Excellent";
 		} else if (score >= 70) {
