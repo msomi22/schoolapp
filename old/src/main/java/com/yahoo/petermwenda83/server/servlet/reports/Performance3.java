@@ -10,7 +10,7 @@ import java.util.Map;
  * @author peter
  *
  */
-public class Test3Performance {
+public class Performance3 {
 	
 	private int totalMean;
 	private int totalPoits;
@@ -19,7 +19,7 @@ public class Test3Performance {
 	/**
 	 * 
 	 */
-	public Test3Performance() {
+	public Performance3() {
 		totalMean = 0;
 		totalPoits = 0;
 		perfomanceMap = new HashMap<>(); 
@@ -78,7 +78,7 @@ public class Test3Performance {
 	 */
 	@Override
 	public String toString() {
-		return "Test3Performance [totalMean=" + totalMean + ", totalPoits=" + totalPoits + ", perfomanceMap="
+		return "Performance3 [totalMean=" + totalMean + ", totalPoits=" + totalPoits + ", perfomanceMap="
 				+ perfomanceMap + "]";
 	}
 

@@ -10,7 +10,7 @@ import java.util.Map;
  * @author peter
  *
  */
-public class Test3Object {
+public class Performance2 {
 	
 	private Map<String,Integer> exam1;
 	private Map<String,Integer> exam2;
@@ -25,7 +25,7 @@ public class Test3Object {
 	/**
 	 * 
 	 */
-	public Test3Object() {
+	public Performance2() {
 		exam1 = new HashMap<>(); 
 		exam2 = new HashMap<>(); 
 		exam3 = new HashMap<>(); 
@@ -170,7 +170,7 @@ public class Test3Object {
 	 */
 	@Override
 	public String toString() {
-		return "Test3Object [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
+		return "Performance2 [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
 				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1Total=" + exam1Total
 				+ ", exam2Total=" + exam2Total + ", exam3Total=" + exam3Total + "]";
 	}

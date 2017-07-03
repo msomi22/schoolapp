@@ -44,13 +44,13 @@
 
 
 	<servlet>
-		<servlet-name>TestPerformance</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.TestPerformance</servlet-class>
+		<servlet-name>StudentReportCard</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StudentReportCard</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>TestPerformance</servlet-name>
-		<url-pattern>/school/testPerformance</url-pattern> 
+		<servlet-name>StudentReportCard</servlet-name>
+		<url-pattern>/school/studentReportCard</url-pattern> 
 	</servlet-mapping>
 
 

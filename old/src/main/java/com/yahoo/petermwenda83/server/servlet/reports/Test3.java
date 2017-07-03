@@ -82,13 +82,13 @@ public class Test3 {
 
 		if(exams.length == 3){
 
-			List<Test3Object> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
+			List<Performance2> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
 
 			Collections.sort(performanceList, new PointsComparator());
 			Collections.reverse(performanceList);
 
 			int count = 0;
-			for(Test3Object test3Object : performanceList){
+			for(Performance2 performance2 : performanceList){
 				
 				/*List<Perfomance> exam1 = test3Object.getExam1();
 				List<Perfomance> exam2 = test3Object.getExam2();
@@ -143,10 +143,10 @@ public class Test3 {
 	 * @param year
 	 * @param studentsList
 	 */
-	private static List<Test3Object> getStudentScore(String accountId, String streamId, String term, String year,
+	private static List<Performance2> getStudentScore(String accountId, String streamId, String term, String year,
 			List<Student> studentsList) {
 
-		List<Test3Object> test3ObjectList = new ArrayList<>();
+		List<Performance2> test3ObjectList = new ArrayList<>();
 		List<Perfomance> exam1;
 		List<Perfomance> exam2;
 		List<Perfomance> exam3;
@@ -157,9 +157,9 @@ public class Test3 {
 			exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 			exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
 
-			Test3Performance totalExam1 = null;
-			Test3Performance totalExam2 = null;
-			Test3Performance totalExam3 = null;
+			Performance3 totalExam1 = null;
+			Performance3 totalExam2 = null;
+			Performance3 totalExam3 = null;
 			 totalExam1 = findExamTotal(accountId, exam1);
 			 totalExam2 = findExamTotal(accountId, exam2);
 			 totalExam3 = findExamTotal(accountId, exam3);
@@ -167,14 +167,14 @@ public class Test3 {
 
 			//int totals = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();
 
-			Test3Object test3Object = new Test3Object();
+			Performance2 performance2 = new Performance2();
 			/*test3Object.setExam1(totalExam1.getPerfomanceList());
 			test3Object.setExam2(totalExam2.getPerfomanceList());
 			test3Object.setExam3(totalExam3.getPerfomanceList());*/
-			test3Object.setStudentId(student.getUuid());
+			performance2.setStudentId(student.getUuid());
 			//test3Object.setTotalScore(totals); 
 
-			test3ObjectList.add(test3Object);
+			test3ObjectList.add(performance2);
 
 		}
 
@@ -186,7 +186,7 @@ public class Test3 {
 	 * @param accountId
 	 * @param exam1
 	 */
-	private static Test3Performance findExamTotal(String accountId, List<Perfomance> exam1) {
+	private static Performance3 findExamTotal(String accountId, List<Perfomance> exam1) {
 		
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		List<Perfomance> perfomanceList = new ArrayList<>();
@@ -277,12 +277,12 @@ public class Test3 {
 
 		}
 
-		Test3Performance test3Performance = new Test3Performance();
+		Performance3 performance3 = new Performance3();
 		//test3Performance.setPerfomanceList(perfomanceList); 
 		//test3Performance.setTotal(getTotalsPerExam(finalPerfomanceList)); 
 		
 		
-		return test3Performance;
+		return performance3;
 	}
 
 

@@ -20,7 +20,7 @@ import com.yahoo.petermwenda83.bean.chat.Chat;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class DateComparator implements Comparator<Chat> {
+public class ChatDateComparator implements Comparator<Chat> {
 
 	/**
 	 * Indicates whether some other object is "equal to" this comparator.

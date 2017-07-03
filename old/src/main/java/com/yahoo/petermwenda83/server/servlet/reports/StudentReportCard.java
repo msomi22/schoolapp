@@ -50,13 +50,13 @@ import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 
-/**   http://localhost:8080/school/school/testPerformance
+/**   http://localhost:8080/school/school/studentReportCard
  * 
  * 
  * @author peter
  *
  */
-public class TestPerformance extends HttpServlet{
+public class StudentReportCard extends HttpServlet{
 
 	private static GradingSystemDAO gradingSystemDAO;
 	private static SubCategoryDAO subCategoryDAO;
@@ -195,16 +195,20 @@ public class TestPerformance extends HttpServlet{
 
 				//TODO rankWithPoints,rankWithTotalMarks
 
-				List<Test3Object> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
+				List<Performance2> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
+				
+				String rankingCriteria = "";
 
 				if(rankWithPoints && !rankWithTotalMarks){
 					Collections.sort(performanceList, new PointsComparator());
 					Collections.reverse(performanceList);
+					rankingCriteria = "Ranking done using Average Points.";
 				}
 				
 				if(!rankWithPoints && rankWithTotalMarks){
 					Collections.sort(performanceList, new MeanComparator());
 					Collections.reverse(performanceList);
+					rankingCriteria = "Ranking done using Total Average.";
 				}
 				
 
@@ -214,18 +218,37 @@ public class TestPerformance extends HttpServlet{
 				double prevtotal =0;
 				String pos = "";
 
-				for(Test3Object test3Object : performanceList){
+				for(Performance2 performance2 : performanceList){
 
 
-					int mainPoint = test3Object.getTotalPoint();
+					int mainPoint = performance2.getTotalPoint();
+					int totalMean = performance2.getTotalMean();
+					
+					int mean = performance2.getTotalMean();
+					
+					if(rankWithPoints && !rankWithTotalMarks){
+						
+						total = mainPoint;
+						
+					}
+					
+					if(!rankWithPoints && rankWithTotalMarks){
+						
+						total = totalMean;
+						
+					}
 
-					total = mainPoint;
+					
 
 					if(total == prevtotal){
+						
 						pos = String.valueOf(position-prevposition++);
+						
 					}else{
+						
 						prevposition = 1;
 						pos =  String.valueOf(position);
+						
 					}
 
 
@@ -234,10 +257,13 @@ public class TestPerformance extends HttpServlet{
 					document.add(new Paragraph(school, timesRomanNarmal6));
 					document.add(new Paragraph("__________________________________________________________________________")); 
 
+					
+					Phrase reportTitle = new Phrase();
+					reportTitle.add(new Chunk("STUDENT END OF TERM REPORT CARD",  timesRomanNarmal8));
+					reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNarmal6));
+					document.add(reportTitle);
 
-					document.add(new Paragraph(" STUDENT END OF TERM REPORT CARD", timesRomanNarmal8));
-
-					Student student = studentDAO.getStudentById(accountId, test3Object.getStudentId()); 
+					Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
 
 					String currentClass = "4 N";
 
@@ -261,7 +287,7 @@ public class TestPerformance extends HttpServlet{
 					studentPhrase.add(new Chunk("\n"));
 
 					studentPhrase.add(new Chunk("Grade               : ",  timesRomanNarmal8));
-					studentPhrase.add(new Chunk(mainPoint + " /84 (" + getGradeMain(mainPoint,accountId) + ")",  timesRomanNarmal6));
+					studentPhrase.add(new Chunk(mainPoint + " /84 (" + getGradeMain(mainPoint,accountId) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
 					studentPhrase.add(new Chunk("\n"));
 
 
@@ -350,9 +376,9 @@ public class TestPerformance extends HttpServlet{
 					examTable.addCell(remarksCell);
 					examTable.addCell(initialsCell);
 
-					Map<String,Integer> exam1 = test3Object.getExam1();
-					Map<String,Integer> exam2 = test3Object.getExam2();
-					Map<String,Integer> exam3 = test3Object.getExam3(); 
+					Map<String,Integer> exam1 = performance2.getExam1();
+					Map<String,Integer> exam2 = performance2.getExam2();
+					Map<String,Integer> exam3 = performance2.getExam3(); 
 
 
 
@@ -460,9 +486,9 @@ public class TestPerformance extends HttpServlet{
 						String exm1 = "0";
 						String exm2 = "0";
 						String exm3 = "0";
-						exm1 = String.valueOf(test3Object.getExam1Total());
-						exm2 = String.valueOf(test3Object.getExam2Total());
-						exm3 = String.valueOf(test3Object.getExam3Total());
+						exm1 = String.valueOf(performance2.getExam1Total());
+						exm2 = String.valueOf(performance2.getExam2Total());
+						exm3 = String.valueOf(performance2.getExam3Total());
 
 						String ex1Grade = getGrade(exm1,"x",accountId);
 						String ex2Grade = getGrade(exm2,"x",accountId);
@@ -523,12 +549,69 @@ public class TestPerformance extends HttpServlet{
 						count++;
 
 					}
+					
+					
+					
+					//TODO show comments here
+					Chunk underline = new Chunk("GENERAL COMMENTS. ", timesRomanNarmal8);
+					underline.setUnderline(0.1f, -2f); // 0.1 thick, -2
+					
+					String classTeacherRemarks = "Class Teacher's Remarks Here";
+					String headteacherRemarks = "Headteacher's Remarks Here";
+					String closingDate = "Closing Date Here";
+					String openingdate = "Opening Date Here";
+					
+					Phrase teacherremarkphrase = new Phrase();
+					teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
+					teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
+					teacherremarkphrase.add(new Chunk("\n"));
+					
+					Phrase headteacherremarkphrase = new Phrase();
+					headteacherremarkphrase.add(new Chunk("HEAD TEACHER'S REMARKS:",  timesRomanNarmal8));
+					headteacherremarkphrase.add(new Chunk("  " + headteacherRemarks,  timesRomanNarmal6));
+					headteacherremarkphrase.add(new Chunk("\n"));
+					
+					Phrase datesphrase = new Phrase();
+					datesphrase.add(new Chunk("SCHOOL CLOSES ON:",  timesRomanNarmal8));
+					datesphrase.add(new Chunk("  " + closingDate,  timesRomanNarmal6));
+					datesphrase.add(new Chunk("               NEXT TERM BEGINS ",  timesRomanNarmal8));
+					datesphrase.add(new Chunk(" " + openingdate,  timesRomanNarmal6));
+					datesphrase.add(new Chunk("\n"));
+					
+					Phrase signaturephrase = new Phrase();
+					signaturephrase.add(new Chunk("SIGNATURE:",  timesRomanNarmal8));
+					signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+					signaturephrase.add(new Chunk("                 STAMP",  timesRomanNarmal8));
+					signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+					signaturephrase.add(new Chunk("\n"));
 
-
+					//TODO show grading scale here
+					
+					String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+					
+					List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
+					
+					
+					//TODO show fee info here
+					
+					
 					position++;
 					prevtotal=total;
 
 					document.add(examTable);
+					
+					document.add(new Chunk("\n"));
+					
+					document.add(underline);
+
+					document.add(new Paragraph(teacherremarkphrase));
+
+					document.add(new Paragraph(headteacherremarkphrase));
+					
+					document.add(new Paragraph(datesphrase));
+					
+					document.add(new Paragraph(signaturephrase));
+					
 
 					document.newPage();
 
@@ -574,10 +657,10 @@ public class TestPerformance extends HttpServlet{
 	 * @param year
 	 * @param studentsList
 	 */
-	private  List<Test3Object> getStudentScore(String accountId, String streamId, String term, String year,
+	private  List<Performance2> getStudentScore(String accountId, String streamId, String term, String year,
 			List<Student> studentsList) {
 
-		List<Test3Object> test3ObjectList = new ArrayList<>();
+		List<Performance2> test3ObjectList = new ArrayList<>();
 		List<Perfomance> exam1;
 		List<Perfomance> exam2;
 		List<Perfomance> exam3;
@@ -588,9 +671,9 @@ public class TestPerformance extends HttpServlet{
 			exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 			exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
 
-			Test3Performance totalExam1 = null;
-			Test3Performance totalExam2 = null;
-			Test3Performance totalExam3 = null;
+			Performance3 totalExam1 = null;
+			Performance3 totalExam2 = null;
+			Performance3 totalExam3 = null;
 			totalExam1 = findExamTotal(accountId, exam1);
 			totalExam2 = findExamTotal(accountId, exam2);
 			totalExam3 = findExamTotal(accountId, exam3);
@@ -602,18 +685,18 @@ public class TestPerformance extends HttpServlet{
 			int totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 			totalMeans = totalMeans / 3;
 
-			Test3Object test3Object = new Test3Object();
-			test3Object.setExam1(totalExam1.getPerfomanceMap());
-			test3Object.setExam2(totalExam2.getPerfomanceMap());
-			test3Object.setExam3(totalExam3.getPerfomanceMap()); 
-			test3Object.setStudentId(student.getUuid());
-			test3Object.setTotalMean(totalMeans); 
-			test3Object.setTotalPoint(totalPoint);
-			test3Object.setExam1Total(totalExam1.getTotalPoits());
-			test3Object.setExam2Total(totalExam2.getTotalPoits());
-			test3Object.setExam3Total(totalExam3.getTotalPoits());
+			Performance2 performance2 = new Performance2();
+			performance2.setExam1(totalExam1.getPerfomanceMap());
+			performance2.setExam2(totalExam2.getPerfomanceMap());
+			performance2.setExam3(totalExam3.getPerfomanceMap()); 
+			performance2.setStudentId(student.getUuid());
+			performance2.setTotalMean(totalMeans); 
+			performance2.setTotalPoint(totalPoint);
+			performance2.setExam1Total(totalExam1.getTotalPoits());
+			performance2.setExam2Total(totalExam2.getTotalPoits());
+			performance2.setExam3Total(totalExam3.getTotalPoits());
 
-			test3ObjectList.add(test3Object);
+			test3ObjectList.add(performance2);
 
 		}
 
@@ -625,7 +708,7 @@ public class TestPerformance extends HttpServlet{
 	 * @param accountId
 	 * @param exam1
 	 */
-	private  Test3Performance findExamTotal(String accountId, List<Perfomance> exam1) {
+	private  Performance3 findExamTotal(String accountId, List<Perfomance> exam1) {
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
@@ -715,13 +798,13 @@ public class TestPerformance extends HttpServlet{
 
 		}
 
-		Test3Performance test3Performance = new Test3Performance();
-		test3Performance.setPerfomanceMap(perfomanceMap); 
-		test3Performance.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-		test3Performance.setTotalPoits(getTotalsByPointsPerExam(finalPerfomanceList)); 
+		Performance3 performance3 = new Performance3();
+		performance3.setPerfomanceMap(perfomanceMap); 
+		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
+		performance3.setTotalPoits(getTotalsByPointsPerExam(finalPerfomanceList)); 
 
 
-		return test3Performance;
+		return performance3;
 	}
 
 
