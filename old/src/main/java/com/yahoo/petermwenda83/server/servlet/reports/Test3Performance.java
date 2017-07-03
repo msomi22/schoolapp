@@ -12,23 +12,48 @@ import java.util.Map;
  */
 public class Test3Performance {
 	
-	private int total;
+	private int totalMean;
+	private int totalPoits;
 	private Map<String,Integer> perfomanceMap;
 
 	/**
 	 * 
 	 */
 	public Test3Performance() {
-		total = 0;
+		totalMean = 0;
+		totalPoits = 0;
 		perfomanceMap = new HashMap<>(); 
 	}
 
-	public int getTotal() {
-		return total;
+	
+	
+
+	/**
+	 * @return the totalMean
+	 */
+	public int getTotalMean() {
+		return totalMean;
 	}
 
-	public void setTotal(int total) {
-		this.total = total;
+	/**
+	 * @param totalMean the totalMean to set
+	 */
+	public void setTotalMean(int totalMean) {
+		this.totalMean = totalMean;
+	}
+
+	/**
+	 * @return the totalPoits
+	 */
+	public int getTotalPoits() {
+		return totalPoits;
+	}
+
+	/**
+	 * @param totalPoits the totalPoits to set
+	 */
+	public void setTotalPoits(int totalPoits) {
+		this.totalPoits = totalPoits;
 	}
 
 	/**
@@ -45,12 +70,16 @@ public class Test3Performance {
 		this.perfomanceMap = perfomanceMap;
 	}
 
+
+
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Test3Performance [total=" + total + ", perfomanceMap=" + perfomanceMap + "]";
+		return "Test3Performance [totalMean=" + totalMean + ", totalPoits=" + totalPoits + ", perfomanceMap="
+				+ perfomanceMap + "]";
 	}
 
 	

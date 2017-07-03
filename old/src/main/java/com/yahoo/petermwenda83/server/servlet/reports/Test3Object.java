@@ -16,7 +16,8 @@ public class Test3Object {
 	private Map<String,Integer> exam2;
 	private Map<String,Integer> exam3;
 	private String studentId;
-	private int totalScore;
+	private int totalPoint;
+	private int totalMean;
 	private int exam1Total;
 	private int exam2Total;
 	private int exam3Total;
@@ -29,7 +30,8 @@ public class Test3Object {
 		exam2 = new HashMap<>(); 
 		exam3 = new HashMap<>(); 
 		studentId = "";
-		totalScore = 0;
+		totalPoint = 0;
+		totalMean = 0;
 		exam1Total = 0;
 		exam2Total = 0;
 		exam3Total = 0;
@@ -91,20 +93,35 @@ public class Test3Object {
 		this.studentId = studentId;
 	}
 
+	
+
 	/**
-	 * @return the totalScore
+	 * @return the totalPoint
 	 */
-	public int getTotalScore() {
-		return totalScore;
+	public int getTotalPoint() {
+		return totalPoint;
 	}
 
 	/**
-	 * @param totalScore the totalScore to set
+	 * @param totalPoint the totalPoint to set
 	 */
-	public void setTotalScore(int totalScore) {
-		this.totalScore = totalScore;
+	public void setTotalPoint(int totalPoint) {
+		this.totalPoint = totalPoint;
 	}
-	
+
+	/**
+	 * @return the totalMean
+	 */
+	public int getTotalMean() {
+		return totalMean;
+	}
+
+	/**
+	 * @param totalMean the totalMean to set
+	 */
+	public void setTotalMean(int totalMean) {
+		this.totalMean = totalMean;
+	}
 
 	/**
 	 * @return the exam1Total
@@ -154,8 +171,8 @@ public class Test3Object {
 	@Override
 	public String toString() {
 		return "Test3Object [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
-				+ ", totalScore=" + totalScore + ", exam1Total=" + exam1Total + ", exam2Total=" + exam2Total
-				+ ", exam3Total=" + exam3Total + "]";
+				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1Total=" + exam1Total
+				+ ", exam2Total=" + exam2Total + ", exam3Total=" + exam3Total + "]";
 	}
 
 	

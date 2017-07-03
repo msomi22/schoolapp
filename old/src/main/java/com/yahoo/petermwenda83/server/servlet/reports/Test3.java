@@ -21,7 +21,7 @@ import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
-import com.yahoo.petermwenda83.util.performance.comparator.Test3ObjectComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 
 /**
  * @author peter
@@ -84,7 +84,7 @@ public class Test3 {
 
 			List<Test3Object> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
 
-			Collections.sort(performanceList, new Test3ObjectComparator());
+			Collections.sort(performanceList, new PointsComparator());
 			Collections.reverse(performanceList);
 
 			int count = 0;
@@ -165,14 +165,14 @@ public class Test3 {
 			 totalExam3 = findExamTotal(accountId, exam3);
 
 
-			int totals = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();
+			//int totals = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();
 
 			Test3Object test3Object = new Test3Object();
 			/*test3Object.setExam1(totalExam1.getPerfomanceList());
 			test3Object.setExam2(totalExam2.getPerfomanceList());
 			test3Object.setExam3(totalExam3.getPerfomanceList());*/
 			test3Object.setStudentId(student.getUuid());
-			test3Object.setTotalScore(totals); 
+			//test3Object.setTotalScore(totals); 
 
 			test3ObjectList.add(test3Object);
 
@@ -279,7 +279,7 @@ public class Test3 {
 
 		Test3Performance test3Performance = new Test3Performance();
 		//test3Performance.setPerfomanceList(perfomanceList); 
-		test3Performance.setTotal(getTotalsPerExam(finalPerfomanceList)); 
+		//test3Performance.setTotal(getTotalsPerExam(finalPerfomanceList)); 
 		
 		
 		return test3Performance;
