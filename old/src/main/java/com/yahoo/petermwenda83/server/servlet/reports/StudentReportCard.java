@@ -118,8 +118,8 @@ public class StudentReportCard extends HttpServlet{
 
 		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
 
-		System.out.println("******************************************************************8"); 
-		System.out.println("accountId " + accountId); 
+		logger.info("******************************************************************"); 
+		logger.info("accountId " + accountId); 
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -591,6 +591,28 @@ public class StudentReportCard extends HttpServlet{
 					
 					List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
 					
+					PdfPTable gradesTable = new PdfPTable(3);
+					PdfPCell rangecell = new PdfPCell(new Phrase("Mark Range" , timesRomanNarmal8));
+					gradesTable.addCell(rangecell);
+					PdfPCell gradescell = new PdfPCell(new Phrase("Grades" , timesRomanNarmal8));
+					gradesTable.addCell(gradescell);
+					PdfPCell remarksscell = new PdfPCell(new Phrase("Points" , timesRomanNarmal8));
+					gradesTable.addCell(remarksscell);
+					
+
+				   for (GradingSystem  rankingScale : gradingSystemList){
+						
+						rangecell = new PdfPCell(new Phrase(rankingScale.getLowerLimit() + " - " + rankingScale.getUpperLimit(), timesRomanNarmal6));
+						gradesTable.addCell(rangecell);
+						
+						gradescell = new PdfPCell(new Phrase(rankingScale.getDescription() + "" , timesRomanNarmal6));
+						gradesTable.addCell(gradescell);
+						
+						remarksscell = new PdfPCell(new Phrase(rankingScale.getPoints() + " " , timesRomanNarmal6));
+						gradesTable.addCell(remarksscell);
+						
+					}
+					
 					
 					//TODO show fee info here
 					
@@ -611,6 +633,10 @@ public class StudentReportCard extends HttpServlet{
 					document.add(new Paragraph(datesphrase));
 					
 					document.add(new Paragraph(signaturephrase));
+					
+					document.add(new Paragraph("\n"));
+					
+					document.add(gradesTable);
 					
 
 					document.newPage();
