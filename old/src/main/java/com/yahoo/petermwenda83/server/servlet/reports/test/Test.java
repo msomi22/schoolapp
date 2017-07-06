@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.servlet.reports;
+package com.yahoo.petermwenda83.server.servlet.reports.test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +17,7 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.reports.FinalPerfomance;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.util.performance.comparator.FinalPerfomancescomparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
@@ -25,7 +26,7 @@ import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator
  * @author peter
  *
  */
-public class Test2 {
+public class Test {
 
 	static final String databaseName = "schooldb";
 	static final String Host = "localhost";
@@ -79,26 +80,24 @@ public class Test2 {
 
 		List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
 
-		
+		List<FinalPerfomance> finalPerfomancesList = new ArrayList<>();
 		HashMap<String,List<FinalPerfomance>> finalPerfomancesMap = new HashMap<>();
 		
-		
-		
-		
-		
-		for( int i = 0; i < exams.length; i++){
-			List<FinalPerfomance> finalPerfomancesList = new ArrayList<>();
-			List<FinalPerfomance> averagePerfomancesList = new ArrayList<>();
-			int totScore = 0;
-			for(Student student : studentsList ){
-				List<Perfomance> selectedLanguagesList = new ArrayList<>();
-				List<Perfomance> selectedSciencesList = new ArrayList<>();
-				List<Perfomance> selectedHumanitiesList = new ArrayList<>();
-				List<Perfomance> selectedTechnicalsList = new ArrayList<>();
-				List<Perfomance> finalPerfomanceList = new ArrayList<>();
-				List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
+        int count = 0;
+		for(Student student : studentsList ){
+
+			List<Perfomance> selectedLanguagesList = new ArrayList<>();
+			List<Perfomance> selectedSciencesList = new ArrayList<>();
+			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
+			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
+			List<Perfomance> finalPerfomanceList = new ArrayList<>();
+			List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
+			
+			for( int i = 0; i < exams.length; i++){
 				perfomanceList = perfomanceDAO.getStreamPerformance(accountId, exams[i], student.getUuid(), streamId, term, year);
-				
+
+
+
 				if (perfomanceList.size() >= 1) {
 					int languagesCount = 0;
 					int sciencesCount = 0;
@@ -167,7 +166,12 @@ public class Test2 {
 
 
 				}
-				
+
+
+
+
+
+
 				if(!perfomanceList.isEmpty()){
 					Collections.sort(selectedTechnicalsList, new PerformanceComparator());
 
@@ -185,46 +189,43 @@ public class Test2 {
 
 					FinalPerfomance finalPerfomance = new FinalPerfomance();
 					finalPerfomance.setPerfomanceList(finalPerfomanceList);
-					totScore += getTotalsPerExam(finalPerfomanceList);
 					finalPerfomance.setTotalScore(getTotalsPerExam(finalPerfomanceList));
 					finalPerfomancesList.add(finalPerfomance);
 
-
 				}
 				
-			}
-			
-			//System.out.println("------" + exams[i] + "-----" + finalPerfomancesList.get(0).getTotalScore());
-			
-			finalPerfomancesMap.put(exams[i], finalPerfomancesList);
-			
-			
-			
+				finalPerfomancesMap.put(exams[i], finalPerfomancesList);
+
+			}//end exam loop
+
+            count++;
+
 			
 		}
+		
+		System.out.println("_________________________________________________________________________________");
 
-        List<Integer> averagesList = new ArrayList<>();
-        int count = 0;
-        for(Student student : studentsList){
-        	int av = 0;
-        	int averaged = 0;
-        	for(int i = 0; i < exams.length; i++){
-        		
-        		if(finalPerfomancesMap.get(exams[i]).size() > 0){
-        		av += finalPerfomancesMap.get(exams[i]).get(count).getTotalScore();
-        		averaged++;
-        		}
-        	}
-        	
-        	av = av / averaged;
-        	System.out.println("++++++++++++++++av    " + av);
-        	count++;
-        }
+		Collections.sort(finalPerfomancesList,new FinalPerfomancescomparator());
+		Collections.reverse(finalPerfomancesList);
+		
+		finalPerfomancesList.forEach(p -> {
+			List<Perfomance> list = p.getPerfomanceList(); 
+			
+			list.forEach(exam -> {
+				
+				
+				System.out.println(p.getTotalScore() + " ** " + studentDAO.getStudentById(accountId,  exam.getStudentId()).getRegNo() + 
+						" ** " + examDAO.getExam(accountId, exam.getExamId()).getDescription() + " ** " + exam.getScore());
+				
+				
+			});
+			
+			
+		});
 
-		System.out.println("count---" + finalPerfomancesMap.size() );
-		
-		
-		
+
+
+		System.out.println("count---" +  count);
 
 	}
 

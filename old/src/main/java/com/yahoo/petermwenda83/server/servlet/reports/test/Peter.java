@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.servlet.reports;
+package com.yahoo.petermwenda83.server.servlet.reports.test;
 
 import java.util.ArrayList;
 import java.util.List;

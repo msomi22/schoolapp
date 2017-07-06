@@ -6,16 +6,15 @@ package com.yahoo.petermwenda83.server.servlet.reports;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -47,7 +46,6 @@ import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
-import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 
 /**   http://localhost:8080/school/school/studentReportCard
@@ -68,6 +66,7 @@ public class StudentReportCard extends HttpServlet{
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNarmal6 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+	private Font timesRomanNarmal4 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 
 	private Document document;
 	private PdfWriter writer;
@@ -81,8 +80,9 @@ public class StudentReportCard extends HttpServlet{
 	private boolean hideGrade = false;
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
-	
-	
+	private boolean showFeeInfo = false;
+
+
 	/**  
 	 *
 	 * @param config
@@ -168,490 +168,11 @@ public class StudentReportCard extends HttpServlet{
 		String term = "1";
 		String year = "2016";
 
-		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
-		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
-		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
-
-
-
-
 		try {
 
 			document.open();
 
-
-			Account account = accountDAO.getAccountById(accountId);
-
-			List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
-
-			if(exams.length == 3){
-
-
-
-				String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
-						+ " , Cell : " + account.getMobile() + "\n"
-						+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
-				
-
-				//TODO rankWithPoints,rankWithTotalMarks
-
-				List<Performance2> performanceList = getStudentScore(accountId, streamId, term, year, studentsList);
-				
-				String rankingCriteria = "";
-
-				if(rankWithPoints && !rankWithTotalMarks){
-					Collections.sort(performanceList, new PointsComparator());
-					Collections.reverse(performanceList);
-					rankingCriteria = "Ranking done using Average Points.";
-				}
-				
-				if(!rankWithPoints && rankWithTotalMarks){
-					Collections.sort(performanceList, new MeanComparator());
-					Collections.reverse(performanceList);
-					rankingCriteria = "Ranking done using Total Average.";
-				}
-				
-
-				int position = 1;
-				int prevposition = 1;
-				double total = 0;
-				double prevtotal =0;
-				String pos = "";
-
-				for(Performance2 performance2 : performanceList){
-
-
-					int mainPoint = performance2.getTotalPoint();
-					int totalMean = performance2.getTotalMean();
-					
-					int mean = performance2.getTotalMean();
-					
-					if(rankWithPoints && !rankWithTotalMarks){
-						
-						total = mainPoint;
-						
-					}
-					
-					if(!rankWithPoints && rankWithTotalMarks){
-						
-						total = totalMean;
-						
-					}
-
-					
-
-					if(total == prevtotal){
-						
-						pos = String.valueOf(position-prevposition++);
-						
-					}else{
-						
-						prevposition = 1;
-						pos =  String.valueOf(position);
-						
-					}
-
-
-					document.add(new Paragraph( account.getName().toUpperCase(),timesRomanNarmal8));  
-
-					document.add(new Paragraph(school, timesRomanNarmal6));
-					document.add(new Paragraph("__________________________________________________________________________")); 
-
-					
-					Phrase reportTitle = new Phrase();
-					reportTitle.add(new Chunk("STUDENT END OF TERM REPORT CARD",  timesRomanNarmal8));
-					reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNarmal6));
-					document.add(reportTitle);
-
-					Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
-
-					String currentClass = "4 N";
-
-					String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
-
-					PdfPTable frontContentTable = new PdfPTable(2);  
-					frontContentTable.setWidthPercentage(100); 
-					frontContentTable.setWidths(new int[]{140,140}); 
-
-					Phrase studentPhrase = new Phrase();
-					studentPhrase.add(new Chunk("Student Name : ",  timesRomanNarmal8));
-					studentPhrase.add(new Chunk(studentName,  timesRomanNarmal6));
-					studentPhrase.add(new Chunk("\n"));
-
-					studentPhrase.add(new Chunk("Reg No             : ",  timesRomanNarmal8));
-					studentPhrase.add(new Chunk(student.getRegNo(),  timesRomanNarmal6));
-					studentPhrase.add(new Chunk("\n"));
-
-					studentPhrase.add(new Chunk("Form                : ",  timesRomanNarmal8));
-					studentPhrase.add(new Chunk(currentClass,  timesRomanNarmal6));
-					studentPhrase.add(new Chunk("\n"));
-
-					studentPhrase.add(new Chunk("Grade               : ",  timesRomanNarmal8));
-					studentPhrase.add(new Chunk(mainPoint + " /84 (" + getGradeMain(mainPoint,accountId) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
-					studentPhrase.add(new Chunk("\n"));
-
-
-					Phrase termPhrase = new Phrase();
-					termPhrase.add(new Chunk("Term                   : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(term,  timesRomanNarmal6));
-					termPhrase.add(new Chunk("\n"));
-
-					termPhrase.add(new Chunk("Year                    : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(year,  timesRomanNarmal6));
-					termPhrase.add(new Chunk("\n"));
-
-					termPhrase.add(new Chunk("Overall position : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" "+ pos,  timesRomanNarmal6));
-					termPhrase.add(new Chunk("                Out of : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" "+performanceList.size(),  timesRomanNarmal6)); 
-					termPhrase.add(new Chunk("\n"));
-
-					termPhrase.add(new Chunk("Stream position : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" ",  timesRomanNarmal6));
-					termPhrase.add(new Chunk("                   Out of : ",  timesRomanNarmal8));
-					termPhrase.add(new Chunk(" ",  timesRomanNarmal6)); 
-					termPhrase.add(new Chunk("\n"));
-
-					Phrase outofPhrase = new Phrase();
-					outofPhrase.add(new Chunk("\n\n"));
-
-					PdfPCell cellOne = new PdfPCell(studentPhrase);
-					PdfPCell cellTwo = new PdfPCell(termPhrase);
-
-
-					cellOne.setBorder(Rectangle.NO_BORDER);
-					cellTwo.setBorder(Rectangle.NO_BORDER);
-
-
-					frontContentTable.addCell(cellOne);
-					frontContentTable.addCell(cellTwo);
-
-
-					document.add(frontContentTable);
-					document.add(new Paragraph("\n"));
-
-
-
-
-					PdfPTable examTable = new PdfPTable(7);  
-					examTable.setWidthPercentage(100); 
-					examTable.setWidths(new int[]{25,12,12,12,12,15,12}); 
-					examTable.setHeaderRows(1); 
-					examTable.isSkipFirstHeader();
-
-					PdfPCell jubjectCell = new PdfPCell(new Paragraph("Subject",timesRomanNarmal8));
-					jubjectCell.setBackgroundColor(baseColor);
-					jubjectCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell examCell1 = new PdfPCell(new Paragraph("Exam 1",timesRomanNarmal8));
-					examCell1.setBackgroundColor(baseColor);
-					examCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell examCell2 = new PdfPCell(new Paragraph("Exam 2",timesRomanNarmal8));
-					examCell2.setBackgroundColor(baseColor);
-					examCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell examCell3 = new PdfPCell(new Paragraph("Exam 3",timesRomanNarmal8));
-					examCell3.setBackgroundColor(baseColor);
-					examCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell averageCell = new PdfPCell(new Paragraph("Average",timesRomanNarmal8));
-					averageCell.setBackgroundColor(baseColor);
-					averageCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell remarksCell = new PdfPCell(new Paragraph("Remarks",timesRomanNarmal8));
-					remarksCell.setBackgroundColor(baseColor);
-					remarksCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell initialsCell = new PdfPCell(new Paragraph("Initials",timesRomanNarmal8));
-					initialsCell.setBackgroundColor(baseColor);
-					initialsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-
-					examTable.addCell(jubjectCell);
-					examTable.addCell(examCell1);
-					examTable.addCell(examCell2);
-					examTable.addCell(examCell3);
-					examTable.addCell(averageCell);
-					examTable.addCell(remarksCell);
-					examTable.addCell(initialsCell);
-
-					Map<String,Integer> exam1 = performance2.getExam1();
-					Map<String,Integer> exam2 = performance2.getExam2();
-					Map<String,Integer> exam3 = performance2.getExam3(); 
-
-
-
-					//getSubjectById(accountId, e1.getSubjectId()).getDescription();
-					List<Subject> subjects = subjectDAO.getSubjects(accountId);
-
-
-					subjects.forEach(subject -> {
-
-
-						String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
-						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
-						String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
-
-						if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
-							exam1Score = "";
-						}
-						if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
-							exam2Score = "";
-						}
-						if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
-							exam3Score = "";
-						}
-
-						String examAverage = findExamAverage(exam1Score,exam2Score,exam3Score);
-
-
-						String avgrade = getGrade(examAverage,subject.getUuid(),accountId);
-						String avgpoints = String.valueOf(getPoints(examAverage,subject.getUuid(),accountId));
-
-						String remarks = getRemarks(examAverage,subject.getUuid(),accountId); 
-
-						String exam1Grade = getGrade(exam1Score,subject.getUuid(),accountId);
-						String exam1Points = String.valueOf(getPoints(exam1Score,subject.getUuid(),accountId));
-
-						if(StringUtils.equals(exam1Points, "0")){
-							exam1Points = "";
-						}
-
-						String exam2Grade = getGrade(exam2Score,subject.getUuid(),accountId);
-						String exam2Points = String.valueOf(getPoints(exam2Score,subject.getUuid(),accountId));
-
-						if(StringUtils.equals(exam2Points, "0")){
-							exam2Points = "";
-						}
-
-						String exam3Grade = getGrade(exam3Score,subject.getUuid(),accountId);
-						String exam3Points = String.valueOf(getPoints(exam3Score,subject.getUuid(),accountId));
-
-						if(StringUtils.equals(exam3Points, "0")){
-							exam3Points = "";
-						}
-
-						String initials = getInitials(accountId,streamId,subject.getUuid()); 
-
-
-						examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
-
-						String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
-						String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
-						String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
-						String average = examAverage + " " + avgrade +  " " + avgpoints;
-
-						if(hidePoints && hideGrade){
-							score1 = exam1Score;
-							score2 = exam2Score;
-							score3 = exam3Score;
-							average = examAverage;
-						}
-						if(hidePoints && !hideGrade){ 
-							score1 = exam1Score + " " + exam1Grade;
-							score2 = exam2Score + " " + exam2Grade;
-							score3 = exam3Score + " " + exam3Grade;
-							average = examAverage + " " + avgrade;
-						}
-						if(hideGrade && !hidePoints){
-							score1 = exam1Score +  " " + exam1Points; 
-							score2 = exam2Score +  " " + exam2Points;
-							score3 = exam3Score +  " " + exam3Points;
-							average = examAverage + " " + avgpoints;
-						}
-
-
-						examTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" " + score2,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" " + score3,timesRomanNarmal6));
-
-
-						
-
-						examTable.addCell(new Paragraph(" " + average,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" " + remarks,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(initials,timesRomanNarmal6));
-
-
-					});
-
-					String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
-					int count = 0;
-
-					for(String header : headers){
-
-						examTable.addCell(new Paragraph(header,timesRomanNarmal8));
-
-						String exm1 = "0";
-						String exm2 = "0";
-						String exm3 = "0";
-						exm1 = String.valueOf(performance2.getExam1Total());
-						exm2 = String.valueOf(performance2.getExam2Total());
-						exm3 = String.valueOf(performance2.getExam3Total());
-
-						String ex1Grade = getGrade(exm1,"x",accountId);
-						String ex2Grade = getGrade(exm2,"x",accountId);
-						String ex3Grade = getGrade(exm3,"x",accountId);
-
-						String exa1Point = String.valueOf(getPoints(exm1,"x",accountId));
-						String exa2Point = String.valueOf(getPoints(exm2,"x",accountId));
-						String exa3Point = String.valueOf(getPoints(exm3,"x",accountId));
-
-						if(StringUtils.equals(exm1, "0") || StringUtils.equals(exa1Point, "0")){
-							exm1 = "";
-							exa1Point = "";
-						}
-
-						if(StringUtils.equals(exm2, "0") || StringUtils.equals(exa2Point, "0")){
-							exm2 = "";
-							exa2Point = "";
-						}
-
-						if(StringUtils.equals(exm3, "0") || StringUtils.equals(exa3Point, "0")){
-							exm3 = "";
-							exa3Point = "";
-						}
-
-
-						//TOTAL
-						if(count == 0){ 
-							examTable.addCell(new Paragraph(" "+exm1 ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+mainPoint ,timesRomanNarmal6));
-						}
-						//MEAN GRADE
-						else if(count == 1){ 
-							examTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+getGradeMain(mainPoint,accountId)  ,timesRomanNarmal6));
-						}
-						//MEAN SCORE
-						else if(count == 2){ 
-							examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-						}
-						//OUT OF
-						else{ 
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-							examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-						}
-
-						//set other columns to blank
-						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-						count++;
-
-					}
-					
-					
-					
-					//TODO show comments here
-					Chunk underline = new Chunk("GENERAL COMMENTS. ", timesRomanNarmal8);
-					underline.setUnderline(0.1f, -2f); // 0.1 thick, -2
-					
-					String classTeacherRemarks = "Class Teacher's Remarks Here";
-					String headteacherRemarks = "Headteacher's Remarks Here";
-					String closingDate = "Closing Date Here";
-					String openingdate = "Opening Date Here";
-					
-					Phrase teacherremarkphrase = new Phrase();
-					teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
-					teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
-					teacherremarkphrase.add(new Chunk("\n"));
-					
-					Phrase headteacherremarkphrase = new Phrase();
-					headteacherremarkphrase.add(new Chunk("HEAD TEACHER'S REMARKS:",  timesRomanNarmal8));
-					headteacherremarkphrase.add(new Chunk("  " + headteacherRemarks,  timesRomanNarmal6));
-					headteacherremarkphrase.add(new Chunk("\n"));
-					
-					Phrase datesphrase = new Phrase();
-					datesphrase.add(new Chunk("SCHOOL CLOSES ON:",  timesRomanNarmal8));
-					datesphrase.add(new Chunk("  " + closingDate,  timesRomanNarmal6));
-					datesphrase.add(new Chunk("               NEXT TERM BEGINS ",  timesRomanNarmal8));
-					datesphrase.add(new Chunk(" " + openingdate,  timesRomanNarmal6));
-					datesphrase.add(new Chunk("\n"));
-					
-					Phrase signaturephrase = new Phrase();
-					signaturephrase.add(new Chunk("SIGNATURE:",  timesRomanNarmal8));
-					signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
-					signaturephrase.add(new Chunk("                 STAMP",  timesRomanNarmal8));
-					signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
-					signaturephrase.add(new Chunk("\n"));
-
-					//TODO show grading scale here
-					
-					String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-					
-					List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
-					
-					PdfPTable gradesTable = new PdfPTable(3);
-					PdfPCell rangecell = new PdfPCell(new Phrase("Mark Range" , timesRomanNarmal8));
-					gradesTable.addCell(rangecell);
-					PdfPCell gradescell = new PdfPCell(new Phrase("Grades" , timesRomanNarmal8));
-					gradesTable.addCell(gradescell);
-					PdfPCell remarksscell = new PdfPCell(new Phrase("Points" , timesRomanNarmal8));
-					gradesTable.addCell(remarksscell);
-					
-
-				   for (GradingSystem  rankingScale : gradingSystemList){
-						
-						rangecell = new PdfPCell(new Phrase(rankingScale.getLowerLimit() + " - " + rankingScale.getUpperLimit(), timesRomanNarmal6));
-						gradesTable.addCell(rangecell);
-						
-						gradescell = new PdfPCell(new Phrase(rankingScale.getDescription() + "" , timesRomanNarmal6));
-						gradesTable.addCell(gradescell);
-						
-						remarksscell = new PdfPCell(new Phrase(rankingScale.getPoints() + " " , timesRomanNarmal6));
-						gradesTable.addCell(remarksscell);
-						
-					}
-					
-					
-					//TODO show fee info here
-					
-					
-					position++;
-					prevtotal=total;
-
-					document.add(examTable);
-					
-					document.add(new Chunk("\n"));
-					
-					document.add(underline);
-
-					document.add(new Paragraph(teacherremarkphrase));
-
-					document.add(new Paragraph(headteacherremarkphrase));
-					
-					document.add(new Paragraph(datesphrase));
-					
-					document.add(new Paragraph(signaturephrase));
-					
-					document.add(new Paragraph("\n"));
-					
-					document.add(gradesTable);
-					
-
-					document.newPage();
-
-				}
-
-
-
-
-
-
-
-			}
-
-
+			generateReport(accountId, streamId, term, year);
 
 			document.close();
 
@@ -664,15 +185,584 @@ public class StudentReportCard extends HttpServlet{
 	}
 
 
-
 	/**
 	 * @param accountId
 	 * @param streamId
-	 * @param uuid
-	 * @return
+	 * @param term
+	 * @param year
+	 * @param baseColor
+	 * @throws DocumentException
 	 */
-	private String getInitials(String accountId, String streamId, String uuid) {
-		return RandomStringUtils.randomAlphabetic(2).toUpperCase();
+	private void generateReport(String accountId, String streamId, String term, String year)
+			throws DocumentException {
+		
+		
+
+		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
+		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
+		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
+
+		Account account = accountDAO.getAccountById(accountId);
+
+		List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
+
+		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
+				+ " , Cell : " + account.getMobile() + "\n"
+				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
+
+
+		List<Performance2> performanceList = getStudentScore3(accountId, streamId, term, year, studentsList);
+
+		String rankingCriteria = "";
+
+		if(rankWithPoints && !rankWithTotalMarks){
+			Collections.sort(performanceList, new PointsComparator());
+			Collections.reverse(performanceList);
+			rankingCriteria = "Ranking done using Average Points.";
+		}
+
+		if(!rankWithPoints && rankWithTotalMarks){
+			Collections.sort(performanceList, new MeanComparator());
+			Collections.reverse(performanceList);
+			rankingCriteria = "Ranking done using Total Average.";
+		}
+
+
+		int position = 1;
+		int prevposition = 1;
+		double total = 0;
+		double prevtotal =0;
+		String pos = "";
+
+		for(Performance2 performance2 : performanceList){
+
+
+			int mainPoint = performance2.getTotalPoint();
+			int totalMean = performance2.getTotalMean();
+
+			int mean = performance2.getTotalMean();
+
+			if(rankWithPoints && !rankWithTotalMarks){
+
+				total = mainPoint;
+
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+
+				total = totalMean;
+
+			}
+
+
+
+			if(total == prevtotal){
+
+				pos = String.valueOf(position-prevposition++);
+
+			}else{
+
+				prevposition = 1;
+				pos =  String.valueOf(position);
+
+			}
+
+
+			document.add(new Paragraph( account.getName().toUpperCase(),timesRomanNarmal8));  
+
+			document.add(new Paragraph(school, timesRomanNarmal6));
+			document.add(new Paragraph("__________________________________________________________________________")); 
+
+
+			Phrase reportTitle = new Phrase();
+			reportTitle.add(new Chunk("STUDENT END OF TERM REPORT CARD",  timesRomanNarmal8));
+			reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNarmal6));
+			document.add(reportTitle);
+			document.add(new Paragraph("\n"));
+
+
+
+			Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
+
+			String currentClass = "4 N";
+
+			String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
+
+
+			/**
+			 *   arrange student info here
+			 */
+			PdfPTable studentInfoTable = new PdfPTable(2);
+			studentInfoTable.setWidthPercentage(100); 
+			studentInfoTable.setWidths(new int[]{50,50}); 
+
+			/**
+			 * left column
+			 */
+			PdfPTable studentLeft = new PdfPTable(2);
+			studentLeft.setWidthPercentage(100); 
+			studentLeft.setWidths(new int[]{50,50}); 
+
+			//student name
+			PdfPCell nameInfoCell = new PdfPCell(new Phrase("Name:",timesRomanNarmal8)); 
+			PdfPCell nameDescCell = new PdfPCell(new Phrase(studentName,  timesRomanNarmal6));
+			nameInfoCell.setBorder(Rectangle.NO_BORDER);
+			nameDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentLeft.addCell(nameInfoCell);
+			studentLeft.addCell(nameDescCell);
+
+			//student regNo
+			PdfPCell regNoInfoCell = new PdfPCell(new Phrase("RegNo:",timesRomanNarmal8)); 
+			PdfPCell regNoDescCell = new PdfPCell(new Phrase(student.getRegNo(),  timesRomanNarmal6));
+			regNoInfoCell.setBorder(Rectangle.NO_BORDER);
+			regNoDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentLeft.addCell(regNoInfoCell);
+			studentLeft.addCell(regNoDescCell);
+
+			//student form
+			PdfPCell streamInfoCell = new PdfPCell(new Phrase("Form:",timesRomanNarmal8)); 
+			PdfPCell streamDescCell = new PdfPCell(new Phrase(currentClass,  timesRomanNarmal6));
+			streamInfoCell.setBorder(Rectangle.NO_BORDER);
+			streamDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentLeft.addCell(streamInfoCell);
+			studentLeft.addCell(streamDescCell);
+
+			//student grade
+			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Score:",timesRomanNarmal8)); 
+			PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /84 (" + ReportUtil.getGradeMain(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
+			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentLeft.addCell(mainGradeInfoCell);
+			studentLeft.addCell(mainGradeDescCell);
+
+
+			/**
+			 * right column
+			 */
+			PdfPTable studentRight = new PdfPTable(2);
+			studentRight.setWidthPercentage(100); 
+			studentRight.setWidths(new int[]{50,50}); 
+
+
+			//student term
+			PdfPCell termInfoCell = new PdfPCell(new Phrase("Term:",timesRomanNarmal8)); 
+			PdfPCell termDescCell = new PdfPCell(new Phrase(term,  timesRomanNarmal6));
+			termInfoCell.setBorder(Rectangle.NO_BORDER);
+			termDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentRight.addCell(termInfoCell);
+			studentRight.addCell(termDescCell);
+
+			//student year
+			PdfPCell yearInfoCell = new PdfPCell(new Phrase("Year:",timesRomanNarmal8)); 
+			PdfPCell yearDescCell = new PdfPCell(new Phrase(year,  timesRomanNarmal6));
+			yearInfoCell.setBorder(Rectangle.NO_BORDER);
+			yearDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentRight.addCell(yearInfoCell);
+			studentRight.addCell(yearDescCell);
+
+			//student class position
+			PdfPCell classGradeInfoCell = new PdfPCell(new Phrase("Overall position:",timesRomanNarmal8)); 
+			PdfPCell classGradeDescCell = new PdfPCell(new Phrase("" + pos + " Out of : " + performanceList.size(),timesRomanNarmal6));
+			classGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+			classGradeDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentRight.addCell(classGradeInfoCell);
+			studentRight.addCell(classGradeDescCell);
+
+			//student stream position
+			PdfPCell streamGradeInfoCell = new PdfPCell(new Phrase("Stream position:",timesRomanNarmal8)); 
+			PdfPCell streamGradeDescCell = new PdfPCell(new Phrase(" Out of : ",timesRomanNarmal6));
+			streamGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+			streamGradeDescCell.setBorder(Rectangle.NO_BORDER);
+			//add student name
+			studentRight.addCell(streamGradeInfoCell);
+			studentRight.addCell(streamGradeDescCell);
+
+
+			/**
+			 * put the columns in student table
+			 */
+			studentInfoTable.addCell(studentLeft);
+			studentInfoTable.addCell(studentRight);
+
+
+			document.add(studentInfoTable);
+			document.add(new Paragraph("\n"));
+
+
+
+			PdfPTable examTable = new PdfPTable(7);  
+			examTable.setWidthPercentage(100); 
+			examTable.setWidths(new int[]{25,12,12,12,12,15,12}); 
+			examTable.setHeaderRows(1); 
+			examTable.isSkipFirstHeader();
+
+			PdfPCell jubjectCell = new PdfPCell(new Paragraph("Subject",timesRomanNarmal8));
+			jubjectCell.setBackgroundColor(baseColor);
+			jubjectCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			
+			PdfPCell examCell1 = new PdfPCell(new Paragraph("Exam 1",timesRomanNarmal8));
+			examCell1.setBackgroundColor(baseColor);
+			examCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			PdfPCell examCell2 = new PdfPCell(new Paragraph("Exam 2",timesRomanNarmal8));
+			examCell2.setBackgroundColor(baseColor);
+			examCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			PdfPCell examCell3 = new PdfPCell(new Paragraph("Exam 3",timesRomanNarmal8));
+			examCell3.setBackgroundColor(baseColor);
+			examCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			PdfPCell averageCell = new PdfPCell(new Paragraph("Average",timesRomanNarmal8));
+			averageCell.setBackgroundColor(baseColor);
+			averageCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			PdfPCell remarksCell = new PdfPCell(new Paragraph("Remarks",timesRomanNarmal8));
+			remarksCell.setBackgroundColor(baseColor);
+			remarksCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			PdfPCell initialsCell = new PdfPCell(new Paragraph("Initials",timesRomanNarmal8));
+			initialsCell.setBackgroundColor(baseColor);
+			initialsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+			examTable.addCell(jubjectCell);
+			examTable.addCell(examCell1);
+			examTable.addCell(examCell2);
+			examTable.addCell(examCell3);
+			examTable.addCell(averageCell);
+			examTable.addCell(remarksCell);
+			examTable.addCell(initialsCell);
+
+			Map<String,Integer> exam1 = performance2.getExam1();
+			Map<String,Integer> exam2 = performance2.getExam2();
+			Map<String,Integer> exam3 = performance2.getExam3(); 
+
+
+
+			//getSubjectById(accountId, e1.getSubjectId()).getDescription();
+			List<Subject> subjects = subjectDAO.getSubjects(accountId);
+
+
+			subjects.forEach(subject -> {
+
+
+				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+				String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+				String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+
+				if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+					exam1Score = "";
+				}
+				if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+					exam2Score = "";
+				}
+				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+					exam3Score = "";
+				}
+
+				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score);
+
+
+				String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
+				String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
+
+				String remarks = ReportUtil.getRemarks(examAverage,subject.getUuid(),accountId); 
+
+				String exam1Grade = ReportUtil.getGrade(exam1Score,subject.getUuid(),accountId, subjectDAO, gradingSystemDAO);
+				String exam1Points = String.valueOf(ReportUtil.getPoints(exam1Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+
+				if(StringUtils.equals(exam1Points, "0")){
+					exam1Points = "";
+				}
+
+				String exam2Grade = ReportUtil.getGrade(exam2Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
+				String exam2Points = String.valueOf(ReportUtil.getPoints(exam2Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+
+				if(StringUtils.equals(exam2Points, "0")){
+					exam2Points = "";
+				}
+
+				String exam3Grade = ReportUtil.getGrade(exam3Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
+				String exam3Points = String.valueOf(ReportUtil.getPoints(exam3Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+
+				if(StringUtils.equals(exam3Points, "0")){
+					exam3Points = "";
+				}
+
+				String initials = ReportUtil.getInitials(accountId,streamId,subject.getUuid());  
+
+
+				examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
+
+				String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
+				String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
+				String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
+				String average = examAverage + " " + avgrade +  " " + avgpoints;
+
+				if(hidePoints && hideGrade){
+					score1 = exam1Score;
+					score2 = exam2Score;
+					score3 = exam3Score;
+					average = examAverage;
+				}
+				if(hidePoints && !hideGrade){ 
+					score1 = exam1Score + " " + exam1Grade;
+					score2 = exam2Score + " " + exam2Grade;
+					score3 = exam3Score + " " + exam3Grade;
+					average = examAverage + " " + avgrade;
+				}
+				if(hideGrade && !hidePoints){
+					score1 = exam1Score +  " " + exam1Points; 
+					score2 = exam2Score +  " " + exam2Points;
+					score3 = exam3Score +  " " + exam3Points;
+					average = examAverage + " " + avgpoints;
+				}
+
+
+				examTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
+				examTable.addCell(new Paragraph(" " + score2,timesRomanNarmal6));
+				examTable.addCell(new Paragraph(" " + score3,timesRomanNarmal6));
+
+
+
+
+				examTable.addCell(new Paragraph(" " + average,timesRomanNarmal6));
+				examTable.addCell(new Paragraph(" " + remarks,timesRomanNarmal6));
+				examTable.addCell(new Paragraph(initials,timesRomanNarmal6));
+
+
+			});
+
+			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
+			int count = 0;
+
+			for(String header : headers){
+
+				examTable.addCell(new Paragraph(header,timesRomanNarmal8));
+
+				String exm1 = "0";
+				String exm2 = "0";
+				String exm3 = "0";
+				exm1 = String.valueOf(performance2.getExam1Total());
+				exm2 = String.valueOf(performance2.getExam2Total());
+				exm3 = String.valueOf(performance2.getExam3Total());
+
+				String ex1Grade = ReportUtil.getGrade(exm1,"x",accountId, subjectDAO, gradingSystemDAO);
+				String ex2Grade = ReportUtil.getGrade(exm2,"x",accountId, subjectDAO, gradingSystemDAO);
+				String ex3Grade = ReportUtil.getGrade(exm3,"x",accountId, subjectDAO, gradingSystemDAO);
+
+				String exa1Point = String.valueOf(ReportUtil.getPoints(exm1,"x",accountId, subjectDAO, gradingSystemDAO));
+				String exa2Point = String.valueOf(ReportUtil.getPoints(exm2,"x",accountId, subjectDAO, gradingSystemDAO));
+				String exa3Point = String.valueOf(ReportUtil.getPoints(exm3,"x",accountId, subjectDAO, gradingSystemDAO));
+
+				if(StringUtils.equals(exm1, "0") || StringUtils.equals(exa1Point, "0")){
+					exm1 = "";
+					exa1Point = "";
+				}
+
+				if(StringUtils.equals(exm2, "0") || StringUtils.equals(exa2Point, "0")){
+					exm2 = "";
+					exa2Point = "";
+				}
+
+				if(StringUtils.equals(exm3, "0") || StringUtils.equals(exa3Point, "0")){
+					exm3 = "";
+					exa3Point = "";
+				}
+
+
+				//TOTAL
+				if(count == 0){ 
+					examTable.addCell(new Paragraph(" "+exm1 ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+mainPoint ,timesRomanNarmal6));
+				}
+				//MEAN GRADE
+				else if(count == 1){ 
+					examTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMain(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+				}
+				//MEAN SCORE
+				else if(count == 2){ 
+					examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+				}
+				//OUT OF
+				else{ 
+					examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+					examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+				}
+
+				//set other columns to blank
+				examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+				examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+				count++;
+
+			}
+
+
+
+			// show comments here
+			Chunk underline = new Chunk("GENERAL COMMENTS. ", timesRomanNarmal8);
+			underline.setUnderline(0.1f, -2f); // 0.1 thick, -2
+
+			String classTeacherRemarks = "Class Teacher's Remarks Here";
+			String headteacherRemarks = "Headteacher's Remarks Here";
+			String closingDate = "Closing Date Here";
+			String openingdate = "Opening Date Here";
+
+			Phrase teacherremarkphrase = new Phrase();
+			teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
+			teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
+			teacherremarkphrase.add(new Chunk("\n"));
+
+			Phrase headteacherremarkphrase = new Phrase();
+			headteacherremarkphrase.add(new Chunk("HEAD TEACHER'S REMARKS:",  timesRomanNarmal8));
+			headteacherremarkphrase.add(new Chunk("  " + headteacherRemarks,  timesRomanNarmal6));
+			headteacherremarkphrase.add(new Chunk("\n"));
+
+			Phrase datesphrase = new Phrase();
+			datesphrase.add(new Chunk("SCHOOL CLOSES ON:",  timesRomanNarmal8));
+			datesphrase.add(new Chunk("  " + closingDate,  timesRomanNarmal6));
+			datesphrase.add(new Chunk("               NEXT TERM BEGINS ",  timesRomanNarmal8));
+			datesphrase.add(new Chunk(" " + openingdate,  timesRomanNarmal6));
+			datesphrase.add(new Chunk("\n"));
+
+			Phrase signaturephrase = new Phrase();
+			signaturephrase.add(new Chunk("SIGNATURE:",  timesRomanNarmal8));
+			signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+			signaturephrase.add(new Chunk("                 STAMP",  timesRomanNarmal8));
+			signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+			signaturephrase.add(new Chunk("\n"));
+
+			// show grading scale here
+
+			String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+
+			List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
+
+			//footer table
+			PdfPTable footerTable = new PdfPTable(2);
+			footerTable.setWidthPercentage(78); 
+			footerTable.setWidths(new int[]{28,50}); 
+
+
+			//fee info table
+			PdfPTable feeInfoTable = new PdfPTable(2);
+			feeInfoTable.setWidthPercentage(100); 
+			feeInfoTable.setWidths(new int[]{50,50}); 
+
+
+			PdfPCell feeInfo1 = new PdfPCell(new Phrase("Fee Analysis",timesRomanNarmal8)); 
+			PdfPCell feeInfo2 = new PdfPCell(new Phrase(""));
+			feeInfo1.setBorder(Rectangle.NO_BORDER);
+			feeInfo2.setBorder(Rectangle.NO_BORDER);
+
+			PdfPCell feecol1 = new PdfPCell(new Phrase("Description",timesRomanNarmal6)); 
+			PdfPCell feecol2 = new PdfPCell(new Phrase("Amount",timesRomanNarmal6));
+
+			feeInfoTable.addCell(feeInfo1);
+			feeInfoTable.addCell(feeInfo2);
+
+			feeInfoTable.addCell(feecol1);
+			feeInfoTable.addCell(feecol2);
+
+			String feeBal = "KSH 10,000";
+			String nextTermFee = "KSH 26,000";
+
+			if(!showFeeInfo){
+				feeBal = "";
+				nextTermFee = "";
+			}
+
+			PdfPCell feeBalInfo = new PdfPCell(new Phrase("Fee Bal:",timesRomanNarmal6));
+			PdfPCell feeBalDesc = new PdfPCell(new Phrase(feeBal,timesRomanNarmal6));
+			feeBalInfo.setBorder(Rectangle.NO_BORDER);
+			feeBalDesc.setBorder(Rectangle.NO_BORDER);
+
+			PdfPCell nextTermFeeInfo = new PdfPCell(new Phrase("Next Term Fee:",timesRomanNarmal6));
+			PdfPCell nextTermFeeDesc = new PdfPCell(new Phrase(nextTermFee,timesRomanNarmal6));
+			nextTermFeeInfo.setBorder(Rectangle.NO_BORDER);
+			nextTermFeeDesc.setBorder(Rectangle.NO_BORDER);
+
+			feeInfoTable.addCell(feeBalInfo);
+			feeInfoTable.addCell(feeBalDesc); 
+
+			feeInfoTable.addCell(nextTermFeeInfo);
+			feeInfoTable.addCell(nextTermFeeDesc); 
+
+			//grade(s) table 
+			PdfPTable gradesTable = new PdfPTable(3);
+			gradesTable.setWidthPercentage(28); 
+			gradesTable.setWidths(new int[]{12,8,8}); 
+			gradesTable.setHeaderRows(1); 
+			gradesTable.isSkipFirstHeader();
+
+			PdfPCell rangecell = new PdfPCell(new Phrase("Mark Range" , timesRomanNarmal8));
+			gradesTable.addCell(rangecell);
+			PdfPCell gradescell = new PdfPCell(new Phrase("Grade" , timesRomanNarmal8));
+			gradesTable.addCell(gradescell);
+			PdfPCell remarksscell = new PdfPCell(new Phrase("Points" , timesRomanNarmal8));
+			gradesTable.addCell(remarksscell);
+
+
+			for (GradingSystem  rankingScale : gradingSystemList){
+
+				rangecell = new PdfPCell(new Phrase(rankingScale.getLowerLimit() + " - " + rankingScale.getUpperLimit(), timesRomanNarmal4));
+				gradesTable.addCell(rangecell);
+
+				gradescell = new PdfPCell(new Phrase(rankingScale.getDescription() + "" , timesRomanNarmal4));
+				gradesTable.addCell(gradescell);
+
+				remarksscell = new PdfPCell(new Phrase(rankingScale.getPoints() + " " , timesRomanNarmal4));
+				gradesTable.addCell(remarksscell);
+
+			}
+
+
+
+			position++;
+			prevtotal=total;
+
+			document.add(examTable);
+
+			document.add(new Chunk("\n"));
+
+			document.add(underline);
+
+			document.add(new Paragraph(teacherremarkphrase));
+
+			document.add(new Paragraph(headteacherremarkphrase));
+
+			document.add(new Paragraph(datesphrase));
+
+			document.add(new Paragraph(signaturephrase));
+
+			document.add(new Paragraph("\n"));
+
+			footerTable.addCell(gradesTable);
+			footerTable.addCell(feeInfoTable);
+
+			document.add(footerTable);
+
+
+			document.newPage();
+
+		}
 	}
 
 
@@ -683,33 +773,77 @@ public class StudentReportCard extends HttpServlet{
 	 * @param year
 	 * @param studentsList
 	 */
-	private  List<Performance2> getStudentScore(String accountId, String streamId, String term, String year,
+	private  List<Performance2> getStudentScore3(String accountId, String streamId, String term, String year,
 			List<Student> studentsList) {
 
-		List<Performance2> test3ObjectList = new ArrayList<>();
-		List<Perfomance> exam1;
-		List<Perfomance> exam2;
-		List<Perfomance> exam3;
+		List<Performance2> performance2List = new ArrayList<>();
+		List<Perfomance> exam1  = new ArrayList<>();
+		List<Perfomance> exam2 = new ArrayList<>();
+		List<Perfomance> exam3 = new ArrayList<>();
+		
+		Performance3 totalExam1 = null;
+		Performance3 totalExam2 = null;
+		Performance3 totalExam3 = null;
+		
+		int totalPoint = 0;
+		int totalMeans = 0;
+		
 
 		for(Student student : studentsList ){
-
-			exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
-			exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
-			exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
-
-			Performance3 totalExam1 = null;
-			Performance3 totalExam2 = null;
-			Performance3 totalExam3 = null;
-			totalExam1 = findExamTotal(accountId, exam1);
-			totalExam2 = findExamTotal(accountId, exam2);
-			totalExam3 = findExamTotal(accountId, exam3);
-
-
-			int totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
-			totalPoint = totalPoint / 3;
 			
-			int totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
-			totalMeans = totalMeans / 3;
+			if(exams.length == 3){
+				
+				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
+				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
+				exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
+				
+				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				totalExam3 = ReportUtil.findExamTotal(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				
+				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
+				totalPoint = totalPoint / 3;
+
+				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
+				totalMeans = totalMeans / 3;
+
+
+			}
+			
+			if(exams.length == 2){
+				
+				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
+				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
+				
+				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				
+
+				
+				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits();
+				totalPoint = totalPoint / 2;
+
+				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean();
+				totalMeans = totalMeans / 2;
+
+				
+			}
+			
+			if(exams.length == 1){
+				
+				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
+				
+				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				
+
+				
+				totalPoint = totalExam1.getTotalPoits();
+				
+				totalMeans = totalExam1.getTotalMean();
+				
+
+				
+			}
 
 			Performance2 performance2 = new Performance2();
 			performance2.setExam1(totalExam1.getPerfomanceMap());
@@ -722,339 +856,11 @@ public class StudentReportCard extends HttpServlet{
 			performance2.setExam2Total(totalExam2.getTotalPoits());
 			performance2.setExam3Total(totalExam3.getTotalPoits());
 
-			test3ObjectList.add(performance2);
+			performance2List.add(performance2);
 
 		}
 
-		return test3ObjectList;
-	}
-
-
-	/**
-	 * @param accountId
-	 * @param exam1
-	 */
-	private  Performance3 findExamTotal(String accountId, List<Perfomance> exam1) {
-
-		List<Perfomance> finalPerfomanceList = new ArrayList<>();
-		Map<String,Integer> perfomanceMap = new HashMap<>(); 
-
-
-		if(!exam1.isEmpty()){
-
-			int languagesCount = 0;
-			int sciencesCount = 0;
-			int humanitiesCount = 0;
-
-			List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
-			List<Perfomance> selectedLanguagesList = new ArrayList<>();
-			List<Perfomance> selectedSciencesList = new ArrayList<>();
-			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
-			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
-
-
-
-			for (Perfomance perfomance : exam1) {
-
-				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
-
-				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
-				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
-
-				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
-					selectedLanguagesList.add(perfomance);
-					languagesCount++;
-
-
-					if (languagesCount > 2) {
-						Collections.sort(selectedLanguagesList, new PerformanceComparator());
-						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
-
-					}
-				}
-
-				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
-					selectedSciencesList.add(perfomance);
-					sciencesCount++;
-
-					if (sciencesCount > 2) {
-						Collections.sort(selectedSciencesList, new PerformanceComparator());	
-						selectedTechnicalsList.add(selectedSciencesList.remove(0));
-
-					}
-				}
-
-				if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
-					selectedHumanitiesList.add(perfomance);
-					humanitiesCount++;
-
-					if (humanitiesCount > 1) {
-						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
-						selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
-
-					}
-				}
-
-				if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
-					selectedTechnicalsList.add(perfomance);
-
-
-				}
-
-				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
-					finalPerfomanceList.add(perfomance);
-
-
-				}
-
-			}
-
-			//some code here
-			Collections.sort(selectedTechnicalsList, new PerformanceComparator());
-
-			if(selectedTechnicalsList.size() > 0){
-				Perfomance highestTechnical = selectedTechnicalsList.remove(selectedTechnicalsList.size()-1);
-				finalPerfomanceList.add(highestTechnical);
-
-			}
-
-			finalPerfomanceList.addAll(selectedLanguagesList);
-			finalPerfomanceList.addAll(selectedSciencesList);
-			finalPerfomanceList.addAll(selectedHumanitiesList);
-
-		}
-
-		Performance3 performance3 = new Performance3();
-		performance3.setPerfomanceMap(perfomanceMap); 
-		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-		performance3.setTotalPoits(getTotalsByPointsPerExam(finalPerfomanceList)); 
-
-
-		return performance3;
-	}
-
-
-
-	/**
-	 * @param perfomanceList
-	 * @return
-	 */
-	public int getTotalsByPointsPerExam(List<Perfomance> perfomanceList){
-		int totalPoints = 0;
-
-		for( Perfomance perfomance : perfomanceList ){
-			int point = getPoints(String.valueOf(perfomance.getScore()),perfomance.getSubjectId(),perfomance.getAccountId());
-
-			totalPoints += point;
-		}
-
-		return totalPoints;
-	}
-	
-	
-	/**
-	 * @param perfomanceList
-	 * @return
-	 */
-	public int getTotalsByTotalPerExam(List<Perfomance> perfomanceList){
-		int totals = 0;
-
-		for( Perfomance perfomance : perfomanceList ){
-			totals += perfomance.getScore();
-		}
-
-		return totals;
-	}
-
-
-
-	/**
-	 * @param score
-	 * @param subjectId
-	 * @param accountId
-	 * @return
-	 */
-	public int getPoints(String value, String subjectId, String accountId){
-
-		if(value.length() == 0){
-			value = "0";
-		}
-
-		int score = Integer.parseInt(value);
-
-		int points = 0;
-		String categoryId = "";
-
-		if(subjectDAO.getSubjectById(accountId, subjectId) != null){
-			categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
-		}
-
-
-		List<GradingSystem> gradingSystemList = new ArrayList<>();
-
-		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
-
-		if(gradingSystemList.isEmpty()){
-			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-
-		}
-
-		for(GradingSystem gradingSystem : gradingSystemList){
-
-			if(score <= gradingSystem.getUpperLimit() &&  score >= gradingSystem.getLowerLimit()){
-
-				points = gradingSystem.getPoints();
-
-			}
-
-		}
-
-
-		return points;
-	}
-
-
-
-	/**
-	 * @param score
-	 * @param subjectId
-	 * @param accountId
-	 * @return
-	 */
-	public String getGrade(String value, String subjectId, String accountId){
-
-		if(value.length() == 0){
-			value = "0";
-		}
-
-		int score = Integer.parseInt(value);
-		String grade = "";
-		String categoryId = "";
-
-		if(subjectDAO.getSubjectById(accountId, subjectId) != null){
-			categoryId = subjectDAO.getSubjectById(accountId, subjectId).getCategoryId(); 
-		}
-
-		List<GradingSystem> gradingSystemList = new ArrayList<>();
-
-		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
-
-		if(gradingSystemList.isEmpty()){
-			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-
-		}
-
-		for(GradingSystem gradingSystem : gradingSystemList){
-
-			if(score <= gradingSystem.getUpperLimit() &&  score >= gradingSystem.getLowerLimit()){
-
-				grade = gradingSystem.getDescription();
-
-			}
-
-		}
-
-
-		return grade;
-	}
-
-
-	/**
-	 * @param score
-	 * @return
-	 */
-	public String getGradeMain(int mean, String accountId) {
-
-		String grade = "";
-
-		int point = (int) mean / 7; 
-
-		List<GradingSystem> gradingSystemList = new ArrayList<>();
-
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-
-		for(GradingSystem gradingSystem : gradingSystemList){
-
-			if(point == gradingSystem.getPoints()){
-
-				grade = gradingSystem.getDescription();
-
-			}
-
-		}
-
-
-		return grade;
-	}
-
-
-
-
-	/**
-	 * @param exam1Score
-	 * @param exam2Score
-	 * @param exam3Score
-	 * @return
-	 */
-	private String findExamAverage(String exam1Score, String exam2Score, String exam3Score) {
-
-		if(exam1Score.length() == 0){
-			exam1Score = "0";
-		}
-
-		if(exam2Score.length() == 0){
-			exam2Score = "0";
-		}
-
-		if(exam3Score.length() == 0){
-			exam3Score = "0";
-		}
-
-		double sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
-		double mean = Math.ceil(sum/3);
-
-		return String.valueOf((int)mean); 
-	}
-
-
-
-
-	/**
-	 * @param examAverage
-	 * @param uuid
-	 * @param accountId
-	 * @return
-	 */
-	private String getRemarks(String examAverage, String uuid, String accountId) {
-
-		String remark = "";
-
-		if(examAverage.length() == 0){
-			examAverage = "0";
-		}
-
-		int score = Integer.valueOf(examAverage);
-
-		if (score >= 80) {
-			remark = "Excellent";
-		} else if (score >= 70) {
-			remark = "Very good";
-		} else if (score >= 60) {
-			remark = "Relatively good";
-		} else if (score >= 50) {
-			remark = "Good";
-		} else if (score >= 40) {
-			remark = "Fair";
-		} else if (score >= 35) {
-			remark = "Poor";
-		} else if  (score > 0){
-			remark = "Very poor";
-		}
-		return remark;
-
+		return performance2List;
 	}
 
 

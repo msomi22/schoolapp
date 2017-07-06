@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.servlet.reports;
+package com.yahoo.petermwenda83.server.servlet.reports.test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +19,8 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.reports.Performance2;
+import com.yahoo.petermwenda83.server.servlet.reports.Performance3;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
