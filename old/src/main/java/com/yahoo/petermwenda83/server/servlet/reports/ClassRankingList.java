@@ -37,6 +37,8 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.CMYKColor;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -45,6 +47,8 @@ import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -73,10 +77,18 @@ public class ClassRankingList extends HttpServlet{
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
+	private static StreamDAO streamDAO;
+	private static ClassDAO classDAO;
 
-	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-	private Font timesRomanNarmal6 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private Font timesRomanNarmal4 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+
+	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+
+	private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+
+	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+	private Font timesRomanBold6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.BOLD);
 
 	private Document document;
 	private PdfWriter writer;
@@ -92,7 +104,6 @@ public class ClassRankingList extends HttpServlet{
 	private boolean hideGrade = false;
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
-	private boolean showFeeInfo = false;
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -113,6 +124,9 @@ public class ClassRankingList extends HttpServlet{
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		classDAO = ClassDAO.getInstance();
+
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -139,6 +153,7 @@ public class ClassRankingList extends HttpServlet{
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
+		//Document(Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom)
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 
 
@@ -148,7 +163,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 
-			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
+			writer.setBoxSize("art", new Rectangle(46, 64, 300, 900)); 
 			writer.setPageEvent(event);
 
 			populatePDFDocument(accountId);
@@ -172,7 +187,7 @@ public class ClassRankingList extends HttpServlet{
 	public void populatePDFDocument(String accountId) {
 		Timeit.code(() -> compute());
 	}
-	
+
 	/**
 	 * @param args
 	 */
@@ -186,6 +201,8 @@ public class ClassRankingList extends HttpServlet{
 		try {
 
 			document.open();
+			document.addAuthor("Peter Mwenda (254718953974)"); 
+			document.addCreationDate();
 
 			generateReport(accountId, streamId, term, year);
 
@@ -198,12 +215,12 @@ public class ClassRankingList extends HttpServlet{
 
 
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	/**
 	 * @param accountId
 	 * @param streamId
@@ -247,19 +264,223 @@ public class ClassRankingList extends HttpServlet{
 		}
 
 
+
+
+		PdfPTable headerTable = new PdfPTable(2);
+		headerTable.setWidthPercentage(100); 
+		headerTable.setWidths(new int[]{70,30});
+
+
+
+		PdfPCell logo = new PdfPCell();
+		logo.addElement(createImage(LOGO_PATH)); 
+		logo.setBorder(Rectangle.NO_BORDER); 
+		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
+
+		PdfPCell schoolInfo = new PdfPCell();
+		schoolInfo.setBorder(Rectangle.NO_BORDER); 
+		schoolInfo.setHorizontalAlignment(Element.ALIGN_LEFT);  
+		schoolInfo.addElement(new Chunk(account.getName().toUpperCase(),timesRomanBold10));
+		schoolInfo.addElement(new Chunk(school, timesRomanNormal10));
+
+		headerTable.addCell(schoolInfo); 
+		headerTable.addCell(logo);   
+
+		document.add(headerTable);
+
+		PdfContentByte topLine = writer.getDirectContent();
+		topLine.setColorStroke(BaseColor.BLACK);
+		topLine.moveTo(45, 463);//start dot, 45 is margin left, 463 is margin top , 
+		//the bigger second value the more the point move further from the margin 
+		topLine.lineTo(790, 463);
+		topLine.closePathStroke();
+
+		Phrase reportTitle = new Phrase();
+		reportTitle.add(new Chunk("CLASS RANKING LIST FOR  TERM : YEAR : ",  timesRomanBold10));
+		reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNormal10));
+		document.add(reportTitle);
+		document.add(new Paragraph("\n"));
+
+
+		/**
+		 *   arrange student info here
+		 */
+		PdfPTable classInfoTable = new PdfPTable(2);
+		classInfoTable.setWidthPercentage(100); 
+		classInfoTable.setWidths(new int[]{50,50}); 
+
+		/**
+		 * left column
+		 */
+		PdfPTable classLeft = new PdfPTable(2);
+		classLeft.setWidthPercentage(58);  
+		classLeft.setWidths(new int[]{8,50});  
+
+		//student name
+		PdfPCell nameInfoCell = new PdfPCell(new Phrase("Class:",timesRomanBold8)); 
+		PdfPCell nameDescCell = new PdfPCell(new Phrase("**",  timesRomanNormal6));
+		nameInfoCell.setBorder(Rectangle.NO_BORDER);
+		nameDescCell.setBorder(Rectangle.NO_BORDER);
+		nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
+		//add class name
+		classLeft.addCell(nameInfoCell);
+		classLeft.addCell(nameDescCell);
+
+		//student grade
+		PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Mean:",timesRomanBold8)); 
+		PdfPCell mainGradeDescCell = new PdfPCell(new Phrase("**",  timesRomanNormal6));
+		mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+		mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+		//add student name
+		classLeft.addCell(mainGradeInfoCell);
+		classLeft.addCell(mainGradeDescCell);
+
+
+		/**
+		 * right column
+		 */
+		PdfPTable classRight = new PdfPTable(2);
+		classRight.setWidthPercentage(58); 
+		classRight.setWidths(new int[]{8,50}); 
+
+
+		//student term
+		PdfPCell termInfoCell = new PdfPCell(new Phrase("Term:",timesRomanBold8)); 
+		PdfPCell termDescCell = new PdfPCell(new Phrase(term,  timesRomanNormal6));
+		termInfoCell.setBorder(Rectangle.NO_BORDER);
+		termDescCell.setBorder(Rectangle.NO_BORDER);
+		//add student name
+		classRight.addCell(termInfoCell);
+		classRight.addCell(termDescCell);
+
+		//student year
+		PdfPCell yearInfoCell = new PdfPCell(new Phrase("Year:",timesRomanBold8)); 
+		PdfPCell yearDescCell = new PdfPCell(new Phrase(year,  timesRomanNormal6));
+		yearInfoCell.setBorder(Rectangle.NO_BORDER);
+		yearDescCell.setBorder(Rectangle.NO_BORDER);
+		//add student name
+		classRight.addCell(yearInfoCell);
+		classRight.addCell(yearDescCell);
+
+
+		/**
+		 * put the columns in student table
+		 */
+		classInfoTable.addCell(classLeft);
+		classInfoTable.addCell(classRight);
+
+
+		document.add(classInfoTable);
+		document.add(new Paragraph("\n"));
+
+
+
+		List<Subject> subjects = subjectDAO.getSubjects(accountId);
+
+		int size = subjects.size() + 6 + 5;
+		if(size > 13){
+			size = 13;
+		}
+
+		PdfPTable rankingTable = new PdfPTable(25);   
+		rankingTable.setWidthPercentage(100); 
+		rankingTable.setWidths(new int[]{8,12,20,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,8,12}); 
+		//rankingTable.setHeaderRows(1); 
+		//rankingTable.isSkipFirstHeader();
+
+
+		//cells = 5
+		PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
+		countCell.setBackgroundColor(baseColor);
+		countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell regNoCell = new PdfPCell(new Paragraph("RegNo",timesRomanBold6));
+		regNoCell.setBackgroundColor(baseColor);
+		regNoCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell nameCell = new PdfPCell(new Paragraph("Name",timesRomanBold6));
+		nameCell.setBackgroundColor(baseColor);
+		nameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell streamCell = new PdfPCell(new Paragraph("Stream",timesRomanBold6));
+		streamCell.setBackgroundColor(baseColor);
+		streamCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell kcpeCell = new PdfPCell(new Paragraph("KCPE",timesRomanBold6));
+		kcpeCell.setBackgroundColor(baseColor);
+		kcpeCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		rankingTable.addCell(countCell);
+		rankingTable.addCell(regNoCell);
+		rankingTable.addCell(nameCell);
+		rankingTable.addCell(streamCell);
+		rankingTable.addCell(kcpeCell);
+
+		//cells = 13
+
+
+		for(Subject subject : subjects){
+
+			PdfPCell cell = new PdfPCell(new Paragraph(subject.getCode(),timesRomanBold6));
+			cell.setBackgroundColor(baseColor);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+			rankingTable.addCell(cell); 
+
+		}
+
+		//cells = 7
+		PdfPCell totalCell = new PdfPCell(new Paragraph("Total",timesRomanBold6));
+		totalCell.setBackgroundColor(baseColor);
+		totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell pointsCell = new PdfPCell(new Paragraph("Points",timesRomanBold6));
+		pointsCell.setBackgroundColor(baseColor);
+		pointsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell meanCell = new PdfPCell(new Paragraph("Mean",timesRomanBold6));
+		meanCell.setBackgroundColor(baseColor);
+		meanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell pmeanCell = new PdfPCell(new Paragraph("P Mean",timesRomanBold6));
+		pmeanCell.setBackgroundColor(baseColor);
+		pmeanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell deviationCell = new PdfPCell(new Paragraph("Dev",timesRomanBold6));
+		deviationCell.setBackgroundColor(baseColor);
+		deviationCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell streamPositionCell = new PdfPCell(new Paragraph("Pos",timesRomanBold6));
+		streamPositionCell.setBackgroundColor(baseColor);
+		streamPositionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell classPositionCell = new PdfPCell(new Paragraph("ClassPos",timesRomanBold6));
+		classPositionCell.setBackgroundColor(baseColor);
+		classPositionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+		rankingTable.addCell(totalCell);
+		rankingTable.addCell(pointsCell);
+		rankingTable.addCell(meanCell);
+		rankingTable.addCell(pmeanCell);
+		rankingTable.addCell(deviationCell);
+		rankingTable.addCell(streamPositionCell);
+		rankingTable.addCell(classPositionCell);
+
+
+		//code here
+
 		int position = 1;
 		int prevposition = 1;
 		double total = 0;
 		double prevtotal =0;
 		String pos = "";
-
+		int count = 1;
 		for(Performance2 performance2 : performanceList){
 
 
 			int mainPoint = performance2.getTotalPoint();
 			int totalMean = performance2.getTotalMean();
-
-			int mean = performance2.getTotalMean();
 
 			if(rankWithPoints && !rankWithTotalMarks){
 
@@ -286,163 +507,29 @@ public class ClassRankingList extends HttpServlet{
 
 			}
 
-			PdfPTable headerTable = new PdfPTable(2);
-			headerTable.setWidthPercentage(100); 
-			headerTable.setWidths(new int[]{70,30});
+			Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
 
-
-
-			PdfPCell logo = new PdfPCell();
-			logo.addElement(createImage(LOGO_PATH)); 
-			logo.setBorder(Rectangle.NO_BORDER); 
-			logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
-
-			PdfPCell schoolInfo = new PdfPCell();
-			schoolInfo.setBorder(Rectangle.NO_BORDER); 
-			schoolInfo.setHorizontalAlignment(Element.ALIGN_LEFT);  
-			schoolInfo.addElement(new Chunk(account.getName().toUpperCase(),timesRomanNarmal8));
-			schoolInfo.addElement(new Chunk(school, timesRomanNarmal6));
-
-			headerTable.addCell(schoolInfo); 
-			headerTable.addCell(logo);   
-
-			document.add(headerTable);
-
-
-			document.add(new Paragraph("__________________________________________________________________________")); 
-
-
-			Phrase reportTitle = new Phrase();
-			reportTitle.add(new Chunk("CLASS RANKING LIST FOR  TERM : YEAR : ",  timesRomanNarmal8));
-			reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNarmal6));
-			document.add(reportTitle);
-			document.add(new Paragraph("\n"));
-
-
-			/**
-			 *   arrange student info here
-			 */
-			PdfPTable classInfoTable = new PdfPTable(2);
-			classInfoTable.setWidthPercentage(100); 
-			classInfoTable.setWidths(new int[]{50,50}); 
-
-			/**
-			 * left column
-			 */
-			PdfPTable classLeft = new PdfPTable(2);
-			classLeft.setWidthPercentage(62);  
-			classLeft.setWidths(new int[]{12,50});  
-
-			//student name
-			PdfPCell nameInfoCell = new PdfPCell(new Phrase("CLASS:",timesRomanNarmal8)); 
-			PdfPCell nameDescCell = new PdfPCell(new Phrase("**",  timesRomanNarmal6));
-			nameInfoCell.setBorder(Rectangle.NO_BORDER);
-			nameDescCell.setBorder(Rectangle.NO_BORDER);
-			nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
-			//add class name
-			classLeft.addCell(nameInfoCell);
-			classLeft.addCell(nameDescCell);
-
-			//student grade
-			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Mean:",timesRomanNarmal8)); 
-			PdfPCell mainGradeDescCell = new PdfPCell(new Phrase("**",  timesRomanNarmal6));
-			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
-			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
-			//add student name
-			classLeft.addCell(mainGradeInfoCell);
-			classLeft.addCell(mainGradeDescCell);
-
-
-			/**
-			 * right column
-			 */
-			PdfPTable classRight = new PdfPTable(2);
-			classRight.setWidthPercentage(80); 
-			classRight.setWidths(new int[]{30,50}); 
-
-
-			//student term
-			PdfPCell termInfoCell = new PdfPCell(new Phrase("Term:",timesRomanNarmal8)); 
-			PdfPCell termDescCell = new PdfPCell(new Phrase(term,  timesRomanNarmal6));
-			termInfoCell.setBorder(Rectangle.NO_BORDER);
-			termDescCell.setBorder(Rectangle.NO_BORDER);
-			//add student name
-			classRight.addCell(termInfoCell);
-			classRight.addCell(termDescCell);
-
-			//student year
-			PdfPCell yearInfoCell = new PdfPCell(new Phrase("Year:",timesRomanNarmal8)); 
-			PdfPCell yearDescCell = new PdfPCell(new Phrase(year,  timesRomanNarmal6));
-			yearInfoCell.setBorder(Rectangle.NO_BORDER);
-			yearDescCell.setBorder(Rectangle.NO_BORDER);
-			//add student name
-			classRight.addCell(yearInfoCell);
-			classRight.addCell(yearDescCell);
-
+			String stream = "";
+			if(streamDAO.getStream(accountId, student.getCurrentStream()) != null){
+				stream = streamDAO.getStream(accountId, student.getCurrentStream()).getDescription();
+			}
 			
-			/**
-			 * put the columns in student table
-			 */
-			classInfoTable.addCell(classLeft);
-			classInfoTable.addCell(classRight);
+			stream = StringUtils.remove(stream, "FORM"); 
+			
 
-
-			document.add(classInfoTable);
-			document.add(new Paragraph("\n"));
-
-
-
-			PdfPTable rankingTable = new PdfPTable(7);  
-			rankingTable.setWidthPercentage(100); 
-			rankingTable.setWidths(new int[]{25,12,12,12,12,15,12}); 
-			rankingTable.setHeaderRows(1); 
-			rankingTable.isSkipFirstHeader();
-
-			PdfPCell jubjectCell = new PdfPCell(new Paragraph("Subject",timesRomanNarmal8));
-			jubjectCell.setBackgroundColor(baseColor);
-			jubjectCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell examCell1 = new PdfPCell(new Paragraph("Exam 1",timesRomanNarmal8));
-			examCell1.setBackgroundColor(baseColor);
-			examCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell examCell2 = new PdfPCell(new Paragraph("Exam 2",timesRomanNarmal8));
-			examCell2.setBackgroundColor(baseColor);
-			examCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell examCell3 = new PdfPCell(new Paragraph("Exam 3",timesRomanNarmal8));
-			examCell3.setBackgroundColor(baseColor);
-			examCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell averageCell = new PdfPCell(new Paragraph("Average",timesRomanNarmal8));
-			averageCell.setBackgroundColor(baseColor);
-			averageCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell remarksCell = new PdfPCell(new Paragraph("Remarks",timesRomanNarmal8));
-			remarksCell.setBackgroundColor(baseColor);
-			remarksCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-			PdfPCell initialsCell = new PdfPCell(new Paragraph("Initials",timesRomanNarmal8));
-			initialsCell.setBackgroundColor(baseColor);
-			initialsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-
-			rankingTable.addCell(jubjectCell);
-			rankingTable.addCell(examCell1);
-			rankingTable.addCell(examCell2);
-			rankingTable.addCell(examCell3);
-			rankingTable.addCell(averageCell);
-			rankingTable.addCell(remarksCell);
-			rankingTable.addCell(initialsCell);
 
 			Map<String,Integer> exam1 = performance2.getExam1();
 			Map<String,Integer> exam2 = performance2.getExam2();
 			Map<String,Integer> exam3 = performance2.getExam3(); 
 
-			List<Subject> subjects = subjectDAO.getSubjects(accountId);
 
+			rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(student.getFirstname(),timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
+			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
 
-			subjects.forEach(subject -> {
+			for(Subject subject : subjects){
 
 
 				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
@@ -458,180 +545,64 @@ public class ClassRankingList extends HttpServlet{
 				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 					exam3Score = "";
 				}
-				
+
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
 
 
 				String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
 				String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
 
-				String remarks = ReportUtil.getRemarks(examAverage,subject.getUuid(),accountId); 
-
-				String exam1Grade = ReportUtil.getGrade(exam1Score,subject.getUuid(),accountId, subjectDAO, gradingSystemDAO);
-				String exam1Points = String.valueOf(ReportUtil.getPoints(exam1Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
-
-				if(StringUtils.equals(exam1Points, "0")){
-					exam1Points = "";
-				}
-
-				String exam2Grade = ReportUtil.getGrade(exam2Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-				String exam2Points = String.valueOf(ReportUtil.getPoints(exam2Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
-
-				if(StringUtils.equals(exam2Points, "0")){
-					exam2Points = "";
-				}
-
-				String exam3Grade = ReportUtil.getGrade(exam3Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-				String exam3Points = String.valueOf(ReportUtil.getPoints(exam3Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
-
-				if(StringUtils.equals(exam3Points, "0")){
-					exam3Points = "";
-				}
-
-				String initials = ReportUtil.getInitials(accountId,streamId,subject.getUuid());  
 
 
-				rankingTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
-
-				String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
-				String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
-				String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
 				String average = examAverage + " " + avgrade +  " " + avgpoints;
 
 				if(hidePoints && hideGrade){
-					score1 = exam1Score;
-					score2 = exam2Score;
-					score3 = exam3Score;
 					average = examAverage;
 				}
+
 				if(hidePoints && !hideGrade){ 
-					score1 = exam1Score + " " + exam1Grade;
-					score2 = exam2Score + " " + exam2Grade;
-					score3 = exam3Score + " " + exam3Grade;
 					average = examAverage + " " + avgrade;
 				}
+
 				if(hideGrade && !hidePoints){
-					score1 = exam1Score +  " " + exam1Points; 
-					score2 = exam2Score +  " " + exam2Points;
-					score3 = exam3Score +  " " + exam3Points;
 					average = examAverage + " " + avgpoints;
 				}
 
-
-				rankingTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
-				rankingTable.addCell(new Paragraph(" " + score2,timesRomanNarmal6));
-				rankingTable.addCell(new Paragraph(" " + score3,timesRomanNarmal6));
+				rankingTable.addCell(new Paragraph(average,timesRomanNormal6));
 
 
-
-
-				rankingTable.addCell(new Paragraph(" " + average,timesRomanNarmal6));
-				rankingTable.addCell(new Paragraph(" " + remarks,timesRomanNarmal6));
-				rankingTable.addCell(new Paragraph(initials,timesRomanNarmal6));
-
-
-			});
-
-			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
-			int count = 0;
-
-			for(String header : headers){
-
-				rankingTable.addCell(new Paragraph(header,timesRomanNarmal8));
-
-				String exm1 = "0";
-				String exm2 = "0";
-				String exm3 = "0";
-				exm1 = String.valueOf(performance2.getExam1Total());
-				exm2 = String.valueOf(performance2.getExam2Total());
-				exm3 = String.valueOf(performance2.getExam3Total());
-
-				String ex1Grade = ReportUtil.getGrade(exm1,"x",accountId, subjectDAO, gradingSystemDAO);
-				String ex2Grade = ReportUtil.getGrade(exm2,"x",accountId, subjectDAO, gradingSystemDAO);
-				String ex3Grade = ReportUtil.getGrade(exm3,"x",accountId, subjectDAO, gradingSystemDAO);
-
-				String exa1Point = String.valueOf(ReportUtil.getPoints(exm1,"x",accountId, subjectDAO, gradingSystemDAO));
-				String exa2Point = String.valueOf(ReportUtil.getPoints(exm2,"x",accountId, subjectDAO, gradingSystemDAO));
-				String exa3Point = String.valueOf(ReportUtil.getPoints(exm3,"x",accountId, subjectDAO, gradingSystemDAO));
-
-				if(StringUtils.equals(exm1, "0") || StringUtils.equals(exa1Point, "0")){
-					exm1 = "";
-					exa1Point = "";
-				}
-
-				if(StringUtils.equals(exm2, "0") || StringUtils.equals(exa2Point, "0")){
-					exm2 = "";
-					exa2Point = "";
-				}
-
-				if(StringUtils.equals(exm3, "0") || StringUtils.equals(exa3Point, "0")){
-					exm3 = "";
-					exa3Point = "";
-				}
-
-
-				//TOTAL
-				if(count == 0){ 
-					rankingTable.addCell(new Paragraph(" "+exm1 ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+mainPoint ,timesRomanNarmal6));
-				}
-				//MEAN GRADE
-				else if(count == 1){ 
-					rankingTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+ReportUtil.getGradeMain(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
-				}
-				//MEAN SCORE
-				else if(count == 2){ 
-					rankingTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-				}
-				//OUT OF
-				else{ 
-					rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-					rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-				}
-
-				//set other columns to blank
-				rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-				rankingTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
-				count++;
 
 			}
 
 
 
-			
+			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(""+performance2.getTotalPoint(),timesRomanNormal6));
+			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(pos,timesRomanNormal6));
+
 
 			position++;
 			prevtotal=total;
+			count++;
 
-			document.add(rankingTable);
-
-			document.add(new Chunk("\n"));
-
-
-
-			document.newPage();
 
 		}
+
+
+
+
+
+
+
+		document.add(rankingTable);
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
 
 	/**
 	 * @param accountId
