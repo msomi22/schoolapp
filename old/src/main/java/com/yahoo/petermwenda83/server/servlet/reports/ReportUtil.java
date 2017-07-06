@@ -26,7 +26,7 @@ import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator
  */
 public class ReportUtil {
 
-	
+
 
 
 	/**
@@ -39,9 +39,9 @@ public class ReportUtil {
 		return RandomStringUtils.randomAlphabetic(2).toUpperCase();
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -52,7 +52,7 @@ public class ReportUtil {
 	 * @param gradingSystemDAO
 	 * @return
 	 */
-	
+
 	public static  Performance3 findExamTotal(String accountId, List<Perfomance> exam1 , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
 
@@ -153,7 +153,7 @@ public class ReportUtil {
 		return performance3;
 	}
 
-	
+
 
 	/**
 	 * 
@@ -162,8 +162,8 @@ public class ReportUtil {
 	 * @param gradingSystemDAO
 	 * @return
 	 */
-	 
-	
+
+
 	public static int getTotalsByPointsPerExam(List<Perfomance> perfomanceList, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
 		int totalPoints = 0;
 
@@ -175,15 +175,15 @@ public class ReportUtil {
 
 		return totalPoints;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param perfomanceList
 	 * @return
 	 */
-	 
+
 	public static int getTotalsByTotalPerExam(List<Perfomance> perfomanceList){
 		int totals = 0;
 
@@ -194,9 +194,9 @@ public class ReportUtil {
 		return totals;
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param value
@@ -206,7 +206,7 @@ public class ReportUtil {
 	 * @param gradingSystemDAO
 	 * @return
 	 */
-	 
+
 	public static int getPoints(String value, String subjectId, String accountId, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
 
 		if(value.length() == 0){
@@ -249,10 +249,10 @@ public class ReportUtil {
 
 
 
-	
-	
-	
-	
+
+
+
+
 
 	/**
 	 * 
@@ -263,7 +263,7 @@ public class ReportUtil {
 	 * @param gradingSystemDAO
 	 * @return
 	 */
-	
+
 	public static String getGrade(String value, String subjectId, String accountId, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
 
 		if(value.length() == 0){
@@ -302,9 +302,9 @@ public class ReportUtil {
 		return grade;
 	}
 
-	
-	
-	
+
+
+
 
 	/**
 	 * 
@@ -313,7 +313,7 @@ public class ReportUtil {
 	 * @param gradingSystemDAO
 	 * @return
 	 */
-	 
+
 	public static String getGradeMain(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
 
 		String grade = "";
@@ -338,9 +338,9 @@ public class ReportUtil {
 
 		return grade;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param exam1Score
@@ -348,8 +348,8 @@ public class ReportUtil {
 	 * @param exam3Score
 	 * @return
 	 */
-	
-	public static String findExamAverage(String exam1Score, String exam2Score, String exam3Score) {
+
+	public static String findExamAverage(String exam1Score, String exam2Score, String exam3Score, int arrsize) {
 
 		if(exam1Score.length() == 0){
 			exam1Score = "0";
@@ -363,15 +363,33 @@ public class ReportUtil {
 			exam3Score = "0";
 		}
 
-		double sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
-		double mean = Math.ceil(sum/3);
+		double sum = 0;
+		double mean = 0;
+
+		if(arrsize == 3){
+
+			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
+			mean = Math.ceil(sum/3);
+
+		}
+		if(arrsize == 2){
+
+			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+			mean = Math.ceil(sum/2);
+
+		}
+		if(arrsize == 1){
+			sum = Integer.parseInt(exam1Score); 
+			mean = Math.ceil(sum); 
+		}
+
 
 		return String.valueOf((int)mean); 
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param examAverage
@@ -379,7 +397,7 @@ public class ReportUtil {
 	 * @param accountId
 	 * @return
 	 */
-	 
+
 	public static String getRemarks(String examAverage, String uuid, String accountId) {
 
 		String remark = "";

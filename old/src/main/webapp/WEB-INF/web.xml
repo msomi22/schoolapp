@@ -47,10 +47,20 @@
 		<servlet-name>StudentReportCard</servlet-name>
 		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StudentReportCard</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>ClassRankingList</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.ClassRankingList</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>StudentReportCard</servlet-name>
 		<url-pattern>/school/studentReportCard</url-pattern> 
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ClassRankingList</servlet-name>
+		<url-pattern>/school/classRankingList</url-pattern> 
 	</servlet-mapping>
 
 
