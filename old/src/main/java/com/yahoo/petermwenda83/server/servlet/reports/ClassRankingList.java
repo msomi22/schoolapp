@@ -155,6 +155,8 @@ public class ClassRankingList extends HttpServlet{
 
 		//Document(Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom)
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
+		document.addAuthor("Peter Mwenda (254718953974)"); 
+		document.addCreationDate();
 
 
 		try {
@@ -201,8 +203,7 @@ public class ClassRankingList extends HttpServlet{
 		try {
 
 			document.open();
-			document.addAuthor("Peter Mwenda (254718953974)"); 
-			document.addCreationDate();
+			
 
 			generateReport(accountId, streamId, term, year);
 
@@ -303,7 +304,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 		/**
-		 *   arrange student info here
+		 *   arrange class info here
 		 */
 		PdfPTable classInfoTable = new PdfPTable(2);
 		classInfoTable.setWidthPercentage(100); 
@@ -315,10 +316,10 @@ public class ClassRankingList extends HttpServlet{
 		PdfPTable classLeft = new PdfPTable(2);
 		classLeft.setWidthPercentage(58);  
 		classLeft.setWidths(new int[]{8,50});  
-
+		
 		//student name
 		PdfPCell nameInfoCell = new PdfPCell(new Phrase("Class:",timesRomanBold8)); 
-		PdfPCell nameDescCell = new PdfPCell(new Phrase("**",  timesRomanNormal6));
+		PdfPCell nameDescCell = new PdfPCell(new Phrase(streamDAO.getStream(accountId, streamId).getDescription(),  timesRomanNormal6));
 		nameInfoCell.setBorder(Rectangle.NO_BORDER);
 		nameDescCell.setBorder(Rectangle.NO_BORDER);
 		nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -528,6 +529,7 @@ public class ClassRankingList extends HttpServlet{
 			rankingTable.addCell(new Paragraph(student.getFirstname(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			
 
 			for(Subject subject : subjects){
 
@@ -547,6 +549,7 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
+				
 
 
 				String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
@@ -575,10 +578,35 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 
+			double avgMean = 0;
+			if(totalMean > 0){ 
+				 avgMean = Math.ceil( (double)totalMean / 7);  
+			}
+			
+			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 
+			String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int)avgMean),"", accountId, subjectDAO, gradingSystemDAO); 
+			
+			String poinst_str = "";
+			String mean_str = "";
+			
+			poinst_str = String.valueOf(performance2.getTotalPoint()); 
+			mean_str = String.valueOf((int)avgMean); 
+			
+			if(rankWithPoints && !rankWithTotalMarks){
+                  //show grade on points
+				poinst_str = performance2.getTotalPoint() + " " + avgGradeByTotalMean;
+				
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+                //show grade on avg
+				mean_str = (int)avgMean + " " +  avgGradeByMean;
+			}
+			
 
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
-			rankingTable.addCell(new Paragraph(""+performance2.getTotalPoint(),timesRomanNormal6));
-			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
 			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
 			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
