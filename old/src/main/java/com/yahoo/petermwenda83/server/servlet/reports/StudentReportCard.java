@@ -368,12 +368,27 @@ public class StudentReportCard extends HttpServlet{
 
 			//student grade
 			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Score:",timesRomanNarmal8)); 
-			PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /84 (" + ReportUtil.getGradeMain(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
-			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
-			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+			
 			//add student name
 			studentLeft.addCell(mainGradeInfoCell);
-			studentLeft.addCell(mainGradeDescCell);
+			//rank 7 subjects
+			if(grade7subjects && !grade11subjects){
+				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
+				mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+				mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+				studentLeft.addCell(mainGradeDescCell);
+			}
+
+			//rank 11 subjects
+			if(!grade7subjects && grade11subjects){
+				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /132 (" + ReportUtil.getGradeMainForm1(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
+				mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+				mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+				studentLeft.addCell(mainGradeDescCell);
+			}
+			
+			
+			
 
 
 			/**
@@ -627,7 +642,17 @@ public class StudentReportCard extends HttpServlet{
 					examTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
 					examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
 					examTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
-					examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMain(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+
+					//rank 7 subjects
+					if(grade7subjects && !grade11subjects){
+						examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+					}
+
+					//rank 11 subjects
+					if(!grade7subjects && grade11subjects){
+						examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMainForm1(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+					}
+					
 				}
 				//MEAN SCORE
 				else if(count == 2){ 

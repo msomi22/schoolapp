@@ -442,11 +442,45 @@ public class ReportUtil {
 	 * @return
 	 */
 
-	public static String getGradeMain(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
+	public static String getGradeMainForm234(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
 
 		String grade = "";
 
 		int point = (int) mean / 7; 
+
+		List<GradingSystem> gradingSystemList = new ArrayList<>();
+
+		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
+
+		for(GradingSystem gradingSystem : gradingSystemList){
+
+			if(point == gradingSystem.getPoints()){
+
+				grade = gradingSystem.getDescription();
+
+			}
+
+		}
+
+
+		return grade;
+	}
+
+	
+	/**
+	 * 
+	 * @param mean
+	 * @param accountId
+	 * @param gradingSystemDAO
+	 * @return
+	 */
+
+	public static String getGradeMainForm1(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
+
+		String grade = "";
+
+		int point = (int) mean / 11; 
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
