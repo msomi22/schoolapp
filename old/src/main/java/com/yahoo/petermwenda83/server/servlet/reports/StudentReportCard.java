@@ -91,6 +91,9 @@ public class StudentReportCard extends HttpServlet{
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
 	private boolean showFeeInfo = false;
+	private boolean grade7subjects = true;
+	private boolean grade11subjects = false;
+
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -499,7 +502,7 @@ public class StudentReportCard extends HttpServlet{
 				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 					exam3Score = "";
 				}
-				
+
 				//TODO
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
 
@@ -831,9 +834,20 @@ public class StudentReportCard extends HttpServlet{
 				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 				exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam3 = ReportUtil.findExamTotal(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam3 = ReportUtil.findExamTotalForm1(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
 
 				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
 				totalPoint = totalPoint / 3;
@@ -849,8 +863,17 @@ public class StudentReportCard extends HttpServlet{
 				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
 				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
 
 
 
@@ -867,7 +890,15 @@ public class StudentReportCard extends HttpServlet{
 
 				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
 
 
 

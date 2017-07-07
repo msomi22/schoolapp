@@ -53,7 +53,7 @@ public class ReportUtil {
 	 * @return
 	 */
 
-	public static  Performance3 findExamTotal(String accountId, List<Perfomance> exam1 , SubCategoryDAO subCategoryDAO,
+	public static  Performance3 findExamTotalForm234(String accountId, List<Perfomance> exam1 , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
@@ -81,6 +81,7 @@ public class ReportUtil {
 				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
 				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
 
+				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
 					selectedLanguagesList.add(perfomance);
 					languagesCount++;
@@ -93,34 +94,40 @@ public class ReportUtil {
 					}
 				}
 
+				//select two best sciences
 				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
 					selectedSciencesList.add(perfomance);
 					sciencesCount++;
 
 					if (sciencesCount > 2) {
+						//add remaining subjects if any to technical list
 						Collections.sort(selectedSciencesList, new PerformanceComparator());	
 						selectedTechnicalsList.add(selectedSciencesList.remove(0));
 
 					}
 				}
 
+				//select one best humanity 
 				if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
 					selectedHumanitiesList.add(perfomance);
 					humanitiesCount++;
 
 					if (humanitiesCount > 1) {
+						//add remaining subjects if any to technical list
 						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
 						selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
 
 					}
 				}
 
+				//add all technical
 				if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
 					selectedTechnicalsList.add(perfomance);
 
 
 				}
 
+				//add mathematics
 				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
 					finalPerfomanceList.add(perfomance);
 
@@ -129,7 +136,7 @@ public class ReportUtil {
 
 			}
 
-			//some code here
+			//select one best from the technical
 			Collections.sort(selectedTechnicalsList, new PerformanceComparator());
 
 			if(selectedTechnicalsList.size() > 0){
@@ -141,6 +148,127 @@ public class ReportUtil {
 			finalPerfomanceList.addAll(selectedLanguagesList);
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
+
+		}
+
+		Performance3 performance3 = new Performance3();
+		performance3.setPerfomanceMap(perfomanceMap); 
+		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
+		performance3.setTotalPoits(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+
+
+		return performance3;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param exam1
+	 * @param subCategoryDAO
+	 * @param categoryDAO
+	 * @param subjectDAO
+	 * @param gradingSystemDAO
+	 * @return
+	 */
+
+	public static  Performance3 findExamTotalForm1(String accountId, List<Perfomance> exam1 , SubCategoryDAO subCategoryDAO,
+			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
+
+		List<Perfomance> finalPerfomanceList = new ArrayList<>();
+		Map<String,Integer> perfomanceMap = new HashMap<>(); 
+
+
+		if(!exam1.isEmpty()){
+
+			int languagesCount = 0;
+			int sciencesCount = 0;
+			int humanitiesCount = 0;
+			int technicalCount = 0;
+
+			List<Perfomance> removedSubjectsPerfomanceList = new ArrayList<>();
+			List<Perfomance> selectedLanguagesList = new ArrayList<>();
+			List<Perfomance> selectedSciencesList = new ArrayList<>();
+			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
+			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
+
+
+
+			for (Perfomance perfomance : exam1) {
+
+				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
+
+				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
+				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+
+				//select two best languages
+				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
+					selectedLanguagesList.add(perfomance);
+					languagesCount++;
+
+
+					if (languagesCount > 2) {
+						Collections.sort(selectedLanguagesList, new PerformanceComparator());
+						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
+
+					}
+				}
+
+				//select three best sciences
+				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
+					selectedSciencesList.add(perfomance);
+					sciencesCount++;
+
+					if (sciencesCount > 3) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedSciencesList, new PerformanceComparator());
+						selectedSciencesList.remove(0);
+						
+					}
+				}
+
+				//select three best humanity 
+				if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
+					selectedHumanitiesList.add(perfomance);
+					humanitiesCount++;
+
+					if (humanitiesCount > 3) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
+						selectedHumanitiesList.remove(0);
+						
+					}
+				}
+
+				//select two best technical
+				if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
+					selectedTechnicalsList.add(perfomance);
+					technicalCount++;
+					
+					if(technicalCount > 2){
+						Collections.sort(selectedTechnicalsList, new PerformanceComparator());
+						selectedTechnicalsList.remove(0);
+					}
+
+
+				}
+
+				//add mathematics
+				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
+					finalPerfomanceList.add(perfomance);
+
+
+				}
+
+			}//end for each loop
+
+
+			finalPerfomanceList.addAll(selectedLanguagesList);
+			finalPerfomanceList.addAll(selectedSciencesList);
+			finalPerfomanceList.addAll(selectedHumanitiesList);
+			finalPerfomanceList.addAll(selectedTechnicalsList);
 
 		}
 

@@ -75,7 +75,7 @@ public class ClassRankingList extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
-	
+
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 
@@ -99,6 +99,8 @@ public class ClassRankingList extends HttpServlet{
 	private boolean hideGrade = false;
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
+	private boolean grade7subjects = true;
+	private boolean grade11subjects = false;
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -120,7 +122,7 @@ public class ClassRankingList extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		
+
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -197,7 +199,7 @@ public class ClassRankingList extends HttpServlet{
 		try {
 
 			document.open();
-			
+
 
 			generateReport(accountId, streamId, term, year);
 
@@ -310,7 +312,7 @@ public class ClassRankingList extends HttpServlet{
 		PdfPTable classLeft = new PdfPTable(2);
 		classLeft.setWidthPercentage(58);  
 		classLeft.setWidths(new int[]{8,50});  
-		
+
 		//student name
 		PdfPCell nameInfoCell = new PdfPCell(new Phrase("Class:",timesRomanBold8)); 
 		PdfPCell nameDescCell = new PdfPCell(new Phrase(streamDAO.getStream(accountId, streamId).getDescription(),  timesRomanNormal6));
@@ -508,9 +510,9 @@ public class ClassRankingList extends HttpServlet{
 			if(streamDAO.getStream(accountId, student.getCurrentStream()) != null){
 				stream = streamDAO.getStream(accountId, student.getCurrentStream()).getDescription();
 			}
-			
+
 			stream = StringUtils.remove(stream, "FORM"); 
-			
+
 
 
 			Map<String,Integer> exam1 = performance2.getExam1();
@@ -523,7 +525,7 @@ public class ClassRankingList extends HttpServlet{
 			rankingTable.addCell(new Paragraph(student.getFirstname(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
-			
+
 
 			for(Subject subject : subjects){
 
@@ -543,7 +545,7 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
-				
+
 
 
 				String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
@@ -574,29 +576,29 @@ public class ClassRankingList extends HttpServlet{
 
 			double avgMean = 0;
 			if(totalMean > 0){ 
-				 avgMean = Math.ceil( (double)totalMean / 7);  
+				avgMean = Math.ceil( (double)totalMean / 7);  
 			}
-			
+
 			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 
 			String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int)avgMean),"", accountId, subjectDAO, gradingSystemDAO); 
-			
+
 			String poinst_str = "";
 			String mean_str = "";
-			
+
 			poinst_str = String.valueOf(performance2.getTotalPoint()); 
 			mean_str = String.valueOf((int)avgMean); 
-			
+
 			if(rankWithPoints && !rankWithTotalMarks){
-                  //show grade on points
+				//show grade on points
 				poinst_str = performance2.getTotalPoint() + " " + avgGradeByTotalMean;
-				
+
 			}
 
 			if(!rankWithPoints && rankWithTotalMarks){
-                //show grade on avg
+				//show grade on avg
 				mean_str = (int)avgMean + " " +  avgGradeByMean;
 			}
-			
+
 
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
@@ -657,9 +659,20 @@ public class ClassRankingList extends HttpServlet{
 				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 				exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam3 = ReportUtil.findExamTotal(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam3 = ReportUtil.findExamTotalForm1(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
 
 				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
 				totalPoint = totalPoint / 3;
@@ -675,8 +688,17 @@ public class ClassRankingList extends HttpServlet{
 				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
 				exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-				totalExam2 = ReportUtil.findExamTotal(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
 
 
 
@@ -693,7 +715,16 @@ public class ClassRankingList extends HttpServlet{
 
 				exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
 
-				totalExam1 = ReportUtil.findExamTotal(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				//rank 7 subjects
+				if(grade7subjects && !grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
+
+
+				//rank 11 subjects
+				if(!grade7subjects && grade11subjects){
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+				}
 
 
 
