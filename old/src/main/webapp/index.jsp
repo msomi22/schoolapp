@@ -1,40 +1,10 @@
 <!DOCTYPE html>
-
-<%@page import="com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
-<%@page import="org.apache.commons.lang3.RandomStringUtils"%>
-<%@page import="org.jasypt.util.text.BasicTextEncryptor"%>
-<%@page
-	import="com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator"%>
-<%@page
-	import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
-
-<%@page
-	import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
-<%@page import="java.net.URLEncoder"%>
+<%@page import="java.util.*"%>
 <%@page import="java.util.Calendar"%>
-
-
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
-
-<%
-
-  
-
-%>
-
 
 
 <html>
@@ -63,7 +33,7 @@
 <body class="hold-transition login-page">
 	<div class="login-box">
 		<div class="login-logo">
-			<a href="#"><b>School APP</b></a>
+			<a href="#"><b>School App</b></a>
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
@@ -71,27 +41,26 @@
 
 
 			<%
-  String loginErrStr = "";
-  session = request.getSession(false);
+				String loginErrStr = "";
+				session = request.getSession(false);
 
-  if(session != null) {
-      loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
-  }                        
+				if (session != null) {
+					loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
+				}
 
-  if (StringUtils.isNotEmpty(loginErrStr)) {
-      %>
+				if (StringUtils.isNotEmpty(loginErrStr)) {
+			%>
 			<div class="alert alert-warning">
 				<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Warning!</strong>
 				<%
-     out.println("Login error: " + loginErrStr);
-     %>
+					out.println("Login error: " + loginErrStr);
+				%>
 			</div>
 
-			<%                                 
-    session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, null);
-  } 
-
- %>
+			<%
+				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, null);
+				}
+			%>
 
 
 
@@ -100,21 +69,22 @@
 			<form action="schoolLogin" method="post">
 
 				<div class="form-group has-feedback">
-					<input type="text" class="form-control" placeholder="Username">
-					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+					<input type="text" class="form-control"
+						placeholder="School Username" name="schoolUsername"> <span
+						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 
-				<div class="form-group">
-					<label>Category</label> <select class="form-control"
-						name="staffposition" required>
-						
-					</select>
+				<div class="form-group has-feedback">
+					<input type="text" class="form-control"
+						placeholder="Staff Username" name="staffUsername"> <span
+						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 
 
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password">
-					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+					<input type="password" class="form-control" placeholder="Password"
+						name="staffPassword"> <span
+						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 
 				<div class="row">
@@ -146,13 +116,13 @@
 	<!-- iCheck -->
 	<script src="js/icheck.min.js"></script>
 	<script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
-    });
-  });
-</script>
+		$(function() {
+			$('input').iCheck({
+				checkboxClass : 'icheckbox_square-blue',
+				radioClass : 'iradio_square-blue',
+				increaseArea : '20%' // optional
+			});
+		});
+	</script>
 </body>
 </html>

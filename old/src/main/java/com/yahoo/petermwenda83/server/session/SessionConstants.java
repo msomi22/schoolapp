@@ -33,7 +33,7 @@ public class SessionConstants {
 	//staff management
 	public static final String SCHOOL_STAFF_SIGN_IN_USERNAME = "Staff signin username"; 
 	public static final String SCHOOL_STAFF_SIGN_IN_ID = "Staff signin ID";
-	public static final String SCHOOL_STAFF_SIGN_IN_POSITION = "Staff signin AcessLevel";
+	public static final String SCHOOL_STAFF_SIGN_IN_CATEGORY= "Staff signin AcessLevel";
 
 
 	//Account login

@@ -62,6 +62,18 @@
 		<servlet-name>ClassRankingList</servlet-name>
 		<url-pattern>/school/classRankingList</url-pattern> 
 	</servlet-mapping>
+	
+	
+	
+	<servlet>
+		<servlet-name>SchoolLogin</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogin</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SchoolLogin</servlet-name>
+		<url-pattern>/schoolLogin</url-pattern> 
+	</servlet-mapping>
 
 
 

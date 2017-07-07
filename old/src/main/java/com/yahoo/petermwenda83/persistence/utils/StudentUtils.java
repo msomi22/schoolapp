@@ -54,7 +54,7 @@ public class StudentUtils extends GenericDAO {
         
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM student WHERE SchoolAccountUuid = ?");    		   
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM student WHERE accountId = ?");    		   
  	    ) {
         	pstmt.setString(1, SchoolAccountUuid);           
  	       	ResultSet rset = pstmt.executeQuery();
@@ -82,7 +82,7 @@ public class StudentUtils extends GenericDAO {
 	        int count=0;
 
 	        try ( Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("SELECT count(*) FROM Student WHERE SchoolAccountUuid = ?;");
+	             PreparedStatement pstmt = conn.prepareStatement("SELECT count(*) FROM Student WHERE accountId = ?;");
 	        		){           
 	            
 	            pstmt.setString(1, accountuuid);
@@ -94,7 +94,7 @@ public class StudentUtils extends GenericDAO {
 	                }
 
 	        } catch (SQLException e) {
-	            logger.error("SQLException while getting all incoming count of schoolaccount with uuid '"
+	            logger.error("SQLException while getting all incoming count of Account with uuid '"
 	                    + accountuuid + "'");
 	            logger.error(ExceptionUtils.getStackTrace(e));
 

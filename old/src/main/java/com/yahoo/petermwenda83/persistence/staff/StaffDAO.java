@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
+import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 
 /**
  * @author peter
@@ -116,6 +117,39 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 
 		return StaffDetail; 
 	}
+	
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByUsername(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Staff getStaffByUsername(String accountId, String username) {
+		Staff StaffDetail =  null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND username =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, username);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				StaffDetail  = beanProcessor.toBean(rset,Staff.class);
+			}  	
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with username: " + username);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return StaffDetail; 
+	}
+
 
 
 	/**
@@ -142,7 +176,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 			pstmt.setString(10, staff.getMobile());
 			pstmt.setString(11, staff.getEmail());
 			pstmt.setString(12, staff.getUsername());
-			pstmt.setString(13, staff.getPassword());
+			pstmt.setString(13, SecurityUtil.getMD5Hash(staff.getPassword()));
 			pstmt.setTimestamp(14, new Timestamp(staff.getRegDate().getTime()));
 			pstmt.executeUpdate();
 
@@ -177,7 +211,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 			pstmt.setString(8, staff.getMobile());
 			pstmt.setString(9, staff.getEmail());
 			pstmt.setString(10, staff.getUsername());
-			pstmt.setString(11, staff.getPassword());  
+			pstmt.setString(11, SecurityUtil.getMD5Hash(staff.getPassword()));  
 			pstmt.setString(12, staff.getUuid());
 			pstmt.setString(13, staff.getAccountId());
 			pstmt.executeUpdate();

@@ -26,6 +26,13 @@ public interface SchoolStaffDAO {
 	 * @return
 	 */
 	public Staff getStaffByStaffNo(String accountId, String staffNo);
+	/**
+	 * 
+	 * @param accountId
+	 * @param username
+	 * @return
+	 */
+	public Staff getStaffByUsername(String accountId, String username);
 	 /**
 	  * 
 	  * @param staff

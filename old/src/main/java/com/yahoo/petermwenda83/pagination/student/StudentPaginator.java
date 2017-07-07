@@ -67,9 +67,9 @@ public class StudentPaginator {
 
    
    /**
-    * Provides the last page of the Incoming USSD session report
+    * Provides the last page 
     *
-    * @return	a Incoming USSD page
+    * @return	
     */
    public StudentPage getLastPage() {
 	   
@@ -87,11 +87,11 @@ public class StudentPaginator {
    
 
    /**
-    * Moves you forward to the page of the Incoming USSD session that comes
+    * Moves you forward to the page that comes
     * after the current page
     *
     * @param currentPage
-    * @return	an Incoming USSD page
+    * @return	
     */
    public StudentPage getNextPage(final StudentPage currentPage) {
        int totalPage = getTotalPage();
@@ -107,11 +107,11 @@ public class StudentPaginator {
 
    
    /**
-    * Moves you backward to the page of the Incoming USSD session that comes
+    * Moves you backward to the page of that comes
     * before the current page
     *
     * @param currentPage
-    * @return	an Incoming USSD page
+    * @return	
     */
    public StudentPage getPrevPage(final StudentPage currentPage) {
        int totalPage = getTotalPage();
@@ -128,8 +128,8 @@ public class StudentPaginator {
    
 
    /**
-    * Calculates the total number of pages that would be printed for the SMS
-    * that belong to the logged-in account
+    * Calculates the total number of pages that would be printed 
+    * 
     *
     * @return	an integer
     */

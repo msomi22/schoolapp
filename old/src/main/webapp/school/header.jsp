@@ -1,22 +1,5 @@
 <!DOCTYPE html>
-<%
-/**
-  Copyright (c) Fastech Solutions Ltd (Jan 16 2016).
 
-  License
-  THIS PRODUCT is Licensed under the Open Software License (the "License"), Version 3.0 .
-  You may not use this SOFTWARE NOT UNLESS in compliance with the License.
-  You may obtain a copy of the License at: http://opensource.org/licenses/OSL-3.0
-
-  Disclaimer
-  This SOFTWARE PRODUCT is provided BY THE PROVIDER "AS-IS" (The buyer buys the product in whatever condition it presently
-  exist,the buyer accept THE PRODUCT "with all faults").
-  THE PROVIDER  makes no representations or warranties of any kind WHATSOEVER concerning the safety,inaccuracies and other harmful results that may arise out of using THE PRODUCT for non-intended purposes.
-  THE DEVELOPER will not be liable for ANY data loss AND OR any other harm connected with using this PRODUCT contrary to the spesifications provided by THE PROVIDER in the terms and conditions.
-
- @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
-**/
-%>
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
 <%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
@@ -172,12 +155,12 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="studentIndex.jsp">Students</a></li>
-            <li><a href="fee.jsp">Finance</a></li>
-            <li><a href="staff.jsp">Staff</a></li>
-            <li><a href="examConfig.jsp">Control Panel</a></li>
-            <li> <a href="lib.jsp">Library</a>  </li>
+            <li><a href="#">Finance</a></li>
+            <li><a href="#">Staff</a></li>
+            <li><a href="#">Control Panel</a></li>
+            <li> <a href="#">Library</a>  </li>
              
-            <li><a href="chat.jsp">Chat</a></li>
+            <li><a href="#">Chat</a></li>
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -190,9 +173,9 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li class="divider"></li>
-                    <li><a href="profile.jsp">Profile</a></li> <br>
+                    <li><a href="#">Profile</a></li> <br>
                     <li><a href="help.html" target="_blank">Help</a></li> <br>
-                    <li><a href="../schoolLogout">Logout</a></li>
+                    <li><a href="#">Logout</a></li>
                 </ul>
                </li>
           </ul>

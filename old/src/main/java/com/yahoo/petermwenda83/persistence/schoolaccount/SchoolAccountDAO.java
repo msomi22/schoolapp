@@ -23,7 +23,7 @@ public interface SchoolAccountDAO {
 	 * @param credentials
 	 * @return
 	 */
-	public Account getAccount(String credentials);
+	public Account getAccount(String credentials,String isActive);
 	
 	/**
 	 * 
