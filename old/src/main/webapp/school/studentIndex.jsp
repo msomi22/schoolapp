@@ -1,10 +1,5 @@
 
-<%
-
-%>
-
-<%@page
-	import="com.yahoo.petermwenda83.pagination.student.StudentPaginator"%>
+<%@page import="com.yahoo.petermwenda83.pagination.student.StudentPaginator"%>
 <%@page import="com.yahoo.petermwenda83.pagination.student.StudentPage"%>
 
 <%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
@@ -23,17 +18,11 @@
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-<%@page
-	import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
+<%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
 
 
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
+<%@page import="java.util.*"%>
+
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
@@ -88,7 +77,7 @@
      
      List<Student> studentList = new ArrayList<>();
      if(studentDAO.getAllStudent(accountId, 0, 15) != null){
-    	 studentList = studentDAO.getAllStudent(accountId, 0, 15);
+       studentList = studentDAO.getAllStudent(accountId, 0, 15);
      }
      
     
@@ -134,244 +123,163 @@
 
 
 
-<div class="container-fluid">
-	<div class="row content">
-		<div class="col-sm-3 sidenav">
-			<h4>Quick Links</h4>
-			<ul class="nav nav-pills nav-stacked">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#">New Student</a></li>
-				<li><a href="#">Import Excel</a></li>
-				<li><a href="#">Parents</a></li>
-				<li><a href="#">More...</a></li>
-			</ul>
-			<br>
-			<div class="input-group">
-				<input type="text" class="form-control"
-					placeholder="Search Anything..."> <span
-					class="input-group-btn">
-					<button class="btn btn-default" type="button">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
-			</div>
-			<hr>
-			<div id="myCarousel" class="carousel slide">
-				<!-- Carousel indicators -->
-				<ol class="carousel-indicators">
-					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-					<li data-target="#myCarousel" data-slide-to="1"></li>
-					<li data-target="#myCarousel" data-slide-to="2"></li>
-				</ol>
-				<!-- Carousel items -->
-				<div class="carousel-inner">
-					<div class="item active">
-						<img src="../img/slide/slide1.jpg" alt="First slide">
-						<div class="carousel-caption">This Caption 1</div>
-					</div>
-					<div class="item">
-						<img src="../img/slide/slide2.jpg" alt="Second slide">
-						<div class="carousel-caption">This Caption 2</div>
-					</div>
-					<div class="item">
-						<img src="../img/slide/slide3.jpg" alt="Third slide">
-						<div class="carousel-caption">This Caption 3</div>
-					</div>
-				</div>
-				<!-- Carousel nav -->
-				<a class="carousel-control left" href="#myCarousel"
-					data-slide="prev">&lsaquo;</a> <a class="carousel-control right"
-					href="#myCarousel" data-slide="next">&rsaquo;</a>
-			</div>
-			<hr>
-		</div>
 
-		<div class="col-sm-9">
-			<div class="breadcrumb">
-				WELCOME TO:
-				<%=schoolname%>
-				, Term:
-				<%=sysConfig.getTerm() %>
-				, Year:
-				<%=sysConfig.getYear() %>
-			</div>
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+          <div class="row tile_count">
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Active Students</span>
+              <div class="count">650</div>
+              <span class="count_bottom"><i class="green">76% </i> Of Total Students</span>
+            </div>
 
 
-			<nav class="navbar navbar-default" role="navigation">
-				<div>
-					<form class="navbar-form navbar-left" role="search" action="#"
-						method="get">
-						<div class="form-group">
-							<input type="text" class="form-control"
-								placeholder="Search By AdmNo"
-								onkeyup="searchstudents(this.value)">
-						</div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-clock-o"></i> Inactive Students</span>
+              <div class="count">434</div>
+              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>27% </i> Of Total Students</span>
+            </div>
 
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary dropdown-toggle"
-								data-toggle="dropdown">
-								Sort-By <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="">RegNo</a></li>
-								<li><a href="">First name</a></li>
-								<li><a href="">Middle name</a></li>
-								<li><a href="">Last name</a></li>
-								<li><a href="">Gender</a></li>
-								<li><a href="">Class</a></li>
-							</ul>
-						</div>
-					</form>
 
-				</div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Alumni</span>
+              <div class="count green">206</div>
+              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>12% Of Total Students</i> </span>
+            </div>
 
-			</nav>
+
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Female Students</span>
+              <div class="count">0</div>
+              <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>0% </i> Of Total Students</span>
+            </div>
+
+
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Male Students </span>
+              <div class="count">656</div>
+              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>100% </i> Of Total Students</span>
+            </div>
+
+          </div>
+          <!-- /top tiles -->
+
+
+          <div class="row">
 
 
 
+          <div class="clearfix"></div>
 
-			<%             
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Students <small>List</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>                      
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
 
-                                String updateErr = "";
-                                String updateSuccess = "";
-                                session = request.getSession(false);
-                                     updateErr = (String) session.getAttribute(SessionConstants.STUDENT_UPDATE_ERROR);
-                                     updateSuccess = (String) session.getAttribute(SessionConstants.STUDENT_UPDATE_SUCCESS); 
+                <div class="x_content">
 
-                                if(session != null) {
-                                    updateErr = (String) session.getAttribute(SessionConstants.STUDENT_UPDATE_ERROR);
-                                    updateSuccess = (String) session.getAttribute(SessionConstants.STUDENT_UPDATE_SUCCESS);
-                                }                        
+                  <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                          <tr class="headings">
 
-                                if (StringUtils.isNotEmpty(updateErr)) {
-                                    %>
-			<div class="alert alert-warning">
-				<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Warning!</strong>
-				<%
-                                          out.println("error: " + updateErr);
-                                           %>
-			</div>
+                            <th class="column-title"># </th>
+                            <th class="column-title">RegNo </th>
+                            <th class="column-title">First name </th>
+                            <th class="column-title">Middle name </th>
+                            <th class="column-title">Last name </th>
+                            <th class="column-title">Gender </th>
+                            <th class="column-title">Class </th>
+                            <th class="column-title no-link last"> 
+                              <span class="nobr"> <a href="profile.jsp"> Profile </a> </span> 
+                            </th>
+                            
+                          </tr>
+                        </thead>
 
-			<%                                 
-                                    session.setAttribute(SessionConstants.STUDENT_UPDATE_ERROR, null);
-                                  } 
-                                   else if (StringUtils.isNotEmpty(updateSuccess)) {
-                                   %>
-			<div class="alert alert-success">
-				<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Success!</strong>
-				<%
-                                           out.println(": " + updateSuccess);
-                                           %>
-			</div>
+              <tbody class='tablebody'>
 
-			<%                                
-                                    session.setAttribute(SessionConstants.STUDENT_UPDATE_SUCCESS,null);
-                                  } 
+                <%
+                  for(Student student : studentList){                   
+                    %>
 
+                <tr class="tabledit" style='color: black;'>
 
+                  <td width="5%"><%=studentCount%>. </td>
+                  <td class="center"><%=student.getRegNo() %></td>
+                  <td class="center"><%=student.getFirstname() %></td>
+                  <td class="center"><%=student.getMiddlename() %></td>
+                  <td class="center"><%=student.getLastname() %></td>
+                  <td class="center"><%=student.getGender() %></td>
+                  <td class="center"><%="" %></td>
+                  <td class="center"><a href=""> Profile</a></td>
 
-                      %>
+                </tr>
 
-
-
-
-
-			<!-- panel start -->
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Student list</h3>
-				</div>
-				<div class="panel-body">
-
-					<div class="table-responsive ">
-
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>*</th>
-									<th>RegNo</th>
-									<th>First name</th>
-									<th>Middle name</th>
-									<th>Last name</th>
-									<th>Gender</th>
-									<th>Class</th>
-									<th>Profile</th>
-								</tr>
-							</thead>
-
-							<tbody class='tablebody'>
-
-								<%
-                  for(Student student : studentList){                	  
-                	  %>
-
-								<tr class="tabledit" style='color: black;'>
-
-									<td width="3%"><%=studentCount%></td>
-									<td class="center"><%=student.getRegNo() %></td>
-									<td class="center"><%=student.getFirstname() %></td>
-									<td class="center"><%=student.getMiddlename() %></td>
-									<td class="center"><%=student.getLastname() %></td>
-									<td class="center"><%=student.getGender() %></td>
-									<td class="center"><%="" %></td>
-									<td class="center"><a href=""> Profile</a></td>
-
-								</tr>
-
-								<%      
-                	  studentCount++;
+                <%      
+                    studentCount++;
                   }
                   
                   %>
 
-							</tbody>
-						</table>
+                        </tbody>
+                      </table>
 
-						<div id="pagination">
-							<form name="pageForm" method="post" action="studentIndex.jsp">
-								<%                                            
+            <div id="pagination">
+              <form name="pageForm" method="post" action="studentIndex.jsp">
+                <%                                            
                         if (!studentpage.isFirstPage()) {
                     %>
-								<input class="toolbarBtn" type="submit" name="page"
-									value="First" /> <input class="toolbarBtn" type="submit"
-									name="page" value="Previous" />
-								<%
+                <input class="toolbarBtn" type="submit" name="page"
+                  value="First" /> <input class="toolbarBtn" type="submit"
+                  name="page" value="Previous" />
+                <%
                         }
                     %>
-								<span class="pageInfo">Page <span
-									class="pagePosition currentPage"><%= studentpage.getPageNum()%></span>
-									of <span class="pagePosition"><%= studentpage.getTotalPage()%></span>
-								</span>
-								<%
+                <span class="pageInfo">Page <span
+                  class="pagePosition currentPage"><%= studentpage.getPageNum()%></span>
+                  of <span class="pagePosition"><%= studentpage.getTotalPage()%></span>
+                </span>
+                <%
                         if (!studentpage.isLastPage()) {                        
                     %>
-								<input class="toolbarBtn" type="submit" name="page" value="Next">
-								<input class="toolbarBtn" type="submit" name="page" value="Last">
-								<%
+                <input class="toolbarBtn" type="submit" name="page" value="Next">
+                <input class="toolbarBtn" type="submit" name="page" value="Last">
+                <%
                        }
                     %>
-							</form>
-						</div>
+              </form>
+          </div>
+                    </div>
+              
+            
+                  </div>
+                </div>
+              </div>
+
+               
+ 
+
+           
+
+          </div>
+          <div class="clearfix"></div>
+          
+        </div>
+        <!-- /page content -->
 
 
-
-					</div>
-				</div>
-				
-				<!-- end panel body-->
-				<div class="panel-footer">
-					<div class="row">
-						<div class="col col-xs-4">
-							<small> <i>****</i>
-							</small>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- end panel -->
-		</div>
-	</div>
-</div>
-
+<!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+
+
 

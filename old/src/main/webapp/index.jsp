@@ -5,124 +5,151 @@
 
 <%@page import="java.util.*"%>
 <%@page import="java.util.Calendar"%>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>SchoolApp </title>
 
-<html>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>School - app</title>
-<!-- Tell the browser to be responsive to screen width -->
-<meta
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	name="viewport">
-<!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-<!-- Ionicons -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="css/AdminLTE.min.css">
-<!-- iCheck -->
-<link rel="stylesheet" href="css/blue.css">
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="vendors/animate.css/animate.min.css" rel="stylesheet">
 
-</head>
-<body class="hold-transition login-page">
-	<div class="login-box">
-		<div class="login-logo">
-			<a href="#"><b>School App</b></a>
-		</div>
-		<!-- /.login-logo -->
-		<div class="login-box-body">
-			<p class="login-box-msg">Sign in here</p>
+    <!-- Custom Theme Style -->
+    <link href="build/css/custom.min.css" rel="stylesheet">
+    
+     <link rel="icon" href="resources/favicon.ico">
+  </head>
 
-
-			<%
-				String loginErrStr = "";
-				session = request.getSession(false);
-
-				if (session != null) {
-					loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
-				}
-
-				if (StringUtils.isNotEmpty(loginErrStr)) {
-			%>
-			<div class="alert alert-warning">
-				<a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Warning!</strong>
-				<%
-					out.println("Login error: " + loginErrStr);
-				%>
-			</div>
-
-			<%
-				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, null);
-				}
-			%>
+  <body class="login">
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
 
 
 
+      <div class="login_wrapper">
+
+        <div class="animate form login_form">
+          <section class="login_content">
+          <%
+        String loginErrStr = "";
+        session = request.getSession(false);
+
+        if (session != null) {
+          loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
+        }
+
+        if (StringUtils.isNotEmpty(loginErrStr)) {
+      %>
+      <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Warning!</strong>
+        <%
+          out.println("Login error: " + loginErrStr);
+        %>
+      </div>
+
+      <%
+        session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, null);
+        }
+      %>
+            <form action="schoolLogin" method="post">
+              <h1>Login Form</h1>
+
+              <div>
+                <input type="text" class="form-control" placeholder="School Username" required name="schoolUsername" />
+              </div>
+
+              <div>
+                <input type="text" class="form-control" placeholder="Staff Username" required name="staffUsername" />
+              </div>
+
+              <div>
+                <input type="password" class="form-control" placeholder="Password" required name="staffPassword" />
+              </div>
+
+              <div>
+                  <button type="submit" class="btn btn-primary btn-block btn-flat">Log in
+                  </button>
+        
+                <a class="reset_pass" href="#">Lost your password?</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">New to site?
+                  <a href="#signup" class="to_register"> Create Account </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-graduation-cap"></i> AppleTech</h1>
+                  <p>&copy;2017 All Rights Reserved.</p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
 
 
-			<form action="schoolLogin" method="post">
-
-				<div class="form-group has-feedback">
-					<input type="text" class="form-control"
-						placeholder="School Username" name="schoolUsername"> <span
-						class="glyphicon glyphicon-envelope form-control-feedback"></span>
-				</div>
-
-				<div class="form-group has-feedback">
-					<input type="text" class="form-control"
-						placeholder="Staff Username" name="staffUsername"> <span
-						class="glyphicon glyphicon-envelope form-control-feedback"></span>
-				</div>
 
 
-				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password"
-						name="staffPassword"> <span
-						class="glyphicon glyphicon-lock form-control-feedback"></span>
-				</div>
 
-				<div class="row">
-					<div class="col-xs-8">
-						<div class="checkbox icheck">
-							<label> <input type="checkbox"> Remember Me
-							</label>
-						</div>
-					</div>
-					<!-- /.col -->
-					<div class="col-xs-4">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">Sign
-							In</button>
-					</div>
-					<!-- /.col -->
-				</div>
-			</form>
+        <div id="register" class="animate form registration_form">
+          <section class="login_content">
+            <form>
+              <h1>Create Account</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="Username" required="" />
+              </div>
+              <div>
+                <input type="email" class="form-control" placeholder="Email" required/>
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" required />
+              </div>
+              <div>
+                  <button type="submit" class="btn btn-primary btn-block btn-flat">Submit
+                  </button>
+              </div>
 
-			<a href="#">I forgot my password</a><br>
-		</div>
-		<!-- /.login-box-body -->
-	</div>
-	<!-- /.login-box -->
+              <div class="clearfix"></div>
 
-	<!-- jQuery 2.2.3 -->
-	<script src="js/jquery/jquery-2.2.3.min.js"></script>
-	<!-- Bootstrap 3.3.7 -->
-	<script src="js/bootstrap/bootstrap.min.js"></script>
-	<!-- iCheck -->
-	<script src="js/icheck.min.js"></script>
-	<script>
-		$(function() {
-			$('input').iCheck({
-				checkboxClass : 'icheckbox_square-blue',
-				radioClass : 'iradio_square-blue',
-				increaseArea : '20%' // optional
-			});
-		});
-	</script>
-</body>
+              <div class="separator">
+                <p class="change_link">Already a member ?
+                  <a href="#signin" class="to_register"> Log in </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-graduation-cap"></i> AppleTech </h1>
+                  <p>&copy;2017 All Rights Reserved.</p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+  </body>
 </html>

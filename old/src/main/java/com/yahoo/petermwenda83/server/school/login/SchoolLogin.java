@@ -74,12 +74,12 @@ public class SchoolLogin extends HttpServlet{
 
 		if(accountDAO.getAccount(schoolUsername,"1") == null){
 
-			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials -1!");
+			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
 		}else if(staffDAO.getStaffByUsername(accountDAO.getAccount(schoolUsername,"1").getUuid(), staffUsername) == null){ 
 
-			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials -2!");
+			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
 		}else{
@@ -101,7 +101,7 @@ public class SchoolLogin extends HttpServlet{
 				
 
 			}else{
-				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials -3!");
+				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 				response.sendRedirect("index.jsp");
 
 

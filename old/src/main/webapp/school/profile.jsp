@@ -1,152 +1,117 @@
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-<%@page import="org.apache.commons.lang3.StringUtils"%>
-
-<%
-
-     if (session == null) {
-       response.sendRedirect("../index.jsp");
-      
-    }
-
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-       
-    }
-
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
-
-%>
-<jsp:include page="header.jsp" /> 
+<jsp:include page="header.jsp" />
 
 
-<div class="container-fluid">
-  <div class="row content">
-    <div class="col-sm-3 sidenav">
-      <h4>Quick Links</h4>
-      <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="schoolIndex.jsp">Home</a></li>
-      </ul><br>
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search Anything...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </span>
-      </div>
-       <hr>
-      <div id="myCarousel" class="carousel slide">
-          <!-- Carousel indicators -->
-            <ol class="carousel-indicators">
-              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#myCarousel" data-slide-to="1"></li>
-                  <li data-target="#myCarousel" data-slide-to="2"></li>
-                  </ol>
-                  <!-- Carousel items -->
-                  <div class="carousel-inner">
-                  <div class="item active">
-                  <img src="../img/slide/slide1.jpg" alt="First slide">
-                  <div class="carousel-caption">This Caption 1</div>
-                  </div>
-                  <div class="item">
-                  <img src="../img/slide/slide2.jpg" alt="Second slide">
-                  <div class="carousel-caption">This Caption 2</div>
-                  </div>
-                  <div class="item">
-                  <img src="../img/slide/slide3.jpg" alt="Third slide">
-                  <div class="carousel-caption">This Caption 3</div>
-                  </div>
-                  </div>
-                  <!-- Carousel nav -->
-              <a class="carousel-control left" href="#myCarousel"
-                  data-slide="prev">&lsaquo;</a>
-              <a class="carousel-control right" href="#myCarousel"
-                  data-slide="next">&rsaquo;</a>
-          </div>
-          <hr>
-    </div>
-
-    <div class="col-sm-9">
-        <div class="breadcrumb">
-            <h4><small>PROFILE INFO</small></h4>
-       </div>
-
-      
-
-      <!-- profile start -->
-      
-        <!-- panel start -->
-          <div class="panel panel-info">
-            <div class="panel-heading">
-              <h3 class="panel-title">Njeru Mwenda Peter</h3>
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Student's Profile</h3>
+              </div>
             </div>
-            <div class="panel-body">
-              <div class="row">
-               <div class="table-responsive ">
-                <div class="col-md-3 col-lg-3 " align="center">
-                  <img alt="User Pic" src="../img/avatar-300x300.png" class="img-circle img-responsive"> 
-                 </div>
-                
-                <div class=" col-md-9 col-lg-9 "> 
-                  <table class="table table-user-information">
-                    <tbody>
-                      <tr>
-                        <td>Department:</td>
-                        <td>Programming</td>
-                      </tr>
-                      <tr>
-                        <td>Hire date:</td>
-                        <td>20/05/2016</td>
-                      </tr>
-                      <tr>
-                        <td>Date of Birth:</td>
-                        <td>31/01/1990</td>
-                      </tr>
-                   
-                         <tr>
-                             <tr>
-                        <td>Gender:</td>
-                        <td>Male</td>
-                      </tr>
-                        <tr>
-                        <td>Home Address:</td>
-                        <td>P.O. BOX,51-60400</td>
-                      </tr>
-                      <tr>
-                        <td>Email:</td>
-                        <td><a href="">mwendapeter72@gmail.com</a></td>
-                      </tr>
-                        <td>Phone Number:</td>
-                        <td>254-718-953-974</td>  
-                      </tr>
-                     
-                    </tbody>
-                  </table>
+            
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_content">
                   
-                  <a href="#" class="btn btn-primary">My Teaching Performance</a>
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="images/peter.jpg" alt="Avatar" title="Change the avatar">
+                        </div>
+                      </div>
+                      <h3>Peter Mwenda</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <i class="fa fa-map-marker user-profile-icon"></i> Tharaka Nithi 
+                        </li>
+                        
+                        <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> FORM 4 N
+                        </li>
+
+                        <li class="m-top-xs">
+                          <i class="fa fa-external-link user-profile-icon"></i>
+                           Active
+                        </li>
+                      </ul>
+
+                      <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                      <br />
+
+                      <!-- start skills -->
+                      <h4>More</h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Ranking </p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                          </div>
+                        </li>                        
+                      </ul>
+                      <!-- end of skills -->
+                    </div>
+                    
+                    
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                     
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                          <li role="presentation" class="active">
+                            <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">General Info</a>
+                          </li>
+                          <li role="presentation" class="">
+                            <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Subjects And Classroom</a>
+                          </li>
+                          <li role="presentation" class="">
+                            <a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Primary</a>
+                          </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                            <!-- start recent activity -->
+                            <div class="messages">
+                              
+                              General Info here
+
+                            </div>
+                            <!-- end recent activity -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                            <!-- start user projects -->
+                             <p> 
+                             Subjects and classroom 
+                             </p>
+                            <!-- end user projects -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                            <p>
+                              Primary school info
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
+                    
+                  </div>
                 </div>
               </div>
             </div>
-                 <div class="panel-footer">
-                        <a data-original-title="Broadcast Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary">
-                          <i class="glyphicon glyphicon-envelope"></i></a>
-                        <span class="pull-right">
-                            <a data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning">
-                            <i class="glyphicon glyphicon-edit"></i></a>
-                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger">
-                            <i class="glyphicon glyphicon-remove"></i></a> 
-                        </span>
-                    </div>
-            
           </div>
-          <!--panel end-->
-      </div>
-  
-      <hr>
-    </div>
-  </div>
-</div>
+        </div>
+        <!-- /page content -->
 
+        <!-- footer -->
 <jsp:include page="footer.jsp" />
+        

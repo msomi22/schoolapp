@@ -1,184 +1,187 @@
 <!DOCTYPE html>
-
-
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
-<%@page import="com.yahoo.petermwenda83.persistence.staff.ClassTeacherDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.ClassTeacher"%>
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-<%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-<%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
-
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.util.Iterator"%>
-
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="org.apache.commons.lang3.StringUtils"%>
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
-<%@page import="org.joda.time.MutableDateTime"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<%   
-
-    CacheManager mgr = CacheManager.getInstance();
-    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-    SessionStatistics statistics = new SessionStatistics();
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    
-
-    Account school = new Account();
-    Element element;
-   
-
-    String classuuid = "";
-    String room  ="";
-    String staffPosition  ="";
-    String accountuuid = "";
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (Account) element.getObjectValue();
-    }
-
-   if(school !=null){ 
-     accountuuid = school.getUuid();
-   }
-    
-  
-        String pos_Pricipal =(String)  PropertiesConfig.getConfigValue("POSITION_PRINCIPAL");
-        String pos_DeputyPricipal =(String)  PropertiesConfig.getConfigValue("POSITION_DEPUTY");
-        String pos_Teacher =(String) PropertiesConfig.getConfigValue("POSITION_TEACHER");
-        String pos_HOD =(String) PropertiesConfig.getConfigValue("POSITION_HOD");
-        String pos_CM =(String) PropertiesConfig.getConfigValue("POSITION_CM");
-        String pos_Secretary =(String) PropertiesConfig.getConfigValue("POSITION_SECRETARY");
-        String pos_Bursar =(String) PropertiesConfig.getConfigValue("POSITION_BURSAR");
-
-
-      String schoolname = "";
-
-      if (session == null) {
-           response.sendRedirect("../index.jsp");
-        }
-
-
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
-
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
-    
-    schoolname = school.getName();
-
-
-%>                       
-
-  <html lang="en">
+<html lang="en">
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../img/favicon.ico">
 
-    <title>FastPro V3</title>
- 
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-theme.css">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-theme.min.css">
-       
-    <style type="text/css">
-    body {
-      padding-top: 70px;
-    }
+    <title>ScoolApp </title>
 
-    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
-    .row.content {height: auto}
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+	
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
     
-    /* Set gray background color and 100% height */
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height: auto;}
-    }
-
-  </style>
-
-
+    <link rel="icon" href="images/favicon.ico">
   </head>
 
-  
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand">FastPro School</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="studentIndex.jsp">Students</a></li>
-            <li><a href="#">Finance</a></li>
-            <li><a href="#">Staff</a></li>
-            <li><a href="#">Control Panel</a></li>
-            <li> <a href="#">Library</a>  </li>
-             
-            <li><a href="#">Chat</a></li>
+  <body class="nav-md footer_fixed">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col menu_fixed">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="studentIndex.jsp" class="site_title"><i class="fa fa-graduation-cap"></i> <span>SchoolApp</span></a>
+            </div>
 
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-               <li class="dropdown">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                  <button type="button" class="btn btn-default btn-xs">
-                 <span class="glyphicon glyphicon-user"></span> <%="" %>
-                </button>
-                <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="divider"></li>
-                    <li><a href="#">Profile</a></li> <br>
-                    <li><a href="help.html" target="_blank">Help</a></li> <br>
-                    <li><a href="#">Logout</a></li>
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="images/peter.jpg" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>Peter</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+              
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Students</a></li>
+                    </ul>
+                  </li>
+                  
+                  <li><a><i class="fa fa-edit"></i> Academics <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Submit Exam</a></li>
+                      <li><a href="#">Exam Reports</a></li>
+                      <li><a href="#">Subjects</a></li>
+                      <li><a href="#">Streams/Classes</a></li>
+                    </ul>
+                  </li>
+                  
+                  <li><a><i class="fa fa-desktop"></i> Staff <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Staff</a></li>
+                      <li><a href="#">Class Teachers</a></li>
+                    </ul>
+                  </li>
+                  
+                  <li><a><i class="fa fa-table"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Exam</a></li>
+                      <li><a href="#">Settings</a></li>
+                    </ul>
+                  </li>
+                  
+                 
                 </ul>
-               </li>
-          </ul>
+              </div>
+              
+             
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="#">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
         </div>
-      </div>
-    </nav> 
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/peter.jpg" alt="">Peter
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">New</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">1</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>Peter Mwenda</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          New system coming soon...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
