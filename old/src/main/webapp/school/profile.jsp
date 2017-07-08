@@ -1,3 +1,27 @@
+<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+
+<%@page import="java.util.*"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
+<%
+
+  if (session == null) {
+       response.sendRedirect("../index.jsp");
+       //return;
+    }
+
+    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+    if (StringUtils.isEmpty(username)) {
+        response.sendRedirect("../index.jsp");
+        //return;
+    }
+
+    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+   
+%>
 <jsp:include page="header.jsp" />
 
 

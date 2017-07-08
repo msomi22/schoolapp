@@ -119,6 +119,8 @@
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-dd-MM");
     SimpleDateFormat timezoneFormatter = new SimpleDateFormat("z");
 %>
+
+
 <jsp:include page="header.jsp" />
 
 
@@ -198,7 +200,7 @@
                             <th class="column-title">Gender </th>
                             <th class="column-title">Class </th>
                             <th class="column-title no-link last"> 
-                              <span class="nobr"> <a href="profile.jsp"> Profile </a> </span> 
+                              <span class="nobr"> Profile </span> 
                             </th>
                             
                           </tr>
@@ -219,7 +221,7 @@
                   <td class="center"><%=student.getLastname() %></td>
                   <td class="center"><%=student.getGender() %></td>
                   <td class="center"><%="" %></td>
-                  <td class="center"><a href=""> Profile</a></td>
+                  <td class="center"> <a href="profile.jsp"> Profile</a> </td>                 
 
                 </tr>
 
