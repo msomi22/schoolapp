@@ -128,6 +128,7 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
+         <div class="">
           <!-- top tiles -->
           <div class="row tile_count">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
@@ -168,12 +169,10 @@
           <!-- /top tiles -->
 
 
-          <div class="row">
-
-
-
+         
           <div class="clearfix"></div>
 
+           <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -259,23 +258,16 @@
                     %>
               </form>
           </div>
-                    </div>
-              
-            
-                  </div>
-                </div>
-              </div>
-
-               
- 
-
-           
-
+            </div>              
           </div>
-          <div class="clearfix"></div>
-          
         </div>
-        <!-- /page content -->
+      </div>
+  </div>
+  <div class="clearfix"></div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<!-- /page content -->
 
 
 <!-- footer -->
