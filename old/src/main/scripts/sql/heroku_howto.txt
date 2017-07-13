@@ -1,0 +1,16 @@
+
+
+**cd to the local location of your sql script
+
+**make sure the script is well configured to match the credentials on heroku
+
+**run the command below (my file is named database.sql)
+**protected-sea-95110 is my app on heroku
+
+**cat database.sql | heroku pg:psql --app protected-sea-95110
+
+**table will be created on heroku
+
+**echo "select * from AcessLevel;" | heroku pg:psql --app protected-sea-95110
+
+**heroku pg:psql --app protected-sea-95110 < test.sql
