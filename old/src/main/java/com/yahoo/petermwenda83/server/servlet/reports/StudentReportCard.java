@@ -24,6 +24,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.jfree.chart.renderer.category.GanttRenderer;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -129,16 +130,21 @@ public class StudentReportCard extends HttpServlet{
 	 * @throws ServletException,
 	 *             IOException
 	 */
-	@Override
+	//@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		response.setContentType("application/pdf");
 
 		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
+		
+			
+			
+			
 
 		logger.info("******************************************************************"); 
 		logger.info("accountId " + accountId); 
+
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -1024,9 +1030,58 @@ public class StudentReportCard extends HttpServlet{
 	 * @throws ServletException,
 	 *             IOException
 	 */
-	@Override
+	//@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		/**
+		 * get the params to customize the report display
+		 */
+		String hidePts="";
+		String hideGds ="";
+		
+		hidePts = request.getParameter("p");
+		hideGds= request.getParameter("g");
+		
+		String rank = request.getParameter("rank");
+	
+		String showfee = request.getParameter("fee");
+		
+		String noOfSub = request.getParameter("subjects");
+		
+		//check for hide points
+		if(!StringUtils.isEmpty(hidePts))
+			hidePoints= true;
+		
+		//check for hide grades
+		if(!StringUtils.isEmpty(hideGds))
+			hideGrade= true;
+		
+		//check for rank with points
+		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
+			rankWithPoints=true;
+			rankWithTotalMarks= false;
+		}
+		
+		//check show fee
+		if(!StringUtils.isEmpty(showfee))
+			showFeeInfo= true;
+		
+		
+		//check for number of subjects to grade
+		
+		if(noOfSub == "eleven") {
+			grade7subjects= false;
+			grade11subjects= true;
+		}
+		
+		
+
+		logger.info("Hide " + hidePts); 
+		logger.info("Hide " + hideGds); 
+		logger.info("Fee " + showfee); 
+		logger.info("Subjects " + noOfSub); 
+			
 		doPost(request, response);
 	}
 

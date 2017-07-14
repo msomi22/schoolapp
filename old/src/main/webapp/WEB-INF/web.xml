@@ -1,103 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-
-
-	<servlet>
-		<servlet-name>Log4jInit</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.init.Log4jInit</servlet-class>
-		<init-param>
-			<param-name>log4j-init-file</param-name>
-			<param-value>/WEB-INF/classes/log4j.properties</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet>
-		<servlet-name>PropertiesConfig</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig</servlet-class>
-		<init-param>
-			<param-name>config-file</param-name>
-			<param-value>/WEB-INF/classes/config.properties</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-
-	<servlet>
-		<servlet-name>DbPoolUtil</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.util.DbPoolUtil</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
-
-	<servlet>
-		<servlet-name>CacheInit</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.init.CacheInit</servlet-class>
-		<init-param>
-			<param-name>ehcache-file</param-name>
-			<param-value>/WEB-INF/classes/ehcache.xml</param-value>
-		</init-param>
-		<load-on-startup>4</load-on-startup>
-	</servlet>
-
-
-
-
-	<servlet>
-		<servlet-name>StudentReportCard</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StudentReportCard</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>ClassRankingList</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.ClassRankingList</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>StudentReportCard</servlet-name>
-		<url-pattern>/school/studentReportCard</url-pattern> 
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>ClassRankingList</servlet-name>
-		<url-pattern>/school/classRankingList</url-pattern> 
-	</servlet-mapping>
-	
-	
-	
-	<servlet>
-		<servlet-name>SchoolLogin</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogin</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>SchoolLogin</servlet-name>
-		<url-pattern>/schoolLogin</url-pattern> 
-	</servlet-mapping>
-
-
-
-
-
-
-	<error-page>
-		<error-code>404</error-code>
-		<location>/404.jsp</location>
-	</error-page>
-
-	<error-page>
-		<error-code>500</error-code>
-		<location>/500.jsp</location>
-	</error-page>
-
-
-
-	<session-config>
-		<session-timeout>500</session-timeout>
-	</session-config>
-
-
-
-
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <servlet>
+    <servlet-name>Log4jInit</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.init.Log4jInit</servlet-class>
+    <init-param>
+      <param-name>log4j-init-file</param-name>
+      <param-value>/WEB-INF/classes/log4j.properties</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>PropertiesConfig</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig</servlet-class>
+    <init-param>
+      <param-name>config-file</param-name>
+      <param-value>/WEB-INF/classes/config.properties</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>DbPoolUtil</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.util.DbPoolUtil</servlet-class>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>CacheInit</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.init.CacheInit</servlet-class>
+    <init-param>
+      <param-name>ehcache-file</param-name>
+      <param-value>/WEB-INF/classes/ehcache.xml</param-value>
+    </init-param>
+    <load-on-startup>4</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>StudentReportCard</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StudentReportCard</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ClassRankingList</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.ClassRankingList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudentReportCard</servlet-name>
+    <url-pattern>/school/studentReportCard</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClassRankingList</servlet-name>
+    <url-pattern>/school/classRankingList</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SchoolLogin</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SchoolLogin</servlet-name>
+    <url-pattern>/schoolLogin</url-pattern>
+  </servlet-mapping>
+ <!--  <error-page>
+    <error-code>404</error-code>
+    <location>/404.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/500.jsp</location>
+  </error-page> -->
+  <session-config>
+    <session-timeout>500</session-timeout>
+  </session-config>
 </web-app>

@@ -70,14 +70,14 @@
                     <br />
                     
                     
-                    <form method="post" action="StudentReportCard" class="col-md-6 col-md-offset-3">
+                    <form  action="studentReportCard" class="col-md-6 col-md-offset-3" method="get" target="_blank">
                     
                     <h2>HIDE:</h2>
 
 							<div class="row">
 											
 											<div>
-												<input type="radio" id="points" name="p" value="1" checked>
+												<input type="radio" id="points" name="p" value="hp" checked>
 												<label for="points">
 													<h3>Points</h3>
 													<p>Hide points i.e 12, 11, 10, 9, ...</p>
@@ -85,7 +85,7 @@
 											</div>
 											
 											<div class="">
-												<input type="radio" id="grades" name="g" value="1"
+												<input type="radio" id="grades" name="g" value="hg"
 													> <label for="grades">
 													<h3>Grades</h3>
 													<p>Hide grades i.e A, B, C, D, E, F..</p>
@@ -101,7 +101,7 @@
 
 						<div class="row">
 										<div>
-											<input type="radio" id="fee" name="fee" value="1" checked>
+											<input type="checkbox" id="fee" name="fee" value="1" checked>
 											<label for="fee">
 												<h3>FEE</h3>
 												<p>Show school fees info i.e balances</p>
@@ -116,14 +116,14 @@
 
 						<div class="row">
 										<div>
-											<input type="radio" id="pointsrank" name="rank" value="1" checked>
+											<input type="radio" id="pointsrank" name="rank" value="points" checked>
 											<label for="pointsrank">
 												<h3>Points</h3>
 												<p>Rank with points</p>
 											</label>
 										</div>
 										<div>
-											<input type="radio" id="gradesrank"  name="rank" value="1"
+											<input type="radio" id="gradesrank"  name="rank" value="marks"
 												> <label for="gradesrank">
 												<h3>Marks</h3>
 												<p>Rank with total marks</p>
@@ -137,14 +137,14 @@
 
 						<div class="row">
 										<div>
-											<input type="radio" id="7sub" name="subjects" value="1" checked>
+											<input type="radio" id="7sub" name="subjects" value="seven" checked>
 											<label for="7sub">
 												<h3>7 Subjects</h3>
 												<p>Grade 7 subjects</p>
 											</label>
 										</div>
 										<div>
-											<input type="radio" id="11sub" name="subjects" value="1"
+											<input type="radio" id="11sub" name="subjects" value="eleven"
 												> <label for="11sub">
 												<h3>11 Subjects</h3>
 												<p>Garde 11 subjects</p>
@@ -161,7 +161,7 @@
 							<div class="row">
 								<div class="col-md-4">
 								<button class="btn btn-primary">Back</button>
-								<button class="btn btn-primary">Reset</button>
+								<button type="reset" class="btn btn-primary">Reset</button>
 								</div>
 								
 								
