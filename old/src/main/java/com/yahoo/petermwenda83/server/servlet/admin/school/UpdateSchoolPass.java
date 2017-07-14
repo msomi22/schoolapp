@@ -78,7 +78,7 @@ public class UpdateSchoolPass extends HttpServlet{
         }else if(!StringUtils.equals(confirmpassword, newpassowrd)){
      	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_UPDATE_ERROR, PASS_MISMATCH); 
      	   
-        }else if(accountDAO.getSchool(schooluuid, SecurityUtil.getMD5Hash(oldpassword)) == null){
+        }else if(accountDAO.getAccountByPassword(schooluuid, SecurityUtil.getMD5Hash(oldpassword)) == null){
       	   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_UPDATE_ERROR, INCORRECT_OLD_PASS); 
      	   
          }else{
@@ -87,7 +87,7 @@ public class UpdateSchoolPass extends HttpServlet{
         	 Account account =  accountDAO.getAccountById(schooluuid); 
         	 account.setPassword(SecurityUtil.getMD5Hash(newpassowrd)); 
         	 updateSchoolCache(account);
-  		       if(accountDAO.update(account) ){ 
+  		       if(accountDAO.updateAccount(account) ){ 
   			    session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_UPDATE_SUCCESS, UPDATE_SUCSESS); 
   			  
   		      }else{

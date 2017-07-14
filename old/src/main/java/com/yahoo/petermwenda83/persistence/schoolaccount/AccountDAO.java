@@ -119,7 +119,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getSchool(com.yahoo.petermwenda83.bean.account.Account)
 	 */
 	@Override
-	public Account getSchool(String Uuid,String password) {
+	public Account getAccountByPassword(String Uuid,String password) {
 		Account school = null;
 		ResultSet rset = null;
 		try(
@@ -147,7 +147,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#put(com.yahoo.petermwenda83.bean.account.Account)
 	 */
-	public boolean put(Account school) {
+	public boolean putAccount(Account school) {
 		boolean success = true; 
 
 		try(   Connection conn = dbutils.getConnection();
@@ -182,7 +182,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#update(com.yahoo.petermwenda83.bean.account.Account)
 	 */
 
-	public boolean update(Account school) {
+	public boolean updateAccount(Account school) {
 		boolean success = true; 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE Account SET SchoolName =?,Username =?,Password =?,"
@@ -214,7 +214,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#delete(com.yahoo.petermwenda83.bean.account.Account)
 	 */
 	@Override
-	public boolean delete(Account school) {
+	public boolean deleteAccount(String uuid) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -222,7 +222,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getAllSchools()
 	 */
-	public List<Account> getAllSchools() {
+	public List<Account> getAccounts() {
 		List<Account> list =new  ArrayList<>(); 
 		try(   
 				Connection conn = dbutils.getConnection();

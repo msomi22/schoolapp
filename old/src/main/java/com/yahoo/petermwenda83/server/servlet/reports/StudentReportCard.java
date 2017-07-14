@@ -81,16 +81,19 @@ public class StudentReportCard extends HttpServlet{
 
 	private Logger logger;
 
-	private static final String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" };//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
+	private static final String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 
 	// , "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A", "16C4BF00-941C-40E4-9891-272D5F0979A1" 
 
 
 	private boolean hidePoints = false;
 	private boolean hideGrade = false;
+	
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
+	
 	private boolean showFeeInfo = false;
+	
 	private boolean grade7subjects = true;
 	private boolean grade11subjects = false;
 

@@ -30,30 +30,31 @@ public interface SchoolAccountDAO {
 	 * @param school
 	 * @return
 	 */
-	public Account getSchool(String uuid,String password);
+	public Account getAccountByPassword(String uuid,String password);
 	/**
 	 * 
 	 * @param school
 	 * @return whether Account has been added successfully
 	 */
-    public boolean put(Account school);
+    public boolean putAccount(Account account);
     /**
      * 
      * @param school
      * @return whether Account has been updated successfully
      */
-    public boolean update(Account school);
-    /**
-     * 
-     * @param school
-     * @return whether Account has been deleted successfully
-     */
-    public boolean delete(Account school);
+    public boolean updateAccount(Account account);
+   /**
+    * 
+    * @param uuid
+    * @return
+    */
+   
+    public boolean deleteAccount(String uuid);
     /**
      * 
      * @return List of all schools 
      */
-    public List<Account> getAllSchools();
+    public List<Account> getAccounts();
     
     
 

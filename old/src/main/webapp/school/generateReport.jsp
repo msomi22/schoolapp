@@ -23,6 +23,14 @@
    
 %>
 <jsp:include page="header.jsp" />
+  <!-- Custom report style -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,700'>
+<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="css/customReportStyle.css">
+
+
 
 
         <!-- page content -->
@@ -51,7 +59,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Select an Exam below<small> Click Generate when done</small></h2>
+                    <h2>Customize Exam Report display<small> Click Generate when done</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>                      
@@ -60,132 +68,117 @@
                   </div>
                   <div class="x_content">
                     <br />
+                    
+                    
+                    <form method="post" action="StudentReportCard" class="col-md-6 col-md-offset-3">
+                    
+                    <h2>HIDE:</h2>
 
-                    <form class="form-horizontal form-label-left">
-
-
-                      <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Check 1
-                          <br>
-                          <small class="text-navy">11</small>
-                        </label>
-
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" value=""> Option 1
-                            </label>
-                          </div>
-
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" value=""> 11
-                            </label>
-                          </div>
-
-                          <div class="radio">
-                            <label>
-                              <input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios"> Option 2
-                            </label>
-                          </div>
-
-                          <div class="radio">
-                            <label>
-                              <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios"> 22
-                            </label>
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Check2
-                          <br>
-                          <small class="text-navy">22</small>
-                        </label>
-
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" class="flat" checked="checked"> Checked
-                            </label>
-                          </div>
-
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" class="flat"> Unchecked
-                            </label>
-                          </div>
-                          
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" class="flat" disabled="disabled" checked="checked"> Disabled & checked
-                            </label>
-                          </div>
-
-                          <div class="radio">
-                            <label>
-                              <input type="radio" class="flat" checked name="iCheck"> Checked
-                            </label>
-                          </div>
-
-                          <div class="radio">
-                            <label>
-                              <input type="radio" class="flat" name="iCheck"> Unchecked
-                            </label>
-                          </div>
-
-                          <div class="radio">
-                            <label>
-                              <input type="radio" class="flat" name="iCheck3" disabled="disabled" checked> Disabled & Checked
-                            </label>
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Switch</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <div class="">
-                            <label>
-                              <input type="checkbox" class="js-switch" checked /> Checked
-                            </label>
-                          </div>
-
-                          <div class="">
-                            <label>
-                              <input type="checkbox" class="js-switch" /> Unchecked
-                            </label>
-                          </div>
-
-                          <div class="">
-                            <label>
-                              <input type="checkbox" class="js-switch" disabled="disabled" /> Disabled
-                            </label>
-                          </div>
-
-                          <div class="">
-                            <label>
-                              <input type="checkbox" class="js-switch" disabled="disabled" checked="checked" /> Disabled Checked
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+							<div class="row">
+											
+											<div>
+												<input type="radio" id="points" name="p" value="1" checked>
+												<label for="points">
+													<h3>Points</h3>
+													<p>Hide points i.e 12, 11, 10, 9, ...</p>
+												</label>
+											</div>
+											
+											<div class="">
+												<input type="radio" id="grades" name="g" value="1"
+													> <label for="grades">
+													<h3>Grades</h3>
+													<p>Hide grades i.e A, B, C, D, E, F..</p>
+												</label>
+											</div>
 
 
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button type="button" class="btn btn-primary">Back</button>
-                          <button type="reset" class="btn btn-primary">Reset</button>
-                          <button type="submit" class="btn btn-success">Generate</button>
-                        </div>
-                      </div>
+										</div>
+										
+										
+										
+											<h1>Show Fee INFO:</h1>
 
-                    </form>
-                  </div>
+						<div class="row">
+										<div>
+											<input type="radio" id="fee" name="fee" value="1" checked>
+											<label for="fee">
+												<h3>FEE</h3>
+												<p>Show school fees info i.e balances</p>
+											</label>
+										</div>
+										
+							</div>
+										
+										
+									
+					<h1>RANK:</h1>
+
+						<div class="row">
+										<div>
+											<input type="radio" id="pointsrank" name="rank" value="1" checked>
+											<label for="pointsrank">
+												<h3>Points</h3>
+												<p>Rank with points</p>
+											</label>
+										</div>
+										<div>
+											<input type="radio" id="gradesrank"  name="rank" value="1"
+												> <label for="gradesrank">
+												<h3>Marks</h3>
+												<p>Rank with total marks</p>
+											</label>
+										</div>
+										
+							</div>
+							
+							
+							<h1>No_ of Subjects:</h1>
+
+						<div class="row">
+										<div>
+											<input type="radio" id="7sub" name="subjects" value="1" checked>
+											<label for="7sub">
+												<h3>7 Subjects</h3>
+												<p>Grade 7 subjects</p>
+											</label>
+										</div>
+										<div>
+											<input type="radio" id="11sub" name="subjects" value="1"
+												> <label for="11sub">
+												<h3>11 Subjects</h3>
+												<p>Garde 11 subjects</p>
+											</label>
+										</div>
+										
+							</div>
+							
+							
+						
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-4">
+								<button class="btn btn-primary">Back</button>
+								<button class="btn btn-primary">Reset</button>
+								</div>
+								
+								
+								
+								<div class="col-md-2 pull-right">
+								<button type="submit" class="btn btn-lg btn-success">Generate</button>
+								</div>
+							
+							
+							</div>
+							
+							
+							</form>
+							
+										
+
+									</div><!-- ./content -->
                 </div>
               </div>
 
@@ -198,6 +191,11 @@
             </div>
           </div>
         </div>
+        
+        
+       
+        
+        
         <!-- /page content -->
 
         <!-- footer -->

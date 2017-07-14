@@ -88,7 +88,7 @@ public class TestAccountDAO {
 		s.setPassword(PASSWORD_NEW);
 		s.setMobile(MOBILE_NEW);
 		s.setEmail(EMAIL_NEW);
-		assertTrue(store.put(s));
+		assertTrue(store.putAccount(s));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class TestAccountDAO {
 		s.setPassword(PASSWORD_UPDATE);
 		s.setMobile(MOBILE_UPDATE);
 		s.setEmail(EMAIL_UPDATE);
-		assertTrue(store.update(s)); 
+		assertTrue(store.updateAccount(s)); 
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class TestAccountDAO {
 	@Test
 	public void testGetAllSchools() {
 		store = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		List<Account> list = store.getAllSchools();	
+		List<Account> list = store.getAccounts();	
 		for (Account ss : list) {
 			System.out.println(ss);
 		}

@@ -29,6 +29,10 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static StudentDAO getInstance(){
 
 		if(studentDAO == null){

@@ -89,7 +89,7 @@ public class CacheInit extends HttpServlet {
 
         List<? extends StorableBean> objList;
 
-        objList = accountDAO.getAllSchools();
+        objList = accountDAO.getAccounts();
         initCacheByUuid(CacheVariables.CACHE_ACCOUNTS_BY_UUID, objList);
        
 
@@ -151,7 +151,7 @@ public class CacheInit extends HttpServlet {
                 accountsCache.initialise();
             }
 
-            List<Account> allAccounts = accountDAO.getAllSchools();
+            List<Account> allAccounts = accountDAO.getAccounts();
 
             if (StringUtils.equals(cacheName, CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME)) {
                 for (Account a : allAccounts) {

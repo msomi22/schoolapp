@@ -34,6 +34,9 @@
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
     
+    
+  
+    
     <link rel="icon" href="images/favicon.ico">
   </head>
 

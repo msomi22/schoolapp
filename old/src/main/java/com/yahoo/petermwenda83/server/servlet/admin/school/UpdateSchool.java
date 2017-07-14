@@ -128,7 +128,7 @@ public class UpdateSchool extends HttpServlet{
 		 
 		   account.setTown(schoolhometown); 
 		   
-		   if(accountDAO.update(account) ){ 
+		   if(accountDAO.updateAccount(account) ){ 
 			   session.setAttribute(AdminSessionConstants.SCHOOL_ACCOUNT_UPDATE_SUCCESS, SCHOOL_UPDATE_SUCCESS); 
 			   session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, schoolusername);
 			   updateSchoolCache(account);

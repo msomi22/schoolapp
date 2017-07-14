@@ -190,7 +190,7 @@ public class AddSchool extends HttpServlet{
     	   
     	   String [] defaultStream = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N"};
     	   
-		   if(accountDAO.put(account)  && gradingSystemDAO.putGradingSystem(gradingSystem)){	
+		   if(accountDAO.putAccount(account)  && gradingSystemDAO.putGradingSystem(gradingSystem)){	
 			   
 			   for(int i=0;i<defaultStream.length;i++){
 	    		   Stream stream = new Stream();

@@ -46,12 +46,12 @@ public class SchoolQuartzJob implements Job{
 		final String STATUS_INACTIVE = "0";
 		
 		List<Account> schoolList = new ArrayList<>();
-		schoolList = accountDAO.getAllSchools();
+		schoolList = accountDAO.getAccounts();
 		for(Account sch : schoolList){
 			sch.setIsActive(STATUS_INACTIVE);  
 			//sch.setUsername("school"); 
 			sch.setPassword("password"); 
-			accountDAO.update(sch);
+			accountDAO.updateAccount(sch);
 			updateSchoolCache(sch);
 			System.out.println("done!");
 		}
