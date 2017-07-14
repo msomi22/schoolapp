@@ -1,7 +1,9 @@
 
--- Schema Name: d6l0ccnbbetr9g
--- Username: egjqodfyxbbzgy
--- Password: 0fa6232252602b5ac8fd05dd232d16b30c672c8559eaea01e778be73e72c628b
+--Host: ec2-23-23-244-83.compute-1.amazonaws.com
+--Database: drd8nk893pomd
+--User:tlpsjpofgdqsxt
+--Port:5432
+--Password:5da2c51153aa1e81afd7f9cb196ac665eff0b70851b7e6c2f46a274496ee0f3b
 
 -- These tables describe the database a School Management system
 
@@ -14,11 +16,11 @@
 --\c postgres
 
 -- Then execute the following:
-DROP DATABASE IF EXISTS d6l0ccnbbetr9g; -- To drop a database you can't be logged into it. Drops if it exists.
-CREATE DATABASE d6l0ccnbbetr9g;
+--DROP DATABASE IF EXISTS drd8nk893pomd; -- To drop a database you can't be logged into it. Drops if it exists.
+--CREATE DATABASE drd8nk893pomd;
 
 -- Connect with the database on the username
-\c d6l0ccnbbetr9g egjqodfyxbbzgy
+\c drd8nk893pomd tlpsjpofgdqsxt
 
 
 
@@ -52,7 +54,7 @@ CREATE TABLE  Account (
 
 );
 --\COPY Account(uuid,isActive,name,motto,website,logo,signature,username,password,mobile,email,address,town,isBoarding,isMixed,lastUpdated) FROM '/tmp/Account.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Account OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Account OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -73,7 +75,7 @@ CREATE TABLE  outGoingSMS (
     sendDate timestamp with time zone DEFAULT now()
 );
 --\COPY outGoingSMS(uuid,accountId,status,mobile,message,smsCost) FROM '/tmp/outGoingSMS.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE outGoingSMS OWNER TO egjqodfyxbbzgy;
+ALTER TABLE outGoingSMS OWNER TO tlpsjpofgdqsxt;
 
 -- -------------------
 -- Table smsApi
@@ -88,7 +90,7 @@ CREATE TABLE  smsApi (
  
 );
 --\COPY smsApi(uuid,accountId,apiKey,apiPassword) FROM '/tmp/smsApi.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE smsApi OWNER TO egjqodfyxbbzgy;
+ALTER TABLE smsApi OWNER TO tlpsjpofgdqsxt;
 
 
 -- =========================
@@ -108,7 +110,7 @@ CREATE TABLE Category (
 );
 -- import data from the CSV file for the status table
 --\COPY Category(uuid,accountId,description,maxNo) FROM '/tmp/Category.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Category OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Category OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -125,7 +127,7 @@ CREATE TABLE Subject (
 );
 -- import data from the CSV file for the status table
 --\COPY Subject(uuid,accountId,categoryId,code,numericCode,description) FROM '/tmp/Subject.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Subject OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Subject OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -141,7 +143,7 @@ CREATE TABLE subCategory (
 );
 -- import data from the CSV file for the status table
 --\COPY subCategory(uuid,accountId,categoryId,subjectId) FROM '/tmp/subCategory.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE subCategory OWNER TO egjqodfyxbbzgy;
+ALTER TABLE subCategory OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -162,7 +164,7 @@ CREATE TABLE classRoom (
 );
 -- import data from the CSV file for the status table
 --\COPY classRoom(uuid,accountId,description) FROM '/tmp/classRoom.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE classRoom OWNER TO egjqodfyxbbzgy;
+ALTER TABLE classRoom OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -178,7 +180,7 @@ CREATE TABLE Stream (
 );
 -- import data from the CSV file for the status table
 --\COPY Stream(uuid,accountId,classRoomId,description) FROM '/tmp/Stream.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Stream OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Stream OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -220,7 +222,7 @@ CREATE TABLE Student(
 );
 
 --\COPY Student(uuid,accountId,regStream,currentStream,isActive,isAlumni,isBoarding,regNo,firstname,middlename,lastname,gender,dob,bcertNo,county,regTerm,finalYear,finalTerm,passport,lastUpdated) FROM '/tmp/Student.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Student OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Student OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -237,7 +239,7 @@ CREATE TABLE StudentSubject (
 );
 
 --\COPY StudentSubject(uuid,accountId,studentId,subjectId) FROM '/tmp/StudentSubject.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentSubject OWNER TO egjqodfyxbbzgy;
+ALTER TABLE StudentSubject OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -257,7 +259,7 @@ CREATE TABLE StudentParent (
 
 );
 --\COPY StudentParent(uuid,accountId,studentId,name,mobile,email,lastUpdated) FROM '/tmp/StudentParent.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentParent OWNER TO egjqodfyxbbzgy;
+ALTER TABLE StudentParent OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -269,13 +271,13 @@ CREATE TABLE StudentPrimary (
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES Student(uuid),
-    egjqodfyxbbzgyName text,
+    tlpsjpofgdqsxtName text,
     index text,
     kcpeYear text ,
     kcpeMark text
 );
----\COPY StudentPrimary(uuid,accountId,studentId,egjqodfyxbbzgyName,index,kcpeYear,kcpeMark) FROM '/tmp/StudentPrimary.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentPrimary OWNER TO egjqodfyxbbzgy;
+---\COPY StudentPrimary(uuid,accountId,studentId,tlpsjpofgdqsxtName,index,kcpeYear,kcpeMark) FROM '/tmp/StudentPrimary.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE StudentPrimary OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -295,7 +297,7 @@ CREATE TABLE AcessLevel (
     description text
 );
 --\COPY AcessLevel(uuid,accountId,description) FROM '/tmp/AcessLevel.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE AcessLevel OWNER TO egjqodfyxbbzgy;
+ALTER TABLE AcessLevel OWNER TO tlpsjpofgdqsxt;
 
 INSERT INTO AcessLevel (uuid,description) VALUES 
   ('C3915245-00EE-4EF4-9898-ACE59683DD60','Principal'),
@@ -330,7 +332,7 @@ CREATE TABLE Staff (
     regDate timestamp with time zone DEFAULT now()
 );
 --\COPY Staff(uuid,accountId,acessLevelId,staffNo,isActive,firstname,middlename,lastname,gender,mobile,email,username,password,lastUpdated) FROM '/tmp/Staff.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Staff OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Staff OWNER TO tlpsjpofgdqsxt;
 
 -- -------------------
 -- Table TeacherSubject
@@ -347,7 +349,7 @@ CREATE TABLE TeacherSubject (
    
 );
 --\COPY TeacherSubject(uuid,accountId,teacherId,subjectId,streamId) FROM '/tmp/TeacherSubject.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE TeacherSubject OWNER TO egjqodfyxbbzgy;
+ALTER TABLE TeacherSubject OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -364,7 +366,7 @@ CREATE TABLE ClassTeacher (
    
 );
 --\COPY ClassTeacher(uuid,accountId,teacherId,streamId) FROM '/tmp/ClassTeacher.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE ClassTeacher OWNER TO egjqodfyxbbzgy;
+ALTER TABLE ClassTeacher OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -393,7 +395,7 @@ ALTER TABLE ClassTeacher OWNER TO egjqodfyxbbzgy;
 
 -- import data from the CSV file for the Accounts table
 --\COPY Exam(uuid,accountId,code,description,outOf) FROM '/tmp/Exam.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Exam OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Exam OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -417,7 +419,7 @@ ALTER TABLE Exam OWNER TO egjqodfyxbbzgy;
 
 -- import data from the CSV file for the Accounts table
 --\COPY Perfomance(accountId,studentId,subjectId,streamId,classRoomId,examId,score,term,year) FROM '/tmp/Perfomance.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Perfomance OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Perfomance OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -438,7 +440,7 @@ ALTER TABLE Perfomance OWNER TO egjqodfyxbbzgy;
 
 -- import data from the CSV file for the GradingSystem table
 --\COPY GradingSystem(uuid,accountId,categoryId,lowerLimit,upperLimit,description,points) FROM '/tmp/GradingSystem.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE GradingSystem OWNER TO egjqodfyxbbzgy;
+ALTER TABLE GradingSystem OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -458,7 +460,7 @@ ALTER TABLE GradingSystem OWNER TO egjqodfyxbbzgy;
 
 -- import data from the CSV file for the sysConfig table
 --\COPY sysConfig(uuid,accountId,examId,term,year,cansendSMS) FROM '/tmp/sysConfig.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE sysConfig OWNER TO egjqodfyxbbzgy;
+ALTER TABLE sysConfig OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -481,7 +483,7 @@ ALTER TABLE sysConfig OWNER TO egjqodfyxbbzgy;
 
 -- import data from the CSV file for the BarWeight table
 --\COPY BarWeight(uuid,accountId,studentId,year,meanOne,meanTwo,meanhree) FROM '/tmp/BarWeight.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE BarWeight OWNER TO egjqodfyxbbzgy;
+ALTER TABLE BarWeight OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -502,7 +504,7 @@ ALTER TABLE BarWeight OWNER TO egjqodfyxbbzgy;
   
 );
 -- import data from the CSV file for the Accounts table
-ALTER TABLE Deviation OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Deviation OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -527,7 +529,7 @@ CREATE TABLE PocketMoney (
 
 );
 --\COPY PocketMoney(uuid,accountId,studentId,amount) FROM '/tmp/PocketMoney.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE PocketMoney OWNER TO egjqodfyxbbzgy;
+ALTER TABLE PocketMoney OWNER TO tlpsjpofgdqsxt;
 
 -- -------------------
 -- Table Deposit
@@ -542,7 +544,7 @@ CREATE TABLE Deposit (
     depositDate timestamp with time zone DEFAULT now()
 );
 --\COPY Deposit(uuid,accountId,studentId,amount) FROM '/tmp/Deposit.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Deposit OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Deposit OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -558,7 +560,7 @@ CREATE TABLE  Withdraw (
     withdrawDate timestamp with time zone DEFAULT now()
 );
 --\COPY Withdraw(uuid,accountId,studentId,amount) FROM '/tmp/Withdraw.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Withdraw OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Withdraw OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -576,7 +578,7 @@ CREATE TABLE  TermFee (
   
 );
 --\COPY TermFee(uuid,accountId,boaderAmount,dayAmount,term,year) FROM '/tmp/TermFee.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE TermFee OWNER TO egjqodfyxbbzgy;
+ALTER TABLE TermFee OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -595,7 +597,7 @@ CREATE TABLE  OtherFee (
   
 );
 --\COPY OtherFee(uuid,accountId,description,amount,term,year) FROM '/tmp/OtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE OtherFee OWNER TO egjqodfyxbbzgy;
+ALTER TABLE OtherFee OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -616,7 +618,7 @@ CREATE TABLE  StudentOtherFee (
   
 );
 --\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,amountPiad,payMode) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentOtherFee OWNER TO egjqodfyxbbzgy;
+ALTER TABLE StudentOtherFee OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -636,7 +638,7 @@ CREATE TABLE  RevertedMoney (
 
 );
 --\COPY RevertedMoney(uuid,accountId,studentId,otherFeeId) FROM '/tmp/RevertedMoney.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE RevertedMoney OWNER TO egjqodfyxbbzgy;
+ALTER TABLE RevertedMoney OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -657,7 +659,7 @@ CREATE TABLE  StudentFee (
    
 );
 --\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentFee OWNER TO egjqodfyxbbzgy;
+ALTER TABLE StudentFee OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -678,7 +680,7 @@ CREATE TABLE  Suspense (
     datePaid timestamp with time zone DEFAULT now()
  
 );
-ALTER TABLE Suspense OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Suspense OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -708,7 +710,7 @@ CREATE TABLE  Book (
 
 );
 --\COPY Book(uuid,accountId,isbn,author,publisher,title,isAvailable,category) FROM '/tmp/Book.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Book OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Book OWNER TO tlpsjpofgdqsxt;
 
 
 -- -------------------
@@ -727,7 +729,7 @@ CREATE TABLE  StudentBook (
     
 );
 --\COPY StudentBook(uuid,accountId,studentId,bookId,hasReturned,returnDate) FROM '/tmp/StudentBook.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE StudentBook OWNER TO egjqodfyxbbzgy;
+ALTER TABLE StudentBook OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -748,7 +750,7 @@ CREATE TABLE Miscellanous (
 );
 -- import data from the CSV file for the Miscellanous CSV file
 --\COPY Miscellanous(uuid,accountId,key,value) FROM '/tmp/Miscellanous.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Miscellanous OWNER TO egjqodfyxbbzgy;
+ALTER TABLE Miscellanous OWNER TO tlpsjpofgdqsxt;
 
 
 
@@ -770,6 +772,6 @@ CREATE TABLE chat (
     dateSent timestamp with time zone DEFAULT now()
 
 );
-ALTER TABLE chat OWNER TO egjqodfyxbbzgy;
+ALTER TABLE chat OWNER TO tlpsjpofgdqsxt;
 
 

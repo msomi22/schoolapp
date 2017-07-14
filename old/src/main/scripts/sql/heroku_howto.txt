@@ -14,3 +14,16 @@
 **echo "select * from AcessLevel;" | heroku pg:psql --app protected-sea-95110
 
 **heroku pg:psql --app protected-sea-95110 < test.sql
+
+
+get api key
+
+HEROKU_KEY = heroku auth:token (43fb8e38-a9a3-4125-b2f0-a1914e0723e0)
+
+
+
+view logs
+
+(rocky-tor-54754  is app name)
+
+heroku logs -t --app rocky-tor-54754 
