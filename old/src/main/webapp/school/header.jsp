@@ -77,7 +77,6 @@
                   <li><a><i class="fa fa-edit"></i> Academics <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="generateReport.jsp">Exam Reports</a></li>
-                      <li><a href="#">Exam Reports</a></li>
                       <li><a href="#">Subjects</a></li>
                       <li><a href="#">Streams/Classes</a></li>
                     </ul>
@@ -85,7 +84,7 @@
                   
                   <li><a><i class="fa fa-desktop"></i> Staff <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="#">Staff</a></li>
+                      <li><a href="staff.jsp">Staff</a></li>
                       <li><a href="#">Class Teachers</a></li>
                     </ul>
                   </li>
