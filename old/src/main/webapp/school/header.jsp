@@ -70,11 +70,11 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="#">Students</a></li>
+                      <li><a href="#">Students</a></li> 
                     </ul>
                   </li>
                   
-                  <li><a><i class="fa fa-edit"></i> Academics <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-book"></i> Academics <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="generateReport.jsp">Exam Reports</a></li>
                       <li><a href="#">Subjects</a></li>
@@ -82,17 +82,24 @@
                     </ul>
                   </li>
                   
-                  <li><a><i class="fa fa-desktop"></i> Staff <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-users"></i> Staff <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="staff.jsp">Staff</a></li>
                       <li><a href="#">Class Teachers</a></li>
                     </ul>
                   </li>
                   
-                  <li><a><i class="fa fa-table"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-cog"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="exam.jsp">Exam</a></li>
                       <li><a href="settings.jsp">Settings</a></li> 
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-money"></i> Finance <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Fee</a></li>
+                      <li><a href="#">Pocket Money</a></li> 
                     </ul>
                   </li>
                   
