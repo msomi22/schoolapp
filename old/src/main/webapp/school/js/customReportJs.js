@@ -1,7 +1,12 @@
 $("#exam").change(function () {
       if($("#exam option:selected").length > 3 ) {
-          alert('At least one exam and not more than three exams are allowed');
+         
+    	  $('#examWarning').modal('show');
           
+    	 /* setTimeout(function(){
+    		  $('#examWarning').modal('hide');
+    	  }, 4000);*/
+    	  
           $("#exam").focus();
           $("#exam").val("");
       }

@@ -253,6 +253,27 @@
 							</div>
 							
 							
+							<h2>Type of Report:</h2>
+
+						<div class="row">
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="reportcard" name="reportcard" value="reportcard" checked>
+											<label for="reportcard">
+												<h6>Report Card</h6>
+												
+											</label>
+										</div >
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="ranklist" name="reportcard" value="ranklist"
+												> <label for="ranklist">
+												<h6>Rank List</h6>
+												
+											</label>
+										</div>
+										
+							</div>
+							
+							
 						
 							
 							<br>
@@ -296,6 +317,8 @@
         
         
         <!-- /page content -->
+        <!-- State Modal -->
+        <jsp:include page="modals/statemodals.html" />
 
         <!-- footer -->
         
