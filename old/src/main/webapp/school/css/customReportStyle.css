@@ -35,7 +35,13 @@ label {
 
 input[type="radio"]:checked + label {
   background: #1ABB9C;
+ 
   color: white;
+}
+
+.formelement{
+	border: 1px solid #1ABB9C;
+	  box-shadow: 0px 3px 10px -2px rgba(161, 170, 166, 0.5);
 }
 input[type="radio"]:checked + label::after {
   color: #3d3f43;
@@ -47,9 +53,9 @@ input[type="radio"]:checked + label::after {
   top: -25px;
   left: 50%;
   transform: translateX(-50%);
-  height: 50px;
+  height: 34px;
   width: 50px;
-  line-height: 50px;
+  line-height:34px;
   text-align: center;
   border-radius: 50%;
   background: white;

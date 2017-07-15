@@ -72,12 +72,82 @@
                     
                     <form  action="studentReportCard" class="col-md-6 col-md-offset-3" method="get" target="_blank">
                     
+                   
+                    <div class="row">
+                    
+                    <div class="col-md-6 col-md-offset-3">
+                    
+                    <h2>Exam</h2>
+                    
+                    <select id="exam" class="form-control formelement" multiple>
+                    
+                    <option>CAT 1</option>
+                    <option>CAT 2</option>
+                    <option>MID-TERM</option>
+                    <option>END-TERM</option>
+                    <option>Math's Contest</option>
+                    <option>Easy challenge</option>
+                    
+                    </select>
+                    
+                    </div>
+                    
+                    
+                    
+                    </div>
+                    
+                    
+                    
+                    <div class="row">
+                     
+                    <div class="col-md-5 col-md-offset-1">
+                    <h2>Class</h2>
+                    
+                    
+   
+                    <select class= "form-control formelement" >
+                    
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    
+                    </select>
+                    
+                    
+                    
+                    </div>
+                    
+                    
+                    <div class="col-md-5 col-md-offset-1">
+                    
+                    <h2>Stream</h2>
+                    
+                    <select class= "form-control formelement"  >
+                    
+                    <option>1 s</option>
+                    <option>1 Q</option>
+                    <option>1 R</option>
+                    <option>1 T</option>
+                    <option>2 s</option>
+                    <option>2 Q</option>
+                    <option>2 R</option>
+                    <option>2 T</option>
+                    
+                    
+                    </select>
+                    
+                    </div>
+                    
+                    
+                    </div>
+                    
                     <h2>HIDE Points:</h2>
 
 							<div class="row">
 											
 											<div class="col-md-5 col-md-offset-1">
-												<input type="radio" id="pointshide" name="p" value="true" checked>
+												<input type="radio" id="pointshide" class="form-control" name="p" value="true" checked>
 												<label for="pointshide">
 													<h6>Yes</h6>
 													
@@ -228,5 +298,9 @@
         <!-- /page content -->
 
         <!-- footer -->
+        
+       
 <jsp:include page="footer.jsp" />
+
+ <script src="js/customReportJs.js"></script>
         
