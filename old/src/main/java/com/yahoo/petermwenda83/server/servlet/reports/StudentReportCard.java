@@ -130,7 +130,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @throws ServletException,
 	 *             IOException
 	 */
-	//@Override
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -144,6 +144,13 @@ public class StudentReportCard extends HttpServlet{
 
 		logger.info("******************************************************************"); 
 		logger.info("accountId " + accountId); 
+		
+		
+		
+		logger.info("HidePts " + hidePoints); 
+		logger.info("HideGds " + hideGrade); 
+		logger.info("Fee " + showFeeInfo); 
+		logger.info("Subjects " + grade7subjects); 
 
 
 		String fileName = "file.pdf"; 
@@ -1030,42 +1037,50 @@ public class StudentReportCard extends HttpServlet{
 	 * @throws ServletException,
 	 *             IOException
 	 */
-	//@Override
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		/**
 		 * get the params to customize the report display
 		 */
-		String hidePts="";
-		String hideGds ="";
+		boolean hidePts=false,hideGds=false;
 		
-		hidePts = request.getParameter("p");
-		hideGds= request.getParameter("g");
+		hidePts = Boolean.parseBoolean(request.getParameter("p"));
+		hideGds= Boolean.parseBoolean(request.getParameter("g"));
 		
 		String rank = request.getParameter("rank");
 	
-		String showfee = request.getParameter("fee");
+		Boolean showfee = Boolean.parseBoolean(request.getParameter("fee"));
 		
 		String noOfSub = request.getParameter("subjects");
 		
 		//check for hide points
-		if(!StringUtils.isEmpty(hidePts))
+		if(hidePts)
 			hidePoints= true;
+		else
+			hidePoints= false;
 		
 		//check for hide grades
-		if(!StringUtils.isEmpty(hideGds))
+		if(hideGds)
 			hideGrade= true;
+		else
+			hideGrade= false;
 		
 		//check for rank with points
 		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
 			rankWithPoints=true;
 			rankWithTotalMarks= false;
+		}else {
+			rankWithPoints=false;
+			rankWithTotalMarks= true;
 		}
 		
 		//check show fee
-		if(!StringUtils.isEmpty(showfee))
+		if(showfee)
 			showFeeInfo= true;
+		else
+			showFeeInfo= false;
 		
 		
 		//check for number of subjects to grade
@@ -1073,14 +1088,23 @@ public class StudentReportCard extends HttpServlet{
 		if(noOfSub == "eleven") {
 			grade7subjects= false;
 			grade11subjects= true;
+		}else {
+			grade7subjects= true;
+			grade11subjects= false;
 		}
 		
 		
-
-		logger.info("Hide " + hidePts); 
-		logger.info("Hide " + hideGds); 
-		logger.info("Fee " + showfee); 
-		logger.info("Subjects " + noOfSub); 
+		logger.info("HidePts submitted " + hidePts); 
+		logger.info("HideGds submitted" + hideGds); 
+		logger.info("Fee submitted" + showfee); 
+		logger.info("Subjects submitted " + noOfSub); 
+		
+		
+		
+		logger.info("HidePts " + hidePoints); 
+		logger.info("HideGds " + hideGrade); 
+		logger.info("Fee " + showFeeInfo); 
+		logger.info("Subjects " + grade7subjects); 
 			
 		doPost(request, response);
 	}

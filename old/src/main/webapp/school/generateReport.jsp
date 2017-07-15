@@ -72,23 +72,41 @@
                     
                     <form  action="studentReportCard" class="col-md-6 col-md-offset-3" method="get" target="_blank">
                     
-                    <h2>HIDE:</h2>
+                    <h2>HIDE Points:</h2>
 
 							<div class="row">
 											
-											<div>
-												<input type="radio" id="points" name="p" value="hp" checked>
-												<label for="points">
-													<h3>Points</h3>
-													<p>Hide points i.e 12, 11, 10, 9, ...</p>
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="pointshide" name="p" value="true" checked>
+												<label for="pointshide">
+													<h6>Yes</h6>
+													
 												</label>
 											</div>
 											
-											<div class="">
-												<input type="radio" id="grades" name="g" value="hg"
-													> <label for="grades">
-													<h3>Grades</h3>
-													<p>Hide grades i.e A, B, C, D, E, F..</p>
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="points" name="p" value="false">
+												<label for="points">
+													<h6>No</h6>
+													
+												</label>
+											</div>
+											
+							</div>
+							
+						 <h2>HIDE Grades:</h2>	
+							
+							<div class="row">
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="gradeshide" name="g" value="true"
+													checked> <label for="gradeshide">
+													<h6>YES</h6>
+												</label>
+											</div>
+											
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="grades" name="g" value="false"> <label for="grades">
+													<h6>NO</h6>
 												</label>
 											</div>
 
@@ -97,57 +115,68 @@
 										
 										
 										
-											<h1>Show Fee INFO:</h1>
+											<h2>Show Fee INFO:</h2>
 
 						<div class="row">
-										<div>
-											<input type="checkbox" id="fee" name="fee" value="1" checked>
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="fee" name="fee" value="true" checked>
 											<label for="fee">
-												<h3>FEE</h3>
-												<p>Show school fees info i.e balances</p>
+												<h6>YES</h6>
+											</label>
+										</div>
+										
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="feehidden" name="fee" value="false">
+											<label for="feehidden">
+												<h6>NO</h6>
 											</label>
 										</div>
 										
 							</div>
+							
+							
+										
+										
+						
 										
 										
 									
-					<h1>RANK:</h1>
+					<h2>RANK:</h2>
 
 						<div class="row">
-										<div>
+										<div class="col-md-5 col-md-offset-1" >
 											<input type="radio" id="pointsrank" name="rank" value="points" checked>
 											<label for="pointsrank">
-												<h3>Points</h3>
-												<p>Rank with points</p>
+												<h6>Rank with points</h6>
+												
 											</label>
 										</div>
-										<div>
+										<div class="col-md-5 col-md-offset-1">
 											<input type="radio" id="gradesrank"  name="rank" value="marks"
 												> <label for="gradesrank">
-												<h3>Marks</h3>
-												<p>Rank with total marks</p>
+												<h6>Rank with total marks</h6>
+												
 											</label>
 										</div>
 										
 							</div>
 							
 							
-							<h1>No_ of Subjects:</h1>
+							<h2>No_ of Subjects:</h2>
 
 						<div class="row">
-										<div>
+										<div class="col-md-5 col-md-offset-1">
 											<input type="radio" id="7sub" name="subjects" value="seven" checked>
 											<label for="7sub">
-												<h3>7 Subjects</h3>
-												<p>Grade 7 subjects</p>
+												<h6>Grade 7 subjects</h6>
+												
 											</label>
-										</div>
-										<div>
+										</div >
+										<div class="col-md-5 col-md-offset-1">
 											<input type="radio" id="11sub" name="subjects" value="eleven"
 												> <label for="11sub">
-												<h3>11 Subjects</h3>
-												<p>Garde 11 subjects</p>
+												<h6>Grade 11 subjects</h6>
+												
 											</label>
 										</div>
 										
