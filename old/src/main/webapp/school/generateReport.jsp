@@ -70,7 +70,7 @@
                     <br />
                     
                     
-                    <form  action="studentReportCard" class="col-md-6 col-md-offset-3" method="get" target="_blank">
+                    <form  action="studentReportCard" id="generateReport" class="col-md-6 col-md-offset-3" method="get" target="_blank">
                     
                    
                     <div class="row">
@@ -97,13 +97,35 @@
                     </div>
                     
                     
-                    
-                    <div class="row">
+                     <h2>Scope:</h2>
                      
+                     	<div class="row">
+											
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="class" class="form-control" name="scope" value="true" onclick="scopeSwap(this.id)" checked>
+												<label for="class">
+													<h6>Class</h6>
+													
+												</label>
+											</div>
+											
+											<div class="col-md-5 col-md-offset-1">
+												<input type="radio" id="stream" name="scope" value="stream" onclick="scopeSwap(this.id)">
+												<label for="stream">
+													<h6>Stream</h6>
+													
+												</label>
+											</div>
+											
+							</div>
+							
+							
+                    <div class="row" id="classScope">
+                    
                     <div class="col-md-5 col-md-offset-1">
+                    
+                    
                     <h2>Class</h2>
-                    
-                    
    
                     <select class= "form-control formelement" >
                     
@@ -117,6 +139,10 @@
                     
                     
                     </div>
+                    
+                    </div>
+                    
+                    <div class="row" id="streamScope" style="display:none">
                     
                     
                     <div class="col-md-5 col-md-offset-1">
@@ -257,14 +283,14 @@
 
 						<div class="row">
 										<div class="col-md-5 col-md-offset-1">
-											<input type="radio" id="reportcard" name="reportcard" value="reportcard" checked>
+											<input type="radio" id="reportcard" name="reportcard" onclick="redirect(this.id)" value="reportcard" checked>
 											<label for="reportcard">
 												<h6>Report Card</h6>
 												
 											</label>
 										</div >
 										<div class="col-md-5 col-md-offset-1">
-											<input type="radio" id="ranklist" name="reportcard" value="ranklist"
+											<input type="radio" id="ranklist" name="reportcard" value="ranklist" onclick="redirect(this.id)"
 												> <label for="ranklist">
 												<h6>Rank List</h6>
 												
