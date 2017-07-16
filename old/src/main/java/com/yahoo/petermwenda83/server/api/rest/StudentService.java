@@ -31,12 +31,34 @@ public class StudentService {
 		List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
 		List<APIStudent> streamStudents = new ArrayList<>();
 		students.forEach(student -> {
-			APIStudent apiStudent = new APIStudent();
+			
+			APIStudent apiStudent = new APIStudent(); 
+			apiStudent.setUuid(student.getUuid());
+			apiStudent.setAccountId(student.getAccountId());
+			apiStudent.setCurrentStream(student.getCurrentStream());
+			apiStudent.setRegStream(student.getRegStream());
+			apiStudent.setIsActive(student.getIsActive());
+			apiStudent.setIsAlumni(student.getIsAlumni());
+			apiStudent.setIsBoarding(student.getIsBoarding());
+			apiStudent.setRegNo(student.getRegNo());
+			apiStudent.setFirstname(student.getFirstname());
+			apiStudent.setMiddlename(student.getMiddlename());
+			apiStudent.setLastname(student.getLastname());
+			apiStudent.setGender(student.getGender());
+			apiStudent.setCounty(student.getCounty());
+			apiStudent.setBcertNo(student.getBcertNo());
+			apiStudent.setDob(student.getDob());
+			apiStudent.setRegTerm(student.getRegTerm());
+			apiStudent.setPassport(student.getPassport());
+			apiStudent.setLastUpdated(student.getLastUpdated()); 
+			apiStudent.setFinalTerm(student.getFinalTerm());
+			apiStudent.setFinalYear(student.getFinalYear());
+			apiStudent.setAdmissionDate(student.getAdmissionDate());
+			
 			streamStudents.add(apiStudent); 
+			
 		});
-		System.out.println("*******************************************************************************************************************");
-		System.out.println(streamStudents.size());
-		System.out.println("*******************************************************************************************************************");
+		
 		return streamStudents; 
 	}
 

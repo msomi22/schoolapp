@@ -22,10 +22,9 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  * 
  */
+
 public class Student extends StorableBean implements Comparable<Student> {
 	
-		
-		
 		private String regStream;
 		private String currentStream;
 		private String isActive;
