@@ -14,7 +14,8 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * 
- * http://localhost:8080/school/webapi/student/4DA86139-6A72-4089-8858-6A3A613FDFE6
+ * http://localhost:8080/school/webapi/student/E3CDC578-37BA-4CDB-B150-DAB0409270CD/4DA86139-6A72-4089-8858-6A3A613FDFE6
+ * 
  * @author peter
  *
  */
@@ -26,9 +27,9 @@ public class SchoolapiImpl{
 	StudentService studentService = new StudentService();
 
 	@GET
-	@Path("/{sreamId}") 
-	public List<APIStudent> getStudentPerStream(@PathParam("sreamId") String sreamId) { 		
-		return studentService.getStudentPerStream(sreamId);  
+	@Path("/{accountId}/{sreamId}") 
+	public List<APIStudent> getStudentPerStream(@PathParam("accountId") String accountId,@PathParam("sreamId") String sreamId) { 		
+		return studentService.getStudentPerStream(accountId,sreamId);  
 	}
 
 }

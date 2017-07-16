@@ -17,7 +17,6 @@ public class StudentService {
 
 	private static StudentDAO studentDAO;
 	
-
 	static{
 		studentDAO = StudentDAO.getInstance();
 	}
@@ -26,8 +25,8 @@ public class StudentService {
 	 * @param sreamId
 	 * @return
 	 */
-	public List<APIStudent> getStudentPerStream(String sreamId) { 
-		String accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+	public List<APIStudent> getStudentPerStream(String accountId, String sreamId) { 
+		
 		List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
 		List<APIStudent> streamStudents = new ArrayList<>();
 		students.forEach(student -> {
