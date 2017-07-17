@@ -1,5 +1,23 @@
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
+<%@page import="net.sf.ehcache.Element"%>
+<%@page import="net.sf.ehcache.Cache"%>
+<%@page import="net.sf.ehcache.CacheManager"%>
+
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+
+<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.classroom.Stream"%>
+
+<%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
+
+<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.Exam"%>
+
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,6 +38,52 @@
 
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+    
+    
+    
+    CacheManager mgr = CacheManager.getInstance();
+    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
+    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
+    
+    Account school = new Account();
+    Element element;
+   
+
+    if ((element = accountsCache.get(username)) != null) {
+        school = (Account) element.getObjectValue();
+    }
+
+     String accountId = school.getUuid();
+    
+     
+     
+     //get exams list
+     
+     ExamDAO examDAO = ExamDAO.getInstance();
+     
+     List<Exam> examList= new ArrayList<>();
+     
+     examList= examDAO.getExamList(accountId);
+     
+     
+     //get class list
+     ClassDAO classDAO = ClassDAO.getInstance();
+     
+     List<ClassRoom> classroomList= new ArrayList<>();
+     
+     classroomList= classDAO.getClassRooms(accountId);
+     
+     
+     
+     //get stream list
+     StreamDAO streamDAO = StreamDAO.getInstance();
+     
+     List<Stream> streamList= new ArrayList<>();
+     
+     streamList= streamDAO.getStreamList(accountId);
+     
+     
+     
    
 %>
 <jsp:include page="header.jsp" />
@@ -76,17 +140,56 @@
                     <div class="row">
                     
                     <div class="col-md-6 col-md-offset-3">
+                 <%--    <%=accountId %>
+                    
+                    <%=examList %>
+                      <%
+                  for(Exam exam : examList){                   
+                    %>
+                    
+                    <%=exam.getDescription() %>
+                    
+                    <%} %>
+                    
+                     --%>
+                    
+                    
+                    <%--   <c:out value="${accountId}"></c:out>
                     
                     <h2>Exam</h2>
                     
-                    <select id="exam" class="form-control formelement" multiple>
+                     <c:forEach var = "i" begin = "1" end = "5">
+         Item <c:out value = "${examList}"/><p>
+      </c:forEach>
                     
-                    <option>CAT 1</option>
-                    <option>CAT 2</option>
-                    <option>MID-TERM</option>
-                    <option>END-TERM</option>
-                    <option>Math's Contest</option>
-                    <option>Easy challenge</option>
+                     <c:forEach  var="Exam" items="${examList}">
+                    
+                   <h1>hi there</h1>
+                    
+                    </c:forEach> --%>
+                    
+                    <!-- Exam element -->
+                    
+                      <h2>Exam</h2>
+                    
+                    <select id="exam" name="exam" class="form-control formelement" multiple>
+                    
+                   <% 
+                   
+                   if(examList !=null){
+                   
+                   for(Exam exam : examList){                   
+                    %>
+                    
+                    <option  value="<%=exam.getUuid()%>"> <%=exam.getDescription() %></option>
+                    
+                    <%}
+                   }
+                   else {
+                        %>
+                    <option  value="">...</option>
+                    
+                    <%} %>
                     
                     </select>
                     
@@ -96,7 +199,7 @@
                     
                     </div>
                     
-                    
+                    <!-- Scope element -->
                      <h2>Scope:</h2>
                      
                      	<div class="row">
@@ -127,13 +230,19 @@
                     
                     <h2>Class</h2>
    
-                    <select class= "form-control formelement" >
+                    <select class= "form-control formelement" name="classroom">
+                     <% 
+                     if(classroomList !=null){
+                     for(ClassRoom classroom : classroomList){                   
+                    %>
                     
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
+                    <option  value="<%=classroom.getUuid()%>"> <%=classroom.getDescription() %></option>
                     
+                    <%}} 
+                    else {
+                    %>
+                     <option  value="">...</option>
+                      <%} %>
                     </select>
                     
                     
@@ -149,16 +258,23 @@
                     
                     <h2>Stream</h2>
                     
-                    <select class= "form-control formelement"  >
+                    <select class= "form-control formelement" name="stream" >
                     
-                    <option>1 s</option>
-                    <option>1 Q</option>
-                    <option>1 R</option>
-                    <option>1 T</option>
-                    <option>2 s</option>
-                    <option>2 Q</option>
-                    <option>2 R</option>
-                    <option>2 T</option>
+                    <% 
+                    
+                    if(streamList !=null){
+                    for(Stream stream : streamList){                   
+                    %>
+                    
+                    <option  value="<%=stream.getUuid()%>"> <%=stream.getDescription() %></option>
+                    
+                    <%}}
+                    
+                    else {
+                    %>
+                     <option  value="">...</option>
+                     
+                      <%} %>
                     
                     
                     </select>
@@ -167,6 +283,8 @@
                     
                     
                     </div>
+                    
+                     <!-- Hide points or grades element -->
                     
                     <h2>HIDE Points:</h2>
 
@@ -211,7 +329,9 @@
 										
 										
 										
-											<h2>Show Fee INFO:</h2>
+										 <!-- Show fee element -->
+										
+				<h2>Show Fee INFO:</h2>
 
 						<div class="row">
 										<div class="col-md-5 col-md-offset-1">
@@ -236,7 +356,9 @@
 						
 										
 										
-									
+					 <!-- Rank element -->	
+					 
+					 			
 					<h2>RANK:</h2>
 
 						<div class="row">
@@ -256,9 +378,11 @@
 										</div>
 										
 							</div>
+						
+						
+						 <!-- Number of subject element -->	
 							
-							
-							<h2>No_ of Subjects:</h2>
+				<h2>No_ of Subjects:</h2>
 
 						<div class="row">
 										<div class="col-md-5 col-md-offset-1">
@@ -278,8 +402,8 @@
 										
 							</div>
 							
-							
-							<h2>Type of Report:</h2>
+					 <!-- Type of report element -->		
+				<h2>Type of Report:</h2>
 
 						<div class="row">
 										<div class="col-md-5 col-md-offset-1">
@@ -303,6 +427,8 @@
 						
 							
 							<br>
+							
+							 <!-- footer of the form elements: Back,Reset and generate -->
 							
 							<div class="row">
 								<div class="col-md-4">
