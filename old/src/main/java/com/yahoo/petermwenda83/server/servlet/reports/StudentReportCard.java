@@ -82,11 +82,12 @@ public class StudentReportCard extends HttpServlet{
 
 	private Logger logger;
 
-	private String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
-
+	//private String[] exams= {"4531A31D-1F8A-40D7-BFE6-D3CB3D91951A,34C4244E-5CE0-4D5D-AD85-60E97FDDD80A,AE24F15B-5038-4A15-8607-1DB2A7A0B7DE"} ;
 	// , "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A", "16C4BF00-941C-40E4-9891-272D5F0979A1" 
 
-
+	private String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};
+	
+	//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 	private boolean hidePoints = false;
 	private boolean hideGrade = false;
 	
@@ -101,6 +102,12 @@ public class StudentReportCard extends HttpServlet{
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	
+	
+	private String accountId;
+	private String streamId;
+	private String term;
+	private String year;
 
 
 	/**  
@@ -133,13 +140,96 @@ public class StudentReportCard extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		//check submitted states
+	boolean hidePts=false,hideGds=false;
+		
+		hidePts = Boolean.parseBoolean(request.getParameter("p"));
+		hideGds= Boolean.parseBoolean(request.getParameter("g"));
+		
+		String rank = request.getParameter("rank");
+	
+		Boolean showfee = Boolean.parseBoolean(request.getParameter("fee"));
+		
+		String noOfSub = request.getParameter("subjects");
+		
+		//check for hide points
+		if(hidePts)
+			hidePoints= true;
+		else
+			hidePoints= false;
+		
+		//check for hide grades
+		if(hideGds)
+			hideGrade= true;
+		else
+			hideGrade= false;
+		
+		//check for rank with points
+		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
+			rankWithPoints=true;
+			rankWithTotalMarks= false;
+		}else {
+			rankWithPoints=false;
+			rankWithTotalMarks= true;
+		}
+		
+		//check show fee
+		if(showfee)
+			showFeeInfo= true;
+		else
+			showFeeInfo= false;
+		
+		
+		//check for number of subjects to grade
+		
+		if(noOfSub == "eleven") {
+			grade7subjects= false;
+			grade11subjects= true;
+		}else {
+			grade7subjects= true;
+			grade11subjects= false;
+		}
+		
 
-		response.setContentType("application/pdf");
+		
+		//log submmited exams
+		String logexams="";
+		
+		//modify the term,year and stream
+		 accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
+		 streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
+		 term = StringUtils.trimToEmpty(request.getParameter("term"));
+		 year = StringUtils.trimToEmpty(request.getParameter("year"));
+		 
+		 //get selected exams
+		 String[] examsfeed= request.getParameterValues("exam");
+		 
+		 
+			
+		//assign the global exams with the submitted	
+		exams=examsfeed;
+			
+		for (int j= 0; j < exams.length; j++) {
 
-		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		String streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
-		String term = StringUtils.trimToEmpty(request.getParameter("term"));
-		String year = StringUtils.trimToEmpty(request.getParameter("year"));
+			// exams[i]= examsfeed[i];
+			//logexams += exams[j] + exams.length+"\n";
+
+		}
+		
+		
+		//log the submitted data 
+		logger.info("HidePts submitted " + hidePts); 
+		logger.info("HideGds submitted" + hideGds); 
+		logger.info("Fee submitted" + showfee); 
+		logger.info("Subjects submitted " + noOfSub); 
+		
+		logger.info("Exam submitted " + logexams);
+		
+		logger.info("Year submitted " + year); 
+		logger.info("Term submitted " + term); 
+		
+		
 		
 		
 		
@@ -148,6 +238,9 @@ public class StudentReportCard extends HttpServlet{
 		logger.info("Fee " + showFeeInfo); 
 		logger.info("Subjects " + grade7subjects); 
 
+		response.setContentType("application/pdf");
+		
+		
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -196,8 +289,8 @@ public class StudentReportCard extends HttpServlet{
 
 		 accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
 		 streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-	     term = "1";
-		 year = "2016";
+	    // term = "1";
+		// year = "2016";
 
 		try {
 
@@ -1043,67 +1136,7 @@ public class StudentReportCard extends HttpServlet{
 		/**
 		 * get the params to customize the report display
 		 */
-		boolean hidePts=false,hideGds=false;
-		
-		hidePts = Boolean.parseBoolean(request.getParameter("p"));
-		hideGds= Boolean.parseBoolean(request.getParameter("g"));
-		
-		String rank = request.getParameter("rank");
 	
-		Boolean showfee = Boolean.parseBoolean(request.getParameter("fee"));
-		
-		String noOfSub = request.getParameter("subjects");
-		
-		//check for hide points
-		if(hidePts)
-			hidePoints= true;
-		else
-			hidePoints= false;
-		
-		//check for hide grades
-		if(hideGds)
-			hideGrade= true;
-		else
-			hideGrade= false;
-		
-		//check for rank with points
-		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
-			rankWithPoints=true;
-			rankWithTotalMarks= false;
-		}else {
-			rankWithPoints=false;
-			rankWithTotalMarks= true;
-		}
-		
-		//check show fee
-		if(showfee)
-			showFeeInfo= true;
-		else
-			showFeeInfo= false;
-		
-		
-		//check for number of subjects to grade
-		
-		if(noOfSub == "eleven") {
-			grade7subjects= false;
-			grade11subjects= true;
-		}else {
-			grade7subjects= true;
-			grade11subjects= false;
-		}
-		
-		
-		logger.info("HidePts submitted " + hidePts); 
-		logger.info("HideGds submitted" + hideGds); 
-		logger.info("Fee submitted" + showfee); 
-		logger.info("Subjects submitted " + noOfSub); 
-		
-		
-		
-		logger.info("HidePts " + hidePoints); 
-		logger.info("HideGds " + hideGrade); 
-		logger.info("Fee " + showFeeInfo); 
-		logger.info("Subjects " + grade7subjects); 
 			
 		doPost(request, response);
 	}

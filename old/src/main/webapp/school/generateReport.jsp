@@ -9,9 +9,23 @@
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.Exam"%>
 
+
+<!-- Config -->
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
+
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
+<!-- Import calendar -->
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.GregorianCalendar"%>
+   
+
+
+
 
 
 <%
@@ -56,6 +70,23 @@
      List<Stream> streamList= new ArrayList<>();
      
      streamList= streamDAO.getStreamList(accountId);
+     
+     
+     //get the current year
+    /*  int current= 0;
+     
+      GregorianCalendar cal = new GregorianCalendar();
+      current=cal.get(Calendar.YEAR); */
+      
+      SysConfigDAO sysConfigDAO= SysConfigDAO.getInstance();
+      
+      SysConfig sysConfig= sysConfigDAO.getSysConfig(accountId);
+      
+      int currentYear= Integer.parseInt(sysConfig.getYear());
+      
+      int currentTerm= Integer.parseInt(sysConfig.getTerm());
+     
+    
      
      
      
@@ -116,7 +147,7 @@
 
 
 										<form action="studentReportCard" id="generateReport"
-											class="col-md-6 col-md-offset-3" method="get" target="_blank">
+											class="col-md-6 col-md-offset-3" method="post" target="_blank">
 
 
 											<div class="row">
@@ -155,7 +186,7 @@
 													<h2>Exam</h2>
 
 													<select id="exam" name="exam"
-														class="form-control formelement" multiple>
+														class="form-control formelement" required="required" multiple>
 
 														<% 
                    
@@ -182,6 +213,89 @@
 
 
 											</div>
+											
+											
+											
+											
+				<!-- Choose time span -->
+				
+				
+
+
+
+							<h2>Year:</h2>
+
+											<div class="row">
+
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="current" class="form-control"
+														name="year" value="<%=currentYear%>" checked> <label
+														for="current">
+														<h6>Current <%=currentYear %></h6>
+														
+
+													</label>
+												</div>
+
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="current-1" name="year" value="<%=currentYear-1%>">
+													<label for="current-1">
+														<h6>Previous <%=currentYear-1 %></h6>
+														
+
+													</label>
+												</div>
+												
+												
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="current-2" name="year" value="<%=currentYear-2%>">
+													<label for="current-2">
+														<h6>2 years ago  <%=currentYear-2 %></h6>
+														
+
+													</label>
+												</div>
+
+											</div>
+
+						<h2>Term:</h2>
+
+											<div class="row">
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="term1" name="term" value="1"
+														<% if(currentTerm ==1){
+															%>checked
+														<% } %> > <label for="term1">
+														<h6>Term 1</h6>
+													</label>
+												</div>
+
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="term2" name="term" value="2"
+													<% if(currentTerm ==2){
+															%>checked
+														<% } %>>
+													<label for="term2">
+														<h6>Term 2</h6>
+													</label>
+												</div>
+												
+												
+												<div class="col-md-3 col-md-offset-1">
+													<input type="radio" id="term3" name="term" value="3"
+													<% if(currentTerm ==3){
+															%>checked
+														<% } %>>
+													<label for="term3">
+														<h6>Term 3</h6>
+													</label>
+												</div>
+
+
+											</div>
+											
+											<br>
+											<br>
 
 											<!-- Scope element -->
 											<h2>Scope:</h2>
@@ -224,7 +338,8 @@
 														<option value="<%=classroom.getUuid()%>">
 															<%=classroom.getDescription() %></option>
 
-														<%}} 
+														<%}
+                     }
                     else {
                     %>
 														<option value="">...</option>
@@ -272,6 +387,9 @@
 											</div>
 
 											<!-- Hide points or grades element -->
+											
+											<br>
+											<br>
 
 											<h2>HIDE Points:</h2>
 
@@ -317,6 +435,9 @@
 											</div>
 
 
+<br>
+<br>
+
 
 											<!-- Show fee element -->
 
@@ -343,7 +464,8 @@
 
 
 
-
+<br>
+<br>
 
 											<!-- Rank element -->
 
@@ -391,6 +513,9 @@
 												</div>
 
 											</div>
+											
+											<br>
+											<br>
 
 											<!-- Type of report element -->
 											<h2>Type of Report:</h2>
@@ -418,6 +543,7 @@
 
 
 
+											<br>
 											<br>
 
 											<!-- footer of the form elements: Back,Reset and generate -->
