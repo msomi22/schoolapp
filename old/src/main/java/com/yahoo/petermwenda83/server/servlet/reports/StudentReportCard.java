@@ -82,7 +82,7 @@ public class StudentReportCard extends HttpServlet{
 
 	private Logger logger;
 
-	private static final String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
+	private String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 
 	// , "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A", "16C4BF00-941C-40E4-9891-272D5F0979A1" 
 
@@ -137,13 +137,9 @@ public class StudentReportCard extends HttpServlet{
 		response.setContentType("application/pdf");
 
 		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		
-			
-			
-			
-
-		logger.info("******************************************************************"); 
-		logger.info("accountId " + accountId); 
+		String streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
+		String term = StringUtils.trimToEmpty(request.getParameter("term"));
+		String year = StringUtils.trimToEmpty(request.getParameter("year"));
 		
 		
 		
@@ -168,7 +164,7 @@ public class StudentReportCard extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			populatePDFDocument(accountId);
+			populatePDFDocument(accountId,streamId,term,year);
 
 
 		} catch (DocumentException e) {
@@ -184,21 +180,24 @@ public class StudentReportCard extends HttpServlet{
 	}
 
 	/**
+	 * @param year 
+	 * @param term 
+	 * @param streamId 
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId) {
-		Timeit.code(() -> compute());
+	public void populatePDFDocument(String accountId, String streamId, String term, String year) {
+		Timeit.code(() -> compute(accountId, streamId, term, year));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute() {
+	public  void compute(String accountId, String streamId, String term, String year) {
 
-		String accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		String streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-		String term = "1";
-		String year = "2016";
+		 accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+		 streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
+	     term = "1";
+		 year = "2016";
 
 		try {
 
