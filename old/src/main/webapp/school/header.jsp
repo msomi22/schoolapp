@@ -80,8 +80,9 @@
                   <li><a><i class="fa fa-book"></i> Academics <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="generateReport.jsp">Exam Reports</a></li>
+                      <li><a href="submitExam.jsp">Submit Exam</a></li>
                       <li><a href="#">Subjects</a></li>
-                      <li><a href="classes.jsp">Streams/Classes</a></li>
+                      
                     </ul>
                   </li>
                   

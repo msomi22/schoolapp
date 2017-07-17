@@ -11,7 +11,7 @@ package com.yahoo.petermwenda83.bean.exam;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
 
-/** 
+/**  
  * An exam in a school
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
