@@ -19,7 +19,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 
-/**
+/** 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
@@ -442,6 +442,33 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 				) {
 			pstmt.setString(1, accountId);
 			pstmt.setString(2, isBoarding);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting day student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#classStudentCount(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int classStudentCount(String accountId, String currentStream, String isActive) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND currentStream =? AND isActive =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, currentStream);
+			pstmt.setString(3, isActive);
 			rset = pstmt.executeQuery();
 
 			while(rset.next()){

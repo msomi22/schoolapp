@@ -102,19 +102,19 @@ public class ExamAjax extends HttpServlet{
 
 		}else if(StringUtils.isBlank(score)){
 			
-			jsonObject.addProperty("responseMessage", "Blank score not allowed.");
+			jsonObject.addProperty("responseMessage", "Blank score not allowed " + score + "." );
 
 		}else if(!StringUtils.isNumeric(score)){  
 			
-			jsonObject.addProperty("responseMessage", "Score not valid, numerics only.");
+			jsonObject.addProperty("responseMessage", "Score not valid, numerics only " + score + "." );
 			
 		}else if(Integer.valueOf(score) < 0 || Integer.valueOf(score) > 100){  
 			
-			jsonObject.addProperty("responseMessage", "Score not valid, scores should be between 0 and 100.");
+			jsonObject.addProperty("responseMessage", "Score not valid, scores should be between 0 and 100 " + score + "." );
 			
 		}else if(Integer.valueOf(score) > examDAO.getExam(accountId, examId).getOutOf()){  
 			
-			jsonObject.addProperty("responseMessage", "Score not allowed.");
+			jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
 			
 		}else{
 			
