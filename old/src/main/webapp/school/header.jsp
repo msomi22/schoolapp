@@ -81,7 +81,7 @@
                     <ul class="nav child_menu">
                       <li><a href="generateReport.jsp">Exam Reports</a></li>
                       <li><a href="#">Subjects</a></li>
-                      <li><a href="#">Streams/Classes</a></li>
+                      <li><a href="classes.jsp">Streams/Classes</a></li>
                     </ul>
                   </li>
                   
