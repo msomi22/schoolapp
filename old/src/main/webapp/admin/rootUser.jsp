@@ -48,7 +48,7 @@ if (session == null) {
 
      AccountDAO accountDAO = AccountDAO.getInstance();
      List<Account> schoolList = new ArrayList(); 
-     schoolList = accountDAO.getAllSchools();
+     schoolList = accountDAO.getAccounts();
 %>
 
 
