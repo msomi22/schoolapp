@@ -16,7 +16,7 @@ import java.util.Date;
 
 import com.yahoo.petermwenda83.bean.StorableBean;
 
-/**
+/** 
  * Has Student;s Basic details 
  * 
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>

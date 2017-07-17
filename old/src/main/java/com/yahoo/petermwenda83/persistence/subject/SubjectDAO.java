@@ -1,8 +1,6 @@
 /**
- * Account Management System
- * This software belong to Peter Mwenda's and Miwgi Ndungu's Company
- * copywrite peter&MigwiSoftwares.co.ltd
- */
+ *
+ * */
 package com.yahoo.petermwenda83.persistence.subject;
 
 import java.sql.Connection;
@@ -20,7 +18,8 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 
 
-/**
+/** 
+ * 
  * @author peter<a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  *

@@ -138,6 +138,7 @@ public class SessionConstants {
 
 	//reports
 	public static final String ERROR_REPORT_NO_PAGES = "Sorry, the report has no pages tp print";
+	
 
 
 	//other monies
@@ -194,11 +195,9 @@ public class SessionConstants {
 	final public static String CLEAR_SUCCESS = "Clearance Successful";
 
 
-	/**
-	 * 
-	 */
-	public SessionConstants() {
-		// TODO Auto-generated constructor stub
-	}
-
+	
+	public static final String GENERIC_ERROR = "Sorry, Unkown Error occured.";
+	public static final String EXAM_GET_STUDENTS = "exam students list";
+	public static final String EXAM_GET_STUDENTS_IDS = "exam students list ids";
+	
 }
