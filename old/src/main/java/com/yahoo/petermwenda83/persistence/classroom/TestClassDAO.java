@@ -3,9 +3,12 @@
  */
 package com.yahoo.petermwenda83.persistence.classroom;
 
+import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 
 /**
@@ -73,10 +76,10 @@ public class TestClassDAO {
 	@Test
 	public void testGetClassList() {
 		store = new ClassDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<Stream> list = store.get
-		for (Stream c : list) {
+		List<ClassRoom> list = store.getClassRooms("E3CDC578-37BA-4CDB-B150-DAB0409270CD");
+		for (ClassRoom c : list) {
 			System.out.println(c);
-		}*/
+		}
 	}
 
 }

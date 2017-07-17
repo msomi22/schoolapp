@@ -21,26 +21,26 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  *
  */
 public class ClassDAO extends GenericDAO implements SchoolClassDAO {
-	
+
 	private static ClassDAO classDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
-	
+
 	public static ClassDAO getInstance(){
-		
+
 		if(classDAO == null){
 			classDAO = new ClassDAO();		
 		}
 		return classDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public ClassDAO() { 
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -52,25 +52,25 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 	 */
 	public ClassRoom getClassRoom(String accountId, String uuid) {
 		ClassRoom classRoom = null;
-        ResultSet rset = null;
-        try(
-        		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM classRoom WHERE accountId = ? AND uuid = ?;");       
-        		
-        		){
-        	
-        	 pstmt.setString(1, accountId);
-        	 pstmt.setString(2, uuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 classRoom  = beanProcessor.toBean(rset,ClassRoom.class);
-	   }
-        }catch(SQLException e){
-        	 logger.error("SQL Exception when getting ClassRoom for accountId " + accountId + " and id " + uuid);
-             logger.error(ExceptionUtils.getStackTrace(e));
-             System.out.println(ExceptionUtils.getStackTrace(e));
-        }
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM classRoom WHERE accountId = ? AND uuid = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				classRoom  = beanProcessor.toBean(rset,ClassRoom.class);
+			}
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting ClassRoom for accountId " + accountId + " and id " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
 		return classRoom; 
 	}
 
@@ -80,24 +80,24 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 	@Override
 	public boolean putClassRoom(ClassRoom classRoom) {
 		boolean success = true;
-		
-		  try(   Connection conn = dbutils.getConnection();
+
+		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ClassRoom" 
-			        		+"(uuid,accountId,description) VALUES (?,?,?);");
-		             ){
-			   
-	            pstmt.setString(1, classRoom.getUuid());
-	            pstmt.setString(2, classRoom.getAccountId());
-	            pstmt.setString(3, classRoom.getDescription());
-	            pstmt.executeUpdate();
-			 
-		 }catch(SQLException e){
-		   logger.error("SQL Exception trying to put ClassRoom " + classRoom);
-           logger.error(ExceptionUtils.getStackTrace(e)); 
-           System.out.println(ExceptionUtils.getStackTrace(e));
-           success = false;
-		 }
-		
+						+"(uuid,accountId,description) VALUES (?,?,?);");
+				){
+
+			pstmt.setString(1, classRoom.getUuid());
+			pstmt.setString(2, classRoom.getAccountId());
+			pstmt.setString(3, classRoom.getDescription());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put ClassRoom " + classRoom);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
 		return success;
 	}
 
@@ -107,23 +107,23 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 	@Override
 	public boolean updateClassRoom(ClassRoom classRoom) {
 		boolean success = true;
-		
-		  try (  Connection conn = dbutils.getConnection();
-	             PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassRoom SET description = ?"
-			        + "WHERE uuid = ? AND accountId = ?;");
-	               ) {           			 	            
-	            pstmt.setString(1, classRoom.getDescription());
-	            pstmt.setString(2, classRoom.getUuid());
-	            pstmt.setString(3, classRoom.getAccountId());
-	            pstmt.executeUpdate();
 
-    } catch (SQLException e) {
-      logger.error("SQL Exception when updating classRoom " + classRoom);
-      logger.error(ExceptionUtils.getStackTrace(e));
-      System.out.println(ExceptionUtils.getStackTrace(e));
-      success = false;
-   } 
-		
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassRoom SET description = ?"
+						+ "WHERE uuid = ? AND accountId = ?;");
+				) {           			 	            
+			pstmt.setString(1, classRoom.getDescription());
+			pstmt.setString(2, classRoom.getUuid());
+			pstmt.setString(3, classRoom.getAccountId());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating classRoom " + classRoom);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
 		return success;
 	}
 	/**
@@ -132,20 +132,25 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 	@Override
 	public List<ClassRoom> getClassRooms(String accountId) {
 		List<ClassRoom>  list = null;
-		 try(   
- 		Connection conn = dbutils.getConnection();
- 		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ClassRoom WHERE accountId =?;");   
- 		ResultSet rset = pstmt.executeQuery();
-		  ) {
- 	
-      list = beanProcessor.toBeanList(rset, ClassRoom.class);
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ClassRoom WHERE accountId =?;");   
 
-    } catch(SQLException e){
- 	   logger.error("SQL Exception when getting all Streams for accountId " + accountId);
-       logger.error(ExceptionUtils.getStackTrace(e));
-       System.out.println(ExceptionUtils.getStackTrace(e));
-    }
-       return list;
+				) {
+
+			pstmt.setString(1, accountId);           
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, ClassRoom.class);
+			}
+
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all ClassRooms for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return list;
 	}
 
 
