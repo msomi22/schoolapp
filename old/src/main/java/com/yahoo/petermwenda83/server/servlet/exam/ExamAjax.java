@@ -159,7 +159,7 @@ public class ExamAjax extends HttpServlet{
 			
 			if(examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, sysConfig.getTerm(), sysConfig.getYear(), streamId)){
 				
-				jsonObject.addProperty("responseMessage", "Score saved successfully." + scoreDouble);
+				jsonObject.addProperty("responseMessage", "OK");
 				
 			}else{
 				
