@@ -31,10 +31,10 @@ function validateScore(id){
 	if(!score.match(scoreRegx) || score.length>2){
 		
 		
-		
+		$('#edit'+id).removeClass('glyphicon glyphicon-ok');
 		$('#scorewarning').modal('show');
 		
-		 Cells[5].innerText="";
+		$('#edit'+id).innerText="";
 		 
 
 
@@ -88,6 +88,18 @@ function validateScore(id){
 		    processData: false,
 		    type: 'GET',
 		    success: function(data){
+		    	
+		    	$('#edit'+id).removeClass('glyphicon glyphicon-ok')
+		    	
+		    	// $('#edit'+id).remove('.glyphicon');
+		    	
+		    	//var obj = jQuery.parseJSON(data);
+		    	 if(data.responseMessage ==="OK"){
+		    		 
+		    		 $('#edit'+id).addClass('glyphicon glyphicon-ok');
+		    		 
+		    		// $('#edit'+id).append('<span class="glyphicon glyphicon-ok"></span>');
+		    	 }
 		    	
 		    	console.log(data);
 

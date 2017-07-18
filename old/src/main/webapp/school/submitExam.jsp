@@ -249,7 +249,7 @@
                     <td ><%=student.getFirstname() %> </td>
                     <td ><%=student.getMiddlename() %> </td>
                     <td ><%=student.getLastname() %> </td>
-                    <td  contenteditable='true' > </td>
+                    <td id="editscore<%=studentCount %>" contenteditable='true' > </td>
                      <td class="hidden" ><%=student.getUuid() %> </td>
 
                  </tr>
