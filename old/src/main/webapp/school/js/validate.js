@@ -23,7 +23,7 @@ function validateScore(id){
 	var Row = document.getElementById(id);
 	var Cells = Row.getElementsByTagName("td");
 	
-	var score= trimVar(Cells[5].innerText);
+	var score= trimVar(Cells[6].innerText);
 	
 	
 	if(score.length>0){
@@ -45,7 +45,7 @@ function validateScore(id){
 		
 		
 		
-		var studentId=Cells[6].innerText ;
+		var studentId=Cells[7].innerText ;
 		var subjectId= $("#subjectId").val();
 		var examId= $("#examId").val();
 		var streamId= $("#streamId").val();
@@ -71,7 +71,7 @@ function validateScore(id){
 		
 		
 		//submit
-		$('#submitExam').attr('action', 'examAjax');
+		//$('#submitExam').attr('action', 'examAjax');
 		
 	//	$("#submitExam").submit();
 		

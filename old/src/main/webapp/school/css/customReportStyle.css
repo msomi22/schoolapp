@@ -28,7 +28,9 @@ input[type="radio"]:checked + label {
   color: white;
 }
 
-
+label{
+	
+}
 input[type="radio"]:checked + label::after {
   color: #3d3f43;
   font-family: FontAwesome;
