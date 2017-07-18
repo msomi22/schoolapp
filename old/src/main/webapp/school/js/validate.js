@@ -34,7 +34,7 @@ function validateScore(id){
 		$('#edit'+id).removeClass('glyphicon glyphicon-ok');
 		$('#scorewarning').modal('show');
 		
-		$('#edit'+id).innerText="";
+		Cells[6].innerText="";
 		 
 
 
