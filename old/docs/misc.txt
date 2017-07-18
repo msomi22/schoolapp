@@ -1,0 +1,6 @@
+
+*Run the command below to enable credential caching. 
+*After enabling credential caching any time you enter 
+*your password it will be cached for 1 hour (3600 (seconds):
+
+git config --global credential.helper 'cache --timeout 3600'
