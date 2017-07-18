@@ -89,92 +89,9 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_content">
-
-
-
-                  <div class="row">
-
                   
-                  <form class="form-horizontal" method="POST" action="getStudents" id="submitExam"> 
-                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-
-                   <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Stream</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="streamId" id="streamId">
-                          <%
-                          
-                            for(Stream stream : streamList){    
-                            	
-                            	int studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1"); 
-                        	   %>
-                        	  <option value="<%=stream.getUuid() %>"> <%=stream.getDescription() + " (" + studentsCount + ")"%> </option>
-                        	   <%
-                                }                        
-                          %>
-                          
-                          </select>
-                        </div>
-                      </div>
-
-                  </div>
-
-                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                    
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="subjectId" id="subjectId">
-                            <%
-                            for(Subject subject : subjectList){                            	
-                            	%>
-                          	  <option value="<%=subject.getUuid() %>"> <%=subject.getDescription() %> </option>
-                          	   <%
-			                  }
-                            %>                           
-                          </select>
-                        </div>
-                      </div>
-
-                  </div>
-
-                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                     
-                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Exam</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="examId" id="examId">
-                            <%
-
-						     for(Exam exam : examList){							  
-							             %>
-                        	  <option value="<%=exam.getUuid() %>"> <%=exam.getDescription() + " , OutOf: " + exam.getOutOf() %></option> 
-                        	   <%
-						       }
-                          %>                   
-                          </select>
-                        </div>
-                      </div>
-
-                  </div>
                   
-                  <input type="hidden" name="studentId" id="studentId" value="">
-                  <input type="hidden" name="score" id ="score" value="">
-                  <input type="hidden" name="decision" id ="decision" value="submitExam">
-
-                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                    <button type="submit" class="btn btn-primary">
-                      Submit
-                    </button>
-                  </div>
-                  </form>
-
-
-
-                  <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-
-                  <div class="x_panel">
-                  <div class="x_title">
+                  
                   
                   
                   <%
@@ -221,6 +138,164 @@
                   
                   
                   %>
+                  
+
+
+
+
+                  <div class="row">
+
+                  
+                  <form class="form-horizontal" method="POST" action="getStudents" id="submitExam"> 
+                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+
+                   <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Stream</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control formelement" name="streamId" id="streamId">
+                          <%
+                             int studentsCount = 0;
+                             if(!StringUtils.isBlank(streamId)){
+                            	 studentsCount = studentDAO.classStudentCount(accountId, streamId, "1"); 
+                            	   Stream stream1 = streamDAO.getStream(accountId, streamId);
+                            	   %>
+                            	  <option value="<%=streamId %>"> <%=stream1.getDescription() + " (" + studentsCount + ")"%> </option>
+                            	  <%
+                            	  for(Stream stream : streamList){    
+                                 	if(!StringUtils.equals(stream.getUuid(), streamId)){
+                                 	studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1"); 
+                             	   %>
+                             	  <option value="<%=stream.getUuid() %>"> <%=stream.getDescription() + " (" + studentsCount + ")"%> </option>
+                             	   <%
+                                     } 
+                            	  }
+                            	  
+                      	       }else{
+                      	    	
+                      	    	 for(Stream stream : streamList){    
+                                 	
+                                 	studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1"); 
+                             	   %>
+                             	  <option value="<%=stream.getUuid() %>"> <%=stream.getDescription() + " (" + studentsCount + ")"%> </option>
+                             	   <%
+                                     } 
+                      	       }
+                               %>
+                            
+                          
+                          </select>
+                        </div>
+                      </div>
+
+                  </div>
+
+                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control formelement" name="subjectId" id="subjectId">
+                            <%
+                            if(!StringUtils.isBlank(subjectId)){
+                            	
+                            	Subject subject1 = subjectDAO.getSubjectById(accountId, subjectId);
+                            	  %>
+                            	  <option value="<%=subjectId %>"> <%=subject1.getDescription() %> </option>
+                            	   <%
+                            	
+                            	for(Subject subject : subjectList){ 
+                            		
+                            		if(!StringUtils.equals(subject.getUuid(), subjectId)){
+                                	%>
+                              	  <option value="<%=subject.getUuid() %>"> <%=subject.getDescription() %> </option>
+                              	   <%
+    			                  }
+                            	}
+                            	
+                            }else{
+                            	
+                            	for(Subject subject : subjectList){                            	
+                                	%>
+                              	  <option value="<%=subject.getUuid() %>"> <%=subject.getDescription() %> </option>
+                              	   <%
+    			                  }
+                            }
+                            
+                            
+                            %>                           
+                          </select>
+                        </div>
+                      </div>
+
+                  </div>
+
+                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                     
+                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Exam</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control formelement" name="examId" id="examId">
+                            <%
+                            
+                            if(!StringUtils.isBlank(examId)){
+                            	
+                            	Exam exam1 = examDAO.getExam(accountId, examId); 
+                            	
+
+					             %>
+              	                <option value="<%=exam1.getUuid() %>"> <%=exam1.getDescription() + " , OutOf: " + exam1.getOutOf() %></option> 
+              	             
+              	              <%
+                            	
+                            	for(Exam exam : examList){	
+                            		
+                            		if(!StringUtils.equals(exam.getUuid(), examId)){
+                            		
+						             %>
+                   	            <option value="<%=exam.getUuid() %>"> <%=exam.getDescription() + " , OutOf: " + exam.getOutOf() %></option> 
+                   	             
+                   	              <%
+					              }
+                            	}
+                            	
+                            }else{
+                            	
+                            	for(Exam exam : examList){							  
+						             %>
+                  	            <option value="<%=exam.getUuid() %>"> <%=exam.getDescription() + " , OutOf: " + exam.getOutOf() %></option> 
+                  	             
+                  	              <%
+                            	
+                               }
+                            }
+
+						     
+                          %>                   
+                          </select>
+                        </div>
+                      </div>
+
+                  </div>
+                  
+                  <input type="hidden" name="studentId" id="studentId" value="">
+                  <input type="hidden" name="score" id ="score" value="">
+                  <input type="hidden" name="decision" id ="decision" value="submitExam">
+
+                  <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                    <button type="submit" class="btn btn-primary">
+                      Submit
+                    </button>
+                  </div>
+                  </form>
+
+
+
+                  <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+
+                  <div class="x_panel">
+                  <div class="x_title">
+                  
+                  
                   
                      
                     <h2>Students <small>List for stream : <%=currentStream %> </small></h2>
