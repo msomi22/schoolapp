@@ -64,6 +64,10 @@
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+    
+    <!-- validate js -->
+    
+      <script type="text/javascript" src="js/validate.js"></script>
 	
   </body>
 </html>
