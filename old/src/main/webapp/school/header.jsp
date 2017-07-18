@@ -1,4 +1,62 @@
 <!DOCTYPE html>
+
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+
+<%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
+
+<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+
+<%@page import="java.util.*"%>
+
+<%@page import="net.sf.ehcache.Element"%>
+<%@page import="net.sf.ehcache.Cache"%>
+<%@page import="net.sf.ehcache.CacheManager"%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
+<%
+
+
+  if (session == null) {
+     response.sendRedirect("../index.jsp");
+     //return;
+  }
+
+  String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+  if (StringUtils.isEmpty(username)) {
+      response.sendRedirect("../index.jsp");
+      //return;
+  }
+
+  session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+  response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+  //return;
+
+    CacheManager mgr = CacheManager.getInstance();
+    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
+    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
+    
+    Account account = new Account();
+    Element element;
+   
+
+    if ((element = accountsCache.get(username)) != null) {
+    	account = (Account) element.getObjectValue();
+    }
+    
+    
+    String user = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
+    String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+    String userAccessLevel = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
+    
+
+
+%>
+
+
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -38,6 +96,16 @@
   
     
     <link rel="icon" href="images/favicon.ico">
+
+
+    <style type="text/css">
+      footer{
+        padding: 15px 50px 10px 300px !important; 
+      }
+    </style>
+
+
+
   </head>
 
   <body class="nav-md footer_fixed">
@@ -58,7 +126,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>Peter</h2>
+                <h2><%=user %></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -142,11 +210,14 @@
               <div class="nav toggle">
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
-
+              
+              <p> <%=account.getName() %>  </p>             
+              
+              
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/peter.jpg" alt="">Peter
+                    <img src="images/peter.jpg" alt=""><%=user %>
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -158,7 +229,7 @@
                       </a>
                     </li>
                     <li><a href="javascript:;">Help</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a href="../index.jsp"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
                 </li>
 

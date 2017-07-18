@@ -1,11 +1,50 @@
 
+<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
+
+<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+
+<%@page import="net.sf.ehcache.Element"%>
+<%@page import="net.sf.ehcache.Cache"%>
+<%@page import="net.sf.ehcache.CacheManager"%>
+
+<%@ page import="java.util.Calendar" %>
+
+<%
+
+    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+
+    CacheManager mgr = CacheManager.getInstance();
+    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
+    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
+    
+    Account account = new Account();
+    Element element;
+   
+
+    if ((element = accountsCache.get(username)) != null) {
+    	account = (Account) element.getObjectValue();
+    }
+    
+%>
+
+
+
+
+
         <!-- footer content -->
         <footer>
-          <div class="pull-right">
-            &copy;AppleTech Limited. 
+          
+            Contacts: (<%=account.getEmail() + " , " + account.getMobile() %>) Motto: <%=account.getMotto() %> 
+          
+          
+           <div class="pull-right">
+            &copy; AppleTech Limited. <%= Calendar.getInstance().get(Calendar.YEAR)%>. 
           </div>
+          
           <div class="clearfix"></div>
         </footer>
+        
         <!-- /footer content -->
       </div>
     </div>
@@ -18,8 +57,7 @@
     <script src="../vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="../vendors/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
-    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+   
     <!-- gauge.js -->
     <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
     <!-- bootstrap-progressbar -->

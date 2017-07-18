@@ -1,4 +1,4 @@
-package com.yahoo.petermwenda83.server.servlet.export.text;
+package com.yahoo.petermwenda83.server.servlet.excel.export;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,22 +38,23 @@ import com.yahoo.petermwenda83.server.session.SessionConstants;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
-public class ExportExcelxls extends HttpServlet{
+public class ExportExcelxlsx extends HttpServlet{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9040785856601966875L;
+	private static final long serialVersionUID = 6639542734210255164L;
 	private static StudentDAO studentDAO;
 	private static StreamDAO streamDAO;
 	private static SubjectDAO subjectDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static StudentSubjectDAO studentSubjectDAO;
+	private ServletOutputStream out;
 
 	private Cache schoolaccountCache;
-	private ServletOutputStream out;
 	private Logger logger;	
 	SysConfig sysConfig;
+
 
 	private String subjectCode = "";
 	private String classCode = "";
@@ -105,8 +106,8 @@ public class ExportExcelxls extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// ServletContext context = getServletContext();
 		out = response.getOutputStream();
-
 		response.setContentType("application/vnd.ms-excel");
 
 
@@ -131,6 +132,7 @@ public class ExportExcelxls extends HttpServlet{
 		}
 
 		
+
 		List<Student> studentList = new ArrayList<>();
 		
 
@@ -138,12 +140,11 @@ public class ExportExcelxls extends HttpServlet{
 		classCode = roomHash.get(classroomuuidToken).replaceAll(" ", "_");  
 		//examCode = sysConfig.getExam();
 
-		response.setHeader("Content-Disposition","attachment; filename="+subjectCode+"."+classCode+"."+examCode+".xls");
+		response.setHeader("Content-Disposition","attachment; filename="+subjectCode+"."+classCode+"."+examCode+".xlsx");
 
 		XSSFWorkbook  xf = new XSSFWorkbook();
 		String outof = "";
 		try {
-
 
 
 			XSSFCreationHelper ch =xf.getCreationHelper();
@@ -151,10 +152,6 @@ public class ExportExcelxls extends HttpServlet{
 			sheet.setColumnWidth(0, 2500); 
 			sheet.setColumnWidth(1, 2000); 
 
-			XSSFRow r1 = sheet.createRow(0);
-
-			XSSFCell c11 = r1.createCell(0);
-			c11.setCellValue(ch.createRichTextString("Adm No")); 
 
 			if(StringUtils.equalsIgnoreCase(examCode, "c1")){
 				outof ="-30";
@@ -166,21 +163,25 @@ public class ExportExcelxls extends HttpServlet{
 				outof ="-100";
 			}
 
+			XSSFRow r1 = sheet.createRow(0);
+
+			XSSFCell c11 = r1.createCell(0);
+			c11.setCellValue(ch.createRichTextString("Adm No")); 
 
 			XSSFCell c12 = r1.createCell(1);
 			c12.setCellValue(ch.createRichTextString("OutOf"+outof));
 
 
 			int i=1;
+			//subjectuuidToken
+
 			for(Student s : studentList){
-				final String STATUS_ACTIVE = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
-				if(StringUtils.equals("", STATUS_ACTIVE)){
-					
-				}
+				
 			}
+
 			xf.write(out);
 			out.flush();          
-			out.close(); 
+			out.close();
 
 		} catch (Exception e) {
 			logger.error("Exception when getting exporting excel marksheet: ");
