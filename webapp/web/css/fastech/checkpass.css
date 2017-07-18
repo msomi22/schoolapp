@@ -1,8 +1,0 @@
-div class="td">
-    <input type="password" id="txtNewPassword" />
-</div>
-<div class="td">
-    <input type="password" id="txtConfirmPassword" onChange="checkPasswordMatch();" />
-</div>
-    <div class="registrationFormAlert" id="divCheckPasswordMatch">
-</div>
