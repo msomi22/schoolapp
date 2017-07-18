@@ -61,6 +61,7 @@ public class GetStudents extends HttpServlet{
        Map<String,String> idsMap = new HashMap<>();  
        idsMap.put("streamId", streamId);
        idsMap.put("examId", examId); 
+       idsMap.put("subjectId", subjectId); 
        
        if(StringUtils.isEmpty(streamId)){
     	   
