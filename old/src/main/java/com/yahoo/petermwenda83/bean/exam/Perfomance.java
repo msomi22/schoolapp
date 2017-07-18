@@ -26,7 +26,7 @@ public class Perfomance extends StorableBean{
 	private String examId;
 	private int score;
 	private String term;
-	private String year;
+	private String year;//
 
 	/**
 	 * 

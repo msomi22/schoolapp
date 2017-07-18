@@ -1,20 +1,15 @@
 
-
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
 package com.yahoo.petermwenda83.persistence.exam;
 
-import org.apache.commons.dbutils.BeanProcessor;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
+import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 
@@ -27,26 +22,25 @@ import com.yahoo.petermwenda83.persistence.GenericDAO;
  *
  */
 public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
-	
+
 	private static ExamEgineDAO examEgineDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
-	private BeanProcessor beanProcessor = new BeanProcessor();
 	
 	public static ExamEgineDAO getInstance(){
-		
+
 		if(examEgineDAO == null){ 
 			examEgineDAO = new ExamEgineDAO();		
 		}
 		return examEgineDAO;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public ExamEgineDAO() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -54,6 +48,141 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamEngineDAO#studentScoreExist(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean studentScoreExist(String accountId, String studentId, String subjectId, String examId,
+			String term, String year, String streamId) {
+
+		boolean studentexist = false;
+
+		String dbaccountId = "";
+		String dbstudentId = "";
+		String dbsubjectId = "";
+		String dbexamId = "";
+		String dbterm = "";
+		String dbyear = "";
+		String dbstreamId = "";
+
+		ResultSet rset = null;
+		try(    Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT accountId, studentId, subjectId, examId, term, year, streamId FROM Perfomance "
+						+ "WHERE accountId = ? AND studentId = ? AND subjectId = ?  AND examId = ? AND term = ? AND year = ? AND streamId = ?;");
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, subjectId);
+			pstmt.setString(4, examId);
+			pstmt.setString(5, term);
+			pstmt.setString(6, year);
+			pstmt.setString(7, streamId);
+			rset = pstmt.executeQuery();
+
+			if(rset.next()){
+				dbaccountId = rset.getString("accountId");
+				dbstudentId = rset.getString("studentId");
+				dbsubjectId = rset.getString("subjectId");
+				dbexamId = rset.getString("examId");
+				dbterm  = rset.getString("term");
+				dbyear  = rset.getString("year");
+				dbstreamId  = rset.getString("streamId");
+
+				studentexist = (dbaccountId != accountId &&
+						dbstudentId != studentId && 
+						dbsubjectId != subjectId && 
+						dbexamId != examId && 
+						dbterm != term && 
+						dbyear != year && 
+						dbstreamId != streamId) ? true : false;
+
+
+			}
+
+
+		}
+		catch(SQLException e){
+			logger.error("SQL Exception while getting score for  Perfomance: ");
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+
+		}
+
+
+		return studentexist;
+
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamEngineDAO#putPerfomance(com.yahoo.petermwenda83.bean.exam.Perfomance, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean putPerfomance(Perfomance perfomance, String accountId, String studentId, String subjectId,
+			String examId, String term, String year, String streamId) {
+
+
+		boolean success = true;
+		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year,streamId)) {
+		try(   Connection conn = dbutils.getConnection();
+				
+				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Perfomance"
+						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, term, year) VALUES (?,?,?,?,?,?,?,?,?);");
+				
+				){
+
+				pstmtCatOne.setString(1, accountId);
+				pstmtCatOne.setString(2, studentId);
+				pstmtCatOne.setString(3, subjectId);
+				pstmtCatOne.setString(4, perfomance.getStreamId());
+				pstmtCatOne.setString(5, perfomance.getClassRoomId());
+				pstmtCatOne.setString(6, perfomance.getExamId());
+				pstmtCatOne.setInt(7, perfomance.getScore()); 
+				pstmtCatOne.setString(8, term);
+				pstmtCatOne.setString(9, year);
+				pstmtCatOne.executeUpdate();
+			
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put Perfomance " + perfomance);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}	
 	
+		} else { 
+			
+			      try(
+					Connection conn = dbutils.getConnection();
+					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Perfomance SET score =? " 
+							+"WHERE accountId =? AND studentId =? AND subjectId =? AND streamId = ? "
+							+ "AND examId = ? AND term =? AND year = ?;");	
+			    	
+					) {
+					
+					pstmtCatOne.setDouble(1, perfomance.getScore());
+					pstmtCatOne.setString(2, accountId);
+					pstmtCatOne.setString(3, studentId);
+					pstmtCatOne.setString(4, subjectId);
+					pstmtCatOne.setString(5, perfomance.getStreamId());
+					pstmtCatOne.setString(6, examId);
+					pstmtCatOne.setString(7, term);
+					pstmtCatOne.setString(8, year);
+					pstmtCatOne.executeUpdate();
+				
+										
+			} catch(SQLException e) {
+				logger.error("SQL Exception trying to update Perfomance " + perfomance);
+				logger.error(ExceptionUtils.getStackTrace(e));
+				System.out.println(ExceptionUtils.getStackTrace(e));
+				success = false;				
+			} 
+		}
+		
+		return success;
+
+	}
+
+
 
 }

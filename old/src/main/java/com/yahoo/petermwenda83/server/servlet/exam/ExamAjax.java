@@ -17,15 +17,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
+import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 public class ExamAjax extends HttpServlet{
 	
 	private static ExamDAO examDAO;
+	private static StreamDAO streamDAO;
 	private static ExamEgineDAO examEgineDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	/**  
 	 *
@@ -37,7 +44,9 @@ public class ExamAjax extends HttpServlet{
 		super.init(config);
         
 		examDAO = ExamDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		examEgineDAO = ExamEgineDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
        
 	}
 
@@ -52,6 +61,7 @@ public class ExamAjax extends HttpServlet{
 		String studentId = StringUtils.trimToEmpty(request.getParameter("studentId"));
 		String subjectId = StringUtils.trimToEmpty(request.getParameter("subjectId"));
 		String examId = StringUtils.trimToEmpty(request.getParameter("examId"));
+		String streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
 		String score = StringUtils.trimToEmpty(request.getParameter("score"));
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
 
@@ -64,7 +74,7 @@ public class ExamAjax extends HttpServlet{
 
 		if(StringUtils.equalsIgnoreCase(decision, "submitExam")){
 
-			out.write(gson.toJson(processData(accountId,studentId, subjectId,examId,score)).getBytes());
+			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score)).getBytes());
 			out.flush();
 			out.close();
 
@@ -80,7 +90,7 @@ public class ExamAjax extends HttpServlet{
 	 * @param score
 	 * @return
 	 */
-	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, String score) {
+	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, String streamId, String score) {
  
 		JsonObject jsonObject = new JsonObject();
 		
@@ -95,6 +105,10 @@ public class ExamAjax extends HttpServlet{
 		}else if(StringUtils.isBlank(examId)){
 			
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no examId.");
+
+		}else if(StringUtils.isBlank(streamId)){
+			
+			jsonObject.addProperty("responseMessage", "Unexpected error occured, no streamId.");
 
 		}else if(StringUtils.isBlank(accountId)){
 			
@@ -120,6 +134,8 @@ public class ExamAjax extends HttpServlet{
 			
 			
 			Exam exam = examDAO.getExam(accountId, examId);
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			Stream stream = streamDAO.getStream(accountId, streamId);
 		
 			int scoreInt = Integer.valueOf(score);
 			
@@ -127,9 +143,26 @@ public class ExamAjax extends HttpServlet{
 			
 			scoreDouble = Math.ceil(scoreDouble);
 			
+			Perfomance perfomance = new Perfomance();
+			perfomance.setAccountId(accountId);
+			perfomance.setClassRoomId(stream.getClassRoomId()); 
+			perfomance.setExamId(examId); 
+			perfomance.setScore((int)scoreDouble);
+			perfomance.setStreamId(streamId);
+			perfomance.setStudentId(studentId);
+			perfomance.setSubjectId(subjectId);
+			perfomance.setTerm(sysConfig.getTerm());
+			perfomance.setYear(sysConfig.getYear()); 
 			
-		
-			jsonObject.addProperty("responseMessage", "Score saved successfully." + scoreDouble);
+			if(examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, sysConfig.getTerm(), sysConfig.getYear(), streamId)){
+				
+				jsonObject.addProperty("responseMessage", "Score saved successfully." + scoreDouble);
+				
+			}else{
+				
+				jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please .");
+				
+			}
 			
 		}
 
