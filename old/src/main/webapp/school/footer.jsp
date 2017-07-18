@@ -100,8 +100,9 @@
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
-    <!-- Custom Theme Scripts -->
+    <!-- Custom Theme Scripts 
     <script src="../build/js/custom.min.js"></script>
+    -->
 	
   </body>
 </html>
