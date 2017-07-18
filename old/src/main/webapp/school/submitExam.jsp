@@ -85,13 +85,13 @@
                   <div class="row">
 
                   
-                  <form class="form-horizontal" method="POST" action="getStudents"> 
+                  <form class="form-horizontal" method="POST" action="getStudents" id="submitExam"> 
                   <div class="col-md-3 col-sm-12 col-xs-12 form-group">
 
                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Stream</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="streamId">
+                          <select class="form-control formelement" name="streamId" id="streamId">
                           <%
                           
                             for(Stream stream : streamList){    
@@ -114,7 +114,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="subjectId">
+                          <select class="form-control formelement" name="subjectId" id="subjectId">
                             <%
                             for(Subject subject : subjectList){                            	
                             	%>
@@ -133,7 +133,7 @@
                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Exam</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control formelement" name="examId">
+                          <select class="form-control formelement" name="examId" id="examId">
                             <%
 
 						     for(Exam exam : examList){							  
@@ -147,6 +147,10 @@
                       </div>
 
                   </div>
+                  
+                  <input type="hidden" name="studentId" id="studentId" value="">
+                  <input type="hidden" name="score" id ="score" value="">
+                  <input type="hidden" name="decision" id ="decision" value="submitExam">
 
                   <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                     <button type="submit" class="btn btn-primary">
@@ -246,6 +250,7 @@
                     <td ><%=student.getMiddlename() %> </td>
                     <td ><%=student.getLastname() %> </td>
                     <td  contenteditable='true' > </td>
+                     <td class="hidden" ><%=student.getUuid() %> </td>
 
                  </tr>
                  <%

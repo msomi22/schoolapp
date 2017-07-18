@@ -41,6 +41,60 @@ function validateScore(id){
 		setTimeout(function(){
 	       $('#scorewarning').modal('hide');
 	   }, 2500);
+	}else{
+		
+		
+		
+		var studentId=Cells[6].innerText ;
+		var subjectId= $("#subjectId").val();
+		var examId= $("#examId").val();
+		var streamId= $("#streamId").val();
+		
+		//setting the hidden values
+		
+		$("#score").val(score);
+		$("#studentId").val(studentId);
+		
+		
+		
+		
+		
+		//log values
+		console.log("Student Id: "+studentId);
+		
+		console.log("Subject Id: "+subjectId);
+		console.log("Exam Id: "+examId);
+		console.log("Stream ID:"+streamId);
+		
+		console.log("Score "+score);
+		
+		
+		
+		//submit
+		$('#submitExam').attr('action', 'examAjax');
+		
+	//	$("#submitExam").submit();
+		
+		
+		var url= $('#submitExam').attr("action");
+
+		var form= $('#submitExam');
+
+		jQuery.ajax({
+		    url: 'examAjax',
+		    data: form.serialize(),
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    type: 'GET',
+		    success: function(data){
+		    	
+		    	console.log(data);
+
+		    }
+		
+		});
+		
 	}
 	
 	}

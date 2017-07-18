@@ -66,6 +66,9 @@ public class ExamAjax extends HttpServlet{
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
+		
+		
+		System.out.print("adkvladfjasdfj");
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
 				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
