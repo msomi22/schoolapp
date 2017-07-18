@@ -1,0 +1,227 @@
+/*
+ Copyright (c) 2015, Tawi Commercial Services Ltd. All rights reserved.
+ Licensed under the OSL-3.0 License:
+ http://opensource.org/licenses/OSL-3.0
+*/
+#scrolltable{
+    width: 200px;
+    height: 150px;    
+    margin-top: 1%;
+    margin-left: 15%;
+    float: left;
+    overflow-y: scroll;
+text-align: left;
+}
+#scrolltable21{
+    width: 200px;
+    height: 150px;    
+    margin-top: 1%;
+    overflow-y: scroll;
+text-align: left;
+float: left;
+}
+#scroll {
+    width: 100%;  /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 2px solid black;
+	float:left;          
+    
+}
+#scrolledit {
+    width: 200px;
+    height: 150px;    
+    margin-top: 1%;
+    margin-left: 15%;
+    overflow-y: scroll;
+text-align: left;
+}
+#scroll21 {
+    width: 100%;  /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 2px solid black;
+    text-align: center;
+	float:left; 
+}
+#scroll3 {
+    width: 200px;  /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+	height: 200px;
+   
+	float:left;
+margin: 0 1.5%;
+}
+#groupsform {
+float: left;
+ width: 100px;
+margin-left: 10%;
+margin-right: 10%;
+}
+#add {
+
+ margin-left:27%;
+ margin-right:27%;
+ margin-top:30%;
+ 
+ 
+}
+
+#adds {
+
+ margin-left:27%;
+ margin-right:27%;
+ margin-top:30%;
+ 
+ 
+}
+
+#add1 {
+
+ margin-left:0;
+ margin-right:0;
+ margin-top:30%; 
+ 
+}
+
+#remove{
+margin-left:27%;
+margin-right:27%;
+margin-bottom:30%;
+}
+
+#remove2{
+margin-left:0;
+margin-right:0;
+margin-bottom:30%;
+}
+
+
+
+#scroll1 {
+    /*width: 100px;  /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 2px solid black;
+    float:left;	
+     margin: 0 1.5%;
+     }
+#groupedit{
+  height: 400px;
+  width: 300px;
+  overflow:auto;
+}
+
+
+
+
+
+
+/*
+#scroll tbody,
+#scroll thead,#scroll1 tbody,
+#scroll1 thead { display: block; }*/
+
+/*thead tr th { 
+    height: 30px;
+    line-height: 30px;
+    /* text-align: left; 
+}*/
+
+#hideANDseek
+{
+    display: none;
+}
+
+/*#tr{
+ height: 15px;
+    line-height: 30px;
+
+}
+#scroll tbody,#scroll1 tbody {
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width:200px;
+}
+#scroll3 tbody {
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width:200px;
+}*/
+.textarea{
+width:30%;
+
+}
+
+#savecancelButtons{
+margin: 0 10%;
+
+
+}
+
+#savecancelButtons2{
+margin: 0  33%;
+
+
+}
+.par{
+    text-align: center;
+}
+#loadimg{
+    margin-left:40%;
+}
+/*
+
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    /* width: 20%; */ /* Optional */
+    /*border-right: 1px solid black;*/
+    /* white-space: nowrap; 
+}
+
+/*tbody td:last-child, thead th:last-child {
+    border-right: none;
+}*/
+#groupcheck{
+  border-color: #5A9EB5;
+  border-width: 5px;
+}
+.modal-dialog{
+  height: 80%;
+  width: 100%;
+  overflow: auto; 
+  align-content:center;  
+}
+
+.modal-content1{
+  text-align: center;
+  margin-top: 2%;
+  height: 50px;
+}
+
+.modal-content2{
+text-align: right; 
+  height: 30px;
+  background-color:#B8c4cc;
+}
+
+.groupcontactadd{
+background-color:rgba(6, 156, 6, 0.45);
+}
+
+.groupcontactdelete{
+background-color:rgba(6, 156, 6, 0.45);
+}
+
+.groupcontactsave{
+background-color:rgba(70, 47, 0, 0.54);
+}
+.groupcontactcancel .groupcontactsave .groupcontactadd .groupcontactdelete:focus{
+box-shadow: 0 13px 17px rgba(96, 64, 0, 0.4);
+color:rgba(6, 156, 6, 0.45); 
+}
