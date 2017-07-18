@@ -102,7 +102,14 @@
 
     <!-- Custom Theme Scripts 
     <script src="../build/js/custom.min.js"></script>
+<<<<<<< HEAD
     -->
+=======
+    
+    <!-- validate js -->
+    
+      <script type="text/javascript" src="js/validate.js"></script>
+>>>>>>> 39c07bc92807c43583c97d0948400446d3cfe32e
 	
   </body>
 </html>

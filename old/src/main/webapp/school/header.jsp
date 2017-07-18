@@ -93,7 +93,12 @@
     <link href="../build/css/custom.min.css" rel="stylesheet">
     
     
+  <!-- custom form elements style -->
   
+  
+<link rel="stylesheet" href="css/formelementBorder.css">
+
+
     
     <link rel="icon" href="images/favicon.ico">
 

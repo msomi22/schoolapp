@@ -91,7 +91,7 @@
                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Stream</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="streamId">
+                          <select class="form-control formelement" name="streamId">
                           <%
                           
                             for(Stream stream : streamList){    
@@ -114,7 +114,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="subjectId">
+                          <select class="form-control formelement" name="subjectId">
                             <%
                             for(Subject subject : subjectList){                            	
                             	%>
@@ -133,7 +133,7 @@
                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Exam</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="examId">
+                          <select class="form-control formelement" name="examId">
                             <%
 
 						     for(Exam exam : examList){							  
@@ -149,7 +149,7 @@
                   </div>
 
                   <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-primary">
                       Submit
                     </button>
                   </div>
@@ -238,14 +238,14 @@
                   if(studentsList != null){
                   for(Student student : studentsList){
                  %>
-                 <tr>
+                 <tr id="score<%=studentCount %>" onkeyup="validateScore(this.id)" onkeypress="return event.keyCode != 13;">
 
                     <td width="5%"><%=studentCount %>. </td>
                     <td ><%=student.getRegNo() %> </td>
                     <td ><%=student.getFirstname() %> </td>
                     <td ><%=student.getMiddlename() %> </td>
                     <td ><%=student.getLastname() %> </td>
-                    <td contenteditable='true'> </td>
+                    <td  contenteditable='true' > </td>
 
                  </tr>
                  <%
@@ -276,7 +276,14 @@
           </div>
         </div>
         <!-- /page content -->
+        
+        
+        <!-- state modal -->
+        
+        <jsp:include page="modals/statemodals.html" />
 
         <!-- footer -->
+        
+      
 <jsp:include page="footer.jsp" />
         
