@@ -433,15 +433,16 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#dayCount(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public int dayCount(String accountId, String isBoarding) {
+	public int dayCount(String accountId, String isActive, String isBoarding) {
 		int count = 0;
 		ResultSet rset = null;
 		try (
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isBoarding =?;");    		   
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isActive =? AND isBoarding =?;");    		   
 				) {
 			pstmt.setString(1, accountId);
-			pstmt.setString(2, isBoarding);
+			pstmt.setString(2, isActive);
+			pstmt.setString(3, isBoarding);
 			rset = pstmt.executeQuery();
 
 			while(rset.next()){
@@ -476,6 +477,33 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException while getting day student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#genderCount(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int genderCount(String accountId, String isActive, String gender) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isActive =? AND gender =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, isActive);
+			pstmt.setString(3, gender);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while performing student gender count for accountId " + accountId);
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 

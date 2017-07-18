@@ -51,9 +51,9 @@ public class Student extends StorableBean implements Comparable<Student> {
 		super();
 		regStream = "";
 		currentStream = "";
-		isActive = "";
-		isAlumni = "";
-		isBoarding = "";
+		isActive = "1"; //active = 1, inactive = 0
+		isAlumni = "0";//alumni = 1, otherwise 0
+		isBoarding = "";//boarders = 1, day = 0
 		regNo = "";
 		firstname = "";
 		middlename = "";

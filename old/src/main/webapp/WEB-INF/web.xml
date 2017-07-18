@@ -95,6 +95,17 @@
 		<url-pattern>/school/examAjax</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>ImportStudent</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.excel.ImportStudent</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>ImportStudent</servlet-name>
+		<url-pattern>/school/importStudent</url-pattern>
+	</servlet-mapping>
+	
 	
 	
 	

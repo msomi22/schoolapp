@@ -1,4 +1,4 @@
-package com.yahoo.petermwenda83.server.servlet.export.excel;
+package com.yahoo.petermwenda83.server.servlet.excel.export;
 
 import java.io.IOException;
 import java.util.ArrayList;

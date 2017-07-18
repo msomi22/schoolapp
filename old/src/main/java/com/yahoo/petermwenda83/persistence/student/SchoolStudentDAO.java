@@ -39,13 +39,17 @@ public interface SchoolStudentDAO {
 
 	public List<Student> getAllStudent(String accountId, int startIndex , int endIndex);
 	
+	
+	
 	public int classStudentCount(String accountId,String currentStream, String isActive);
 
 	public int activeCount(String accountId, String isActive);
 	
 	public int alumniCount(String accountId, String isAlumni);
 	
-	public int dayCount(String accountId, String isBoarding);
+	public int dayCount(String accountId, String isActive, String isBoarding);
+	
+	public int genderCount(String accountId, String isActive, String gender);
 
 
 

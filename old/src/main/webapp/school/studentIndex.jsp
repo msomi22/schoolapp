@@ -18,7 +18,7 @@
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-<%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
+
 
 
 <%@page import="java.util.*"%>
@@ -133,36 +133,36 @@
           <div class="row tile_count">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Active Students</span>
-              <div class="count">650</div>
-              <span class="count_bottom"><i class="green">76% </i> Of Total Students</span>
+              <div class="count"><%=studentDAO.activeCount(accountId, "1") %></div> 
+              <span class="count_bottom"><i class="green"><%=studentDAO.activeCount(accountId, "0") %> </i> Inactive</span>
             </div>
 
 
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-clock-o"></i> Inactive Students</span>
-              <div class="count">434</div>
-              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>27% </i> Of Total Students</span>
+              <span class="count_top"><i class="fa fa-user"></i> Day Students</span>
+              <div class="count"><%=studentDAO.dayCount(accountId, "1", "0") %></div> 
+              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i><%=studentDAO.dayCount(accountId, "1", "1") %> </i> Boarding</span>
             </div>
 
 
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Alumni</span>
-              <div class="count green">206</div>
-              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>12% Of Total Students</i> </span>
+              <div class="count green"><%=studentDAO.alumniCount(accountId, "1") %></div> 
+              
             </div>
 
 
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Female Students</span>
-              <div class="count">0</div>
-              <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>0% </i> Of Total Students</span>
+              <div class="count"><%=studentDAO.genderCount(accountId, "1", "F") %></div> 
+              
             </div>
 
 
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Male Students </span>
-              <div class="count">656</div>
-              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>100% </i> Of Total Students</span>
+              <div class="count"><%=studentDAO.genderCount(accountId, "1", "M") %></div> 
+             
             </div>
 
           </div>

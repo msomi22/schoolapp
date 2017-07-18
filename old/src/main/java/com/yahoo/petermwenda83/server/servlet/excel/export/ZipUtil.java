@@ -1,4 +1,4 @@
-package com.yahoo.petermwenda83.server.servlet.export;
+package com.yahoo.petermwenda83.server.servlet.excel.export;
 
 import java.io.File;
 import java.io.FileInputStream;
