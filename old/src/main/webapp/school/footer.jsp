@@ -100,16 +100,11 @@
     <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
-    <!-- Custom Theme Scripts 
-    <script src="../build/js/custom.min.js"></script>
-<<<<<<< HEAD
-    -->
-=======
     
     <!-- validate js -->
     
-      <script type="text/javascript" src="js/validate.js"></script>
->>>>>>> 39c07bc92807c43583c97d0948400446d3cfe32e
+    <script type="text/javascript" src="js/validate.js"></script>
+
 	
   </body>
 </html>
