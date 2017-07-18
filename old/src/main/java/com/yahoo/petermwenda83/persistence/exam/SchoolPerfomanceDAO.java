@@ -22,6 +22,8 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
  */
 public interface SchoolPerfomanceDAO {
 	
+	
+	public Perfomance getPerformance(String accountId,String examId,String studentId,String streamId,String term,String year,String subjectId); 
 	 
 	public List<Perfomance> getStreamPerformance(String accountId,String examId,String studentId,String streamId,String term,String year); 
 	

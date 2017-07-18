@@ -1,15 +1,4 @@
 
-
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
 package com.yahoo.petermwenda83.persistence.exam;
 
 import java.sql.Connection;
@@ -25,7 +14,7 @@ import org.apache.log4j.Logger;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
-/**
+/** 
  *  Persistence implementation for {@link SchoolPerfomanceDAO}
  *  
  *  Copyright (c) FasTech Solutions Ltd., Dec 02, 2015
@@ -216,6 +205,43 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
             System.out.println(ExceptionUtils.getStackTrace(e));
         }
         return list;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Perfomance getPerformance(String accountId, String examId, String studentId, String streamId, String term,
+			String year, String subjectId) {
+		Perfomance perfomance = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance"
+						+ " WHERE accountId =? AND examId = ? AND studentId = ? AND streamId = ? AND term = ? AND year = ? AND subjectId =?;");       
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, examId); 
+			pstmt.setString(3, studentId); 
+			pstmt.setString(4, streamId); 
+			pstmt.setString(5, term); 
+			pstmt.setString(6, year); 
+			pstmt.setString(7, subjectId); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				perfomance  = beanProcessor.toBean(rset,Perfomance.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Perfomance " + perfomance);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+
+		}
+
+		return perfomance; 
 	}
 
 

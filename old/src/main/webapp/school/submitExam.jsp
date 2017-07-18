@@ -13,6 +13,12 @@
 <%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
 
+<%@page import="com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.Perfomance"%>
+
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
+
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -41,6 +47,10 @@
     SubjectDAO subjectDAO = SubjectDAO.getInstance();
     ExamDAO examDAO = ExamDAO.getInstance();
     StudentDAO studentDAO = StudentDAO.getInstance();
+    PerfomanceDAO perfomanceDAO = PerfomanceDAO.getInstance();
+    SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
+    
+    SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
     
     List<Stream> streamList = new ArrayList<>();
     List<Subject> subjectList = new ArrayList<>();
@@ -185,10 +195,12 @@
                   
                   String examId = "";
                   String streamId = "";
+                  String subjectId = "";
                   
                   if(!idsHash.isEmpty()){
                 	  examId = (String)idsHash.get("examId"); 
                 	  streamId = (String)idsHash.get("streamId"); 
+                	  subjectId = (String)idsHash.get("subjectId"); 
                   }
                   
                   String currentExam = "";                 
@@ -206,10 +218,11 @@
                 	  currentStream = stream.getDescription();
                   }
                   
+                  
+                  
                   %>
                   
-                  
-                  
+                     
                     <h2>Students <small>List for stream : <%=currentStream %> </small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -230,6 +243,7 @@
                             <th class="column-title">First name </th>
                             <th class="column-title">Middle name </th>
                             <th class="column-title">Last name </th>
+                            <th class="column-title">Score </th>
                             <th class="column-title">Score ( <%=currentExam %> ) </th>   
                             
                           </tr>
@@ -241,7 +255,16 @@
                   int studentCount = 1;
                   if(studentsList != null){
                   for(Student student : studentsList){
-                 %>
+                	 
+                	  Perfomance perfomance = new Perfomance();
+                	  int score = 0;
+                	  if(perfomanceDAO.getPerformance(accountId, examId, student.getUuid(), streamId, sysConfig.getTerm(), sysConfig.getYear(),subjectId) != null){
+                		  perfomance =  perfomanceDAO.getPerformance(accountId, examId, student.getUuid(), streamId, sysConfig.getTerm(), sysConfig.getYear(),subjectId);
+                	  }
+                	 
+                	  score = perfomance.getScore();
+                	  %>
+                 
                  <tr id="score<%=studentCount %>" onkeyup="validateScore(this.id)" onkeypress="return event.keyCode != 13;">
 
                     <td width="5%"><%=studentCount %>. </td>
@@ -249,6 +272,7 @@
                     <td ><%=student.getFirstname() %> </td>
                     <td ><%=student.getMiddlename() %> </td>
                     <td ><%=student.getLastname() %> </td>
+                    <td > <%=score+"" %> </td>
                     <td  contenteditable='true' > </td>
                      <td class="hidden" ><%=student.getUuid() %> </td>
 

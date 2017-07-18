@@ -67,8 +67,6 @@ public class ExamAjax extends HttpServlet{
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 		
-		
-		System.out.print("adkvladfjasdfj");
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
 				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -142,7 +140,7 @@ public class ExamAjax extends HttpServlet{
 		
 			int scoreInt = Integer.valueOf(score);
 			
-			double scoreDouble = (scoreInt / exam.getOutOf()) * 100; 
+			double scoreDouble = ((double)scoreInt / (double)exam.getOutOf()) * 100; 
 			
 			scoreDouble = Math.ceil(scoreDouble);
 			
