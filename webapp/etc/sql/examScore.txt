@@ -1,0 +1,10 @@
+
+
+
+++++++examScore+++++
+id primary key
+schooluuid REFERENCES schoolAccount(uuid)
+teacheruuid REFERENCES staff(uuid)
+studentuuid REFERENCES student(uuid)
+subjectuuid REFERENCES subject(uuid)
+examuuid REFERENCES exam(uuid)

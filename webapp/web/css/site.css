@@ -1,0 +1,233 @@
+/* HTML5 WORKAROUND */
+
+/* Get the new HTML5 tags to work */
+article,aside,audio,canvas,command,datalist,details,embed,figcaption,figure,footer,header,hgroup,keygen,meter,nav,output,progress,section,source,video
+{
+    display: block
+}
+
+mark,rp,rt,ruby,summary,time {
+    display: inline
+}
+
+/* LAYOUT */
+.col1,.col2,.col3,.cols {
+    float: left
+}
+
+.col1 {
+    width: 500px
+}
+
+.col2 {
+    width: 290px
+}
+
+.cols {
+    width: 110px
+}
+
+#static .text,#signin .text {
+    width: 100%;
+    margin-top: 17px;
+    padding: 0;
+    height: 100%;
+}
+
+.wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.reset-password {
+    width: 50%;
+    overflow: hidden;
+    position: relative;
+}
+.main {
+    margin: 0 auto;
+    width: 920px
+}
+
+.subtitle {
+    text-decoration: none;
+    font-size: 16px;
+    color: #377E8C;
+}
+
+
+#page1 .text {
+    height: 505px;
+    padding: 0;
+    width: 100%;
+}
+
+#page1 .text1 span {
+    padding-bottom: 40px
+}
+
+.text {
+    padding: 18px 0 0 515px;
+    width: 325px;
+    margin-top: 15px;
+    height: 265px
+}
+
+/* GLOBAL ELEMENT STYLES */
+body {
+    border: 0;
+    font: 13px Arial, Helvetica, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.5em
+}
+
+header {
+    position: relative;
+    z-index: 10;
+    margin: 0 0 -1px;
+}
+
+
+
+h1 {
+    float: left;
+    padding: 16px 0 17px 0
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    line-height: 44px;
+    padding: 0 0 9px 0;
+    letter-spacing: -1px;
+    text-transform: capitalize;
+}
+
+h3 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000;
+    line-height: 38px;
+    padding: 16px 0 9px 0;
+    letter-spacing: -1px
+}
+
+p,dd {
+    padding-bottom: 1em
+}
+
+p,li,dt,dd {
+    font-size: 1.175em;
+}
+
+ol,dl {
+    list-style: decimal;
+    padding: 0 0 1.5em;
+}
+
+ol ol,ol ol ol {
+    list-style: lower-alpha;
+    padding: 0 0 .5em;
+}
+
+
+
+/* GLOBAL BUTTONS */
+.button {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 53px;
+    padding: 0 37px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    position: relative;
+    text-decoration: none
+}
+
+.button:hover {
+    background: #696969
+}
+
+/* CONTENT */
+#content {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border: 1px solid #bfbfbf;
+    border-radius: 8px;    
+    position: relative;
+
+}
+
+.pad {
+    padding: 0 30px 0 35px
+}
+
+.pad_left1 {
+    padding-left: 55px
+}
+
+.pad_left2 {
+    padding-left: 45px
+}
+
+.marg_right1 {
+    margin-right: 12px
+}
+
+.marg_right2 {
+    margin-right: 18px
+}
+
+.pad_bot1 {
+    padding-bottom: 35px
+}
+
+.pad_bot2 {
+    padding-bottom: 49px
+}
+
+.pad_bot3 {
+    padding-bottom: 7px
+}
+
+.pad_bot4 {
+    padding-bottom: 17px
+}
+
+.marg_top {
+    margin-top: 17px
+}
+
+.marg_top2 {
+    margin-top: 7px
+}
+
+
+
+
+
+
+
+/* FOOTER */
+footer {
+    padding: 50px 0 28px 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 18px;
+}
+
+footer p {
+    padding-bottom: 0;
+}
+
+footer #madeInKenya {
+    float: right;
+    position: relative;
+    top: -44px;
+}
+

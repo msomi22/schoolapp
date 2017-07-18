@@ -1,0 +1,1 @@
+﻿SELECT subjectuuid,(catone+cattwo+endterm) as sum FROM perfomance WHERE subjectuuid ='D0F7EC32-EA25-7D32-8708-2CC132446' and classroomuuid ='4DA86139-6A72-4089-8858-6A3A613FDFE6' AND term ='1' AND year = '2016' ORDER BY sum DESC;
