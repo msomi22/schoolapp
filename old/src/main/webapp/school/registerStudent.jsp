@@ -324,7 +324,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 												<h4>Term</h4>
-													<select name="terrm" class="form-control formelement">
+													<select name="term" class="form-control formelement">
 														<option value="1">Term 1</option>
 														<option value="2">Term 2</option>
 														<option value="3">Term 3</option>
@@ -412,7 +412,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 												<h4>Active</h4>
-													<select name="boarding" class="form-control formelement" >
+													<select name="active" class="form-control formelement" >
 													<option value="1">Yes</option>
 													<option value="0">No</option>
 													</select>
@@ -422,7 +422,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 												<h4>Alumni</h4>
-													<select name="terrm" class="form-control formelement">
+													<select name="alumni" class="form-control formelement">
 														<option value="0">No</option>
 														<option value="1">Yes</option>
 														
@@ -443,6 +443,11 @@
 
 											<br>
 											<br>
+											
+											<input type="hidden" name="action" value="add">
+											
+											
+										<!-- 	<input type="hidden" name="action" value="edit"> -->
 
 											<!-- footer of the form elements: Back,Reset and generate -->
 
@@ -455,7 +460,7 @@
 
 
 												<div class="col-md-2 pull-right">
-													<button type="submit" class="btn btn-lg btn-primary">Register</button>
+													<button type="button" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button>
 												</div>
 
 

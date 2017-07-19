@@ -39,8 +39,8 @@ public class Student extends StorableBean implements Comparable<Student> {
 		private String bcertNo;
 		private String county;
 		private String regTerm;
-		private String finalYear;
-		private String finalTerm;
+		private int finalYear;
+		private int finalTerm;
 		private String passport;
 		private String lastUpdated;
 		private Timestamp admissionDate;
@@ -63,8 +63,8 @@ public class Student extends StorableBean implements Comparable<Student> {
 		bcertNo = "";
 		county = "";
 		regTerm = "";
-		finalYear = "";
-		finalTerm = "";
+		finalYear = 0;
+		finalTerm = 3;
 		passport = "";
 		lastUpdated = "";
 		admissionDate = new Timestamp(new Date().getTime());
@@ -270,28 +270,28 @@ public class Student extends StorableBean implements Comparable<Student> {
 	/**
 	 * @return the finalYear
 	 */
-	public String getFinalYear() {
+	public int getFinalYear() {
 		return finalYear;
 	}
 
 	/**
 	 * @param finalYear the finalYear to set
 	 */
-	public void setFinalYear(String finalYear) {
+	public void setFinalYear(int finalYear) {
 		this.finalYear = finalYear;
 	}
 
 	/**
 	 * @return the finalTerm
 	 */
-	public String getFinalTerm() {
+	public int getFinalTerm() {
 		return finalTerm;
 	}
 
 	/**
 	 * @param finalTerm the finalTerm to set
 	 */
-	public void setFinalTerm(String finalTerm) {
+	public void setFinalTerm(int finalTerm) {
 		this.finalTerm = finalTerm;
 	}
 
