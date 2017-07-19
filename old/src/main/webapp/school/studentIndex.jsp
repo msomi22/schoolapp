@@ -165,7 +165,15 @@
              
             </div>
 
-          </div>
+
+			<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count pull-right">
+				<span class="count_top"><i class="fa fa-user"></i>Add new student </span>
+				<div class="count"><a role="button" class="btn btn-lg btn-primary" href="registerStudent.jsp"><i class="fa fa-user-plus fa-3x" aria-hidden="true"></i></a></div>
+
+			</div>
+
+
+		</div>
           <!-- /top tiles -->
 
 
