@@ -198,7 +198,7 @@ public class StudentReportCard extends HttpServlet{
 		
 		//modify the term,year and stream
 		 accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		 streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
+		 streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		 term = StringUtils.trimToEmpty(request.getParameter("term"));
 		 year = StringUtils.trimToEmpty(request.getParameter("year"));
 		 
@@ -288,7 +288,7 @@ public class StudentReportCard extends HttpServlet{
 	public  void compute(String accountId, String streamId, String term, String year) {
 
 		 accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		 streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
+		 //streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
 	    // term = "1";
 		// year = "2016";
 
