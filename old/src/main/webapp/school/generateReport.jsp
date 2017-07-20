@@ -330,20 +330,22 @@
 													<h2>Class</h2>
 
 													<select class="form-control formelement" name="classroom">
-														<% 
-                     if(classroomList !=null){
-                     for(ClassRoom classroom : classroomList){                   
-                    %>
+														<%
+															if (classroomList != null) {
+																for (ClassRoom classroom : classroomList) {
+														%>
 
 														<option value="<%=classroom.getUuid()%>">
-															<%=classroom.getDescription() %></option>
+															<%=classroom.getDescription()%></option>
 
-														<%}
-                     }
-                    else {
-                    %>
+														<%
+															}
+															} else {
+														%>
 														<option value="">...</option>
-														<%} %>
+														<%
+															}
+														%>
 													</select>
 
 
@@ -361,22 +363,25 @@
 
 													<select class="form-control formelement" name="stream">
 
-														<% 
-                    
-                    if(streamList !=null){
-                    for(Stream stream : streamList){                   
-                    %>
+														<%
+															if (streamList != null) {
+																for (Stream stream : streamList) {
+														%>
 
 														<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription() %></option>
+															<%=stream.getDescription()%></option>
 
-														<%}}
-                    
-                    else {
-                    %>
+														<%
+															}
+															}
+
+															else {
+														%>
 														<option value="">...</option>
 
-														<%} %>
+														<%
+															}
+														%>
 
 
 													</select>
@@ -549,7 +554,7 @@
 											<!-- footer of the form elements: Back,Reset and generate -->
 
 											<div class="row">
-												<div class="col-md-4">
+												<div class="col-md-5 col-md-offset-1">
 													<button class="btn btn-primary">Back</button>
 													<button type="reset" class="btn btn-primary">Reset</button>
 												</div>

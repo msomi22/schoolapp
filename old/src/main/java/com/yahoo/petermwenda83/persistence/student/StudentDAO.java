@@ -218,8 +218,8 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			pstmt.setString(14, student.getBcertNo());
 			pstmt.setString(15, student.getCounty());
 			pstmt.setString(16, student.getRegTerm());
-			pstmt.setString(17, student.getFinalYear());
-			pstmt.setString(13, student.getFinalTerm());
+			pstmt.setInt(17, student.getFinalYear());
+			pstmt.setInt(18, student.getFinalTerm());
 			pstmt.setString(19, student.getPassport());
 			pstmt.setString(20, student.getLastUpdated());
 			pstmt.setTimestamp(21, new Timestamp(student.getAdmissionDate().getTime()));
@@ -266,8 +266,8 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			pstmt.setString(12, student.getBcertNo());
 			pstmt.setString(13, student.getCounty());
 			pstmt.setString(14, student.getRegTerm());
-			pstmt.setString(15, student.getFinalYear());
-			pstmt.setString(16, student.getFinalTerm());
+			pstmt.setInt(15, student.getFinalYear());
+			pstmt.setInt(16, student.getFinalTerm());
 			pstmt.setString(17, student.getPassport());
 			pstmt.setString(18, student.getLastUpdated());
 			pstmt.setString(19, student.getUuid());

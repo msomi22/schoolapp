@@ -210,6 +210,7 @@ public class StudentReportCard extends HttpServlet{
 		String logexams="";
 
 		//modify the term,year and stream
+
 		accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
 		streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
@@ -218,7 +219,10 @@ public class StudentReportCard extends HttpServlet{
 		//get selected exams
 		String[] examsfeed= request.getParameterValues("exam");
 
-
+		accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
+		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
+		term = StringUtils.trimToEmpty(request.getParameter("term"));
+		year = StringUtils.trimToEmpty(request.getParameter("year"));
 
 		//assign the global exams with the submitted	
 		exams=examsfeed;
@@ -302,6 +306,10 @@ public class StudentReportCard extends HttpServlet{
 
 		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
 		streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
+		// term = "1";
+
+		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+		//streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
 		// term = "1";
 		// year = "2016";
 
