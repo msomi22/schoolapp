@@ -402,7 +402,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="pointshide" class="form-control"
-														name="p" value="true" checked> <label
+														name="p" value="true"> <label
 														for="pointshide">
 														<h6>Yes</h6>
 
@@ -410,7 +410,7 @@
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="points" name="p" value="false">
+													<input type="radio" id="points" name="p" value="false" checked>
 													<label for="points">
 														<h6>No</h6>
 
@@ -424,13 +424,13 @@
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="gradeshide" name="g" value="true"
-														checked> <label for="gradeshide">
+														> <label for="gradeshide">
 														<h6>YES</h6>
 													</label>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="grades" name="g" value="false">
+													<input type="radio" id="grades" name="g" value="false" checked>
 													<label for="grades">
 														<h6>NO</h6>
 													</label>

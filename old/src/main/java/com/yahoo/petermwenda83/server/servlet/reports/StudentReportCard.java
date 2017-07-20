@@ -108,6 +108,7 @@ public class StudentReportCard extends HttpServlet{
 	private String streamId;
 	private String term;
 	private String year;
+	private String classroomId;
 
 
 	/**  
@@ -201,6 +202,8 @@ public class StudentReportCard extends HttpServlet{
 		 streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		 term = StringUtils.trimToEmpty(request.getParameter("term"));
 		 year = StringUtils.trimToEmpty(request.getParameter("year"));
+		 classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//added
+		 
 		 
 		 //get selected exams
 		 String[] examsfeed= request.getParameterValues("exam");
