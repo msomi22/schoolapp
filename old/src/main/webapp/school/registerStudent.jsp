@@ -152,20 +152,24 @@
 												<h4>First Name</h4>
 												
 													<input type="text" id="fname" class="form-control formelement"
-														name="fname" placeholder="First Name">
+														name="fname" placeholder="First Name" 
+														pattern="[A-Za-z]{3,20}" 
+														title="First Name,Only characters are allowed and should be more than two and less than 20 characters" required>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
 												<h4>Middle Name</h4>
 													<input type="text" id="mname" name="mname"   class="form-control formelement"
-													placeholder="Middle Name" >
+													placeholder="Middle Name" pattern="[A-Za-z]{,20}"
+													title="Middle Name,Only characters are allowed and should be less than 20 characters "  >
 												</div>
 												
 												
 												<div class="col-md-3 col-md-offset-1">
 												<h4>Last Name</h4>
 													<input type="text" id="lname" name="lname" class="form-control formelement" 
-													placeholder="Last Name"   >
+													placeholder="Last Name" pattern="[A-Za-z]{3,20}" 
+													title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"  required>
 												</div>
 												
 												
@@ -266,7 +270,8 @@
 												<div class="col-md-5 col-md-offset-1">
 												<h4>Birth Cert N0_</h4>
 													<input type="text" id="bcertno" name="bcertno"  class="form-control formelement"
-													placeholder="Birth Cert No_" >
+													placeholder="Birth Cert No_"
+													pattern="[0-9]{5}" title="Birth cert no, should contain numerics only and should be 5 numbers only" required>
 												</div>
 
 												
@@ -290,14 +295,17 @@
 												<div class="col-md-5 col-md-offset-1">
 												<h4>School's Name</h4>
 													<input type="text" id="schoolname" class="form-control formelement"
-														name="schoolname" placeholder="School name" >
+														name="schoolname" placeholder="School name" pattern="[A-Za-z]{,20}" 
+													title="School Name,Only characters are allowed and should be less than 20 characters"> 
+														
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
 												<h4>Registration No_</h4>
 												
 													<input type="text" id="regno" name="regno" class="form-control formelement"
-													placeholder="Registration number" >
+													placeholder="Registration number"
+													pattern="[0-9]{4}" title="Registration number, should contain numerics only and should be 4 numbers only" required>
 												</div>
 
 
@@ -460,7 +468,8 @@
 
 
 												<div class="col-md-2 pull-right">
-													<button type="button" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button>
+													<button type="submit" class="btn btn-lg btn-primary">Register</button>
+													<!-- <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
 												</div>
 
 
