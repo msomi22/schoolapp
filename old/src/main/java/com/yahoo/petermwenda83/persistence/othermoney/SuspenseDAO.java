@@ -121,7 +121,7 @@ public class SuspenseDAO extends GenericDAO implements SchoolSuspenseDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Suspense" 
-						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas, datePaid) VALUES (?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas, termPiad, yearPaid, datePaid) VALUES (?,?,?,?,?,?,?,?);");
 				){ 
 
 			pstmt.setString(1, suspense.getUuid());
@@ -131,7 +131,9 @@ public class SuspenseDAO extends GenericDAO implements SchoolSuspenseDAO {
 			pstmt.setString(5, suspense.getPayMode());
 			pstmt.setString(6, suspense.getTransactionId());
 			pstmt.setString(7, suspense.getPaidHas());
-			pstmt.setTimestamp(6, new Timestamp(suspense.getDatePaid().getTime()));
+			pstmt.setString(8, suspense.getTermPiad());
+			pstmt.setString(9, suspense.getYearPaid());
+			pstmt.setTimestamp(10, new Timestamp(suspense.getDatePaid().getTime()));
 			pstmt.executeUpdate();
 
 

@@ -19,6 +19,8 @@ public class StudentOtherFee extends StorableBean{
 	private String otherFeeId;
 	private int amountPiad;
 	private String payMode;
+	private String termPiad; 
+	private String yearPaid;
 	private Timestamp datePaid;
 	
 	/**
@@ -29,15 +31,21 @@ public class StudentOtherFee extends StorableBean{
 		otherFeeId = "";
 		amountPiad =0;
 		payMode = "";
+		termPiad = "";
+		yearPaid = "";
 		datePaid = new Timestamp(new Date().getTime());
 	}
 	
-	   /**
+	
+
+	/**
 	 * @return the studentId
 	 */
 	public String getStudentId() {
 		return studentId;
 	}
+
+
 
 	/**
 	 * @param studentId the studentId to set
@@ -46,12 +54,16 @@ public class StudentOtherFee extends StorableBean{
 		this.studentId = studentId;
 	}
 
+
+
 	/**
 	 * @return the otherFeeId
 	 */
 	public String getOtherFeeId() {
 		return otherFeeId;
 	}
+
+
 
 	/**
 	 * @param otherFeeId the otherFeeId to set
@@ -60,12 +72,16 @@ public class StudentOtherFee extends StorableBean{
 		this.otherFeeId = otherFeeId;
 	}
 
+
+
 	/**
 	 * @return the amountPiad
 	 */
 	public int getAmountPiad() {
 		return amountPiad;
 	}
+
+
 
 	/**
 	 * @param amountPiad the amountPiad to set
@@ -74,12 +90,16 @@ public class StudentOtherFee extends StorableBean{
 		this.amountPiad = amountPiad;
 	}
 
+
+
 	/**
 	 * @return the payMode
 	 */
 	public String getPayMode() {
 		return payMode;
 	}
+
+
 
 	/**
 	 * @param payMode the payMode to set
@@ -88,6 +108,44 @@ public class StudentOtherFee extends StorableBean{
 		this.payMode = payMode;
 	}
 
+
+
+	/**
+	 * @return the termPiad
+	 */
+	public String getTermPiad() {
+		return termPiad;
+	}
+
+
+
+	/**
+	 * @param termPiad the termPiad to set
+	 */
+	public void setTermPiad(String termPiad) {
+		this.termPiad = termPiad;
+	}
+
+
+
+	/**
+	 * @return the yearPaid
+	 */
+	public String getYearPaid() {
+		return yearPaid;
+	}
+
+
+
+	/**
+	 * @param yearPaid the yearPaid to set
+	 */
+	public void setYearPaid(String yearPaid) {
+		this.yearPaid = yearPaid;
+	}
+
+
+
 	/**
 	 * @return the datePaid
 	 */
@@ -95,14 +153,16 @@ public class StudentOtherFee extends StorableBean{
 		return datePaid;
 	}
 
+
+
 	/**
 	 * @param datePaid the datePaid to set
 	 */
 	public void setDatePaid(Timestamp datePaid) {
 		this.datePaid = datePaid;
 	}
-	
-	
+
+
 
 	/**
 	 * @see java.lang.Object#toString()
@@ -110,8 +170,8 @@ public class StudentOtherFee extends StorableBean{
 	@Override
 	public String toString() {
 		return "StudentOtherFee [studentId=" + studentId + ", otherFeeId=" + otherFeeId + ", amountPiad=" + amountPiad
-				+ ", payMode=" + payMode + ", datePaid=" + datePaid + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+				+ ", payMode=" + payMode + ", termPiad=" + termPiad + ", yearPaid=" + yearPaid + ", datePaid="
+				+ datePaid + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

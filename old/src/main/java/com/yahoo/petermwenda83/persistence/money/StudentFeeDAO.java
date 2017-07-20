@@ -81,7 +81,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 		return studentFee; 
 	}
 
-	
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#putStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)
 	 */
@@ -91,7 +91,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentFee" 
-						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas, datePaid) VALUES (?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas,termPiad, yearPaid, datePaid) VALUES (?,?,?,?,?,?,?,?,?,?);");
 				){ 
 
 			pstmt.setString(1, studentFee.getUuid());
@@ -101,7 +101,9 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 			pstmt.setString(5, studentFee.getPayMode());
 			pstmt.setString(6, studentFee.getTransactionId());
 			pstmt.setString(7, studentFee.getPaidHas());
-			pstmt.setTimestamp(6, new Timestamp(studentFee.getDatePaid().getTime()));
+			pstmt.setString(8, studentFee.getTermPiad());
+			pstmt.setString(9, studentFee.getYearPaid());
+			pstmt.setTimestamp(10, new Timestamp(studentFee.getDatePaid().getTime()));
 			pstmt.executeUpdate();
 
 
@@ -116,7 +118,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 		return success;
 	}
 
-	
+
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#updateStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)
 	 */
@@ -162,6 +164,36 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 			pstmt.setString(2, studentId); 
 			pstmt.setInt(3, endIndex - startIndex);
 			pstmt.setInt(4, startIndex);
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, StudentFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting StudentFee List for studentId " + studentId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#getStudentFeeList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<StudentFee> getStudentFeeList(String accountId, String studentId, String termPiad, String yearPaid) {
+		List<StudentFee> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentFee WHERE"
+						+ " accountId = ? AND studentId = ? AND termPiad =? AND yearPaid =?  ORDER BY datePaid DESC;");
+				) {
+			pstmt.setString(1, accountId);      
+			pstmt.setString(2, studentId); 
+			pstmt.setString(3, termPiad); 
+			pstmt.setString(4, yearPaid); 
+			
 			try( ResultSet rset = pstmt.executeQuery();){
 
 				list = beanProcessor.toBeanList(rset, StudentFee.class);
