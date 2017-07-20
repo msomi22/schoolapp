@@ -602,11 +602,13 @@ CREATE TABLE  StudentOtherFee (
     otherFeeId text REFERENCES OtherFee(uuid),
     amountPiad integer NOT NULL CHECK (amountPiad>=0),
     payMode text,
+    termPiad text,
+    yearPaid text,
     datePaid timestamp with time zone DEFAULT now()
   
   
 );
-\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,amountPiad,payMode) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,amountPiad,payMode,termPiad,yearPaid) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentOtherFee OWNER TO school;
 
 
@@ -644,10 +646,12 @@ CREATE TABLE  StudentFee (
     payMode text,
     transactionId text,
     paidHas text,
+    termPiad text,    
+    yearPaid text,
     datePaid timestamp with time zone DEFAULT now()
    
 );
-\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas,termPiad,yearPaid) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentFee OWNER TO school;
 
 
@@ -666,6 +670,8 @@ CREATE TABLE  Suspense (
     amountPiad integer NOT NULL CHECK (amountPiad>=0),
     payMode text,
     paidHas text,
+    termPiad text,    
+    yearPaid text,
     datePaid timestamp with time zone DEFAULT now()
  
 );

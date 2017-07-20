@@ -13,6 +13,8 @@ public interface SchoolStudentFeeDAO {
 	public boolean updateStudentFee(StudentFee studentFee);
 
 	public List<StudentFee> getStudentFeeList(String accountId , String studentId, int startIndex , int endIndex); 
+
+	public List<StudentFee> getStudentFeeList(String accountId , String studentId, String termPiad, String yearPaid); 
 	
 	
 }

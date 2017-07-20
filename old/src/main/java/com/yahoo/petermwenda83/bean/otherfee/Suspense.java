@@ -19,6 +19,8 @@ public class Suspense extends StorableBean{
 	private String payMode;
 	private String transactionId;
 	private String paidHas;
+	private String termPiad;
+	private String yearPaid;
 	private Timestamp datePaid;
 
 	/**
@@ -30,15 +32,19 @@ public class Suspense extends StorableBean{
 		payMode = "";
 		transactionId = "";
 		paidHas = "";
+		termPiad = "";
+		yearPaid = "";
 		datePaid = new Timestamp(new Date().getTime());
 	}
 
+	
 	/**
 	 * @return the studentId
 	 */
 	public String getStudentId() {
 		return studentId;
 	}
+
 
 	/**
 	 * @param studentId the studentId to set
@@ -47,12 +53,14 @@ public class Suspense extends StorableBean{
 		this.studentId = studentId;
 	}
 
+
 	/**
 	 * @return the amountPaid
 	 */
 	public int getAmountPaid() {
 		return amountPaid;
 	}
+
 
 	/**
 	 * @param amountPaid the amountPaid to set
@@ -61,12 +69,14 @@ public class Suspense extends StorableBean{
 		this.amountPaid = amountPaid;
 	}
 
+
 	/**
 	 * @return the payMode
 	 */
 	public String getPayMode() {
 		return payMode;
 	}
+
 
 	/**
 	 * @param payMode the payMode to set
@@ -75,12 +85,14 @@ public class Suspense extends StorableBean{
 		this.payMode = payMode;
 	}
 
+
 	/**
 	 * @return the transactionId
 	 */
 	public String getTransactionId() {
 		return transactionId;
 	}
+
 
 	/**
 	 * @param transactionId the transactionId to set
@@ -89,12 +101,14 @@ public class Suspense extends StorableBean{
 		this.transactionId = transactionId;
 	}
 
+
 	/**
 	 * @return the paidHas
 	 */
 	public String getPaidHas() {
 		return paidHas;
 	}
+
 
 	/**
 	 * @param paidHas the paidHas to set
@@ -103,12 +117,46 @@ public class Suspense extends StorableBean{
 		this.paidHas = paidHas;
 	}
 
+
+	/**
+	 * @return the termPiad
+	 */
+	public String getTermPiad() {
+		return termPiad;
+	}
+
+
+	/**
+	 * @param termPiad the termPiad to set
+	 */
+	public void setTermPiad(String termPiad) {
+		this.termPiad = termPiad;
+	}
+
+
+	/**
+	 * @return the yearPaid
+	 */
+	public String getYearPaid() {
+		return yearPaid;
+	}
+
+
+	/**
+	 * @param yearPaid the yearPaid to set
+	 */
+	public void setYearPaid(String yearPaid) {
+		this.yearPaid = yearPaid;
+	}
+
+
 	/**
 	 * @return the datePaid
 	 */
 	public Timestamp getDatePaid() {
 		return datePaid;
 	}
+
 
 	/**
 	 * @param datePaid the datePaid to set
@@ -117,16 +165,18 @@ public class Suspense extends StorableBean{
 		this.datePaid = datePaid;
 	}
 
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "Suspense [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
-				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", datePaid=" + datePaid
-				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", termPiad=" + termPiad + ", yearPaid="
+				+ yearPaid + ", datePaid=" + datePaid + ", getUuid()=" + getUuid() + ", getAccountId()="
+				+ getAccountId() + "]";
 	}
-	
+
 
 	/**
 	 * 

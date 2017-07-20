@@ -18,7 +18,9 @@ public class StudentFee extends StorableBean{
 	private int amountPaid;
 	private String payMode;
 	private String transactionId;
-	private String paidHas;
+	private String paidHas;//boarders = 1, day = 0
+	private String termPiad;
+	private String yearPaid;
 	private Timestamp datePaid;
 
 	private int amountTokenizer;
@@ -30,6 +32,8 @@ public class StudentFee extends StorableBean{
 		payMode = "";
 		transactionId = "";
 		paidHas = "";
+		termPiad = "";
+		yearPaid = "";
 		datePaid = new Timestamp(new Date().getTime());
 
 		amountTokenizer = 0;
@@ -129,6 +133,42 @@ public class StudentFee extends StorableBean{
 
 
 	/**
+	 * @return the termPiad
+	 */
+	public String getTermPiad() {
+		return termPiad;
+	}
+
+
+
+	/**
+	 * @param termPiad the termPiad to set
+	 */
+	public void setTermPiad(String termPiad) {
+		this.termPiad = termPiad;
+	}
+
+
+
+	/**
+	 * @return the yearPaid
+	 */
+	public String getYearPaid() {
+		return yearPaid;
+	}
+
+
+
+	/**
+	 * @param yearPaid the yearPaid to set
+	 */
+	public void setYearPaid(String yearPaid) {
+		this.yearPaid = yearPaid;
+	}
+
+
+
+	/**
 	 * @return the datePaid
 	 */
 	public Timestamp getDatePaid() {
@@ -170,9 +210,9 @@ public class StudentFee extends StorableBean{
 	@Override
 	public String toString() {
 		return "StudentFee [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
-				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", datePaid=" + datePaid
-				+ ", amountTokenizer=" + amountTokenizer + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", termPiad=" + termPiad + ", yearPaid="
+				+ yearPaid + ", datePaid=" + datePaid + ", amountTokenizer=" + amountTokenizer + ", getUuid()="
+				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

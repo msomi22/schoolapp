@@ -8,9 +8,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -19,13 +21,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
-import org.jfree.chart.renderer.category.GanttRenderer;
-
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -42,10 +43,13 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -53,7 +57,9 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
+import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 
@@ -72,6 +78,8 @@ public class StudentReportCard extends HttpServlet{
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
+	private static StreamDAO streamDAO;
+	private static ExamDAO examDAO;
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNarmal6 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
@@ -86,29 +94,30 @@ public class StudentReportCard extends HttpServlet{
 	// , "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A", "16C4BF00-941C-40E4-9891-272D5F0979A1" 
 
 	private String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};
-	
+
 	//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 	private boolean hidePoints = false;
 	private boolean hideGrade = false;
-	
+
 	private boolean rankWithPoints = false;
 	private boolean rankWithTotalMarks = true;
-	
+
 	private boolean showFeeInfo = false;
-	
+
 	private boolean grade7subjects = true;
 	private boolean grade11subjects = false;
 
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+
 	
 	
-	private String accountId;
-	private String streamId;
-	private String term;
-	private String year;
-	private String classroomId;
+	
+
+
+
+
 
 
 	/**  
@@ -126,6 +135,8 @@ public class StudentReportCard extends HttpServlet{
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -141,31 +152,41 @@ public class StudentReportCard extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		//check submitted states
-	boolean hidePts=false,hideGds=false;
-		
+		boolean hidePts=false,hideGds=false;
+
+		HttpSession session = request.getSession(true);
+
+		String accountId;
+		String streamId;
+		String term;
+		String year;
+		String classroomId;
+
+		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
+
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
 		hideGds= Boolean.parseBoolean(request.getParameter("g"));
-		
+
 		String rank = request.getParameter("rank");
-	
+
 		Boolean showfee = Boolean.parseBoolean(request.getParameter("fee"));
-		
+
 		String noOfSub = request.getParameter("subjects");
-		
+
 		//check for hide points
 		if(hidePts)
 			hidePoints= true;
 		else
 			hidePoints= false;
-		
+
 		//check for hide grades
 		if(hideGds)
 			hideGrade= true;
 		else
 			hideGrade= false;
-		
+
 		//check for rank with points
 		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
 			rankWithPoints=true;
@@ -174,16 +195,16 @@ public class StudentReportCard extends HttpServlet{
 			rankWithPoints=false;
 			rankWithTotalMarks= true;
 		}
-		
+
 		//check show fee
 		if(showfee)
 			showFeeInfo= true;
 		else
 			showFeeInfo= false;
-		
-		
+
+
 		//check for number of subjects to grade
-		
+
 		if(noOfSub == "eleven") {
 			grade7subjects= false;
 			grade11subjects= true;
@@ -191,13 +212,14 @@ public class StudentReportCard extends HttpServlet{
 			grade7subjects= true;
 			grade11subjects= false;
 		}
-		
 
-		
+
+
 		//log submmited exams
 		String logexams="";
-		
+
 		//modify the term,year and stream
+
 		 accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
 		 streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		 term = StringUtils.trimToEmpty(request.getParameter("term"));
@@ -210,40 +232,42 @@ public class StudentReportCard extends HttpServlet{
 		 
 		 
 			
+
+
 		//assign the global exams with the submitted	
 		exams=examsfeed;
-			
+
 		for (int j= 0; j < exams.length; j++) {
 
 			// exams[i]= examsfeed[i];
 			//logexams += exams[j] + exams.length+"\n";
 
 		}
-		
-		
+
+
 		//log the submitted data 
 		logger.info("HidePts submitted " + hidePts); 
 		logger.info("HideGds submitted" + hideGds); 
 		logger.info("Fee submitted" + showfee); 
 		logger.info("Subjects submitted " + noOfSub); 
-		
+
 		logger.info("Exam submitted " + logexams);
-		
+
 		logger.info("Year submitted " + year); 
 		logger.info("Term submitted " + term); 
-		
-		
-		
-		
-		
+
+
+
+
+
 		logger.info("HidePts " + hidePoints); 
 		logger.info("HideGds " + hideGrade); 
 		logger.info("Fee " + showFeeInfo); 
 		logger.info("Subjects " + grade7subjects); 
 
 		response.setContentType("application/pdf");
-		
-		
+
+
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -290,9 +314,13 @@ public class StudentReportCard extends HttpServlet{
 	 */
 	public  void compute(String accountId, String streamId, String term, String year) {
 
-		 accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		 //streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-	    // term = "1";
+		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+		streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
+		// term = "1";
+
+		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+		//streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
+		// term = "1";
 		// year = "2016";
 
 		try {
@@ -421,7 +449,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 			Phrase reportTitle = new Phrase();
-			reportTitle.add(new Chunk("STUDENT END OF TERM REPORT CARD",  timesRomanNarmal8));
+			reportTitle.add(new Chunk("STUDENT END OF TERM: " + term +" , YEAR: " + year + " REPORT CARD",  timesRomanNarmal8));
 			reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNarmal6));
 			document.add(reportTitle);
 			document.add(new Paragraph("\n"));
@@ -430,7 +458,8 @@ public class StudentReportCard extends HttpServlet{
 
 			Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
 
-			String currentClass = "4 N";
+			Stream stream = streamDAO.getStream(accountId, streamId);
+			String currentClass = stream.getDescription();
 
 			String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
 
@@ -452,6 +481,7 @@ public class StudentReportCard extends HttpServlet{
 			//student name
 			PdfPCell nameInfoCell = new PdfPCell(new Phrase("Name:",timesRomanNarmal8)); 
 			PdfPCell nameDescCell = new PdfPCell(new Phrase(studentName,  timesRomanNarmal6));
+			
 			nameInfoCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -469,7 +499,7 @@ public class StudentReportCard extends HttpServlet{
 			studentLeft.addCell(regNoDescCell);
 
 			//student form
-			PdfPCell streamInfoCell = new PdfPCell(new Phrase("Form:",timesRomanNarmal8)); 
+			PdfPCell streamInfoCell = new PdfPCell(new Phrase("Class:",timesRomanNarmal8)); 
 			PdfPCell streamDescCell = new PdfPCell(new Phrase(currentClass,  timesRomanNarmal6));
 			streamInfoCell.setBorder(Rectangle.NO_BORDER);
 			streamDescCell.setBorder(Rectangle.NO_BORDER);
@@ -479,7 +509,8 @@ public class StudentReportCard extends HttpServlet{
 
 			//student grade
 			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Score:",timesRomanNarmal8)); 
-			
+			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
+
 			//add student name
 			studentLeft.addCell(mainGradeInfoCell);
 			//rank 7 subjects
@@ -497,9 +528,9 @@ public class StudentReportCard extends HttpServlet{
 				mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 				studentLeft.addCell(mainGradeDescCell);
 			}
-			
-			
-			
+
+
+
 
 
 			/**
@@ -565,19 +596,59 @@ public class StudentReportCard extends HttpServlet{
 			examTable.setHeaderRows(1); 
 			examTable.isSkipFirstHeader();
 
+			String exam11 = "";
+			String exam22 = "";
+			String exam33 = "";
+
+			if(exams.length == 1){
+
+				if(examDAO.getExam(accountId, exams[0]) != null){
+					exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
+				}
+
+			}
+
+			if(exams.length == 2){
+
+				if(examDAO.getExam(accountId, exams[0]) != null){
+					exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
+				}
+
+				if(examDAO.getExam(accountId, exams[1]) != null){
+					exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
+				}
+
+			}
+
+			if(exams.length == 3){
+
+				if(examDAO.getExam(accountId, exams[0]) != null){
+					exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
+				}
+
+				if(examDAO.getExam(accountId, exams[1]) != null){
+					exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
+				}
+
+				if(examDAO.getExam(accountId, exams[2]) != null){
+					exam33 = examDAO.getExam(accountId, exams[2]).getDescription();
+				}
+
+			}
+
 			PdfPCell jubjectCell = new PdfPCell(new Paragraph("Subject",timesRomanNarmal8));
 			jubjectCell.setBackgroundColor(baseColor);
 			jubjectCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell examCell1 = new PdfPCell(new Paragraph("Exam 1",timesRomanNarmal8));
+			PdfPCell examCell1 = new PdfPCell(new Paragraph(exam11,timesRomanNarmal8));
 			examCell1.setBackgroundColor(baseColor);
 			examCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell examCell2 = new PdfPCell(new Paragraph("Exam 2",timesRomanNarmal8));
+			PdfPCell examCell2 = new PdfPCell(new Paragraph(exam22,timesRomanNarmal8));
 			examCell2.setBackgroundColor(baseColor);
 			examCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell examCell3 = new PdfPCell(new Paragraph("Exam 3",timesRomanNarmal8));
+			PdfPCell examCell3 = new PdfPCell(new Paragraph(exam33,timesRomanNarmal8));
 			examCell3.setBackgroundColor(baseColor);
 			examCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -629,7 +700,6 @@ public class StudentReportCard extends HttpServlet{
 					exam3Score = "";
 				}
 
-				//TODO
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
 
 
@@ -703,7 +773,7 @@ public class StudentReportCard extends HttpServlet{
 
 			});
 
-			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
+			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE"};
 			int count = 0;
 
 			for(String header : headers){
@@ -763,7 +833,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!grade7subjects && grade11subjects){
 						examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMainForm1(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
 					}
-					
+
 				}
 				//MEAN SCORE
 				else if(count == 2){ 
@@ -853,9 +923,17 @@ public class StudentReportCard extends HttpServlet{
 
 			feeInfoTable.addCell(feecol1);
 			feeInfoTable.addCell(feecol2);
+			
+			
+			Locale locale = new Locale("en","KE"); 
+			NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
-			String feeBal = "KSH 10,000";
-			String nextTermFee = "KSH 26,000";
+			StudentBalance balance = new StudentBalance();
+			double feeBalance = balance.findBalance(accountId, student.getUuid());
+			
+			String feeBal = nf.format(feeBalance);
+			//TODO
+			String nextTermFee = balance.findNextTermFee(accountId); 
 
 			if(!showFeeInfo){
 				feeBal = "";
@@ -1135,12 +1213,12 @@ public class StudentReportCard extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		/**
 		 * get the params to customize the report display
 		 */
-	
-			
+
+
 		doPost(request, response);
 	}
 
