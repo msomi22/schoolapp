@@ -8,9 +8,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -55,6 +57,7 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
@@ -689,7 +692,6 @@ public class StudentReportCard extends HttpServlet{
 					exam3Score = "";
 				}
 
-				//TODO
 				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
 
 
@@ -913,9 +915,17 @@ public class StudentReportCard extends HttpServlet{
 
 			feeInfoTable.addCell(feecol1);
 			feeInfoTable.addCell(feecol2);
+			
+			
+			Locale locale = new Locale("en","KE"); 
+			NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
-			String feeBal = "KSH 10,000";
-			String nextTermFee = "KSH 26,000";
+			StudentBalance balance = new StudentBalance();
+			double feeBalance = balance.findBalance(accountId, student.getUuid());
+			
+			String feeBal = nf.format(feeBalance);
+			//TODO
+			String nextTermFee = balance.findNextTermFee(accountId); 
 
 			if(!showFeeInfo){
 				feeBal = "";
