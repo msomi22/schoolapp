@@ -474,6 +474,7 @@ public class StudentReportCard extends HttpServlet{
 			//student name
 			PdfPCell nameInfoCell = new PdfPCell(new Phrase("Name:",timesRomanNarmal8)); 
 			PdfPCell nameDescCell = new PdfPCell(new Phrase(studentName,  timesRomanNarmal6));
+			
 			nameInfoCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -491,7 +492,7 @@ public class StudentReportCard extends HttpServlet{
 			studentLeft.addCell(regNoDescCell);
 
 			//student form
-			PdfPCell streamInfoCell = new PdfPCell(new Phrase("Form:",timesRomanNarmal8)); 
+			PdfPCell streamInfoCell = new PdfPCell(new Phrase("Class:",timesRomanNarmal8)); 
 			PdfPCell streamDescCell = new PdfPCell(new Phrase(currentClass,  timesRomanNarmal6));
 			streamInfoCell.setBorder(Rectangle.NO_BORDER);
 			streamDescCell.setBorder(Rectangle.NO_BORDER);
@@ -765,7 +766,7 @@ public class StudentReportCard extends HttpServlet{
 
 			});
 
-			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE", "OUT OF" };
+			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE"};
 			int count = 0;
 
 			for(String header : headers){
