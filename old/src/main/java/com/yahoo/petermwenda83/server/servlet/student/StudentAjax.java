@@ -12,13 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.bean.student.StudentPrimary;
+import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
+import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
+import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -28,6 +33,12 @@ public class StudentAjax extends HttpServlet {
 	
 	
 	private static StudentDAO studentDAO;
+	private static PrimaryDAO primaryDAO;
+	private static ParentsDAO parentsDAO;
+	
+	
+	
+	//private Logger logger;
 	
 	private static SysConfigDAO sysConfigDAO;
        
@@ -42,6 +53,9 @@ public class StudentAjax extends HttpServlet {
        
 		studentDAO = StudentDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
+		parentsDAO= ParentsDAO.getInstance();
+		primaryDAO=PrimaryDAO.getInstance();
+		
       
 	}
 	/**
@@ -86,11 +100,61 @@ public class StudentAjax extends HttpServlet {
 		//String passport=StringUtils.trimToEmpty(request.getParameter(""));
 		//String lastUpdated;
 		//Timestamp admissionDate;
-		//schoolname
+		
+		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
+		
+		
+		Student student= new Student();
+		//student.setUuid(student.getUuid());
+		student.setAccountId(accountId);
+		student.setCurrentStream(currentStream);
+		student.setFirstname(firstname);
+		student.setLastname(lastname);
+		student.setMiddlename(middlename);
+		student.setGender(gender);
+		student.setDob(dob);
+		student.setBcertNo(bcertNo);
+		student.setCounty(county);
+		student.setRegTerm(regTerm);
+		student.setRegStream(regStream);
+		student.setIsActive(isActive);
+		student.setIsBoarding(isBoarding);
+		student.setRegNo(regNo);
+		student.setIsAlumni(isAlumni);
+		
+		
+		//Primary details
+		//String studentId;
+		Boolean primaryState=Boolean.parseBoolean(request.getParameter("primaryschool"));
+		String schoolName=StringUtils.trimToEmpty(request.getParameter("schoolname"));
+		String index=StringUtils.trimToEmpty(request.getParameter("indexno"));
+		String kcpeyear=StringUtils.trimToEmpty(request.getParameter("kcpeyear"));
+		String kcpemark=StringUtils.trimToEmpty(request.getParameter("kcpemarks"));
+		
+		
+		
+		
+		
+		
+		
+		//Parent's details
+		
+		//String studentId;
+		Boolean parentState=Boolean.parseBoolean(request.getParameter("parent"));
+		String name=StringUtils.trimToEmpty(request.getParameter("pfname")) +" "+
+				StringUtils.trimToEmpty(request.getParameter("plname"));
+		String mobile=StringUtils.trimToEmpty(request.getParameter("phone"));
+		String email=StringUtils.trimToEmpty(request.getParameter("email"));
+		//String lastUpdated;
+		
+		
+		
+		
+		
 
 		
 
-		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
+		
 		
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
@@ -103,30 +167,72 @@ public class StudentAjax extends HttpServlet {
 			
 			JsonObject jsonObject = new JsonObject();
 			
-			Student student= new Student();
-			student.setUuid(student.getUuid());
-			student.setAccountId(accountId);
-			student.setCurrentStream(currentStream);
-			student.setFirstname(firstname);
-			student.setLastname(lastname);
-			student.setMiddlename(middlename);
-			student.setGender(gender);
-			student.setDob(dob);
-			student.setBcertNo(bcertNo);
-			student.setCounty(county);
-			student.setRegTerm(regTerm);
-			student.setRegStream(regStream);
-			student.setIsActive(isActive);
-			student.setIsBoarding(isBoarding);
-			student.setRegNo(regNo);
-			student.setIsAlumni(isAlumni);
 			
 			
-			studentDAO= StudentDAO.getInstance();
+			
+			
 			
 			if (studentDAO.putStudent(student)) {
-
+				
+				
+				
+				
+				
+				//check for primary details then add them
+				if(primaryState) {
+					
+					StudentPrimary studentPrimary= new StudentPrimary();
+					studentPrimary.setAccountId(accountId);
+					//studentPrimary.setUuid(studentPrimary.getUuid());
+					studentPrimary.setStudentId(student.getUuid());
+					studentPrimary.setSchoolName(schoolName);
+					studentPrimary.setIndex(index);
+					studentPrimary.setKcpemark(kcpemark);
+					studentPrimary.setKcpeyear(kcpeyear);
+					
+					primaryDAO.putStudentPrimary(studentPrimary);
+					
+				/*	if(primaryDAO.putStudentPrimary(studentPrimary)) {
+						jsonObject.addProperty("responseMessage", "OK");
+					}*/
+					
+				}
+				
+				
+				//check for parent's details then add them
+				
+				if(parentState) {
+					StudentParent studentParent= new StudentParent();
+					//studentParent.setUuid(studentParent.getUuid());
+					studentParent.setAccountId(accountId);
+					studentParent.setStudentId(student.getUuid());
+					studentParent.setName(name);
+					studentParent.setMobile(mobile);
+					studentParent.setEmail(email);
+					
+					
+					parentsDAO.putParent(studentParent);
+					
+					
+					//log the submitted data 
+					//logger.info("HidePts submitted " + student.getUuid()); 
+					//logger.info("HideGds submitted" + studentParent.getStudentId()); 
+					
+					
+					/*if(parentsDAO.putParent(studentParent)) {
+						jsonObject.addProperty("responseMessage", "OK");
+					}*/
+				}
+				
+				
+				
 				jsonObject.addProperty("responseMessage", "OK");
+				
+				
+				
+				
+
+				
 
 			} else {
 

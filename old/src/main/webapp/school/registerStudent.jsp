@@ -151,7 +151,7 @@
 													<h4>Middle Name</h4>
 													<input type="text" id="mname" name="mname"
 														class="form-control formelement" placeholder="Middle Name"
-														pattern="[A-Za-z]{,20}"
+														pattern="[A-Za-z]{3,20}"
 														title="Middle Name,Only characters are allowed and should be less than 20 characters ">
 												</div>
 
@@ -424,7 +424,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="no" class="form-control"
-														name="primaryschool"  onclick="primarySwap(this.id)"
+														name="primaryschool" value="false"  onclick="primarySwap(this.id)"
 														checked> <label for="no">
 														<h6>NO</h6>
 
@@ -432,7 +432,7 @@
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="yes" name="primaryschool" 
+													<input type="radio" id="yes" value="true" name="primaryschool" 
 														onclick="primarySwap(this.id)"> <label for="yes">
 														<h6>Yes</h6>
 
@@ -456,7 +456,7 @@
 													<h4>School's Name</h4>
 													<input type="text" id="schoolname"
 														class="form-control formelement" name="schoolname"
-														placeholder="School name" pattern="[A-Za-z]{,20}"
+														placeholder="School name" pattern="[A-Za-z]{3,30}"
 														title="School Name,Only characters are allowed and should be less than 20 characters">
 
 												</div>
@@ -517,7 +517,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="noParent" class="form-control"
-														name="parent"  onclick="primarySwap(this.id)"
+														name="parent"  value="false" onclick="primarySwap(this.id)"
 														checked> <label for="noParent">
 														<h6>NO</h6>
 
@@ -525,7 +525,7 @@
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="yesParent" name="parent" 
+													<input type="radio" id="yesParent" name="parent" value="true"
 														onclick="primarySwap(this.id)"> <label for="yesParent">
 														<h6>Yes</h6>
 
@@ -625,8 +625,8 @@
 
 
 												<div class="col-md-2 pull-right">
-													<button type="submit" class="btn btn-lg btn-primary">Register</button>
-													<!-- <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
+													<<button type="submit" class="btn btn-lg btn-primary">Register</button> 
+													<!--  <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
 												</div>
 
 
