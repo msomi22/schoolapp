@@ -455,9 +455,9 @@ ALTER TABLE sysConfig OWNER TO school;
 
 
 -- -------------------
--- Table BarWeight
+-- Table yearlyMean
 -- -------------------
- CREATE TABLE  BarWeight (
+ CREATE TABLE  yearlyMean (
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
@@ -465,35 +465,14 @@ ALTER TABLE sysConfig OWNER TO school;
     year text,
     meanOne float, 
     meanTwo float, 
-    meanhree float 
+    meanThree float 
    
    
 );
 
--- import data from the CSV file for the BarWeight table
-\COPY BarWeight(uuid,accountId,studentId,year,meanOne,meanTwo,meanhree) FROM '/tmp/BarWeight.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE BarWeight OWNER TO school;
-
-
-
-
--- -------------------
--- Table Deviation
--- -------------------
- CREATE TABLE  Deviation (
-    id SERIAL PRIMARY KEY,
-    uuid text UNIQUE NOT NULL,
-    accountId text REFERENCES Account(uuid),
-    studentId text REFERENCES Student(uuid),
-    year text,
-    devOne float,
-    devTwo float,
-    devThree float
-
-  
-);
--- import data from the CSV file for the Accounts table
-ALTER TABLE Deviation OWNER TO school;
+-- import data from the CSV file for the yearlyMean table
+\COPY yearlyMean(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) FROM '/tmp/yearlyMean.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE yearlyMean OWNER TO school;
 
 
 

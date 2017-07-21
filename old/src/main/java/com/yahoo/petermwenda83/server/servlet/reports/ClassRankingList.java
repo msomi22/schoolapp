@@ -576,7 +576,7 @@ public class ClassRankingList extends HttpServlet{
 
 			double avgMean = 0;
 			if(totalMean > 0){ 
-				avgMean = Math.ceil( (double)totalMean / 7);  
+				avgMean = Math.round( (double)totalMean / 7);  
 			}
 
 			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 

@@ -12,50 +12,50 @@ import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.yahoo.petermwenda83.bean.exam.BarWeight;
+import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
  * @author peter
  *
  */
-public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
+public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 
-	private static BarWeightDAO barWeightDAO;
+	private static YearlyMeanDAO yearlyMeanDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private BeanProcessor beanProcessor = new BeanProcessor();
 
-	public static BarWeightDAO getInstance(){
+	public static YearlyMeanDAO getInstance(){
 
-		if(barWeightDAO == null){ 
-			barWeightDAO = new BarWeightDAO();		
+		if(yearlyMeanDAO == null){ 
+			yearlyMeanDAO = new YearlyMeanDAO();		
 		}
-		return barWeightDAO;
+		return yearlyMeanDAO;
 	}
 
 	/**
 	 * 
 	 */
-	public BarWeightDAO() {
+	public YearlyMeanDAO() {
 		super();
 	}
 
 	/**
 	 * 
 	 */
-	public BarWeightDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
+	public YearlyMeanDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolBarWeightDAO#getBarWeight(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolYearlyMeanDAO#getBarWeight(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public BarWeight getBarWeight(String accountId,String studentId,String year) {
-		BarWeight barWeight = null;
+	public YearlyMean getYearlyMean(String accountId,String studentId,String year) {
+		YearlyMean yearlyMean = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM BarWeight"
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM YearlyMean"
 						+ " WHERE accountId = ? AND studentId =? AND year =?;");       
 
 				){
@@ -66,21 +66,21 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
-				barWeight  = beanProcessor.toBean(rset,BarWeight.class);
+				yearlyMean  = beanProcessor.toBean(rset,YearlyMean.class);
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting BarWeight: " + barWeight);
+			logger.error("SQL Exception when getting YearlyMean: " + yearlyMean);
 			logger.error(ExceptionUtils.getStackTrace(e));
 
 		}
 
-		return barWeight; 
+		return yearlyMean; 
 	}
 
 
 	@Override
-	public boolean ExistBarWeight(String accountId,String studentId,String year) {
+	public boolean existYearlyMean(String accountId,String studentId,String year) {
 		boolean studentexist = false;
 
 		String dbAccountId = "";
@@ -90,7 +90,7 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM BarWeight"
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM YearlyMean"
 						+ " WHERE accountId = ? AND studentId =? AND year =?;");       
 
 				){
@@ -112,7 +112,7 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting BarWeight: ");
+			logger.error("SQL Exception when getting YearlyMean: ");
 			logger.error(ExceptionUtils.getStackTrace(e)); 
 			System.out.println(ExceptionUtils.getStackTrace(e));
 
@@ -122,29 +122,29 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 	}
 
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolBarWeightDAO#put(com.yahoo.petermwenda83.bean.exam.BarWeight)
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolYearlyMeanDAO#put(com.yahoo.petermwenda83.bean.exam.YearlyMean)
 	 */
 	@Override
-	public boolean put(BarWeight weight,String accountId,String studentId,String year) {
+	public boolean putYearlyMean(YearlyMean yearlyMean,String accountId,String studentId,String year) {
 		boolean success = true;
-		if(!ExistBarWeight(accountId,studentId,year)){
+		if(!existYearlyMean(accountId,studentId,year)){
 			try(   Connection conn = dbutils.getConnection();
-					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO BarWeight" 
+					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO YearlyMean" 
 							+"(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) VALUES (?,?,?,?,?,?,?);");
 					){
 
-				pstmt.setString(1, weight.getUuid());
+				pstmt.setString(1, yearlyMean.getUuid());
 				pstmt.setString(2, accountId);
 				pstmt.setString(3, studentId);
 				pstmt.setString(4, year);
-				pstmt.setDouble(5, weight.getMeanOne());
-				pstmt.setDouble(6, weight.getMeanOne());
-				pstmt.setDouble(7, weight.getMeanThree());
+				pstmt.setDouble(5, yearlyMean.getMeanOne());
+				pstmt.setDouble(6, yearlyMean.getMeanTwo());
+				pstmt.setDouble(7, yearlyMean.getMeanThree());
 
 				pstmt.executeUpdate();
 
 			}catch(SQLException e){
-				logger.error("SQL Exception trying to put BarWeight: " + weight);
+				logger.error("SQL Exception trying to put YearlyMean: " + yearlyMean);
 				logger.error(ExceptionUtils.getStackTrace(e)); 
 				System.out.println(ExceptionUtils.getStackTrace(e));
 				success = false;
@@ -153,20 +153,20 @@ public class BarWeightDAO  extends GenericDAO implements SchoolBarWeightDAO {
 		}else{
 
 			try (  Connection conn = dbutils.getConnection();
-					PreparedStatement pstmt = conn.prepareStatement("UPDATE BarWeight SET meanOne=?,"
+					PreparedStatement pstmt = conn.prepareStatement("UPDATE YearlyMean SET meanOne=?,"
 							+ "meanTwo=?,meanThree =? WHERE accountId = ? AND studentId =?"
 							+ "AND year = ?;");
 					) { 
-				pstmt.setDouble(1, weight.getMeanOne());
-				pstmt.setDouble(2, weight.getMeanOne());
-				pstmt.setDouble(3, weight.getMeanThree());
+				pstmt.setDouble(1, yearlyMean.getMeanOne());
+				pstmt.setDouble(2, yearlyMean.getMeanTwo());
+				pstmt.setDouble(3, yearlyMean.getMeanThree());
 				pstmt.setString(4, accountId);
 				pstmt.setString(5, studentId);
 				pstmt.setString(6, year);
 				pstmt.executeUpdate(); 
 
 			} catch (SQLException e) {
-				logger.error("SQL Exception when updating BarWeight" + weight);
+				logger.error("SQL Exception when updating YearlyMean" + yearlyMean);
 				logger.error(ExceptionUtils.getStackTrace(e));
 				System.out.println(ExceptionUtils.getStackTrace(e));
 				success = false;

@@ -27,6 +27,9 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -46,12 +49,14 @@ import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
+import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
@@ -80,6 +85,10 @@ public class StudentReportCard extends HttpServlet{
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
+	private static YearlyMeanDAO yearlyMeanDAO;
+	//private static SysConfigDAO sysConfigDAO;
+
+
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNarmal6 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
@@ -132,6 +141,8 @@ public class StudentReportCard extends HttpServlet{
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
+		yearlyMeanDAO = YearlyMeanDAO.getInstance();
+		//sysConfigDAO = SysConfigDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -198,8 +209,8 @@ public class StudentReportCard extends HttpServlet{
 
 
 		//check for number of subjects to grade
-
-		if(noOfSub == "eleven") {
+		//
+		if(StringUtils.equalsIgnoreCase(noOfSub, "eleven")) {
 			grade7subjects= false;
 			grade11subjects= true;
 		}else {
@@ -388,11 +399,12 @@ public class StudentReportCard extends HttpServlet{
 			int mainPoint = performance2.getTotalPoint();
 			int totalMean = performance2.getTotalMean();
 
-			int mean = performance2.getTotalMean();
+			int meanTotal = performance2.getTotalMean();
 
 			if(rankWithPoints && !rankWithTotalMarks){
 
 				total = mainPoint;
+
 
 			}
 
@@ -474,7 +486,7 @@ public class StudentReportCard extends HttpServlet{
 			//student name
 			PdfPCell nameInfoCell = new PdfPCell(new Phrase("Name:",timesRomanNarmal8)); 
 			PdfPCell nameDescCell = new PdfPCell(new Phrase(studentName,  timesRomanNarmal6));
-			
+
 			nameInfoCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setBorder(Rectangle.NO_BORDER);
 			nameDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -506,20 +518,134 @@ public class StudentReportCard extends HttpServlet{
 
 			//add student name
 			studentLeft.addCell(mainGradeInfoCell);
-			//rank 7 subjects
+
+
+
+			//rank 7 subjects 
+
+
+			double mean = 0;
+
+
+
+
 			if(grade7subjects && !grade11subjects){
-				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
+
+
+				mean = (double)meanTotal / 7;
+
+				String studentScore = "";
+
+				if(rankWithPoints && !rankWithTotalMarks){
+
+					studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, 
+							accountId, gradingSystemDAO) + ")";
+
+					YearlyMean yearlyMean = new YearlyMean();
+					yearlyMean.setAccountId(accountId);
+					yearlyMean.setStudentId(student.getUuid());
+					yearlyMean.setYear(year);
+					
+					if(StringUtils.equals(term, "1")){
+						
+						yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);
+						
+					}
+					if(StringUtils.equals(term, "2")){
+						
+						yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);
+						
+					}
+					if(StringUtils.equals(term, "3")){
+						
+						yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);
+						
+					}
+					
+					
+					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+
+				}
+
+				if(!rankWithPoints && rankWithTotalMarks){
+
+					studentScore = " , Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
+									accountId, gradingSystemDAO);
+					
+					
+					
+					YearlyMean yearlyMean = new YearlyMean();
+					yearlyMean.setAccountId(accountId);
+					yearlyMean.setStudentId(student.getUuid());
+					yearlyMean.setYear(year);
+					
+					if(StringUtils.equals(term, "1")){
+						
+						yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(mean))); 
+						
+					}
+					if(StringUtils.equals(term, "2")){
+						
+						yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(mean)));
+						
+					}
+					if(StringUtils.equals(term, "3")){
+						
+						yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(mean)));
+						
+					}
+					
+					
+					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+					
+					
+					
+				}
+
+
+
+
+
+				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));				
 				mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 				mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 				studentLeft.addCell(mainGradeDescCell);
+
+
 			}
 
-			//rank 11 subjects
+			//rank 11 subjects 
 			if(!grade7subjects && grade11subjects){
-				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(mainPoint + " /132 (" + ReportUtil.getGradeMainForm1(mainPoint, accountId, gradingSystemDAO) + ")" + " , Total(Avg): " + mean,  timesRomanNarmal6));
+
+
+				mean = (double)meanTotal / 11; 
+
+				String studentScore = "";
+
+				double avg = ((double)mainPoint / 132) * 84;
+
+
+				if(rankWithPoints && !rankWithTotalMarks){
+
+					studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), 
+							accountId, gradingSystemDAO) + ")";
+
+				}
+
+				if(!rankWithPoints && rankWithTotalMarks){
+
+					studentScore = "Total: " + meanTotal + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
+									accountId, gradingSystemDAO);
+				}
+
+				PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));
 				mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 				mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 				studentLeft.addCell(mainGradeDescCell);
+
+
 			}
 
 
@@ -769,6 +895,8 @@ public class StudentReportCard extends HttpServlet{
 			String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE"};
 			int count = 0;
 
+
+
 			for(String header : headers){
 
 				examTable.addCell(new Paragraph(header,timesRomanNarmal8));
@@ -776,9 +904,12 @@ public class StudentReportCard extends HttpServlet{
 				String exm1 = "0";
 				String exm2 = "0";
 				String exm3 = "0";
+
 				exm1 = String.valueOf(performance2.getExam1Total());
 				exm2 = String.valueOf(performance2.getExam2Total());
 				exm3 = String.valueOf(performance2.getExam3Total());
+
+				////mean
 
 				String ex1Grade = ReportUtil.getGrade(exm1,"x",accountId, subjectDAO, gradingSystemDAO);
 				String ex2Grade = ReportUtil.getGrade(exm2,"x",accountId, subjectDAO, gradingSystemDAO);
@@ -804,12 +935,34 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 
+
+				//mean
+				String meanStr = ReportUtil.df2.format(mean); 
+
+
+
+				double avg = ((double)mainPoint / 132) * 84;
+
 				//TOTAL
 				if(count == 0){ 
 					examTable.addCell(new Paragraph(" "+exm1 ,timesRomanNarmal6));
 					examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
 					examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
-					examTable.addCell(new Paragraph(" "+mainPoint ,timesRomanNarmal6));
+
+					String mainScore = "";
+
+					if(grade7subjects && !grade11subjects){
+						mainScore = (int)Math.round(mainPoint) + "";
+					}
+
+					if(!grade7subjects && grade11subjects){
+						mainScore = (int)Math.round(avg) + "";
+					}
+
+
+					examTable.addCell(new Paragraph(meanStr + " , " + mainScore ,timesRomanNarmal6)); 
+
+
 				}
 				//MEAN GRADE
 				else if(count == 1){ 
@@ -817,14 +970,50 @@ public class StudentReportCard extends HttpServlet{
 					examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
 					examTable.addCell(new Paragraph(" "+ex3Grade ,timesRomanNarmal6));
 
+
+					String mainExam = "";
+
+
 					//rank 7 subjects
 					if(grade7subjects && !grade11subjects){
-						examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+
+
+						if(rankWithPoints && !rankWithTotalMarks){
+
+							mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO);
+						}
+
+						if(!rankWithPoints && rankWithTotalMarks){
+
+
+							mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId, gradingSystemDAO);
+
+						}
+
+
+						examTable.addCell(new Paragraph(" "+mainExam  ,timesRomanNarmal6));
+
 					}
 
 					//rank 11 subjects
 					if(!grade7subjects && grade11subjects){
-						examTable.addCell(new Paragraph(" "+ReportUtil.getGradeMainForm1(mainPoint, accountId, gradingSystemDAO)  ,timesRomanNarmal6));
+
+
+						if(rankWithPoints && !rankWithTotalMarks){
+
+							mainExam = ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId, gradingSystemDAO);
+
+						}
+
+						if(!rankWithPoints && rankWithTotalMarks){
+
+							mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId, gradingSystemDAO);
+
+						}
+
+
+						examTable.addCell(new Paragraph(" "+mainExam  ,timesRomanNarmal6));
+
 					}
 
 				}
@@ -893,14 +1082,18 @@ public class StudentReportCard extends HttpServlet{
 
 			//footer table
 			PdfPTable footerTable = new PdfPTable(2);
-			footerTable.setWidthPercentage(78); 
-			footerTable.setWidths(new int[]{28,50}); 
+			footerTable.setWidthPercentage(100); 
+			footerTable.setWidths(new int[]{70,30}); 
+
+			PdfPTable graphTable = new PdfPTable(1);
+			graphTable.setWidthPercentage(70); 
+			graphTable.setWidths(new int[]{70});    
 
 
 			//fee info table
 			PdfPTable feeInfoTable = new PdfPTable(2);
-			feeInfoTable.setWidthPercentage(100); 
-			feeInfoTable.setWidths(new int[]{50,50}); 
+			feeInfoTable.setWidthPercentage(30); 
+			feeInfoTable.setWidths(new int[]{15,15}); 
 
 
 			PdfPCell feeInfo1 = new PdfPCell(new Phrase("Fee Analysis",timesRomanNarmal8)); 
@@ -916,16 +1109,16 @@ public class StudentReportCard extends HttpServlet{
 
 			feeInfoTable.addCell(feecol1);
 			feeInfoTable.addCell(feecol2);
-			
-			
+
+
 			Locale locale = new Locale("en","KE"); 
 			NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
 			StudentBalance balance = new StudentBalance();
 			double feeBalance = balance.findBalance(accountId, student.getUuid());
-			
+
 			String feeBal = nf.format(feeBalance);
-			//TODO
+
 			String nextTermFee = balance.findNextTermFee(accountId); 
 
 			if(!showFeeInfo){
@@ -949,33 +1142,53 @@ public class StudentReportCard extends HttpServlet{
 			feeInfoTable.addCell(nextTermFeeInfo);
 			feeInfoTable.addCell(nextTermFeeDesc); 
 
-			//grade(s) table 
-			PdfPTable gradesTable = new PdfPTable(3);
-			gradesTable.setWidthPercentage(28); 
-			gradesTable.setWidths(new int[]{12,8,8}); 
-			gradesTable.setHeaderRows(1); 
-			gradesTable.isSkipFirstHeader();
 
-			PdfPCell rangecell = new PdfPCell(new Phrase("Mark Range" , timesRomanNarmal8));
-			gradesTable.addCell(rangecell);
-			PdfPCell gradescell = new PdfPCell(new Phrase("Grade" , timesRomanNarmal8));
-			gradesTable.addCell(gradescell);
-			PdfPCell remarksscell = new PdfPCell(new Phrase("Points" , timesRomanNarmal8));
-			gradesTable.addCell(remarksscell);
+			ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
+			JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO);  
 
+			try {
 
-			for (GradingSystem  rankingScale : gradingSystemList){
+				ChartUtilities.writeChartAsPNG(byte_out, lineGraph, 1200, 270);
+				byte [] data = byte_out.toByteArray();
+				byte_out.close();
+				Image chartImage = Image.getInstance(data);
+				graphTable.addCell(chartImage); 
 
-				rangecell = new PdfPCell(new Phrase(rankingScale.getLowerLimit() + " - " + rankingScale.getUpperLimit(), timesRomanNarmal4));
-				gradesTable.addCell(rangecell);
-
-				gradescell = new PdfPCell(new Phrase(rankingScale.getDescription() + "" , timesRomanNarmal4));
-				gradesTable.addCell(gradescell);
-
-				remarksscell = new PdfPCell(new Phrase(rankingScale.getPoints() + " " , timesRomanNarmal4));
-				gradesTable.addCell(remarksscell);
-
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+
+
+
+
+			footerTable.addCell(graphTable);
+			footerTable.addCell(feeInfoTable);
+
+
+			//grade(s) table 
+			PdfPTable gradesTable = new PdfPTable(12);
+			gradesTable.setWidthPercentage(96);  
+			gradesTable.setWidths(new int[]{8,8,8,8,8,8,8,8,8,8,8,8}); 
+
+			gradingSystemList.forEach(grade ->{
+
+				PdfPCell cell = new PdfPCell(new Phrase(grade.getLowerLimit() + " - " + grade.getUpperLimit() , timesRomanNarmal4)); 
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+				gradesTable.addCell(cell);
+
+			});
+
+
+			gradingSystemList.forEach(grade ->{
+
+				PdfPCell cell = new PdfPCell(new Phrase(grade.getDescription(), timesRomanNarmal4));  
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+				gradesTable.addCell(cell);
+
+			});
+			//end grade table
 
 
 
@@ -984,7 +1197,8 @@ public class StudentReportCard extends HttpServlet{
 
 			document.add(examTable);
 
-			document.add(new Chunk("\n"));
+			document.add(gradesTable);
+			document.add(new Paragraph("\n"));
 
 			document.add(underline);
 
@@ -998,11 +1212,7 @@ public class StudentReportCard extends HttpServlet{
 
 			document.add(new Paragraph("\n"));
 
-			footerTable.addCell(gradesTable);
-			footerTable.addCell(feeInfoTable);
-
 			document.add(footerTable);
-
 
 			document.newPage();
 

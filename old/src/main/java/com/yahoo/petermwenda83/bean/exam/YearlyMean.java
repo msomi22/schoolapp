@@ -15,7 +15,7 @@ import com.yahoo.petermwenda83.bean.StorableBean;
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
-public class BarWeight extends StorableBean{
+public class YearlyMean extends StorableBean{
 	
 	private String studentId;
 	private String year;
@@ -23,7 +23,7 @@ public class BarWeight extends StorableBean{
 	private double meanTwo;
 	private double meanThree;
 	
-	public BarWeight() {
+	public YearlyMean() {
 		studentId = "";
 		year = "";
 		meanOne = 0;
@@ -117,7 +117,7 @@ public class BarWeight extends StorableBean{
 	 */
 	@Override
 	public String toString() {
-		return "BarWeight [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
+		return "YearlyMean [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
 				+ ", meanThree=" + meanThree + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 

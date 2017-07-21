@@ -3,6 +3,8 @@
  */
 package com.yahoo.petermwenda83.server.servlet.reports;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,10 +13,20 @@ import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import com.yahoo.petermwenda83.bean.exam.YearlyMean;
+import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
+import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
+import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
@@ -25,9 +37,13 @@ import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator
  *
  */
 public class ReportUtil {
-
-
-
+	
+	
+	public static SimpleDateFormat yearformatter = new SimpleDateFormat("yyyy");
+	public static DecimalFormat df2 = new DecimalFormat(".##");
+	public final static double STD_CONSTANT = 1.19;
+	public final static double GRAPH_CONSTANT = 0.12;
+	
 
 	/**
 	 * @param accountId
@@ -445,9 +461,11 @@ public class ReportUtil {
 	public static String getGradeMainForm234(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
 
 		String grade = "";
+		
+		double meanDouble = (double) mean / 7;
 
-		int point = (int) mean / 7; 
-
+		int point = (int) Math.round(meanDouble); 
+		
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
 		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
@@ -462,45 +480,11 @@ public class ReportUtil {
 			}
 
 		}
-
-
+		
 		return grade;
 	}
 
 	
-	/**
-	 * 
-	 * @param mean
-	 * @param accountId
-	 * @param gradingSystemDAO
-	 * @return
-	 */
-
-	public static String getGradeMainForm1(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
-
-		String grade = "";
-
-		int point = (int) mean / 11; 
-
-		List<GradingSystem> gradingSystemList = new ArrayList<>();
-
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-
-		for(GradingSystem gradingSystem : gradingSystemList){
-
-			if(point == gradingSystem.getPoints()){
-
-				grade = gradingSystem.getDescription();
-
-			}
-
-		}
-
-
-		return grade;
-	}
-
 
 
 	/**
@@ -531,18 +515,18 @@ public class ReportUtil {
 		if(arrsize == 3){
 
 			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
-			mean = Math.ceil(sum/3);
+			mean = Math.round(sum/3);
 
 		}
 		if(arrsize == 2){
 
 			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
-			mean = Math.ceil(sum/2);
+			mean = Math.round(sum/2);
 
 		}
 		if(arrsize == 1){
 			sum = Integer.parseInt(exam1Score); 
-			mean = Math.ceil(sum); 
+			mean = Math.round(sum); 
 		}
 
 
@@ -587,6 +571,84 @@ public class ReportUtil {
 		}
 		return remark;
 
+	}
+
+
+
+
+	/**
+	 * @param accountId
+	 * @param uuid
+	 * @param yearlyMeanDAO 
+	 * @param studentDAO 
+	 * @param sysConfigDAO 
+	 * @return
+	 */
+	public static JFreeChart generateLineGraph(String accountId, String studentId, YearlyMeanDAO yearlyMeanDAO, 
+			StudentDAO studentDAO) {
+		 
+		Student student = studentDAO.getStudentById(accountId, studentId); 
+		int regYear = Integer.valueOf(yearformatter.format(student.getAdmissionDate()));  
+		
+		YearlyMean yearOne = new YearlyMean();
+		YearlyMean yearTwo = new YearlyMean();
+		YearlyMean yearThree = new YearlyMean();
+		YearlyMean yearFour = new YearlyMean();
+		
+		if(yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear)) != null){
+			 yearOne = yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear)); 
+		}
+		
+		if(yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 1)) != null){
+			yearTwo = yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 1)); 
+		}
+		
+		if(yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 2)) != null){
+			yearThree = yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 2)); 
+		}
+		
+		if(yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 3)) != null){
+			yearFour = yearlyMeanDAO.getYearlyMean(accountId, studentId, Integer.toString(regYear + 3)); 
+		}
+		
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		
+		dataset.setValue(Double.valueOf(df2.format(yearOne.getMeanOne() * GRAPH_CONSTANT)) , "Mean" , yearOne.getYear() + " T 1");
+		dataset.setValue(Double.valueOf(df2.format(yearOne.getMeanTwo() * GRAPH_CONSTANT)), "Mean" , yearOne.getYear() + " T 2");
+		dataset.setValue(Double.valueOf(df2.format(yearOne.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearOne.getYear() + " T 3");
+		
+		dataset.setValue(Double.valueOf(df2.format(yearTwo.getMeanOne() * GRAPH_CONSTANT)) , "Mean" , yearTwo.getYear() + " T 1");
+		dataset.setValue(Double.valueOf(df2.format(yearTwo.getMeanTwo() * GRAPH_CONSTANT)), "Mean" , yearTwo.getYear() + " T 2");
+		dataset.setValue(Double.valueOf(df2.format(yearTwo.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearTwo.getYear() + " T 3");
+		
+		dataset.setValue(Double.valueOf(df2.format(yearThree.getMeanOne() * GRAPH_CONSTANT)) , "Mean" , yearThree.getYear() + " T 1");
+		dataset.setValue(Double.valueOf(df2.format(yearThree.getMeanTwo() * GRAPH_CONSTANT)), "Mean" , yearThree.getYear() + " T 2");
+		dataset.setValue(Double.valueOf(df2.format(yearThree.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearThree.getYear() + " T 3");
+		
+		dataset.setValue(Double.valueOf(df2.format(yearFour.getMeanOne() * GRAPH_CONSTANT)) , "Mean" , yearFour.getYear() + " T 1");
+		dataset.setValue(Double.valueOf(df2.format(yearFour.getMeanTwo() * GRAPH_CONSTANT)), "Mean" , yearFour.getYear() + " T 2");
+		dataset.setValue(Double.valueOf(df2.format(yearFour.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearFour.getYear() + " T 3");
+		
+		dataset.setValue(12, "Control ", "Control ");
+		
+		System.out.println("---------------------------------" + yearOne.getMeanOne()* GRAPH_CONSTANT); 
+		
+		JFreeChart chart = ChartFactory.createBarChart("Yearly Performance", // chart title
+				"Year", // domain axis label (Y axis)
+				"Mean", //  range axis label (X axis)
+				dataset, // data
+				PlotOrientation.VERTICAL, // orientation
+				false, // include legend
+				true, // tooltips?
+				false);// URLs?
+		
+		
+		CategoryPlot categoryPlot = chart.getCategoryPlot();
+		BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
+		br.setMaximumBarWidth(0.05); // set maximum width to 10% of chart
+		
+		
+		return chart;
 	}
 
 }

@@ -23,6 +23,7 @@ import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 
 /**
  * @author peter
@@ -80,7 +81,7 @@ public class StudentBalance {
 	 */
 	public double findBalance(String accountId, String studentId) {
 
-		SimpleDateFormat yearformatter = new SimpleDateFormat("yyyy");
+		SimpleDateFormat yearformatter = ReportUtil.yearformatter;
 
 		String currentYear;
 		String currentTerm;
@@ -88,7 +89,7 @@ public class StudentBalance {
 
 		Student student = studentDAO.getStudentById(accountId, studentId);
 		int finalYear = Integer.valueOf(student.getFinalYear()); 
-		System.out.println("finalYear:" + finalYear);
+		//System.out.println("finalYear:" + finalYear);
 
 		double balance = 0;
 		double amountPaid = 0;
@@ -96,23 +97,23 @@ public class StudentBalance {
 
 		String admYear = yearformatter.format(student.getAdmissionDate());  
 
-		System.out.println("admYear:" + admYear);
+		//System.out.println("admYear:" + admYear);
 
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 
 		currentYear = sysConfig.getYear();
 		currentTerm = sysConfig.getTerm();
 
-		System.out.println("currentYear:" + currentYear);
-		System.out.println("currentTerm:" + currentTerm);
+		//System.out.println("currentYear:" + currentYear);
+		//System.out.println("currentTerm:" + currentTerm);
 
 		int admYr = Integer.parseInt(admYear);
 		int admTm = Integer.parseInt(student.getRegTerm());
 		int crrntYr = Integer.parseInt(currentYear);
 
-		System.out.println("admYr:" + admYr);
-		System.out.println("admTm:" + admTm);
-		System.out.println("crrntYr:" + crrntYr);
+		//System.out.println("admYr:" + admYr);
+		//System.out.println("admTm:" + admTm);
+		//System.out.println("crrntYr:" + crrntYr);
 
 		if(admTm == 2){   
 			terms = new String [] {"2","3"}; 
@@ -135,8 +136,8 @@ public class StudentBalance {
 				studentFeeList = studentFeeDAO.getStudentFeeList(accountId, studentId, term, year);
 				otherFeeList = studentOtherMoniesDAO.StudentOtherFeeList(accountId, studentId, term, year);
 
-				System.out.println("studentFeeList:" + studentFeeList.size());
-				System.out.println("otherFeeList:" + otherFeeList.size());
+				//System.out.println("studentFeeList:" + studentFeeList.size());
+				//System.out.println("otherFeeList:" + otherFeeList.size());
 
 
 				TermFee admTermFee = new TermFee();
@@ -150,24 +151,24 @@ public class StudentBalance {
 				for(StudentFee studentFee :studentFeeList){
 					amountPaid +=studentFee.getAmountPaid();//amount paid per term
 					paidHas = studentFee.getPaidHas();//last payment type , boarders = 1, day = 0
-					System.out.println("amountPaid: " + studentFee.getAmountPaid()+ ", total: " + amountPaid + ", term: " +term+ ", year: " + year + ", paidHas: " + paidHas);
+					//System.out.println("amountPaid: " + studentFee.getAmountPaid()+ ", total: " + amountPaid + ", term: " +term+ ", year: " + year + ", paidHas: " + paidHas);
 
 				}
 
 				for(StudentOtherFee otherFee : otherFeeList){
 					otherPaid += otherFee.getAmountPiad();
-					System.out.println("otherPaid: " + otherFee.getAmountPiad() + " , total:" + otherPaid);
+					//System.out.println("otherPaid: " + otherFee.getAmountPiad() + " , total:" + otherPaid);
 				}
 
 				if(StringUtils.equals(paidHas, "1")){
 
 					balance += (admTermFee.getBoaderAmount() + otherPaid) - amountPaid;
-					System.out.println("balance 1: " + balance + " += " +admTermFee.getBoaderAmount() + " + " + otherPaid + " - " + amountPaid);
+					//System.out.println("balance 1: " + balance + " += " +admTermFee.getBoaderAmount() + " + " + otherPaid + " - " + amountPaid);
 
 				}else if(StringUtils.equals(paidHas, "0")) {
 
 					balance += (admTermFee.getDayAmount() + otherPaid) - amountPaid;
-					System.out.println("balance 0: " + balance + " += " +admTermFee.getDayAmount() + " + " + otherPaid + " - " + amountPaid);
+					//System.out.println("balance 0: " + balance + " += " +admTermFee.getDayAmount() + " + " + otherPaid + " - " + amountPaid);
 				}
 
 				// clear our list at the end to ensure a clean start
