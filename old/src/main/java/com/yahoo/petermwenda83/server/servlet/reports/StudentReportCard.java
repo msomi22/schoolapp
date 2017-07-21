@@ -99,12 +99,8 @@ public class StudentReportCard extends HttpServlet{
 
 	private Logger logger;
 
-	//private String[] exams= {"4531A31D-1F8A-40D7-BFE6-D3CB3D91951A,34C4244E-5CE0-4D5D-AD85-60E97FDDD80A,AE24F15B-5038-4A15-8607-1DB2A7A0B7DE"} ;
-	// , "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A", "16C4BF00-941C-40E4-9891-272D5F0979A1" 
-
 	private String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" ,"16C4BF00-941C-40E4-9891-272D5F0979A1"};
 
-	//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 	private boolean hidePoints = false;
 	private boolean hideGrade = false;
 
@@ -119,14 +115,6 @@ public class StudentReportCard extends HttpServlet{
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
-
-	
-	
-	
-
-
-
-
 
 
 	/**  
@@ -225,56 +213,20 @@ public class StudentReportCard extends HttpServlet{
 		}
 
 
+		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
+		term = StringUtils.trimToEmpty(request.getParameter("term"));
+		year = StringUtils.trimToEmpty(request.getParameter("year"));
+		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//added
 
-		//log submmited exams
-		String logexams="";
 
-		//modify the term,year and stream
-
-		 accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		 streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
-		 term = StringUtils.trimToEmpty(request.getParameter("term"));
-		 year = StringUtils.trimToEmpty(request.getParameter("year"));
-		 classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//added
-		 
-		 
-		 //get selected exams
-		 String[] examsfeed= request.getParameterValues("exam");
-		 
-		 
-			
-
+		//get selected exams
+		String[] examsfeed= request.getParameterValues("exam");
 
 		//assign the global exams with the submitted	
 		exams=examsfeed;
 
-		for (int j= 0; j < exams.length; j++) {
-
-			// exams[i]= examsfeed[i];
-			//logexams += exams[j] + exams.length+"\n";
-
-		}
-
-
-		//log the submitted data 
-		logger.info("HidePts submitted " + hidePts); 
-		logger.info("HideGds submitted" + hideGds); 
-		logger.info("Fee submitted" + showfee); 
-		logger.info("Subjects submitted " + noOfSub); 
-
-		logger.info("Exam submitted " + logexams);
-
-		logger.info("Year submitted " + year); 
-		logger.info("Term submitted " + term); 
-
-
-
-
-
-		logger.info("HidePts " + hidePoints); 
-		logger.info("HideGds " + hideGrade); 
-		logger.info("Fee " + showFeeInfo); 
-		logger.info("Subjects " + grade7subjects); 
+		logger.info("*************** streamId " + streamId); 
+		logger.info("*************** classroomId " + classroomId); 
 
 		response.setContentType("application/pdf");
 
@@ -325,15 +277,6 @@ public class StudentReportCard extends HttpServlet{
 	 */
 	public  void compute(String accountId, String streamId, String term, String year) {
 
-		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-		// term = "1";
-
-		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		//streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-		// term = "1";
-		// year = "2016";
-
 		try {
 
 			document.open();
@@ -369,16 +312,41 @@ public class StudentReportCard extends HttpServlet{
 		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
 
 		Account account = accountDAO.getAccountById(accountId);
+		
+		List<Student> studentsList = new ArrayList<>();
+		List<Performance2> performanceList =  new ArrayList<>();
 
-		List<Student> studentsList = studentDAO.getStudentByStream(accountId, streamId);
+		if(studentDAO.getStudentByStream(accountId, streamId) != null){
+			
+			studentsList = studentDAO.getStudentByStream(accountId, streamId);
 
+		}
+		
+		if(studentsList.isEmpty()){
+			//avoid document has no page error
+			document.add(new Paragraph(",")); 
+		}
+		
+		
+		
 		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
 				+ " , Cell : " + account.getMobile() + "\n"
 				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
 
 
-		List<Performance2> performanceList = getStudentScore3(accountId, streamId, term, year, studentsList);
+		if(getStudentScore3(accountId, streamId, term, year, studentsList) != null){
+			
+			performanceList = getStudentScore3(accountId, streamId, term, year, studentsList);
 
+		}
+		
+		//avoid document has no page error
+		if(performanceList.isEmpty()){
+			
+			  document.add(new Paragraph(",")); 
+		}
+		 
+		
 		String rankingCriteria = "";
 
 		if(rankWithPoints && !rankWithTotalMarks){
@@ -552,24 +520,24 @@ public class StudentReportCard extends HttpServlet{
 					yearlyMean.setAccountId(accountId);
 					yearlyMean.setStudentId(student.getUuid());
 					yearlyMean.setYear(year);
-					
+
 					if(StringUtils.equals(term, "1")){
-						
+
 						yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);
-						
+
 					}
 					if(StringUtils.equals(term, "2")){
-						
+
 						yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);
-						
+
 					}
 					if(StringUtils.equals(term, "3")){
-						
+
 						yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);
-						
+
 					}
-					
-					
+
+
 					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 				}
@@ -579,35 +547,35 @@ public class StudentReportCard extends HttpServlet{
 					studentScore = " , Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
 									accountId, gradingSystemDAO);
-					
-					
-					
+
+
+
 					YearlyMean yearlyMean = new YearlyMean();
 					yearlyMean.setAccountId(accountId);
 					yearlyMean.setStudentId(student.getUuid());
 					yearlyMean.setYear(year);
-					
+
 					if(StringUtils.equals(term, "1")){
-						
+
 						yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(mean))); 
-						
+
 					}
 					if(StringUtils.equals(term, "2")){
-						
+
 						yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(mean)));
-						
+
 					}
 					if(StringUtils.equals(term, "3")){
-						
+
 						yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(mean)));
-						
+
 					}
-					
-					
+
+
 					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
-					
-					
-					
+
+
+
 				}
 
 

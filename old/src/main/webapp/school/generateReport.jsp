@@ -9,6 +9,8 @@
 <%@page import="com.yahoo.petermwenda83.persistence.exam.ExamDAO"%>
 <%@page import="com.yahoo.petermwenda83.bean.exam.Exam"%>
 
+<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
+
 
 <!-- Config -->
 <%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
@@ -49,6 +51,7 @@
      //get exams list
      
      ExamDAO examDAO = ExamDAO.getInstance();
+     StudentDAO studentDAO = StudentDAO.getInstance();
      
      List<Exam> examList= new ArrayList<>();
      
@@ -364,12 +367,15 @@
 													<select class="form-control formelement" name="stream">
 
 														<%
+														    int studentsCount = 0;
 															if (streamList != null) {
 																for (Stream stream : streamList) {
+																	
+															studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1"); 
 														%>
 
 														<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription()%></option>
+															<%=stream.getDescription() + " (" + studentsCount + ")"%></option> 
 
 														<%
 															}
