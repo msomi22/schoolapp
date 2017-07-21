@@ -20,68 +20,56 @@
 <!-- Import calendar -->
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.GregorianCalendar"%>
-   
+
 
 
 
 
 
 <%
+	if (session == null) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-  if (session == null) {
-       response.sendRedirect("../index.jsp");
-       //return;
-    }
+	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(username)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
+	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-    
-    String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
-    
-    
-     //get the current year
-    /*  int current= 0;
-     
-      GregorianCalendar cal = new GregorianCalendar();
-      current=cal.get(Calendar.YEAR); */
-      
-      SysConfigDAO sysConfigDAO= SysConfigDAO.getInstance();
-      
-      SysConfig sysConfig= sysConfigDAO.getSysConfig(accountId);
-      
-      int currentYear= Integer.parseInt(sysConfig.getYear());
-      
-      int currentTerm= Integer.parseInt(sysConfig.getTerm());
-      
-      
-      
-      //get class list
-      ClassDAO classDAO = ClassDAO.getInstance();
-      
-      List<ClassRoom> classroomList = new ArrayList<>();
-      
-      classroomList = classDAO.getClassRooms(accountId);
-      
-      
-      
-      //get stream list
-      StreamDAO streamDAO = StreamDAO.getInstance();
-      
-      List<Stream> streamList= new ArrayList<>();
-      
-      streamList= streamDAO.getStreamList(accountId);
-     
-    
-     
-     
-     
-   
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+
+	//get the current year
+	/*  int current= 0;
+	 
+	  GregorianCalendar cal = new GregorianCalendar();
+	  current=cal.get(Calendar.YEAR); */
+
+	SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
+
+	SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+
+	int currentYear = Integer.parseInt(sysConfig.getYear());
+
+	int currentTerm = Integer.parseInt(sysConfig.getTerm());
+
+	//get class list
+	ClassDAO classDAO = ClassDAO.getInstance();
+
+	List<ClassRoom> classroomList = new ArrayList<>();
+
+	classroomList = classDAO.getClassRooms(accountId);
+
+	//get stream list
+	StreamDAO streamDAO = StreamDAO.getInstance();
+
+	List<Stream> streamList = new ArrayList<>();
+
+	streamList = streamDAO.getStreamList(accountId);
 %>
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
@@ -126,8 +114,8 @@
 								<div class="x_panel">
 									<div class="x_title">
 										<h1>
-											Register a new student<small> Click register
-												when done</small>
+											Register a new student<small> Click register when
+												done</small>
 										</h1>
 										<ul class="nav navbar-right panel_toolbox">
 											<li><a class="collapse-link"><i
@@ -140,59 +128,64 @@
 
 
 										<form action="studentRegistration" id="registerStudent"
-											class="col-md-6 col-md-offset-3" method="post" target="_blank">
+											class="col-md-6 col-md-offset-3" method="post"
+											target="_blank">
 
 
-								<!-- names  -->
-											
+											<!-- names  -->
+
 											<div class="row">
-											
+
 
 												<div class="col-md-3 col-md-offset-1">
-												<h4>First Name</h4>
-												
-													<input type="text" id="fname" class="form-control formelement"
-														name="fname" placeholder="First Name" 
-														pattern="[A-Za-z]{3,20}" 
-														title="First Name,Only characters are allowed and should be more than two and less than 20 characters" required>
+													<h4>First Name</h4>
+
+													<input type="text" id="fname"
+														class="form-control formelement" name="fname"
+														placeholder="First Name" pattern="[A-Za-z]{3,20}"
+														title="First Name,Only characters are allowed and should be more than two and less than 20 characters"
+														required>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
-												<h4>Middle Name</h4>
-													<input type="text" id="mname" name="mname"   class="form-control formelement"
-													placeholder="Middle Name" pattern="[A-Za-z]{,20}"
-													title="Middle Name,Only characters are allowed and should be less than 20 characters "  >
+													<h4>Middle Name</h4>
+													<input type="text" id="mname" name="mname"
+														class="form-control formelement" placeholder="Middle Name"
+														pattern="[A-Za-z]{,20}"
+														title="Middle Name,Only characters are allowed and should be less than 20 characters ">
 												</div>
-												
-												
+
+
 												<div class="col-md-3 col-md-offset-1">
-												<h4>Last Name</h4>
-													<input type="text" id="lname" name="lname" class="form-control formelement" 
-													placeholder="Last Name" pattern="[A-Za-z]{3,20}" 
-													title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"  required>
+													<h4>Last Name</h4>
+													<input type="text" id="lname" name="lname"
+														class="form-control formelement" placeholder="Last Name"
+														pattern="[A-Za-z]{3,20}"
+														title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"
+														required>
 												</div>
-												
-												
-												
+
+
+
 											</div>
-											
+
 											<br>
 
 
-								<!-- sex and county  -->
-											
+											<!-- sex and county  -->
+
 											<div class="row">
 
 												<div class="col-md-5 col-md-offset-1">
-												<h4>Gender</h4>
-													<select name="gender" class="form-control formelement" >
-													<option value="male">Male</option>
-													<option value="female">Female</option>
+													<h4>Gender</h4>
+													<select name="gender" class="form-control formelement">
+														<option value="male">Male</option>
+														<option value="female">Female</option>
 													</select>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-												<h4>County</h4>
+													<h4>County</h4>
 													<select name="county" class="form-control formelement">
 														<option value='Baringo'>Baringo</option>
 														<option value='Bomet'>Bomet</option>
@@ -244,106 +237,82 @@
 													</select>
 												</div>
 
-												
-												
-												
+
+
+
 											</div>
-											
-											
+
+
 											<br>
-											
-											
-											
-											
+
+
+
+
 											<!-- dob and bcertno -->
-											
+
 											<div class="row">
 
 												<div class="col-md-5 col-md-offset-1">
-												<h4>Date of Birth</h4>
-													<input type="date" id="dob" class="form-control formelement"
-														name="dob" placeholder="Date of Birth"  >
+													<h4>Date of Birth</h4>
+													<input type="date" id="dob"
+														class="form-control formelement" name="dob"
+														placeholder="Date of Birth">
 
-												
+
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-												<h4>Birth Cert N0_</h4>
-													<input type="text" id="bcertno" name="bcertno"  class="form-control formelement"
-													placeholder="Birth Cert No_"
-													pattern="[0-9]{5}" title="Birth cert no, should contain numerics only and should be 5 numbers only" required>
+													<h4>Birth Cert N0_</h4>
+													<input type="text" id="bcertno" name="bcertno"
+														class="form-control formelement"
+														placeholder="Birth Cert No_" pattern="[0-9]{5}"
+														title="Birth cert no, should contain numerics only and should be 5 numbers only"
+														required>
 												</div>
 
-												
-												
-												
+
+
+
 											</div>
-											
-											<br>
-											
-											
-											<br>
-											<br>
-											
-											
-											
+
+											<br> <br> <br>
+
+
+
 											<!-- Schoool info -->
 
 
 											<div class="row">
 
 												<div class="col-md-5 col-md-offset-1">
-												<h4>School's Name</h4>
-													<input type="text" id="schoolname" class="form-control formelement"
-														name="schoolname" placeholder="School name" pattern="[A-Za-z]{,20}" 
-													title="School Name,Only characters are allowed and should be less than 20 characters"> 
-														
+													<h4>Type</h4>
+													<select name="boarding" class="form-control formelement">
+														<option value="1">Boarding</option>
+														<option value="0">Day</option>
+													</select>
 												</div>
 
+
+
 												<div class="col-md-5 col-md-offset-1">
-												<h4>Registration No_</h4>
-												
-													<input type="text" id="regno" name="regno" class="form-control formelement"
-													placeholder="Registration number"
-													pattern="[0-9]{4}" title="Registration number, should contain numerics only and should be 4 numbers only" required>
+													<h4>Registration No_</h4>
+
+													<input type="text" id="regno" name="regno"
+														class="form-control formelement"
+														placeholder="Registration number" pattern="[0-9]{4}"
+														title="Registration number, should contain numerics only and should be 4 numbers only"
+														required>
 												</div>
 
 
 
 
 											</div>
-											
-											
-											
-											
-											<div class="row">
-											
-											
 
-												<div class="col-md-5 col-md-offset-1">
-												<h4>Type</h4>
-													<select name="boarding" class="form-control formelement" >
-													<option value="1">Boarding</option>
-													<option value="0">Day</option>
-													</select>
-												</div>
-												
-												
 
-												<div class="col-md-5 col-md-offset-1">
-												<h4>Term</h4>
-													<select name="term" class="form-control formelement">
-														<option value="1">Term 1</option>
-														<option value="2">Term 2</option>
-														<option value="3">Term 3</option>
-														
-													</select>
-												</div>
 
-												
-												
-												
-											</div>
+
+
 
 
 
@@ -375,10 +344,10 @@
 
 
 												</div>
-												
-												
-												
-												
+
+
+
+
 												<div class="col-md-5 col-md-offset-1">
 
 													<h4>Stream</h4>
@@ -411,10 +380,13 @@
 												</div>
 
 											</div>
+
+
+
 											
-											
-											
-											<div class="row">
+
+
+											<!-- 	<div class="row">
 											
 											
 
@@ -441,21 +413,206 @@
 												
 												
 											</div>
-
-
-
-
-
-
-
+ -->
 
 											<br>
 											<br>
+											<!-- Primary school element -->
+											<h4>Enter Primary school details:</h4>
+
+											<div class="row">
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="no" class="form-control"
+														name="primaryschool"  onclick="primarySwap(this.id)"
+														checked> <label for="no">
+														<h6>NO</h6>
+
+													</label>
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="yes" name="primaryschool" 
+														onclick="primarySwap(this.id)"> <label for="yes">
+														<h6>Yes</h6>
+
+													</label>
+												</div>
+
+											</div>
 											
-											<input type="hidden" name="action" value="add">
 											
 											
-										<!-- 	<input type="hidden" name="action" value="edit"> -->
+											
+											<!-- Priamry school details -->
+											<div id="primarySchoolDetails" style="display:none">
+
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>School's Name</h4>
+													<input type="text" id="schoolname"
+														class="form-control formelement" name="schoolname"
+														placeholder="School name" pattern="[A-Za-z]{,20}"
+														title="School Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+												
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Index Number</h4>
+													<input type="text" id="indexno"
+														class="form-control formelement" name="indexno"
+														placeholder="Index Number" pattern="[0-9]{9}"
+														title="Index Number,Only numbers are allowed and should be 9 numbers">
+
+												</div>
+
+
+
+
+
+											</div>
+											
+											
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>KCPE YEAR</h4>
+													<input type="text" id="kcpeyear"
+														class="form-control formelement" name="kcpeyear"
+														placeholder="KCPE year" pattern="[0-9]{4}"
+														title="KCPE year,enter an year">
+
+												</div>
+												
+												<div class="col-md-5 col-md-offset-1">
+													<h4>KCPE MARKS</h4>
+													<input type="text" id="kcpemarks"
+														class="form-control formelement" name="kcpemarks"
+														placeholder="KCPE marks" pattern="[0-9]{1,3}"
+														title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
+
+												</div>
+
+
+
+
+
+											</div>
+											
+											</div>
+											
+											
+											<br>
+											<!-- Student's parent element -->
+											<h4>Enter Parent's details:</h4>
+
+											<div class="row">
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="noParent" class="form-control"
+														name="parent"  onclick="primarySwap(this.id)"
+														checked> <label for="noParent">
+														<h6>NO</h6>
+
+													</label>
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="yesParent" name="parent" 
+														onclick="primarySwap(this.id)"> <label for="yesParent">
+														<h6>Yes</h6>
+
+													</label>
+												</div>
+
+											</div>
+											
+											
+											<!-- Parent's details -->
+											<div id="parentDetails" style="display:none">
+
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>First Name</h4>
+													<input type="text" id="pfname"
+														class="form-control formelement" name="pfname"
+														placeholder="Parent's First name" pattern="[A-Za-z]{3,20}"
+														title="First Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+												
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Last Name</h4>
+													<input type="text" id="plname"
+														class="form-control formelement" name="plname"
+														placeholder="Parent's Last name" pattern="[A-Za-z]{3,20}"
+														title="Last Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+
+
+
+
+
+											</div>
+											
+											
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Phone Number</h4>
+													<input type="text" id="phone"
+														class="form-control formelement" name="phone"
+														placeholder="Phone number" pattern="[0-9]{10}"
+														title="Phone,enter a valid number e.g 0712345678">
+
+												</div>
+												
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Email</h4>
+													<input type="email" id="email"
+														class="form-control formelement" name="email">
+
+												</div>
+
+
+
+
+
+											</div>
+											
+											</div>
+											
+											
+											
+											
+											
+
+
+
+
+
+
+
+											<br> <br> <input type="hidden" name="action"
+												value="add">
+
+
+											<!-- 	<input type="hidden" name="action" value="edit"> -->
 
 											<!-- footer of the form elements: Back,Reset and generate -->
 
@@ -513,28 +670,18 @@
 <script src="js/datepicker/pikaday.js"></script>
 <script src="js/datepicker/pikaday.jquery.js"></script>
 
-	<script>
-														var timepicker = new Pikaday(
-																{
-																	field : document
-																			.getElementById('dob'),
-																	firstDay : 1,
-																	minDate : new Date(
-																			1990,
-																			0,
-																			1),
-																	maxDate : new Date(
-																			2006,
-																			12,
-																			31),
-																	yearRange : [
-																			1990,
-																			2006 ],
-																	showTime : true,
-																	autoClose : false,
-																	use24hour : false,
-																	format : 'YYYY-MM-DD'
-																});
-													</script>
+<script>
+	var timepicker = new Pikaday({
+		field : document.getElementById('dob'),
+		firstDay : 1,
+		minDate : new Date(1990, 0, 1),
+		maxDate : new Date(2006, 12, 31),
+		yearRange : [ 1990, 2006 ],
+		showTime : true,
+		autoClose : false,
+		use24hour : false,
+		format : 'YYYY-MM-DD'
+	});
+</script>
 
 

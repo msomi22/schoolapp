@@ -120,6 +120,11 @@ public class StudentReportCard extends HttpServlet{
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
 
+	
+	
+	
+
+
 
 
 
@@ -168,6 +173,7 @@ public class StudentReportCard extends HttpServlet{
 		String streamId;
 		String term;
 		String year;
+		String classroomId;
 
 		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 
@@ -225,18 +231,19 @@ public class StudentReportCard extends HttpServlet{
 
 		//modify the term,year and stream
 
-		accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
-		term = StringUtils.trimToEmpty(request.getParameter("term"));
-		year = StringUtils.trimToEmpty(request.getParameter("year"));
+		 accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
+		 streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
+		 term = StringUtils.trimToEmpty(request.getParameter("term"));
+		 year = StringUtils.trimToEmpty(request.getParameter("year"));
+		 classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//added
+		 
+		 
+		 //get selected exams
+		 String[] examsfeed= request.getParameterValues("exam");
+		 
+		 
+			
 
-		//get selected exams
-		String[] examsfeed= request.getParameterValues("exam");
-
-		accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
-		term = StringUtils.trimToEmpty(request.getParameter("term"));
-		year = StringUtils.trimToEmpty(request.getParameter("year"));
 
 		//assign the global exams with the submitted	
 		exams=examsfeed;
