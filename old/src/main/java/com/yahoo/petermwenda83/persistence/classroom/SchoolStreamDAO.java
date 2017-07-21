@@ -51,6 +51,13 @@ public interface SchoolStreamDAO {
 	   * @return
 	   */
 	public List<Stream> getStreamList(String accountId);
+	/**
+	 * 
+	 * @param accountId
+	 * @param classRoomId
+	 * @return
+	 */
+	public List<Stream> getStreamList(String accountId , String classRoomId);
 	
 
 }
