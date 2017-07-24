@@ -315,7 +315,7 @@
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="stream" name="scope" value="stream"
+													<input type="radio" id="stream" name="scope" value="false"
 														onclick="scopeSwap(this.id)"> <label for="stream">
 														<h6>Stream</h6>
 
