@@ -136,7 +136,7 @@
 
 
 
-										<div class="col-md-3 col-sm-3" id="crop-avatar">
+										<div class="col-md-2 col-sm-2" id="crop-avatar">
 
 											<!-- Current avatar -->
 											<div class="avatar-view" title="Change the avatar">
