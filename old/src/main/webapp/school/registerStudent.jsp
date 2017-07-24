@@ -75,14 +75,22 @@
 <!-- Custom report style -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
 <link rel='stylesheet prefetch'
 	href='https://fonts.googleapis.com/css?family=Roboto:400,700'>
 <link rel='stylesheet prefetch'
 	href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
 <link rel="stylesheet" href="css/customReportStyle.css">
 
+
+<!-- Date and time picker -->
 <link rel="stylesheet" href="css/pikaday.css">
+
+
+
+<!-- Cropper -->
+
+<link rel="stylesheet" href="css/cropper/cropper.min.css">
+<link rel="stylesheet" href="css/cropper/main.css">
 
 
 
@@ -127,8 +135,25 @@
 										<br />
 
 
+
+										<div class="col-md-3 col-sm-3" id="crop-avatar">
+
+											<!-- Current avatar -->
+											<div class="avatar-view" title="Change the avatar">
+												<img src="images/picture.jpg" alt="Avatar">
+											</div>
+
+											<!-- Cropper Modal -->
+											<jsp:include page="modals/cropper.html" />
+
+											<!-- Loading state -->
+											<div class="loading" aria-label="Loading" role="img"
+												tabindex="-1"></div>
+										</div>
+
+
 										<form action="studentRegistration" id="registerStudent"
-											class="col-md-6 col-md-offset-3" method="post"
+											class="col-md-6 col-sm-3 col-md-offset-1" method="post"
 											target="_blank">
 
 
@@ -383,7 +408,7 @@
 
 
 
-											
+
 
 
 											<!-- 	<div class="row">
@@ -415,8 +440,7 @@
 											</div>
  -->
 
-											<br>
-											<br>
+											<br> <br>
 											<!-- Primary school element -->
 											<h4>Enter Primary school details:</h4>
 
@@ -424,91 +448,93 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="no" class="form-control"
-														name="primaryschool" value="false"  onclick="primarySwap(this.id)"
-														checked> <label for="no">
+														name="primaryschool" value="false"
+														onclick="primarySwap(this.id)" checked> <label
+														for="no">
 														<h6>NO</h6>
 
 													</label>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="yes" value="true" name="primaryschool" 
-														onclick="primarySwap(this.id)"> <label for="yes">
+													<input type="radio" id="yes" value="true"
+														name="primaryschool" onclick="primarySwap(this.id)">
+													<label for="yes">
 														<h6>Yes</h6>
 
 													</label>
 												</div>
 
 											</div>
-											
-											
-											
-											
+
+
+
+
 											<!-- Priamry school details -->
-											<div id="primarySchoolDetails" style="display:none">
+											<div id="primarySchoolDetails" style="display: none">
 
-											<div class="row">
-
-
+												<div class="row">
 
 
-												<div class="col-md-5 col-md-offset-1">
-													<h4>School's Name</h4>
-													<input type="text" id="schoolname"
-														class="form-control formelement" name="schoolname"
-														placeholder="School name" pattern="[A-Za-z]{3,30}"
-														title="School Name,Only characters are allowed and should be less than 20 characters">
+
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>School's Name</h4>
+														<input type="text" id="schoolname"
+															class="form-control formelement" name="schoolname"
+															placeholder="School name" pattern="[A-Za-z]{3,30}"
+															title="School Name,Only characters are allowed and should be less than 20 characters">
+
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>Index Number</h4>
+														<input type="text" id="indexno"
+															class="form-control formelement" name="indexno"
+															placeholder="Index Number" pattern="[0-9]{9}"
+															title="Index Number,Only numbers are allowed and should be 9 numbers">
+
+													</div>
+
+
+
+
 
 												</div>
-												
-												<div class="col-md-5 col-md-offset-1">
-													<h4>Index Number</h4>
-													<input type="text" id="indexno"
-														class="form-control formelement" name="indexno"
-														placeholder="Index Number" pattern="[0-9]{9}"
-														title="Index Number,Only numbers are allowed and should be 9 numbers">
+
+
+												<div class="row">
+
+
+
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>KCPE YEAR</h4>
+														<input type="text" id="kcpeyear"
+															class="form-control formelement" name="kcpeyear"
+															placeholder="KCPE year" pattern="[0-9]{4}"
+															title="KCPE year,enter an year">
+
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>KCPE MARKS</h4>
+														<input type="text" id="kcpemarks"
+															class="form-control formelement" name="kcpemarks"
+															placeholder="KCPE marks" pattern="[0-9]{1,3}"
+															title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
+
+													</div>
+
+
+
+
 
 												</div>
-
-
-
-
 
 											</div>
-											
-											
-											<div class="row">
 
 
-
-
-												<div class="col-md-5 col-md-offset-1">
-													<h4>KCPE YEAR</h4>
-													<input type="text" id="kcpeyear"
-														class="form-control formelement" name="kcpeyear"
-														placeholder="KCPE year" pattern="[0-9]{4}"
-														title="KCPE year,enter an year">
-
-												</div>
-												
-												<div class="col-md-5 col-md-offset-1">
-													<h4>KCPE MARKS</h4>
-													<input type="text" id="kcpemarks"
-														class="form-control formelement" name="kcpemarks"
-														placeholder="KCPE marks" pattern="[0-9]{1,3}"
-														title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
-
-												</div>
-
-
-
-
-
-											</div>
-											
-											</div>
-											
-											
 											<br>
 											<!-- Student's parent element -->
 											<h4>Enter Parent's details:</h4>
@@ -517,7 +543,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="noParent" class="form-control"
-														name="parent"  value="false" onclick="primarySwap(this.id)"
+														name="parent" value="false" onclick="primarySwap(this.id)"
 														checked> <label for="noParent">
 														<h6>NO</h6>
 
@@ -525,82 +551,84 @@
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="yesParent" name="parent" value="true"
-														onclick="primarySwap(this.id)"> <label for="yesParent">
+													<input type="radio" id="yesParent" name="parent"
+														value="true" onclick="primarySwap(this.id)"> <label
+														for="yesParent">
 														<h6>Yes</h6>
 
 													</label>
 												</div>
 
 											</div>
-											
-											
+
+
 											<!-- Parent's details -->
-											<div id="parentDetails" style="display:none">
+											<div id="parentDetails" style="display: none">
 
-											<div class="row">
-
-
+												<div class="row">
 
 
-												<div class="col-md-5 col-md-offset-1">
-													<h4>First Name</h4>
-													<input type="text" id="pfname"
-														class="form-control formelement" name="pfname"
-														placeholder="Parent's First name" pattern="[A-Za-z]{3,20}"
-														title="First Name,Only characters are allowed and should be less than 20 characters">
+
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>First Name</h4>
+														<input type="text" id="pfname"
+															class="form-control formelement" name="pfname"
+															placeholder="Parent's First name"
+															pattern="[A-Za-z]{3,20}"
+															title="First Name,Only characters are allowed and should be less than 20 characters">
+
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>Last Name</h4>
+														<input type="text" id="plname"
+															class="form-control formelement" name="plname"
+															placeholder="Parent's Last name" pattern="[A-Za-z]{3,20}"
+															title="Last Name,Only characters are allowed and should be less than 20 characters">
+
+													</div>
+
+
+
+
 
 												</div>
-												
-												<div class="col-md-5 col-md-offset-1">
-													<h4>Last Name</h4>
-													<input type="text" id="plname"
-														class="form-control formelement" name="plname"
-														placeholder="Parent's Last name" pattern="[A-Za-z]{3,20}"
-														title="Last Name,Only characters are allowed and should be less than 20 characters">
+
+
+												<div class="row">
+
+
+
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>Phone Number</h4>
+														<input type="text" id="phone"
+															class="form-control formelement" name="phone"
+															placeholder="Phone number" pattern="[0-9]{10}"
+															title="Phone,enter a valid number e.g 0712345678">
+
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>Email</h4>
+														<input type="email" id="email"
+															class="form-control formelement" name="email">
+
+													</div>
+
+
+
+
 
 												</div>
-
-
-
-
 
 											</div>
-											
-											
-											<div class="row">
-
-
-
-
-												<div class="col-md-5 col-md-offset-1">
-													<h4>Phone Number</h4>
-													<input type="text" id="phone"
-														class="form-control formelement" name="phone"
-														placeholder="Phone number" pattern="[0-9]{10}"
-														title="Phone,enter a valid number e.g 0712345678">
-
-												</div>
-												
-												<div class="col-md-5 col-md-offset-1">
-													<h4>Email</h4>
-													<input type="email" id="email"
-														class="form-control formelement" name="email">
-
-												</div>
 
 
 
 
 
-											</div>
-											
-											</div>
-											
-											
-											
-											
-											
 
 
 
@@ -625,7 +653,8 @@
 
 
 												<div class="col-md-2 pull-right">
-													<<button type="submit" class="btn btn-lg btn-primary">Register</button> 
+
+													<button type="submit" class="btn btn-lg btn-primary">Register</button>
 													<!--  <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
 												</div>
 
@@ -660,6 +689,9 @@
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 
+
+
+
 <!-- footer -->
 
 
@@ -669,6 +701,13 @@
 <script src="js/datepicker/moment.min.js"></script>
 <script src="js/datepicker/pikaday.js"></script>
 <script src="js/datepicker/pikaday.jquery.js"></script>
+
+<!-- Cropper -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/cropper/cropper.min.js"></script>
+<script src="js/cropper/main.js"></script>
 
 <script>
 	var timepicker = new Pikaday({
