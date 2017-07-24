@@ -266,13 +266,15 @@ public class StudentReportCard extends HttpServlet{
 			
 			if(exams.length == 3){
 				
-				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") && 
+				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") &&
 						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper") && 
 						StringUtils.contains(examDAO.getExam(accountId, exams[2]).getDescription(), "Paper")){
 					
 					examType = ReportUtil.EXAM_TYPE;  
 					
-				}else{
+				}else if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") ||
+						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper") ||
+						StringUtils.contains(examDAO.getExam(accountId, exams[2]).getDescription(), "Paper")){
 					
 					streamId = "";
 					classroomId = "";
@@ -281,7 +283,7 @@ public class StudentReportCard extends HttpServlet{
 				
 			}else if(exams.length == 2){
 				
-				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") && 
+				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") ||
 						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper")){
 					
 					streamId = "";
