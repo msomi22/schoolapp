@@ -157,7 +157,7 @@ public class StudentReportCard extends HttpServlet{
 
 		//check submitted states
 		boolean hidePts=false,hideGds=false;
-		boolean scope= false;//check scope true for class and false for stream
+		boolean scope= true;//check scope true for class and false for stream
 
 		HttpSession session = request.getSession(true);
 
@@ -222,8 +222,14 @@ public class StudentReportCard extends HttpServlet{
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
 		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//classroom added
 		
+		//if class checked the scope is true, otherwise false
+		scope= Boolean.parseBoolean((request.getParameter("scope")));//scope added
 		
-		scope= Boolean.parseBoolean((request.getParameter("classroom")));//scope added
+		if(!scope){
+			classResult = false;
+		}else{
+			classResult = true;
+		}
 
 
 		//get selected exams
