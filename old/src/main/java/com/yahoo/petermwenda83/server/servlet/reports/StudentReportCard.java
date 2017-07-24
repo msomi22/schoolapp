@@ -264,6 +264,12 @@ public class StudentReportCard extends HttpServlet{
 			
 			//TODO
 			
+			
+			//I see it much easy to use javascript to accomplish this since we have the description at the client
+			//side,let know your view on this. :)
+			
+			//check out the JavaScript script
+			
 			if(exams.length == 3){
 				
 				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") &&

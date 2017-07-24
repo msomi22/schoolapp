@@ -82,7 +82,10 @@
 <link rel="stylesheet" href="css/customReportStyle.css">
 
 
+
+
 <!-- Date and time picker -->
+
 <link rel="stylesheet" href="css/pikaday.css">
 
 
@@ -140,7 +143,7 @@
 
 											<!-- Current avatar -->
 											<div class="avatar-view" title="Change the avatar">
-												<img src="images/picture.jpg" alt="Avatar">
+												<img src="images/user.png" alt="Avatar">
 											</div>
 
 											<!-- Cropper Modal -->
@@ -697,30 +700,5 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="js/registerStudent.js"></script>
-<script src="js/datepicker/moment.min.js"></script>
-<script src="js/datepicker/pikaday.js"></script>
-<script src="js/datepicker/pikaday.jquery.js"></script>
-
-<!-- Cropper -->
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="js/cropper/cropper.min.js"></script>
-<script src="js/cropper/main.js"></script>
-
-<script>
-	var timepicker = new Pikaday({
-		field : document.getElementById('dob'),
-		firstDay : 1,
-		minDate : new Date(1990, 0, 1),
-		maxDate : new Date(2006, 12, 31),
-		yearRange : [ 1990, 2006 ],
-		showTime : true,
-		autoClose : false,
-		use24hour : false,
-		format : 'YYYY-MM-DD'
-	});
-</script>
 
 

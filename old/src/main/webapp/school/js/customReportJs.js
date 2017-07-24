@@ -1,43 +1,99 @@
-$("#exam").change(function () {
-      if($("#exam option:selected").length > 3 ) {
-         
-    	  $('#examWarning').modal('show');
-          
-    	 /* setTimeout(function(){
-    		  $('#examWarning').modal('hide');
-    	  }, 4000);*/
-    	  
-          $("#exam").focus();
-          $("#exam").val("");
-      }
-  });
+function examWarningModal() {
 
-function redirect(reportType){
-	if (reportType == "reportcard"){
-		
-		$('#generateReport').attr('action', 'studentReportCard');
-		
-		//alert('reporcard selected');
-	}else{
-		
-		$('#generateReport').attr('action', 'classRankingList');
-		//alert('rank list selected');
-	}
+	$('#examWarning').modal('show');
+
+	setTimeout(function() {
+		$('#examWarning').modal('hide');
+	}, 5000);
+	
+	
+	$("#exam").focus();
+	$("#exam").val("");
+	
 	
 }
 
+$("#exam")
+		.change(
+				function() {
+					if ($("#exam option:selected").length > 3) {
 
-function scopeSwap(scopeType){
+						$('#titleWarning').text('Number of exams allowed');
+
+						$('#smsWarning')
+								.text(
+										'At least one exam and not more than three exams are allowed.');
+
+						examWarningModal();
+						
+						
+
+						
+					}
+
+				
+				});
+
+function validateExamSelected(){
 	
-	if(scopeType == "class"){
+	
+	if ($("#exam option:selected").length >0) {
+
+		var selectedExams = $('#exam option:selected').text();
+
+		if (selectedExams.includes('Paper 1')
+				| selectedExams.includes('Paper 2')
+				| selectedExams.includes('Paper 3')) {
+
+			if (!(selectedExams.includes('Paper 1')
+					&& selectedExams.includes('Paper 2') 
+					&& selectedExams.includes('Paper 3'))) 
+			{
+
+				$('#titleWarning').text(
+						'Exam Papers Number Warning');
+
+				$('#smsWarning')
+						.text(
+								'Exam Papers selected must be three i.e Paper 1, Paper 2 and Paper 3');
+
+				examWarningModal();
+				
+				
+
+			}
+
+		}
+
+	}
+
+	
+	
+}
+
+function redirect(reportType) {
+	if (reportType == "reportcard") {
+
+		$('#generateReport').attr('action', 'studentReportCard');
+
+		// alert('reporcard selected');
+	} else {
+
+		$('#generateReport').attr('action', 'classRankingList');
+		// alert('rank list selected');
+	}
+
+}
+
+function scopeSwap(scopeType) {
+
+	if (scopeType == "class") {
 		$('#streamScope').hide('2000');
 		$('#classScope').show('2000');
-		
-		
-	}else{
+
+	} else {
 		$('#streamScope').show('2000');
 		$('#classScope').hide('2000');
-		
-		
+
 	}
 }

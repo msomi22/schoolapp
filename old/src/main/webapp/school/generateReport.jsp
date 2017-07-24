@@ -24,76 +24,65 @@
 <!-- Import calendar -->
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.GregorianCalendar"%>
-   
+
 
 
 
 
 
 <%
+	if (session == null) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-  if (session == null) {
-       response.sendRedirect("../index.jsp");
-       //return;
-    }
+	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(username)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
+	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-    
-    String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
-    
-     //get exams list
-     
-     ExamDAO examDAO = ExamDAO.getInstance();
-     StudentDAO studentDAO = StudentDAO.getInstance();
-     
-     List<Exam> examList= new ArrayList<>();
-     
-     examList= examDAO.getExamList(accountId);
-     
-     
-     //get class list
-     ClassDAO classDAO = ClassDAO.getInstance();
-     
-     List<ClassRoom> classroomList = new ArrayList<>();
-     
-     classroomList = classDAO.getClassRooms(accountId);
-     
-     
-     
-     //get stream list
-     StreamDAO streamDAO = StreamDAO.getInstance();
-     
-     List<Stream> streamList= new ArrayList<>();
-     
-     streamList= streamDAO.getStreamList(accountId);
-     
-     
-     //get the current year
-    /*  int current= 0;
-     
-      GregorianCalendar cal = new GregorianCalendar();
-      current=cal.get(Calendar.YEAR); */
-      
-      SysConfigDAO sysConfigDAO= SysConfigDAO.getInstance();
-      
-      SysConfig sysConfig= sysConfigDAO.getSysConfig(accountId);
-      
-      int currentYear= Integer.parseInt(sysConfig.getYear());
-      
-      int currentTerm= Integer.parseInt(sysConfig.getTerm());
-     
-    
-     
-     
-     
-   
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+
+	//get exams list
+
+	ExamDAO examDAO = ExamDAO.getInstance();
+	StudentDAO studentDAO = StudentDAO.getInstance();
+
+	List<Exam> examList = new ArrayList<>();
+
+	examList = examDAO.getExamList(accountId);
+
+	//get class list
+	ClassDAO classDAO = ClassDAO.getInstance();
+
+	List<ClassRoom> classroomList = new ArrayList<>();
+
+	classroomList = classDAO.getClassRooms(accountId);
+
+	//get stream list
+	StreamDAO streamDAO = StreamDAO.getInstance();
+
+	List<Stream> streamList = new ArrayList<>();
+
+	streamList = streamDAO.getStreamList(accountId);
+
+	//get the current year
+	/*  int current= 0;
+	 
+	  GregorianCalendar cal = new GregorianCalendar();
+	  current=cal.get(Calendar.YEAR); */
+
+	SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
+
+	SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+
+	int currentYear = Integer.parseInt(sysConfig.getYear());
+
+	int currentTerm = Integer.parseInt(sysConfig.getTerm());
 %>
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
@@ -150,7 +139,8 @@
 
 
 										<form action="studentReportCard" id="generateReport"
-											class="col-md-6 col-md-offset-3" method="post" target="_blank">
+											class="col-md-6 col-md-offset-3" method="post"
+											target="_blank">
 
 
 											<div class="row">
@@ -188,26 +178,28 @@
 
 													<h2>Exam</h2>
 
-													<select id="exam" name="exam"
-														class="form-control formelement" required="required" multiple>
+													<select id="exam" name="exam" onblur="validateExamSelected()"
+														class="form-control formelement" required="required"
+														multiple>
 
-														<% 
-                   
-                   if(examList !=null){
-                   
-                   for(Exam exam : examList){                   
-                    %>
+														<%
+															if (examList != null) {
+
+																for (Exam exam : examList) {
+														%>
 
 														<option value="<%=exam.getUuid()%>">
-															<%=exam.getDescription() %></option>
+															<%=exam.getDescription()%></option>
 
-														<%}
-                   }
-                   else {
-                        %>
+														<%
+															}
+															} else {
+														%>
 														<option value="">...</option>
 
-														<%} %>
+														<%
+															}
+														%>
 
 													</select>
 
@@ -216,17 +208,17 @@
 
 
 											</div>
-											
-											
-											
-											
-				<!-- Choose time span -->
-				
-				
 
 
 
-							<h2>Year:</h2>
+
+											<!-- Choose time span -->
+
+
+
+
+
+											<h2>Year:</h2>
 
 											<div class="row">
 
@@ -234,61 +226,62 @@
 													<input type="radio" id="current" class="form-control"
 														name="year" value="<%=currentYear%>" checked> <label
 														for="current">
-														<h6>Current <%=currentYear %></h6>
-														
+														<h6>
+															Current
+															<%=currentYear%></h6>
+
 
 													</label>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
-													<input type="radio" id="current-1" name="year" value="<%=currentYear-1%>">
-													<label for="current-1">
-														<h6>Previous <%=currentYear-1 %></h6>
-														
+													<input type="radio" id="current-1" name="year"
+														value="<%=currentYear - 1%>"> <label for="current-1">
+														<h6>
+															Previous
+															<%=currentYear - 1%></h6>
+
 
 													</label>
 												</div>
-												
-												
+
+
 												<div class="col-md-3 col-md-offset-1">
-													<input type="radio" id="current-2" name="year" value="<%=currentYear-2%>">
-													<label for="current-2">
-														<h6>2 years ago  <%=currentYear-2 %></h6>
-														
+													<input type="radio" id="current-2" name="year"
+														value="<%=currentYear - 2%>"> <label for="current-2">
+														<h6>
+															2 years ago
+															<%=currentYear - 2%></h6>
+
 
 													</label>
 												</div>
 
 											</div>
 
-						<h2>Term:</h2>
+											<h2>Term:</h2>
 
 											<div class="row">
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term1" name="term" value="1"
-														<% if(currentTerm ==1){
-															%>checked
-														<% } %> > <label for="term1">
+														<%if (currentTerm == 1) {%> checked <%}%>>
+													<label for="term1">
 														<h6>Term 1</h6>
 													</label>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term2" name="term" value="2"
-													<% if(currentTerm ==2){
-															%>checked
-														<% } %>>
+														<%if (currentTerm == 2) {%> checked <%}%>>
 													<label for="term2">
 														<h6>Term 2</h6>
 													</label>
 												</div>
-												
-												
+
+
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term3" name="term" value="3"
-													<% if(currentTerm ==3){
-															%>checked
-														<% } %>>
+														<%if (currentTerm == 3) {%> checked <%}%>>
 													<label for="term3">
 														<h6>Term 3</h6>
 													</label>
@@ -296,9 +289,8 @@
 
 
 											</div>
-											
-											<br>
-											<br>
+
+											<br> <br>
 
 											<!-- Scope element -->
 											<h2>Scope:</h2>
@@ -332,9 +324,10 @@
 
 													<h2>Class</h2>
 
-													<select class="form-control formelement" name="classroom" required>
-													
-													  <option> Select a Class</option>
+													<select class="form-control formelement" name="classroom"
+														required>
+
+														<option> Select a Class</option>
 														<%
 															if (classroomList != null) {
 																for (ClassRoom classroom : classroomList) {
@@ -366,20 +359,21 @@
 
 													<h2>Stream</h2>
 
-													<select class="form-control formelement" name="stream" required>
-													
-													<option> Select a Stream</option>
+													<select class="form-control formelement" name="stream"
+														required>
+
+														<option> Select a Stream</option>
 
 														<%
-														    int studentsCount = 0;
+															int studentsCount = 0;
 															if (streamList != null) {
 																for (Stream stream : streamList) {
-																	
-															studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1"); 
+
+																	studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
 														%>
 
 														<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription() + " (" + studentsCount + ")"%></option> 
+															<%=stream.getDescription() + " (" + studentsCount + ")"%></option>
 
 														<%
 															}
@@ -402,9 +396,8 @@
 											</div>
 
 											<!-- Hide points or grades element -->
-											
-											<br>
-											<br>
+
+											<br> <br>
 
 											<h2>HIDE Points:</h2>
 
@@ -412,16 +405,15 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="pointshide" class="form-control"
-														name="p" value="true"> <label
-														for="pointshide">
+														name="p" value="true"> <label for="pointshide">
 														<h6>Yes</h6>
 
 													</label>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="points" name="p" value="false" checked>
-													<label for="points">
+													<input type="radio" id="points" name="p" value="false"
+														checked> <label for="points">
 														<h6>No</h6>
 
 													</label>
@@ -433,15 +425,15 @@
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="gradeshide" name="g" value="true"
-														> <label for="gradeshide">
+													<input type="radio" id="gradeshide" name="g" value="true">
+													<label for="gradeshide">
 														<h6>YES</h6>
 													</label>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="grades" name="g" value="false" checked>
-													<label for="grades">
+													<input type="radio" id="grades" name="g" value="false"
+														checked> <label for="grades">
 														<h6>NO</h6>
 													</label>
 												</div>
@@ -450,8 +442,7 @@
 											</div>
 
 
-<br>
-<br>
+											<br> <br>
 
 
 											<!-- Show fee element -->
@@ -479,8 +470,7 @@
 
 
 
-<br>
-<br>
+											<br> <br>
 
 											<!-- Rank element -->
 
@@ -497,8 +487,7 @@
 												</div>
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="gradesrank" name="rank"
-														value="marks"> <label
-														for="gradesrank">
+														value="marks"> <label for="gradesrank">
 														<h6>Rank with total marks</h6>
 
 													</label>
@@ -528,9 +517,8 @@
 												</div>
 
 											</div>
-											
-											<br>
-											<br>
+
+											<br> <br>
 
 											<!-- Type of report element -->
 											<h2>Type of Report:</h2>
@@ -546,8 +534,8 @@
 												</div>
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="ranklist" name="reportcard"
-														value="ranklist" onclick="redirect(this.id)">
-													<label for="ranklist">
+														value="ranklist" onclick="redirect(this.id)"> <label
+														for="ranklist">
 														<h6>Rank List</h6>
 
 													</label>
@@ -558,8 +546,7 @@
 
 
 
-											<br>
-											<br>
+											<br> <br>
 
 											<!-- footer of the form elements: Back,Reset and generate -->
 
@@ -611,4 +598,4 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="js/customReportJs.js"></script>
+
