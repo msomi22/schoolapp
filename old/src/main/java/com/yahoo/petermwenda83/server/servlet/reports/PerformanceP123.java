@@ -3,30 +3,22 @@
  */
 package com.yahoo.petermwenda83.server.servlet.reports;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author peter
  *
  */
-public class Performance3 {
+public class PerformanceP123 {
 	
 	private int totalMean;
 	private int totalPoints;
-	private Map<String,Integer> perfomanceMap;
 
 	/**
 	 * 
 	 */
-	public Performance3() {
+	public PerformanceP123() {
 		totalMean = 0;
 		totalPoints = 0;
-		perfomanceMap = new HashMap<>(); 
 	}
-
-	
-	
 
 	/**
 	 * @return the totalMean
@@ -56,33 +48,16 @@ public class Performance3 {
 		this.totalPoints = totalPoints;
 	}
 
-	/**
-	 * @return the perfomanceMap
-	 */
-	public Map<String, Integer> getPerfomanceMap() {
-		return perfomanceMap;
-	}
-
-	/**
-	 * @param perfomanceMap the perfomanceMap to set
-	 */
-	public void setPerfomanceMap(Map<String, Integer> perfomanceMap) {
-		this.perfomanceMap = perfomanceMap;
-	}
-
-
-
-
+	
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Performance3 [totalMean=" + totalMean + ", totalPoints=" + totalPoints + ", perfomanceMap="
-				+ perfomanceMap + "]";
+		return "PerformanceP123 [totalMean=" + totalMean + ", totalPoints=" + totalPoints + "]";
 	}
-
+	
 	
 
-	
 }

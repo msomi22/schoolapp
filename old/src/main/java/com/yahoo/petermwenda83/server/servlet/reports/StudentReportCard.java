@@ -117,6 +117,7 @@ public class StudentReportCard extends HttpServlet{
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	String incorrectExamMSG = "";
 
 
 	/**  
@@ -242,9 +243,10 @@ public class StudentReportCard extends HttpServlet{
 		logger.info("*************** classroomId " + classroomId); 
 
 		response.setContentType("application/pdf");
-
-
-
+		
+		String examType = "";
+		
+		
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
@@ -259,8 +261,47 @@ public class StudentReportCard extends HttpServlet{
 
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
+			
+			//TODO
+			
+			if(exams.length == 3){
+				
+				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") && 
+						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper") && 
+						StringUtils.contains(examDAO.getExam(accountId, exams[2]).getDescription(), "Paper")){
+					
+					examType = ReportUtil.EXAM_TYPE;  
+					
+				}else{
+					
+					streamId = "";
+					classroomId = "";
+					incorrectExamMSG = "Please select Paper 1, 2 and 3";
+				}
+				
+			}else if(exams.length == 2){
+				
+				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") && 
+						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper")){
+					
+					streamId = "";
+					classroomId = "";
+					incorrectExamMSG = "Please select Paper 1, 2 and 3";
+					
+				}
+				
+			}else if(exams.length == 1){
+				
+				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper")){
+					
+					streamId = "";
+					classroomId = "";
+					incorrectExamMSG = "Please select Paper 1, 2 and 3";
+					
+				}
+			}
 
-			populatePDFDocument(accountId,streamId,classroomId,term,year);
+			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
 
 
 		} catch (DocumentException e) {
@@ -281,20 +322,20 @@ public class StudentReportCard extends HttpServlet{
 	 * @param streamId 
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term, String year) {
-		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year));
+	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term, String year, String examType) {
+		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year, examType));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute(String accountId, String streamId, String classroomId , String term, String year) {
+	public  void compute(String accountId, String streamId, String classroomId , String term, String year, String examType) {
 
 		try {
 
 			document.open();
 
-			generateReport(accountId, streamId, classroomId , term, year);
+			generateReport(accountId, streamId, classroomId , term, year, examType);
 
 			document.close();
 
@@ -315,7 +356,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @param baseColor
 	 * @throws DocumentException
 	 */
-	private void generateReport(String accountId, String streamId,  String classroomId ,String term, String year)
+	private void generateReport(String accountId, String streamId,  String classroomId ,String term, String year, String examType)
 			throws DocumentException {
 
 
@@ -330,8 +371,6 @@ public class StudentReportCard extends HttpServlet{
 		List<Performance2> performanceList =  new ArrayList<>();
 
 		String correctClass = "";
-
-		//TODO
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
@@ -380,10 +419,10 @@ public class StudentReportCard extends HttpServlet{
 
 		if(studentsList.isEmpty()){
 			//avoid document has no page error
-			document.add(new Paragraph("No students for " + correctClass)); 
+			document.add(new Paragraph("No students for " + correctClass + "." + incorrectExamMSG)); 
 		}else{
-			//TODO
-			performanceList = getStudentScore3(accountId, classroomId, streamId, term, year, studentsList);
+			
+			performanceList = getStudentScore3(accountId, classroomId, streamId, term, year, studentsList, examType);
 
 
 		}
@@ -893,30 +932,55 @@ public class StudentReportCard extends HttpServlet{
 
 
 					examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
+					
+					if(StringUtils.equals(examAverage, "0")){
+						examAverage = "";
+					}
+					if(StringUtils.equals(avgpoints, "0")){
+						avgpoints = "";
+					}
 
 					String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
 					String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
 					String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
 					String average = examAverage + " " + avgrade +  " " + avgpoints;
-
-					if(hidePoints && hideGrade){
+					
+					
+					if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
+						
 						score1 = exam1Score;
 						score2 = exam2Score;
 						score3 = exam3Score;
-						average = examAverage;
+						
+						
+					}else{
+						
+						
+						if(hidePoints && hideGrade){
+							score1 = exam1Score;
+							score2 = exam2Score;
+							score3 = exam3Score;
+							average = examAverage;
+						}
+						if(hidePoints && !hideGrade){ 
+							score1 = exam1Score + " " + exam1Grade;
+							score2 = exam2Score + " " + exam2Grade;
+							score3 = exam3Score + " " + exam3Grade;
+							average = examAverage + " " + avgrade;
+						}
+						if(hideGrade && !hidePoints){
+							score1 = exam1Score +  " " + exam1Points; 
+							score2 = exam2Score +  " " + exam2Points;
+							score3 = exam3Score +  " " + exam3Points;
+							average = examAverage + " " + avgpoints;
+						}
+						
+						
+						
+						
 					}
-					if(hidePoints && !hideGrade){ 
-						score1 = exam1Score + " " + exam1Grade;
-						score2 = exam2Score + " " + exam2Grade;
-						score3 = exam3Score + " " + exam3Grade;
-						average = examAverage + " " + avgrade;
-					}
-					if(hideGrade && !hidePoints){
-						score1 = exam1Score +  " " + exam1Points; 
-						score2 = exam2Score +  " " + exam2Points;
-						score3 = exam3Score +  " " + exam3Points;
-						average = examAverage + " " + avgpoints;
-					}
+
+					
 
 
 					examTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
@@ -983,6 +1047,19 @@ public class StudentReportCard extends HttpServlet{
 
 
 					double avg = ((double)mainPoint / 132) * 84;
+					String mainScore = "";
+					
+
+					
+					if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
+						
+						exm1 = ""; exm2 = ""; exm3 = "";
+						ex1Grade = ""; ex2Grade = ""; ex3Grade = "";
+						exa1Point = ""; exa2Point = ""; exa3Point = "";
+						
+					}
+					
+					
 
 					//TOTAL
 					if(count == 0){ 
@@ -990,7 +1067,7 @@ public class StudentReportCard extends HttpServlet{
 						examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
 
-						String mainScore = "";
+						
 
 						if(grade7subjects && !grade11subjects){
 							mainScore = (int)Math.round(mainPoint) + "";
@@ -1005,7 +1082,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 					}
-					//MEAN GRADE
+					//MEAN GRADE   
 					else if(count == 1){ 
 						examTable.addCell(new Paragraph(" "+ex1Grade ,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(" "+ex2Grade ,timesRomanNarmal6));
@@ -1058,7 +1135,11 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 					}
-					//MEAN SCORE
+					
+					
+					
+					
+					//MEAN SCORE 
 					else if(count == 2){ 
 						examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
@@ -1286,7 +1367,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @param studentsList
 	 */
 	private  List<Performance2> getStudentScore3(String accountId,String classId, String streamId, String term, String year,
-			List<Student> studentsList) {
+			List<Student> studentsList, String examType) {
 
 		List<Performance2> performance2List = new ArrayList<>();
 		List<Perfomance> exam1  = new ArrayList<>();
@@ -1321,9 +1402,9 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
@@ -1334,7 +1415,7 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 
-				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
 				totalPoint = totalPoint / 3;
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
@@ -1361,8 +1442,8 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
@@ -1373,7 +1454,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 
-				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints();
 				totalPoint = totalPoint / 2;
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean();
@@ -1397,7 +1478,7 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
@@ -1407,7 +1488,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 
-				totalPoint = totalExam1.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints();
 
 				totalMeans = totalExam1.getTotalMean();
 
@@ -1422,9 +1503,9 @@ public class StudentReportCard extends HttpServlet{
 			performance2.setStudentId(student.getUuid());
 			performance2.setTotalMean(totalMeans); 
 			performance2.setTotalPoint(totalPoint);
-			performance2.setExam1Total(totalExam1.getTotalPoits());
-			performance2.setExam2Total(totalExam2.getTotalPoits());
-			performance2.setExam3Total(totalExam3.getTotalPoits());
+			performance2.setExam1Total(totalExam1.getTotalPoints());
+			performance2.setExam2Total(totalExam2.getTotalPoints());
+			performance2.setExam3Total(totalExam3.getTotalPoints());
 
 			performance2List.add(performance2);
 

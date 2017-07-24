@@ -46,6 +46,7 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -75,6 +76,7 @@ public class ClassRankingList extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
+	private static ExamDAO examDAO;
 
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -122,6 +124,7 @@ public class ClassRankingList extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 
 
 		logger = Logger.getLogger(this.getClass());
@@ -153,6 +156,8 @@ public class ClassRankingList extends HttpServlet{
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 		document.addAuthor("Peter Mwenda (254718953974)"); 
 		document.addCreationDate();
+		
+		String examType = "";
 
 
 		try {
@@ -164,7 +169,7 @@ public class ClassRankingList extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 300, 900)); 
 			writer.setPageEvent(event);
 
-			populatePDFDocument(accountId);
+			populatePDFDocument(accountId,examType);
 
 
 		} catch (DocumentException e) {
@@ -182,16 +187,16 @@ public class ClassRankingList extends HttpServlet{
 	/**
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId) {
-		Timeit.code(() -> compute());
+	public void populatePDFDocument(String accountId, String examType) {
+		Timeit.code(() -> compute(accountId, examType));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute() {
+	public  void compute(String accountId, String examType) {
 
-		String accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+	    accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
 		String streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
 		String term = "1";
 		String year = "2016";
@@ -201,7 +206,7 @@ public class ClassRankingList extends HttpServlet{
 			document.open();
 
 
-			generateReport(accountId, streamId, term, year);
+			generateReport(accountId, streamId, term, year, examType);
 
 			document.close();
 
@@ -226,7 +231,7 @@ public class ClassRankingList extends HttpServlet{
 	 * @param baseColor
 	 * @throws DocumentException
 	 */
-	private void generateReport(String accountId, String streamId, String term, String year)
+	private void generateReport(String accountId, String streamId, String term, String year, String examType)
 			throws DocumentException {
 
 
@@ -244,7 +249,7 @@ public class ClassRankingList extends HttpServlet{
 				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
 
 
-		List<Performance2> performanceList = getStudentScore3(accountId, streamId, term, year, studentsList);
+		List<Performance2> performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType);
 
 		String rankingCriteria = "";
 
@@ -636,7 +641,7 @@ public class ClassRankingList extends HttpServlet{
 	 * @param studentsList
 	 */
 	private  List<Performance2> getStudentScore3(String accountId, String streamId, String term, String year,
-			List<Student> studentsList) {
+			List<Student> studentsList, String examType) {
 
 		List<Performance2> performance2List = new ArrayList<>();
 		List<Perfomance> exam1  = new ArrayList<>();
@@ -661,9 +666,9 @@ public class ClassRankingList extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 
@@ -674,7 +679,7 @@ public class ClassRankingList extends HttpServlet{
 					totalExam3 = ReportUtil.findExamTotalForm1(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
 				}
 
-				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits() + totalExam3.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
 				totalPoint = totalPoint / 3;
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
@@ -690,8 +695,8 @@ public class ClassRankingList extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
@@ -702,7 +707,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 
-				totalPoint = totalExam1.getTotalPoits() + totalExam2.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints();
 				totalPoint = totalPoint / 2;
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean();
@@ -717,7 +722,7 @@ public class ClassRankingList extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 
@@ -728,7 +733,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 
-				totalPoint = totalExam1.getTotalPoits();
+				totalPoint = totalExam1.getTotalPoints();
 
 				totalMeans = totalExam1.getTotalMean();
 
@@ -743,9 +748,9 @@ public class ClassRankingList extends HttpServlet{
 			performance2.setStudentId(student.getUuid());
 			performance2.setTotalMean(totalMeans); 
 			performance2.setTotalPoint(totalPoint);
-			performance2.setExam1Total(totalExam1.getTotalPoits());
-			performance2.setExam2Total(totalExam2.getTotalPoits());
-			performance2.setExam3Total(totalExam3.getTotalPoits());
+			performance2.setExam1Total(totalExam1.getTotalPoints());
+			performance2.setExam2Total(totalExam2.getTotalPoints());
+			performance2.setExam3Total(totalExam3.getTotalPoints());
 
 			performance2List.add(performance2);
 
