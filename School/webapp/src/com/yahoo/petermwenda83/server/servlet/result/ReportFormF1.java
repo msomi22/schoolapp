@@ -61,9 +61,7 @@ import com.yahoo.petermwenda83.bean.exam.Deviation;
 import com.yahoo.petermwenda83.bean.exam.ExamConfig;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
-import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
 import com.yahoo.petermwenda83.bean.schoolaccount.Miscellanous;
 import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.ClassTeacher;
@@ -96,66 +94,66 @@ import com.yahoo.petermwenda83.server.servlet.money.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.result.sms.SendResultSMS;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.server.session.SessionStatistics;
-import com.yahoo.petermwenda83.server.util.magic.MiddleNumberFor3;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
-/**
+/** 
  * @author peter
  * 
  */
-public class ReportFormF3_4_c1_c2_et extends HttpServlet{
+public class ReportFormF1 extends HttpServlet{
 
 	private Font courierBold14 = ExamConstants.courierBold14;
 	private Font timesRomanBold7 = ExamConstants.timesRomanBold7;
 	private Font timesRomanItalic8 = ExamConstants.timesRomanItalic8;
 	private Font timesRomanNormal7 = ExamConstants.timesRomanNormal7;
 	private Font timesRomanNormal0 = ExamConstants.timesRomanNormal0;
-	
+
 	private Document document;
 	private PdfWriter writer;
 	private Cache schoolaccountCache, statisticsCache;
 
 	private Logger logger;
 	ExamConfig examConfig;
+	String stffID = "";
+
+
 	GradingSystem gradingSystem;
 	private String PDF_SUBTITLE ="";
 	private String schoolname = "";
 	private String title = "";
-	private String  firstnamee = "";
 
 	private static PerfomanceDAO perfomanceDAO;
 	private static SubjectDAO subjectDAO;
-	private static ClassTeacherDAO classTeacherDAO;
+	private static ParentsDAO parentsDAO;
+
 	private static StudentDAO studentDAO;
 	private static RoomDAO roomDAO;
 	private static ExamConfigDAO examConfigDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static TeacherSubClassDAO teacherSubClassDAO;
+
 	private static StaffDetailsDAO staffDetailsDAO;
+	private static ClassTeacherDAO classTeacherDAO;
+
 	private static StudentOtherMoniesDAO studentOtherMoniesDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static MiscellanousDAO miscellanousDAO;
 	private static BarWeightDAO barWeightDAO;
 	private static PrimaryDAO primaryDAO;
 	private static DeviationDAO deviationDAO;
-	private StudentBalance studentBal;
+	//private StudentBalance studentBal;
 	private SendResultSMS sendResultSMS;
 	private static SmsSendDAO smsSendDAO;
-	private static ParentsDAO parentsDAO;
 	private static SmsApiDAO smsApiDAO;
-	
-	
-
-	String classroomuuid = "";String schoolusername = "";String stffID = "";
 
 	HashMap<String, String> studentAdmNoHash = new HashMap<String, String>();
-	HashMap<String, String> firstnameHash = new HashMap<String, String>();
 	HashMap<String, String> studNameHash = new HashMap<String, String>();
-	HashMap<String, String> admYearMap = new HashMap<String, String>();
+	HashMap<String, String> firstnameHash = new HashMap<String, String>();
 	HashMap<String, String> roomHash = new HashMap<String, String>();
+	HashMap<String, String> admYearMap = new HashMap<String, String>();
 	HashMap<String, String> shameMap = new HashMap<String, String>();
 	
 	HashMap<String, String> admtermMap = new HashMap<String, String>();
@@ -163,43 +161,71 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	HashMap<String, Date> admdaterMap = new HashMap<String, Date>();
    
 
+
 	double score = 0;
-	double engscore = 0;String engscorestr = "";
-	double kswscore = 0;String kswscorestr = "";
-	double matscore = 0;String matscorestr = "";
-	double physcore = 0;String physcorestr = "";  
-	double bioscore = 0;String bioscorestr = "";
-	double chemscore = 0; String chemscorestr = "";
-	double bsscore = 0;String bsscorestr = "";
-	double comscore = 0;String comscorestr = "";
-	double hscscore = 0;String hscscorestr = "";
-	double agriscore = 0;String agriscorestr = "";
-	double geoscore = 0;String geoscorestr = "";
-	double crescore = 0;String crescorestr = "";
-	double histscore = 0; String histscorestr = "";
+
+	double engscore = 0;
+	String engscorestr = "";
+
+	double kswscore = 0;
+	String kswscorestr = "";
+
+	double matscore = 0;
+	String matscorestr = "";
+
+	double physcore = 0;
+	String physcorestr = "";  
+
+	double bioscore = 0;
+	String bioscorestr = "";
+
+	double chemscore = 0;
+	String chemscorestr = "";
+
+	double bsscore = 0;
+	String bsscorestr = "";
+
+	double comscore = 0;
+	String comscorestr = "";
+
+	double hscscore = 0;
+	String hscscorestr = "";
+
+	double agriscore = 0;
+	String agriscorestr = "";
+
+	double geoscore = 0;
+	String geoscorestr = "";
+
+	double crescore = 0;
+	String crescorestr = "";
+
+	double histscore = 0;
+	String histscorestr = "";
 
 
 
-	String grade = "";String studeadmno = "";String studename = "";String admno = "";
+	String grade = "";
+	String studeadmno = "";
+	String firstnamee = "";
+	String studename = "";
+	String admno = "";
+	
 
 	double cat1 = 0;  double cat2  = 0;double endterm  = 0;
-	double catTotals  = 0;double catmean  = 0;double examcattotal  = 0;
+	double catgrandscores  = 0;double catmean  = 0;double examcatgrandscore  = 0;
 
 
 	int position = 1;
-	static int Finalposition = 0;
+
 
 	String USER= "";
 	String path ="";
-	
+	private String photopath ="";
+
 	String EndTermOnly = "";
 	String EndTermAndC2 = "";
 	String EndTermC1AndC2 = "";
-	
-	Date admdate;
-	String admTerm;
-	int finalYear = 0;
-	private String photopath ="";
 
 
 	/**
@@ -215,27 +241,29 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
 		perfomanceDAO = PerfomanceDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
-		classTeacherDAO = ClassTeacherDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		roomDAO = RoomDAO.getInstance();
 		examConfigDAO = ExamConfigDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
+
 		termFeeDAO = TermFeeDAO.getInstance();
 		teacherSubClassDAO = TeacherSubClassDAO.getInstance();
 		staffDetailsDAO = StaffDetailsDAO.getInstance();
+		classTeacherDAO = ClassTeacherDAO.getInstance();
+		parentsDAO = ParentsDAO.getInstance();
+
 		studentOtherMoniesDAO = StudentOtherMoniesDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
 		barWeightDAO = BarWeightDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 		deviationDAO = DeviationDAO.getInstance();
-		studentBal = new StudentBalance();
+		//studentBal = new StudentBalance();
 		sendResultSMS = new SendResultSMS();
 		smsSendDAO = SmsSendDAO.getInstance();
-		parentsDAO = ParentsDAO.getInstance();
 		smsApiDAO = SmsApiDAO.getInstance();
-		
-		
+
+
 
 		USER = System.getProperty("user.name");
 		path = "/home/"+USER+"/school/logo/logo.png";
@@ -251,40 +279,34 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//ServletContext context = getServletContext();
+
+		HttpSession session = request.getSession(true);
 		response.setContentType("application/pdf");
-		
+
+
 
 		SchoolAccount school = new SchoolAccount();
-		HttpSession session = request.getSession(false);
+
+		String classroomuuid = "";
+		String schoolusername = "";
+		String classID = "";
+		
 
 		if(session !=null){
 			schoolusername = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-			//stffID = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+			//schoolusername = "demo";
 			stffID = StringUtils.trimToEmpty(request.getParameter("staffid"));
 
 		}
-
-	
-		String classID = "";
 		classID = StringUtils.trimToEmpty(request.getParameter("classID"));
-
-
+		//System.out.println("classID="+classID);
 		net.sf.ehcache.Element element;
-
 		element = schoolaccountCache.get(schoolusername);
 		if(element !=null){
 			school = (SchoolAccount) element.getObjectValue();
 		}
-
-		    schoolname = school.getSchoolName().toUpperCase()+"\n";
-			PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
-							+ ""+school.getTown()+" - Kenya\n" 
-							+ "" + school.getMobile()+"\n"
-							+ "" + school.getEmail()+"\n" ;
-			
-			title = "_____________________________________ \n"
-					+ " End of Term Report Card ";
+		
+		//System.out.println("stffID: " + stffID + ", classIDL " + classID);
 
 
 		examConfig = examConfigDAO.getExamConfig(school.getUuid());
@@ -299,85 +321,93 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			classroomuuid = classTeacher.getClassRoomUuid();
 		}
 
-		SessionStatistics statistics = new SessionStatistics();
-		if ((element = statisticsCache.get(schoolusername)) != null) {
-			statistics = (SessionStatistics) element.getObjectValue();
-		}
-	
-		List<Perfomance> pDistinctListGeneral = new ArrayList<Perfomance>();
-		pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear());
-		
-		List<Perfomance> pDistinctList = new ArrayList<Perfomance>();
-		pDistinctList = perfomanceDAO.getPerfomanceListDistinct(school.getUuid(), classroomuuid,examConfig.getTerm(),examConfig.getYear());
+			SessionStatistics statistics = new SessionStatistics();
+			if ((element = statisticsCache.get(schoolusername)) != null) {
+				statistics = (SessionStatistics) element.getObjectValue();
+			}
+
+			schoolname = school.getSchoolName().toUpperCase()+"\n";
+			PDF_SUBTITLE =  "P.O BOX "+school.getPostalAddress()+"\n" 
+					+ ""+school.getTown()+" - Kenya\n" 
+					+ "" + school.getMobile()+"\n"
+					+ "" + school.getEmail()+"\n";
+
+			title = "_____________________________________ \n"
+					+ " End of Term Report Card ";
+
+			List<Perfomance> pDistinctListGeneral = new ArrayList<Perfomance>();
+			pDistinctListGeneral = perfomanceDAO.getPerfomanceListDistinctGeneral(school.getUuid(), classID,examConfig.getTerm(),examConfig.getYear());
 
 
-		List<Student> studentList = new ArrayList<Student>(); 
-		studentList = studentDAO.getAllStudentList(school.getUuid());
-		
-		 String admYear = "";
-         SimpleDateFormat formatter;
-		 formatter = new SimpleDateFormat("yyyy");
-		 Date admdate;
-		
-		String admTerm;int finalYear = 0;
-		for(Student stu : studentList){
-			studentAdmNoHash.put(stu.getUuid(),stu.getAdmno()); 
+			List<Perfomance> pDistinctList = new ArrayList<Perfomance>(); 
+			pDistinctList = perfomanceDAO.getPerfomanceListDistinct(school.getUuid(), classroomuuid,examConfig.getTerm(),examConfig.getYear());
 			
-			 String formatedFirstname = StringUtils.capitalize(stu.getFirstname().toLowerCase());
-			 String formatedLastname = StringUtils.capitalize(stu.getLastname().toLowerCase());
-			 String formatedsurname = StringUtils.capitalize(stu.getSurname().toLowerCase());
+			List<Student> studentList = new ArrayList<Student>(); 
+			studentList = studentDAO.getAllStudentList(school.getUuid());
 			
-			formatedFirstname = formatedFirstname.substring(0, Math.min(formatedFirstname.length(), 10));
-			formatedLastname = formatedLastname.substring(0, Math.min(formatedLastname.length(), 10));
-			formatedsurname = formatedsurname.substring(0, Math.min(formatedsurname.length(), 10));
+			String admYear = "";
+			SimpleDateFormat formatter;
+			formatter = new SimpleDateFormat("yyyy");
+			Date admdate;
 			
-			admdate = stu.getAdmissionDate();
-			admdaterMap.put(stu.getUuid(), admdate);
-			admTerm = stu.getRegTerm();
-			admtermMap.put(stu.getUuid(), admTerm);
-			
-			admYear = formatter.format(admdate);
-			finalYear = stu.getFinalYear();
-			finalyearMap.put(stu.getUuid(), finalYear);
-			 //admtermMap finalyearMap
-			admYearMap.put(stu.getUuid(), admYear); 
-			studNameHash.put(stu.getUuid(),formatedFirstname + " " + formatedLastname + " " + formatedsurname +"\n"); 
-			firstnameHash.put(stu.getUuid(), formatedFirstname);
-		}
-
-		List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
-		classroomList = roomDAO.getAllRooms(school.getUuid()); 
-		for(ClassRoom c : classroomList){
-			roomHash.put(c.getUuid() , c.getRoomName());
-		}
-
-		 String fileName = new StringBuffer(StringUtils.trimToEmpty("ReportCards")) 
-	               .append("_")
-	               .append(roomHash.get(classroomuuid).replaceAll(" ", "_"))
-	               .append(".pdf")
-	               .toString();
-		   response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
-
-
-		document = new Document(PageSize.A4, 46, 46, 64, 64);
-
-		try {
-			writer = PdfWriter.getInstance(document, response.getOutputStream());
-
-
-
-
-			PdfUtil event = new PdfUtil();
-			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
-			writer.setPageEvent(event);
-
-		   populatePDFDocument(statistics, school,classroomuuid,classID,pDistinctList,pDistinctListGeneral,path,photopath);
+			String admTerm;int finalYear = 0;
+			for(Student stu : studentList){
+				studentAdmNoHash.put(stu.getUuid(),stu.getAdmno()); 
 				
-		} catch (DocumentException e) {
-			logger.error("DocumentException while writing into the document");
-			logger.error(ExceptionUtils.getStackTrace(e));
-		}
-		 
+				 String formatedFirstname = StringUtils.capitalize(stu.getFirstname().toLowerCase());
+				 String formatedLastname = StringUtils.capitalize(stu.getLastname().toLowerCase());
+				 String formatedsurname = StringUtils.capitalize(stu.getSurname().toLowerCase());
+				
+				formatedFirstname = formatedFirstname.substring(0, Math.min(formatedFirstname.length(), 10));
+				formatedLastname = formatedLastname.substring(0, Math.min(formatedLastname.length(), 10));
+				formatedsurname = formatedsurname.substring(0, Math.min(formatedsurname.length(), 10));
+				
+				admdate = stu.getAdmissionDate();
+				admdaterMap.put(stu.getUuid(), admdate);
+				admTerm = stu.getRegTerm();
+				admtermMap.put(stu.getUuid(), admTerm);
+				
+				admYear = formatter.format(admdate);
+				finalYear = stu.getFinalYear();
+				finalyearMap.put(stu.getUuid(), finalYear);
+				 //admtermMap finalyearMap
+				admYearMap.put(stu.getUuid(), admYear); 
+				studNameHash.put(stu.getUuid(),formatedFirstname + " " + formatedLastname + " " + formatedsurname +"\n"); 
+				firstnameHash.put(stu.getUuid(), formatedFirstname);
+			}
+
+			List<ClassRoom> classroomList = new ArrayList<ClassRoom>(); 
+			classroomList = roomDAO.getAllRooms(school.getUuid()); 
+			for(ClassRoom c : classroomList){
+				roomHash.put(c.getUuid() , c.getRoomName());
+			}
+
+
+
+			String fileName = new StringBuffer(StringUtils.trimToEmpty("ReportCards")) 
+					.append("_")
+					.append(roomHash.get(classroomuuid).replaceAll(" ", "_"))
+					.append(".pdf")
+					.toString();
+			response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
+
+
+			document = new Document(PageSize.A4, 46, 46, 64, 64);
+
+			try {
+				writer = PdfWriter.getInstance(document, response.getOutputStream());
+
+				PdfUtil event = new PdfUtil();
+				writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
+				writer.setPageEvent(event);
+
+			    populatePDFDocument(statistics, school,classroomuuid,classID,pDistinctList,pDistinctListGeneral,path, photopath);
+				
+			} catch (DocumentException e) {
+				logger.error("DocumentException while writing into the document");
+				logger.error(ExceptionUtils.getStackTrace(e));
+			}
+
 	}
 
 
@@ -387,7 +417,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param pDistinctListGeneral 
 	 * @param pDistinctList 
 	 * @param classID 
-	 * @param classroomuuid2 
+	 * @param classroomuuid 
 	 * @param school 
 	 * @param statistics 
 	 * @param statistics
@@ -400,8 +430,10 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param perfomanceListGeneral 
 	 * @param realPath
 	 */
-	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid2,
-			String classID, List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath, String photopath) {
+	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid,
+			String classID, List<Perfomance> pDistinctList, List<Perfomance> pDistinctListGeneral, String realPath , String photopath) {
+
+
 
 		Map<String,Double> kswscoreMapgn = new LinkedHashMap<String,Double>();
 		Map<String,Double> engscorehashgn = new LinkedHashMap<String,Double>(); 
@@ -419,20 +451,39 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		Map<String,Double> geoscoreMapgn = new LinkedHashMap<String,Double>();
 		Map<String,Double> crescorehashgn = new LinkedHashMap<String,Double>(); 
 		Map<String,Double> histscoreMapgn = new LinkedHashMap<String,Double>();
-		
+
 		Map<String,Double> grandscoremapgn = new LinkedHashMap<String,Double>();
-		
+
+		Map<String,Double> MEANMapgn = new LinkedHashMap<String,Double>();
 		Map<String,String> POSMapgn = new LinkedHashMap<String,String>();
 
-		
-		
 
-		String totalz = "";
+		double engscoregn = 0;
+		double kswscoregn = 0;
+		double matscoregn = 0;
+		double physcoregn = 0;
+		double bioscoregn = 0;
+		double chemscoregn = 0;
+		double bsscoregn = 0;
+		double comscoregn = 0;
+		double hscscoregn = 0;
+		double agriscoregn = 0;
+		double geoscoregn = 0;
+		double crescoregn = 0;
+		double histscoregn = 0;
+
+		double  cat1gn  = 0, cat2gn  = 0, endtermgn = 0;
+		double  totalscoregn = 0,grandscoregn = 0;
+		double totalgrandscoregn = 0;
+
 		try {
+
 			document.open();
 			document.add(new Paragraph("."));
+
+
 			
-			
+
 			Paragraph content = new Paragraph();
 			content.add(new Paragraph((schoolname +"") , courierBold14));//
 			content.add(new Paragraph((PDF_SUBTITLE +"") , timesRomanItalic8));
@@ -446,7 +497,12 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			logo.addElement(createImage(realPath,1)); 
 			logo.setBorder(Rectangle.NO_BORDER); 
 			logo.setHorizontalAlignment(Element.ALIGN_LEFT);
+			
+			
 
+
+			//SimpleDateFormat formatter;
+			//formatter = new SimpleDateFormat("dd, MMM yyyy");
 
 			DecimalFormat df = new DecimalFormat("0.00"); 
 			df.setRoundingMode(RoundingMode.DOWN);
@@ -456,646 +512,676 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 			DecimalFormat rf2 = new DecimalFormat("0"); 
 			rf2.setRoundingMode(RoundingMode.UP);
-			
-			
+
+
+
 			//perfomanceListGeneral,pDistinctListGeneral
-		    //int Finalposition = 0;
-			
-			 double humanityScoregn =0,techinicalScoregn = 0,subjectSmallgn = 0;
-			 double scienceScoregn = 0,subjectBiggn = 0, bestTechinicalgn =0;
-			 double bestHumanitygn = 0;
-			
-			
-		    double engscoregn = 0;
-			double kswscoregn = 0;
-			double matscoregn = 0;
-			double physcoregn = 0;
-			double bioscoregn = 0;
-			double chemscoregn = 0;
-			double bsscoregn = 0;
-			double comscoregn = 0;
-			double hscscoregn = 0;
-			double agriscoregn = 0;
-			double geoscoregn = 0;
-			double crescoregn = 0;
-			double histscoregn = 0;
-			
-			double  cat1gn  = 0, cat2gn  = 0, endtermgn = 0;
-			double  grandscoregn = 0;
-			
-			double catTotalsgn = 0,catmeangn = 0,examcattotalgn = 0;
-			double languageScoregn = 0; 
-			
-				
-		   double numbergn = 0.0;
-		 //perfomanceListGeneral,pDistinctListGeneral
 			int Finalposition = 0;
-			
+
 			int mycountgn =1;
 			
-			
-			
-			
+			double bestTechinical = 0;
+			double bestTechinical2 = 0;
+
+
+			double numbergn = 0.0;
 			List<Perfomance> listGeneral = new ArrayList<>();
 			if(pDistinctListGeneral !=null){
 				for(Perfomance pD : pDistinctListGeneral){     
 					listGeneral = perfomanceDAO.getPerformanceGeneral(school.getUuid(), classID, pD.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
 
-					engscoregn = 0;	kswscoregn = 0;
-					matscoregn = 0;	physcoregn = 0;
-					bioscoregn = 0;	chemscoregn = 0;
-					bsscoregn = 0;comscoregn = 0;
-					hscscoregn = 0;agriscoregn = 0;
-					geoscoregn = 0;crescoregn = 0;
+					engscoregn = 0;
+					kswscoregn = 0;
+					matscoregn = 0;
+					physcoregn = 0;
+					bioscoregn = 0;
+					chemscoregn = 0;
+					bsscoregn = 0;
+					comscoregn = 0;
+					hscscoregn = 0;
+					agriscoregn = 0;
+					geoscoregn = 0;
+					crescoregn = 0;
 					histscoregn = 0;
+
 					cat1gn  = 0; cat2gn  = 0; endtermgn = 0;
+					totalgrandscoregn = 0;
 
 					for(Perfomance pp : listGeneral){
 
-						//Languages
-						//Include all the languages
-						if(true){
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.ENG_UUID) ){
 
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
+						cat1gn = pp.getCatOne();
+						cat2gn = pp.getCatTwo();
+						endtermgn = pp.getEndTerm();
+
+						totalscoregn = 0;
+						/*COMPASARY
+						 * 1 ENG*/
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.ENG_UUID) ){
+
+							 cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							 cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							 endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
 								
-								/**  exam logic, determine which exam is being done     */
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+							 }
+							 
+							  engscoregn = totalscoregn;				
+							  grandscoregn += totalscoregn;
+							  totalscoregn = 0;				
+							  engscorehashgn.put(pD.getStudentUuid(),engscoregn);
+							 // end exam logic
+
+							 /*totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							 totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+                             */
+							
+
+
+						 }
+
+						 /*2 KISW*/					
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.KISWA_UUID)){
+
+							 cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							 cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							 endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+							 }
+							 // end exam logic
+							 
+							  kswscoregn = totalscoregn;				
+							  grandscoregn += totalscoregn;
+							  totalscoregn = 0;				
+							  kswscoreMapgn.put(pD.getStudentUuid(),kswscoregn);
+
+							 
+
+						 }
+
+						 /*3 PHY*/			
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.PHY_UUID)){
+
+							 cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							 cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							 endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+
+							 }
+							 // end exam logic
+
+							// totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							// totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							 physcoregn = totalscoregn;				
+							 grandscoregn += totalscoregn;
+							 totalscoregn = 0;				
+							 physcoreMapgn.put(pD.getStudentUuid(),physcoregn);
+
+						 }
+
+
+						 /*4 BIO*/					
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BIO_UUID)){
+
+							 cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							 cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							 endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+
+							 }
+							 // end exam logic
+
+							// totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							 //totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							 bioscoregn = totalscoregn;				
+							 grandscoregn += totalscoregn;
+							 totalscoregn = 0;				
+							 bioscoreMapgn.put(pD.getStudentUuid(),bioscoregn);
+
+						 }
+						 /*5 CHEM*/				
+						 if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CHEM_UUID)){
+
+							 cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							 cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							 endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+
+							 }
+							 // end exam logic
+
+							 //totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							 //totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							 chemscoregn = totalscoregn;				
+							 grandscoregn += totalscoregn;
+							 totalscoregn = 0;				
+							 chemscorehashgn.put(pD.getStudentUuid(),chemscoregn);
+
+						 }
+						 /*6 MATH
+						  * 
+						  * END OF COMPASARY*/
+						 if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.MATH_UUID)){                	  
+
+							  cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							  cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							  endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							  /**  exam logic, determine which exam is being done     */
 								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
+									
+									  totalscoregn = (endtermgn/70)*100;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+									  
 
 								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
+									  totalscoregn = cat2gn + endtermgn;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+									  
+
 								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
 									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								engscoregn = examcattotalgn; 
-								engscorehashgn.put(pD.getStudentUuid(),engscoregn);
-								//System.out.println("adm No " + studentAdmNoHash.get(pD.getStudentUuid()) + " engscoregn = " + engscoregn);
-
-							}
-
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.KISWA_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
+									  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 									 
-										examcattotalgn = (endtermgn/70)*100;
-										
+
+								 }
+								 // end exam logic
+
+							  //totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							  //totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							  matscoregn = totalscoregn;				
+							  grandscoregn += totalscoregn;
+							  totalscoregn = 0;				
+							  matscorehashgn.put(pD.getStudentUuid(),matscoregn);
+
+						  }
+						  /*HUMANITIES
+						   * 7 HIST*/	 
+						  if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.HIST_UUID)){
+
+							   cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							   cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							   endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							   /**  exam logic, determine which exam is being done     */
+								 if(StringUtils.equals(EndTermOnly, "ON")){
+									
+									  totalscoregn = (endtermgn/70)*100;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+									  
 
 								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
+									  totalscoregn = cat2gn + endtermgn;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+									  
+
 								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
 									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
+									  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+									  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+									 
+
 								 }
+								 // end exam logic
+
+							   // totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							   // totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							    histscoregn = totalscoregn;
+							    grandscoregn += totalscoregn;
+							    totalscoregn = 0;
+							    histscoreMapgn.put(pD.getStudentUuid(),histscoregn);
+
+						  }
+
+							   /*8 GEO*/			
+							   if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.GEO_UUID)){
+
+								   cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+								   cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+								   endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+								   /**  exam logic, determine which exam is being done     */
+									 if(StringUtils.equals(EndTermOnly, "ON")){
+										
+										  totalscoregn = (endtermgn/70)*100;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										  
+
+									 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+										 
+										  totalscoregn = cat2gn + endtermgn;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										  
+
+									 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+										 
+										  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										 
+
+									 }
+									 // end exam logic
+
+								   //totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								   //totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+								   geoscoregn = totalscoregn;				
+								   grandscoregn += totalscoregn;
+								   totalscoregn = 0;				
+								   geoscoreMapgn.put(pD.getStudentUuid(),geoscoregn);
+
+							   }
+							   /*9 CRE 
+							    * END HUMANITY*/
+							 if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CRE_UUID)){
+
+							    	cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							    	cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							    	endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+
+							    	/**  exam logic, determine which exam is being done     */
+									 if(StringUtils.equals(EndTermOnly, "ON")){
+										
+										  totalscoregn = (endtermgn/70)*100;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										  
+
+									 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+										 
+										  totalscoregn = cat2gn + endtermgn;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										  
+
+									 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+										 
+										  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+										  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+										 
+
+									 }
+									 // end exam logic
+
+							    	//totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							    	//totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+
+							    	crescoregn = totalscoregn;				
+							    	grandscoregn += totalscoregn;
+							    	totalscoregn = 0;	
+							    	crescorehashgn.put(pD.getStudentUuid(),crescoregn);
+
+							    }
+
+							    // end exam logic
+
+
+						   /*TECHINICAL 
+					                   TAKE BS AND CHOOSE 1 */	
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BS_UUID)){
+				
+						cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+						cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+						endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+				
+						 /**  exam logic, determine which exam is being done     */
+						 if(StringUtils.equals(EndTermOnly, "ON")){
+							
+							  totalscoregn = (endtermgn/70)*100;
+							  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+							  
+				
+						 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+							 
+							  totalscoregn = cat2gn + endtermgn;
+							  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+							  
+				
+						 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+							 
+							  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+							 
+				
+						 }
+						 // end exam logic
+				
+						//totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+						//totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+				
+						bsscoregn = totalscoregn;				
+						grandscoregn += totalscoregn;
+						totalscoregn = 0;				
+						bsscoreMapgn.put(pD.getStudentUuid(),bsscoregn);
+				
+					}
+				
+				
+					//double bestTechinical = 0;
+					if(true){
+						/*BEGIN CHOOSE */	if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.AGR_UUID)){
+				
+							cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+				
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								kswscoregn = examcattotalgn; 								
-								kswscoreMapgn.put(pD.getStudentUuid(),kswscoregn);
-								//System.out.println("adm No " + studentAdmNoHash.get(pD.getStudentUuid()) + " kswscoregn = " + kswscoregn);
-								
-
-							}
-
-
-							languageScoregn = (engscoregn+kswscoregn); 
-
-						}       
-						//Sciences
-						//Pick best two if the student take the three
-						if(true){
-							//double subjectBig = 0;
-							//double subjectSmall = 0;
-
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.PHY_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								physcoregn = examcattotalgn; 
-								
-								physcoreMapgn.put(pD.getStudentUuid(),physcoregn);
-								
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BIO_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								bioscoregn = examcattotalgn; 
-								
-								bioscoreMapgn.put(pD.getStudentUuid(),bioscoregn);
-								
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CHEM_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								chemscoregn = examcattotalgn; 
-								
-								chemscorehashgn.put(pD.getStudentUuid(),chemscoregn);
-								
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.MATH_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								matscoregn = examcattotalgn; 
-								
-								matscorehashgn.put(pD.getStudentUuid(),matscoregn);
-								
-							}
-
-							MiddleNumberFor3 middle = new MiddleNumberFor3();
-							subjectBiggn = Math.max( (Math.max(physcoregn, bioscoregn)), Math.max(Math.max(physcoregn, bioscoregn), chemscoregn));
-							subjectSmallgn = middle.ComputeMiddle(physcoregn, bioscoregn, chemscoregn);
-							scienceScoregn = (subjectBiggn+subjectSmallgn+matscoregn);
+				
+							 }
+							 // end exam logic
+				
+							//totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							//totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+				
+							agriscoregn = totalscoregn;				
+							//grandscoregn += totalscoregn;
+							//totalscoregn = 0;				
+							agriscorehashgn.put(pD.getStudentUuid(),agriscoregn);
+				
+				
 						}
-
-						//Technical 
-						//Here we pick one subject, the one he/she has performed best, but this subject can be replaced by a science,
-						//if the student takes 3 sciences and he/she performed better in the science than in all  the techinicals . 
-						if(true){
-							//double bestTechinical = 0;
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BS_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
+				
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.COMP_UUID)){
+				
+							cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+				
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
 								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								bsscoregn = examcattotalgn; 
-								
-								bsscoreMapgn.put(pD.getStudentUuid(),bsscoregn);
-								
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.AGR_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								agriscoregn = examcattotalgn; 
-								
-								agriscorehashgn.put(pD.getStudentUuid(),agriscoregn);
-								
-							}     
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.H_S)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								hscscoregn = examcattotalgn; 
-								
-								hscscoreMapgn.put(pD.getStudentUuid(),hscscoregn);
-								
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.COMP_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								comscoregn = examcattotalgn; 
-								
-								comscoreMapgn.put(pD.getStudentUuid(),comscoregn);
-								
-							} 
-
-                         
-							bestTechinicalgn = Math.max( (Math.max(bsscoregn, agriscoregn)), Math.max(hscscoregn, comscoregn));
-							techinicalScoregn = bestTechinicalgn; 
-
-						}     
-
-						//Humanities
-						//Here we pick only one subject, the one the student has performed best . 
-						if(true){  
-							//double bestHumanitygn = 0;     
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.GEO_UUID)){
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								geoscoregn = examcattotalgn; 
-								
-								geoscoreMapgn.put(pD.getStudentUuid(),geoscoregn);
-								
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CRE_UUID)){
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								crescoregn = examcattotalgn; 
-								
-								crescorehashgn.put(pD.getStudentUuid(),crescoregn);
-								
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.HIST_UUID)){
-
-
-								cat1gn = pp.getCatOne();
-								cat2gn = pp.getCatTwo();
-								endtermgn = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-										examcattotalgn = (endtermgn/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotalgn = cat2gn + endtermgn;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotalsgn = cat1gn + cat2gn;
-										catmeangn = catTotalsgn/2;
-										examcattotalgn = catmeangn + endtermgn;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								examcattotalgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotalgn)))));
-								histscoregn = examcattotalgn; 
-								
-								histscoreMapgn.put(pD.getStudentUuid(),histscoregn);
-								
-							}
-
-							bestHumanitygn = Math.max( (Math.max(geoscoregn, crescoregn)), Math.max(Math.max(geoscoregn, crescoregn), histscoregn));
-							humanityScoregn = bestHumanitygn; 
-
+				
+							 }
+							 // end exam logic
+							//totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							//totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+				
+							comscoregn = totalscoregn;				
+							//grandscoregn += totalscoregn;
+							//totalscoregn = 0;				
+							comscoreMapgn.put(pD.getStudentUuid(),comscoregn);
+				
 						} 
+				
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.H_S)){
+				
+							cat1gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1gn)))));
+							cat2gn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2gn)))));
+							endtermgn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endtermgn)))));
+				
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscoregn = (endtermgn/70)*100;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscoregn = cat2gn + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								  
+				
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+								  totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+								 
+				
+							 }
+							 // end exam logic
+				
+				
+							//totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
+							//totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
+				
+							hscscoregn = totalscoregn;				
+							//grandscoregn += totalscoregn;
+							//totalscoregn = 0;
+				
+							hscscoreMapgn.put(pD.getStudentUuid(),hscscoregn);
+				
+						}// agriscoregn,comscoregn,hscscoregn
+				
+						bestTechinical = Math.max( (Math.max(agriscoregn, comscoregn)), Math.max(Math.max(agriscoregn, comscoregn), hscscoregn));
+						//grandscoregn += bestTechinical;
+						bestTechinical2 = bestTechinical;
+						bestTechinical = 0;
+				
+					}//end if true
+				
+				
+				
+					// end exam logic
+				
+				
+				}
+				
 
+					grandscoregn += bestTechinical2;
+					totalgrandscoregn += grandscoregn;
+					grandscoregn = 0;
+					bestTechinical2 = 0;
+					
+					grandscoremapgn.put(pD.getStudentUuid(), totalgrandscoregn);
+					totalgrandscoregn = 0;
+				
+					Finalposition = mycountgn++;
+				}
+
+				@SuppressWarnings("unchecked")
+				ArrayList<?> as = new ArrayList(grandscoremapgn.entrySet());
+				Collections.sort(as,new Comparator(){
+					public int compare(Object o1,Object o2){
+						Map.Entry e1 = (Map.Entry)o1;
+						Map.Entry e2 = (Map.Entry)o2;
+						Double f = (Double)e1.getValue();
+						Double s = (Double)e2.getValue();
+						return s.compareTo(f);
+					}
+				});
+
+
+
+				double meangn = 0;
+				int counttwogn = 1;
+				int positiongn = 1;
+
+				String totalzgn = "";
+				for(Object o : as){
+
+					String items = String.valueOf(o);
+					String [] item = items.split("=");
+					String uuid = item[0];
+
+					totalzgn = item[1];
+
+					double the_grandscoregn = 0;
+					the_grandscoregn = Double.parseDouble(totalzgn);
+					meangn = the_grandscoregn/11; 
+					MEANMapgn.put(uuid,meangn);
+					//TODO save this mean for future use  
+					Deviation dev;
+					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
+						dev = deviationDAO.getDev(uuid, examConfig.getYear());
+					}else{
+						dev = new Deviation();
+					}
+
+
+
+					if(StringUtils.equals(examConfig.getTerm(), "1")){
+						dev.setStudentUuid(uuid);
+						dev.setYear(examConfig.getYear());
+						dev.setDevOne(meangn);
+						deviationDAO.putDev(dev,uuid,examConfig.getYear());
+
+
+					}else if(StringUtils.equals(examConfig.getTerm(), "2")){
+						dev.setStudentUuid(uuid);
+						dev.setYear(examConfig.getYear());
+						dev.setDevTwo(meangn);
+						deviationDAO.putDev(dev,uuid,examConfig.getYear());
+
+
+					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
+						dev.setStudentUuid(uuid);
+						dev.setYear(examConfig.getYear());
+						dev.setDevThree(meangn); 
+						deviationDAO.putDev(dev,uuid,examConfig.getYear());
 
 					}
 
-					grandscoregn = languageScoregn+scienceScoregn+humanityScoregn+techinicalScoregn;
-					languageScoregn = 0; scienceScoregn = 0; humanityScoregn = 0;techinicalScoregn = 0;  
-					grandscoremapgn.put(pD.getStudentUuid(), grandscoregn);   
-					grandscoregn = 0;
-					
-					Finalposition = mycountgn++;
+
+					String pos = "";
+					if(meangn==numbergn){
+						pos = (" " +(positiongn-counttwogn++)+ " / " +Finalposition);
+						POSMapgn.put(uuid,pos);
+					}
+					else{
+						counttwogn=1;
+						pos = (" " +positiongn+ " / " +Finalposition);
+						POSMapgn.put(uuid,pos);
+					}
+
+					positiongn++;
+					numbergn=meangn;
+
+
 
 				}
-				
-			
-			
-			@SuppressWarnings("unchecked")
-			ArrayList<?> as = new ArrayList(grandscoremapgn.entrySet());
-			Collections.sort(as,new Comparator(){
-				public int compare(Object o1,Object o2){
-					Map.Entry e1 = (Map.Entry)o1;
-					Map.Entry e2 = (Map.Entry)o2;
-					Double f = (Double)e1.getValue();
-					Double s = (Double)e2.getValue();
-					return s.compareTo(f);
-				}
-			});
-			
-			double meangn = 0;
-			int counttwogn = 1;
-			int positiongn = 1;
-			
-			String totalzgn = "";
-			for(Object o : as){
 
-				String items = String.valueOf(o);
-				String [] item = items.split("=");
-				String uuid = item[0];
-				
-				totalzgn = item[1];
-				
-				double the_grandscoregn = 0;
-				the_grandscoregn = Double.parseDouble(totalzgn);
-				meangn = the_grandscoregn/7; 
-				//System.out.println("meangn = " + meangn);
-				
-                            //			    TODO
-								Deviation dev;
-								if(deviationDAO.getDev(uuid, examConfig.getYear())==null){
-									dev = new Deviation();
-								}else{
-									dev = deviationDAO.getDev(uuid, examConfig.getYear());
-								}
-								
-								if(StringUtils.equals(examConfig.getTerm(), "1")){
-									dev.setStudentUuid(uuid);
-									dev.setYear(examConfig.getYear());
-									dev.setDevOne(meangn);
-									deviationDAO.putDev(dev,uuid,examConfig.getYear());
-									
-									
-								}else if(StringUtils.equals(examConfig.getTerm(), "2")){
-									dev.setStudentUuid(uuid);
-									dev.setYear(examConfig.getYear());
-									dev.setDevTwo(meangn);
-									deviationDAO.putDev(dev,uuid,examConfig.getYear());
-									
-									
-								}else if(StringUtils.equals(examConfig.getTerm(), "3")){
-									dev.setStudentUuid(uuid);
-									dev.setYear(examConfig.getYear());
-									dev.setDevThree(meangn); 
-									deviationDAO.putDev(dev,uuid,examConfig.getYear());
-									
-								}
-				
-				
-
-				String pos = "";
-				if(meangn==numbergn){
-					 pos = (" " +(positiongn-counttwogn++)+ " / " +Finalposition);
-					 POSMapgn.put(uuid,pos);
-				}
-				else{
-					counttwogn=1;
-					pos = (" " +positiongn+ " / " +Finalposition);
-					POSMapgn.put(uuid,pos);
-				}
-
-				positiongn++;
-				numbergn=meangn;
-				//System.out.println("position " + POSMapgn.get(uuid)); 
-				
-			
 			}
-			
-		}
-		//System.out.println("pos= "+pos);
 
-        /** end general ###################################################################
-         * ################################################################################################################################# */
-        
-			
-			
-			
-			
-			
+			/** end general ###################################################################
+			 * ################################################################################################################################# */
+
 			Map<String,Double> kswscoreMap = new LinkedHashMap<String,Double>();
 			Map<String,Double> engscorehash = new LinkedHashMap<String,Double>(); 
 
@@ -1112,7 +1198,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			Map<String,Double> geoscoreMap = new LinkedHashMap<String,Double>();
 			Map<String,Double> crescorehash = new LinkedHashMap<String,Double>(); 
 			Map<String,Double> histscoreMap = new LinkedHashMap<String,Double>();
-
 
 
 
@@ -1160,23 +1245,28 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 
 
-
-
-			MiddleNumberFor3 middle = new MiddleNumberFor3();
 			List<Perfomance> list = new ArrayList<>();
 			Map<String,Double> grandscoremap = new LinkedHashMap<String,Double>(); 
-			double languageScore = 0;
-			double scienceScore = 0;
-			double humanityScore = 0;
-			double techinicalScore = 0;
-			double grandscore = 0;
-			double number = 0.0;
 
+			double grandscore = 0;
+			double totalscore = 0;
+			double totalgrandscore = 0;
+			double number = 0.0;
+			int theFinalposition = 0;
+
+			bestTechinical = 0;
+			bestTechinical2 = 0;
+			
 			if(pDistinctList !=null){
+
+				totalscore = 0;
+				totalgrandscore = 0;
+				grandscore = 0;
 				int mycount =1;
+
+
 				for(Perfomance s : pDistinctList){                              
 					list = perfomanceDAO.getPerformance(school.getUuid(), classroomuuid, s.getStudentUuid(),examConfig.getTerm(),examConfig.getYear());
-
 					engscore = 0;
 					kswscore = 0;
 					matscore = 0;
@@ -1191,450 +1281,570 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					crescore = 0;
 					histscore = 0;
 
-					examcattotal = 0; cat1  = 0; cat2  = 0; endterm = 0; catTotals = 0; catmean = 0;
+					examcatgrandscore = 0; cat1  = 0; cat2  = 0; endterm = 0; catgrandscores = 0; catmean = 0;
 
 					for(Perfomance pp : list){
 
-						//Languages
-						//Include all the languages
-						if(true){
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.ENG_UUID) ){
+						cat1 = pp.getCatOne();
+						cat2 = pp.getCatTwo();
+						endterm = pp.getEndTerm();
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
+						totalscore = 0;
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.ENG_UUID) ){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
 								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
 
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 								 
-								 /**  end if     */
-							
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								engscore = examcattotal; 
-								//System.out.println("adm No " + studentAdmNoHash.get(s.getStudentUuid()) + " engscore = " + engscore);
-								
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								engscorehash.put(s.getStudentUuid(),examcattotal);
-								engcat1scoreMap.put(s.getStudentUuid(), cat1);
-								engcat2scoreMap.put(s.getStudentUuid(), cat2);
-								engendtscoreMap.put(s.getStudentUuid(), endterm);
-								
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
 
-
-							}
-
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.KISWA_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
 								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								kswscore = examcattotal; 
-								//System.out.println("adm No " + studentAdmNoHash.get(s.getStudentUuid()) + " kswscore = " + kswscore);
-								
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								
-								kswscoreMap.put(s.getStudentUuid(),kswscore);
-								kiscat1scoreMap.put(s.getStudentUuid(), cat1);                        
-								kiscat2scoreMap.put(s.getStudentUuid(), cat2);
-								kisendtscoreMap.put(s.getStudentUuid(), endterm);
-
-
-							}
-
-
-							languageScore = (engscore+kswscore); 
-
-						}       
-						//Sciences
-						//Pick best two if the student take the three
-						if(true){
-							double subjectBig = 0;
-							double subjectSmall = 0;
-
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.PHY_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								 
-								 /**  end if     */
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								physcore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								physcoreMap.put(s.getStudentUuid(),physcore);
-								phycat1scoreMap.put(s.getStudentUuid(), cat1);                  
-								phycat2scoreMap.put(s.getStudentUuid(), cat2);
-								phyendtscoreMap.put(s.getStudentUuid(), endterm);
 
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BIO_UUID)){
+							 }
+							 // end exam logic
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
+							/*totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));*/
 
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								 
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								bioscore = examcattotal;
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								bioscoreMap.put(s.getStudentUuid(),bioscore);
-								biocat1scoreMap.put(s.getStudentUuid(), cat1);              
-								biocat2scoreMap.put(s.getStudentUuid(), cat2);
-								bioendtscoreMap.put(s.getStudentUuid(), endterm);
+							engscore = totalscore;
 
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CHEM_UUID)){
+							grandscore += totalscore;
+							totalscore = 0;
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								chemscore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								chemscorehash.put(s.getStudentUuid(),chemscore);
-								chemcat1scoreMap.put(s.getStudentUuid(), cat1);                           
-								chemcat2scoreMap.put(s.getStudentUuid(), cat2);
-								chemendtscoreMap.put(s.getStudentUuid(), endterm);
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.MATH_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-							
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								matscore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								matscorehash.put(s.getStudentUuid(),matscore);
-								matcat1scoreMap.put(s.getStudentUuid(), cat1);                          
-								matcat2scoreMap.put(s.getStudentUuid(), cat2);
-								matendtscoreMap.put(s.getStudentUuid(), endterm);
-
-							}
-
-
-							subjectBig = Math.max( (Math.max(physcore, bioscore)), Math.max(Math.max(physcore, bioscore), chemscore));
-							subjectSmall = middle.ComputeMiddle(physcore, bioscore, chemscore);
-							scienceScore = (subjectBig+subjectSmall+matscore);
+							engscorehash.put(s.getStudentUuid(),engscore);
+							engcat1scoreMap.put(s.getStudentUuid(), cat1);
+							engcat2scoreMap.put(s.getStudentUuid(), cat2);
+							engendtscoreMap.put(s.getStudentUuid(), endterm);
 						}
 
-						//Technical 
-						//Here we pick one subject, the one he/she has performed best, but this subject can be replaced by a science,
-						//if the student takes 3 sciences and he/she performed better in the science than in all  the techinicals . 
-						if(true){
-							double bestTechinical = 0;
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BS_UUID)){
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.KISWA_UUID)){
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
 								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
 
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
 								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								bsscore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								bsscoreMap.put(s.getStudentUuid(),bsscore);
-								bscat1scoreMap.put(s.getStudentUuid(), cat1);                        
-								bscat2scoreMap.put(s.getStudentUuid(), cat2);
-								bsendtscoreMap.put(s.getStudentUuid(), endterm);
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
 
-							}
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+
+							/*totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));*/
+
+							kswscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+
+							kswscoreMap.put(s.getStudentUuid(),kswscore);
+							kiscat1scoreMap.put(s.getStudentUuid(), cat1);                        
+							kiscat2scoreMap.put(s.getStudentUuid(), cat2);
+							kisendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.PHY_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+
+							/*totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							physcore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							physcoreMap.put(s.getStudentUuid(),physcore);
+							phycat1scoreMap.put(s.getStudentUuid(), cat1);                  
+							phycat2scoreMap.put(s.getStudentUuid(), cat2);
+							phyendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+
+
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BIO_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							bioscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							bioscoreMap.put(s.getStudentUuid(),bioscore);
+							biocat1scoreMap.put(s.getStudentUuid(), cat1);              
+							biocat2scoreMap.put(s.getStudentUuid(), cat2);
+							bioendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CHEM_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+
+							/*totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));*/
+
+							chemscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							chemscorehash.put(s.getStudentUuid(),chemscore);
+							chemcat1scoreMap.put(s.getStudentUuid(), cat1);                           
+							chemcat2scoreMap.put(s.getStudentUuid(), cat2);
+							chemendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.MATH_UUID)){                	  
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							matscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							matscorehash.put(s.getStudentUuid(),matscore);
+							matcat1scoreMap.put(s.getStudentUuid(), cat1);                          
+							matcat2scoreMap.put(s.getStudentUuid(), cat2);
+							matendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+						/** end of */						
+
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.GEO_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							geoscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							geoscoreMap.put(s.getStudentUuid(),geoscore);
+							geocat1scoreMap.put(s.getStudentUuid(), cat1);                        
+							geocat2scoreMap.put(s.getStudentUuid(), cat2);
+							geoendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CRE_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							crescore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							crescorehash.put(s.getStudentUuid(),crescore);
+							crecat1scoreMap.put(s.getStudentUuid(), cat1);                        
+							crecat2scoreMap.put(s.getStudentUuid(), cat2);
+							creendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.HIST_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							histscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							histscoreMap.put(s.getStudentUuid(),histscore);
+							hiscat1scoreMap.put(s.getStudentUuid(), cat1);                       
+							hiscat2scoreMap.put(s.getStudentUuid(), cat2);
+							hisendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+
+						/** bs plus one*/
+
+
+						if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.BS_UUID)){
+
+							cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
+							cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
+							endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+							 /**  exam logic, determine which exam is being done     */
+							 if(StringUtils.equals(EndTermOnly, "ON")){
+								
+								  totalscore = (endterm/70)*100;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+								 
+								  totalscore = cat2 + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								  
+
+							 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+								 
+								  totalscore = ((cat1+cat2)/2) + endterm;
+								  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+								 
+
+							 }
+							 // end exam logic
+/*
+							totalscore = ((cat1+cat2)/2) + endterm;
+							totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+							bsscore = totalscore;
+
+							grandscore += totalscore;
+							totalscore = 0;
+
+							bsscoreMap.put(s.getStudentUuid(),bsscore);
+							bscat1scoreMap.put(s.getStudentUuid(), cat1);                        
+							bscat2scoreMap.put(s.getStudentUuid(), cat2);
+							bsendtscoreMap.put(s.getStudentUuid(), endterm);
+
+						}
+
+						/** choose one*/
+						//double bestTechinical = 0;
+						if(true){
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.AGR_UUID)){
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								agriscore = examcattotal; 
-								
 								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
 								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
 								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+								 /**  exam logic, determine which exam is being done     */
+								 if(StringUtils.equals(EndTermOnly, "ON")){
+									
+									  totalscore = (endterm/70)*100;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+									 
+									  totalscore = cat2 + endterm;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+									 
+									  totalscore = ((cat1+cat2)/2) + endterm;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									 
+
+								 }
+								 // end exam logic
+/*
+								totalscore = ((cat1+cat2)/2) + endterm;
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+								agriscore = totalscore;
+
+								//grandscore += totalscore;
+								//totalscore = 0;
+
 								agriscorehash.put(s.getStudentUuid(),agriscore);
 								agrcat1scoreMap.put(s.getStudentUuid(), cat1);                         
 								agrcat2scoreMap.put(s.getStudentUuid(), cat2);
 								agrendtscoreMap.put(s.getStudentUuid(), endterm);
 
+							}
 
-							}     
+
 							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.H_S)){
 
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								hscscore = examcattotal; 
-								
 								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
 								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
 								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+								 /**  exam logic, determine which exam is being done     */
+								 if(StringUtils.equals(EndTermOnly, "ON")){
+									
+									  totalscore = (endterm/70)*100;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+									 
+									  totalscore = cat2 + endterm;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+									 
+									  totalscore = ((cat1+cat2)/2) + endterm;
+									  totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									 
+
+								 }
+								 // end exam logic
+/*
+								totalscore = ((cat1+cat2)/2) + endterm;
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+								hscscore = totalscore;
+
+								//grandscore += totalscore;
+								//totalscore = 0;
+
 								hscscoreMap.put(s.getStudentUuid(),hscscore);
 								hsccat1scoreMap.put(s.getStudentUuid(), cat1);                          
 								hsccat2scoreMap.put(s.getStudentUuid(), cat2);
 								hscendtscoreMap.put(s.getStudentUuid(), endterm);
 
+							}if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.COMP_UUID)){
 
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.COMP_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								comscore = examcattotal; 
-								
 								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
 								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
 								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
+
+								 /**  exam logic, determine which exam is being done     */
+								 if(StringUtils.equals(EndTermOnly, "ON")){
+									
+									 totalscore = (endterm/70)*100;
+									 totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
+									 
+									 totalscore = cat2 + endterm;
+									 totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									  
+
+								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
+									 
+									 totalscore = ((cat1+cat2)/2) + endterm;
+									 totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+									 
+
+								 }
+								 // end exam logic
+/*
+								totalscore = ((cat1+cat2)/2) + endterm;
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
+*/
+								comscore = totalscore;
+
+								//grandscore += totalscore;
+								//totalscore = 0;
+
 								comscoreMap.put(s.getStudentUuid(),comscore);
 								comcat1scoreMap.put(s.getStudentUuid(), cat1);                           
 								comcat2scoreMap.put(s.getStudentUuid(), cat2);
@@ -1643,157 +1853,31 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							} 
 
 
-							bestTechinical = Math.max( (Math.max(bsscore, agriscore)), Math.max(hscscore, comscore));
-							techinicalScore = bestTechinical; 
 
-						}     
+							bestTechinical = Math.max( (Math.max(agriscore, comscore)), Math.max(Math.max(agriscore, comscore), hscscore));
+							//grandscore += bestTechinical;
+							bestTechinical2 = bestTechinical;
+							bestTechinical = 0;
+							
 
-						//Humanities
-						//Here we pick only one subject, the one the student has performed best . 
-						if(true){  
-							double bestHumanity = 0;     
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.GEO_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								geoscore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								geoscoreMap.put(s.getStudentUuid(),geoscore);
-								geocat1scoreMap.put(s.getStudentUuid(), cat1);                        
-								geocat2scoreMap.put(s.getStudentUuid(), cat2);
-								geoendtscoreMap.put(s.getStudentUuid(), endterm);
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.CRE_UUID)){
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								crescore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								crescorehash.put(s.getStudentUuid(),crescore);
-								crecat1scoreMap.put(s.getStudentUuid(), cat1);                        
-								crecat2scoreMap.put(s.getStudentUuid(), cat2);
-								creendtscoreMap.put(s.getStudentUuid(), endterm);
-
-
-							}
-							if(StringUtils.equals(pp.getSubjectUuid(), ExamConstants.HIST_UUID)){
-
-
-								cat1 = pp.getCatOne();
-								cat2 = pp.getCatTwo();
-								endterm = pp.getEndTerm();
-								
-								/**  exam logic, determine which exam is being done     */
-								 if(StringUtils.equals(EndTermOnly, "ON")){
-									 
-									  
-										examcattotal = (endterm/70)*100;
-										
-
-								 }else if(StringUtils.equals(EndTermAndC2, "ON")){
-									 
-										examcattotal = cat2 + endterm;
-										
-										
-								 }else if(StringUtils.equals(EndTermC1AndC2, "ON")){//
-									 
-									    catTotals = cat1 + cat2;
-										catmean = catTotals/2;
-										examcattotal = catmean + endterm;
-										
-								 }
-								 
-								 /**  end if     */
-								
-								
-								examcattotal = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(examcattotal)))));
-								histscore = examcattotal; 
-								
-								cat1 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat1)))));
-								cat2 = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(cat2)))));
-								endterm = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(endterm)))));
-								histscoreMap.put(s.getStudentUuid(),histscore);
-								hiscat1scoreMap.put(s.getStudentUuid(), cat1);                       
-								hiscat2scoreMap.put(s.getStudentUuid(), cat2);
-								hisendtscoreMap.put(s.getStudentUuid(), endterm);
-
-
-							}
-
-							bestHumanity = Math.max( (Math.max(geoscore, crescore)), Math.max(Math.max(geoscore, crescore), histscore));
-							humanityScore = bestHumanity; 
-
-						} 
-
-
+						}// end if true
+						
+						  
 					}
+					  grandscore += bestTechinical2;
+					  totalgrandscore += grandscore;
+					  bestTechinical2 = 0;
+					  grandscore = 0;
 
-					grandscore = languageScore+scienceScore+humanityScore+techinicalScore;
-					languageScore = 0; scienceScore = 0; humanityScore = 0;techinicalScore = 0;  
-					grandscoremap.put(s.getStudentUuid(), grandscore);   
-					grandscore = 0;
-					Finalposition = mycount++;
+					//System.out.println("total in repoty card ="+totalgrandscore);
+					grandscoremap.put(s.getStudentUuid(), totalgrandscore);
+					totalgrandscore = 0;
+
+
+					theFinalposition = mycount++;
 
 				}
+
 
 				double engc1 = 0,kisc1 = 0,matc1 = 0,phyc1 = 0,chemc1 = 0,bioc1 = 0;
 				double bsc1 = 0,agrc1 = 0,hscc1 = 0,comc1 = 0,crec1 = 0,hisc1 = 0,geoc1 = 0;
@@ -1815,6 +1899,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 
 
+
 				@SuppressWarnings("unchecked")
 				ArrayList<?> as = new ArrayList(grandscoremap.entrySet());
 				Collections.sort(as,new Comparator(){
@@ -1830,27 +1915,24 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 
 				position = 1;
+				double mean = 0;
 				int counttwo = 1;
-
+				//double grandscoreT = 0;
+				String totalz = "";
 				for(Object o : as){
 					String items = String.valueOf(o);
 					String [] item = items.split("=");
 					String uuid = item[0];
+
 					totalz = item[1];
-					double mean = 0;
-					double the_grandscore = 0;
-	                   
-					the_grandscore = Double.parseDouble(totalz);
-					mean = the_grandscore/7;   
-					//System.out.println("mean = " + mean);
-					
+					mean = Double.parseDouble(totalz)/11;  
+
+
 
 					studeadmno = studentAdmNoHash.get(uuid);
-					studename = studNameHash.get(uuid);   
+					studename = studNameHash.get(uuid);    
 					firstnamee = firstnameHash.get(uuid);
 
-
-					TermFee termFee = termFeeDAO.getFee(school.getUuid(),examConfig.getTerm(),examConfig.getYear());
 
 					engc1 = 0;kisc1 = 0;matc1 = 0;phyc1 = 0;chemc1 = 0;bioc1 = 0;
 					bsc1 = 0;agrc1 = 0;hscc1 = 0;comc1 = 0;crec1 = 0;hisc1 = 0;geoc1 = 0;
@@ -1860,6 +1942,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 					enget = 0;kiset = 0;matet = 0;phyet = 0;chemet = 0;bioet = 0;
 					bset = 0;agret = 0;hscet = 0;comet = 0;creet = 0;hiset = 0;geoet = 0;
+
+					//grandscoreT = 0;
 
 					if(engscorehash.get(uuid)!=null && engscorehash.get(uuid)!=0){
 						engscore = engscorehash.get(uuid);  
@@ -2289,14 +2373,61 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					}else{
 						cometstr = "";
 					}
+					
+					
+					
+					
+					
+
+					double the_grandscore = 0;
+
+					the_grandscore = Double.parseDouble(totalz);
+					mean = the_grandscore/11; 
+
 
 					BaseColor baseColor = new BaseColor(255,255,255);//while
 					BaseColor Colormagenta = new BaseColor(255,255,255);//  (176,196,222); magenta
 					BaseColor Colorgrey = new BaseColor(255,255,255);//  (128,128,128)gray,grey
 
+
+					PdfPTable containerTable = new PdfPTable(2);  
+					containerTable.setWidthPercentage(100); 
+					containerTable.setWidths(new int[]{100,100}); 
+					containerTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+					PdfPTable titleTable = new PdfPTable(1);  
+					titleTable.setWidthPercentage(25); 
+					titleTable.setWidths(new int[]{100}); 
+					titleTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+					PdfPTable HeaderTable = new PdfPTable(1);  
+					HeaderTable.setWidthPercentage(50); 
+					HeaderTable.setWidths(new int[]{100});   
+					HeaderTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+
+
+					PdfPCell contheader = new PdfPCell(new Paragraph(("TERM " +examConfig.getTerm() + ": YEAR " + examConfig.getYear() +"\n" +("CLASS : " + roomHash.get(classroomuuid) +"\n")) +"",timesRomanBold7));
+					contheader.setBackgroundColor(Colormagenta);
+					contheader.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+					PdfPCell bodyheader = new PdfPCell(new Paragraph(("ADMISSION NUMBER : " + studentAdmNoHash.get(uuid) +"\n" +("STUDENT NAME : " + studNameHash.get(uuid) +"\n")),timesRomanBold7));
+					bodyheader.setBackgroundColor(Colormagenta);
+					bodyheader.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+					containerTable.addCell(bodyheader);
+					containerTable.addCell(contheader);
+
+
 					Paragraph emptyline = new Paragraph(("                              "));
 
-					//table here
+					Paragraph reporttitle = new Paragraph();
+					reporttitle.setAlignment(Element.ALIGN_CENTER); 
+					reporttitle.add(new Paragraph(("               STUDENT REPORT CARD") , timesRomanBold7));
+
 					PdfPCell CountHeader = new PdfPCell(new Paragraph("*",timesRomanBold7));
 					CountHeader.setBackgroundColor(baseColor);
 					CountHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -2320,28 +2451,25 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					PdfPCell scoreHeader = new PdfPCell(new Paragraph("TOTAL /100",timesRomanBold7));
 					scoreHeader.setBackgroundColor(baseColor);
 					scoreHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
-					PdfPCell pointsHeader = new PdfPCell(new Paragraph("PNTS /12",timesRomanBold7));
+
+					PdfPCell pointsHeader = new PdfPCell(new Paragraph("PNTS/12",timesRomanBold7));
 					pointsHeader.setBackgroundColor(baseColor);
 					pointsHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-
 					PdfPCell gradeHeader = new PdfPCell(new Paragraph("GRADE",timesRomanBold7));
-					gradeHeader.setBackgroundColor(baseColor);
+					gradeHeader.setBackgroundColor(baseColor); 
 					gradeHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 					PdfPCell remarkHeader = new PdfPCell(new Paragraph("REMARKS",timesRomanBold7));
 					remarkHeader.setBackgroundColor(baseColor);
 					remarkHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
-					
+
 					PdfPCell teacherHeader = new PdfPCell(new Paragraph("Teacher",timesRomanBold7));
 					teacherHeader.setBackgroundColor(baseColor);
 					teacherHeader.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
-					PdfPTable myTable;
 
-					myTable = new PdfPTable(10); 
+
+					PdfPTable myTable = new PdfPTable(10); 
 					myTable.addCell(CountHeader);
 					myTable.addCell(subjectHeader);
 					myTable.addCell(cat1Header);
@@ -2353,7 +2481,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					myTable.addCell(remarkHeader);
 					myTable.addCell(teacherHeader);
 					myTable.setWidthPercentage(100); 
-					myTable.setWidths(new int[]{15,60,20,20,20,25,20,25,60,20}); 
+					myTable.setWidths(new int[]{15,60,20,20,20,25,20,25,60,20});   
 					myTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 					String maxscore = "100";
@@ -2376,55 +2504,56 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					String gradeE = Integer.toString(gradingSystem.getGradeE());
 
 
-					PdfPCell gradeA = new PdfPCell(new Paragraph(maxscore+"-"+(gradingSystem.getGradeAplain()),timesRomanBold7));
+					PdfPCell gradeA = new PdfPCell(new Paragraph(maxscore+"-"+(gradingSystem.getGradeAplain()),timesRomanNormal7));
 					gradeA.setBackgroundColor(baseColor);
 					gradeA.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeAminus = new PdfPCell(new Paragraph(aplain+"-"+(gradingSystem.getGradeAminus()),timesRomanBold7));
+					PdfPCell gradeAminus = new PdfPCell(new Paragraph(aplain+"-"+(gradingSystem.getGradeAminus()),timesRomanNormal7));
 					gradeAminus.setBackgroundColor(baseColor);
 					gradeAminus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeBplus = new PdfPCell(new Paragraph(aminus+"-"+(gradingSystem.getGradeBplus()),timesRomanBold7));
+					PdfPCell gradeBplus = new PdfPCell(new Paragraph(aminus+"-"+(gradingSystem.getGradeBplus()),timesRomanNormal7));
 					gradeBplus.setBackgroundColor(baseColor);
 					gradeBplus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeBplain = new PdfPCell(new Paragraph(bplus+"-"+(gradingSystem.getGradeBplain()),timesRomanBold7));
+					PdfPCell gradeBplain = new PdfPCell(new Paragraph(bplus+"-"+(gradingSystem.getGradeBplain()),timesRomanNormal7));
 					gradeBplain.setBackgroundColor(baseColor);
 					gradeBplain.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeBminus = new PdfPCell(new Paragraph(bplain+"-"+(gradingSystem.getGradeBminus()),timesRomanBold7));
+					PdfPCell gradeBminus = new PdfPCell(new Paragraph(bplain+"-"+(gradingSystem.getGradeBminus()),timesRomanNormal7));
 					gradeBminus.setBackgroundColor(baseColor);
 					gradeBminus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeCplus = new PdfPCell(new Paragraph(bminus+"-"+(gradingSystem.getGradeCplus()),timesRomanBold7));
+					PdfPCell gradeCplus = new PdfPCell(new Paragraph(bminus+"-"+(gradingSystem.getGradeCplus()),timesRomanNormal7));
 					gradeCplus.setBackgroundColor(baseColor);
 					gradeCplus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeCplain = new PdfPCell(new Paragraph(cplus+"-"+(gradingSystem.getGradeCplain()),timesRomanBold7));
+					PdfPCell gradeCplain = new PdfPCell(new Paragraph(cplus+"-"+(gradingSystem.getGradeCplain()),timesRomanNormal7));
 					gradeCplain.setBackgroundColor(baseColor);
 					gradeCplain.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeCminus = new PdfPCell(new Paragraph(cplain+"-"+(gradingSystem.getGradeCminus()),timesRomanBold7));
+					PdfPCell gradeCminus = new PdfPCell(new Paragraph(cplain+"-"+(gradingSystem.getGradeCminus()),timesRomanNormal7));
 					gradeCminus.setBackgroundColor(baseColor);
 					gradeCminus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeDplus = new PdfPCell(new Paragraph(cminus+"-"+(gradingSystem.getGradeDplus()),timesRomanBold7));
+					PdfPCell gradeDplus = new PdfPCell(new Paragraph(cminus+"-"+(gradingSystem.getGradeDplus()),timesRomanNormal7));
 					gradeDplus.setBackgroundColor(baseColor);
 					gradeDplus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeDplain = new PdfPCell(new Paragraph(dplus+"-"+(gradingSystem.getGradeDplain()),timesRomanBold7));
+					PdfPCell gradeDplain = new PdfPCell(new Paragraph(dplus+"-"+(gradingSystem.getGradeDplain()),timesRomanNormal7));
 					gradeDplain.setBackgroundColor(baseColor);
 					gradeDplain.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeDminus = new PdfPCell(new Paragraph(dplain+"-"+(gradingSystem.getGradeDminus()),timesRomanBold7));
+					PdfPCell gradeDminus = new PdfPCell(new Paragraph(dplain+"-"+(gradingSystem.getGradeDminus()),timesRomanNormal7));
 					gradeDminus.setBackgroundColor(baseColor);
 					gradeDminus.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					PdfPCell gradeEE = new PdfPCell(new Paragraph(dminus+"-"+gradeE,timesRomanBold7));
+					PdfPCell gradeEE = new PdfPCell(new Paragraph(dminus+"-"+gradeE,timesRomanNormal7));
 					gradeEE.setBackgroundColor(baseColor);
 					gradeEE.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 					PdfPTable gradeTable = new PdfPTable(12);  
+
 					gradeTable.addCell(gradeA);
 					gradeTable.addCell(gradeAminus);
 					gradeTable.addCell(gradeBplus);
@@ -2454,38 +2583,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					gradeTable.addCell(new Paragraph("D-",timesRomanNormal7));
 					gradeTable.addCell(new Paragraph("E",timesRomanNormal7));
 
-					PdfPTable containerTable = new PdfPTable(2);  
-					containerTable.setWidthPercentage(100); 
-					containerTable.setWidths(new int[]{100,100}); 
-					containerTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-
-					PdfPTable titleTable = new PdfPTable(1);  
-					titleTable.setWidthPercentage(25); 
-					titleTable.setWidths(new int[]{100}); 
-					titleTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPTable HeaderTable = new PdfPTable(1);  
-					HeaderTable.setWidthPercentage(50); 
-					HeaderTable.setWidths(new int[]{100});   
-					HeaderTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					
-
-
-					PdfPCell contheader = new PdfPCell(new Paragraph(("TERM " +examConfig.getTerm() + ": YEAR " + examConfig.getYear() +"\n\n" +("CLASS : " + roomHash.get(classroomuuid) +"\n")) +"",timesRomanBold7));
-					contheader.setBackgroundColor(Colormagenta);
-					contheader.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					PdfPCell bodyheader = new PdfPCell(new Paragraph(("ADMISSION NUMBER : " + studentAdmNoHash.get(uuid) +"\n\n" +("STUDENT NAME : " + studNameHash.get(uuid) +"\n")),timesRomanBold7));
-					bodyheader.setBackgroundColor(Colormagenta);
-					bodyheader.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-
-					containerTable.addCell(bodyheader);
-					containerTable.addCell(contheader);
-					
-					
 					//studentDAO parentsDAO TODO
 					if(StringUtils.equals(examConfig.getSendSMS(),"ON")){
 						sendResultSMS.sendToParents(smsApiDAO,smsSendDAO,studentDAO,parentsDAO,uuid,school.getUuid(),engscorestr,kswscorestr,matscorestr,
@@ -2493,12 +2590,11 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 								hscscorestr,agriscorestr,geoscorestr,crescorestr,histscorestr,mean);
 					}
 
+
 					List<Subject> subList = subjectDAO.getAllSubjects();
 
 					int count = 1;
 					for(Subject sub : subList){
-
-
 
 						myTable.addCell(new Paragraph(" "+count,timesRomanNormal7));
 
@@ -2512,7 +2608,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							myTable.addCell(new Paragraph(" "+computeGrade(engscore),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+computeRemarks(engscore),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+findSubTecher(sub.getUuid(),classroomuuid),timesRomanNormal7)); 
-							if(engscore > 0 && engscore < gradingSystem.getGradeDplus()){
+                            if(engscore > 0 && engscore < gradingSystem.getGradeDplus()){
                             	shameMap.put(sub.getUuid(),sub.getUuid());
                             }
 							engscore = 0;
@@ -2533,7 +2629,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							kswscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.MATH_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+matc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+matc2str,timesRomanNormal7));
@@ -2549,7 +2644,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							matscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.PHY_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+phyc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+phyc2str,timesRomanNormal7));
@@ -2565,7 +2659,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							physcore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.BIO_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+bioc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+bioc2str,timesRomanNormal7));
@@ -2581,7 +2674,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							bioscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.CHEM_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+chemc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+chemc2str,timesRomanNormal7));
@@ -2597,7 +2689,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							chemscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.BS_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+bsc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+bsc2str,timesRomanNormal7));
@@ -2613,7 +2704,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							bsscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.COMP_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+comc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+comc2str,timesRomanNormal7));
@@ -2629,7 +2719,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							comscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.H_S)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+hscc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+hscc2str,timesRomanNormal7));
@@ -2645,7 +2734,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							hscscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.AGR_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+agrc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+agrc2str,timesRomanNormal7));
@@ -2661,7 +2749,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							agriscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.GEO_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+geoc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+geoc2str,timesRomanNormal7));
@@ -2677,7 +2764,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							geoscore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.CRE_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+crec1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+crec2str,timesRomanNormal7));
@@ -2693,7 +2779,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 							crescore = 0;
 
 						}if(StringUtils.equals(sub.getUuid(), ExamConstants.HIST_UUID)){
-							
 							myTable.addCell(new Paragraph(" "+sub.getSubjectName(),timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+hisc1str,timesRomanNormal7));
 							myTable.addCell(new Paragraph(" "+hisc2str,timesRomanNormal7));
@@ -2712,7 +2797,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 						count++;
 					}
 
-				
+
+
 					//KCSE
 					double kcse = 0;
 					double newkcse = 0;
@@ -2721,32 +2807,31 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 						kcse = Integer.parseInt(primary.getKcpemark()); 
 						newkcse = (kcse/500)*12;
 					}
-					
+
+					//MEANMapgn  POSMapgn
+
 					Paragraph myposition;
 
 					if(mean==number){
-						myposition = new Paragraph((" Stream PSTN " +(position-counttwo++)+ " / " +Finalposition)   +    "     Class PSTN " +POSMapgn.get(uuid) +    "      K.C.P.E = " + (int)kcse +" ",timesRomanNormal7);
+						myposition = new Paragraph((" Stream PSTN " +(position-counttwo++)+ " / " +theFinalposition)   +    "     Class PSTN " +POSMapgn.get(uuid) +    "      K.C.P.E = " + (int)kcse +" ",timesRomanNormal7);
 					}
 					else{
 						counttwo=1;
-						myposition = new Paragraph((" Stream PSTN " +position+ " / " +Finalposition)   +    "     Class PSTN " +POSMapgn.get(uuid) +  "      K.C.P.E = " + (int)kcse + " ",timesRomanNormal7);
+						myposition = new Paragraph((" Stream PSTN " +position+ " / " +theFinalposition)   +    "     Class PSTN " +POSMapgn.get(uuid) +  "      K.C.P.E = " + (int)kcse + " ",timesRomanNormal7);
 					}
-					
 
-
-					PdfPCell positionheader = new PdfPCell(myposition);
+					PdfPCell positionheader = new PdfPCell(myposition); 
 					positionheader.setBackgroundColor(Colormagenta);
-					positionheader.setHorizontalAlignment(Element.ALIGN_LEFT);  
-					
-					String str = " ";
+					positionheader.setHorizontalAlignment(Element.ALIGN_LEFT); 
 
-					PdfPCell meanheader = new PdfPCell(new Paragraph(("TOTAL MARKS: " + df.format(the_grandscore) + " / 700 "+ str +"MEAN SCORE " + df.format(mean) + " / 100 GRADE " +computeGrade(mean)) +"\n\n",timesRomanNormal7));
+
+					PdfPCell meanheader = new PdfPCell(new Paragraph("TOTAL MARKS = " + the_grandscore + " / 1100 , MEAN SCORE = " + df.format(mean) + " / 100 , MEAN GRADE = " +computeGrade(mean) +"\n",timesRomanNormal7));
 					meanheader.setBackgroundColor(Colormagenta);
 					meanheader.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 					PdfPTable bottomTable = new PdfPTable(2);  
 					bottomTable.setWidthPercentage(100); 
-					bottomTable.setWidths(new int[]{100,100}); 
+					bottomTable.setWidths(new int[]{80,120}); 
 					bottomTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 					bottomTable.addCell(positionheader);
@@ -2760,7 +2845,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 					//fee balance
 					//admdate  admTerm
-					
+
 					String currentTermstr = examConfig.getTerm();
 					String correctTermstr = "";
 					int correctTermint = 0;
@@ -2785,31 +2870,29 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 					double balance = 0;
 					String feebalance = "";
+					StudentBalance studentBal = new StudentBalance();
+					//admtermMap finalyearMap
 					balance = studentBal.findBalance(termFeeDAO,examConfigDAO,studentFeeDAO,studentOtherMoniesDAO,admdaterMap.get(uuid),admtermMap.get(uuid),uuid,school.getUuid(),finalyearMap.get(uuid)); 
 					//System.out.println("balance = " + balance + " admTerm " + admtermMap.get(uuid) + " adm no " + studentAdmNoHash.get(uuid));
 					feebalance = nf.format(balance);
-	                
-	               
 					
-					//end fee balance
 					Miscellanous closingDate = new Miscellanous();
 					Miscellanous openingDate = new Miscellanous();
 					Miscellanous comments = new Miscellanous();
 					String cdate = "";
 					String odate = "";
 					String comment = "";
-					
+
 					closingDate = miscellanousDAO.getKey(school.getUuid(),"CLOSING_DATE");
 					cdate = closingDate.getValue();
-					
+
 					openingDate = miscellanousDAO.getKey(school.getUuid(),"OPENING_DATE");
 					odate = openingDate.getValue();
-					
+
 					comments = miscellanousDAO.getKey(school.getUuid(),"HEAD_TEACHER_REMARKS");
 					comment = comments.getValue();
 					
-					
-					 String dayfee = "";
+					String dayfee = "";
 					 String boarderfee = "";
 		             boarderfee = nf.format(nexttermBoardingfee);
 					 dayfee = nf.format(nexttermDayfee);
@@ -2823,14 +2906,11 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 				        schoolfee = " " + boarderfee;
 				    }
 					
-					
-					
 
 
-					PdfPCell feeCell = new PdfPCell(new Paragraph("Closing Fee Balance  " + feebalance +" \n\nNext Term Fee " + schoolfee,timesRomanNormal0));
+					PdfPCell feeCell = new PdfPCell(new Paragraph("Closing Fee Balance  " + feebalance +" \n\nNext Term Fee "  + schoolfee ,timesRomanNormal0));
 					feeCell.setBackgroundColor(Colorgrey);
 					feeCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
 
 					PdfPCell DateCell = new PdfPCell(new Paragraph(("Closing date : " +cdate+" \n\nNext Term Opening date :" +odate)+"\n",timesRomanNormal0));
 					DateCell.setBackgroundColor(Colorgrey);
@@ -2838,131 +2918,132 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 					feeTable.addCell(feeCell);
 					feeTable.addCell(DateCell);
-					
-					
-                    //save details
-					
+
+					//save details
+
 					String StartYear = "";
 					StartYear = admYearMap.get(uuid);
 					int Year2Int = 0;
 					int Year3Int = 0;
 					int Year4Int = 0;
-					
+
 					String Year2Str = "";
 					String Year3Str = "";
 					String Year4Str = "";
-					
+
 					Year2Int = Integer.parseInt(StartYear)+1;
 					Year3Int = Year2Int + 1;
 					Year4Int = Year3Int + 1;
-					
+
 					Year2Str = Integer.toString(Year2Int);
 					Year3Str = Integer.toString(Year3Int);
 					Year4Str = Integer.toString(Year4Int);
-					
-					
+
+
 					GraphWeightGenerator(mean,uuid,school.getUuid()); 
+					
 					// Create a simple Bar chart start
 					BarWeight barWeight1 = new BarWeight();
 					BarWeight barWeight2 = new BarWeight();
 					BarWeight barWeight3 = new BarWeight();
 					BarWeight barWeight4 = new BarWeight();
-                    if(GraphWeightGenerator(mean,uuid,school.getUuid())){
-                    	if(barWeightDAO.getBarWeight(school.getUuid(), uuid, StartYear) !=null){
-                    		barWeight1 = barWeightDAO.getBarWeight(school.getUuid(), uuid, StartYear); 
-                    	}
-                    	
-                    	if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year2Str) !=null){
-                    		barWeight2 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year2Str); 
-                    	}
-                    	
-                    	if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year3Str) !=null){
-                    		barWeight3 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year3Str); 
-                    	}
-                    	if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year4Str) !=null){
-                    		barWeight4 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year4Str); 
-                    	}
-                    	
-                    	
+					if(GraphWeightGenerator(mean,uuid,school.getUuid())){
+						if(barWeightDAO.getBarWeight(school.getUuid(), uuid, StartYear) !=null){
+							barWeight1 = barWeightDAO.getBarWeight(school.getUuid(), uuid, StartYear); 
+						}
+
+						if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year2Str) !=null){
+							barWeight2 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year2Str); 
+						}
+
+						if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year3Str) !=null){
+							barWeight3 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year3Str); 
+						}
+						if(barWeightDAO.getBarWeight(school.getUuid(), uuid, Year4Str) !=null){
+							barWeight4 = barWeightDAO.getBarWeight(school.getUuid(), uuid, Year4Str); 
+						}
+
+
 					}
-					
+
 					PdfPCell BAFheader = new PdfPCell();
-					
+
 					DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 					double ChartWeight = 0;
 					double ChartWeight2 = 0;
 					double ChartWeight3 = 0;
-					
-				
-					dataset.setValue(newkcse, "Pnts", " K.C.P.E");
-					
+
+
+
+					dataset.setValue(newkcse, "Pnts", " K.C.P.E"); 
+
 					//YEAR 1
-				    ChartWeight =  barWeight1.getWeightOne(); 
-				    ChartWeight2 =  barWeight1.getWeightTwo(); 	
+					ChartWeight =  barWeight1.getWeightOne(); 
+					ChartWeight2 =  barWeight1.getWeightTwo(); 	
 					ChartWeight3 =  barWeight1.getWeightThree(); 
-					
-					
+
+
 					dataset.setValue(ChartWeight, "Pnts",  StartYear+"-T 1");
 					dataset.setValue(ChartWeight2, "Pnts", StartYear+"-T 2");
 					dataset.setValue(ChartWeight3, "Pnts", StartYear+"-T 3");
-					
+
 					//YEAR 2
 					ChartWeight = 0;
 					ChartWeight2 = 0;
 					ChartWeight3 = 0;
-					
+
 					ChartWeight =  barWeight2.getWeightOne(); 
-				    ChartWeight2 =  barWeight2.getWeightTwo(); 	
+					ChartWeight2 =  barWeight2.getWeightTwo(); 	
 					ChartWeight3 =  barWeight2.getWeightThree(); 
-					
+
 					dataset.setValue(ChartWeight, "Pnts",  Year2Str+"-T 1");
 					dataset.setValue(ChartWeight2, "Pnts", Year2Str+"-T 2");
 					dataset.setValue(ChartWeight3, "Pnts", Year2Str+"-T 3");
-					
+
 					//YEAR 2
 					ChartWeight = 0;
 					ChartWeight2 = 0;
 					ChartWeight3 = 0;
-					
+
 					ChartWeight =  barWeight3.getWeightOne(); 
-				    ChartWeight2 =  barWeight3.getWeightTwo(); 	
+					ChartWeight2 =  barWeight3.getWeightTwo(); 	
 					ChartWeight3 =  barWeight3.getWeightThree(); 
-					
+
 					dataset.setValue(ChartWeight, "Pnts",  Year3Str+"-T 1");
 					dataset.setValue(ChartWeight2, "Pnts", Year3Str+"-T 2");
 					dataset.setValue(ChartWeight3, "Pnts", Year3Str+"-T 3");
-					
+
 					//YEAR 4
 					ChartWeight = 0;
 					ChartWeight2 = 0;
 					ChartWeight3 = 0;
-					
+
 					ChartWeight =  barWeight4.getWeightOne(); 
-				    ChartWeight2 =  barWeight4.getWeightTwo(); 	
+					ChartWeight2 =  barWeight4.getWeightTwo(); 	
 					ChartWeight3 =  barWeight4.getWeightThree(); 
-					
+
 					dataset.setValue(ChartWeight, "Pnts",  Year4Str+"-T 1");
 					dataset.setValue(ChartWeight2, "Pnts", Year4Str+"-T 2");
 					dataset.setValue(ChartWeight3, "Pnts", Year4Str+"-T 3");
-					
+
 					//CONTROL
 					dataset.setValue(12, "Control ", "Control ");
-					
+
 					//END 
-					
+
 					JFreeChart chart = ChartFactory.createBarChart("Yearly Performance Analysis", // chart title
-																	"Term", // domain axis label (Y axis)
-																	"Weight", //  range axis label (X axis)
-																	dataset, // data
-																	PlotOrientation.VERTICAL, // orientation
-																	false, // include legend
-																	true, // tooltips?
-																	false);// URLs?
-					
+							"Term", // domain axis label (Y axis)
+							"Weight", //  range axis label (X axis)
+							dataset, // data
+							PlotOrientation.VERTICAL, // orientation
+							false, // include legend
+							true, // tooltips?
+							false);// URLs?
+
 					ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
-					
+
 					try {
-						
+
 						ChartUtilities.writeChartAsPNG(byte_out, chart, 1200, 270);
 						byte [] data = byte_out.toByteArray();
 						byte_out.close();
@@ -2974,39 +3055,40 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 						BAFheader.setHorizontalAlignment(Element.ALIGN_LEFT);
 						BAFheader.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-						
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					
+
 					//chart end
-					
+
 					//QR code start
 					Paragraph QRparagraph;
 					QRparagraph = new Paragraph(); 
 					BarcodeQRCode my_code = new BarcodeQRCode("AdmNo: " + studentAdmNoHash.get(uuid) + 
 							"\nName: " + studNameHash.get(uuid) +"Mean: " + df.format(mean) + "\nGrade: "
 							+ computeGrade(mean) + "\nFee Bal: "
-							+ feebalance,1,1, null);
-					
-					Image qr_image = my_code.getImage();
-					qr_image.scaleToFit(100, 100); 
-					QRparagraph.add(qr_image);
+							+ feebalance,1,1, null);//This method accept as parameter, a string to be encoded in the QR,notice the '\n' 
+					                                //This is similar to 'BufferedImage buffImage = getBufferedImage('String')' 
+
+					Image qr_image = my_code.getImage();//create the QR image
+					qr_image.scaleToFit(100, 100);//scale the image to the desired size
+					QRparagraph.add(qr_image);//embed the image into PDF table cell
 					//QR code end
-					
+
 					//chart table
 					PdfPTable chartTable = new PdfPTable(1);  
 					chartTable.setWidthPercentage(100); 
 					chartTable.setWidths(new int[]{100}); 
 					chartTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
+
 					//chart table
 					PdfPTable QrTable = new PdfPTable(1);  
 					QrTable.setWidthPercentage(100); 
 					QrTable.setWidths(new int[]{100}); 
 					QrTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-					
+
 					PdfPCell QRheader = new PdfPCell();
 					QRheader.addElement(new Chunk(qr_image,15,-50)); // margin left  ,  margin top
 					QRheader.setBackgroundColor(Colormagenta);
@@ -3014,50 +3096,46 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					QRheader.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 					QrTable.addCell(QRheader);
-					chartTable.addCell(BAFheader);
-					
+					chartTable.addCell(BAFheader);   
+
 					//chart table end
 
 
-					//class teacher comment table start
-					PdfPTable classTeacherCommentTable = new PdfPTable(2);  
-					classTeacherCommentTable.setWidthPercentage(100); 
-					classTeacherCommentTable.setWidths(new int[]{100,100}); 
-					classTeacherCommentTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
-					
-					
 					BarWeight barWeight = new BarWeight();
 					if(barWeightDAO.getBarWeight(school.getUuid(), uuid, examConfig.getYear()) !=null){
-                		barWeight = barWeightDAO.getBarWeight(school.getUuid(), uuid, examConfig.getYear()); 
-                	}
-					
-					// 
+						barWeight = barWeightDAO.getBarWeight(school.getUuid(), uuid, examConfig.getYear()); 
+					}
+
+					//  get last term mean, and this term mean, find deviation and out the comment
 					//if current term is 1, get deviation for term 3 ,last year
 					double lastTermMean = 0;
 					Deviation means = new Deviation();
 					String lastyr = "";
-					
+
 					if(StringUtils.equals(examConfig.getTerm(), "1")){
 						//get current year
 						String thisyear = "";
 						int lastyear = 0;
-						
+
 						if(examConfig !=null){
 							thisyear = examConfig.getYear();
 							lastyear = Integer.parseInt(thisyear) - 1;
 						}
-						
+
 						lastyr = Integer.toString(lastyear); 
-						
+
 					}else{
 						lastyr = examConfig.getYear();
 					}
-					
+
+
+
 					if(deviationDAO.getDev(uuid, lastyr)!=null){
-						 means =  deviationDAO.getDev(uuid, lastyr);
+						means =  deviationDAO.getDev(uuid, lastyr);
 					}
-					
+
+					//System.out.println("My Object = "+means);
+
 					//get last term mean 
 					if(StringUtils.equals(examConfig.getTerm(), "1")){
 						lastTermMean = means.getDevThree();
@@ -3067,12 +3145,12 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 						lastTermMean = means.getDevTwo();
 					}
 					//now we haave our last term deviation in the variable  'lastTermMean'
-					
+
 					// we get this term mean
 					double thstermMean = 0;
 					Deviation thisterMmeanObj = new Deviation();
 					if(deviationDAO.getDev(uuid, examConfig.getYear()) !=null){
-					  thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
+						thisterMmeanObj = deviationDAO.getDev(uuid, examConfig.getYear());
 					}
 					if(StringUtils.equals(examConfig.getTerm(), "1")){
 						thstermMean = thisterMmeanObj.getDevOne();
@@ -3081,12 +3159,12 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					}else if(StringUtils.equals(examConfig.getTerm(), "3")){
 						thstermMean = thisterMmeanObj.getDevThree();
 					}
-					
+
 					//now we haave our last term deviation in the variable  'thstermMean'
-					
+
 					double deviation_from_lastTerm = 0;
 					deviation_from_lastTerm = deviationFinder(thstermMean,lastTermMean);
-					
+
 					// now we have our deviation, we generate comment
 					String devComment = "";
 					devComment = deviationComment(deviation_from_lastTerm);
@@ -3114,12 +3192,16 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 						}
 					}
 					
+					//class teacher comment table start
+					PdfPTable classTeacherCommentTable = new PdfPTable(2);  
+					classTeacherCommentTable.setWidthPercentage(100); 
+					classTeacherCommentTable.setWidths(new int[]{100,100}); 
+					classTeacherCommentTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
 					String CTcommentLabel = "CLASS TEACHER'S COMMENT \n\n";
 					Paragraph CTcommentLb = new Paragraph(CTcommentLabel,timesRomanBold7);
-					
-					
-					
-					PdfPCell CTcommentCell = new PdfPCell(new Paragraph("Hi " + firstnamee +", "+ classteacherRemarks(school,uuid,barWeight) + devComment + " " + finalShame +" \n",timesRomanNormal0));
+
+					PdfPCell CTcommentCell = new PdfPCell(new Paragraph("Hi " + firstnamee +", "+ classteacherRemarks(school,uuid,barWeight)+  devComment + " " + finalShame + " \n",timesRomanNormal0));
 					CTcommentCell.setBackgroundColor(Colormagenta);
 					CTcommentCell.setColspan(2); 
 					CTcommentCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -3131,24 +3213,24 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					PdfPCell CTsignaturedate2 = new PdfPCell(new Paragraph("Date : _____________________    \n\n",timesRomanNormal0));
 					CTsignaturedate2.setBackgroundColor(Colormagenta);
 					CTsignaturedate2.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
+
 					classTeacherCommentTable.addCell(CTcommentCell);
 					classTeacherCommentTable.addCell(CTsignature);
 					classTeacherCommentTable.addCell(CTsignaturedate2);
 					//class teacher comment table end
 
-                  
+
 					//principal comment table start
 					PdfPTable principalCommentTable = new PdfPTable(2);  
 					principalCommentTable.setWidthPercentage(100); 
 					principalCommentTable.setWidths(new int[]{100,100}); 
 					principalCommentTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
+
 					String commentLabel = "PRINCIPAL'S COMMENT \n\n";
 					Paragraph commentLb = new Paragraph(commentLabel,timesRomanBold7);
-					
-					comment = comment.substring(0, Math.min(comment.length(), ExamConstants.PRINCIPAL_COMMENT_MAX_LENGHT));
-					PdfPCell commentCell = new PdfPCell(new Paragraph("Thank you " + firstnamee +" "+ comment +" "+PrincipalRemarks(mean)+"\n",timesRomanNormal0));
+                    
+				    comment = comment.substring(0, Math.min(comment.length(), ExamConstants.PRINCIPAL_COMMENT_MAX_LENGHT));
+					PdfPCell commentCell = new PdfPCell(new Paragraph("Thank you " + firstnamee +" "+ comment +" "+PrincipalRemarks(mean) +"\n",timesRomanNormal0));
 					commentCell.setBackgroundColor(Colormagenta);
 					commentCell.setColspan(2); 
 					commentCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -3160,19 +3242,18 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					PdfPCell Cell2 = new PdfPCell(new Paragraph("            Rubber Stamp \n\n",timesRomanNormal0));
 					Cell2.setBackgroundColor(Colormagenta);
 					Cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-					
+
 					principalCommentTable.addCell(commentCell);
 					principalCommentTable.addCell(Cell1);
 					principalCommentTable.addCell(Cell2);
 					//principal comment table end
-					
 					String equity = ExamConstants.EQUITY_ACC;
 					String coop = ExamConstants.COOP_ACC;
 					
-					String accountLabel = "Pay school fee to any of the following accounts. "
-				             + " CO-OP BANK : " + coop + "  or  EQUITY BANK : " + equity;
+					String accountLabel = "Pay school fee to the following account. "
+				             + " CO-OP BANK : " + coop;
 		            Paragraph caccounttLb = new Paragraph(accountLabel,timesRomanNormal0);
-		            
+
 
 		            String passpartPath = photopath+studentAdmNoHash.get(uuid)+".png";
 					
@@ -3181,60 +3262,57 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 					photo.setBorder(Rectangle.NO_BORDER); 
 					photo.setHorizontalAlignment(Element.ALIGN_LEFT);
 					
-					PdfPTable prefaceTable = new PdfPTable(3);  
+					PdfPTable prefaceTable = new PdfPTable(2);  
 					prefaceTable.setWidthPercentage(100); 
-					prefaceTable.setWidths(new int[]{50,20,130}); 
+					prefaceTable.setWidths(new int[]{40,60}); 
 
 					prefaceTable.addCell(logo); 
-					prefaceTable.addCell(photo); 
+					//prefaceTable.addCell(photo); 
 					prefaceTable.addCell(contentcell);
 
-
-					document.add(prefaceTable);      	 
-					document.add(containerTable);      	 
+					document.add(prefaceTable);
+					document.add(containerTable);      	  
 					document.add(emptyline);
 					document.add(myTable); 
 					document.add(emptyline);
 					document.add(gradeTable);  
 					document.add(emptyline);
 					document.add(bottomTable); 
-					
-                    document.add(chartTable);
-                    document.add(emptyline);
+
+					document.add(chartTable);
+
 					document.add(emptyline);
 					document.add(emptyline);
 					document.add(emptyline);
 					document.add(emptyline);
-					
-                  //document.add(feeTable);
-					
- 				   //Class teacher start
- 					document.add(CTcommentLb);
- 					//document.add(emptyline); 
- 					document.add(classTeacherCommentTable); 
- 					
- 					// principal start
- 					document.add(commentLb);
- 					//document.add(emptyline); 
- 					document.add(principalCommentTable); 
- 					
- 					//document.add(emptyline);
- 					document.add(feeTable);
- 					
- 					document.add(caccounttLb);
+					document.add(emptyline);
+					//document.add(feeTable);
+
+					//Class teacher start
+					document.add(CTcommentLb);
+					//document.add(emptyline); 
+					document.add(classTeacherCommentTable); 
+
+					// principal start
+					document.add(commentLb);
+					//document.add(emptyline); 
+					document.add(principalCommentTable); 
+
+					//document.add(emptyline);
+					document.add(feeTable);
+
+					document.add(caccounttLb);
+
 
 					position++;
 					number=mean;
 
 					document.newPage();
 
-
-					
-
 				}
 
-
 			}
+
 
 			// step 5
 			document.close();
@@ -3245,8 +3323,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		}
 
 	}
-	
-	
+
+
 
 	/**
 	 * @param classroomuuid
@@ -3257,18 +3335,20 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		//classTeacherDAO
 		String teacherId = "";
 		if(classTeacherDAO.getClassTeacherByclassId(classroomuuid) !=null){
-		    ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByclassId(classroomuuid);
-		    teacherId = classTeacher.getTeacherUuid();
-		    
-		    if(staffDetailsDAO.getStaffDetail(teacherId) !=null){
+			ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByclassId(classroomuuid);
+			teacherId = classTeacher.getTeacherUuid();
+
+			if(staffDetailsDAO.getStaffDetail(teacherId) !=null){
 				StaffDetails StaffDetail = staffDetailsDAO.getStaffDetail(teacherId); 
 				classTeacherName = StringUtils.capitalize(StaffDetail.getFirstName().toLowerCase());
 			}
-		    
-		  }
+
+		}
 		return classTeacherName.substring(0, Math.min(classTeacherName.length(), 8));
 	}
 	
+	
+
 	/**
 	 * @param subjectid
 	 * @param classroomid
@@ -3288,12 +3368,10 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		if(StringUtils.isBlank(teachername)){
 			teachername = "";
 		}
-		
+
 		return teachername.substring(0, Math.min(teachername.length(), 8));
 	}
 
-
-	
 
 	/**
 	 * @param school
@@ -3385,17 +3463,19 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 
 		return classTeacherComent;
 	}
-	
+
+
+
 	/** Find deviation from last term
 	 * pass thisTermMean following lastTermMean
 	 * @param lastTermMean
 	 * @param thisTermMean
 	 * @return the deviation 
 	 */
-	
+
 	private double deviationFinder(double thisTermMean, double lastTermMean){
-          double deviation = 0;
-		
+		double deviation = 0;
+
 		if(lastTermMean == 0){
 			deviation = 0;
 		}else{
@@ -3403,7 +3483,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		}
 		return deviation;
 	}
-	
+
 	/** put comment as per deviation
 	 * @param deviation
 	 * @return teacher comment
@@ -3413,28 +3493,26 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		DecimalFormat df = new DecimalFormat("0.00"); 
 		df.setRoundingMode(RoundingMode.HALF_UP);
 		double dev = 0;
-				dev = mean;
-				if(dev<0){
-					double positiveDev = Math.abs(dev);
-					String newDev = "-"+df.format(positiveDev);
-					comment = " Your deviation is " + newDev;
-					//System.out.println(comment);
-					
-				}else if(dev>0){
-					//positive , student working hard
-					comment = " Your deviation is " + df.format(dev);
-					
-				}else if(dev == 0){
-					//stagnant
-					comment = " !";
-					
-				}
-				
+		dev = mean;
+		if(dev<0){
+			//Negative , student nose diving
+			double positiveDev = Math.abs(dev);
+			String newDev = "-"+df.format(positiveDev);
+			comment = " Your deviation is " + newDev;
+			//System.out.println(comment);
+
+		}else if(dev>0){
+			//positive , student working hard
+			comment = " Your deviation is " + df.format(dev);
+
+		}else if(dev == 0){
+			//stagnant
+			comment = " !";
+
+		}
+
 		return comment;
 	}
-
-
-	
 
 	/**
 	 * 
@@ -3443,21 +3521,21 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param schooluuid
 	 * @return
 	 */
-	 
+
 	private boolean GraphWeightGenerator(double mean,String studentuuid,String schooluuid) {
 		boolean saved = false;
-		
+
 		BarWeight barWeight;
 		if(barWeightDAO.getBarWeight(schooluuid, studentuuid, examConfig.getYear())==null){
-			 barWeight = new BarWeight();
+			barWeight = new BarWeight();
 		}else{
-			 barWeight = barWeightDAO.getBarWeight(schooluuid, studentuuid, examConfig.getYear());
+			barWeight = barWeightDAO.getBarWeight(schooluuid, studentuuid, examConfig.getYear());
 		}
-	
-		
+
+
 		double weight = 0;
 		weight =  ((mean/100)*12);
-		
+
 		if(StringUtils.equals(examConfig.getTerm(), "1")){
 			barWeight.setWeightOne(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
@@ -3466,7 +3544,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			barWeight.setYear(examConfig.getYear());
 			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
 			saved = true;
-			
+
 		}else if (StringUtils.equals(examConfig.getTerm(), "2")){
 			barWeight.setWeightTwo(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
@@ -3475,7 +3553,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			barWeight.setYear(examConfig.getYear());
 			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
 			saved = true;
-			
+
 		}else if (StringUtils.equals(examConfig.getTerm(), "3")){
 			barWeight.setWeightThree(weight);
 			barWeight.setSchoolAccountUuid(schooluuid);
@@ -3485,16 +3563,58 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			barWeightDAO.put(barWeight,schooluuid,studentuuid,examConfig.getYear());
 			saved = true;
 		}
-		
+
 		return saved;
-		
+
 	}
-	
+
+
 	/**
 	 * @param score
 	 * @return
 	 */
 	private String PrincipalRemarks(double score) {
+		String remarks = "";
+		double mean = score;
+
+		if(mean >= gradingSystem.getGradeAplain()){
+			remarks = "Execellent work,let sky be your steping stone.";
+		}else if(mean >= gradingSystem.getGradeAminus()){
+			remarks = "Good work, sky is not the limit.";
+		}else if(mean >= gradingSystem.getGradeBplus()){
+			remarks = "Good work, a little more effort please.";
+		}else if(mean >= gradingSystem.getGradeBplain()){
+			remarks = "Good work but, this is not your best.";
+		}else if(mean >= gradingSystem.getGradeBminus()){
+			remarks = "An average student, you have the potential.";
+		}else if(mean >= gradingSystem.getGradeCplus()){
+			remarks = "Below average, this is not your best.";
+		}else if(mean >= gradingSystem.getGradeCplain()){
+			remarks = "Below average, you can do beter than this.";
+		}else if(mean >= gradingSystem.getGradeCminus()){
+			remarks = "Below average, you can do beter.";
+		}else if(mean >= gradingSystem.getGradeDplus()){
+			remarks = "Below average, put more effort.";
+		}else if(mean >= gradingSystem.getGradeDplain()){
+			remarks = "Far below average, please you deserve better.";
+		}else if(mean >= gradingSystem.getGradeDminus()){
+			remarks = "Far much below average but you deserve beter than this.";
+		}else{
+			remarks = "This is extremly poor but still you can do beter.";
+		}
+
+		if(mean ==0){
+			remarks = " ";
+		}
+
+		return remarks;
+	}
+
+	/**
+	 * @param score
+	 * @return
+	 */
+	private String computeRemarks(double score) {
 		String remarks = "";
 		double mean = score;
 
@@ -3535,47 +3655,6 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 	 * @param score
 	 * @return
 	 */
-	private String computeRemarks(double score) {
-		String remarks = "";
-		double mean = score;
-
-		if(mean >= gradingSystem.getGradeAplain()){
-			remarks = "Execellent, keep it up.";
-		}else if(mean >= gradingSystem.getGradeAminus()){
-			remarks = "Good work, aim higher.";
-		}else if(mean >= gradingSystem.getGradeBplus()){
-			remarks = "Good job, aim high.";
-		}else if(mean >= gradingSystem.getGradeBplain()){
-			remarks = "Well done, aim higher.";
-		}else if(mean >= gradingSystem.getGradeBminus()){
-			remarks = "Well done, aim high.";
-		}else if(mean >= gradingSystem.getGradeCplus()){
-			remarks = "Fair, you can do better.";
-		}else if(mean >= gradingSystem.getGradeCplain()){
-			remarks = "Fair, put more effort.";
-		}else if(mean >= gradingSystem.getGradeCminus()){
-			remarks = "Fair, you can improve.";
-		}else if(mean >= gradingSystem.getGradeDplus()){
-			remarks = "Fair, pull up your socks.";
-		}else if(mean >= gradingSystem.getGradeDplain()){
-			remarks = "You can do better than this.";
-		}else if(mean >= gradingSystem.getGradeDminus()){
-			remarks = "You can do better than this.";
-		}else{
-			remarks = "You can do better than this.";
-		}
-
-		if(mean ==0){
-			remarks = " ";
-		}
-
-		return remarks;
-	}
-
-	/**
-	 * @param engscore2
-	 * @return
-	 */
 	private String computeGrade(double score) {
 		double mean = score;
 		if(mean >= gradingSystem.getGradeAplain()){
@@ -3600,7 +3679,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			grade = "D";
 		}else if(mean >= gradingSystem.getGradeDminus()){
 			grade = "D-";
-		}else{
+		}else if(mean >= gradingSystem.getGradeE()){
 			grade = "E";
 		}
 
@@ -3611,7 +3690,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		return grade;
 	}
 
-	
+
 	/**
 	 * @param score
 	 * @return
@@ -3649,14 +3728,11 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 		if(score ==0){
 			points = " ";
 		}
-		
+
 		return points;
 	}
 
 
-
-	/**
-	
 	/**
 	 * @param realPath
 	 * @return
@@ -3676,9 +3752,9 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 			if(type == 1){//log
-				ImageIO.write(resize(bufferedImage, 600,300), "png", baos);//w,h
+				ImageIO.write(resize(bufferedImage, 600,350), "png", baos);//w,h
 				img = Image.getInstance(baos.toByteArray());
-				img.scaleAbsolute(100f,50f); 
+				img.scaleAbsolute(120f,80f); 
 				img.setAlignment(Element.ALIGN_LEFT);
 
 			}else{//student

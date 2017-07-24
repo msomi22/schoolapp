@@ -52,7 +52,7 @@ public class QuartzJob implements Job{
 				 StartBackup();
 			 }
 			
-			checksentSMS();
+			//checksentSMS();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -12,7 +12,7 @@ import com.itextpdf.text.Font;
 public class ExamConstants {
 	
 	public static final String EQUITY_ACC = "0210263801254";//0210263801254
-	public static final String COOP_ACC = "01120057306800";//01120057306800
+	public static final String COOP_ACC = "01129057686000";//01120057306800
 	
 	public static final int PRINCIPAL_COMMENT_MAX_LENGHT = 150;
 	public static final int LOGO_L = 15;

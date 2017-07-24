@@ -2588,8 +2588,8 @@ public class ReportFormF3_4_p1_p2_p3 extends HttpServlet{
 					String equity = ExamConstants.EQUITY_ACC;
 					String coop = ExamConstants.COOP_ACC;
 					
-					String accountLabel = "Pay school fee to any of the following accounts. "
-				             + " CO-OP BANK : " + coop + "  or  EQUITY BANK : " + equity;
+					String accountLabel = "Pay school fee to the following account. "
+				             + " CO-OP BANK : " + coop;
 		            Paragraph caccounttLb = new Paragraph(accountLabel,timesRomanNormal0);
 		            
 
@@ -2600,12 +2600,12 @@ public class ReportFormF3_4_p1_p2_p3 extends HttpServlet{
 					photo.setBorder(Rectangle.NO_BORDER); 
 					photo.setHorizontalAlignment(Element.ALIGN_LEFT);
 					
-					PdfPTable prefaceTable = new PdfPTable(3);  
+					PdfPTable prefaceTable = new PdfPTable(2);  
 					prefaceTable.setWidthPercentage(100); 
-					prefaceTable.setWidths(new int[]{50,20,130}); 
+					prefaceTable.setWidths(new int[]{40,60}); 
 
 					prefaceTable.addCell(logo); 
-					prefaceTable.addCell(photo); 
+					//prefaceTable.addCell(photo); 
 					prefaceTable.addCell(contentcell);
 
 
@@ -3090,9 +3090,9 @@ public class ReportFormF3_4_p1_p2_p3 extends HttpServlet{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 			if(type == 1){//log
-				ImageIO.write(resize(bufferedImage, 600,300), "png", baos);//w,h
+				ImageIO.write(resize(bufferedImage, 600,350), "png", baos);//w,h
 				img = Image.getInstance(baos.toByteArray());
-				img.scaleAbsolute(100f,50f); 
+				img.scaleAbsolute(120f,80f); 
 				img.setAlignment(Element.ALIGN_LEFT);
 
 			}else{//student
