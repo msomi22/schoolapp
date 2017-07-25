@@ -329,7 +329,7 @@
 													<select class="form-control formelement" name="classroom"
 														required>
 
-														<option> Select a Class</option>
+														
 														<%
 															if (classroomList != null) {
 																for (ClassRoom classroom : classroomList) {
@@ -364,7 +364,7 @@
 													<select class="form-control formelement" name="stream"
 														required>
 
-														<option> Select a Stream</option>
+														
 
 														<%
 															int studentsCount = 0;
