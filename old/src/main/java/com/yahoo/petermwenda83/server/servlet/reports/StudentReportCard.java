@@ -442,6 +442,9 @@ public class StudentReportCard extends HttpServlet{
 			double total = 0;
 			double prevtotal =0;
 			String pos = "";
+			
+			
+			System.out.println("***** performanceList ****" + performanceList); 
 
 			for(Performance2 performance2 : performanceList){
 

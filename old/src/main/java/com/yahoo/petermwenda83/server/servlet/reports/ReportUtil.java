@@ -187,8 +187,8 @@ public class ReportUtil {
 
 		Performance3 performance3 = new Performance3();
 		performance3.setPerfomanceMap(perfomanceMap); 
-		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-		performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+		//performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
+		//performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
 
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 
