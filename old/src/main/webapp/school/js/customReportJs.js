@@ -64,7 +64,15 @@ function validateExamSelected(){
 				
 				$('#examType').val('P123');
 			}
+			else{
+				
+				$('#examType').val('others');
+			}
 
+		}
+		else{
+			
+			$('#examType').val('others');
 		}
 
 	}
