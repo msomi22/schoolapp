@@ -60,6 +60,9 @@ public class ReportUtil {
 	public static final int HUMAN_TECH_MATH_P2_OUTOF = 100;
 	
 	public static final String EXAM_TYPE = "P123";
+	
+	public static final String SCOPE_CLASS = "class";
+	public static final String SCOPE_STREAM = "stream";
 
 
 	/**

@@ -237,9 +237,6 @@ public class StudentReportCard extends HttpServlet{
 		//assign the global exams with the submitted	
 		exams=examsfeed;
 
-		//logger.info("*************** streamId " + streamId); 
-		//logger.info("*************** classroomId " + classroomId); 
-
 		response.setContentType("application/pdf");
 		
 		String examType = "";
@@ -262,15 +259,6 @@ public class StudentReportCard extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 			
-			//TODO
-			
-			
-			//I see it much easy to use javascript to accomplish this since we have the description at the client
-			//side,let know your view on this. :)
-			
-			//check out the JavaScript script
-			
-			System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
 			
 			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 				
@@ -283,10 +271,6 @@ public class StudentReportCard extends HttpServlet{
 			
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
 			
-			
-			//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
-
-
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -401,17 +385,28 @@ public class StudentReportCard extends HttpServlet{
 
 
 		if(studentsList.isEmpty()){
-			//avoid document has no page error
+			//avoid document has no page exception
 			document.add(new Paragraph("No students for " + correctClass)); 
 		}else{
 			
-			performanceList = getStudentScore3(accountId, classroomId, streamId, term, year, studentsList, examType);
+			
+			// ******************** TODO
+			if(classResult){
+				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType);	
+				
+				
+			}else{
+				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType);
+				//get performance for the associated classId
+				
+			}
+			
 
 
 		}
 
 
-		//avoid document has no page error
+		//avoid document has no page exception
 		if(!performanceList.isEmpty()){
 
 			 
@@ -448,11 +443,8 @@ public class StudentReportCard extends HttpServlet{
 			double prevtotal =0;
 			String pos = "";
 			
-			
-			//System.out.println("***** performanceList ****" + performanceList); 
-
 			for(Performance2 performance2 : performanceList){
-
+				
 
 				int mainPoint = performance2.getTotalPoint();
 				int totalMean = performance2.getTotalMean();
@@ -743,10 +735,25 @@ public class StudentReportCard extends HttpServlet{
 				//add student name
 				studentRight.addCell(yearInfoCell);
 				studentRight.addCell(yearDescCell);
+				
+				String classPositionMSG = "";
+				String streamPositionMSG = "";
+				
+				if(classResult){
+					
+					classPositionMSG = pos + " Out of : " + performanceList.size();
+					streamPositionMSG = "";
+					
+				}else{
+					
+					classPositionMSG = "";
+					streamPositionMSG = pos + " Out of : " + performanceList.size();
+					
+				}
 
 				//student class position
 				PdfPCell classGradeInfoCell = new PdfPCell(new Phrase("Overall position:",timesRomanNarmal8)); 
-				PdfPCell classGradeDescCell = new PdfPCell(new Phrase("" + pos + " Out of : " + performanceList.size(),timesRomanNarmal6));
+				PdfPCell classGradeDescCell = new PdfPCell(new Phrase(classPositionMSG,timesRomanNarmal6));
 				classGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 				classGradeDescCell.setBorder(Rectangle.NO_BORDER);
 				//add student name
@@ -755,7 +762,7 @@ public class StudentReportCard extends HttpServlet{
 
 				//student stream position
 				PdfPCell streamGradeInfoCell = new PdfPCell(new Phrase("Stream position:",timesRomanNarmal8)); 
-				PdfPCell streamGradeDescCell = new PdfPCell(new Phrase(" Out of : ",timesRomanNarmal6));
+				PdfPCell streamGradeDescCell = new PdfPCell(new Phrase(streamPositionMSG,timesRomanNarmal6));
 				streamGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 				streamGradeDescCell.setBorder(Rectangle.NO_BORDER);
 				//add student name
@@ -1324,14 +1331,10 @@ public class StudentReportCard extends HttpServlet{
 
 				document.newPage();
 
-			}
 			
 			
 			
-			
-			
-			
-			
+			}// end  for loop
 			
 			
 		}else{
@@ -1352,7 +1355,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @param year
 	 * @param studentsList
 	 */
-	private  List<Performance2> getStudentScore3(String accountId,String classId, String streamId, String term, String year,
+	private  List<Performance2> getStudentScore3(String accountId,String class_streamId, String term, String year,
 			List<Student> studentsList, String examType) {
 
 		List<Performance2> performance2List = new ArrayList<>();
@@ -1374,16 +1377,17 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), classId, term, year);
-					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), classId, term, year);
-					exam3 = perfomanceDAO.getClassPerformance(accountId, exams[2], student.getUuid(), classId, term, year); 				
-
+					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
+					exam3 = perfomanceDAO.getClassPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 
+					
+					
 				}else{
 
-					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
-					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);
-					exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), streamId, term, year); 					
-
+					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
+					exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 	
+					
 				}
 
 				//rank 7 subjects
@@ -1416,14 +1420,14 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), classId, term, year);
-					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), classId, term, year);
-
+					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
+					
 				}else{
 
-					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
-					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), streamId, term, year);			
-
+					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);	
+					
 				}
 
 				//rank 7 subjects
@@ -1453,13 +1457,12 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), classId, term, year);
+					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 					
 				}else{
 
-					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), streamId, term, year);
-						
-
+					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+					
 				}
 
 				//rank 7 subjects
@@ -1482,18 +1485,22 @@ public class StudentReportCard extends HttpServlet{
 
 			}
 
-			Performance2 performance2 = new Performance2();
-			performance2.setExam1(totalExam1.getPerfomanceMap());
-			performance2.setExam2(totalExam2.getPerfomanceMap());
-			performance2.setExam3(totalExam3.getPerfomanceMap()); 
-			performance2.setStudentId(student.getUuid());
-			performance2.setTotalMean(totalMeans); 
-			performance2.setTotalPoint(totalPoint);
-			performance2.setExam1Total(totalExam1.getTotalPoints());
-			performance2.setExam2Total(totalExam2.getTotalPoints());
-			performance2.setExam3Total(totalExam3.getTotalPoints());
+			if(totalMeans > 0 || totalPoint > 0){
+				
+				Performance2 performance2 = new Performance2();
+				performance2.setExam1(totalExam1.getPerfomanceMap());
+				performance2.setExam2(totalExam2.getPerfomanceMap());
+				performance2.setExam3(totalExam3.getPerfomanceMap()); 
+				performance2.setStudentId(student.getUuid());
+				performance2.setTotalMean(totalMeans); 
+				performance2.setTotalPoint(totalPoint);
+				performance2.setExam1Total(totalExam1.getTotalPoints());
+				performance2.setExam2Total(totalExam2.getTotalPoints());
+				performance2.setExam3Total(totalExam3.getTotalPoints());
 
-			performance2List.add(performance2);
+				performance2List.add(performance2);
+			}
+			
 
 		}
 
