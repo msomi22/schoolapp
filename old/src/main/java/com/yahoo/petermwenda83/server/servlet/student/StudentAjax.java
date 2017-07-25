@@ -171,6 +171,14 @@ public class StudentAjax extends HttpServlet {
 			
 			
 			
+			//check if the regno already exists 
+			if(studentDAO.getStudentByregNo(accountId, regNo) != null) {
+				
+				jsonObject.addProperty("responseMessage", "OK");
+				
+				
+			}else {
+			
 			
 			if (studentDAO.putStudent(student)) {
 				
@@ -239,6 +247,7 @@ public class StudentAjax extends HttpServlet {
 				jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please ."+ student.getUuid() +","+student.getAccountId()
 				+","+student.getCurrentStream()+","+student.getRegStream());
 
+			}
 			}
 			
 			

@@ -204,6 +204,8 @@
 													</select>
 
 												</div>
+												
+												<input type="hidden" name="examType" id="examType" value="others">
 
 
 

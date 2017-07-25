@@ -26,10 +26,7 @@ $("#exam")
 
 						examWarningModal();
 						
-						
-
-						
-					}
+						}
 
 				
 				});
@@ -61,6 +58,11 @@ function validateExamSelected(){
 				
 				
 
+			}else if(selectedExams.includes('Paper 1')
+					&& selectedExams.includes('Paper 2') 
+					&& selectedExams.includes('Paper 3')){
+				
+				$('#examType').val('P123');
 			}
 
 		}
