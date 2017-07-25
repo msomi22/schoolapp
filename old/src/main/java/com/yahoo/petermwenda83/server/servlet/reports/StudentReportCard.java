@@ -117,9 +117,7 @@ public class StudentReportCard extends HttpServlet{
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
-	String incorrectExamMSG = "";
-
-
+	
 	/**  
 	 *
 	 * @param config
@@ -246,6 +244,8 @@ public class StudentReportCard extends HttpServlet{
 		
 		String examType = "";
 		
+		examType = StringUtils.trimToEmpty(request.getParameter("examType"));
+		
 		
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -270,45 +270,15 @@ public class StudentReportCard extends HttpServlet{
 			
 			//check out the JavaScript script
 			
-			if(exams.length == 3){
+			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 				
-				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") &&
-						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper") && 
-						StringUtils.contains(examDAO.getExam(accountId, exams[2]).getDescription(), "Paper")){
-					
-					examType = ReportUtil.EXAM_TYPE;  
-					
-				}else if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") ||
-						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper") ||
-						StringUtils.contains(examDAO.getExam(accountId, exams[2]).getDescription(), "Paper")){
-					
-					streamId = "";
-					classroomId = "";
-					incorrectExamMSG = "Please select Paper 1, 2 and 3";
-				}
+				examType = ReportUtil.EXAM_TYPE;  
 				
-			}else if(exams.length == 2){
+			}else{
 				
-				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper") ||
-						StringUtils.contains(examDAO.getExam(accountId, exams[1]).getDescription(), "Paper")){
-					
-					streamId = "";
-					classroomId = "";
-					incorrectExamMSG = "Please select Paper 1, 2 and 3";
-					
-				}
-				
-			}else if(exams.length == 1){
-				
-				if(StringUtils.contains(examDAO.getExam(accountId, exams[0]).getDescription(), "Paper")){
-					
-					streamId = "";
-					classroomId = "";
-					incorrectExamMSG = "Please select Paper 1, 2 and 3";
-					
-				}
+				examType = "";
 			}
-
+			
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
 
 
@@ -427,7 +397,7 @@ public class StudentReportCard extends HttpServlet{
 
 		if(studentsList.isEmpty()){
 			//avoid document has no page error
-			document.add(new Paragraph("No students for " + correctClass + "." + incorrectExamMSG)); 
+			document.add(new Paragraph("No students for " + correctClass)); 
 		}else{
 			
 			performanceList = getStudentScore3(accountId, classroomId, streamId, term, year, studentsList, examType);
