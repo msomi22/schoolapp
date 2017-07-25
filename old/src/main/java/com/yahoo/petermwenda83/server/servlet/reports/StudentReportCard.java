@@ -237,8 +237,8 @@ public class StudentReportCard extends HttpServlet{
 		//assign the global exams with the submitted	
 		exams=examsfeed;
 
-		logger.info("*************** streamId " + streamId); 
-		logger.info("*************** classroomId " + classroomId); 
+		//logger.info("*************** streamId " + streamId); 
+		//logger.info("*************** classroomId " + classroomId); 
 
 		response.setContentType("application/pdf");
 		
@@ -270,6 +270,8 @@ public class StudentReportCard extends HttpServlet{
 			
 			//check out the JavaScript script
 			
+			System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
+			
 			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 				
 				examType = ReportUtil.EXAM_TYPE;  
@@ -280,6 +282,9 @@ public class StudentReportCard extends HttpServlet{
 			}
 			
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
+			
+			
+			//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
 
 
 		} catch (DocumentException e) {
@@ -444,7 +449,7 @@ public class StudentReportCard extends HttpServlet{
 			String pos = "";
 			
 			
-			System.out.println("***** performanceList ****" + performanceList); 
+			//System.out.println("***** performanceList ****" + performanceList); 
 
 			for(Performance2 performance2 : performanceList){
 

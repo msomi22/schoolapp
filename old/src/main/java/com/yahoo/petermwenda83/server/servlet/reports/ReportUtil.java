@@ -187,21 +187,26 @@ public class ReportUtil {
 
 		Performance3 performance3 = new Performance3();
 		performance3.setPerfomanceMap(perfomanceMap); 
-		//performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-		//performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+		
+		//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
+		
+		if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 
-		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-
+			performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
+			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+			
+			
+			//System.out.println(" ^^ ******************************************** ^^ : " + getTotalsByTotalPerExam(finalPerfomanceList)); 
+			
+			
+		}else{
+			
 			PerformanceP123 performanceP123 = new PerformanceP123();
 			performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
 			performance3.setTotalMean(performanceP123.getTotalMean());
 			performance3.setTotalPoints(performanceP123.getTotalPoints());
 
-		}else{
-
-			performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
 		}
 
 
@@ -861,7 +866,7 @@ public class ReportUtil {
 
 		dataset.setValue(12, "Control ", "Control ");
 
-		System.out.println("---------------------------------" + yearOne.getMeanOne()* GRAPH_CONSTANT); 
+		//System.out.println("---------------------------------" + yearOne.getMeanOne()* GRAPH_CONSTANT); 
 
 		JFreeChart chart = ChartFactory.createBarChart("Yearly Performance", // chart title
 				"Year", // domain axis label (Y axis)
