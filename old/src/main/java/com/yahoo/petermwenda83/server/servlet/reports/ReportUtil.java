@@ -254,7 +254,7 @@ public class ReportUtil {
 
 
 		for(Perfomance perfomance : finalPerfomanceList){
-			//TODO
+			
 
 			Subject subject = subjectMap.get(perfomance.getSubjectId());
 			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();

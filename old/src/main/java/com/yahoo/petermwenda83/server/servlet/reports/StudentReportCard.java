@@ -11,13 +11,9 @@ import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-//import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -744,9 +740,6 @@ public class StudentReportCard extends HttpServlet{
 
 				}else{
 
-
-					// ******************** TODO
-				
 					if(!classResult){
 						classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
 								performanceList,rankWithPoints,rankWithTotalMarks);
@@ -1493,7 +1486,7 @@ public class StudentReportCard extends HttpServlet{
 
 			}
 
-			if(totalMeans > 0 || totalPoint > 0){  //TODO
+			if(totalMeans > 0 || totalPoint > 0){
 
 				Performance2 performance2 = new Performance2();
 				performance2.setExam1(totalExam1.getPerfomanceMap());
