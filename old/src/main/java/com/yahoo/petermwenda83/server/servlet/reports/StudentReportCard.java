@@ -579,7 +579,7 @@ public class StudentReportCard extends HttpServlet{
 		
 						performanceList2.forEach(performance -> {						
 							ClassStudentPosition classStudentPosition = new ClassStudentPosition(); 
-							classStudentPosition.setCount(count.getAndIncrement());
+							classStudentPosition.setCount(count.getAndIncrement()+1);
 							classStudentPosition.setStudentId(performance.getStudentId());							
 							classPositionMap.put(performance.getStudentId(), classStudentPosition);
 						
