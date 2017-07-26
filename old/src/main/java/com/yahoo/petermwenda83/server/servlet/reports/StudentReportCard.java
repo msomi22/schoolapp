@@ -11,9 +11,12 @@ import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
@@ -117,7 +120,7 @@ public class StudentReportCard extends HttpServlet{
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
-	
+
 	/**  
 	 *
 	 * @param config
@@ -220,10 +223,10 @@ public class StudentReportCard extends HttpServlet{
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
 		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//classroom added
-		
+
 		//if class checked the scope is true, otherwise false
 		scope= Boolean.parseBoolean((request.getParameter("scope")));//scope added
-		
+
 		if(!scope){
 			classResult = false;
 		}else{
@@ -238,12 +241,12 @@ public class StudentReportCard extends HttpServlet{
 		exams=examsfeed;
 
 		response.setContentType("application/pdf");
-		
+
 		String examType = "";
-		
+
 		examType = StringUtils.trimToEmpty(request.getParameter("examType"));
-		
-		
+
+
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
@@ -258,19 +261,19 @@ public class StudentReportCard extends HttpServlet{
 
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
-			
-			
+
+
 			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-				
+
 				examType = ReportUtil.EXAM_TYPE;  
-				
+
 			}else{
-				
+
 				examType = "";
 			}
-			
+
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
-			
+
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -335,9 +338,135 @@ public class StudentReportCard extends HttpServlet{
 		Account account = accountDAO.getAccountById(accountId);
 
 		List<Student> studentsList = new ArrayList<>();
+		List<Student> studentsLis2 = new ArrayList<>();
 		List<Performance2> performanceList =  new ArrayList<>();
 
 		String correctClass = "";
+		
+		
+		class Stream2{
+			int count;
+			int costant;
+			String stream;
+
+			public Stream2(){
+				count = 1;
+				costant = 0;
+				stream = "";
+			}
+
+			/**
+			 * @return the count
+			 */
+			public int getCount() {
+				return count;
+			}
+
+			/**
+			 * @param count the count to set
+			 */
+			public void setCount(int count) {
+				this.count = count;
+			}
+
+			/**
+			 * @return the costant
+			 */
+			public int getCostant() {
+				return costant;
+			}
+
+			/**
+			 * @param costant the costant to set
+			 */
+			public void setCostant(int costant) {
+				this.costant = costant;
+			}
+
+			/**
+			 * @return the stream
+			 
+			public String getStream() {
+				return stream;
+			}
+			
+			*/
+
+			/**
+			 * @param stream the stream to set
+			 */
+			public void setStream(String stream) {
+				this.stream = stream;
+			}
+
+			/**
+			 * @see java.lang.Object#toString()
+			 */
+			@Override
+			public String toString() {
+				return "Stream [count=" + count + ", costant=" + costant + ", stream=" + stream + "]";
+			}
+			
+		}
+		
+		class ClassStudentPosition{
+			
+			String studentId;
+			int count;
+			ClassStudentPosition(){
+				studentId = "";
+				count = 0;
+			}
+			/**
+			 * @return the studentId
+			 
+			public String getStudentId() {
+				return studentId;
+			}
+			*/
+			
+			
+			/**
+			 * @param studentId the studentId to set
+			 */
+			public void setStudentId(String studentId) {
+				this.studentId = studentId;
+			}
+			/**
+			 * @return the count
+			 */
+			public int getCount() {
+				return count;
+			}
+			/**
+			 * @param count the count to set
+			 */
+			public void setCount(int count) {
+				this.count = count;
+			}
+			/**
+			 * @see java.lang.Object#toString()
+			 */
+			@Override
+			public String toString() {
+				return "classStudentPosition [studentId=" + studentId + ", count=" + count + "]";
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		Map<String,Stream2> streaMap = new HashMap<>();
+		Map<String,ClassStudentPosition> classPositionMap = new HashMap<>();
+		//List<ClassStudentPosition> classPosList = new ArrayList<>();
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
@@ -368,6 +497,7 @@ public class StudentReportCard extends HttpServlet{
 					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()); 
 					if(!studentListStream.isEmpty())
 						studentsList.addAll(studentListStream); 
+					   
 
 				}
 
@@ -378,6 +508,8 @@ public class StudentReportCard extends HttpServlet{
 
 
 		}
+		
+		 studentsLis2.addAll(studentsList); 
 
 
 
@@ -388,19 +520,78 @@ public class StudentReportCard extends HttpServlet{
 			//avoid document has no page exception
 			document.add(new Paragraph("No students for " + correctClass)); 
 		}else{
-			
-			
+
+
 			// ******************** TODO
 			if(classResult){
-				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType);	
-				
-				
-			}else{
-				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType);
-				//get performance for the associated classId
-				
-			}
+				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType, classResult);	
 			
+				List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId);
+				
+				List<String> streamIdsList = new ArrayList<>();
+				if(!performanceList.isEmpty()){
+					
+					performanceList.forEach(performance -> {
+						streamIdsList.add(performance.getStreamId());
+					});
+					
+				}
+				
+				//Map<streamId,Object> objMap
+				
+				for(Stream stream: streamList){
+					
+					List<String> result = streamIdsList.parallelStream()
+							.filter(newstream -> stream.getUuid().equals(newstream))
+							.collect(Collectors.toList());
+                   
+					//Object obj = new Object(); = <position,fixedCount>  
+					Stream2 stm = new Stream2();
+					
+					stm.setCostant(result.size());
+					stm.setStream(stream.getUuid());
+
+					//objMap.put(streamId,object);
+					streaMap.put(stream.getUuid(), stm);
+
+					
+
+				}
+
+
+
+
+			}else{
+				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult);
+				
+				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
+				
+				if(!studentsLis2.isEmpty()){
+					
+
+					List<Performance2> performanceList2 = getStudentScore3(accountId, classId, term, year, studentsLis2, examType, true);	
+					Collections.sort(performanceList2, new PointsComparator());
+					Collections.reverse(performanceList2);
+					
+					if(!performanceList2.isEmpty()){
+						
+						AtomicInteger count = new AtomicInteger();
+		
+						performanceList2.forEach(performance -> {						
+							ClassStudentPosition classStudentPosition = new ClassStudentPosition(); 
+							classStudentPosition.setCount(count.getAndIncrement());
+							classStudentPosition.setStudentId(performance.getStudentId());							
+							classPositionMap.put(performance.getStudentId(), classStudentPosition);
+						
+						});
+						
+						
+					}
+				}// end if(!studentsLis2.isEmpty()){
+				
+
+			}
+
 
 
 		}
@@ -409,12 +600,12 @@ public class StudentReportCard extends HttpServlet{
 		//avoid document has no page exception
 		if(!performanceList.isEmpty()){
 
-			 
-			
-			
-			
-			
-			
+
+
+
+
+
+
 			String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
 					+ " , Cell : " + account.getMobile() + "\n"
 					+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
@@ -442,9 +633,10 @@ public class StudentReportCard extends HttpServlet{
 			double total = 0;
 			double prevtotal =0;
 			String pos = "";
-			
+		
+
 			for(Performance2 performance2 : performanceList){
-				
+
 
 				int mainPoint = performance2.getTotalPoint();
 				int totalMean = performance2.getTotalMean();
@@ -555,7 +747,7 @@ public class StudentReportCard extends HttpServlet{
 				String strm = streamDAO.getStream(accountId, student.getCurrentStream()).getDescription(); 
 				strm = StringUtils.replace(strm, "FORM", ""); 
 				strm = " (" + strm + ")";
-				
+
 				if(!classResult){
 					strm = "";
 				}
@@ -735,20 +927,35 @@ public class StudentReportCard extends HttpServlet{
 				//add student name
 				studentRight.addCell(yearInfoCell);
 				studentRight.addCell(yearDescCell);
-				
+
 				String classPositionMSG = "";
 				String streamPositionMSG = "";
-				
+
 				if(classResult){
-					
+
 					classPositionMSG = pos + " Out of : " + performanceList.size();
-					streamPositionMSG = "";
+				
+					int count = streaMap.get(student.getCurrentStream()).getCount();
+					streamPositionMSG = count + " Out of : " + streaMap.get(student.getCurrentStream()).getCostant();
+					count++;
+					streaMap.get(student.getCurrentStream()).setCount(count);
+					
+					System.out.println("streaMap : " + streaMap.toString());
+					
 					
 				}else{
 					
-					classPositionMSG = "";
-					streamPositionMSG = pos + " Out of : " + performanceList.size();
+					ClassStudentPosition classPos = new ClassStudentPosition();
+					if(classPositionMap.get(student.getUuid()) != null){
+						 classPos = classPositionMap.get(student.getUuid());//studentsLis2    classPosList
+					}
 					
+					
+					
+					
+					classPositionMSG = classPos.getCount() + " Out of : " + studentsLis2.size() ;
+					streamPositionMSG = pos + " Out of : " + performanceList.size();
+
 				}
 
 				//student class position
@@ -925,7 +1132,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 					examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
-					
+
 					if(StringUtils.equals(examAverage, "0")){
 						examAverage = "";
 					}
@@ -937,18 +1144,18 @@ public class StudentReportCard extends HttpServlet{
 					String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
 					String score3 = exam3Score + " " + exam3Grade +  " " + exam3Points;
 					String average = examAverage + " " + avgrade +  " " + avgpoints;
-					
-					
+
+
 					if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
-						
+
 						score1 = exam1Score;
 						score2 = exam2Score;
 						score3 = exam3Score;
-						
-						
+
+
 					}else{
-						
-						
+
+
 						if(hidePoints && hideGrade){
 							score1 = exam1Score;
 							score2 = exam2Score;
@@ -967,13 +1174,13 @@ public class StudentReportCard extends HttpServlet{
 							score3 = exam3Score +  " " + exam3Points;
 							average = examAverage + " " + avgpoints;
 						}
-						
-						
-						
-						
+
+
+
+
 					}
 
-					
+
 
 
 					examTable.addCell(new Paragraph(" " + score1,timesRomanNarmal6));
@@ -1041,18 +1248,18 @@ public class StudentReportCard extends HttpServlet{
 
 					double avg = ((double)mainPoint / 132) * 84;
 					String mainScore = "";
-					
 
-					
+
+
 					if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
-						
+
 						exm1 = ""; exm2 = ""; exm3 = "";
 						ex1Grade = ""; ex2Grade = ""; ex3Grade = "";
 						exa1Point = ""; exa2Point = ""; exa3Point = "";
-						
+
 					}
-					
-					
+
+
 
 					//TOTAL
 					if(count == 0){ 
@@ -1060,7 +1267,7 @@ public class StudentReportCard extends HttpServlet{
 						examTable.addCell(new Paragraph(" "+exm2 ,timesRomanNarmal6));
 						examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
 
-						
+
 
 						if(grade7subjects && !grade11subjects){
 							mainScore = (int)Math.round(mainPoint) + "";
@@ -1128,10 +1335,10 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 					}
-					
-					
-					
-					
+
+
+
+
 					//MEAN SCORE 
 					else if(count == 2){ 
 						examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
@@ -1331,20 +1538,20 @@ public class StudentReportCard extends HttpServlet{
 
 				document.newPage();
 
-			
-			
-			
+
+
+
 			}// end  for loop
-			
-			
+
+
 		}else{
 			document.add(new Paragraph(" Exam found for " + correctClass)); 
-			
+
 		}
 
 
 
-		
+
 	}
 
 
@@ -1356,7 +1563,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @param studentsList
 	 */
 	private  List<Performance2> getStudentScore3(String accountId,String class_streamId, String term, String year,
-			List<Student> studentsList, String examType) {
+			List<Student> studentsList, String examType, boolean classResult) {
 
 		List<Performance2> performance2List = new ArrayList<>();
 		List<Perfomance> exam1  = new ArrayList<>();
@@ -1369,7 +1576,7 @@ public class StudentReportCard extends HttpServlet{
 
 		int totalPoint = 0;
 		int totalMeans = 0;
-
+		
 
 		for(Student student : studentsList ){
 
@@ -1381,13 +1588,14 @@ public class StudentReportCard extends HttpServlet{
 					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
 					exam3 = perfomanceDAO.getClassPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 
 					
-					
+
 				}else{
 
 					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
 					exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 	
 					
+
 				}
 
 				//rank 7 subjects
@@ -1395,6 +1603,7 @@ public class StudentReportCard extends HttpServlet{
 					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+				
 				}
 
 				//rank 11 subjects
@@ -1422,12 +1631,12 @@ public class StudentReportCard extends HttpServlet{
 
 					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
-					
+
 				}else{
 
 					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);	
-					
+
 				}
 
 				//rank 7 subjects
@@ -1458,11 +1667,11 @@ public class StudentReportCard extends HttpServlet{
 				if(classResult){
 
 					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-					
+
 				}else{
 
 					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-					
+
 				}
 
 				//rank 7 subjects
@@ -1485,8 +1694,8 @@ public class StudentReportCard extends HttpServlet{
 
 			}
 
-			if(totalMeans > 0 || totalPoint > 0){
-				
+			if(totalMeans > 0 || totalPoint > 0){  //TODO
+
 				Performance2 performance2 = new Performance2();
 				performance2.setExam1(totalExam1.getPerfomanceMap());
 				performance2.setExam2(totalExam2.getPerfomanceMap());
@@ -1497,13 +1706,14 @@ public class StudentReportCard extends HttpServlet{
 				performance2.setExam1Total(totalExam1.getTotalPoints());
 				performance2.setExam2Total(totalExam2.getTotalPoints());
 				performance2.setExam3Total(totalExam3.getTotalPoints());
+				performance2.setStreamId(student.getCurrentStream()); 
 
 				performance2List.add(performance2);
 			}
-			
+
 
 		}
-
+		
 		return performance2List;
 	}
 
