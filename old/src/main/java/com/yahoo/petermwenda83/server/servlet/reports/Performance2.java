@@ -22,6 +22,7 @@ public class Performance2 {
 	private int exam2Total;
 	private int exam3Total;
 	private String streamId;
+	private String classroomId;
 
 	/**
 	 * 
@@ -37,6 +38,7 @@ public class Performance2 {
 		exam2Total = 0;
 		exam3Total = 0;
 		streamId = "";
+		classroomId = "";
 	}
 
 	/**
@@ -182,13 +184,17 @@ public class Performance2 {
 	}
 
 	/**
-	 * @see java.lang.Object#toString()
+	 * @return the classroomId
 	 */
-	@Override
-	public String toString() {
-		return "Performance2 [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
-				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1Total=" + exam1Total
-				+ ", exam2Total=" + exam2Total + ", exam3Total=" + exam3Total + ", streamId=" + streamId + "]";
+	public String getClassroomId() {
+		return classroomId;
+	}
+
+	/**
+	 * @param classroomId the classroomId to set
+	 */
+	public void setClassroomId(String classroomId) {
+		this.classroomId = classroomId;
 	}
 
 	
