@@ -1091,11 +1091,19 @@ public class ReportUtil {
 			prevTotal = total;
 		}
 
-
+       //return object
 		StreamResult position = positionList.parallelStream()
 				.filter(student -> studentId.equals(student.getStudentId()))
 				.findAny()
 				.orElse(null);
+		
+		//return string 
+		 String positionStr = positionList.parallelStream()
+	                .filter(student -> studentId.equals(student.getStudentId()))
+	                .map(StreamResult::getResult) //convert stream to String
+	                .findAny()
+	                .orElse("");
+		 
 
 
 		return position.getResult();
