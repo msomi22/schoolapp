@@ -174,7 +174,7 @@ public class StudentAjax extends HttpServlet {
 			//check if the regno already exists 
 			if(studentDAO.getStudentByregNo(accountId, regNo) != null) {
 				
-				jsonObject.addProperty("responseMessage", "OK");
+				jsonObject.addProperty("responseMessage", "Exists");
 				
 				
 			}else {
