@@ -57,6 +57,8 @@
 <!-- Bootstrap -->
 <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 
+<script src="js/registerStudent.js"></script>
+
 <script
 	src="../vendors/bootstrap-datetimepicker/bootstrap-datepicker.min.js"></script>
 
@@ -145,7 +147,7 @@ $("#kcpeyear").datepicker({
 
 
 <!-- Register new student -->
-<script src="js/registerStudent.js"></script>
+
 <script src="js/datepicker/moment.min.js"></script>
 <script src="js/datepicker/pikaday.js"></script>
 <script src="js/datepicker/pikaday.jquery.js"></script>

@@ -149,7 +149,7 @@
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
 												 -->
 
-												<input type="file" name="student_avatar">
+
 											</div>
 											<!-- Cropper Modal -->
 											<jsp:include page="modals/cropper.html" />
@@ -162,11 +162,14 @@
 
 										<form action="studentRegistration" id="registerStudent"
 											class="col-md-6 col-sm-6 col-md-offset-1"
-											enctype="multipart/form-data" method="post">
+											 method="post" target="_blank">
 											<!-- <div class="col-md-6 col-sm-6 col-md-offset-1"> -->
 
 
+											<input type="hidden" name="profile_url" id="profile_url"
+												value="">
 											<!-- names  -->
+
 
 											<div class="row">
 
@@ -663,7 +666,7 @@
 
 												<div class="col-md-2 pull-right">
 
-													<button type="submit" class="btn btn-lg btn-primary">Register</button>
+													<button type="submit" onclick="talkToMe()" class="btn btn-lg btn-primary">Register</button>
 													<!--  <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
 												</div>
 
@@ -705,6 +708,7 @@
 
 
 <jsp:include page="footer.jsp" />
+
 
 
 

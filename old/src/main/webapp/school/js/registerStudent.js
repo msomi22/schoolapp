@@ -1,13 +1,19 @@
 $(document).ready(function() {
+	
+	alert("loaded");
 	$("#registerStudent").submit(function(e) {
 		e.preventDefault();
 
 		var form = $('#registerStudent');
+		
+		alert(form);
+		
+		
 
 		// submit with ajax
 		jQuery.ajax({
 			url : 'studentAjax',
-			data : new FormData( this ),
+			data : $(this).serialize(),
 			cache : false,
 			contentType : false,
 			processData : false,
@@ -90,6 +96,11 @@ function submitStudentData(form) {
 		}
 
 	});
+}
+
+
+function talkToMe(){
+	alert ("Me here");
 }
 
 function primarySwap(state) {

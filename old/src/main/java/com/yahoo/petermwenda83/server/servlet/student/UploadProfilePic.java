@@ -117,7 +117,7 @@ public class UploadProfilePic extends HttpServlet {
             
             jsonObject.addProperty("state", 200);
     		jsonObject.addProperty("message", "Success");
-    		jsonObject.addProperty("result", DATA_DIRECTORY+fileName);
+    		jsonObject.addProperty("result", fileName);
 
            
 

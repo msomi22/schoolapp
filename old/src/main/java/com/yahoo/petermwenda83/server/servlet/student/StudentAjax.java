@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
@@ -97,7 +98,7 @@ public class StudentAjax extends HttpServlet {
 		String isBoarding = StringUtils.trimToEmpty(request.getParameter("boarding"));
 		String regNo = StringUtils.trimToEmpty(request.getParameter("regno"));
 		String action = StringUtils.trimToEmpty(request.getParameter("action"));
-		//String passport=StringUtils.trimToEmpty(request.getParameter(""));
+		String passport=StringUtils.trimToEmpty(request.getParameter("profile_url"));
 		//String lastUpdated;
 		//Timestamp admissionDate;
 		
@@ -121,6 +122,7 @@ public class StudentAjax extends HttpServlet {
 		student.setIsBoarding(isBoarding);
 		student.setRegNo(regNo);
 		student.setIsAlumni(isAlumni);
+		student.setPassport(passport);
 		
 		
 		//Primary details
@@ -150,12 +152,7 @@ public class StudentAjax extends HttpServlet {
 		
 		
 		
-		
 
-		
-
-		
-		
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
 				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -165,100 +162,112 @@ public class StudentAjax extends HttpServlet {
 		
 		if(StringUtils.equalsIgnoreCase(action, "add")){
 			
-			JsonObject jsonObject = new JsonObject();
 			
 			
 			
-			
-			
-			//check if the regno already exists 
-			if(studentDAO.getStudentByregNo(accountId, regNo) != null) {
-				
-				jsonObject.addProperty("responseMessage", "Exists");
-				
-				
-			}else {
-			
-			
-			if (studentDAO.putStudent(student)) {
-				
-				
-				
-				
-				
-				//check for primary details then add them
-				if(primaryState) {
-					
-					StudentPrimary studentPrimary= new StudentPrimary();
-					studentPrimary.setAccountId(accountId);
-					//studentPrimary.setUuid(studentPrimary.getUuid());
-					studentPrimary.setStudentId(student.getUuid());
-					studentPrimary.setSchoolName(schoolName);
-					studentPrimary.setIndex(index);
-					studentPrimary.setKcpemark(kcpemark);
-					studentPrimary.setKcpeyear(kcpeyear);
-					
-					primaryDAO.putStudentPrimary(studentPrimary);
-					
-				/*	if(primaryDAO.putStudentPrimary(studentPrimary)) {
-						jsonObject.addProperty("responseMessage", "OK");
-					}*/
-					
-				}
-				
-				
-				//check for parent's details then add them
-				
-				if(parentState) {
-					StudentParent studentParent= new StudentParent();
-					//studentParent.setUuid(studentParent.getUuid());
-					studentParent.setAccountId(accountId);
-					studentParent.setStudentId(student.getUuid());
-					studentParent.setName(name);
-					studentParent.setMobile(mobile);
-					studentParent.setEmail(email);
-					
-					
-					parentsDAO.putParent(studentParent);
-					
-					
-					//log the submitted data 
-					//logger.info("HidePts submitted " + student.getUuid()); 
-					//logger.info("HideGds submitted" + studentParent.getStudentId()); 
-					
-					
-					/*if(parentsDAO.putParent(studentParent)) {
-						jsonObject.addProperty("responseMessage", "OK");
-					}*/
-				}
-				
-				
-				
-				jsonObject.addProperty("responseMessage", "OK");
-				
-				
-				
-				
-
-				
-
-			} else {
-
-				jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please ."+ student.getUuid() +","+student.getAccountId()
-				+","+student.getCurrentStream()+","+student.getRegStream());
-
-			}
-			}
-			
-			
-
-			out.write(gson.toJson(jsonObject).getBytes());
+			out.write(gson.toJson(saveStudent(student, accountId, parentState, name, mobile, email, primaryState, schoolName, index, kcpeyear, kcpemark)).getBytes());
 			out.flush();
 			out.close();
 
 		}
 
 
+	}
+	
+	
+	
+	
+	public JsonElement saveStudent(Student student, String accountId,Boolean parentState,String name, String mobile, String email,
+			Boolean primaryState, String schoolName, String index, String kcpeyear, String kcpemark) {
+		
+		JsonObject jsonObject = new JsonObject();
+		
+
+		
+		//check if the regno already exists 
+		if(studentDAO.getStudentByregNo(accountId, student.getRegNo()) != null) {
+			
+			jsonObject.addProperty("responseMessage", "Exists");
+			
+			
+		}else {
+		
+		
+		if (studentDAO.putStudent(student)) {
+			
+			
+			
+			
+			
+			//check for primary details then add them
+			if(primaryState) {
+				
+				StudentPrimary studentPrimary= new StudentPrimary();
+				studentPrimary.setAccountId(accountId);
+				//studentPrimary.setUuid(studentPrimary.getUuid());
+				studentPrimary.setStudentId(student.getUuid());
+				studentPrimary.setSchoolName(schoolName);
+				studentPrimary.setIndex(index);
+				studentPrimary.setKcpemark(kcpemark);
+				studentPrimary.setKcpeyear(kcpeyear);
+				
+				primaryDAO.putStudentPrimary(studentPrimary);
+				
+			/*	if(primaryDAO.putStudentPrimary(studentPrimary)) {
+					jsonObject.addProperty("responseMessage", "OK");
+				}*/
+				
+			}
+			
+			
+			//check for parent's details then add them
+			
+			if(parentState) {
+				StudentParent studentParent= new StudentParent();
+				//studentParent.setUuid(studentParent.getUuid());
+				studentParent.setAccountId(accountId);
+				studentParent.setStudentId(student.getUuid());
+				studentParent.setName(name);
+				studentParent.setMobile(mobile);
+				studentParent.setEmail(email);
+				
+				
+				parentsDAO.putParent(studentParent);
+				
+				
+				//log the submitted data 
+				//logger.info("HidePts submitted " + student.getUuid()); 
+				//logger.info("HideGds submitted" + studentParent.getStudentId()); 
+				
+				
+				/*if(parentsDAO.putParent(studentParent)) {
+					jsonObject.addProperty("responseMessage", "OK");
+				}*/
+			}
+			
+			
+			
+			jsonObject.addProperty("responseMessage", "OK");
+			
+			
+			
+			
+
+			
+
+		} else {
+
+			jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please ."+ student.getUuid() +","+student.getAccountId()
+			+","+student.getCurrentStream()+","+student.getRegStream());
+
+		}
+		}
+		
+		
+		
+		
+		return jsonObject;
+		
 	}
 
 }
