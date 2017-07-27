@@ -81,6 +81,8 @@
       var url = this.$avatar.attr('src');
 
       this.$avatarPreview.html('<img src="' + url + '">');
+      this.url = url;
+    //  this.$avatar.attr('src', url);
     },
 
     initIframe: function () {
@@ -196,7 +198,9 @@
         this.$img.cropper('replace', this.url);
       } else {
         this.$img = $('<img src="' + this.url + '">');
+       
         this.$avatarWrapper.empty().html(this.$img);
+        //;
         this.$img.cropper({
           aspectRatio: 1,
           preview: this.$avatarPreview.selector,
@@ -224,8 +228,8 @@
 
     stopCropper: function () {
       if (this.active) {
-        this.$img.cropper('destroy');
-        this.$img.remove();
+        //this.$img.cropper('destroy');
+       // this.$img.remove();
         this.active = false;
       }
     },
@@ -273,7 +277,7 @@
 
       if ($.isPlainObject(data) && data.state === 200) {
         if (data.result) {
-          this.url = data.result;
+         // this.url = data.result;
 
           if (this.support.datauri || this.uploaded) {
             this.uploaded = false;
@@ -302,9 +306,11 @@
     },
 
     cropDone: function () {
-      this.$avatarForm.get(0).reset();
-      this.$avatar.attr('src', this.url);
-      this.stopCropper();
+    	
+    //$('.works').html(this.$img);
+      //this.$avatarForm.get(0).reset();
+     this.$avatar.attr('src', this.url);
+     // this.stopCropper();
       this.$avatarModal.modal('hide');
     },
 

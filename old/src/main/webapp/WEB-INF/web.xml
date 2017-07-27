@@ -68,7 +68,6 @@
     <servlet-name>ExamAjax</servlet-name>
     <url-pattern>/school/examAjax</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>StudentAjax</servlet-name>
     <servlet-class>com.yahoo.petermwenda83.server.servlet.student.StudentAjax</servlet-class>
@@ -78,6 +77,14 @@
     <url-pattern>/school/studentAjax</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>UploadProfilePic</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.student.UploadProfilePic</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadProfilePic</servlet-name>
+    <url-pattern>/school/uploadProfilePic</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>ImportStudent</servlet-name>
     <servlet-class>com.yahoo.petermwenda83.server.servlet.excel.ImportStudent</servlet-class>
@@ -98,10 +105,6 @@
     <error-code>404</error-code>
     <location>/404.jsp</location>
   </error-page>
- <!--  <error-page>
-    <error-code>500</error-code>
-    <location>/500.jsp</location>
-  </error-page> -->
   <session-config>
     <session-timeout>500</session-timeout>
   </session-config>

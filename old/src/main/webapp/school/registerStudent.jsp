@@ -137,15 +137,20 @@
 									<div class="x_content">
 										<br />
 
-
-
+										<!-- 	<form action="studentRegistration" id="registerStudent"
+											enctype="multipart/form-data" method="post"> -->
 										<div class="col-md-2 col-sm-2" id="crop-avatar">
 
 											<!-- Current avatar -->
-											<div class="avatar-view" title="Change the avatar">
+											<div class="avatar-view works" title="Change the avatar">
 												<img src="images/user.png" alt="Avatar">
-											</div>
+												<!-- Since i can't get the dist dir need to create a preview here simiar 
+												to the one in the cropping option, thus i will have to look at the code
+												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
+												 -->
 
+												<input type="file" name="student_avatar">
+											</div>
 											<!-- Cropper Modal -->
 											<jsp:include page="modals/cropper.html" />
 
@@ -156,8 +161,9 @@
 
 
 										<form action="studentRegistration" id="registerStudent"
-											class="col-md-6 col-sm-3 col-md-offset-1" method="post"
-											target="_blank">
+											class="col-md-6 col-sm-6 col-md-offset-1"
+											enctype="multipart/form-data" method="post">
+											<!-- <div class="col-md-6 col-sm-6 col-md-offset-1"> -->
 
 
 											<!-- names  -->
@@ -663,13 +669,13 @@
 
 
 											</div>
-
-
 										</form>
 
 
-
+										<!-- </form> -->
 									</div>
+
+
 									<!-- ./content -->
 								</div>
 							</div>

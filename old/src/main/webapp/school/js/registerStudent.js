@@ -7,7 +7,7 @@ $(document).ready(function() {
 		// submit with ajax
 		jQuery.ajax({
 			url : 'studentAjax',
-			data : $(form).serialize(),
+			data : new FormData( this ),
 			cache : false,
 			contentType : false,
 			processData : false,
@@ -40,6 +40,12 @@ $(document).ready(function() {
 
 		});
 	});
+	
+	$('#btn_avatar').click(function(){
+		
+		alert($('#avatarInput').val() +'other field'+ $('.avatar-data').val() );
+		
+	});
 });
 
 function submitStudentData(form) {
@@ -52,7 +58,7 @@ function submitStudentData(form) {
 
 	jQuery.ajax({
 		url : 'studentAjax',
-		data : $(form).serialize(),
+		data : new FormData( this ),
 		cache : false,
 		contentType : false,
 		processData : false,
