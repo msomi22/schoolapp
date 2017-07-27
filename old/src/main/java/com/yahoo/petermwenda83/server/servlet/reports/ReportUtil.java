@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -58,9 +59,9 @@ public class ReportUtil {
 
 	public static final int HUMAN_TECH_MATH_P1_OUTOF = 100;
 	public static final int HUMAN_TECH_MATH_P2_OUTOF = 100;
-	
+
 	public static final String EXAM_TYPE = "P123";
-	
+
 	public static final String SCOPE_CLASS = "class";
 	public static final String SCOPE_STREAM = "stream";
 
@@ -190,20 +191,20 @@ public class ReportUtil {
 
 		Performance3 performance3 = new Performance3();
 		performance3.setPerfomanceMap(perfomanceMap); 
-		
+
 		//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
-		
+
 		if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 
 			performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
 			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
-			
-			
+
+
 			//System.out.println(" ^^ ******************************************** ^^ : " + getTotalsByTotalPerExam(finalPerfomanceList)); 
-			
-			
+
+
 		}else{
-			
+
 			PerformanceP123 performanceP123 = new PerformanceP123();
 			performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
@@ -216,10 +217,10 @@ public class ReportUtil {
 		return performance3;
 	}
 
-	
-	
-	
-	
+
+
+
+
 
 
 	/**
@@ -253,7 +254,7 @@ public class ReportUtil {
 
 
 		for(Perfomance perfomance : finalPerfomanceList){
-			//TODO
+			
 
 			Subject subject = subjectMap.get(perfomance.getSubjectId());
 			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
@@ -531,7 +532,7 @@ public class ReportUtil {
 		performance3.setPerfomanceMap(perfomanceMap); 
 		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
 		performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
-		
+
 		return performance3;
 	}
 
@@ -889,8 +890,230 @@ public class ReportUtil {
 		return chart;
 	}
 
-}
 
+
+
+
+	static class StreamResult{
+
+		String studentId;
+		String result;
+
+		public StreamResult(){
+			studentId = "";
+			result = "";
+		}
+
+		/**
+		 * @return the studentId
+		 */
+		public String getStudentId() {
+			return studentId;
+		}
+
+		/**
+		 * @param studentId the studentId to set
+		 */
+		public void setStudentId(String studentId) {
+			this.studentId = studentId;
+		}
+
+		/**
+		 * @return the result
+		 */
+		public String getResult() {
+			return result;
+		}
+
+		/**
+		 * @param result the result to set
+		 */
+		public void setResult(String result) {
+			this.result = result;
+		}
+
+	}
+
+
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param uuid
+	 * @param exams
+	 * @param streamId
+	 * @param performanceList
+	 * @param rankWithTotalMarks 
+	 * @param rankWithPoints 
+	 * @return
+	 */
+
+	public static String getStreamPosition(String accountId, String studentId, String streamId,
+			List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks) {
+
+
+
+
+		List<Performance2> result = performanceList.parallelStream()
+				.filter(performance -> streamId.equals(performance.getStreamId()))
+				.collect(Collectors.toList()); 
+
+		double total = 0;
+		double prevTotal = 0;
+
+		int scount = 1;
+		int prevscount = 1;
+
+		String cposition = "";
+
+
+		List<StreamResult> positionList = new ArrayList<>();
+
+		for(Performance2 performance : result){
+
+
+			int mainPoint = performance.getTotalPoint();
+			int totalMean = performance.getTotalMean();
+
+			if(rankWithPoints && !rankWithTotalMarks){  
+
+				total = mainPoint;
+
+
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+
+				total = totalMean;
+
+			}
+
+
+			if(total == prevTotal){
+
+				cposition = String.valueOf(scount-prevscount++);
+
+			}else{
+
+				prevscount = 1;
+				cposition =  String.valueOf(scount);
+
+			}
+
+			StreamResult streamResult = new StreamResult();
+			streamResult.setResult(cposition + " Out of: " + result.size());
+			streamResult.setStudentId(performance.getStudentId());
+
+			positionList.add(streamResult);
+
+
+			scount++;
+			prevTotal = total;
+		}
+
+
+
+		StreamResult position = positionList.parallelStream()
+				.filter(student -> studentId.equals(student.getStudentId()))
+				.findAny()
+				.orElse(null);
+
+
+		return position.getResult();
+	}
+
+
+
+
+	/**
+	 * @param accountId
+	 * @param uuid
+	 * @param classroomId
+	 * @param classResult
+	 * @param performanceList
+	 * @param rankWithPoints
+	 * @param rankWithTotalMarks
+	 * @return
+	 */
+	public static String getClassPosition(String accountId, String studentId,
+			List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks) {
+
+		double total = 0;
+		double prevTotal = 0;
+
+		int scount = 1;
+		int prevscount = 1;
+
+		String cposition = "";
+		
+		List<StreamResult> positionList = new ArrayList<>();
+
+		for(Performance2 performance : performanceList){
+
+
+			int mainPoint = performance.getTotalPoint();
+			int totalMean = performance.getTotalMean();
+
+			if(rankWithPoints && !rankWithTotalMarks){  
+
+				total = mainPoint;
+
+
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+
+				total = totalMean;
+
+			}
+
+
+			if(total == prevTotal){
+
+				cposition = String.valueOf(scount-prevscount++);
+
+			}else{
+
+				prevscount = 1;
+				cposition =  String.valueOf(scount);
+
+			}
+
+			
+			StreamResult streamResult = new StreamResult();
+			streamResult.setResult(cposition + " Out of: " + performanceList.size());
+			streamResult.setStudentId(performance.getStudentId());
+
+			positionList.add(streamResult);
+
+
+			scount++;
+			prevTotal = total;
+		}
+
+       //return object
+		StreamResult position = positionList.parallelStream()
+				.filter(student -> studentId.equals(student.getStudentId()))
+				.findAny()
+				.orElse(null);
+		
+		//return string 
+		 String positionStr = positionList.parallelStream()
+	                .filter(student -> studentId.equals(student.getStudentId()))
+	                .map(StreamResult::getResult) //convert stream to String
+	                .findAny()
+	                .orElse("");
+		 
+
+
+		return position.getResult();
+
+	}
+
+
+
+
+}
 
 
 
