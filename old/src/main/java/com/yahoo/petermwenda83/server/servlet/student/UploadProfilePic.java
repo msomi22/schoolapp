@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -124,6 +126,7 @@ public class UploadProfilePic extends HttpServlet {
         	String data="none";
         	File uploadedFile = null;
         	String filePath= DATA_DIRECTORY;
+        	String b64= "";
             List<FileItem> items = upload.parseRequest(request);
             Iterator iter = items.iterator();
             while (iter.hasNext()) {
@@ -168,9 +171,21 @@ public class UploadProfilePic extends HttpServlet {
                       
                       
                       dst.getGraphics().drawImage(src, 0, 0, w, h, x, y, x + w, y + h, null);
+                      
+                      dst=op.filter(dst, null);
 
                       //ovorride the upload
-                      ImageIO.write(op.filter(dst, null), "png", new File(filePath,fileName));
+                      ImageIO.write(dst, "png", new File(filePath,fileName));
+                      
+                      //return the cropped image in base64 format
+                      
+                      
+                      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                      ImageIO.write( dst, "png", baos );
+                      baos.flush();
+                      byte[] imageInByteArray = baos.toByteArray();
+                      baos.close();                                   
+                      b64  = DatatypeConverter.printBase64Binary(imageInByteArray);
                 	
                 	
                 	
@@ -184,6 +199,7 @@ public class UploadProfilePic extends HttpServlet {
     		jsonObject.addProperty("message", "Success");
     		jsonObject.addProperty("result", fileName);
     		jsonObject.addProperty("Data", data);
+    		jsonObject.addProperty("newImage", "data:image/jpg;base64,"+b64);
 
            
 
