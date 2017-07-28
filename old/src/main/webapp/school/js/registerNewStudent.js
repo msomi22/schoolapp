@@ -1,16 +1,12 @@
 $(document).ready(function() {
 	
-	alert("loaded");
-	$("#registerStudent").submit(function(e) {
+	//alert("loaded");
+	$("#registerNewStudent").submit(function(e) {
 		e.preventDefault();
 
-		var form = $('#registerStudent');
-		
-		alert(form);
+		var form = $('#registerNewStudent');
 		
 		
-
-		// submit with ajax
 		jQuery.ajax({
 			url : 'studentAjax',
 			data : $(this).serialize(),
@@ -47,11 +43,7 @@ $(document).ready(function() {
 		});
 	});
 	
-	$('#btn_avatar').click(function(){
-		
-		alert($('#avatarInput').val() +'other field'+ $('.avatar-data').val() );
-		
-	});
+	
 });
 
 function submitStudentData(form) {
@@ -100,7 +92,8 @@ function submitStudentData(form) {
 
 
 function talkToMe(){
-	alert ("Me here");
+//	alert ("Me here");
+	
 }
 
 function primarySwap(state) {
