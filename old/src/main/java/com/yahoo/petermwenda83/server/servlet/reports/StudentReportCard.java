@@ -1392,17 +1392,17 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam3 = ReportUtil.findExamTotalForm234(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 
 				}
 
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam3 = ReportUtil.findExamTotalForm1(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
 				}
 
 
@@ -1411,8 +1411,15 @@ public class StudentReportCard extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 				totalMeans = totalMeans / 3;
+				
+				/*
+				System.out.println("________" + student.getUuid() + "___________");
+				
+				System.out.println("exam1 : " + totalExam1.getTotalMean() + ", exam2 : " + totalExam2.getTotalMean() + ", exam3 : " + totalExam3.getTotalMean());
+				
+				System.out.println("________________________________________________");
 
-
+*/
 			}
 
 			if(exams.length == 2){
@@ -1433,14 +1440,14 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm1(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
 				}
 
 
@@ -1468,12 +1475,12 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 				}
 
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
 				}
 
 
@@ -1485,6 +1492,9 @@ public class StudentReportCard extends HttpServlet{
 
 
 			}
+			
+			
+		
 
 			if(totalMeans > 0 || totalPoint > 0){
 

@@ -91,14 +91,34 @@ public class ReportUtil {
 	 * @return student performance object based on the best 7/11 subjects
 	 */
 
-	public static Performance3 findExamTotalForm234(String accountId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
+	/**
+	 * @param accountId
+	 * @param streamId
+	 * @param exam
+	 * @param subCategoryDAO
+	 * @param categoryDAO
+	 * @param subjectDAO
+	 * @param gradingSystemDAO
+	 * @param examDAO
+	 * @param examType
+	 * @return
+	 */
+	public static Performance3 findExamTotalForm234(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO, ExamDAO examDAO,String examType) {
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
-
-
+		Performance3 performance3 = new Performance3();
+		
 		if(!exam.isEmpty()){
+			
+			
+			List<Perfomance> filteredExam = exam.parallelStream()
+			    .filter(performance -> streamId.equals(performance.getStreamId()))
+			    .collect(Collectors.toList());
+			
+			
+			
 
 			int languagesCount = 0;
 			int sciencesCount = 0;
@@ -109,12 +129,19 @@ public class ReportUtil {
 			List<Perfomance> selectedSciencesList = new ArrayList<>();
 			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
+			
+			
 
 
+			
+			for (Perfomance perfomance : filteredExam) {
 
-			for (Perfomance perfomance : exam) {
-
+				
+				/*if(perfomanceMap.containsKey(perfomance.getSubjectId())){
+					
+				}*/
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
+				//temp.add(perfomance);
 
 				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
 				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
@@ -133,7 +160,7 @@ public class ReportUtil {
 				}
 
 				//select two best sciences
-				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
+				else if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
 					selectedSciencesList.add(perfomance);
 					sciencesCount++;
 
@@ -146,7 +173,7 @@ public class ReportUtil {
 				}
 
 				//select one best humanity 
-				if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
+				else if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
 					selectedHumanitiesList.add(perfomance);
 					humanitiesCount++;
 
@@ -159,16 +186,30 @@ public class ReportUtil {
 				}
 
 				//add all technical
-				if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
+				else if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
 					selectedTechnicalsList.add(perfomance);
 
 
 				}
 
 				//add mathematics
-				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
-					finalPerfomanceList.add(perfomance);
-
+				else if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
+					
+					String subjectId = finalPerfomanceList.parallelStream()
+					                   .filter(p -> 
+					                	   p.getSubjectId().equals(perfomance.getSubjectId())
+					                  )
+					                   .map(Perfomance::getSubjectId)
+					                   .findAny()
+					                   .orElse("");
+					
+					
+					    if(StringUtils.isEmpty(subjectId) || StringUtils.isBlank(subjectId)){ 
+					    	finalPerfomanceList.add(perfomance);
+					    }
+					
+						
+					
 
 				}
 
@@ -187,11 +228,11 @@ public class ReportUtil {
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
 
-		}
+		
 
-		Performance3 performance3 = new Performance3();
+		
 		performance3.setPerfomanceMap(perfomanceMap); 
-
+		
 		//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
 
 		if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
@@ -212,7 +253,22 @@ public class ReportUtil {
 			performance3.setTotalPoints(performanceP123.getTotalPoints());
 
 		}
+		
+		
 
+		if(!finalPerfomanceList.isEmpty()){/*
+			
+			System.out.println("________________________________________________");//exam
+			
+			
+			System.out.println(finalPerfomanceList.toString());
+			
+			System.out.println("________________________________________________");
+			
+			
+		  */}
+		}
+		
 
 		return performance3;
 	}
@@ -430,14 +486,22 @@ public class ReportUtil {
 	 * @return
 	 */
 
-	public static Performance3 findExamTotalForm1(String accountId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
+	public static Performance3 findExamTotalForm1(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
+		
+		
+		
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
 
 
 		if(!exam.isEmpty()){
+			
+			
+			List<Perfomance> filteredExam = exam.parallelStream()
+				    .filter(performance -> streamId.equals(performance.getStreamId()))
+				    .collect(Collectors.toList());
 
 			int languagesCount = 0;
 			int sciencesCount = 0;
@@ -452,7 +516,7 @@ public class ReportUtil {
 
 
 
-			for (Perfomance perfomance : exam) {
+			for (Perfomance perfomance : filteredExam) {
 
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
 
