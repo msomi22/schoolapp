@@ -63,7 +63,7 @@ public class StudentAjax extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		doPost(request, response);
 	}
 
@@ -71,7 +71,7 @@ public class StudentAjax extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		HttpSession session = request.getSession(true);
 
 		OutputStream out = response.getOutputStream();
@@ -175,7 +175,21 @@ public class StudentAjax extends HttpServlet {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param student
+	 * @param accountId
+	 * @param parentState
+	 * @param name
+	 * @param mobile
+	 * @param email
+	 * @param primaryState
+	 * @param schoolName
+	 * @param index
+	 * @param kcpeyear
+	 * @param kcpemark
+	 * @return
+	 */
 	
 	public JsonElement saveStudent(Student student, String accountId,Boolean parentState,String name, String mobile, String email,
 			Boolean primaryState, String schoolName, String index, String kcpeyear, String kcpemark) {

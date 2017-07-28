@@ -142,7 +142,7 @@
 										<div class="col-md-2 col-sm-2" id="crop-avatar">
 
 											<!-- Current avatar -->
-											<div class="avatar-view works" title="Change the avatar">
+											<div class="avatar-view" title="Change the avatar">
 												<img src="images/user.png" alt="Avatar">
 												<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
@@ -160,7 +160,7 @@
 										</div>
 
 
-										<form action="studentRegistration" id="registerStudent"
+										<form action="#" id="registerNewStudent"
 											class="col-md-6 col-sm-6 col-md-offset-1"
 											 method="post" target="_blank">
 											<!-- <div class="col-md-6 col-sm-6 col-md-offset-1"> -->
@@ -178,7 +178,7 @@
 													<h4>First Name</h4>
 
 													<input type="text" id="fname"
-														class="form-control formelement" name="fname"
+														class="form-control formelement" name="fname" onblur="talkToMe()"
 														placeholder="First Name" pattern="[A-Za-z]{3,20}"
 														title="First Name,Only characters are allowed and should be more than two and less than 20 characters"
 														required>

@@ -1,31 +1,40 @@
 package com.yahoo.petermwenda83.server.servlet.student;
 
 
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import javassist.bytecode.analysis.Util;
+
 
 /**
  * Servlet implementation class UploadProfilePic
@@ -45,7 +54,7 @@ public class UploadProfilePic extends HttpServlet {
 	 */
 	public UploadProfilePic() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -54,7 +63,7 @@ public class UploadProfilePic extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		doPost(request, response);
 	}
 
@@ -64,7 +73,7 @@ public class UploadProfilePic extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		OutputStream out = response.getOutputStream();
 		response.setContentType("application/json;charset=UTF-8");
 		
@@ -72,10 +81,23 @@ public class UploadProfilePic extends HttpServlet {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
 				.setPrettyPrinting().serializeNulls().create();
 
+		//process the upload and return json response
+		out.write(gson.toJson(cropAndUploadImage(request)).getBytes());
+		out.flush();
+		out.close();
+	}
+	
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private JsonElement cropAndUploadImage(HttpServletRequest request) {
 		
 		JsonObject jsonObject = new JsonObject();
-
 		
+
 		// Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();
 
@@ -99,6 +121,9 @@ public class UploadProfilePic extends HttpServlet {
         try {
             // Parse the request
         	String fileName="failed";
+        	String data="none";
+        	File uploadedFile = null;
+        	String filePath= DATA_DIRECTORY;
             List<FileItem> items = upload.parseRequest(request);
             Iterator iter = items.iterator();
             while (iter.hasNext()) {
@@ -106,18 +131,59 @@ public class UploadProfilePic extends HttpServlet {
 
                 if (!item.isFormField()) {
                 	fileName= new File(item.getName()).getName();
-                    String filePath = DATA_DIRECTORY;
-                    File uploadedFile = new File(filePath,fileName);
+                	fileName= StringUtils.replace(fileName, ".jpeg", "");
+                	fileName= StringUtils.replace(fileName, ".jpg", "");
+                	fileName= StringUtils.replace(fileName, ".png", "");
+                	fileName= StringUtils.replace(fileName, ".gif", "");
+                	fileName= fileName+".png";
+                	filePath = DATA_DIRECTORY;
+                    uploadedFile = new File(filePath,fileName);
                     System.out.println(filePath);
+                    
+                   
                     // saves the file to upload directory
                     item.write(uploadedFile);
                 }
+               if( StringUtils.equalsIgnoreCase(item.getFieldName(),"avatar_data")) {
+                	
+                	data= item.getString();
+                	JSONObject imageData= new JSONObject(data);
+                	
+                	 //cropp the image submitted
+                	
+                	
+                	
+                     Image src = ImageIO.read(uploadedFile);
+
+                      int x = imageData.getInt("x"), y = imageData.getInt("y"), w = imageData.getInt("width"), h = imageData.getInt("height");
+
+                     
+                      //rotate image
+                      double rotationRequired = Math.toRadians (imageData.getDouble("rotate"));
+                
+                      AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired,w , h);
+                      AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+                      
+                      BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                      
+                      
+                      dst.getGraphics().drawImage(src, 0, 0, w, h, x, y, x + w, y + h, null);
+
+                      //ovorride the upload
+                      ImageIO.write(op.filter(dst, null), "png", new File(filePath,fileName));
+                	
+                	
+                	
+                }
             }
+           
+    		
             
             
             jsonObject.addProperty("state", 200);
     		jsonObject.addProperty("message", "Success");
     		jsonObject.addProperty("result", fileName);
+    		jsonObject.addProperty("Data", data);
 
            
 
@@ -131,17 +197,16 @@ public class UploadProfilePic extends HttpServlet {
         	
         	 jsonObject.addProperty("state", 500);
      		jsonObject.addProperty("message", "Error : "+ex.getMessage());
-     		jsonObject.addProperty("result", "images/dcclxxvii.png");
+     		jsonObject.addProperty("result", "images/user.png");
            // throw new ServletException(ex);
         }
 
+	
+		return jsonObject;
 		
-
 		
-
-		out.write(gson.toJson(jsonObject).getBytes());
-		out.flush();
-		out.close();
 	}
+	
+	
 
 }

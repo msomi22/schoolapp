@@ -57,7 +57,7 @@
 <!-- Bootstrap -->
 <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 
-<script src="js/registerStudent.js"></script>
+<script src="js/registerNewStudent.js"></script>
 
 <script
 	src="../vendors/bootstrap-datetimepicker/bootstrap-datepicker.min.js"></script>
