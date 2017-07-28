@@ -109,16 +109,16 @@ public class ReportUtil {
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
 		Performance3 performance3 = new Performance3();
-		
+
 		if(!exam.isEmpty()){
-			
-			
+
+
 			List<Perfomance> filteredExam = exam.parallelStream()
-			    .filter(performance -> streamId.equals(performance.getStreamId()))
-			    .collect(Collectors.toList());
-			
-			
-			
+					.filter(performance -> streamId.equals(performance.getStreamId()))
+					.collect(Collectors.toList());
+
+
+
 
 			int languagesCount = 0;
 			int sciencesCount = 0;
@@ -129,16 +129,16 @@ public class ReportUtil {
 			List<Perfomance> selectedSciencesList = new ArrayList<>();
 			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
-			
-			
 
 
-			
+
+
+
 			for (Perfomance perfomance : filteredExam) {
 
-				
+
 				/*if(perfomanceMap.containsKey(perfomance.getSubjectId())){
-					
+
 				}*/
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
 				//temp.add(perfomance);
@@ -194,22 +194,22 @@ public class ReportUtil {
 
 				//add mathematics
 				else if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
-					
+
 					String subjectId = finalPerfomanceList.parallelStream()
-					                   .filter(p -> 
-					                	   p.getSubjectId().equals(perfomance.getSubjectId())
-					                  )
-					                   .map(Perfomance::getSubjectId)
-					                   .findAny()
-					                   .orElse("");
-					
-					
-					    if(StringUtils.isEmpty(subjectId) || StringUtils.isBlank(subjectId)){ 
-					    	finalPerfomanceList.add(perfomance);
-					    }
-					
-						
-					
+							.filter(p -> 
+							p.getSubjectId().equals(perfomance.getSubjectId())
+									)
+							.map(Perfomance::getSubjectId)
+							.findAny()
+							.orElse("");
+
+
+					if(StringUtils.isEmpty(subjectId) || StringUtils.isBlank(subjectId)){ 
+						finalPerfomanceList.add(perfomance);
+					}
+
+
+
 
 				}
 
@@ -228,47 +228,47 @@ public class ReportUtil {
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
 
-		
-
-		
-		performance3.setPerfomanceMap(perfomanceMap); 
-		
-		//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
-
-		if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-
-			performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
 
 
-			//System.out.println(" ^^ ******************************************** ^^ : " + getTotalsByTotalPerExam(finalPerfomanceList)); 
+
+			performance3.setPerfomanceMap(perfomanceMap); 
+
+			//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
+
+			if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
+
+				performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
+				performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
 
 
-		}else{
+				//System.out.println(" ^^ ******************************************** ^^ : " + getTotalsByTotalPerExam(finalPerfomanceList)); 
 
-			PerformanceP123 performanceP123 = new PerformanceP123();
-			performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
-			performance3.setTotalMean(performanceP123.getTotalMean());
-			performance3.setTotalPoints(performanceP123.getTotalPoints());
+			}else{
 
-		}
-		
-		
+				PerformanceP123 performanceP123 = new PerformanceP123();
+				performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
-		if(!finalPerfomanceList.isEmpty()){/*
-			
+				performance3.setTotalMean(performanceP123.getTotalMean());
+				performance3.setTotalPoints(performanceP123.getTotalPoints());
+
+			}
+
+
+
+			if(!finalPerfomanceList.isEmpty()){/*
+
 			System.out.println("________________________________________________");//exam
-			
-			
+
+
 			System.out.println(finalPerfomanceList.toString());
-			
+
 			System.out.println("________________________________________________");
-			
-			
-		  */}
+
+
+			 */}
 		}
-		
+
 
 		return performance3;
 	}
@@ -310,7 +310,7 @@ public class ReportUtil {
 
 
 		for(Perfomance perfomance : finalPerfomanceList){
-			
+
 
 			Subject subject = subjectMap.get(perfomance.getSubjectId());
 			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
@@ -488,20 +488,20 @@ public class ReportUtil {
 
 	public static Performance3 findExamTotalForm1(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
-		
-		
-		
+
+
+
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
 
 
 		if(!exam.isEmpty()){
-			
-			
+
+
 			List<Perfomance> filteredExam = exam.parallelStream()
-				    .filter(performance -> streamId.equals(performance.getStreamId()))
-				    .collect(Collectors.toList());
+					.filter(performance -> streamId.equals(performance.getStreamId()))
+					.collect(Collectors.toList());
 
 			int languagesCount = 0;
 			int sciencesCount = 0;
@@ -956,16 +956,18 @@ public class ReportUtil {
 
 
 
-
-
 	static class StreamResult{
 
 		String studentId;
 		String result;
+		double total;
+		double point;
 
 		public StreamResult(){
 			studentId = "";
 			result = "";
+			total= 0;
+			point = 0;
 		}
 
 		/**
@@ -995,6 +997,45 @@ public class ReportUtil {
 		public void setResult(String result) {
 			this.result = result;
 		}
+
+		/**
+		 * @return the total
+		 */
+		public double getTotal() {
+			return total;
+		}
+
+		/**
+		 * @param total the total to set
+		 */
+		public void setTotal(double total) {
+			this.total = total;
+		}
+
+		/**
+		 * @return the point
+		 */
+		public double getPoint() {
+			return point;
+		}
+
+		/**
+		 * @param point the point to set
+		 */
+		public void setPoint(double point) {
+			this.point = point;
+		}
+
+		/**
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "StreamResult [studentId=" + studentId + ", result=" + result + ", total=" + total + ", point="
+					+ point + "]";
+		}
+
+
 
 	}
 
@@ -1109,7 +1150,7 @@ public class ReportUtil {
 		int prevscount = 1;
 
 		String cposition = "";
-		
+
 		List<StreamResult> positionList = new ArrayList<>();
 
 		for(Performance2 performance : performanceList){
@@ -1144,9 +1185,15 @@ public class ReportUtil {
 			}
 
 			
+
+
+
+
 			StreamResult streamResult = new StreamResult();
 			streamResult.setResult(cposition + " Out of: " + performanceList.size());
 			streamResult.setStudentId(performance.getStudentId());
+			streamResult.setTotal(totalMean);
+			streamResult.setPoint(mainPoint); 
 
 			positionList.add(streamResult);
 
@@ -1155,19 +1202,26 @@ public class ReportUtil {
 			prevTotal = total;
 		}
 
-       //return object
+		//return object
 		StreamResult position = positionList.parallelStream()
 				.filter(student -> studentId.equals(student.getStudentId()))
 				.findAny()
 				.orElse(null);
 		
-		//return string 
+		
+		System.out.println("______________________________________________________________________");
+
+		System.out.println(position);
+
+		System.out.println("______________________________________________________________________");
+
+		/**return string 
 		 String positionStr = positionList.parallelStream()
 	                .filter(student -> studentId.equals(student.getStudentId()))
 	                .map(StreamResult::getResult) //convert stream to String
 	                .findAny()
-	                .orElse("");
-		 
+	                .orElse("");*/
+
 
 
 		return position.getResult();
@@ -1225,6 +1279,16 @@ public class ReportUtil {
  * 5) Math (P1 and 2)
  *    *P1 = 100
  *    *P2 = 100
+ *    
+ *    
+ *    
+ *    new Thread(new Runnable() {
+		     public void run() {
+		          // code goes here.
+
+		     }
+		}).start();
+
  *
  */
 

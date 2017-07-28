@@ -334,12 +334,18 @@ public class StudentReportCard extends HttpServlet{
 		Account account = accountDAO.getAccountById(accountId);
 
 		List<Student> studentsList = new ArrayList<>();
+		List<Student> classstudentsList = new ArrayList<>();
+
 		List<Performance2> performanceList =  new ArrayList<>();
+		List<Performance2> classperformanceList =  new ArrayList<>();
 
 		String correctClass = "";
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
+			
+			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();
+			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
 			if(studentDAO.getStudentByStream(accountId, streamId) != null){
@@ -347,6 +353,28 @@ public class StudentReportCard extends HttpServlet{
 				studentsList = studentDAO.getStudentByStream(accountId, streamId);
 
 			}
+
+			List<Stream> streamList = new ArrayList<>();
+			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
+			
+			
+
+
+			if(streamDAO.getStreamList(accountId, classroomId) != null){
+				streamList = streamDAO.getStreamList(accountId, classroomId);
+			}
+
+			streamList.forEach(stream -> {				
+				if(studentDAO.getStudentByStream(accountId, stream.getUuid()) != null){
+
+					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()); 
+					if(!studentListStream.isEmpty())
+						classstudentsList.addAll(studentListStream); 
+
+				}
+			});
+
+
 
 		}else if(classDAO.getClassRoom(accountId, classroomId) != null && classResult){
 
@@ -358,8 +386,7 @@ public class StudentReportCard extends HttpServlet{
 				streamList = streamDAO.getStreamList(accountId, classroomId);
 			}
 
-
-
+			
 			for(Stream stream : streamList){
 
 				if(studentDAO.getStudentByStream(accountId, stream.getUuid()) != null){
@@ -392,6 +419,23 @@ public class StudentReportCard extends HttpServlet{
 			}else{
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult);
 
+
+				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
+				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true); 
+				
+				if(rankWithPoints && !rankWithTotalMarks){
+					Collections.sort(classperformanceList, new PointsComparator());
+					Collections.reverse(classperformanceList);
+					
+				}
+
+				if(!rankWithPoints && rankWithTotalMarks){
+					Collections.sort(classperformanceList, new MeanComparator());
+					Collections.reverse(classperformanceList);
+					
+				}
+				
+			
 			}
 
 
@@ -730,22 +774,25 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-				
-					
+
+
 					classPositionMSG = pos + " Out of : " + performanceList.size();
-					
+
 					streamPositionMSG = ReportUtil.getStreamPosition(accountId, student.getUuid(), student.getCurrentStream(), 
 							performanceList,rankWithPoints,rankWithTotalMarks); 
-					
+
 
 				}else{
 
 					if(!classResult){
-						classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
-								performanceList,rankWithPoints,rankWithTotalMarks);
+
+						if(!classperformanceList.isEmpty()){
+							classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
+									classperformanceList,rankWithPoints,rankWithTotalMarks);
+						}
 					}
-					
-					
+
+
 					streamPositionMSG = pos + " Out of : " + performanceList.size();
 
 				}
@@ -1411,15 +1458,7 @@ public class StudentReportCard extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 				totalMeans = totalMeans / 3;
-				
-				/*
-				System.out.println("________" + student.getUuid() + "___________");
-				
-				System.out.println("exam1 : " + totalExam1.getTotalMean() + ", exam2 : " + totalExam2.getTotalMean() + ", exam3 : " + totalExam3.getTotalMean());
-				
-				System.out.println("________________________________________________");
 
-*/
 			}
 
 			if(exams.length == 2){
@@ -1492,9 +1531,9 @@ public class StudentReportCard extends HttpServlet{
 
 
 			}
-			
-			
-		
+
+
+
 
 			if(totalMeans > 0 || totalPoint > 0){
 
@@ -1509,11 +1548,11 @@ public class StudentReportCard extends HttpServlet{
 				performance2.setExam2Total(totalExam2.getTotalPoints());
 				performance2.setExam3Total(totalExam3.getTotalPoints());
 				performance2.setStreamId(student.getCurrentStream()); 
-				
+
 				if(!classResult){
 					performance2.setClassroomId(class_streamId); 
 				}
-				
+
 
 				performance2List.add(performance2);
 			}
