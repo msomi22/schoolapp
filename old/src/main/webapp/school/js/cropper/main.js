@@ -278,7 +278,7 @@
       if ($.isPlainObject(data) && data.state === 200) {
         if (data.result) {
          this.url = data.newImage;
-        	//$('#profile_url').val(data.result);
+        $('#profile_url').val(data.result);
         	
         	//alert($('#profile_url').val());
 
