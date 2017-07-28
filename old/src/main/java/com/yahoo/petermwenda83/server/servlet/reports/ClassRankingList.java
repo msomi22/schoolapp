@@ -47,6 +47,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
@@ -55,6 +56,7 @@ import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
@@ -86,6 +88,7 @@ public class ClassRankingList extends HttpServlet{
 	private static YearlyMeanDAO yearlyMeanDAO;
 	//private static SysConfigDAO sysConfigDAO;
 	private static ClassDAO classDAO;
+	private static PrimaryDAO primaryDAO;
 
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -140,6 +143,7 @@ public class ClassRankingList extends HttpServlet{
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
 		//sysConfigDAO = SysConfigDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
+		primaryDAO = PrimaryDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -773,13 +777,25 @@ public class ClassRankingList extends HttpServlet{
 			Map<String,Integer> exam1 = performance2.getExam1();
 			Map<String,Integer> exam2 = performance2.getExam2();
 			Map<String,Integer> exam3 = performance2.getExam3(); 
-
+			
+			
+			StudentPrimary primary = new StudentPrimary();
+			if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null){
+				primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
+				
+			}
+			
+            String kcpe = "";
+            kcpe = primary.getKcpemark();
+            if(StringUtils.equals(kcpe, "0")){
+            	kcpe = "";
+            }
 
 			rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(student.getFirstname(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
-			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(kcpe,timesRomanNormal6));
 
 
 			for(Subject subject : subjects){
