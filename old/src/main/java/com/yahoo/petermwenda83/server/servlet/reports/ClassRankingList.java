@@ -45,6 +45,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
@@ -885,13 +886,66 @@ public class ClassRankingList extends HttpServlet{
 				streamPositionMSG = pos + " / " + performanceList.size();
 
 			}
+			
+			
+			int thisTerm = Integer.valueOf(term);
+			String accurateYear = year;
+			
+			if(thisTerm == 1){
+				accurateYear = String.valueOf(Integer.valueOf(accurateYear)-1); 
+			}
+			
 
+			YearlyMean yearlymean = new YearlyMean();
+			if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), accurateYear) != null){
+				yearlymean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), accurateYear);
+			}
+			
+			double previousMean = 0;
+			String prevMean = "";
+			
+			if(Integer.valueOf(term) == 1){
+				previousMean = yearlymean.getMeanOne();
+			}else if(Integer.valueOf(term) == 2){
+				previousMean = yearlymean.getMeanTwo();
+			}else if(Integer.valueOf(term) == 3){
+				previousMean = yearlymean.getMeanThree();
+			}
+			 
+			prevMean = ReportUtil.df2.format(previousMean);
+			
+			if(StringUtils.equals(String.valueOf((int)previousMean), "0")){
+				prevMean = "";
+			}
+			
+			double thisMean = 0;
+			
+			if(rankWithPoints && !rankWithTotalMarks){
+				
+				thisMean = performance2.getTotalPoint();
+
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+				
+				thisMean = Double.valueOf(ReportUtil.df2.format(avgMean)); 
+				
+			}
+			
+			double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
+			
+			
+			String dev = ReportUtil.df2.format(deviation);
+			if(StringUtils.equals(dev, "0")){
+				dev = "";
+			}
+			
 
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
-			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
-			rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(""+prevMean,timesRomanNormal6));
+			rankingTable.addCell(new Paragraph(dev,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(streamPositionMSG,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(classPositionMSG,timesRomanNormal6));
 
