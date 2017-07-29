@@ -78,7 +78,6 @@ public class ReportUtil {
 
 
 
-
 	/**
 	 * 
 	 * @param accountId account unique id
@@ -91,18 +90,6 @@ public class ReportUtil {
 	 * @return student performance object based on the best 7/11 subjects
 	 */
 
-	/**
-	 * @param accountId
-	 * @param streamId
-	 * @param exam
-	 * @param subCategoryDAO
-	 * @param categoryDAO
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
-	 * @param examDAO
-	 * @param examType
-	 * @return
-	 */
 	public static Performance3 findExamTotalForm234(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO, ExamDAO examDAO,String examType) {
 
@@ -117,9 +104,6 @@ public class ReportUtil {
 					.filter(performance -> streamId.equals(performance.getStreamId()))
 					.collect(Collectors.toList());
 
-
-
-
 			int languagesCount = 0;
 			int sciencesCount = 0;
 			int humanitiesCount = 0;
@@ -130,16 +114,8 @@ public class ReportUtil {
 			List<Perfomance> selectedHumanitiesList = new ArrayList<>();
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
 
-
-
-
-
 			for (Perfomance perfomance : filteredExam) {
 
-
-				/*if(perfomanceMap.containsKey(perfomance.getSubjectId())){
-
-				}*/
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
 				//temp.add(perfomance);
 
@@ -208,9 +184,6 @@ public class ReportUtil {
 						finalPerfomanceList.add(perfomance);
 					}
 
-
-
-
 				}
 
 			}
@@ -228,20 +201,12 @@ public class ReportUtil {
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
 
-
-
-
 			performance3.setPerfomanceMap(perfomanceMap); 
-
-			//System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% examType : " + examType);
 
 			if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 
 				performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
 				performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
-
-
-				//System.out.println(" ^^ ******************************************** ^^ : " + getTotalsByTotalPerExam(finalPerfomanceList)); 
 
 
 			}else{
@@ -254,19 +219,6 @@ public class ReportUtil {
 
 			}
 
-
-
-			if(!finalPerfomanceList.isEmpty()){/*
-
-			System.out.println("________________________________________________");//exam
-
-
-			System.out.println(finalPerfomanceList.toString());
-
-			System.out.println("________________________________________________");
-
-
-			 */}
 		}
 
 
@@ -338,8 +290,6 @@ public class ReportUtil {
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
 
-				//System.out.println("\nLang --> scoreP1: " + scoreP1 + " , scoreP2: " + scoreP2 + " , scoreP3:" + scoreP3 + " , total: " + total  + " , point:" + point);
-
 				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
@@ -364,9 +314,6 @@ public class ReportUtil {
 
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
-
-				//System.out.println("\nSci --> scoreP1: " + scoreP1 + " , scoreP2: " + scoreP2 + " , scoreP3:" + scoreP3 + " , total: " + total  + " , point:" + point);
-
 
 				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
@@ -398,9 +345,6 @@ public class ReportUtil {
 					int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 					grandPoints += point;
 
-					//System.out.println("\nAgr --> scoreP1: " + scoreP1 + " , scoreP2: " + scoreP2 + " , scoreP3:" + scoreP3 + " , total: " + total  + " , point:" + point);
-
-
 					total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
@@ -422,8 +366,6 @@ public class ReportUtil {
 
 					int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 					grandPoints += point;
-
-					//System.out.println("\nTech --> scoreP1: " + scoreP1 + " , scoreP2: " + scoreP2 + " , scoreP3:" + scoreP3 + " , total: " + total  + " , point:" + point);
 
 					total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
@@ -450,19 +392,12 @@ public class ReportUtil {
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
 
-				//System.out.println("\nHuman --> scoreP1: " + scoreP1 + " , scoreP2: " + scoreP2 + " , scoreP3:" + scoreP3 + " , total: " + total + " , point:" + point);
-
-
 				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
 			}
 
 		}
-
-
-
-		//System.out.println("_____________________________________________________________________ grandPoints: " + grandPoints); 
 
 		PerformanceP123 performanceP123 = new PerformanceP123();
 		performanceP123.setTotalMean((int)Math.round(grandTotal));
@@ -1184,10 +1119,6 @@ public class ReportUtil {
 
 			}
 
-			
-
-
-
 
 			StreamResult streamResult = new StreamResult();
 			streamResult.setResult(cposition + " Out of: " + performanceList.size());
@@ -1207,13 +1138,6 @@ public class ReportUtil {
 				.filter(student -> studentId.equals(student.getStudentId()))
 				.findAny()
 				.orElse(null);
-		
-		
-		System.out.println("______________________________________________________________________");
-
-		System.out.println(position);
-
-		System.out.println("______________________________________________________________________");
 
 		/**return string 
 		 String positionStr = positionList.parallelStream()

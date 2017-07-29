@@ -182,53 +182,23 @@ public class ClassRankingList extends HttpServlet{
 		String noOfSub = request.getParameter("subjects");
 
 		//check for hide points
-		if(hidePts)
-			hidePoints= true;
-		else
-			hidePoints= false;
-
+		hidePoints = hidePts ? true : false;
 		//check for hide grades
-		if(hideGds)
-			hideGrade= true;
-		else
-			hideGrade= false;
-
+		hideGrade = hideGds ? true : false;
 		//check for rank with points
-		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
-			rankWithPoints=true;
-			rankWithTotalMarks= false;
-		}else {
-			rankWithPoints=false;
-			rankWithTotalMarks= true;
-		}
-
-
+		rankWithPoints = StringUtils.equalsIgnoreCase(rank, "points") ? true : false;
+		rankWithTotalMarks = StringUtils.equalsIgnoreCase(rank, "points") ? false : true;
 		//check for number of subjects to grade
-		//
-		if(StringUtils.equalsIgnoreCase(noOfSub, "eleven")) {
-			grade7subjects= false;
-			grade11subjects= true;
-		}else {
-			grade7subjects= true;
-			grade11subjects= false;
-		}
-
-
+		grade7subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? false : true;
+		grade11subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? true :false;
+		
 		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
-		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//classroom added
-
+		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));
 		//if class checked the scope is true, otherwise false
-		scope= Boolean.parseBoolean((request.getParameter("scope")));//scope added
-
-		if(!scope){
-			classResult = false;
-		}else{
-			classResult = true;
-		}
-
-
+		scope= Boolean.parseBoolean((request.getParameter("scope")));
+		classResult = scope ? true : false;
 		//get selected exams
 		String[] examsfeed= request.getParameterValues("exam");
 
@@ -241,31 +211,19 @@ public class ClassRankingList extends HttpServlet{
 
 		examType = StringUtils.trimToEmpty(request.getParameter("examType"));
 
-
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 
-
 		try {
 			writer = PdfWriter.getInstance(document, response.getOutputStream());           
 			PdfUtil event = new PdfUtil();
 
-
-
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-
-			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-
-				examType = ReportUtil.EXAM_TYPE;  
-
-			}else{
-
-				examType = "";
-			}
+			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";			
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
 
@@ -288,15 +246,9 @@ public class ClassRankingList extends HttpServlet{
 	 */
 	public  void compute(String accountId, String streamId ,String classroomId, String term ,String year ,String examType) {
 
-		accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
-		//String streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-		//String term = "1";
-		//String year = "2016";
-
 		try {
 
 			document.open();
-
 
 			generateReport(accountId, streamId, classroomId, term, year, examType);
 
@@ -343,65 +295,38 @@ public class ClassRankingList extends HttpServlet{
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
 			
-			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();
-			
+			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
-			if(studentDAO.getStudentByStream(accountId, streamId) != null){
-
-				studentsList = studentDAO.getStudentByStream(accountId, streamId);
-
-			}
-
-			List<Stream> streamList = new ArrayList<>();
+			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ? studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
 			
-			
-			
+			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
-			if(streamDAO.getStreamList(accountId, classroomId) != null){
-				streamList = streamDAO.getStreamList(accountId, classroomId);
-			}
+			streamList.forEach(stream -> {
+				
+				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+				
+				if(!studentListStream.isEmpty())
+					classstudentsList.addAll(studentListStream); 
 
-			streamList.forEach(stream -> {				
-				if(studentDAO.getStudentByStream(accountId, stream.getUuid()) != null){
-
-					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()); 
-					if(!studentListStream.isEmpty())
-						classstudentsList.addAll(studentListStream); 
-
-				}
 			});
 			
 			
 
 		}else if(classDAO.getClassRoom(accountId, classroomId) != null && classResult){
-
-			List<Stream> streamList = new ArrayList<>();
+			
 			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
-
-
-			if(streamDAO.getStreamList(accountId, classroomId) != null){
-				streamList = streamDAO.getStreamList(accountId, classroomId);
-			}
-
-
+			
+			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
+			
 			for(Stream stream : streamList){
 
-				if(studentDAO.getStudentByStream(accountId, stream.getUuid()) != null){
-
-					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()); 
+					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+					
 					if(!studentListStream.isEmpty())
 						studentsList.addAll(studentListStream); 
 
-
-				}
-
-
-
 			}
-
-
-
 		}
 
 		if(studentsList.isEmpty()){
@@ -494,7 +419,7 @@ public class ClassRankingList extends HttpServlet{
 		topLine.closePathStroke();
 
 		Phrase reportTitle = new Phrase();
-		reportTitle.add(new Chunk("CLASS RANKING LIST FOR  TERM : YEAR : ",  timesRomanBold10));
+		reportTitle.add(new Chunk("CLASS RANKING LIST FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
 		reportTitle.add(new Chunk(" (" + rankingCriteria+")",  timesRomanNormal10));
 		document.add(reportTitle);
 		document.add(new Paragraph("\n"));
@@ -544,38 +469,23 @@ public class ClassRankingList extends HttpServlet{
 		String exam33 = "";
 
 		if(exams.length == 1){
-
-			if(examDAO.getExam(accountId, exams[0]) != null){
-				exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-			}
+			
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 
 		}
 
 		if(exams.length == 2){
-
-			if(examDAO.getExam(accountId, exams[0]) != null){
-				exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-			}
-
-			if(examDAO.getExam(accountId, exams[1]) != null){
-				exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
-			}
+			
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
 
 		}
 
 		if(exams.length == 3){
 
-			if(examDAO.getExam(accountId, exams[0]) != null){
-				exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-			}
-
-			if(examDAO.getExam(accountId, exams[1]) != null){
-				exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
-			}
-
-			if(examDAO.getExam(accountId, exams[2]) != null){
-				exam33 = examDAO.getExam(accountId, exams[2]).getDescription();
-			}
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+			exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
 
 		}
 
@@ -674,14 +584,18 @@ public class ClassRankingList extends HttpServlet{
 
 		//cells = 13
 
-
+        int subCount = 0;
 		for(Subject subject : subjects){
-
+			subCount++;
 			PdfPCell cell = new PdfPCell(new Paragraph(subject.getCode(),timesRomanBold6));
 			cell.setBackgroundColor(baseColor);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			
+			if(subCount > 13)
+				break;
 
 			rankingTable.addCell(cell); 
+			
 
 		}
 
@@ -785,8 +699,8 @@ public class ClassRankingList extends HttpServlet{
 				
 			}
 			
-            String kcpe = "";
-            kcpe = primary.getKcpemark();
+            String kcpe = primary.getKcpemark();
+            
             if(StringUtils.equals(kcpe, "0")){
             	kcpe = "";
             }
@@ -804,7 +718,7 @@ public class ClassRankingList extends HttpServlet{
 				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 				String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 				String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
-
+				
 				if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
 					exam1Score = "";
 				}
@@ -845,11 +759,8 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 
-			double avgMean = 0;
-			if(totalMean > 0){ 
-				avgMean = (double)totalMean / 7;  
-			}
-
+			double avgMean = totalMean > 0 ? (double)totalMean / 7 : 0;
+			
 			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 
 			String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int) Math.round(avgMean)),"", accountId, subjectDAO, gradingSystemDAO); 
 
@@ -950,13 +861,9 @@ public class ClassRankingList extends HttpServlet{
 			
 			double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
 			
+			String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
+			dev = StringUtils.equals(dev, "0") ? "" : dev;
 			
-			String dev = ReportUtil.df2.format(deviation);
-			if(StringUtils.equals(dev, "0")){
-				dev = "";
-			}
-			
-
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
@@ -1016,6 +923,9 @@ public class ClassRankingList extends HttpServlet{
 		for(Student student : studentsList ){
 
 			if(exams.length == 3){
+				
+				
+				
 
 				if(classResult){
 
@@ -1060,7 +970,7 @@ public class ClassRankingList extends HttpServlet{
 
 			if(exams.length == 2){
 
-
+              
 
 				if(classResult){
 
@@ -1098,8 +1008,12 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 			if(exams.length == 1){
+				
+				
+				exam1 = classResult ? perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year) : 
+					perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 
-				if(classResult){
+				/*if(classResult){
 
 					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 
@@ -1107,7 +1021,7 @@ public class ClassRankingList extends HttpServlet{
 
 					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 
-				}
+				}*/
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
