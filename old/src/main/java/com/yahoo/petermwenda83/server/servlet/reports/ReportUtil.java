@@ -1154,6 +1154,62 @@ public class ReportUtil {
 
 
 
+	/**
+	 * @param performanceList
+	 * @param rankWithPoints
+	 * @param rankWithTotalMarks
+	 * @return
+	 */
+	public static String getclassMean(List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks,boolean grade7subjects,boolean grade11subjects) {
+
+
+		double total = 0;
+		double totalMean = 0;
+		double median = 0;
+		double classMean = 0;
+		
+		System.out.println("-------------------------------- rankWithPoints: " + rankWithPoints + " , rankWithTotalMarks : " + rankWithTotalMarks);
+
+		for(Performance2 performance : performanceList){
+
+			if(rankWithPoints && !rankWithTotalMarks){
+
+				total = performance.getTotalPoint();
+
+			}
+
+			if(!rankWithPoints && rankWithTotalMarks){
+
+				total = performance.getTotalMean();
+
+			}
+			
+			
+			
+			if(grade7subjects && !grade11subjects){
+				median = total > 0 ? total / 7 : 0;
+			}
+			if(!grade7subjects && grade11subjects){
+				median = total > 0 ? total / 11 : 0;
+			}
+			
+			totalMean += median;
+			//a += b is short-hand for a = a + b
+			//a =+ b is a = (+b)    
+			
+			//System.out.println("totalMean: " + totalMean + " , total : " + total + " , median : " + median); 
+
+		}
+		
+		classMean = totalMean / performanceList.size();
+		
+		//System.out.println(classMean);
+
+		return df2.format(classMean); 
+	}
+
+
+
 
 }
 

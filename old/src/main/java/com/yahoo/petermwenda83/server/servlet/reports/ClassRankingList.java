@@ -191,7 +191,7 @@ public class ClassRankingList extends HttpServlet{
 		//check for number of subjects to grade
 		grade7subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? false : true;
 		grade11subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? true :false;
-		
+
 		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
@@ -294,37 +294,37 @@ public class ClassRankingList extends HttpServlet{
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
-			
+
 			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
 			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ? studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
-			
+
 			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
 			streamList.forEach(stream -> {
-				
+
 				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
-				
+
 				if(!studentListStream.isEmpty())
 					classstudentsList.addAll(studentListStream); 
 
 			});
-			
-			
+
+
 
 		}else if(classDAO.getClassRoom(accountId, classroomId) != null && classResult){
-			
+
 			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
-			
+
 			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
-			
+
 			for(Stream stream : streamList){
 
-					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
-					
-					if(!studentListStream.isEmpty())
-						studentsList.addAll(studentListStream); 
+				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+
+				if(!studentListStream.isEmpty())
+					studentsList.addAll(studentListStream); 
 
 			}
 		}
@@ -340,24 +340,24 @@ public class ClassRankingList extends HttpServlet{
 
 
 			}else{
-				
+
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult);
 
 				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
 				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true); 
-				
+
 				if(rankWithPoints && !rankWithTotalMarks){
 					Collections.sort(classperformanceList, new PointsComparator());
 					Collections.reverse(classperformanceList);
-					
+
 				}
 
 				if(!rankWithPoints && rankWithTotalMarks){
 					Collections.sort(classperformanceList, new MeanComparator());
 					Collections.reverse(classperformanceList);
-					
+
 				}
-				
+
 			}
 
 
@@ -449,8 +449,13 @@ public class ClassRankingList extends HttpServlet{
 		classTable.addCell(nameInfoCell);
 		classTable.addCell(nameDescCell);
 
+		//TODO add class mean here
+		String classMean = ReportUtil.getclassMean(performanceList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
+		String grade = ReportUtil.getGrade(String.valueOf((int) Math.round(Double.parseDouble(classMean)) ), "x", accountId, subjectDAO, gradingSystemDAO); 
+
+
 		PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Mean:",timesRomanBold8)); 
-		PdfPCell mainGradeDescCell = new PdfPCell(new Phrase("**",  timesRomanNormal6));
+		PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(classMean + " / " + performanceList.size() + " Grade : " + grade,  timesRomanNormal6));
 		mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 		mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 
@@ -469,13 +474,13 @@ public class ClassRankingList extends HttpServlet{
 		String exam33 = "";
 
 		if(exams.length == 1){
-			
+
 			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 
 		}
 
 		if(exams.length == 2){
-			
+
 			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
 
@@ -543,10 +548,12 @@ public class ClassRankingList extends HttpServlet{
 
 		List<Subject> subjects = subjectDAO.getSubjects(accountId);
 
-		int size = subjects.size() + 6 + 5;
+		int size = subjects.size();
 		if(size > 13){
 			size = 13;
 		}
+
+		size += 12;
 
 		PdfPTable rankingTable = new PdfPTable(25);   
 		rankingTable.setWidthPercentage(100); 
@@ -584,18 +591,18 @@ public class ClassRankingList extends HttpServlet{
 
 		//cells = 13
 
-        int subCount = 0;
+		int subCount = 0;
 		for(Subject subject : subjects){
 			subCount++;
 			PdfPCell cell = new PdfPCell(new Paragraph(subject.getCode(),timesRomanBold6));
 			cell.setBackgroundColor(baseColor);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			
+
 			if(subCount > 13)
 				break;
 
 			rankingTable.addCell(cell); 
-			
+
 
 		}
 
@@ -652,7 +659,7 @@ public class ClassRankingList extends HttpServlet{
 			int mainPoint = performance2.getTotalPoint();
 			int totalMean = performance2.getTotalMean();
 
-			if(rankWithPoints && !rankWithTotalMarks){
+			if(rankWithPoints && !rankWithTotalMarks){ // ,rankWithPoints,rankWithTotalMarks TODO
 
 				total = mainPoint;
 
@@ -691,19 +698,19 @@ public class ClassRankingList extends HttpServlet{
 			Map<String,Integer> exam1 = performance2.getExam1();
 			Map<String,Integer> exam2 = performance2.getExam2();
 			Map<String,Integer> exam3 = performance2.getExam3(); 
-			
-			
+
+
 			StudentPrimary primary = new StudentPrimary();
 			if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null){
 				primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
-				
+
 			}
-			
-            String kcpe = primary.getKcpemark();
-            
-            if(StringUtils.equals(kcpe, "0")){
-            	kcpe = "";
-            }
+
+			String kcpe = primary.getKcpemark();
+
+			if(StringUtils.equals(kcpe, "0")){
+				kcpe = "";
+			}
 
 			rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
@@ -718,7 +725,7 @@ public class ClassRankingList extends HttpServlet{
 				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 				String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 				String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
-				
+
 				if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
 					exam1Score = "";
 				}
@@ -758,9 +765,16 @@ public class ClassRankingList extends HttpServlet{
 
 			}
 
+			//TODO
+			double avgMean = 0;
+			if(grade7subjects && !grade11subjects){
+				avgMean = totalMean > 0 ? (double)totalMean / 7 : 0;
+			}
+			if(!grade7subjects && grade11subjects){
+				avgMean = totalMean > 0 ? (double)totalMean / 11 : 0;
+			}
+			 
 
-			double avgMean = totalMean > 0 ? (double)totalMean / 7 : 0;
-			
 			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 
 			String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int) Math.round(avgMean)),"", accountId, subjectDAO, gradingSystemDAO); 
 
@@ -813,24 +827,24 @@ public class ClassRankingList extends HttpServlet{
 				streamPositionMSG = pos + " / " + performanceList.size();
 
 			}
-			
-			
+
+
 			int thisTerm = Integer.valueOf(term);
 			String accurateYear = year;
-			
+
 			if(thisTerm == 1){
 				accurateYear = String.valueOf(Integer.valueOf(accurateYear)-1); 
 			}
-			
+
 
 			YearlyMean yearlymean = new YearlyMean();
 			if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), accurateYear) != null){
 				yearlymean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), accurateYear);
 			}
-			
+
 			double previousMean = 0;
 			String prevMean = "";
-			
+
 			if(Integer.valueOf(term) == 1){
 				previousMean = yearlymean.getMeanOne();
 			}else if(Integer.valueOf(term) == 2){
@@ -838,32 +852,32 @@ public class ClassRankingList extends HttpServlet{
 			}else if(Integer.valueOf(term) == 3){
 				previousMean = yearlymean.getMeanThree();
 			}
-			 
+
 			prevMean = ReportUtil.df2.format(previousMean);
-			
+
 			if(StringUtils.equals(String.valueOf((int)previousMean), "0")){
 				prevMean = "";
 			}
-			
+
 			double thisMean = 0;
-			
+
 			if(rankWithPoints && !rankWithTotalMarks){
-				
+
 				thisMean = performance2.getTotalPoint();
 
 			}
 
 			if(!rankWithPoints && rankWithTotalMarks){
-				
+
 				thisMean = Double.valueOf(ReportUtil.df2.format(avgMean)); 
-				
+
 			}
-			
+
 			double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
-			
+
 			String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 			dev = StringUtils.equals(dev, "0") ? "" : dev;
-			
+
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
@@ -923,9 +937,9 @@ public class ClassRankingList extends HttpServlet{
 		for(Student student : studentsList ){
 
 			if(exams.length == 3){
-				
-				
-				
+
+
+
 
 				if(classResult){
 
@@ -970,7 +984,7 @@ public class ClassRankingList extends HttpServlet{
 
 			if(exams.length == 2){
 
-              
+
 
 				if(classResult){
 
@@ -1008,8 +1022,8 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 			if(exams.length == 1){
-				
-				
+
+
 				exam1 = classResult ? perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year) : 
 					perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 
