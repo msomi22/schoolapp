@@ -93,7 +93,7 @@
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link href="../build/css/custom.css" rel="stylesheet">
     
     
   <!-- custom form elements style -->
@@ -101,17 +101,14 @@
   
 <link rel="stylesheet" href="css/formelementBorder.css">
 
+<link rel="stylesheet" href="css/ui-styling.css">
+
 
     
     <link rel="icon" href="images/favicon.ico">
 
 
-    <style type="text/css">
-      footer{
-        padding: 15px 50px 10px 300px !important; 
-      }
-    </style>
-
+    
 
 
   </head>
@@ -213,16 +210,18 @@
 
         <!-- top navigation -->
         <div class="top_nav">
-          <div class="nav_menu">
+          <div class="nav_menu themeColor">
             <nav>
               <div class="nav toggle">
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
               
-              <p> <%=account.getName() %>  </p>             
               
+           
               
               <ul class="nav navbar-nav navbar-right">
+              
+               <li class="pull-left"> <h2><%=account.getName() %></h2>  </li>  
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <img src="images/peter.jpg" alt=""><%=user %>

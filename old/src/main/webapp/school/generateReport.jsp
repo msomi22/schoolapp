@@ -560,8 +560,8 @@
 
 
 
-												<div class="col-md-2 pull-right">
-													<button type="submit" class="btn btn-lg btn-success">Generate</button>
+												<div class="col-md-2 col-md-offset-4">
+													<button type="submit" class="btn btn-primary">Generate</button>
 												</div>
 
 

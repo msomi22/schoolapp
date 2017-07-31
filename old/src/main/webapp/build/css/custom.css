@@ -827,7 +827,7 @@ a:focus {
     text-decoration: none
 }
 .nav.navbar-nav>li>a {
-    color: #515356 !important
+    color: #fff !important
 }
 .nav.top_menu>li>a {
     position: relative;
@@ -1067,7 +1067,7 @@ h2 {
     transition: all .2s ease
 }
 .x_title {
-    border-bottom: 2px solid #E6E9ED;
+    border-bottom: 2px solid #1ABB9C;
     padding: 1px 5px 6px;
     margin-bottom: 10px
 }
