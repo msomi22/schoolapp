@@ -24,13 +24,19 @@ public interface SchoolPerfomanceDAO {
 	
 	
 	public Perfomance getPerformance(String accountId,String examId,String studentId,String streamId,String term,String year,String subjectId); 
-	 
+ 
+	
+    //student	
 	public List<Perfomance> getStreamPerformance(String accountId,String examId,String studentId,String streamId,String term,String year); 
 	
 	public List<Perfomance> getClassPerformance(String accountId,String examId,String studentId,String classRoomId,String term,String year); 
 
+	
+	
 	public boolean deletePerfomance(String accountId,String examId,String studentId,String term,String year);
 	
+	
+	//subject
 	public List<Perfomance> getStreamSubjectPerfomance(String accountId,String examId,String subjectId,String streamId,String term,String year);
 	
 	public List<Perfomance> getClassSubjectPerfomance(String accountId,String examId,String subjectId,String classRoomId,String term,String year);

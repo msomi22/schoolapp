@@ -65,6 +65,8 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.SubjectMeanComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.SubjectPointComparator;
 
 /**
  * 
@@ -449,7 +451,7 @@ public class ClassRankingList extends HttpServlet{
 		classTable.addCell(nameInfoCell);
 		classTable.addCell(nameDescCell);
 
-		//TODO add class mean here
+		
 		String classMean = ReportUtil.getclassMean(performanceList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
 		String grade = ReportUtil.getGrade(String.valueOf((int) Math.round(Double.parseDouble(classMean)) ), "x", accountId, subjectDAO, gradingSystemDAO); 
 
@@ -659,7 +661,7 @@ public class ClassRankingList extends HttpServlet{
 			int mainPoint = performance2.getTotalPoint();
 			int totalMean = performance2.getTotalMean();
 
-			if(rankWithPoints && !rankWithTotalMarks){ // ,rankWithPoints,rankWithTotalMarks TODO
+			if(rankWithPoints && !rankWithTotalMarks){ 
 
 				total = mainPoint;
 
@@ -765,28 +767,32 @@ public class ClassRankingList extends HttpServlet{
 
 			}
 
-			//TODO
+			
 			double avgMean = 0;
+			double pointsAvg = 0;
 			if(grade7subjects && !grade11subjects){
 				avgMean = totalMean > 0 ? (double)totalMean / 7 : 0;
+				pointsAvg = performance2.getTotalPoint();
 			}
 			if(!grade7subjects && grade11subjects){
 				avgMean = totalMean > 0 ? (double)totalMean / 11 : 0;
+				pointsAvg = ((double)performance2.getTotalPoint() / 132) * 84;
+				
 			}
 			 
 
-			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"", accountId, subjectDAO, gradingSystemDAO); 
+			String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf((int) Math.round(pointsAvg)),"", accountId, subjectDAO, gradingSystemDAO); 
 			String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int) Math.round(avgMean)),"", accountId, subjectDAO, gradingSystemDAO); 
 
 			String poinst_str = "";
 			String mean_str = "";
 
-			poinst_str = String.valueOf(performance2.getTotalPoint()); 
+			poinst_str = String.valueOf((int) Math.round(pointsAvg)); 
 			mean_str = ReportUtil.df2.format(avgMean);
 
 			if(rankWithPoints && !rankWithTotalMarks){
 				//show grade on points
-				poinst_str = performance2.getTotalPoint() + " " + avgGradeByTotalMean;
+				poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
 
 			}
 
@@ -896,7 +902,38 @@ public class ClassRankingList extends HttpServlet{
 
 
 
+		
+		//start subject ranking TODO
+		List<Performance1>  subjectPerformance = new ArrayList<>();
+		
+		subjectPerformance = getclassSubjectPerformance(accountId, exams, subjectDAO, perfomanceDAO, classroomId, 
+				streamId, term, year,examType,classResult);
+		
+		if(rankWithPoints && !rankWithTotalMarks){
+			Collections.sort(subjectPerformance, new SubjectPointComparator());
+			Collections.reverse(subjectPerformance);
 
+		}
+
+		if(!rankWithPoints && rankWithTotalMarks){
+			Collections.sort(subjectPerformance, new SubjectMeanComparator());
+			Collections.reverse(subjectPerformance);
+
+		}
+
+		
+		for(Performance1 performance : subjectPerformance){
+			
+			Subject subject = subjectDAO.getSubjectById(accountId, performance.getSubjectId());
+			
+			System.out.println("_____________________________________________________________");
+			System.out.println(" *** " + subject.getDescription() + " , M :" + performance.getTotalMean() + " , P : " +  performance.getTotalPoint());
+			System.out.println("_____________________________________________________________");
+			
+			
+		}
+	
+	
 
 
 
@@ -1027,16 +1064,6 @@ public class ClassRankingList extends HttpServlet{
 				exam1 = classResult ? perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year) : 
 					perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
 
-				/*if(classResult){
-
-					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-
-				}else{
-
-					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-
-				}*/
-
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
 					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
@@ -1087,6 +1114,121 @@ public class ClassRankingList extends HttpServlet{
 
 		return performance2List;
 
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param exams
+	 * @param subjectDAO
+	 * @param perfomanceDAO
+	 * @param classroomId
+	 * @param streamId
+	 * @param term
+	 * @param year
+	 * @param classResult
+	 * @return
+	 */
+	private static List<Performance1> getclassSubjectPerformance(String accountId, String[] exams, SubjectDAO subjectDAO,
+			PerfomanceDAO perfomanceDAO, String classroomId, String streamId, String term, String year,String examType, boolean classResult) {
+
+		List<Subject> subjects = subjectDAO.getSubjects(accountId);
+		List<Performance1> performance1List = new ArrayList<>();
+		
+		List<Perfomance> exam1  = new ArrayList<>();
+		List<Perfomance> exam2 = new ArrayList<>();
+		List<Perfomance> exam3 = new ArrayList<>();
+		
+		Performance3 totalExam1 = new Performance3();
+		Performance3 totalExam2 = new Performance3();
+		Performance3 totalExam3 = new Performance3();
+		
+		int totalPoint = 0;
+		int totalMean = 0;
+
+		for(Subject subject : subjects){
+
+			if(exams.length == 3){
+				
+				if(classResult){
+					exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
+					exam2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[1], subject.getUuid(), classroomId, term, year);
+					exam3 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[2], subject.getUuid(), classroomId, term, year);
+				}else{
+					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
+					exam2 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[1], subject.getUuid(), streamId, term, year);
+					exam3 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[2], subject.getUuid(), streamId, term, year);
+				}
+				
+				totalExam1 = ReportUtil.findSubjectPerformance(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, 
+						examDAO, examType);
+				totalExam2 = ReportUtil.findSubjectPerformance(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, 
+						examDAO, examType);
+				totalExam3 = ReportUtil.findSubjectPerformance(accountId, exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, 
+						examDAO, examType);
+				
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
+				totalPoint = totalPoint / 3;
+
+				totalMean = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
+				totalMean = totalMean / 3;
+				
+			}
+			if(exams.length == 2){
+				
+				if(classResult){
+					exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
+					exam2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[1], subject.getUuid(), classroomId, term, year);
+				}else{
+					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
+					exam2 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[1], subject.getUuid(), streamId, term, year);
+				}
+				
+				totalExam1 = ReportUtil.findSubjectPerformance(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, 
+						examType);
+				totalExam2 = ReportUtil.findSubjectPerformance(accountId, exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO,
+						examType);
+				
+				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints();
+				totalPoint = totalPoint / 2;
+
+				totalMean = totalExam1.getTotalMean() + totalExam2.getTotalMean();
+				totalMean = totalMean / 2;
+				
+			}
+			if(exams.length == 1){
+				
+				if(classResult){
+					exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
+				}else{
+					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
+				}
+				
+				totalExam1 =ReportUtil.findSubjectPerformance(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, 
+						examType);
+				
+				totalPoint = totalExam1.getTotalPoints();
+
+				totalMean = totalExam1.getTotalMean();
+				
+			}
+			
+			
+			//Business logic here
+			Performance1 performance1 = new Performance1();
+			performance1.setSubjectId(subject.getUuid()); 
+			performance1.setTotalPoint(totalPoint);
+			performance1.setTotalMean(totalMean);
+			performance1List.add(performance1);
+			
+
+		}//end of subject loop
+		
+		
+		return performance1List;
 	}
 
 
