@@ -197,6 +197,17 @@ public class Performance2 {
 		this.classroomId = classroomId;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Performance2 [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
+				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1Total=" + exam1Total
+				+ ", exam2Total=" + exam2Total + ", exam3Total=" + exam3Total + ", streamId=" + streamId
+				+ ", classroomId=" + classroomId + "]";
+	}
+
 	
 
 }

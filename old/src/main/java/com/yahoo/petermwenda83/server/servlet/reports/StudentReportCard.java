@@ -177,57 +177,28 @@ public class StudentReportCard extends HttpServlet{
 		String noOfSub = request.getParameter("subjects");
 
 		//check for hide points
-		if(hidePts)
-			hidePoints= true;
-		else
-			hidePoints= false;
-
+		hidePoints = hidePts ? true : false;
 		//check for hide grades
-		if(hideGds)
-			hideGrade= true;
-		else
-			hideGrade= false;
+		hideGrade = hideGds ? true : false;
 
 		//check for rank with points
-		if(StringUtils.equalsIgnoreCase(rank, "points")) {//rank == "points"  
-			rankWithPoints=true;
-			rankWithTotalMarks= false;
-		}else {
-			rankWithPoints=false;
-			rankWithTotalMarks= true;
-		}
+		rankWithPoints = StringUtils.equalsIgnoreCase(rank, "points") ? true : false;
+		rankWithTotalMarks = StringUtils.equalsIgnoreCase(rank, "points") ? false : true;
+		//check for number of subjects to grade
+		grade7subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? false : true;
+		grade11subjects = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? true :false;
 
 		//check show fee
-		if(showfee)
-			showFeeInfo= true;
-		else
-			showFeeInfo= false;
-
-
-		//check for number of subjects to grade
-		//
-		if(StringUtils.equalsIgnoreCase(noOfSub, "eleven")) {
-			grade7subjects= false;
-			grade11subjects= true;
-		}else {
-			grade7subjects= true;
-			grade11subjects= false;
-		}
-
-
+		showFeeInfo = showfee ? true : false;
+		
 		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
-		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));//classroom added
+		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));
 
 		//if class checked the scope is true, otherwise false
-		scope= Boolean.parseBoolean((request.getParameter("scope")));//scope added
-
-		if(!scope){
-			classResult = false;
-		}else{
-			classResult = true;
-		}
+		scope= Boolean.parseBoolean((request.getParameter("scope")));
+		classResult = scope ? true : false;
 
 
 		//get selected exams
@@ -253,20 +224,10 @@ public class StudentReportCard extends HttpServlet{
 			writer = PdfWriter.getInstance(document, response.getOutputStream());           
 			PdfUtil event = new PdfUtil();
 
-
-
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
-
-
-			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-
-				examType = ReportUtil.EXAM_TYPE;  
-
-			}else{
-
-				examType = "";
-			}
+			
+			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
 
@@ -334,49 +295,48 @@ public class StudentReportCard extends HttpServlet{
 		Account account = accountDAO.getAccountById(accountId);
 
 		List<Student> studentsList = new ArrayList<>();
+		List<Student> classstudentsList = new ArrayList<>();
+
 		List<Performance2> performanceList =  new ArrayList<>();
+		List<Performance2> classperformanceList =  new ArrayList<>();
 
 		String correctClass = "";
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
+			
+			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
-			if(studentDAO.getStudentByStream(accountId, streamId) != null){
+			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ? studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
+			
+			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
-				studentsList = studentDAO.getStudentByStream(accountId, streamId);
+			streamList.forEach(stream -> {
+				
+				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+				
+				if(!studentListStream.isEmpty())
+					classstudentsList.addAll(studentListStream); 
 
-			}
+			});
+			
+			
 
 		}else if(classDAO.getClassRoom(accountId, classroomId) != null && classResult){
-
-			List<Stream> streamList = new ArrayList<>();
+			
 			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
-
-
-			if(streamDAO.getStreamList(accountId, classroomId) != null){
-				streamList = streamDAO.getStreamList(accountId, classroomId);
-			}
-
-
-
+			
+			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
+			
 			for(Stream stream : streamList){
 
-				if(studentDAO.getStudentByStream(accountId, stream.getUuid()) != null){
-
-					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()); 
+					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+					
 					if(!studentListStream.isEmpty())
 						studentsList.addAll(studentListStream); 
 
-
-				}
-
-
-
 			}
-
-
-
 		}
 
 		if(studentsList.isEmpty()){
@@ -391,6 +351,23 @@ public class StudentReportCard extends HttpServlet{
 
 			}else{
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult);
+
+
+				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
+				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true); 
+
+				if(rankWithPoints && !rankWithTotalMarks){
+					Collections.sort(classperformanceList, new PointsComparator());
+					Collections.reverse(classperformanceList);
+
+				}
+
+				if(!rankWithPoints && rankWithTotalMarks){
+					Collections.sort(classperformanceList, new MeanComparator());
+					Collections.reverse(classperformanceList);
+
+				}
+
 
 			}
 
@@ -651,9 +628,6 @@ public class StudentReportCard extends HttpServlet{
 					}
 
 
-
-
-
 					PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));				
 					mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 					mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
@@ -730,22 +704,25 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-				
-					
+
+
 					classPositionMSG = pos + " Out of : " + performanceList.size();
-					
+
 					streamPositionMSG = ReportUtil.getStreamPosition(accountId, student.getUuid(), student.getCurrentStream(), 
 							performanceList,rankWithPoints,rankWithTotalMarks); 
-					
+
 
 				}else{
 
 					if(!classResult){
-						classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
-								performanceList,rankWithPoints,rankWithTotalMarks);
+
+						if(!classperformanceList.isEmpty()){
+							classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
+									classperformanceList,rankWithPoints,rankWithTotalMarks);
+						}
 					}
-					
-					
+
+
 					streamPositionMSG = pos + " Out of : " + performanceList.size();
 
 				}
@@ -792,38 +769,23 @@ public class StudentReportCard extends HttpServlet{
 				String exam33 = "";
 
 				if(exams.length == 1){
-
-					if(examDAO.getExam(accountId, exams[0]) != null){
-						exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-					}
+					
+					exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 
 				}
 
 				if(exams.length == 2){
-
-					if(examDAO.getExam(accountId, exams[0]) != null){
-						exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-					}
-
-					if(examDAO.getExam(accountId, exams[1]) != null){
-						exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
-					}
+					
+					exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+					exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
 
 				}
 
 				if(exams.length == 3){
 
-					if(examDAO.getExam(accountId, exams[0]) != null){
-						exam11 = examDAO.getExam(accountId, exams[0]).getDescription();
-					}
-
-					if(examDAO.getExam(accountId, exams[1]) != null){
-						exam22 = examDAO.getExam(accountId, exams[1]).getDescription();
-					}
-
-					if(examDAO.getExam(accountId, exams[2]) != null){
-						exam33 = examDAO.getExam(accountId, exams[2]).getDescription();
-					}
+					exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+					exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+					exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
 
 				}
 
@@ -1411,15 +1373,7 @@ public class StudentReportCard extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 				totalMeans = totalMeans / 3;
-				
-				/*
-				System.out.println("________" + student.getUuid() + "___________");
-				
-				System.out.println("exam1 : " + totalExam1.getTotalMean() + ", exam2 : " + totalExam2.getTotalMean() + ", exam3 : " + totalExam3.getTotalMean());
-				
-				System.out.println("________________________________________________");
 
-*/
 			}
 
 			if(exams.length == 2){
@@ -1492,9 +1446,9 @@ public class StudentReportCard extends HttpServlet{
 
 
 			}
-			
-			
-		
+
+
+
 
 			if(totalMeans > 0 || totalPoint > 0){
 
@@ -1509,11 +1463,11 @@ public class StudentReportCard extends HttpServlet{
 				performance2.setExam2Total(totalExam2.getTotalPoints());
 				performance2.setExam3Total(totalExam3.getTotalPoints());
 				performance2.setStreamId(student.getCurrentStream()); 
-				
+
 				if(!classResult){
 					performance2.setClassroomId(class_streamId); 
 				}
-				
+
 
 				performance2List.add(performance2);
 			}
