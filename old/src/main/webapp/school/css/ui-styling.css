@@ -1,0 +1,45 @@
+.bg-text {
+	color: #000;
+}
+
+.bg-blue {
+	background-color: #008ABB !important;
+	border-color: #D7E8EF !important;
+}
+
+.bg-color {
+	background-color: #D7E8EF !important;
+}
+
+.whiteme {
+	color: white;
+}
+
+.themeColor {
+	background-color: #2A3F54 !important;
+	border-color: #F7F7F7 !important;
+	color: #fff;
+}
+
+.secondary-assent{
+	background-color: #1ABB9C !important;
+	
+}
+
+.btn-primary {
+	background-color: #3c8dbc;
+	border-color: #367fa9;
+}
+
+.shadowme:hover {
+	box-shadow: 0 4px 8px 0 #008ABB, 0 6px 20px 0 #008ABB !important;
+}
+
+.cards {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19) !important;
+}
+
+.icon {
+	font-size: 70px !important;
+}

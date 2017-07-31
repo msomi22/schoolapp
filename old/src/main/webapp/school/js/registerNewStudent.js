@@ -26,6 +26,8 @@ $(document).ready(function() {
 					}, 2500);
 
 					// reset form to allow next entry
+					
+					$(form)[0].reset();
 
 				} else {
 

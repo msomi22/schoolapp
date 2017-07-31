@@ -30,19 +30,28 @@
 
 
 <!-- footer content -->
-<footer>
+<footer class="secondary-assent whiteme">
+
+<div class="row">
+
+	<div class="col-md-4 col-md-offset-2 col-sm-6">
 
 	Contacts: (<%=account.getEmail() + " , " + account.getMobile()%>)
 	Motto:
 	<%=account.getMotto()%>
+	
+	</div>
 
 
-	<div class="pull-right">
+	<div class="col-md-2 col-sm-6 col-md-offset-4">
 		&copy; AppleTech Limited.
 		<%=Calendar.getInstance().get(Calendar.YEAR)%>.
 	</div>
+	
+	
+	</div>
 
-	<div class="clearfix"></div>
+
 </footer>
 
 <!-- /footer content -->

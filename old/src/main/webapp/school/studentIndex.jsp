@@ -168,7 +168,7 @@
 
 			<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count pull-right">
 				<span class="count_top"><i class="fa fa-user"></i>Add new student </span>
-				<div class="count"><a role="button" class="btn btn-lg btn-primary" href="registerStudent.jsp"><i class="fa fa-user-plus fa-3x" aria-hidden="true"></i></a></div>
+				<div class="count"><a role="button" class="btn btn-lg btn-primary secondary-assent" href="registerStudent.jsp"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a></div>
 
 			</div>
 
@@ -197,7 +197,7 @@
                   <div class="table-responsive">
                     <table class="table table-striped jambo_table bulk_action">
                         <thead>
-                          <tr class="headings">
+                          <tr class="headings secondary-assent">
 
                             <th class="column-title"># </th>
                             <th class="column-title">RegNo </th>

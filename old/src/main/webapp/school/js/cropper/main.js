@@ -228,8 +228,8 @@
 
     stopCropper: function () {
       if (this.active) {
-        //this.$img.cropper('destroy');
-       // this.$img.remove();
+        this.$img.cropper('destroy');
+       this.$img.remove();
         this.active = false;
       }
     },
@@ -311,9 +311,9 @@
     cropDone: function () {
     	
     //$('.works').html(this.$img);
-      //this.$avatarForm.get(0).reset();
+     this.$avatarForm.get(0).reset();
      this.$avatar.attr('src', this.url);
-     // this.stopCropper();
+     this.stopCropper();
       this.$avatarModal.modal('hide');
     },
 

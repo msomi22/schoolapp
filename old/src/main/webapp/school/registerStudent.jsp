@@ -664,9 +664,9 @@
 
 
 
-												<div class="col-md-2 pull-right">
+												<div class="col-md-2 col-md-offset-4">
 
-													<button type="submit" onclick="talkToMe()" class="btn btn-lg btn-primary">Register</button>
+													<button type="submit" onclick="talkToMe()" class="btn btn-primary">Register</button>
 													<!--  <button type="submit" onclick="submitStudentData(this.form)" class="btn btn-lg btn-primary">Register</button> -->
 												</div>
 
