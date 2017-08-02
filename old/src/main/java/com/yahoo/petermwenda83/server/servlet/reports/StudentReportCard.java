@@ -49,6 +49,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
@@ -58,6 +59,9 @@ import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
@@ -86,8 +90,10 @@ public class StudentReportCard extends HttpServlet{
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
-	//private static SysConfigDAO sysConfigDAO;
+	private static StaffDAO staffDAO;
 	private static ClassDAO classDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
+	private static MiscellanousDAO miscellanousDAO;
 
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -135,8 +141,10 @@ public class StudentReportCard extends HttpServlet{
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
-		//sysConfigDAO = SysConfigDAO.getInstance();
+		staffDAO = StaffDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
+		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
+		miscellanousDAO = MiscellanousDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -190,7 +198,7 @@ public class StudentReportCard extends HttpServlet{
 
 		//check show fee
 		showFeeInfo = showfee ? true : false;
-		
+
 		streamId = StringUtils.trimToEmpty(request.getParameter("stream"));
 		term = StringUtils.trimToEmpty(request.getParameter("term"));
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
@@ -226,7 +234,7 @@ public class StudentReportCard extends HttpServlet{
 
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
-			
+
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
@@ -304,37 +312,37 @@ public class StudentReportCard extends HttpServlet{
 
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
-			
+
 			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
 			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ? studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
-			
+
 			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
 			streamList.forEach(stream -> {
-				
+
 				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
-				
+
 				if(!studentListStream.isEmpty())
 					classstudentsList.addAll(studentListStream); 
 
 			});
-			
-			
+
+
 
 		}else if(classDAO.getClassRoom(accountId, classroomId) != null && classResult){
-			
+
 			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
-			
+
 			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
-			
+
 			for(Stream stream : streamList){
 
-					List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
-					
-					if(!studentListStream.isEmpty())
-						studentsList.addAll(studentListStream); 
+				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+
+				if(!studentListStream.isEmpty())
+					studentsList.addAll(studentListStream); 
 
 			}
 		}
@@ -643,8 +651,6 @@ public class StudentReportCard extends HttpServlet{
 					mean = (double)meanTotal / 11; 
 
 					String studentScore = "";
-					
-					//TODO
 
 					double avg = ((double)mainPoint / 132) * 84;
 
@@ -771,13 +777,13 @@ public class StudentReportCard extends HttpServlet{
 				String exam33 = "";
 
 				if(exams.length == 1){
-					
+
 					exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 
 				}
 
 				if(exams.length == 2){
-					
+
 					exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 					exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
 
@@ -832,15 +838,15 @@ public class StudentReportCard extends HttpServlet{
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
 
-
-
-				//getSubjectById(accountId, e1.getSubjectId()).getDescription();
 				List<Subject> subjects = subjectDAO.getSubjects(accountId);
-
+				
+				List<FailedSubject> failedSubjects = new ArrayList<>();
+				
 
 				subjects.forEach(subject -> {
 
-
+					FailedSubject failedSubject = new FailedSubject();
+					
 					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
@@ -856,6 +862,15 @@ public class StudentReportCard extends HttpServlet{
 					}
 
 					String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
+					
+					if(Integer.valueOf(examAverage) > 0){
+						failedSubject.setScore(Integer.valueOf(examAverage));
+						failedSubject.setStudentId(student.getUuid());
+						failedSubject.setSubjectCode(subject.getCode());
+						
+						failedSubjects.add(failedSubject);
+					}
+					
 
 
 					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
@@ -866,35 +881,35 @@ public class StudentReportCard extends HttpServlet{
 					String exam1Grade = ReportUtil.getGrade(exam1Score,subject.getUuid(),accountId, subjectDAO, gradingSystemDAO);
 					String exam1Points = String.valueOf(ReportUtil.getPoints(exam1Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
 
-					if(StringUtils.equals(exam1Points, "0")){
-						exam1Points = "";
-					}
+					exam1Points = StringUtils.equals(exam1Points, "0") ? "" : exam1Points;
 
 					String exam2Grade = ReportUtil.getGrade(exam2Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
 					String exam2Points = String.valueOf(ReportUtil.getPoints(exam2Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
 
-					if(StringUtils.equals(exam2Points, "0")){
-						exam2Points = "";
-					}
+					exam2Points = StringUtils.equals(exam2Points, "0") ? "" : exam2Points;
 
 					String exam3Grade = ReportUtil.getGrade(exam3Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
 					String exam3Points = String.valueOf(ReportUtil.getPoints(exam3Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
 
-					if(StringUtils.equals(exam3Points, "0")){
-						exam3Points = "";
-					}
+					exam3Points = StringUtils.equals(exam3Points, "0") ? "" : exam3Points;
 
-					String initials = ReportUtil.getInitials(accountId,streamId,subject.getUuid());  
+					String teacherId = "";					
+					teacherId = ReportUtil.getInitials(accountId,streamId,subject.getUuid(),teacherSubjectDAO);
+					Staff staff = staffDAO.getStaff(accountId, teacherId) != null ? staffDAO.getStaff(accountId, teacherId) : new Staff();
+
+					String initialName = "";
+					initialName += staff.getFirstname().length() > 1 ? staff.getFirstname().substring(0, 1)+"." : ""; 
+					initialName += staff.getMiddlename().length() > 1 ? staff.getMiddlename().substring(0, 1)+"." : ""; 
+					initialName += staff.getLastname().length() > 1 ? staff.getLastname().substring(0, 1)+"." : ""; 
+
+
+					String initials = initialName.toUpperCase(); 
 
 
 					examTable.addCell(new Paragraph(subject.getDescription(),timesRomanNarmal6));
 
-					if(StringUtils.equals(examAverage, "0")){
-						examAverage = "";
-					}
-					if(StringUtils.equals(avgpoints, "0")){
-						avgpoints = "";
-					}
+					examAverage = StringUtils.equals(examAverage, "0") ? "" : examAverage;
+					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
 
 					String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
 					String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
@@ -961,6 +976,8 @@ public class StudentReportCard extends HttpServlet{
 				for(String header : headers){
 
 					examTable.addCell(new Paragraph(header,timesRomanNarmal8));
+					
+					
 
 					String exm1 = "0";
 					String exm2 = "0";
@@ -1119,180 +1136,190 @@ public class StudentReportCard extends HttpServlet{
 
 
 
-				// show comments here
+				// show comments here TODO
 				Chunk underline = new Chunk("GENERAL COMMENTS. ", timesRomanNarmal8);
 				underline.setUnderline(0.1f, -2f); // 0.1 thick, -2
 
-				String classTeacherRemarks = "Class Teacher's Remarks Here";
-				String headteacherRemarks = "Headteacher's Remarks Here";
-				String closingDate = "Closing Date Here";
-				String openingdate = "Opening Date Here";
 
-				Phrase teacherremarkphrase = new Phrase();
-				teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
-				teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
-				teacherremarkphrase.add(new Chunk("\n"));
+				String closingDate = miscellanousDAO.getValueByKey(accountId, "CLOSING_DATE") !=null ?
+						miscellanousDAO.getValueByKey(accountId, "CLOSING_DATE") : "";
 
-				Phrase headteacherremarkphrase = new Phrase();
-				headteacherremarkphrase.add(new Chunk("HEAD TEACHER'S REMARKS:",  timesRomanNarmal8));
-				headteacherremarkphrase.add(new Chunk("  " + headteacherRemarks,  timesRomanNarmal6));
-				headteacherremarkphrase.add(new Chunk("\n"));
+						String openingdate = miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") !=null ?
+								miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") : "";
 
-				Phrase datesphrase = new Phrase();
-				datesphrase.add(new Chunk("SCHOOL CLOSES ON:",  timesRomanNarmal8));
-				datesphrase.add(new Chunk("  " + closingDate,  timesRomanNarmal6));
-				datesphrase.add(new Chunk("               NEXT TERM BEGINS ",  timesRomanNarmal8));
-				datesphrase.add(new Chunk(" " + openingdate,  timesRomanNarmal6));
-				datesphrase.add(new Chunk("\n"));
+								String headteacherRemarks = "Thanks " + student.getFirstname() + " ";
+								 headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
+										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
 
-				Phrase signaturephrase = new Phrase();
-				signaturephrase.add(new Chunk("SIGNATURE:",  timesRomanNarmal8));
-				signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
-				signaturephrase.add(new Chunk("                 STAMP",  timesRomanNarmal8));
-				signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
-				signaturephrase.add(new Chunk("\n"));
+										
+										String classTeacherRemarks = ReportUtil.getclassTeacherComment(accountId,total,failedSubjects);
+										//"Class Teacher's Remarks Here";
 
-				// show grading scale here
+										Phrase teacherremarkphrase = new Phrase();
+										teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
+										teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
+										teacherremarkphrase.add(new Chunk("\n"));
 
-				String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+										Phrase headteacherremarkphrase = new Phrase();
+										headteacherremarkphrase.add(new Chunk("HEAD TEACHER'S REMARKS:",  timesRomanNarmal8));
+										headteacherremarkphrase.add(new Chunk("  " + headteacherRemarks,  timesRomanNarmal6));
+										headteacherremarkphrase.add(new Chunk("\n"));
 
-				List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
+										Phrase datesphrase = new Phrase();
+										datesphrase.add(new Chunk("SCHOOL CLOSES ON:",  timesRomanNarmal8));
+										datesphrase.add(new Chunk("  " + closingDate,  timesRomanNarmal6));
+										datesphrase.add(new Chunk("               NEXT TERM BEGINS ",  timesRomanNarmal8));
+										datesphrase.add(new Chunk(" " + openingdate,  timesRomanNarmal6));
+										datesphrase.add(new Chunk("\n"));
 
-				//footer table
-				PdfPTable footerTable = new PdfPTable(2);
-				footerTable.setWidthPercentage(100); 
-				footerTable.setWidths(new int[]{70,30}); 
+										Phrase signaturephrase = new Phrase();
+										signaturephrase.add(new Chunk("SIGNATURE:",  timesRomanNarmal8));
+										signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+										signaturephrase.add(new Chunk("                 STAMP",  timesRomanNarmal8));
+										signaturephrase.add(new Chunk("__________________",  timesRomanNarmal6));
+										signaturephrase.add(new Chunk("\n"));
 
-				PdfPTable graphTable = new PdfPTable(1);
-				graphTable.setWidthPercentage(70); 
-				graphTable.setWidths(new int[]{70});    
+										// show grading scale here
 
+										String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
 
-				//fee info table
-				PdfPTable feeInfoTable = new PdfPTable(2);
-				feeInfoTable.setWidthPercentage(30); 
-				feeInfoTable.setWidths(new int[]{15,15}); 
+										List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
 
+										//footer table
+										PdfPTable footerTable = new PdfPTable(2);
+										footerTable.setWidthPercentage(100); 
+										footerTable.setWidths(new int[]{70,30}); 
 
-				PdfPCell feeInfo1 = new PdfPCell(new Phrase("Fee Analysis",timesRomanNarmal8)); 
-				PdfPCell feeInfo2 = new PdfPCell(new Phrase(""));
-				feeInfo1.setBorder(Rectangle.NO_BORDER);
-				feeInfo2.setBorder(Rectangle.NO_BORDER);
-
-				PdfPCell feecol1 = new PdfPCell(new Phrase("Description",timesRomanNarmal6)); 
-				PdfPCell feecol2 = new PdfPCell(new Phrase("Amount",timesRomanNarmal6));
-
-				feeInfoTable.addCell(feeInfo1);
-				feeInfoTable.addCell(feeInfo2);
-
-				feeInfoTable.addCell(feecol1);
-				feeInfoTable.addCell(feecol2);
+										PdfPTable graphTable = new PdfPTable(1);
+										graphTable.setWidthPercentage(70); 
+										graphTable.setWidths(new int[]{70});    
 
 
-				Locale locale = new Locale("en","KE"); 
-				NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-
-				StudentBalance balance = new StudentBalance();
-				double feeBalance = balance.findBalance(accountId, student.getUuid());
-
-				String feeBal = nf.format(feeBalance);
-
-				String nextTermFee = balance.findNextTermFee(accountId); 
-
-				if(!showFeeInfo){
-					feeBal = "";
-					nextTermFee = "";
-				}
-
-				PdfPCell feeBalInfo = new PdfPCell(new Phrase("Fee Bal:",timesRomanNarmal6));
-				PdfPCell feeBalDesc = new PdfPCell(new Phrase(feeBal,timesRomanNarmal6));
-				feeBalInfo.setBorder(Rectangle.NO_BORDER);
-				feeBalDesc.setBorder(Rectangle.NO_BORDER);
-
-				PdfPCell nextTermFeeInfo = new PdfPCell(new Phrase("Next Term Fee:",timesRomanNarmal6));
-				PdfPCell nextTermFeeDesc = new PdfPCell(new Phrase(nextTermFee,timesRomanNarmal6));
-				nextTermFeeInfo.setBorder(Rectangle.NO_BORDER);
-				nextTermFeeDesc.setBorder(Rectangle.NO_BORDER);
-
-				feeInfoTable.addCell(feeBalInfo);
-				feeInfoTable.addCell(feeBalDesc); 
-
-				feeInfoTable.addCell(nextTermFeeInfo);
-				feeInfoTable.addCell(nextTermFeeDesc); 
+										//fee info table
+										PdfPTable feeInfoTable = new PdfPTable(2);
+										feeInfoTable.setWidthPercentage(30); 
+										feeInfoTable.setWidths(new int[]{15,15}); 
 
 
-				ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
-				JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO);  
+										PdfPCell feeInfo1 = new PdfPCell(new Phrase("Fee Analysis",timesRomanNarmal8)); 
+										PdfPCell feeInfo2 = new PdfPCell(new Phrase(""));
+										feeInfo1.setBorder(Rectangle.NO_BORDER);
+										feeInfo2.setBorder(Rectangle.NO_BORDER);
 
-				try {
+										PdfPCell feecol1 = new PdfPCell(new Phrase("Description",timesRomanNarmal6)); 
+										PdfPCell feecol2 = new PdfPCell(new Phrase("Amount",timesRomanNarmal6));
 
-					ChartUtilities.writeChartAsPNG(byte_out, lineGraph, 1200, 270);
-					byte [] data = byte_out.toByteArray();
-					byte_out.close();
-					Image chartImage = Image.getInstance(data);
-					graphTable.addCell(chartImage); 
+										feeInfoTable.addCell(feeInfo1);
+										feeInfoTable.addCell(feeInfo2);
 
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
+										feeInfoTable.addCell(feecol1);
+										feeInfoTable.addCell(feecol2);
 
 
+										Locale locale = new Locale("en","KE"); 
+										NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
-				footerTable.addCell(graphTable);
-				footerTable.addCell(feeInfoTable);
+										StudentBalance balance = new StudentBalance();
+										double feeBalance = balance.findBalance(accountId, student.getUuid());
+
+										String feeBal = nf.format(feeBalance);
+
+										String nextTermFee = balance.findNextTermFee(accountId); 
+
+										if(!showFeeInfo){
+											feeBal = "";
+											nextTermFee = "";
+										}
+
+										PdfPCell feeBalInfo = new PdfPCell(new Phrase("Fee Bal:",timesRomanNarmal6));
+										PdfPCell feeBalDesc = new PdfPCell(new Phrase(feeBal,timesRomanNarmal6));
+										feeBalInfo.setBorder(Rectangle.NO_BORDER);
+										feeBalDesc.setBorder(Rectangle.NO_BORDER);
+
+										PdfPCell nextTermFeeInfo = new PdfPCell(new Phrase("Next Term Fee:",timesRomanNarmal6));
+										PdfPCell nextTermFeeDesc = new PdfPCell(new Phrase(nextTermFee,timesRomanNarmal6));
+										nextTermFeeInfo.setBorder(Rectangle.NO_BORDER);
+										nextTermFeeDesc.setBorder(Rectangle.NO_BORDER);
+
+										feeInfoTable.addCell(feeBalInfo);
+										feeInfoTable.addCell(feeBalDesc); 
+
+										feeInfoTable.addCell(nextTermFeeInfo);
+										feeInfoTable.addCell(nextTermFeeDesc); 
 
 
-				//grade(s) table 
-				PdfPTable gradesTable = new PdfPTable(12);
-				gradesTable.setWidthPercentage(96);  
-				gradesTable.setWidths(new int[]{8,8,8,8,8,8,8,8,8,8,8,8}); 
+										ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
+										JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO);  
 
-				gradingSystemList.forEach(grade ->{
+										try {
 
-					PdfPCell cell = new PdfPCell(new Phrase(grade.getLowerLimit() + " - " + grade.getUpperLimit() , timesRomanNarmal4)); 
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+											ChartUtilities.writeChartAsPNG(byte_out, lineGraph, 1200, 270);
+											byte [] data = byte_out.toByteArray();
+											byte_out.close();
+											Image chartImage = Image.getInstance(data);
+											graphTable.addCell(chartImage); 
 
-					gradesTable.addCell(cell);
-
-				});
-
-
-				gradingSystemList.forEach(grade ->{
-
-					PdfPCell cell = new PdfPCell(new Phrase(grade.getDescription(), timesRomanNarmal4));  
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-					gradesTable.addCell(cell);
-
-				});
-				//end grade table
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
 
 
 
-				position++;
-				prevtotal=total;
 
-				document.add(examTable);
+										footerTable.addCell(graphTable);
+										footerTable.addCell(feeInfoTable);
 
-				document.add(gradesTable);
-				document.add(new Paragraph("\n"));
 
-				document.add(underline);
+										//grade(s) table 
+										PdfPTable gradesTable = new PdfPTable(12);
+										gradesTable.setWidthPercentage(96);  
+										gradesTable.setWidths(new int[]{8,8,8,8,8,8,8,8,8,8,8,8}); 
 
-				document.add(new Paragraph(teacherremarkphrase));
+										gradingSystemList.forEach(grade ->{
 
-				document.add(new Paragraph(headteacherremarkphrase));
+											PdfPCell cell = new PdfPCell(new Phrase(grade.getLowerLimit() + " - " + grade.getUpperLimit() , timesRomanNarmal4)); 
+											cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-				document.add(new Paragraph(datesphrase));
+											gradesTable.addCell(cell);
 
-				document.add(new Paragraph(signaturephrase));
+										});
 
-				document.add(new Paragraph("\n"));
 
-				document.add(footerTable);
+										gradingSystemList.forEach(grade ->{
 
-				document.newPage();
+											PdfPCell cell = new PdfPCell(new Phrase(grade.getDescription(), timesRomanNarmal4));  
+											cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+											gradesTable.addCell(cell);
+
+										});
+										//end grade table
+
+
+
+										position++;
+										prevtotal=total;
+
+										document.add(examTable);
+
+										document.add(gradesTable);
+										document.add(new Paragraph("\n"));
+
+										document.add(underline);
+
+										document.add(new Paragraph(teacherremarkphrase));
+
+										document.add(new Paragraph(headteacherremarkphrase));
+
+										document.add(new Paragraph(datesphrase));
+
+										document.add(new Paragraph(signaturephrase));
+
+										document.add(new Paragraph("\n"));
+
+										document.add(footerTable);
+
+										document.newPage();
 
 
 
