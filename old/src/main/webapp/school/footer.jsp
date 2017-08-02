@@ -30,7 +30,7 @@
 
 
 <!-- footer content -->
-<footer class="secondary-assent whiteme">
+<footer class="mono whiteme">
 
 <div class="row">
 

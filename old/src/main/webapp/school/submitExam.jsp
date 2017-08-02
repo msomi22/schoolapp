@@ -311,7 +311,7 @@
                 <div class="table-responsive">
                     <table class="table table-striped jambo_table bulk_action">
                         <thead>
-                          <tr class="headings">
+                          <tr class="headings secondary-assent">
 
                             <th class="column-title"># </th>
                             <th class="column-title">RegNo </th>

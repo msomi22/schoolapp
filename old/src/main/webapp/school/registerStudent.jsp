@@ -127,6 +127,11 @@
 										<h1>
 											Register a new student<small> Click register when
 												done</small>
+												
+												
+										<button class="btn btn-primary secondary-assent pull-right" onclick="">
+										<i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i> Import Students
+										 </button>
 										</h1>
 										<ul class="nav navbar-right panel_toolbox">
 											<li><a class="collapse-link"><i

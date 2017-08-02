@@ -1,5 +1,6 @@
 package com.yahoo.petermwenda83.server.servlet.student;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
@@ -36,6 +37,7 @@ public class StudentAjax extends HttpServlet {
 	private static StudentDAO studentDAO;
 	private static PrimaryDAO primaryDAO;
 	private static ParentsDAO parentsDAO;
+	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
 	
 	
 	
@@ -205,6 +207,9 @@ public class StudentAjax extends HttpServlet {
 			
 			
 		}else {
+			
+			
+			student.setPassport(renameImage(student.getPassport(),student.getRegNo()));
 		
 		
 		if (studentDAO.putStudent(student)) {
@@ -281,6 +286,23 @@ public class StudentAjax extends HttpServlet {
 		
 		
 		return jsonObject;
+		
+	}
+	
+	/**
+	 * 
+	 * @param initalName
+	 * @param regNo
+	 * @return
+	 */
+	private String renameImage(String initalName,String regNo) {
+		 String renamed= initalName;
+		
+		 File passport = new File(DATA_DIRECTORY+initalName); 
+
+		 if(passport.renameTo(new File(DATA_DIRECTORY+regNo+".png")))
+			 renamed= regNo+".png";
+		return renamed;
 		
 	}
 
