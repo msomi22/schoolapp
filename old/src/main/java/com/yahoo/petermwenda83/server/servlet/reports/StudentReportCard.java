@@ -643,6 +643,8 @@ public class StudentReportCard extends HttpServlet{
 					mean = (double)meanTotal / 11; 
 
 					String studentScore = "";
+					
+					//TODO
 
 					double avg = ((double)mainPoint / 132) * 84;
 
