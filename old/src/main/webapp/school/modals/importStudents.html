@@ -1,0 +1,1129 @@
+
+<!--The import interface-->
+<div class="modal fade" id="import_show">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #1569C7; color: #fff">
+				<button type="button" class="close" data-dismiss="modal">
+					<span>&times;</span>
+				</button>
+				<h4 class="modal-title">File Import</h4>
+			</div>
+			<form action="DeleteModal.cshtml" method="post">
+				<div class="modal-body">
+					<div class="row" id="import_intro">
+						<div class="row">
+							<div class="col-xs-2"></div>
+							<div class="col-xs-9">
+								<h4>Import New Students</h4>
+
+								<p>New FastPro  web application allows you to
+									import new students via:</p>
+								<ul>
+									<li>Downloading a template</li>
+									<li>Browsing to a file(.txt or .csv)</li>
+								</ul>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2"></div>
+							<div class="col-xs-9">
+								<h4>Downlaod a template</h4>
+
+
+								<p>Allows you to enter the required details for the students
+									to be imported. Its highly advised to use this template in any
+									import to be performed. If not so, ensure the format
+									corresponds with your intend file import in order to have a
+									successful import</p>
+								<a class="btn send" type="button" href="~/template/contact.csv">Download
+									a csv file template </a> <a class="btn send" type="button"
+									href="~/template/contact.xlsx">Download an excel file
+									template </a>
+							</div>
+
+
+						</div>
+
+						<div class="row">
+							<div class="col-xs-2"></div>
+							<div class="col-xs-9">
+								<h4>Browse to a file</h4>
+								<button id="browse_excel" onclick="importExcel()" type="button"
+									class="btn send">Import from an Excel File</button>
+								<button id="browse_csv" type="button" class="btn send">Import
+									from an csv or txt File</button>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="file_import" style="display: none">
+
+
+
+						<div class="col-xs-12">
+							<div class="row">
+								<input type="hidden" id="uploadTextValue" name="uploadTextValue"
+									value="" />
+								<div class="row">
+									<div class="col-xs-1"></div>
+									<div class="col-xs-8">
+										<h4>Choose .csv or .txt</h4>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-1"></div>
+									<div class="col-xs-4">
+
+
+										<input id="uploadText" placeholder="Choose .csv or .txt"
+											type="file" accept=".txt,.csv" onchange="PreviewText()" /> <input
+											type="hidden" id="names_import" name="names_import" value="">
+										<input type="hidden" id="final_import" name="final_import"
+											value="">
+
+
+										<textarea style="display: none" id="obj"> </textarea>
+
+
+
+									</div>
+
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-xs-1"></div>
+									<div class="col-xs-4"></div>
+								</div>
+							</div>
+							<br>
+
+
+							<div class="table table-responsive"
+								style="height: 200px; overflow: auto">
+								<table id="my_import" class="table table-hover table-bordered"
+									width="100%">
+									<thead>
+										<tr>
+											<th><input type="checkbox" id="de_select"
+												onchange="deselect(this.id)" checked></th>
+											<th>Title</th>
+											<th>First Name</th>
+											<th>Middle Name</th>
+											<th>Last Name</th>
+											<th>Mobile number</th>
+											<th>Email Address</th>
+
+
+
+										</tr>
+									</thead>
+
+									<tbody id="import_body">
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="modal-footer" style="background-color: #1569C7">
+					<input id="check_import" type="hidden" value="">
+					<button class="btn btn-default" type="button" id="back" disabled><<
+						Back</button>
+					<button class="btn btn-default" type="button" id="back2"
+						style="display: none"><< Back</button>
+					<button class="btn btn-default" type="button" id="next">Next
+						>></button>
+					<button class="btn btn-default" type="button" id="next2"
+						style="display: none">Next >></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						id="cancel_Import">Cancel</button>
+					<button type="submit" id="import_btn" class="btn btn-default xbtn"
+						style="display: none">Import</button>
+
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+<!--Importing an excel file interface-->
+<div class="modal fade" id="excel_import">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="Excel.cshtml" method="post">
+				<div class="modal-header" style="background-color: #4b6c9e">
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+					<h4 class="modal-title">Import an Excel File</h4>
+				</div>
+
+				<div class="modal-body">
+
+					<div id="excel_face1">
+						<select name="format" style="display: none">
+							<option value="csv"> CSV</option>
+							<option value="json" selected> JSON</option>
+							<option value="form"> FORMULAE</option>
+						</select><br />
+						<!--<input type="radio" name="format" value="csv" checked> CSV<br>
+<input type="radio" name="format" value="json"> JSON<br>
+<input type="radio" name="format" value="form"> FORMULAE<br> -->
+
+						<div id="drop" style="display: none"></div>
+						<input type="file" name="xlfile" id="xlf" /> <br>
+						<!--<button class="form-control btn send" onclick="showCon()" value="Read">Upload</button>
+         -->
+
+						<div style="display: none">
+							<textarea id="b64data" style="display: none">... or paste a base64-encoding here</textarea>
+							<input type="hidden" id="dotext"
+								value="Click here to process the base64 text" onclick="b64it();" /><br />
+							Advanced Demo Options: <br /> Use Web Workers: (when available)
+							<input type="checkbox" name="useworker"><br /> Use
+							Transferrables: (when available) <input type="checkbox"
+								name="xferable" checked><br /> Use readAsBinaryString:
+							(when available) <input type="checkbox" name="userabs" checked><br />
+
+
+						</div>
+						<div id="out" class="out" style="display: none"></div>
+						<input type="hidden" value="testing" id="checkersms">
+						<div class="table table-responsive"
+							style="height: 200px; overflow: auto">
+							<table id="my_Eximport" class="table table-hover table-bordered">
+								<thead>
+									<tr>
+										<th><input type="checkbox" id="excel_select"
+											onchange="deselect(this.id)" checked></th>
+										<th>Title</th>
+										<th>First Name</th>
+
+										<th>Last Name</th>
+										<th>Mobile number</th>
+										<th>Email Address</th>
+
+
+
+									</tr>
+								</thead>
+
+								<tbody id="import_Exbody">
+
+
+
+								</tbody>
+							</table>
+						</div>
+
+						<input type="hidden" id="excel_importData" name="excel_importData"
+							value=""> <input type="hidden" id="excel_importNums"
+							name="excel_importNums" value="">
+					</div>
+
+				
+
+					<br />
+
+
+
+					<script>
+						$(document)
+								.ready(
+										function() {
+											$('#ok_excel2')
+													.click(
+															function() {
+																// alert("clicled");
+
+																if (document
+																		.getElementById(
+																				"ok_excel2")
+																		.getAttribute(
+																				"type") == "button") {
+																	$(
+																			'#cant_import')
+																			.modal(
+																					"show");
+
+																}
+															});
+
+										});
+
+						function checkEditExcel(exid, excid) {
+
+							//  id = 'csv' + id;
+							excid = 'exc' + excid;
+
+							// alert(exid + excid);
+							// alert(document.getElementById(excid).value);
+							if (document.getElementById(exid).value.length != 12
+									|| document.getElementById(exid).value
+											.includes('2547') == false) {
+								$('#import_editNumber').modal("show");
+								document.getElementById(exid).focus();
+								document.getElementById(excid).disabled = true;
+								$('#' + excid).removeAttr('checked');
+							} else {
+								var newnum = document.getElementById(excid).value;
+
+								var splitnum = newnum.split(",");
+								// alert(splitnum[3]);
+								splitnum[3] = document.getElementById(exid).value;
+								var joinvalu = "";
+								for (var i = 0; i < splitnum.length; i++) {
+									joinvalu += splitnum[i] + ",";
+								}
+								joinvalu = joinvalu.substring(0,
+										joinvalu.length - 1);
+								//  alert(joinvalu);
+								document.getElementById(excid).value = joinvalu;
+								//  alert(document.getElementById(excid).value);
+								document.getElementById(excid).disabled = false;
+								$('#' + excid).click();
+							}
+						}
+						function checkEditEx(smsid, smscid) {
+
+							smscid = 'sms' + smscid;
+							// smsid = "sms" + smsid;
+							// alert(smsid + smscid);
+							// alert(document.getElementById(smscid).value);
+							if (document.getElementById(smsid).value.length != 12
+									|| document.getElementById(smsid).value
+											.includes('2547') == false) {
+								$('#import_editNumber').modal("show");
+								document.getElementById(smsid).focus();
+								document.getElementById(smscid).disabled = true;
+								$('#' + smscid).removeAttr('checked');
+							} else {
+								document.getElementById(smscid).value = document
+										.getElementById(smsid).value;
+								// alert(document.getElementById(cid).value);
+								document.getElementById(smscid).disabled = false;
+								$('#' + smscid).click();
+							}
+						}
+						function importExcel() {
+
+							var checker = document.getElementById("checkersms").value;
+							// alert(checker);
+							var X = XLSX;
+							var XW = {
+								/* worker message */
+								msg : 'xlsx',
+								/* worker scripts */
+								rABS : './xlsxworker2.js',
+								norABS : './xlsxworker1.js',
+								noxfer : './xlsxworker.js'
+							};
+							var rABS = typeof FileReader !== "undefined"
+									&& typeof FileReader.prototype !== "undefined"
+									&& typeof FileReader.prototype.readAsBinaryString !== "undefined";
+							if (!rABS) {
+								document.getElementsByName("userabs")[0].disabled = true;
+								document.getElementsByName("userabs")[0].checked = false;
+							}
+							var use_worker = typeof Worker !== 'undefined';
+							if (!use_worker) {
+								document.getElementsByName("useworker")[0].disabled = true;
+								document.getElementsByName("useworker")[0].checked = false;
+							}
+							var transferable = use_worker;
+							if (!transferable) {
+								document.getElementsByName("xferable")[0].disabled = true;
+								document.getElementsByName("xferable")[0].checked = false;
+							}
+							var wtf_mode = false;
+							function fixdata(data) {
+								var o = "", l = 0, w = 10240;
+								for (; l < data.byteLength / w; ++l)
+									o += String.fromCharCode.apply(null,
+											new Uint8Array(data.slice(l * w, l
+													* w + w)));
+								o += String.fromCharCode.apply(null,
+										new Uint8Array(data.slice(l * w)));
+								return o;
+							}
+							function ab2str(data) {
+								var o = "", l = 0, w = 10240;
+								for (; l < data.byteLength / w; ++l)
+									o += String.fromCharCode.apply(null,
+											new Uint16Array(data.slice(l * w, l
+													* w + w)));
+								o += String.fromCharCode.apply(null,
+										new Uint16Array(data.slice(l * w)));
+								return o;
+							}
+							function s2ab(s) {
+								var b = new ArrayBuffer(s.length * 2), v = new Uint16Array(
+										b);
+								for (var i = 0; i != s.length; ++i)
+									v[i] = s.charCodeAt(i);
+								return [ v, b ];
+							}
+							function xw_noxfer(data, cb) {
+								var worker = new Worker(XW.noxfer);
+								worker.onmessage = function(e) {
+									switch (e.data.t) {
+									case 'ready':
+										break;
+									case 'e':
+										console.error(e.data.d);
+										break;
+									case XW.msg:
+										cb(JSON.parse(e.data.d));
+										break;
+									}
+								};
+								var arr = rABS ? data : btoa(fixdata(data));
+								worker.postMessage({
+									d : arr,
+									b : rABS
+								});
+							}
+							function xw_xfer(data, cb) {
+								var worker = new Worker(rABS ? XW.rABS
+										: XW.norABS);
+								worker.onmessage = function(e) {
+									switch (e.data.t) {
+									case 'ready':
+										break;
+									case 'e':
+										console.error(e.data.d);
+										break;
+									default:
+										xx = ab2str(e.data).replace(/\n/g,
+												"\\n").replace(/\r/g, "\\r");
+										console.log("done");
+										cb(JSON.parse(xx));
+										break;
+									}
+								};
+								if (rABS) {
+									var val = s2ab(data);
+									worker.postMessage(val[1], [ val[1] ]);
+								} else {
+									worker.postMessage(data, [ data ]);
+								}
+							}
+							function xw(data, cb) {
+								transferable = document
+										.getElementsByName("xferable")[0].checked;
+								if (transferable)
+									xw_xfer(data, cb);
+								else
+									xw_noxfer(data, cb);
+							}
+							function get_radio_value(radioName) {
+								var radios = document
+										.getElementsByName(radioName);
+								for (var i = 0; i < radios.length; i++) {
+									if (radios[i].checked
+											|| radios.length === 1) {
+										return radios[i].value;
+									}
+								}
+							}
+							function to_json(workbook) {
+								var result = {};
+								workbook.SheetNames
+										.forEach(function(sheetName) {
+											var roa = X.utils
+													.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+											if (roa.length > 0) {
+												result[sheetName] = roa;
+											}
+										});
+								return result;
+							}
+							function to_csv(workbook) {
+								var result = [];
+								workbook.SheetNames
+										.forEach(function(sheetName) {
+											var csv = X.utils
+													.sheet_to_csv(workbook.Sheets[sheetName]);
+											if (csv.length > 0) {
+												result.push("SHEET: "
+														+ sheetName);
+												result.push("");
+												result.push(csv);
+											}
+										});
+								return result.join("\n");
+							}
+							function to_formulae(workbook) {
+								var result = [];
+								workbook.SheetNames
+										.forEach(function(sheetName) {
+											var formulae = X.utils
+													.get_formulae(workbook.Sheets[sheetName]);
+											if (formulae.length > 0) {
+												result.push("SHEET: "
+														+ sheetName);
+												result.push("");
+												result
+														.push(formulae
+																.join("\n"));
+											}
+										});
+								return result.join("\n");
+							}
+							var tarea = document.getElementById('b64data');
+							function b64it() {
+								if (typeof console !== 'undefined')
+									console.log("onload", new Date());
+								var wb = X.read(tarea.value, {
+									type : 'base64',
+									WTF : wtf_mode
+								});
+								process_wb(wb);
+							}
+							function process_wb(wb) {
+								var output = "";
+								switch (get_radio_value("format")) {
+								case "json":
+									output = JSON.stringify(to_json(wb), 2, 2);
+									break;
+								case "form":
+									output = to_formulae(wb);
+									break;
+								default:
+									output = to_csv(wb);
+								}
+								if (out.innerText === undefined)
+									out.textContent = output;
+								else {
+
+									var checker = document
+											.getElementById("checkersms").value;
+									var text = "";
+									if (checker == "sms") {
+										alert(checker);
+										outsms.innerText = output;
+										text = document
+												.getElementById("outsms").textContent;
+									} else {
+										alert(checker);
+										out.innerText = output;
+										text = document.getElementById("out").textContent;
+									}
+
+									//alert(document.getElementById("out").textContent);
+
+									var obj = JSON.parse(text);
+									var len = Object.keys(obj.Sheet1).length;
+									//alert(obj.Sheet1[0].FirstName + "  " + len);
+									if (obj.Sheet1[0].FirstName === undefined
+											|| obj.Sheet1[0].number === undefined) {
+										$('#excel_import').modal("hide");
+										$('#excel_col').modal("show");
+									}
+
+									if (checker == "sms") {
+										var id = 0;
+										var cid = 100000;
+										var table2 = $("#my_Eximportsms")
+												.DataTable();
+										for (var i = 0; i < len; i++) {
+
+											/* var rowCount = table2.rows.length;
+											var row = table2.insertRow(rowCount);
+											// alert(rowCount);
+											var checker = 0;
+											var cell1 = row.insertCell(0);
+											var checkbox = document.createElement("input");
+											checkbox.type = "checkbox";
+											checkbox.name = "ExmemberSms";
+											checkbox.id = "ExmemberSms";
+											checkbox.setAttribute('checked', true);
+											checkbox.setAttribute('class', 'Eximport');
+											checkbox.value = obj.Sheet1[i].Title + "," + obj.Sheet1[i].FirstName + "," + obj.Sheet1[i].LastName + "," + obj.Sheet1[i].number + "," + obj.Sheet1[i].email + "\n";
+											var title = document.createElement("label");
+											title.setAttribute('class', 'break');
+											title.appendChild(document.createTextNode(obj.Sheet1[i].Title));
+
+											cell1.appendChild(checkbox);*/
+
+											/*var cellx = row.insertCell(1);
+											var title = document.createElement("label");
+											title.setAttribute('class', 'break');
+											title.appendChild(document.createTextNode(obj.Sheet1[i].Title));
+											cellx.appendChild(title);*/
+											var title = "";
+											if (obj.Sheet1[i].Title === undefined) {
+
+												var title = "";
+											} else {
+												var title = obj.Sheet1[i].Title;
+											}
+
+											//var cell2 = row.insertCell(2);
+											// var fname = document.createElement("label");
+											var fname = "";
+											if (obj.Sheet1[i].FirstName === undefined) {
+
+												// alert("It worked");
+												fname = '<label class="error">'
+														+ obj.Sheet1[i].FirstName
+														+ '</label>';
+
+											} else {
+												fname = '<label>'
+														+ obj.Sheet1[i].FirstName
+														+ '</label>';
+											}
+											//fname.appendChild(document.createTextNode(obj.Sheet1[i].FirstName));
+											// cell2.appendChild(fname);
+
+											/* var cell3 = row.insertCell(3);
+											var mname = document.createElement("label");
+											mname.setAttribute('class', 'break');
+											mname.appendChild(document.createTextNode(obj.Sheet1[i].LastName));
+											cell3.appendChild(mname);*/
+											var mname = "";
+											if (obj.Sheet1[i].LastName === undefined)
+												mname = "";
+											else {
+												mname = obj.Sheet1[i].LastName;
+											}
+
+											//   var cell4 = row.insertCell(4);
+											//  var lname = document.createElement("label");
+											var checkboxsms = '<input type="checkbox" name="SmsViaEx" id="SmsViaEx" class="SmsViaEx" value="' + obj.Sheet1[i].number + '" checked>';
+
+											var num = "";
+											var init = "2547";
+											var ex_id = 'sms' + id;
+											var ex_cid = 'sms' + cid;
+											if (obj.Sheet1[i].number === undefined
+													|| obj.Sheet1[i].number.length < 12
+													|| obj.Sheet1[i].number
+															.includes(init) == false) {
+												num = '<input type="number" maxlength="12" id='
+														+ ex_id
+														+ ' class="editImportNum" onblur="checkEditEx(this.id,'
+														+ cid
+														+ ')" value='
+														+ obj.Sheet1[i].number
+														+ ' >';
+												checkboxsms = '<input type="checkbox"  class="SmsViaEx" id=' + ex_cid + ' value="' + obj.Sheet1[i].number + '" disabled>';
+												$('#import_errorNumber').modal(
+														"show");
+												id += 1;
+												cid += 1;
+
+											} else {
+												num = obj.Sheet1[i].number;
+												checkboxsms = '<input type="checkbox" name="SmsViaEx" id="SmsViaEx" class="SmsViaEx" value="' + obj.Sheet1[i].number + '" checked>';
+											}
+											// lname.appendChild(document.createTextNode(obj.Sheet1[i].number));
+											// cell4.appendChild(lname);
+
+											/* var cell5 = row.insertCell(5);
+											var num = document.createElement("label");
+											num.setAttribute('class', 'break');
+											num.appendChild(document.createTextNode(obj.Sheet1[i].email));
+											cell5.appendChild(num);*/
+											var email = "";
+											if (obj.Sheet1[i].email === undefined)
+												email = "";
+											else
+												email = obj.Sheet1[i].email;
+
+											table2.row.add(
+													[ checkboxsms, title,
+															fname, mname, num,
+															email ])
+													.draw(false);
+
+										}
+
+									} else {
+
+										var table2 = $('#my_Eximport')
+												.DataTable();
+										var nums = 0;
+										var ex_id = 0;
+										var ex_cid = 1000000;
+										for (var i = 0; i < len; i++) {
+
+											/* var rowCount = table2.rows.length;
+											var row = table2.insertRow(rowCount);
+											// alert(rowCount);
+											var checker = 0;
+											var cell1 = row.insertCell(0);
+											var checkbox = document.createElement("input");
+											checkbox.type = "checkbox";
+											checkbox.name = "ExmemberSms";
+											checkbox.id = "ExmemberSms";
+											checkbox.setAttribute('checked', true);
+											checkbox.setAttribute('class', 'Eximport');
+											checkbox.value = obj.Sheet1[i].Title + "," + obj.Sheet1[i].FirstName + "," + obj.Sheet1[i].LastName + "," + obj.Sheet1[i].number + "," + obj.Sheet1[i].email + "\n";
+											var title = document.createElement("label");
+											title.setAttribute('class', 'break');
+											title.appendChild(document.createTextNode(obj.Sheet1[i].Title));
+
+											cell1.appendChild(checkbox);*/
+
+											/*  var cellx = row.insertCell(1);
+											var title = document.createElement("label");
+											title.setAttribute('class', 'break');
+											title.appendChild(document.createTextNode(obj.Sheet1[i].Title));
+											cellx.appendChild(title);
+											 */
+
+											var title = "";
+											if (obj.Sheet1[i].Title === undefined) {
+
+												var title = "";
+											} else {
+												var title = obj.Sheet1[i].Title;
+											}
+
+											/*
+
+											var cell2 = row.insertCell(2);
+											var fname = document.createElement("label");
+											if (obj.Sheet1[i].FirstName === undefined)
+											{
+											checker = 1;
+											document.getElementById("ok_excel2").setAttribute("type", "button");
+											// alert("It worked");
+											fname.setAttribute('class', 'error');
+											}
+											fname.appendChild(document.createTextNode(obj.Sheet1[i].FirstName));
+											cell2.appendChild(fname);
+											 */
+											var fname = "";
+											if (obj.Sheet1[i].FirstName === undefined) {
+
+												// alert("It worked");
+												fname = '<label class="error">'
+														+ obj.Sheet1[i].FirstName
+														+ '</label>';
+
+											} else {
+												fname = '<label>'
+														+ obj.Sheet1[i].FirstName
+														+ '</label>';
+											}
+											/*
+											var cell3 = row.insertCell(3);
+											var mname = document.createElement("label");
+											mname.setAttribute('class', 'break');
+											mname.appendChild(document.createTextNode(obj.Sheet1[i].LastName));
+											cell3.appendChild(mname);
+											 */
+
+											var mname = "";
+											if (obj.Sheet1[i].LastName === undefined) {
+
+												// alert("It worked");
+												mname = "";
+
+											} else {
+												mname = '<label>'
+														+ obj.Sheet1[i].LastName
+														+ '</label>';
+											}
+
+											num += obj.Sheet1[i].number;
+
+											var checkboxsms = '';
+
+											var num = "";
+											var init = "2547";
+											var eeid = 'ex' + ex_id;
+											var eecid = 'exc' + ex_cid;
+
+											if (obj.Sheet1[i].number === undefined
+													|| obj.Sheet1[i].number.length < 12
+													|| obj.Sheet1[i].number
+															.includes(init) == false) {
+												// var cc = 'exc' + ex_cid;
+												num = '<input type="number" maxlength="12" id='
+														+ eeid
+														+ ' onblur="checkEditExcel(this.id,'
+														+ ex_cid
+														+ ')" class="editImportNumEx"  value='
+														+ obj.Sheet1[i].number
+														+ '>';
+												checkboxsms = '<input type="checkbox"  id=' + eecid + ' class="Eximport" value="' + obj.Sheet1[i].Title + ',' + obj.Sheet1[i].FirstName + ',' + obj.Sheet1[i].LastName + ',' + obj.Sheet1[i].number + ',' + obj.Sheet1[i].email + '\n " disabled>';
+												$('#import_errorNumber').modal(
+														"show");
+												ex_cid += 1;
+												ex_id += 1;
+											} else {
+												num = obj.Sheet1[i].number;
+												checkboxsms = '<input type="checkbox" class="Eximport" value="' + obj.Sheet1[i].Title + ',' + obj.Sheet1[i].FirstName + ',' + obj.Sheet1[i].LastName + ',' + obj.Sheet1[i].number + ',' + obj.Sheet1[i].email + '\n " checked>';
+											}
+											// lname.appendChild(document.createTextNode(obj.Sheet1[i].number));
+											// cell4.appendChild(lname);
+
+											/* var cell5 = row.insertCell(5);
+											var num = document.createElement("label");
+											num.setAttribute('class', 'break');
+											num.appendChild(document.createTextNode(obj.Sheet1[i].email));
+											cell5.appendChild(num);*/
+											var email = "";
+											if (obj.Sheet1[i].email === undefined)
+												email = "";
+											else
+												email = obj.Sheet1[i].email;
+
+											table2.row.add(
+													[ checkboxsms, title,
+															fname, mname, num,
+															email ])
+													.draw(false);
+
+											/*
+											var cell4 = row.insertCell(4);
+											var lname = document.createElement("label");
+											if (obj.Sheet1[i].number === undefined)
+											{
+											document.getElementById("ok_excel2").setAttribute("type", "button");
+											checker = 1;
+											lname.setAttribute('class', 'error');
+											}
+											lname.appendChild(document.createTextNode(obj.Sheet1[i].number));
+											cell4.appendChild(lname);
+
+
+
+											var cell5 = row.insertCell(5);
+											var num = document.createElement("label");
+											num.setAttribute('class', 'break');
+											num.appendChild(document.createTextNode(obj.Sheet1[i].email));
+											cell5.appendChild(num);
+
+											 */
+
+										}
+										document
+												.getElementById("excel_importNums").value = num;
+									}
+
+									Object.size = function(myObj) {
+										var size = 0, key;
+										for (key in myObj) {
+											if (myObj.hasOwnProperty(key))
+												size++;
+										}
+										return size;
+									};
+
+									// Get the size of an object
+									var size = Object.size(obj.Sheet1);
+									//   alert(size);
+
+								}
+								if (typeof console !== 'undefined')
+									console.log("output", new Date());
+							}
+							var drop = document.getElementById('drop');
+							function handleDrop(e) {
+								e.stopPropagation();
+								e.preventDefault();
+								rABS = document.getElementsByName("userabs")[0].checked;
+								use_worker = document
+										.getElementsByName("useworker")[0].checked;
+								var files = e.dataTransfer.files;
+								var f = files[0];
+								{
+									var reader = new FileReader();
+									var name = f.name;
+									reader.onload = function(e) {
+										if (typeof console !== 'undefined')
+											console.log("onload", new Date(),
+													rABS, use_worker);
+										var data = e.target.result;
+										if (use_worker) {
+											xw(data, process_wb);
+										} else {
+											var wb;
+											if (rABS) {
+												wb = X.read(data, {
+													type : 'binary'
+												});
+											} else {
+												var arr = fixdata(data);
+												wb = X.read(btoa(arr), {
+													type : 'base64'
+												});
+											}
+											process_wb(wb);
+										}
+									};
+									if (rABS)
+										reader.readAsBinaryString(f);
+									else
+										reader.readAsArrayBuffer(f);
+								}
+							}
+							function handleDragover(e) {
+								e.stopPropagation();
+								e.preventDefault();
+								e.dataTransfer.dropEffect = 'copy';
+							}
+							if (drop.addEventListener) {
+								drop.addEventListener('dragenter',
+										handleDragover, false);
+								drop.addEventListener('dragover',
+										handleDragover, false);
+								drop
+										.addEventListener('drop', handleDrop,
+												false);
+							}
+
+							if (checker == "sms") {
+								var xlf = document.getElementById('xlfsms');
+								// alert(checker);
+							} else {
+								var xlf = document.getElementById('xlf');
+								// alert(checker);
+							}
+
+							function handleFile(e) {
+								rABS = document.getElementsByName("userabs")[0].checked;
+								use_worker = document
+										.getElementsByName("useworker")[0].checked;
+								var files = e.target.files;
+								var f = files[0];
+								{
+									var reader = new FileReader();
+									var name = f.name;
+									reader.onload = function(e) {
+										if (typeof console !== 'undefined')
+											console.log("onload", new Date(),
+													rABS, use_worker);
+										var data = e.target.result;
+										if (use_worker) {
+											xw(data, process_wb);
+										} else {
+											var wb;
+											if (rABS) {
+												wb = X.read(data, {
+													type : 'binary'
+												});
+											} else {
+												var arr = fixdata(data);
+												wb = X.read(btoa(arr), {
+													type : 'base64'
+												});
+											}
+											process_wb(wb);
+										}
+									};
+									if (rABS)
+										reader.readAsBinaryString(f);
+									else
+										reader.readAsArrayBuffer(f);
+								}
+							}
+							if (xlf.addEventListener)
+								xlf.addEventListener('change', handleFile,
+										false);
+						}
+					</script>
+					<script>
+						function checkGroupEx() {
+							if ($('#import_groupNameEx').val() != "") {
+								//   $('#import_show').modal("hide");
+								$('#Multi_groupentry').modal("show");
+								$('#existing_groupEx').val("");
+
+							} else {
+								$('#import_groupbody').hide();
+							}
+						}
+						function checkEntryEx() {
+							if ($('#existing_groupEx').val() != "") {
+								// $('#import_show').modal("hide");
+								$('#Multi_groupentry').modal("show");
+							} else {
+								$('#import_groupbodyEx').toggle("slow");
+							}
+						}
+						function checkImportGroupNameEx() {
+							$('#existing_groupEx').val("");
+							var new_group = document
+									.getElementById("import_groupNameEx").value;
+							var existing_groups = "";
+							$('.existingGroupsEx').each(function() {
+								var values = $(this).val();
+								existing_groups += values;
+							});
+
+							if (existing_groups.includes(new_group) == true) {
+								document.getElementById("ok_excel2")
+										.setAttribute("type", "button");
+								$('#name_conflict').modal("show");
+							}
+							if (existing_groups.includes(new_group) == false) {
+								document.getElementById("ok_excel2")
+										.setAttribute("type", "submit");
+							}
+
+						}
+						$(document)
+								.ready(
+										function() {
+
+											$('#browse_excel').click(
+													function() {
+
+														$('#import_show')
+																.modal("hide");
+														$('#excel_import')
+																.modal("show");
+
+														// $('#back').disabled = false;
+
+													});
+											$('#back_ex')
+													.click(
+															function() {
+
+																$(
+																		'#import_show')
+																		.modal(
+																				"show");
+																$(
+																		'#excel_import')
+																		.modal(
+																				"hide");
+																document
+																		.getElementById("back").disabled = true;
+																document
+																		.getElementById("next").disabled = false;
+
+															});
+											$('#next_excel')
+													.click(
+															function() {
+																var excelToImport = "";
+																$(
+																		'.Eximport:checked')
+																		.each(
+																				function() {
+																					var values = $(
+																							this)
+																							.val();
+																					excelToImport += values;
+
+																				});
+																//  alert(excelToImport);
+																document
+																		.getElementById("excel_importData").value = excelToImport;
+																//alert($('#excel_importData').val());
+																if (excelToImport == "") {
+																	document
+																			.getElementById("ok_excel2").disabled = true;
+																	$(
+																			'#emptyImport')
+																			.modal(
+																					"show");
+																} else {
+
+																	if (excelToImport != "") {
+																		document
+																				.getElementById("ok_excel2").disabled = false;
+																	}
+																	$(
+																			'#excel_face1')
+																			.hide();
+																	$(
+																			'#create_groupExcel')
+																			.toggle(
+																					"slow");
+																	$(
+																			'#back_ex')
+																			.hide();
+																	$(
+																			'#back_ex2')
+																			.show();
+																	document
+																			.getElementById("next_excel").disabled = true;
+																	$('#c_ex')
+																			.hide();
+
+																	$(
+																			'#ok_excel2')
+																			.show();
+
+																	//alert($('#back_excel').val())
+																}
+															});
+											$('#back_ex2')
+													.click(
+															function() {
+																$(
+																		'#excel_face1')
+																		.toggle(
+																				"slow");
+																$(
+																		'#create_groupExcel')
+																		.hide();
+																$('#back_ex')
+																		.show();
+																$('#back_ex2')
+																		.hide();
+																$('#c_ex')
+																		.show();
+																$('#ok_excel2')
+																		.hide();
+																document
+																		.getElementById("next_excel").disabled = false;
+																//document.getElementById("back_ex").setAttribute("value", "back");
+																//alert($('#back_excel').val())
+															});
+											$('#ok_col')
+													.click(
+															function() {
+																window.location = "Default.cshtml";
+
+															});
+										});
+					</script>
+
+				</div>
+				<div class="modal-footer" style="background-color: #3a4f63">
+
+					<button type="button" id="back_ex" class="btn btn-default"><<
+						Back</button>
+					<button type="button" id="back_ex2" class="btn btn-default"
+						style="display: none"><< Back</button>
+					<button type="button" id="next_excel" class="btn btn-default">Next
+						>></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						id="c_ex">Cancel</button>
+					<button type="submit" id="ok_excel2" class="btn btn-default xbtn"
+						style="display: none">Import</button>
+
+				</div>
+			</form>
+
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
