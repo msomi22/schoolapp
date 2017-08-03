@@ -136,10 +136,6 @@ public class ExamAjax extends HttpServlet{
 
 			jsonObject.addProperty("responseMessage", "Score not valid, scores should be between 0 and 100 " + score + "." );
 
-		}else if(Integer.valueOf(score) > examDAO.getExam(accountId, examId).getOutOf()){  
-
-			jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
-
 		}else{
 
 
@@ -257,13 +253,19 @@ public class ExamAjax extends HttpServlet{
 
 			}else{
 
+				if(Integer.valueOf(score) > examDAO.getExam(accountId, examId).getOutOf()){  
 
-				scoreDouble = ((double)scoreInt / (double)exam.getOutOf()) * 100; 
+					jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
 
-				scoreDouble = Math.ceil(scoreDouble);
-				scoreValid = true;
+				}else{
+					
+					scoreDouble = ((double)scoreInt / (double)exam.getOutOf()) * 100; 
 
+					scoreDouble = Math.ceil(scoreDouble);
+					scoreValid = true;
+				}
 
+				
 			}
 
             
