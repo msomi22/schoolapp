@@ -96,6 +96,15 @@ function validateScore(id) {
 
 						$('#edit' + id).addClass('glyphicon glyphicon-remove error');
 						Cells[6].innerText = "";
+						
+						
+						$('#errorTitle').text('Score Error');
+						$('#errorSms').text('Score entered is above the score allowed, x out of y');
+						$('#error').modal('show');
+						
+						setTimeout(function() {
+							$('#error').modal('hide');
+						}, 2500);
 
 						// $('#edit'+id).append('<span class="glyphicon
 						// glyphicon-ok"></span>');
