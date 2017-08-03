@@ -194,9 +194,28 @@ $("#kcpeyear").datepicker({
 	}); 
 	
 	 */
+	 
+
+
 
 	
 </script>
+
+
+<!-- excel import -->
+
+   <!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!--<script src="dist/cpexcel.js"></script>-->
+<script src="js/excelImport/shim.js"></script>
+<script src="js/excelImport/jszip.js"></script>
+<script src="js/excelImport/xlsx.js"></script>
+<!-- uncomment the next line here and in xlsxworker.js for ODS support -->
+<script src="js/excelImport/ods.js"></script>
+
+<script src="js/excelImport/processImportData.js"></script>
+
+
+
 
 
 

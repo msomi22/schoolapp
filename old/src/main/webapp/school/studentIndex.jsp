@@ -246,8 +246,8 @@
                 <%                                            
                         if (!studentpage.isFirstPage()) {
                     %>
-                <input class="toolbarBtn" type="submit" name="page"
-                  value="First" /> <input class="toolbarBtn" type="submit"
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page"
+                  value="First" /> <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit"
                   name="page" value="Previous" />
                 <%
                         }
@@ -259,8 +259,8 @@
                 <%
                         if (!studentpage.isLastPage()) {                        
                     %>
-                <input class="toolbarBtn" type="submit" name="page" value="Next">
-                <input class="toolbarBtn" type="submit" name="page" value="Last">
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page" value="Next">
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page" value="Last">
                 <%
                        }
                     %>

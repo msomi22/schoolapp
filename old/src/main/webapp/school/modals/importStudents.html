@@ -3,8 +3,7 @@
 <div class="modal fade" id="import_show">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header"
-				style="background-color: #1569C7; color: #fff">
+			<div class="modal-header secondary-assent">
 				<button type="button" class="close" data-dismiss="modal">
 					<span>&times;</span>
 				</button>
@@ -38,9 +37,9 @@
 									import to be performed. If not so, ensure the format
 									corresponds with your intend file import in order to have a
 									successful import</p>
-								<a class="btn send" type="button" href="~/template/contact.csv">Download
-									a csv file template </a> <a class="btn send" type="button"
-									href="~/template/contact.xlsx">Download an excel file
+								<a class="btn btn-info btn-block themeColor" type="button" href="#">Download
+									a csv file template </a> <a class="btn btn btn-info btn-block themeColor" type="button"
+									href="#">Download an excel file
 									template </a>
 							</div>
 
@@ -48,12 +47,13 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xs-2"></div>
-							<div class="col-xs-9">
+							<div class="col-md-2 col-xs-2"></div>
+							<div class="col-md-9 col-xs-9">
+							
 								<h4>Browse to a file</h4>
 								<button id="browse_excel" onclick="importExcel()" type="button"
-									class="btn send">Import from an Excel File</button>
-								<button id="browse_csv" type="button" class="btn send">Import
+									class="btn btn-info btn-block themeColor">Import from an Excel File</button>
+								<button id="browse_csv" type="button" class="btn btn-info btn-block themeColor">Import
 									from an csv or txt File</button>
 							</div>
 						</div>
@@ -133,9 +133,9 @@
 
 				</div>
 
-				<div class="modal-footer" style="background-color: #1569C7">
+				<div class="modal-footer secondary-assent">
 					<input id="check_import" type="hidden" value="">
-					<button class="btn btn-default" type="button" id="back" disabled><<
+					<button class="btn btn-default " type="button" id="back" disabled><<
 						Back</button>
 					<button class="btn btn-default" type="button" id="back2"
 						style="display: none"><< Back</button>
@@ -330,9 +330,9 @@
 								/* worker message */
 								msg : 'xlsx',
 								/* worker scripts */
-								rABS : './xlsxworker2.js',
-								norABS : './xlsxworker1.js',
-								noxfer : './xlsxworker.js'
+								rABS : '../js/excelImport/xlsxworker2.js',
+								norABS : '../js/excelImport/xlsxworker1.js',
+								noxfer : '../js/excelImport/xlsxworker.js'
 							};
 							var rABS = typeof FileReader !== "undefined"
 									&& typeof FileReader.prototype !== "undefined"

@@ -129,7 +129,7 @@
 												done</small>
 												
 												
-										<button class="btn btn-primary secondary-assent pull-right" onclick="">
+										<button class="btn btn-primary secondary-assent pull-right" onclick="popImport()">
 										<i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i> Import Students
 										 </button>
 										</h1>
@@ -709,10 +709,17 @@
 
 
 
+
+
 <!-- footer -->
 
 
 <jsp:include page="footer.jsp" />
+
+<!-- import Modal -->
+<jsp:include page="modals/importStudents.html" />
+
+
 
 
 

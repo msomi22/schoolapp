@@ -126,3 +126,12 @@ function primarySwap(state) {
 		
 	}
 }
+
+
+
+
+function popImport(){
+	
+	$('#import_show').modal('show');
+	
+}
