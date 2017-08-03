@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -31,6 +30,7 @@ import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
@@ -64,16 +64,24 @@ public class ReportUtil {
 
 	public static final String SCOPE_CLASS = "class";
 	public static final String SCOPE_STREAM = "stream";
-
+	
+	public static final String CAT_LANG = "Languages";
+	public static final String CAT_SCI = "Sciences";
+	public static final String CAT_HUM = "Humanities";
+	public static final String CAT_TECH = "Technicals";
+	public static final String CAT_MATH = "Mathematics";
+	
+	
 
 	/**
 	 * @param accountId
 	 * @param streamId
+	 * @param teacherSubjectDAO 
 	 * @param uuid
 	 * @return
 	 */
-	public static String getInitials(String accountId, String streamId, String uuid) {
-		return RandomStringUtils.randomAlphabetic(2).toUpperCase();
+	public static String getInitials(String accountId, String streamId, String subjectId, TeacherSubjectDAO teacherSubjectDAO) { 
+		return teacherSubjectDAO.getTeacherSubject(accountId, streamId, subjectId).getTeacherId();
 	}
 
 
@@ -1223,31 +1231,87 @@ public class ReportUtil {
 	 * @param examDAO
 	 * @param examType
 	 */
-	public static Performance3 findSubjectPerformance(String accountId, List<Perfomance> exam, SubCategoryDAO subCategoryDAO,
+	public static SubjectPerformance findSubjectPerformance(String accountId, List<Perfomance> exam, SubCategoryDAO subCategoryDAO,
 			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO, ExamDAO examDAO,
 			String examType) {
 		
 		
+		SubjectPerformance subjectPerformance = new SubjectPerformance();
+		subjectPerformance.setEntry(exam.size()); 
 		
-		Performance3 totalExam = new Performance3();
-		
-		if(!StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-
-			totalExam.setTotalMean(getTotalsByTotalPerExam(exam)); 
-			totalExam.setTotalPoints(getTotalsByPointsPerExam(exam, subjectDAO, gradingSystemDAO)); 
-
-
-		}else{
-
+		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
+			
 			PerformanceP123 performanceP123 = new PerformanceP123();
 			performanceP123 = ReportUtil.computeP123(exam, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
-			totalExam.setTotalMean(performanceP123.getTotalMean());
-			totalExam.setTotalPoints(performanceP123.getTotalPoints());
+			if(performanceP123.getTotalMean()  > 0){
+				subjectPerformance.setAverage((double)performanceP123.getTotalMean() / (double)exam.size());  
+			}
+			
+			subjectPerformance.setTotal(performanceP123.getTotalMean());  
+			
+			
+
+		}else{
+
+			if(getTotalsByTotalPerExam(exam) > 0){
+				subjectPerformance.setAverage((double)getTotalsByTotalPerExam(exam) / (double)exam.size()); 
+			}
+			
+			subjectPerformance.setTotal((double)getTotalsByTotalPerExam(exam));  
 
 		}
 		
-		return totalExam;
+		return subjectPerformance;
+	}
+
+
+
+	/**
+	 * @param accountId
+	 * @param total
+	 * @param failedSubjects
+	 * @return
+	 */
+	public static String getclassTeacherComment(String accountId, double total, List<FailedSubject> failedSubjects) {
+		
+		List<String> failedList = new ArrayList<>();
+		
+		String message = "";
+		
+		if(total>70){
+			message = "Excellent";
+		}else if(total>60){
+			message = "Good";
+		}else if(total>50){
+			message = "Average";
+		}else if(total>40){
+			message = "Below average";
+		}else if(total>30){
+			message = "Much below average";
+		}else{
+			message = "Horrible"; 
+		}
+		
+		failedSubjects.forEach(p -> {
+			
+			if(p.getScore() < 30){
+				failedList.add(p.getSubjectCode()); 
+			}
+			
+			
+		});
+		
+		String subjects = "";
+		if(!failedList.isEmpty()){
+			 subjects = failedList.toString();
+		}
+		
+		if(!StringUtils.isBlank(subjects)){
+			message += " , put more effort in " + failedList.toString();
+		}
+		
+		return message; 
 	}
 
 

@@ -48,50 +48,21 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	}
 
 
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#getMiscellanous(java.lang.String)
-	 */
-	@Override
-	public Miscellanous getMiscellanous(String Uuid) {
-		Miscellanous miscellanous = null;
-        ResultSet rset = null;
-     try(
-     		 Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE Uuid = ?;");       
-     		
-     		){
-     	
-     	 pstmt.setString(1, Uuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 miscellanous  = beanProcessor.toBean(rset,Miscellanous.class);
-	   }
-     	
-     }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Account with Uuid: " + Uuid);
-          logger.error(ExceptionUtils.getStackTrace(e));
-          System.out.println(ExceptionUtils.getStackTrace(e));
-     }
-     
-		return miscellanous; 
-	}
-	
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#getKey(java.lang.String)
 	 */
 	@Override
-	public Miscellanous getKey(String schoolAccountUuid,String key) {
+	public String getValueByKey(String accountId,String key) {
 		Miscellanous miscellanous = null;
         ResultSet rset = null;
      try(
      		 Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE schoolAccountUuid =? AND key = ?;");       
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE accountId =? AND key = ?;");       
      		
      		){
      	
-     	 pstmt.setString(1, schoolAccountUuid);
+     	 pstmt.setString(1, accountId);
      	 pstmt.setString(2, key);
 	      rset = pstmt.executeQuery();
 	     while(rset.next()){
@@ -105,39 +76,10 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
           System.out.println(ExceptionUtils.getStackTrace(e));
      }
      
-		return miscellanous; 
+		return miscellanous.getValue(); 
 	}
 
 	
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#getMisc(java.lang.String)
-	 */
-	@Override
-	public Miscellanous getMisc(String schoolAccountUuid) {
-		Miscellanous miscellanous = null;
-        ResultSet rset = null;
-     try(
-     		 Connection conn = dbutils.getConnection();
-        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE schoolAccountUuid = ?;");       
-     		
-     		){
-     	
-     	 pstmt.setString(1, schoolAccountUuid);
-	         rset = pstmt.executeQuery();
-	     while(rset.next()){
-	
-	    	 miscellanous  = beanProcessor.toBean(rset,Miscellanous.class);
-	   }
-     	
-     }catch(SQLException e){
-     	  logger.error("SQL Exception when getting Account with schoolAccountUuid: " + schoolAccountUuid);
-          logger.error(ExceptionUtils.getStackTrace(e));
-          System.out.println(ExceptionUtils.getStackTrace(e));
-     }
-     
-		return miscellanous; 
-	}
-
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#putMiscellanous(com.yahoo.petermwenda83.bean.account.Miscellanous)
@@ -147,10 +89,10 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 		boolean success = true; 
 		  
 		 try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Miscellanous (Uuid,SchoolAccountUuid,Key,Value) VALUES (?,?,?,?);");
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Miscellanous (uuid,accountId,key,value) VALUES (?,?,?,?);");
     		){
 	            pstmt.setString(1, misc.getUuid());
-	           // pstmt.setString(2, misc.getSchoolAccountUuid());
+	            pstmt.setString(2, misc.getAccountId());
 	            pstmt.setString(3, misc.getKey());
 	            pstmt.setString(4, misc.getValue());
 	            pstmt.executeUpdate();
@@ -173,11 +115,11 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	public boolean updateMiscellanous(Miscellanous misc) {
 		boolean success = true; 
 		 try(   Connection conn = dbutils.getConnection();
-	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Miscellanous SET Value =? WHERE SchoolAccountUuid =? AND Uuid =?;");
+	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Miscellanous SET Value = ? WHERE accountId =? AND key =?;");
       		){
 	            pstmt.setString(1, misc.getValue());
-	           /// pstmt.setString(2, misc.getSchoolAccountUuid());
-	            pstmt.setString(3, misc.getUuid());
+	            pstmt.setString(2, misc.getAccountId()); 
+	            pstmt.setString(3, misc.getKey());
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
@@ -194,13 +136,13 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#getMiscellanousList(java.lang.String)
 	 */
 	@Override
-	public List<Miscellanous> getMiscellanousList(String schoolAccountUuid) {
+	public List<Miscellanous> getMiscellanousList(String accountId) {
 		 List<Miscellanous> list = null;
 		 try(   
 	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE SchoolAccountUuid = ?;");   
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE accountId = ?;");   
 			) {
-			 pstmt.setString(1,schoolAccountUuid);
+			 pstmt.setString(1,accountId);
 
 			 try(ResultSet rset = pstmt.executeQuery();){
 				 list = beanProcessor.toBeanList(rset, Miscellanous.class);

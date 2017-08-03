@@ -12,28 +12,15 @@ import com.yahoo.petermwenda83.bean.account.Miscellanous;
  *
  */
 public interface SchoolMiscellanousDAO {
-	/**
-	 * 
-	 * @param Uuid
-	 * @return
-	 */
-	public Miscellanous getMiscellanous(String Uuid);
-	
 	
 	/**
 	 * 
+	 * @param accountId
 	 * @param key
 	 * @return
 	 */
+	public String getValueByKey(String accountId,String key);
 	
-	public Miscellanous getKey(String schoolAccountUuid,String key);
-	
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @return
-	 */
-	public Miscellanous getMisc(String schoolAccountUuid);
 	/**
 	 * 
 	 * @param misc
@@ -51,6 +38,6 @@ public interface SchoolMiscellanousDAO {
 	  * @param schoolAccountUuid
 	  * @return
 	  */
-	public List<Miscellanous> getMiscellanousList(String schoolAccountUuid);
+	public List<Miscellanous> getMiscellanousList(String accountId);
 
 }
