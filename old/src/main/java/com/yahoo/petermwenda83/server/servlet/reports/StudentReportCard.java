@@ -1147,14 +1147,13 @@ public class StudentReportCard extends HttpServlet{
 						String openingdate = miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") !=null ?
 								miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") : "";
 
-								String headteacherRemarks = "Thanks " + student.getFirstname() + " ";
+								String headteacherRemarks = "Thanks " + student.getFirstname().toUpperCase() + " ";
 								 headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
 										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
 
 										
 										String classTeacherRemarks = ReportUtil.getclassTeacherComment(accountId,total,failedSubjects);
-										//"Class Teacher's Remarks Here";
-
+										
 										Phrase teacherremarkphrase = new Phrase();
 										teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
 										teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));

@@ -716,7 +716,9 @@ public class ClassRankingList extends HttpServlet{
 
 			rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
-			rankingTable.addCell(new Paragraph(student.getFirstname(),timesRomanNormal6));
+			String name = student.getFirstname() + " " +  student.getMiddlename();
+			name = name.substring(0, Math.min(name.length(), 12));
+			rankingTable.addCell(new Paragraph(name ,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(kcpe,timesRomanNormal6));
 

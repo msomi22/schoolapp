@@ -64,7 +64,14 @@ public class ReportUtil {
 
 	public static final String SCOPE_CLASS = "class";
 	public static final String SCOPE_STREAM = "stream";
-
+	
+	public static final String CAT_LANG = "Languages";
+	public static final String CAT_SCI = "Sciences";
+	public static final String CAT_HUM = "Humanities";
+	public static final String CAT_TECH = "Technicals";
+	public static final String CAT_MATH = "Mathematics";
+	
+	
 
 	/**
 	 * @param accountId
