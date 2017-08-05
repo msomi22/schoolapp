@@ -161,18 +161,18 @@ public class ExamAjax extends HttpServlet{
 
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.LANG_P1_OUTOF){
 
-						message = "Papre 1 Language score can't be greater than '" + ReportUtil.LANG_P1_OUTOF + "'";
-						
+						message = "Score not valid, Paper 1, Language: score can't be greater than '" + ReportUtil.LANG_P1_OUTOF + "'";
+
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.LANG_P2_OUTOF){
 
-						message = "Papre 2 Language score can't be greater than '" + ReportUtil.LANG_P2_OUTOF + "'";
-						
+						message = "Score not valid, Paper 2, Language: score can't be greater than '" + ReportUtil.LANG_P2_OUTOF + "'";
+
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.LANG_P3_OUTOF){
 
-						message = "Papre 3 Language score can't be greater than '" + ReportUtil.LANG_P3_OUTOF + "'";
-						
+						message = "Score not valid, Paper 3, Language: score can't be greater than '" + ReportUtil.LANG_P3_OUTOF + "'";
+
 					}else{
-						scoreDouble = Math.ceil(scoreDouble);
+						scoreDouble = scoreInt;
 						scoreValid = true;
 					}
 
@@ -180,73 +180,81 @@ public class ExamAjax extends HttpServlet{
 				}else if(StringUtils.equals(subDesc, ReportUtil.CAT_SCI)){
 
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
-						
-						message = "Papre 1 Science score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
-						
+
+						message = "Score not valid, Paper 1, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
-						message = "Papre 2 Science score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
-						
+						message = "Score not valid, Paper 2, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
-						message = "Papre 3 Science score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
-						
+						message = "Score not valid, Paper 3, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+
 					}else{
-						scoreDouble = Math.ceil(scoreDouble);
+						scoreDouble = scoreInt;
 						scoreValid = true;
 					}
 
 				}else if(StringUtils.equals(subDesc, ReportUtil.CAT_HUM) || StringUtils.equals(subDesc, ReportUtil.CAT_MATH)){
 
-					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
+					if(StringUtils.equals(exam.getCode(), "P3")){
 
-						message = "Papre 1 Humanity/maths score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
-						
+						message = "This subject has no paper 3";
+
+					}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
+
+						message = "Score not valid, Paper 1, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
+
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
-						message = "Papre 2 Humanity/maths score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
-						
+						message = "Score not valid, Paper 2, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
+
 					}else{
-						scoreDouble = Math.ceil(scoreDouble);
+						scoreDouble = scoreInt;
 						scoreValid = true;
 					}
 
 				}else if(StringUtils.equals(subDesc, ReportUtil.CAT_TECH)){ 
-					
+
 					if(StringUtils.equals(subject.getCode(), "AGR") || StringUtils.equals(subject.getDescription(), "Agriculture")){
-						
+
 						if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
 
-							message = "Papre 1 Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
-							
+							message = "Score not valid, Paper 1, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
-							message = "Papre 2 Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
-							
+							message = "Score not valid, Paper 2, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+
 						}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
-							message = "Papre 3 Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
-							
+							message = "Score not valid, Paper 3 Agriculture, score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+
 						}else{
-							scoreDouble = Math.ceil(scoreDouble);
+							scoreDouble = scoreInt;
 							scoreValid = true;
 						}
-						
-					}else{
-						
-						if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
 
-							message = "Papre 1 Technical score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
-							
+					}else{
+
+						if(StringUtils.equals(exam.getCode(), "P3")){
+
+							message = "This subject has no paper 3";
+
+						}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
+
+							message = "Score not valid, Paper 1, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
+
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
-							message = "Papre 2 Technical score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
-							
+							message = "Score not valid, Paper 2, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
+
 						}else{
-							scoreDouble = Math.ceil(scoreDouble);
+							scoreDouble = scoreInt;
 							scoreValid = true;
 						}
-						
+
 					}
 
 				}
@@ -258,17 +266,17 @@ public class ExamAjax extends HttpServlet{
 					jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
 
 				}else{
-					
+
 					scoreDouble = ((double)scoreInt / (double)exam.getOutOf()) * 100; 
 
 					scoreDouble = Math.ceil(scoreDouble);
 					scoreValid = true;
 				}
 
-				
+
 			}
 
-            
+
 			Perfomance perfomance = new Perfomance();
 			perfomance.setAccountId(accountId);
 			perfomance.setClassRoomId(stream.getClassRoomId()); 
@@ -280,17 +288,29 @@ public class ExamAjax extends HttpServlet{
 			perfomance.setTerm(sysConfig.getTerm());
 			perfomance.setYear(sysConfig.getYear()); 
 
-			if(examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
-					sysConfig.getTerm(), sysConfig.getYear(), streamId) && scoreValid){
-				
-				message = "OK";
+			if(scoreValid){
 
-				jsonObject.addProperty("responseMessage", message);
+				boolean stored = examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
+						sysConfig.getTerm(), sysConfig.getYear(), streamId);
+				if(stored){
+
+					message = "OK";
+
+					jsonObject.addProperty("responseMessage", message + " -- " + stored);
+
+				}else{
+
+					jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please.");
+
+				}
+
+
+
 
 			}else{
-				
+
 				message = message.length() == 0 ? "Unexpected error has occured, contact admin please." : message;
-				
+
 				jsonObject.addProperty("responseMessage", message);
 
 			}
