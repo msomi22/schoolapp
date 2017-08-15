@@ -11,7 +11,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
  * @author peter
  *
  */
-@XmlRootElement(name = "student") 
+@XmlRootElement(name = "student")  //only needed if we also want to generate XML     
 public class APIStudent extends Student{
 
 	/**
