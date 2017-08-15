@@ -99,12 +99,12 @@ function validateScore(id) {
 						
 						
 						$('#errorTitle').text('Score Error');
-						$('#errorSms').text('Score entered is above the score allowed, x out of y');
+						$('#errorSms').text(data.responseMessage);
 						$('#error').modal('show');
 						
 						setTimeout(function() {
 							$('#error').modal('hide');
-						}, 2500);
+						}, 2000);
 
 						// $('#edit'+id).append('<span class="glyphicon
 						// glyphicon-ok"></span>');

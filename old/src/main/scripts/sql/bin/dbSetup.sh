@@ -22,7 +22,7 @@
 
 #Begin automatic creation of role
 DB_USERNAME="postgres"
-DB_PASSWORD="root"
+DB_PASSWORD="postgres"
 DB_HOST="localhost"
 
 export PGUSER=$DB_USERNAME
@@ -39,7 +39,7 @@ echo "Finished creating new role."
 
 # Initialize the following variables as appropriate:
 DB_USERNAME="school"
-DB_PASSWORD="AllaManO1"
+DB_PASSWORD="school@school"
 DB_HOST="localhost"
 
 # There should be no need to change anything below this line.
