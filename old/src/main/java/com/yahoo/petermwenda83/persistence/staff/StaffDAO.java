@@ -230,9 +230,28 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
 	@Override
-	public boolean deleteStaff(String accountId, String Uuid) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteStaff(String accountId, String uuid) {
+		boolean success = true; 
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Staff"
+						+ " WHERE accountId =? AND uuid=? ;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting Staff with id  " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
 	/**
