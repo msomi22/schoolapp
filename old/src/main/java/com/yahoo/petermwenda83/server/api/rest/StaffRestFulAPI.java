@@ -5,7 +5,8 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
+//import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -39,7 +40,7 @@ public class StaffRestFulAPI {
 		emailValidator = EmailValidator.getInstance();
 	}
 
-	@PUT 
+	@POST
 	@Path("/{accountId}")
 	public String putStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , APIStaff apiStaff){
