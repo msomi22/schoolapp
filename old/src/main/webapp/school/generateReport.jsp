@@ -176,11 +176,23 @@
 
 													<!-- Exam element -->
 
+													<select multiple="multiple"
+														onchange="console.log('changed', this)"
+														placeholder="Hello  im from placeholder" class="SlectBox"
+														required>
+														<option value="volvo">Volvo</option>
+														<option value="saab">Saab</option>
+														<option value="mercedes">Mercedes</option>
+														<option value="audi">Audi</option>
+														<option value="bmw">BMW</option>
+													</select>
+
 													<h2>Exam</h2>
 
-													<select id="exam" name="exam" onblur="validateExamSelected()"
-														class="form-control formelement" required="required"
-														multiple>
+													<select id="exam" name="exam"
+														onblur="validateExamSelected()"
+														class="form-control SlectBox formelement "
+														required="required" multiple>
 
 														<%
 															if (examList != null) {
@@ -204,8 +216,9 @@
 													</select>
 
 												</div>
-												
-												<input type="hidden" name="examType" id="examType" value="others">
+
+												<input type="hidden" name="examType" id="examType"
+													value="others">
 
 
 
@@ -238,7 +251,8 @@
 
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="current-1" name="year"
-														value="<%=currentYear - 1%>"> <label for="current-1">
+														value="<%=currentYear - 1%>"> <label
+														for="current-1">
 														<h6>
 															Previous
 															<%=currentYear - 1%></h6>
@@ -250,7 +264,8 @@
 
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="current-2" name="year"
-														value="<%=currentYear - 2%>"> <label for="current-2">
+														value="<%=currentYear - 2%>"> <label
+														for="current-2">
 														<h6>
 															2 years ago
 															<%=currentYear - 2%></h6>
@@ -266,16 +281,16 @@
 											<div class="row">
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term1" name="term" value="1"
-														<%if (currentTerm == 1) {%> checked <%}%>>
-													<label for="term1">
+														<%if (currentTerm == 1) {%> checked <%}%>> <label
+														for="term1">
 														<h6>Term 1</h6>
 													</label>
 												</div>
 
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term2" name="term" value="2"
-														<%if (currentTerm == 2) {%> checked <%}%>>
-													<label for="term2">
+														<%if (currentTerm == 2) {%> checked <%}%>> <label
+														for="term2">
 														<h6>Term 2</h6>
 													</label>
 												</div>
@@ -283,8 +298,8 @@
 
 												<div class="col-md-3 col-md-offset-1">
 													<input type="radio" id="term3" name="term" value="3"
-														<%if (currentTerm == 3) {%> checked <%}%>>
-													<label for="term3">
+														<%if (currentTerm == 3) {%> checked <%}%>> <label
+														for="term3">
 														<h6>Term 3</h6>
 													</label>
 												</div>
@@ -329,7 +344,7 @@
 													<select class="form-control formelement" name="classroom"
 														required>
 
-														
+
 														<%
 															if (classroomList != null) {
 																for (ClassRoom classroom : classroomList) {
@@ -364,7 +379,7 @@
 													<select class="form-control formelement" name="stream"
 														required>
 
-														
+
 
 														<%
 															int studentsCount = 0;

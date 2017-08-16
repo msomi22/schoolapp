@@ -91,6 +91,10 @@
     <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    
+    <!-- sumo select -->
+    
+    <link href="../vendors/sumoselect/sumoselect.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.css" rel="stylesheet">

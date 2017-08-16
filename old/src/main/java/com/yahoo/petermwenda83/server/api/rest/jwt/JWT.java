@@ -58,7 +58,7 @@ public class JWT {
 	 * @param subject
 	 * @return
 	 */
-	public static boolean validateJWT(String jwt, String secret,String id, String issuer, String subject) {
+	public static boolean validateJWT(String jwt, String secret,String id, String issuer, String subject, Date date) {
 
 		boolean isValid = false;
 		
@@ -66,7 +66,7 @@ public class JWT {
 		
 		if(StringUtils.equals(id, claims.getId()) && 
 				StringUtils.equals(issuer, claims.getIssuer()) && 
-				StringUtils.equals(subject, claims.getSubject())){
+				StringUtils.equals(subject, claims.getSubject()) && date.before(claims.getExpiration()) ){
 			
 			isValid = true;
 			

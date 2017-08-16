@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
+import com.yahoo.petermwenda83.server.api.rest.jwt.ApiCredentials;
+import com.yahoo.petermwenda83.server.api.rest.jwt.JWT;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -95,6 +97,10 @@ public class SchoolLogin extends HttpServlet{
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME, staff.getUsername()); 
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY, staff.getAcessLevelId());
+				
+				//token
+				ApiCredentials apiKey = new ApiCredentials();
+				request.getSession().setAttribute("Token",JWT.createJWT(staff.getUuid(), staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 				response.sendRedirect("school/studentIndex.jsp"); 
                 
 				logger.info("success"); 

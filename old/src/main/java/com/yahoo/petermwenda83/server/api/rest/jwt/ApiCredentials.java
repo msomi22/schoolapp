@@ -13,7 +13,7 @@ public class ApiCredentials {
 	private String apiKey = "";
 	private String secret;
 	
-	ApiCredentials(){
+	public ApiCredentials(){
 		apiUsername = "apiusername";
 		apiKey = "apikey";
 		secret = "apisecret";
