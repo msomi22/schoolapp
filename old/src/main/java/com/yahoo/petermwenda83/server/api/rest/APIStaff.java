@@ -1,32 +1,17 @@
+package com.yahoo.petermwenda83.server.api.rest;
 
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
-package com.yahoo.petermwenda83.bean.staff;
-
-import java.sql.Timestamp;
-import java.util.Date;
-
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Staff Basic Informations 
  * 
- * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
+ * @author peter
  *
  */
-public class Staff extends StorableBean{
-
+@XmlRootElement(name = "staff")  //only needed if we also want to generate XML     
+public class APIStaff{
+	
 	private String acessLevelId; 
 	private String staffNo; 
-	private String isActive; 
 	private String firstname;
 	private String middlename;
 	private String lastname;
@@ -35,25 +20,18 @@ public class Staff extends StorableBean{
 	private String email; 
 	private String username;
 	private String password;
-	private Timestamp regDate;
 
-	/**
-	 * 
-	 */
-	public Staff() {
-		super();
+	public APIStaff() {
 		acessLevelId = "";
-		staffNo = "";
-		isActive = "1";
-		firstname = "";
-		middlename = "";
-		lastname = "";
-		gender = "";
-		mobile = "";
-		email = "";
-		username = "";
-		password = "";
-		regDate = new Timestamp(new Date().getTime());
+		staffNo ="";
+		firstname ="";
+		middlename ="";
+		lastname ="";
+		gender ="";
+		mobile ="";
+		email ="";
+		username ="";
+		password ="";
 	}
 
 	
@@ -86,22 +64,6 @@ public class Staff extends StorableBean{
 	 */
 	public void setStaffNo(String staffNo) {
 		this.staffNo = staffNo;
-	}
-
-
-	/**
-	 * @return the isActive
-	 */
-	public String getIsActive() {
-		return isActive;
-	}
-
-
-	/**
-	 * @param isActive the isActive to set
-	 */
-	public void setIsActive(String isActive) {
-		this.isActive = isActive;
 	}
 
 
@@ -234,37 +196,15 @@ public class Staff extends StorableBean{
 
 
 	/**
-	 * @return the regDate
-	 */
-	public Timestamp getRegDate() {
-		return regDate;
-	}
-
-
-	/**
-	 * @param regDate the regDate to set
-	 */
-	public void setRegDate(Timestamp regDate) {
-		this.regDate = regDate;
-	}
-
-
-	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Staff [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", isActive=" + isActive
-				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
-				+ gender + ", mobile=" + mobile + ", email=" + email + ", username=" + username + ", password="
-				+ password + ", regDate=" + regDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+		return "APIStaff [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", firstname=" + firstname
+				+ ", middlename=" + middlename + ", lastname=" + lastname + ", gender=" + gender + ", mobile=" + mobile
+				+ ", email=" + email + ", username=" + username + ", password=" + password + "]";
 	}
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7717234136342401517L;
-
+	
 }
