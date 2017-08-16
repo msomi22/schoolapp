@@ -6,6 +6,9 @@ function examWarningModal() {
 		$('#examWarning').modal('hide');
 	}, 5000);
 	
+	/*$('.SlectBox').html('');
+	$('.SlectBox')[0].sumo.reload();*/
+	
 	
 	$("#exam").focus();
 	$("#exam").val("");
@@ -23,7 +26,22 @@ $("#exam")
 						$('#smsWarning')
 								.text(
 										'At least one exam and not more than three exams are allowed.');
+						
+						
+						
+						/*var num = $('option').length;
+					    for(var i=0; i<num-1; i++){
+					      $('.SlectBox')[0].sumo.unSelectItem(i);
+					    }
+*/
+						var obj = [];
+					    $('option:selected').each(function () {
+					        obj.push($(this).index());
+					    });
 
+					    for (var i = 0; i < obj.length; i++) {
+					        $('.SlectBox')[0].sumo.unSelectItem(obj[i]);
+					    }
 						examWarningModal();
 						
 						}
@@ -37,6 +55,8 @@ function validateExamSelected(){
 	if ($("#exam option:selected").length >0) {
 
 		var selectedExams = $('#exam option:selected').text();
+		
+		//alert(selectedExams);
 
 		if (selectedExams.includes('Paper 1')
 				| selectedExams.includes('Paper 2')
@@ -53,6 +73,17 @@ function validateExamSelected(){
 				$('#smsWarning')
 						.text(
 								'Exam Papers selected must be three i.e Paper 1, Paper 2 and Paper 3');
+				
+				
+				var obj = [];
+			    $('option:selected').each(function () {
+			        obj.push($(this).index());
+			    });
+
+			    for (var i = 0; i < obj.length; i++) {
+			        $('.SlectBox')[0].sumo.unSelectItem(obj[i]);
+			    }
+			    
 
 				examWarningModal();
 				

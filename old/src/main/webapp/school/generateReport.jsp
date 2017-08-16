@@ -162,7 +162,7 @@
 
 													<%--   <c:out value="${accountId}"></c:out>
                     
-                    <h2>Exam</h2>
+                    <h4>Exam</h4>
                     
                      <c:forEach var = "i" begin = "1" end = "5">
          Item <c:out value = "${examList}"/><p>
@@ -176,22 +176,13 @@
 
 													<!-- Exam element -->
 
-													<select multiple="multiple"
-														onchange="console.log('changed', this)"
-														placeholder="Hello  im from placeholder" class="SlectBox"
-														required>
-														<option value="volvo">Volvo</option>
-														<option value="saab">Saab</option>
-														<option value="mercedes">Mercedes</option>
-														<option value="audi">Audi</option>
-														<option value="bmw">BMW</option>
-													</select>
+												
 
-													<h2>Exam</h2>
+													<h4>Exam</h4>
 
 													<select id="exam" name="exam"
 														onblur="validateExamSelected()"
-														class="form-control SlectBox formelement "
+														class="form-control formelement SlectBox"
 														required="required" multiple>
 
 														<%
@@ -233,7 +224,7 @@
 
 
 
-											<h2>Year:</h2>
+											<h4>Year:</h4>
 
 											<div class="row">
 
@@ -276,7 +267,7 @@
 
 											</div>
 
-											<h2>Term:</h2>
+											<h4>Term:</h4>
 
 											<div class="row">
 												<div class="col-md-3 col-md-offset-1">
@@ -310,7 +301,7 @@
 											<br> <br>
 
 											<!-- Scope element -->
-											<h2>Scope:</h2>
+											<h4>Scope:</h4>
 
 											<div class="row">
 
@@ -339,7 +330,7 @@
 												<div class="col-md-5 col-md-offset-1">
 
 
-													<h2>Class</h2>
+													<h4>Class</h4>
 
 													<select class="form-control formelement" name="classroom"
 														required>
@@ -374,7 +365,7 @@
 
 												<div class="col-md-5 col-md-offset-1">
 
-													<h2>Stream</h2>
+													<h4>Stream</h4>
 
 													<select class="form-control formelement" name="stream"
 														required>
@@ -416,7 +407,7 @@
 
 											<br> <br>
 
-											<h2>HIDE Points:</h2>
+											<h4>HIDE Points:</h4>
 
 											<div class="row">
 
@@ -438,7 +429,7 @@
 
 											</div>
 
-											<h2>HIDE Grades:</h2>
+											<h4>HIDE Grades:</h4>
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
@@ -464,7 +455,7 @@
 
 											<!-- Show fee element -->
 
-											<h2>Show Fee INFO:</h2>
+											<h4>Show Fee INFO:</h4>
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
@@ -492,7 +483,7 @@
 											<!-- Rank element -->
 
 
-											<h2>RANK:</h2>
+											<h4>RANK:</h4>
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
@@ -515,7 +506,7 @@
 
 											<!-- Number of subject element -->
 
-											<h2>No_ of Subjects:</h2>
+											<h4>No_ of Subjects:</h4>
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
@@ -538,7 +529,7 @@
 											<br> <br>
 
 											<!-- Type of report element -->
-											<h2>Type of Report:</h2>
+											<h4>Type of Report:</h4>
 
 											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
