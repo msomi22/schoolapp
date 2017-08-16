@@ -35,6 +35,7 @@ public class Staff extends StorableBean{
 	private String email; 
 	private String username;
 	private String password;
+	private String lastupdated;
 	private Timestamp regDate;
 
 	/**
@@ -53,6 +54,7 @@ public class Staff extends StorableBean{
 		email = "";
 		username = "";
 		password = "";
+		lastupdated = new Timestamp(new Date().getTime()).toString();
 		regDate = new Timestamp(new Date().getTime());
 	}
 
@@ -234,6 +236,22 @@ public class Staff extends StorableBean{
 
 
 	/**
+	 * @return the lastupdated
+	 */
+	public String getLastupdated() {
+		return lastupdated;
+	}
+
+
+	/**
+	 * @param lastupdated the lastupdated to set
+	 */
+	public void setLastupdated(String lastupdated) {
+		this.lastupdated = lastupdated;
+	}
+
+
+	/**
 	 * @return the regDate
 	 */
 	public Timestamp getRegDate() {
@@ -249,6 +267,8 @@ public class Staff extends StorableBean{
 	}
 
 
+	
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -257,9 +277,11 @@ public class Staff extends StorableBean{
 		return "Staff [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", isActive=" + isActive
 				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
 				+ gender + ", mobile=" + mobile + ", email=" + email + ", username=" + username + ", password="
-				+ password + ", regDate=" + regDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+				+ password + ", lastupdated=" + lastupdated + ", regDate=" + regDate + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
 	}
+
+
 
 
 	/**

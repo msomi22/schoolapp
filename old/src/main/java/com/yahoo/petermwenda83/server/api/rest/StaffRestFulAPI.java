@@ -49,7 +49,25 @@ public class StaffRestFulAPI {
 			AuthErr error = new AuthErr("error");
 			return gson.toJson(error); 
 			
-		}else if(apiStaff.getMobile().length() != 9 && apiStaff.getMobile().isEmpty() && !StringUtils.isNumeric(apiStaff.getMobile()) ){
+		}else if (StringUtils.isBlank(apiStaff.getFirstname())) { 
+			
+			AuthErr error = new AuthErr("error");
+			error.setDescription("Firt Name Can't be Empty!"); 
+			return gson.toJson(error); 
+
+        }else if (StringUtils.isBlank(apiStaff.getMiddlename())) { 
+			
+			AuthErr error = new AuthErr("error");
+			error.setDescription("Middle Name Can't be Empty!"); 
+			return gson.toJson(error); 
+
+        }else if (StringUtils.isBlank(apiStaff.getGender())) { 
+			
+			AuthErr error = new AuthErr("error");
+			error.setDescription("Gender Can't be Empty!"); 
+			return gson.toJson(error); 
+
+        }else if(!validMobileNo(apiStaff.getMobile())){
 			
 			AuthErr error = new AuthErr("error");
 			error.setDescription("Phone Number Not Valid!"); 
@@ -61,6 +79,18 @@ public class StaffRestFulAPI {
 			error.setDescription("Email Address Not Valid!"); 
 			return gson.toJson(error); 
 
+        }else if (StringUtils.isBlank(apiStaff.getUsername())) { 
+			
+			AuthErr error = new AuthErr("error");
+			error.setDescription("Username Can't be Empty!"); 
+			return gson.toJson(error); 
+
+        }else if (StringUtils.isBlank(apiStaff.getPassword())) { 
+			
+			AuthErr error = new AuthErr("error");
+			error.setDescription("Password Can't be Empty!"); 
+			return gson.toJson(error); 
+
         }else {
         	
         	Staff staff = new Staff();
@@ -70,16 +100,43 @@ public class StaffRestFulAPI {
     		staff.setFirstname(apiStaff.getFirstname());
     		staff.setMiddlename(apiStaff.getMiddlename());
     		staff.setLastname(apiStaff.getLastname());
-    		staff.setGender(apiStaff.getGender());
+    		staff.setGender(apiStaff.getGender().toUpperCase());
     		staff.setMobile(apiStaff.getMobile());
     		staff.setEmail(apiStaff.getEmail());
     		staff.setUsername(apiStaff.getUsername());
     		staff.setPassword(apiStaff.getPassword());
     		
-    		return gson.toJson(staffService.putStaff(staff)); 
+    		boolean put = staffService.putStaff(staff);
+    		
+    		if(put){
+    			
+    			AuthErr error = new AuthErr("success");
+    			error.setDescription("Staff was registered successfully"); 
+    			return gson.toJson(error); 
+    			
+    		}else{
+    			
+    			AuthErr error = new AuthErr("error");
+    			error.setDescription("Did you suply a duplicate StaffNo?"); 
+    			return gson.toJson(error); 
+    			
+    		}
+    	
         }
 		
 		
+	}
+	
+	
+	
+	public static boolean validMobileNo(String mobile){
+		boolean valid = false;
+		
+		if(mobile.length() == 9 && StringUtils.isNumeric(mobile)){
+			valid = true;
+		}
+		
+		return valid;
 	}
 
 	/**

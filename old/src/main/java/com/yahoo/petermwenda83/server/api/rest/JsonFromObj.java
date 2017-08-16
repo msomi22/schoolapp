@@ -16,10 +16,10 @@ public class JsonFromObj {
 		Gson gson = new Gson();
 		
 		String jsonString = gson.toJson(new APIStaff());
-		
+	
 		System.out.println(jsonString);
 		
-		System.out.println(StringUtils.isNumeric("01777272h")); 
+		System.out.println(StaffRestFulAPI.validMobileNo("h718953974"));  
 
 	}
 
