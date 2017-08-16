@@ -40,7 +40,7 @@ public class Test {
 			e.printStackTrace();
 		}
 		
-		boolean valid = JWT.validateJWT(jwt, apiKey.getSecret(), id, issuer, subject,date);
+		boolean valid = JWT.validateJWT(jwt, apiKey.getSecret(), id, issuer, subject);
 		
 		System.out.println(valid); 
 		

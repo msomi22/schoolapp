@@ -29,6 +29,7 @@ public class SessionConstants {
 	public static final String SCHOOL_ACCOUNT_SIGN_IN_TIME = "Account Signin Time";
 
 	final public static String SCHOOL_ACCOUNT_ADD_SUCCESS = "Account Account Added Successfully";
+	final public static String USER_JSON_WEB_TOKEN = "User Json Web Token";
 
 	//staff management
 	public static final String SCHOOL_STAFF_SIGN_IN_USERNAME = "Staff signin username"; 

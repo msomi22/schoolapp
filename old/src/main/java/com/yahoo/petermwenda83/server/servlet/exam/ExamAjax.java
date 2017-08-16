@@ -28,6 +28,8 @@ import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.rest.jwt.ApiCredentials;
+import com.yahoo.petermwenda83.server.api.rest.jwt.JWT;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -74,6 +76,9 @@ public class ExamAjax extends HttpServlet{
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
+		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
+		String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+		String jwtSubject = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
 
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
@@ -83,7 +88,7 @@ public class ExamAjax extends HttpServlet{
 
 		if(StringUtils.equalsIgnoreCase(decision, "submitExam")){
 
-			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score)).getBytes());
+			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score,jwt,userId,jwtSubject)).getBytes());
 			out.flush();
 			out.close();
 
@@ -97,14 +102,24 @@ public class ExamAjax extends HttpServlet{
 	 * @param subjectId
 	 * @param examId
 	 * @param score
+	 * @param jwt 
+	 * @param userId 
+	 * @param jwtSubject 
 	 * @return
 	 */
-	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, String streamId, String score) {
+	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
+			String streamId, String score, String jwt, String userId, String jwtSubject) {
 
 		JsonObject jsonObject = new JsonObject();
 		String message = "";
+		ApiCredentials apiKey = new ApiCredentials();
 
-		if(StringUtils.isBlank(studentId)){
+		
+		if(JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
+
+			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
+
+		}else if(StringUtils.isBlank(studentId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no studentId.");
 

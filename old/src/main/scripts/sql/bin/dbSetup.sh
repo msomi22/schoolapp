@@ -39,7 +39,7 @@ echo "Finished creating new role."
 
 # Initialize the following variables as appropriate:
 DB_USERNAME="school"
-DB_PASSWORD="school@school"
+DB_PASSWORD="AllaManO1"
 DB_HOST="localhost"
 
 # There should be no need to change anything below this line.

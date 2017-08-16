@@ -100,7 +100,9 @@ public class SchoolLogin extends HttpServlet{
 				
 				//token
 				ApiCredentials apiKey = new ApiCredentials();
-				request.getSession().setAttribute("Token",JWT.createJWT(staff.getUuid(), staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
+				//String id, String issuer, String subject, long ttlMillis, String secret
+				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
+						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 				response.sendRedirect("school/studentIndex.jsp"); 
                 
 				logger.info("success"); 
