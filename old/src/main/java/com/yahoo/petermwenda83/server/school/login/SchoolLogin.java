@@ -94,13 +94,17 @@ public class SchoolLogin extends HttpServlet{
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, schoolUsername);
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_SUCCESS, SessionConstants.SCHOOL_ACCOUNT_LOGIN_SUCCESS); 
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_TIME, String.valueOf(new Date().getTime()));
+				
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME, staff.getUsername()); 
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY, staff.getAcessLevelId());
 				
 				//token
 				ApiCredentials apiKey = new ApiCredentials();
-				request.getSession().setAttribute("Token",JWT.createJWT(staff.getUuid(), staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
+				//String id, String issuer, String subject, long ttlMillis, String secret
+				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
+						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
+				
 				response.sendRedirect("school/studentIndex.jsp"); 
                 
 				logger.info("success"); 

@@ -136,7 +136,24 @@
                   }
                   
                   
+                  String respo = "";
+                  if (session != null) {
+                    respo = (String) session.getAttribute(SessionConstants.GENERIC_ERROR);
+                  }
                   
+                  if (StringUtils.isNotEmpty(respo)) {
+                      %>
+                      <div class="alert alert-warning">
+                        <a href="#" class="close" data-dismiss="alert"> &times; </a> <strong>Warning!</strong>
+                        <%
+                          out.println("Login error: " + respo);
+                        %>
+                      </div>
+
+                      <%
+                        session.setAttribute(SessionConstants.GENERIC_ERROR, null);
+                        }
+                   
                   %>
                   
 

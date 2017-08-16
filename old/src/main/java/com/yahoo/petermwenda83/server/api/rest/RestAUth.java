@@ -19,9 +19,10 @@ public class RestAUth {
 	
 	/**
 	 * @param auth 
+	 * @param accountId 
 	 * @return
 	 */
-	public static boolean isUserAuthenticated(String auth) {
+	public static boolean isUserAuthenticated(String auth, String accountId) {
 		String decodedAuth = "";
 		boolean success = false;
 
