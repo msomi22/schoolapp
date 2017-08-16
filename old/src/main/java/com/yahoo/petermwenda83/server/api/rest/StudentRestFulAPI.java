@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 @Path("/student") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class SchoolapiImpl{
+public class StudentRestFulAPI{
 
 	StudentService studentService = new StudentService();
 
@@ -38,7 +38,7 @@ public class SchoolapiImpl{
 
 		Gson gson = new Gson();
 
-		if(!RestAUth.isUserAuthenticated(auth)){
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			AuthErr error = new AuthErr("error");
 			return gson.toJson(error); 
 		}
