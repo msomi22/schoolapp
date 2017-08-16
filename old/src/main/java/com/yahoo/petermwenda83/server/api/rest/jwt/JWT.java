@@ -58,7 +58,7 @@ public class JWT {
 	 * @param subject
 	 * @return
 	 */
-	public static boolean validateJWT(String jwt, String secret,String id, String issuer, String subject) {
+	public static boolean validateJWT(String jwt, String secret, String id, String issuer, String subject) {
 
 		boolean isValid = false;
 		

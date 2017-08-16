@@ -69,6 +69,10 @@ public class GetStudents extends HttpServlet{
 		idsMap.put("examId", examId); 
 		idsMap.put("subjectId", subjectId); 
 		
+		System.out.println(jwt);
+		System.out.println("userId : " + userId);
+		System.out.println("jwtSubject : " + jwtSubject);
+		
 		ApiCredentials apiKey = new ApiCredentials();
 
 		if(StringUtils.isEmpty(streamId)){
@@ -83,7 +87,7 @@ public class GetStudents extends HttpServlet{
 
 			session.setAttribute(SessionConstants.GENERIC_ERROR, "Exam not selected! Please select one."); 
 
-		}else if(JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
+		}else if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
 
 			session.setAttribute(SessionConstants.GENERIC_ERROR, "Invalid Json Web token.."); 
 

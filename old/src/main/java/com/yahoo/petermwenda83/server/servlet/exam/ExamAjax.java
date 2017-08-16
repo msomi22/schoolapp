@@ -115,7 +115,7 @@ public class ExamAjax extends HttpServlet{
 		ApiCredentials apiKey = new ApiCredentials();
 
 		
-		if(JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
+		if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
 
 			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
 
