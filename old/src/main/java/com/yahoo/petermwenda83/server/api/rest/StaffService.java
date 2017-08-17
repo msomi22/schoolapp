@@ -3,6 +3,8 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -206,6 +208,11 @@ public class StaffService {
 				error = new AuthErr("error");
 				error.setDescription("Password Can't be Empty!"); 
 
+			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
+
+				error = new AuthErr("error");
+				error.setDescription("StudentId invalid!");  
+
 			}/*else if(staffDAO.getStaffByStaffNo(apiStaffFull.getAccountId(), apiStaffFull.getStaffNo()) != null){
 
 				error = new AuthErr("error");
@@ -218,8 +225,32 @@ public class StaffService {
 
 			}*/else{
 				
-				error = new AuthErr("success");
-				error.setDescription("Staff was updated successfully.");
+				Staff staff = staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid());
+				staff.setAccountId(apiStaffFull.getAccountId());
+				staff.setAcessLevelId(apiStaffFull.getAcessLevelId());
+				staff.setEmail(apiStaffFull.getEmail());
+				staff.setFirstname(apiStaffFull.getFirstname());
+				staff.setGender(apiStaffFull.getGender().toUpperCase());
+				staff.setIsActive(apiStaffFull.getIsActive());
+				staff.setLastname(apiStaffFull.getLastname());
+				staff.setLastupdated(new Date().toString());
+				staff.setMiddlename(apiStaffFull.getMiddlename());
+				staff.setMobile(apiStaffFull.getMobile());
+				staff.setPassword(apiStaffFull.getPassword());
+				staff.setStaffNo(apiStaffFull.getStaffNo());
+				staff.setUsername(apiStaffFull.getUsername());
+				
+				if(staffDAO.updateStaff(staff)){
+					error = new AuthErr("success");
+					error.setDescription("Staff was updated successfully.");
+					
+				}else{
+					
+					error = new AuthErr("error");
+					error.setDescription("Something went wrong, try again later."); 
+				}
+				
+				
 				
 				
 			}
@@ -231,8 +262,6 @@ public class StaffService {
 			error.setDescription("Operation not allowed.");
 		}
 		
-		System.out.println("allowed : " + allowed); 
-
 		return error;
 
 	}
