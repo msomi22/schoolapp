@@ -87,12 +87,11 @@
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
+	href="css/normalize.min.css">
 <link rel='stylesheet prefetch'
-	href='https://fonts.googleapis.com/css?family=Roboto:400,700'>
+	href='css/roboto.css'>
 <link rel='stylesheet prefetch'
-	href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
+	href='../vendors/font-awesome/css/font-awesome.min.css'>
 <link rel="stylesheet" href="css/customReportStyle.css">
 
 

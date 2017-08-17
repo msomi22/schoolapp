@@ -172,7 +172,7 @@ $("#kcpeyear").datepicker({
         });
     </script>
 
-<script src="../build/js/custom.min.js"></script>
+<script src="../build/js/custom.js"></script>
 <!-- validate js -->
 
 <script type="text/javascript" src="js/validate.js"></script>
@@ -187,6 +187,12 @@ $("#kcpeyear").datepicker({
 
 
 <script src="js/customReportJs.js"></script>
+
+
+
+<!-- js api calls -->
+
+<script src="js/apiCalls/api.js"></script>
 
 
 
