@@ -1,4 +1,4 @@
-package com.yahoo.petermwenda83.server.api.rest;
+package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

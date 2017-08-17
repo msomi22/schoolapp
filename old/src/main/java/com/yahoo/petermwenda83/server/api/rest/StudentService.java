@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 
 /**
  * @author peter

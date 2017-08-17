@@ -6,6 +6,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 //import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,10 +14,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
-
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.staff.Staff;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
+import com.yahoo.petermwenda83.server.api.rest.bean.AuthErr;
 
 /**
  * 
@@ -34,12 +36,7 @@ import com.yahoo.petermwenda83.bean.staff.Staff;
 public class StaffRestFulAPI {
 
 	StaffService staffService = new StaffService();
-	private static EmailValidator emailValidator;
 	
-	static {
-		emailValidator = EmailValidator.getInstance();
-	}
-
 	@POST
 	@Path("/{accountId}")
 	public String putStatff(@PathParam("accountId") String accountId, 
@@ -52,49 +49,7 @@ public class StaffRestFulAPI {
 			AuthErr error = new AuthErr("error");
 			return gson.toJson(error); 
 			
-		}else if (StringUtils.isBlank(apiStaff.getFirstname())) { 
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Firt Name Can't be Empty!"); 
-			return gson.toJson(error); 
-
-        }else if (StringUtils.isBlank(apiStaff.getMiddlename())) { 
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Middle Name Can't be Empty!"); 
-			return gson.toJson(error); 
-
-        }else if (StringUtils.isBlank(apiStaff.getGender())) { 
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Gender Can't be Empty!"); 
-			return gson.toJson(error); 
-
-        }else if(!validMobileNo(apiStaff.getMobile())){
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Phone Number Not Valid!"); 
-			return gson.toJson(error); 
-			
-		}else if (!emailValidator.isValid(apiStaff.getEmail())) {
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Email Address Not Valid!"); 
-			return gson.toJson(error); 
-
-        }else if (StringUtils.isBlank(apiStaff.getUsername())) { 
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Username Can't be Empty!"); 
-			return gson.toJson(error); 
-
-        }else if (StringUtils.isBlank(apiStaff.getPassword())) { 
-			
-			AuthErr error = new AuthErr("error");
-			error.setDescription("Password Can't be Empty!"); 
-			return gson.toJson(error); 
-
-        }else {
+		}else {
         	
         	Staff staff = new Staff();
     		staff.setAccountId(accountId);
@@ -109,22 +64,9 @@ public class StaffRestFulAPI {
     		staff.setUsername(apiStaff.getUsername());
     		staff.setPassword(apiStaff.getPassword());
     		
-    		boolean put = staffService.putStaff(staff);
+    		AuthErr put = staffService.putStaff(staff);
+    		return gson.toJson(put); 
     		
-    		if(put){
-    			
-    			AuthErr error = new AuthErr("success");
-    			error.setDescription("Staff was registered successfully"); 
-    			return gson.toJson(error); 
-    			
-    		}else{
-    			
-    			AuthErr error = new AuthErr("error");
-    			error.setDescription("Did you suply a duplicate StaffNo?"); 
-    			return gson.toJson(error); 
-    			
-    		}
-    	
         }
 		
 		
@@ -132,6 +74,35 @@ public class StaffRestFulAPI {
 	
 	
 	
+	
+	@PUT
+	@Path("/{accountId}")
+	public String updateStatff(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth , ApiStaffFull ApiStaffFull){
+
+		Gson gson = new Gson();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			
+			AuthErr error = new AuthErr("error");
+			return gson.toJson(error); 
+			
+		}else{
+			
+			AuthErr put = staffService.updateStaff(ApiStaffFull);
+			return gson.toJson(put); 
+		}
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @param mobile
+	 * @return
+	 */
 	public static boolean validMobileNo(String mobile){
 		boolean valid = false;
 		
@@ -155,6 +126,47 @@ public class StaffRestFulAPI {
 		   "username":"msomi22",
 		   "password":"12345667890"
 		}
+		
+		
+		
+		<staff>
+		   <acessLevelId>BDF7F33D-1936-43F3-B14B-8FC3EA3A1265</acessLevelId>
+		   <email>peter.mwenda@adcea.com</email>
+		   <firstname>Peter</firstname>
+		   <gender>M</gender>
+		   <lastname>Njeru</lastname>
+		   <middlename>Mwenda</middlename>
+		   <mobile>718953974</mobile>
+		   <password>12345667890</password>
+		   <staffNo>456</staffNo>
+		   <username>msomi22</username>
+		</staff>
+		
+		
+		
+		{  
+		   "acessLevelId":"C3915245-00EE-4EF4-9898-ACE59683DD60",
+		   "staffNo":"1234",
+		   "isActive":"1",
+		   "firstname":"NICK",
+		   "middlename":"KARANI",
+		   "lastname":"NK",
+		   "gender":"M",
+		   "mobile":"7736636633",
+		   "email":"na",
+		   "username":"principal",
+		   "password":"demo",
+		   "uuid":"38EFA2D4-352D-4BC0-887F-9CA227950501",
+		   "accountId":"E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		   "logedUserId":"5498156A-FE83-43F4-9592-36281E377FE4",
+		   "logedUserAccessId":"1CC7F06E-9938-4850-81FB-9CC249C7CFA2"
+		}
+
+
+		
+		
+		
+		
 	 */
 
 }

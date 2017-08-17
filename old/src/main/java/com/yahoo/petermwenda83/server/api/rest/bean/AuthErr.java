@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.api.rest;
+package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,7 +15,7 @@ public class AuthErr {
 	private String message;
 	private String description;
 	
-	AuthErr(){
+	public AuthErr(){
 		
 	}
 

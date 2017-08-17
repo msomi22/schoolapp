@@ -313,9 +313,9 @@ CREATE TABLE Staff (
     middlename text,
     lastname text,
     gender text, 
-    mobile text,
-    email text,
-    username text,
+    mobile text UNIQUE NOT NULL,,
+    email text UNIQUE NOT NULL,,
+    username text UNIQUE NOT NULL,
     password text,
     lastUpdated text,
     regDate timestamp with time zone DEFAULT now()

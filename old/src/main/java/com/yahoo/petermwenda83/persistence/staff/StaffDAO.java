@@ -149,6 +149,40 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 
 		return StaffDetail; 
 	}
+	
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByAccessLevel(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Staff getStaffByAccessLevel(String accountId, String acessLevelId) {
+		Staff StaffDetail =  null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND acessLevelId =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, acessLevelId);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				StaffDetail  = beanProcessor.toBean(rset,Staff.class);
+			}  	
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with acessLevelId: " + acessLevelId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return StaffDetail; 
+	}
+
+
 
 
 
@@ -161,7 +195,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Staff" 
 						+"(uuid, accountId, acessLevelId, staffNo, isActive, firstname, middlename, lastname, gender,"
-						+ "mobile, email, username, password, regDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+						+ "mobile, email, username, password, lastupdated, regDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 				){
 		
 			pstmt.setString(1, staff.getUuid());
@@ -177,7 +211,8 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 			pstmt.setString(11, staff.getEmail());
 			pstmt.setString(12, staff.getUsername());
 			pstmt.setString(13, SecurityUtil.getMD5Hash(staff.getPassword()));
-			pstmt.setTimestamp(14, new Timestamp(staff.getRegDate().getTime()));
+			pstmt.setString(14, staff.getLastupdated());
+			pstmt.setTimestamp(15, new Timestamp(staff.getRegDate().getTime()));
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -198,7 +233,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE Staff SET acessLevelId =?, staffNo =?, isActive =?,"
 						+ "firstname =?, middlename =? , lastname =?, gender =?, mobile =?, email =?, username =?, password =? "
-						+ "WHERE uuid = ? AND accountId =? ;");
+						+ ", lastupdated = ? WHERE uuid = ? AND accountId =? ;");
 				){
 		
 			pstmt.setString(1, staff.getAcessLevelId());
@@ -212,8 +247,9 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 			pstmt.setString(9, staff.getEmail());
 			pstmt.setString(10, staff.getUsername());
 			pstmt.setString(11, SecurityUtil.getMD5Hash(staff.getPassword()));  
-			pstmt.setString(12, staff.getUuid());
-			pstmt.setString(13, staff.getAccountId());
+			pstmt.setString(12, staff.getLastupdated());
+			pstmt.setString(13, staff.getUuid());
+			pstmt.setString(14, staff.getAccountId());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -225,7 +261,8 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 
 		return success;
 	}
-
+	
+	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#deleteSStaffDetail(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
@@ -310,5 +347,32 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		return staffList;		
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffAccessLevel(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int getStaffAccessLevel(String accountId, String acessLevelId) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Staff WHERE accountId = ? AND acessLevelId = ?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, acessLevelId);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting Staff count for acessLevelId: " + acessLevelId + " and accountId : " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+
+	
 
 }

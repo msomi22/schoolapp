@@ -18,7 +18,7 @@ public interface SchoolStaffDAO {
 	 * @param Uuid
 	 * @return
 	 */
-	public Staff getStaff(String accountId, String Uuid);
+	public Staff getStaff(String accountId, String uuid);
 	/**
 	 * 
 	 * @param accountId
@@ -33,6 +33,13 @@ public interface SchoolStaffDAO {
 	 * @return
 	 */
 	public Staff getStaffByUsername(String accountId, String username);
+	/**
+	 * 
+	 * @param accountId
+	 * @param acessLevelId
+	 * @return
+	 */
+	public Staff getStaffByAccessLevel(String accountId, String acessLevelId);
 	 /**
 	  * 
 	  * @param staff
@@ -51,13 +58,20 @@ public interface SchoolStaffDAO {
 	  * @param Uuid
 	  * @return
 	  */
-	public boolean deleteStaff(String accountId, String Uuid);
+	public boolean deleteStaff(String accountId, String uuid);
 	/**
 	 * 
 	 * @param accountId
 	 * @return
 	 */
 	public List<Staff> getStaff(String accountId); 
+	/**
+	 * 
+	 * @param accountId
+	 * @param acessLevelId
+	 * @return
+	 */
+	public int getStaffAccessLevel(String accountId, String acessLevelId);
 	/**
 	 * 
 	 * @param accountId

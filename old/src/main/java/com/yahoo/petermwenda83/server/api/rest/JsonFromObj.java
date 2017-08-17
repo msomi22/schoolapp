@@ -1,8 +1,9 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
-import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 
 public class JsonFromObj {
 
@@ -15,11 +16,11 @@ public class JsonFromObj {
 		
 		Gson gson = new Gson();
 		
-		String jsonString = gson.toJson(new APIStaff());
+		String jsonString = gson.toJson(new ApiStaffFull());
 	
 		System.out.println(jsonString);
 		
-		System.out.println(StaffRestFulAPI.validMobileNo("h718953974"));  
+		//System.out.println(StaffRestFulAPI.validMobileNo("h718953974"));  
 
 	}
 
