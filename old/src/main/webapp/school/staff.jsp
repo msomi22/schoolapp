@@ -6,69 +6,84 @@
 
 
 <%
+	if (session == null) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-  if (session == null) {
-       response.sendRedirect("../index.jsp");
-       //return;
-    }
+	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(username)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
-
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-   
+	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 %>
 <jsp:include page="header.jsp" />
 
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Title</h3>
-              </div>
-            </div>
-            
-            <div class="clearfix"></div>
+<!-- page content -->
+<div class="right_col" role="main">
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h3>Title</h3>
+			</div>
+		</div>
 
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_content">
+		<div class="clearfix"></div>
 
-
-
-
-
-
-                  content here
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
 
 
 
 
 
+						<h1>Test the Api call via jquery</h1>
+
+
+						<button class="btn btn-primary btn-block" onclick="StaffApiCall()">
+							Test API call</button>
 
 
 
 
 
 
-                    
-                    
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /page content -->
 
-        <!-- footer -->
+
+						content here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /page content -->
+
+<!-- footer -->
 <jsp:include page="footer.jsp" />
-        
+
+
+
+<script>
+	
+</script>
