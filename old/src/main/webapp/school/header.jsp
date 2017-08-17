@@ -92,7 +92,7 @@
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     
-    <!-- sumo select -->
+    <!-- sumoselect -->
     
     <link href="../vendors/sumoselect/sumoselect.css" rel="stylesheet">
 
