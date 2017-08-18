@@ -4,6 +4,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
+import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
 public class JsonFromObj {
 
@@ -16,7 +17,7 @@ public class JsonFromObj {
 		
 		Gson gson = new Gson();
 		
-		String jsonString = gson.toJson(new ApiStaffFull());
+		String jsonString = gson.toJson(new SubClass());
 	
 		System.out.println(jsonString);
 		

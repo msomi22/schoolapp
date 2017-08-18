@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author peter
  *
  */
-@XmlRootElement(name = "apiResponse")  //only needed if we also want to generate XML     
+@XmlRootElement(name = "ApiResponse")  //only needed if we also want to generate XML     
 public class ApiResponse {
 	
 	private String message;

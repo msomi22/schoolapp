@@ -16,6 +16,7 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
@@ -345,23 +346,31 @@ public class StaffService {
 		
 		ApiResponse apiResponse = new ApiResponse(); 
 		
-		if(teacherSubjectDAO.updateTeacherSubject(teacherSubject)){
+		if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
 			
-			// Info updated successfully
-			
-			apiResponse = new ApiResponse("success");
-			apiResponse.setDescription("Info updated successfully"); 
-			
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Nothing to update / Update not allowed !"); 
 			
 		}else{
 			
-			//Something went wrong while updating the Info
-			
-			apiResponse = new ApiResponse("error");
-			apiResponse.setDescription("Something went wrong while updating the Info"); 
+			if(teacherSubjectDAO.updateTeacherSubject(teacherSubject)){
+				
+				// Info updated successfully
+				
+				apiResponse = new ApiResponse("success");
+				apiResponse.setDescription("Info updated successfully"); 
+				
+				
+			}else{
+				
+				//Something went wrong while updating the Info
+				
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Something went wrong while updating the Info"); 
+				
+			}
 			
 		}
-		
 		
 		return apiResponse;
 	}
@@ -374,21 +383,33 @@ public class StaffService {
 		
 		ApiResponse apiResponse = new ApiResponse(); 
 		
-		if(teacherSubjectDAO.deleteTeacherSubject(subClassId)){
+		if(teacherSubjectDAO.getTeacherSubject(subClassId) == null){
 			
-			// Info deleted successfully
-			apiResponse = new ApiResponse("success");
-			apiResponse.setDescription("Info deleted successfully"); 
-			
-			
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Nothing to delete!"); 
+			return apiResponse;
+
 		}else{
 			
-			//Something went wrong while deleting the Info
-			apiResponse = new ApiResponse("error");
-			apiResponse.setDescription("Something went wrong while deleting the Info"); 
-			
+			if(teacherSubjectDAO.deleteTeacherSubject(subClassId)){
+				
+				// Info deleted successfully
+				apiResponse = new ApiResponse("success");
+				apiResponse.setDescription("Info deleted successfully"); 
+				
+				
+			}else{
+				
+				//Something went wrong while deleting the Info
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Something went wrong while deleting the Info"); 
+				
+				
+			}
 			
 		}
+		
+		
 		
 		return apiResponse;
 	}
@@ -399,7 +420,7 @@ public class StaffService {
 	 */
 	public List<APITeacherSubject> getSubjectClassList(String staffId) {
 		
-		List<APITeacherSubject> tsList = new ArrayList<>();
+		List<APITeacherSubject> tsList = new ArrayList<APITeacherSubject>();
 		
 		if(teacherSubjectDAO.getTeacherSubjects(staffId) != null){
 			
@@ -410,13 +431,26 @@ public class StaffService {
 				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
 				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
 				
-				APITeacherSubject apiTSC = new APITeacherSubject();
-				apiTSC.setAccountId(tsc.getAccountId()); 
-				apiTSC.setAllocationDate(tsc.getAllocationDate());
-				apiTSC.setStreamId(tsc.getStreamId());
-				apiTSC.setSubjectId(tsc.getSubjectId());
-				apiTSC.setTeacherId(tsc.getTeacherId());
-				apiTSC.setUuid(tsc.getUuid());
+				ApiResponse response = new ApiResponse();
+				response.setMessage("success");
+				response.setDescription("OK");
+				
+
+				APISubjectClasss apiSC = new APISubjectClasss();
+				
+				apiSC.setAccountId(tsc.getAccountId()); 
+				apiSC.setAllocationDate(tsc.getAllocationDate());
+				apiSC.setStreamId(tsc.getStreamId());
+				apiSC.setSubjectId(tsc.getSubjectId());
+				apiSC.setTeacherId(tsc.getTeacherId());
+				apiSC.setUuid(tsc.getUuid());
+				
+				APITeacherSubject apiTSC = new APITeacherSubject(response, apiSC); 
+				apiTSC.setApiSubjectClasss(apiSC);
+				apiTSC.setResponse(response);
+				
+				
+				
 				
 				tsList.add(apiTSC);
 				

@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
@@ -34,6 +35,8 @@ public class SubClassRestFulAPI {
 	/**
 	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects
 	 * 
+	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects
+	 * 
 	 * @param subClass
 	 * @param auth
 	 * @return
@@ -50,9 +53,32 @@ public class SubClassRestFulAPI {
 		
 		return staffService.addSubject(subClass);
 	}
+	
+	/**
+	*    {  
+		   "teacherId":"",
+		   "subjectId":"",
+		   "streamId":"",
+		   "accountId":""
+		 }
+		 
+		 
+		 {  
+		   "teacherId":"38EFA2D4-352D-4BC0-887F-9CA227950501",
+		   "subjectId":"b9bbd718-b32f-4466-ab34-42f544ff900e",
+		   "streamId":"D3733507-C113-4795-91ED-D3CD8039EA03",
+		   "accountId":"E3CDC578-37BA-4CDB-B150-DAB0409270CD"
+		 }
+	 */
+	
+	
+	
+	
 
 	/**
 	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{subjectId}
+	 * 
+	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/a8382b24-7154-4722-8c6f-9f1b961a481a
 	 * 
 	 * @param subClassId
 	 * @param subClass
@@ -73,9 +99,37 @@ public class SubClassRestFulAPI {
 		
 		return staffService.updateSubjectClass(subClassId, subClass);
 	}
+	
+
+	/**
+	*    {  
+		   "teacherId":"",
+		   "subjectId":"",
+		   "streamId":"",
+		   "accountId":""
+		 }
+		 
+		 
+		 {  
+		   "teacherId":"38EFA2D4-352D-4BC0-887F-9CA227950501",
+		   "subjectId":"b9bbd718-b32f-4466-ab34-42f544ff900e",
+		   "streamId":"D3733507-C113-4795-91ED-D3CD8039EA03",
+		   "accountId":"E3CDC578-37BA-4CDB-B150-DAB0409270CD"
+		 }
+	 */
+	
+	
+	
+	
+	
+	
 
 	/** 
 	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{sub_class_id}/{accountId} 
+	 * 
+	 *   e.g 
+	 *   
+	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/F754E5B4-5340-41FF-9F48-89C6AB5EC130/E3CDC578-37BA-4CDB-B150-DAB0409270CD  
 	 *   
 	 * @param accountId
 	 * @param subClassId
@@ -100,6 +154,8 @@ public class SubClassRestFulAPI {
 
 	/**  
 	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{accountId}  
+	 *    e.g 
+	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/E3CDC578-37BA-4CDB-B150-DAB0409270CD
 	 * 
 	 * @param accountId
 	 * @param staffId
@@ -116,9 +172,15 @@ public class SubClassRestFulAPI {
 			
 			List<APITeacherSubject> response = new ArrayList<>();
 
-			APITeacherSubject error = new APITeacherSubject();
-			error.setMessage("error");
-			error.setDescription("User not authenticated"); 
+			ApiResponse respo = new ApiResponse();
+			respo.setMessage("error");
+			respo.setDescription("User not authenticated");
+			
+			APISubjectClasss apiR = new APISubjectClasss();
+			
+			APITeacherSubject error = new APITeacherSubject(respo,apiR);
+			error.setResponse(respo); 
+			
 			
 			response.add(error);
 			
@@ -131,80 +193,159 @@ public class SubClassRestFulAPI {
 
 	/**
 	 * 
-		[
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Chemistry",
-        "streamId": "FORM 1 N",
-        "uuid": "F754E5B4-5340-41FF-9F48-89C6AB5EC130",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Agriculture",
-        "streamId": "FORM 1 N",
-        "uuid": "CE527ACB-75CF-4B1B-A897-77132DDB0C83",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Biology",
-        "streamId": "FORM 4 N",
-        "uuid": "57DB9162-49FB-4416-AD72-ABCE228AF5B8",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Computer Studies",
-        "streamId": "FORM 4 N",
-        "uuid": "7E37176C-5A27-4617-BD00-B959612D7A9B",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Christian Religion",
-        "streamId": "FORM 2 S",
-        "uuid": "2D78671A-29C0-4B3F-8055-0A7713B848FC",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Mathematics",
-        "streamId": "FORM 2 N",
-        "uuid": "1AE66950-B137-4F2F-B01E-E262162536E0",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Business",
-        "streamId": "FORM 2 N",
-        "uuid": "1760EC73-CD38-4023-8ACC-CEC8CD575861",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Physics",
-        "streamId": "FORM 3 N",
-        "uuid": "AD9566E3-A48E-4E40-ACFA-7C863CFDF4EC",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    },
-    {
-        "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
-        "subjectId": "Home Science",
-        "streamId": "FORM 1 S",
-        "uuid": "011AA1FC-7CC7-41C9-A891-FD058ECF8A1E",
-        "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-        "allocationDate": 1501141262429
-    }
-]
+	 * 
+	 * 
+	 * [
+            {
+		        "response": {
+		            "message": "error",
+		            "description": "User not authenticated"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": null,
+		            "subjectId": null,
+		            "streamId": null,
+		            "uuid": null,
+		            "accountId": null,
+		            "allocationDate": null
+		        }
+		    }
+		]
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * [
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Chemistry",
+		            "streamId": "FORM 1 N",
+		            "uuid": "F754E5B4-5340-41FF-9F48-89C6AB5EC130",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Agriculture",
+		            "streamId": "FORM 1 N",
+		            "uuid": "CE527ACB-75CF-4B1B-A897-77132DDB0C83",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Biology",
+		            "streamId": "FORM 4 N",
+		            "uuid": "57DB9162-49FB-4416-AD72-ABCE228AF5B8",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Computer Studies",
+		            "streamId": "FORM 4 N",
+		            "uuid": "7E37176C-5A27-4617-BD00-B959612D7A9B",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Christian Religion",
+		            "streamId": "FORM 2 S",
+		            "uuid": "2D78671A-29C0-4B3F-8055-0A7713B848FC",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Mathematics",
+		            "streamId": "FORM 2 N",
+		            "uuid": "1AE66950-B137-4F2F-B01E-E262162536E0",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Business",
+		            "streamId": "FORM 2 N",
+		            "uuid": "1760EC73-CD38-4023-8ACC-CEC8CD575861",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Physics",
+		            "streamId": "FORM 3 N",
+		            "uuid": "AD9566E3-A48E-4E40-ACFA-7C863CFDF4EC",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    },
+		    {
+		        "response": {
+		            "message": "success",
+		            "description": "OK"
+		        },
+		        "apiSubjectClasss": {
+		            "teacherId": "5498156A-FE83-43F4-9592-36281E377FE4",
+		            "subjectId": "Home Science",
+		            "streamId": "FORM 1 S",
+		            "uuid": "011AA1FC-7CC7-41C9-A891-FD058ECF8A1E",
+		            "accountId": "E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+		            "allocationDate": 1501141262429
+		        }
+		    }
+		]
+    
 	 * 
 	 */
 

@@ -58,6 +58,39 @@ public class TeacherSubjectDAO extends GenericDAO  implements SchoolTeacherSubje
 	}
 	
 	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubjectDAO#getTeacherSubject(java.lang.String)
+	 */
+	@Override
+	public TeacherSubject getTeacherSubject(String uuid) {
+		TeacherSubject teachersub = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM TeacherSubject WHERE uuid =?;");       
+
+				){
+
+			pstmt.setString(1, uuid);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				teachersub  = beanProcessor.toBean(rset,TeacherSubject.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with TeacherSubject with uuid  " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return teachersub; 
+	}
+
+	
+	
+	
 	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolTeacherSubjectDAO#getTeacherSubject(java.lang.String, java.lang.String)
@@ -163,13 +196,12 @@ public class TeacherSubjectDAO extends GenericDAO  implements SchoolTeacherSubje
 		boolean success = true; 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE TeacherSubject SET subjectId =?, streamId =?"
-						+ " WHERE teacherId = ? AND accountId =? ;");
+						+ " WHERE uuid = ? ;");
 				){
 		
 			pstmt.setString(1, teacherSubject.getSubjectId());
 			pstmt.setString(2, teacherSubject.getStreamId());			
-			pstmt.setString(3, teacherSubject.getTeacherId());
-			pstmt.setString(4, teacherSubject.getAccountId());
+			pstmt.setString(3, teacherSubject.getUuid());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -236,7 +268,6 @@ public class TeacherSubjectDAO extends GenericDAO  implements SchoolTeacherSubje
 		return list;
 	}
 
-	
 	
 
 }

@@ -3,8 +3,6 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.bean;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -12,148 +10,63 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 
-@XmlRootElement(name = "teacherSubject")  //only needed if we also want to generate XML 
-
-public class APITeacherSubject extends ApiResponse{
+@XmlRootElement(name = "APITeacherSubject")  //only needed if we also want to generate XML 
+public class APITeacherSubject{
 	
 	
-	private String teacherId;
-	private String subjectId;
-	private String streamId;
-	private String uuid;
-	private String accountId;
-	private Timestamp allocationDate;
+	private ApiResponse response;
+	private APISubjectClasss apiSubjectClasss;
+	
+	public APITeacherSubject(){
+		
+	}
 
 	/**
 	 * 
 	 */
-	public APITeacherSubject() {
-		teacherId ="";
-		subjectId ="";
-		streamId ="";
-		uuid = "";
-		accountId = "";
-		allocationDate = new Timestamp(new Date().getTime());  
-	}
-
+	public APITeacherSubject(ApiResponse response,APISubjectClasss apiSubjectClasss) {
+		
+		this.response = response;
+		this.apiSubjectClasss = apiSubjectClasss;
 	
-
-	/**
-	 * @return the teacherId
-	 */
-	public String getTeacherId() {
-		return teacherId;
 	}
 
-
-
 	/**
-	 * @param teacherId the teacherId to set
+	 * @return the response
 	 */
-	public void setTeacherId(String teacherId) {
-		this.teacherId = teacherId;
+	public ApiResponse getResponse() {
+		return response;
 	}
 
-
-
 	/**
-	 * @return the subjectId
+	 * @param response the response to set
 	 */
-	public String getSubjectId() {
-		return subjectId;
+	public void setResponse(ApiResponse response) {
+		this.response = response;
 	}
 
-
-
 	/**
-	 * @param subjectId the subjectId to set
+	 * @return the apiSubjectClasss
 	 */
-	public void setSubjectId(String subjectId) {
-		this.subjectId = subjectId;
+	public APISubjectClasss getApiSubjectClasss() {
+		return apiSubjectClasss;
 	}
 
-
-
 	/**
-	 * @return the streamId
+	 * @param apiSubjectClasss the apiSubjectClasss to set
 	 */
-	public String getStreamId() {
-		return streamId;
+	public void setApiSubjectClasss(APISubjectClasss apiSubjectClasss) {
+		this.apiSubjectClasss = apiSubjectClasss;
 	}
-
-
-
-	/**
-	 * @param streamId the streamId to set
-	 */
-	public void setStreamId(String streamId) {
-		this.streamId = streamId;
-	}
-
-
-
-	/**
-	 * @return the uuid
-	 */
-	public String getUuid() {
-		return uuid;
-	}
-
-
-
-	/**
-	 * @param uuid the uuid to set
-	 */
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-
-
-	/**
-	 * @return the accountId
-	 */
-	public String getAccountId() {
-		return accountId;
-	}
-
-
-
-	/**
-	 * @param accountId the accountId to set
-	 */
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
-
-
-
-	/**
-	 * @return the allocationDate
-	 */
-	public Timestamp getAllocationDate() {
-		return allocationDate;
-	}
-
-
-
-	/**
-	 * @param allocationDate the allocationDate to set
-	 */
-	public void setAllocationDate(Timestamp allocationDate) {
-		this.allocationDate = allocationDate;
-	}
-
-
 
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "APITeacherSubject [teacherId=" + teacherId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", uuid=" + uuid + ", accountId=" + accountId + ", allocationDate=" + allocationDate + "]";
+		return "APITeacherSubject [response=" + response + ", apiSubjectClasss=" + apiSubjectClasss + "]";
 	}
 
+	
 
 }

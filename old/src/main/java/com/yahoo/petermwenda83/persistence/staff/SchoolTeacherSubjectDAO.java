@@ -13,6 +13,8 @@ import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
  */
 public interface SchoolTeacherSubjectDAO {
 	
+	public TeacherSubject getTeacherSubject(String uuid);
+	
 	public TeacherSubject getTeacherSubject(String accountId, String uuid);
 	
 	public TeacherSubject getTeacherSubject(String accountId, String streamId, String subjectId);
