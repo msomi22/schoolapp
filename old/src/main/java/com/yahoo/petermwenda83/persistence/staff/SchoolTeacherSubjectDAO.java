@@ -13,13 +13,17 @@ import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
  */
 public interface SchoolTeacherSubjectDAO {
 	
+	public TeacherSubject getTeacherSubject(String accountId, String uuid);
+	
 	public TeacherSubject getTeacherSubject(String accountId, String streamId, String subjectId);
 	
 	public boolean putTeacherSubject(TeacherSubject teacherSubject);
 	
-	public boolean deleteTeacherSubject(String accountId, String teacherId, String streamId, String subjectId);
+	public boolean updateTeacherSubject(TeacherSubject teacherSubject);
 	
-	public List<TeacherSubject> getTeacherSubjects(String accountId, String teacherId);
+	public boolean deleteTeacherSubject(String uuid);
+	
+	public List<TeacherSubject> getTeacherSubjects(String teacherId);
 	
 	
 

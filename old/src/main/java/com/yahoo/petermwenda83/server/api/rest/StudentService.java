@@ -29,7 +29,7 @@ public class StudentService {
 	public List<APIStudent> getStudentPerStream(String accountId, String sreamId) { 
 		
 		List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
-		List<APIStudent> streamStudents = new ArrayList<>();
+		List<APIStudent> streamStudents = new ArrayList<APIStudent>();
 		students.forEach(student -> {
 			
 			APIStudent apiStudent = new APIStudent(); 

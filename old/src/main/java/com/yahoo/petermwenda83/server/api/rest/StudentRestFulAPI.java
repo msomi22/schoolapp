@@ -5,6 +5,9 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 //import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -15,12 +18,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.Gson;
-import com.yahoo.petermwenda83.server.api.rest.bean.AuthErr;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 
 /**
- * 
- * http://localhost:8080/school/webapi/student/E3CDC578-37BA-4CDB-B150-DAB0409270CD/4DA86139-6A72-4089-8858-6A3A613FDFE6
  * 
  * @author peter
  *
@@ -32,19 +32,31 @@ public class StudentRestFulAPI{
 
 	StudentService studentService = new StudentService();
 
+	/**
+	 * http://localhost:8080/school/webapi/student/{accountId}/{streamId}
+	 * 
+	 * @param accountId
+	 * @param sreamId
+	 * @param auth
+	 * @return
+	 */
 	@GET
-	@Path("/{accountId}/{sreamId}") //List<APIStudent>
-	public String getStudentPerStream(@PathParam("accountId") String accountId, 
+	@Path("/{accountId}/{sreamId}") 
+	public List<APIStudent> getStudentPerStream(@PathParam("accountId") String accountId, 
 			@PathParam("sreamId") String sreamId , @HeaderParam("authorization") String auth) { 
 
-		Gson gson = new Gson();
+		List<APIStudent>  response = new ArrayList<>();
+		APIStudent re = new APIStudent();
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		
+		response.add(re);
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			AuthErr error = new AuthErr("error");
-			return gson.toJson(error); 
+			return response; 
 		}
 
-		return gson.toJson(studentService.getStudentPerStream(accountId,sreamId));  
+		return studentService.getStudentPerStream(accountId,sreamId);  
 	}
 
 	

@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author peter
  *
  */
-@XmlRootElement(name = "student")  //only needed if we also want to generate XML     
-public class AuthErr {
+@XmlRootElement(name = "apiResponse")  //only needed if we also want to generate XML     
+public class ApiResponse {
 	
 	private String message;
 	private String description;
 	
-	public AuthErr(){
+	public ApiResponse(){
 		
 	}
 
-	public AuthErr(String message){//"error"
+	public ApiResponse(String message){//"error"
 		this.message = message;
 		description = "User not authenticated";
 	}
@@ -57,7 +57,7 @@ public class AuthErr {
 	 */
 	@Override
 	public String toString() {
-		return "AuthErr [message=" + message + ", description=" + description + "]";
+		return "ApiResponse [message=" + message + ", description=" + description + "]";
 	}
 	
 	

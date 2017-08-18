@@ -3,15 +3,23 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
+import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
+import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
-import com.yahoo.petermwenda83.server.api.rest.bean.AuthErr;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
 /**
  * @author peter
@@ -20,10 +28,19 @@ import com.yahoo.petermwenda83.server.api.rest.bean.AuthErr;
 public class StaffService {
 
 	private static StaffDAO staffDAO;
+	private static StreamDAO streamDAO;
+	private static SubjectDAO subjectDAO;
+	private static TeacherSubjectDAO teacherSubjectDAO;
+	
+	
 	private static EmailValidator emailValidator;
 
 	static{
 		staffDAO = StaffDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
+		subjectDAO = SubjectDAO.getInstance();
+		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
+		
 		emailValidator = EmailValidator.getInstance();
 	}
 
@@ -32,10 +49,10 @@ public class StaffService {
 	 * @param staff
 	 * @return
 	 */
-	public AuthErr putStaff(Staff staff){
+	public ApiResponse putStaff(Staff staff){
 
 		String  response = "";
-		AuthErr error = new AuthErr(); 
+		ApiResponse apiResponse = new ApiResponse(); 
 
 		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
@@ -44,8 +61,8 @@ public class StaffService {
 
 			if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), principal) != null ){
 				response = "Principal can not be added twice";
-				error = new AuthErr("error");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription(response);
 
 			}
 
@@ -54,8 +71,8 @@ public class StaffService {
 
 			if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), deputy_Principal) != null ){
 				response = "Deputy Principal can not be added twice";
-				error = new AuthErr("error");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription(response);
 
 			}
 
@@ -64,64 +81,64 @@ public class StaffService {
 
 			if (StringUtils.isBlank(staff.getFirstname())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Firt Name Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Firt Name Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(staff.getMiddlename())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Middle Name Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Middle Name Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(staff.getGender())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Gender Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Gender Can't be Empty!"); 
 
 			}else if(!validMobileNo(staff.getMobile())){
 
-				error = new AuthErr("error");
-				error.setDescription("Phone Number Not Valid!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Phone Number Not Valid!"); 
 
 			}else if (!emailValidator.isValid(staff.getEmail())) {
 
-				error = new AuthErr("error");
-				error.setDescription("Email Address Not Valid!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Email Address Not Valid!"); 
 
 			}else if (StringUtils.isBlank(staff.getUsername())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Username Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Username Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(staff.getPassword())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Password Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Password Can't be Empty!"); 
 
 			}else if(staffDAO.getStaffByStaffNo(staff.getAccountId(), staff.getStaffNo()) != null){
 				response = "StaffNo already exist.";
-				error = new AuthErr("error");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription(response);
 
 			}else if(staffDAO.getStaffByUsername(staff.getAccountId(), staff.getUsername()) != null){
 				response = "Staff username already exist.";
-				error = new AuthErr("error");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription(response);
 
 			}else if(staffDAO.putStaff(staff)){
 				response = "Staff was registered successfully.";
-				error = new AuthErr("success");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("success");
+				apiResponse.setDescription(response);
 
 			}else{
 				response = "Something went wrong, try again later.";
-				error = new AuthErr("error");
-				error.setDescription(response);
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription(response);
 			}
 
 		}
 
 
-		return error;
+		return apiResponse;
 	}
 
 
@@ -131,9 +148,9 @@ public class StaffService {
 	 * @param ApiStaffFull
 	 * @return
 	 */
-	public AuthErr updateStaff(ApiStaffFull apiStaffFull){
+	public ApiResponse updateStaff(ApiStaffFull apiStaffFull){
 
-		AuthErr error = new AuthErr(); 
+		ApiResponse apiResponse = new ApiResponse(); 
 		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
 
@@ -148,19 +165,19 @@ public class StaffService {
 			//user tries to alter principal 
 			if(StringUtils.equals(apiStaffFull.getAcessLevelId(), principal)){ 
 				//prevent user from performing the action 
-				error = new AuthErr("error");
-				error.setDescription("You are performing an illegal action (Altering principal Info!)");  
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("You are performing an illegal action (Altering principal Info!)");  
 				
-				return error;
+				return apiResponse;
 			}
 			//user NOT deputy and tries to alter deputy principal 
 			else if(!StringUtils.equals(apiStaffFull.getLogedUserAccessId(), deputy_Principal) && 
 					StringUtils.equals(apiStaffFull.getAcessLevelId(), deputy_Principal)){ 
 				//prevent user from performing the action 
-				error = new AuthErr("error");
-				error.setDescription("You are performing an illegal action (Altering deputy principal Info!)");  
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("You are performing an illegal action (Altering deputy principal Info!)");  
 				
-				return error;
+				return apiResponse;
 				
 			}else{
 				allowed = true;
@@ -175,52 +192,52 @@ public class StaffService {
 			
 			if (StringUtils.isBlank(apiStaffFull.getFirstname())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Firt Name Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Firt Name Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(apiStaffFull.getMiddlename())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Middle Name Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Middle Name Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(apiStaffFull.getGender())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Gender Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Gender Can't be Empty!"); 
 
 			}else if(!validMobileNo(apiStaffFull.getMobile())){
 
-				error = new AuthErr("error");
-				error.setDescription("Phone Number Not Valid!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Phone Number Not Valid!"); 
 
 			}else if (!emailValidator.isValid(apiStaffFull.getEmail())) {
 
-				error = new AuthErr("error");
-				error.setDescription("Email Address Not Valid!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Email Address Not Valid!"); 
 
 			}else if (StringUtils.isBlank(apiStaffFull.getUsername())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Username Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Username Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(apiStaffFull.getPassword())) { 
 
-				error = new AuthErr("error");
-				error.setDescription("Password Can't be Empty!"); 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Password Can't be Empty!"); 
 
 			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
 
-				error = new AuthErr("error");
-				error.setDescription("StudentId invalid!");  
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("StudentId invalid!");  
 
 			}/*else if(staffDAO.getStaffByStaffNo(apiStaffFull.getAccountId(), apiStaffFull.getStaffNo()) != null){
 
-				error = new AuthErr("error");
+				error = new ApiResponse("error");
 				error.setDescription("StaffNo already exist.");
 
 			}else if(staffDAO.getStaffByUsername(apiStaffFull.getAccountId(), apiStaffFull.getUsername()) != null){
 
-				error = new AuthErr("error");
+				error = new ApiResponse("error");
 				error.setDescription("Staff username already exist.");
 
 			}*/else{
@@ -241,13 +258,13 @@ public class StaffService {
 				staff.setUsername(apiStaffFull.getUsername());
 				
 				if(staffDAO.updateStaff(staff)){
-					error = new AuthErr("success");
-					error.setDescription("Staff was updated successfully.");
+					apiResponse = new ApiResponse("success");
+					apiResponse.setDescription("Staff was updated successfully.");
 					
 				}else{
 					
-					error = new AuthErr("error");
-					error.setDescription("Something went wrong, try again later."); 
+					apiResponse = new ApiResponse("error");
+					apiResponse.setDescription("Something went wrong, try again later."); 
 				}
 				
 				
@@ -258,13 +275,177 @@ public class StaffService {
 			
 		}else{
 			
-			error = new AuthErr("error");
-			error.setDescription("Operation not allowed.");
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Operation not allowed.");
 		}
 		
-		return error;
+		return apiResponse;
 
 	}
+	
+	
+	
+	
+
+	/**
+	 * @param staffId
+	 * @param subClass
+	 * @return
+	 */
+	public ApiResponse addSubject(SubClass subClass) {
+		
+		TeacherSubject teacherSubject = new TeacherSubject();
+		teacherSubject.setAccountId(subClass.getAccountId());
+		teacherSubject.setTeacherId(subClass.getTeacherId());
+		teacherSubject.setSubjectId(subClass.getSubjectId());
+		teacherSubject.setStreamId(subClass.getStreamId());
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
+			
+			//The subject is already assigned to another teacher 
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("The subject is already assigned to another teacher."); 
+			
+		}else{
+			
+			if(teacherSubjectDAO.putTeacherSubject(teacherSubject)){
+				
+				//subject allocated successfully 
+				apiResponse = new ApiResponse("success");
+				apiResponse.setDescription("subject allocated successfully."); 
+				
+			}else{
+				
+				//Something went wrong, try again later or contact the Admin 
+				apiResponse = new ApiResponse("error");
+				apiResponse.setDescription("Something went wrong, try again later or contact the Admin."); 
+				
+			}
+			
+		}
+		
+		return apiResponse; 
+	}
+
+
+
+	/**
+	 * @param staffId
+	 * @param subClassId
+	 * @param subClass
+	 * @return
+	 */
+	public ApiResponse updateSubjectClass(String subClassId, SubClass subClass) {
+		
+		TeacherSubject teacherSubject = teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClassId); 
+		teacherSubject.setStreamId(subClass.getStreamId());
+		teacherSubject.setSubjectId(subClass.getSubjectId()); 
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(teacherSubjectDAO.updateTeacherSubject(teacherSubject)){
+			
+			// Info updated successfully
+			
+			apiResponse = new ApiResponse("success");
+			apiResponse.setDescription("Info updated successfully"); 
+			
+			
+		}else{
+			
+			//Something went wrong while updating the Info
+			
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Something went wrong while updating the Info"); 
+			
+		}
+		
+		
+		return apiResponse;
+	}
+
+	/**
+	 * @param subClassId
+	 * @return
+	 */
+	public ApiResponse deleteSubjectClass(String subClassId) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(teacherSubjectDAO.deleteTeacherSubject(subClassId)){
+			
+			// Info deleted successfully
+			apiResponse = new ApiResponse("success");
+			apiResponse.setDescription("Info deleted successfully"); 
+			
+			
+		}else{
+			
+			//Something went wrong while deleting the Info
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Something went wrong while deleting the Info"); 
+			
+			
+		}
+		
+		return apiResponse;
+	}
+
+	/**
+	 * @param staffId
+	 * @return
+	 */
+	public List<APITeacherSubject> getSubjectClassList(String staffId) {
+		
+		List<APITeacherSubject> tsList = new ArrayList<>();
+		
+		if(teacherSubjectDAO.getTeacherSubjects(staffId) != null){
+			
+			teacherSubjectDAO.getTeacherSubjects(staffId).forEach(ts -> {
+				
+				TeacherSubject tsc = teacherSubjectDAO.getTeacherSubject(ts.getAccountId(), ts.getUuid()); 
+				
+				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
+				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
+				
+				APITeacherSubject apiTSC = new APITeacherSubject();
+				apiTSC.setAccountId(tsc.getAccountId()); 
+				apiTSC.setAllocationDate(tsc.getAllocationDate());
+				apiTSC.setStreamId(tsc.getStreamId());
+				apiTSC.setSubjectId(tsc.getSubjectId());
+				apiTSC.setTeacherId(tsc.getTeacherId());
+				apiTSC.setUuid(tsc.getUuid());
+				
+				tsList.add(apiTSC);
+				
+			});
+			
+		}
+		
+		return teacherSubjectDAO.getTeacherSubjects(staffId) != null ? tsList : new ArrayList<APITeacherSubject>();
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
@@ -281,5 +462,7 @@ public class StaffService {
 
 		return valid;
 	}
+
+
 
 }

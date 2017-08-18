@@ -1,45 +1,41 @@
-
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
-package com.yahoo.petermwenda83.bean.staff;
+/**
+ * 
+ */
+package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import java.sql.Timestamp;
 import java.util.Date;
-
-import com.yahoo.petermwenda83.bean.StorableBean;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Teacher Subject-ClassRoom Allocation
- * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
+ * @author peter
  *
  */
 
-public class TeacherSubject extends StorableBean {
+@XmlRootElement(name = "teacherSubject")  //only needed if we also want to generate XML 
+
+public class APITeacherSubject extends ApiResponse{
+	
 	
 	private String teacherId;
 	private String subjectId;
 	private String streamId;
+	private String uuid;
+	private String accountId;
 	private Timestamp allocationDate;
-	
-	
+
 	/**
 	 * 
 	 */
-	public TeacherSubject() {
-		super();
+	public APITeacherSubject() {
 		teacherId ="";
 		subjectId ="";
 		streamId ="";
+		uuid = "";
+		accountId = "";
 		allocationDate = new Timestamp(new Date().getTime());  
 	}
+
 	
 
 	/**
@@ -50,12 +46,14 @@ public class TeacherSubject extends StorableBean {
 	}
 
 
+
 	/**
 	 * @param teacherId the teacherId to set
 	 */
 	public void setTeacherId(String teacherId) {
 		this.teacherId = teacherId;
 	}
+
 
 
 	/**
@@ -66,12 +64,14 @@ public class TeacherSubject extends StorableBean {
 	}
 
 
+
 	/**
 	 * @param subjectId the subjectId to set
 	 */
 	public void setSubjectId(String subjectId) {
 		this.subjectId = subjectId;
 	}
+
 
 
 	/**
@@ -82,12 +82,50 @@ public class TeacherSubject extends StorableBean {
 	}
 
 
+
 	/**
 	 * @param streamId the streamId to set
 	 */
 	public void setStreamId(String streamId) {
 		this.streamId = streamId;
 	}
+
+
+
+	/**
+	 * @return the uuid
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+
+
+
+	/**
+	 * @param uuid the uuid to set
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+
+
+	/**
+	 * @return the accountId
+	 */
+	public String getAccountId() {
+		return accountId;
+	}
+
+
+
+	/**
+	 * @param accountId the accountId to set
+	 */
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
 
 
 	/**
@@ -98,6 +136,7 @@ public class TeacherSubject extends StorableBean {
 	}
 
 
+
 	/**
 	 * @param allocationDate the allocationDate to set
 	 */
@@ -106,19 +145,15 @@ public class TeacherSubject extends StorableBean {
 	}
 
 
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "TeacherSubject [teacherId=" + teacherId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", allocationDate=" + allocationDate + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "APITeacherSubject [teacherId=" + teacherId + ", subjectId=" + subjectId + ", streamId=" + streamId
+				+ ", uuid=" + uuid + ", accountId=" + accountId + ", allocationDate=" + allocationDate + "]";
 	}
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8748801928170289528L;
 }

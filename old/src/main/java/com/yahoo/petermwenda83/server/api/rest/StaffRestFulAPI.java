@@ -14,17 +14,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
-import com.yahoo.petermwenda83.server.api.rest.bean.AuthErr;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 
 /**
- * 
- * http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/
- * 
- * http://862bdf67.ngrok.io/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD
  * 
  * 
  * @author peter
@@ -37,17 +32,23 @@ public class StaffRestFulAPI {
 
 	StaffService staffService = new StaffService();
 	
+	/**
+	 * http://localhost:8080/school/webapi/staff/{accountId}
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param apiStaff
+	 * @return
+	 */
 	@POST
 	@Path("/{accountId}")
-	public String putStatff(@PathParam("accountId") String accountId, 
+	public ApiResponse putStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , APIStaff apiStaff){
-
-		Gson gson = new Gson();
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			
-			AuthErr error = new AuthErr("error");
-			return gson.toJson(error); 
+			ApiResponse error = new ApiResponse("error");
+			return error; 
 			
 		}else {
         	
@@ -64,8 +65,8 @@ public class StaffRestFulAPI {
     		staff.setUsername(apiStaff.getUsername());
     		staff.setPassword(apiStaff.getPassword());
     		
-    		AuthErr put = staffService.putStaff(staff);
-    		return gson.toJson(put); 
+    		ApiResponse put = staffService.putStaff(staff);
+    		return put; 
     		
         }
 		
@@ -73,27 +74,43 @@ public class StaffRestFulAPI {
 	}
 	
 	
-	
+	/**
+	 * http://localhost:8080/school/webapi/staff/{accountId}
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param ApiStaffFull
+	 * @return
+	 */
 	
 	@PUT
 	@Path("/{accountId}")
-	public String updateStatff(@PathParam("accountId") String accountId, 
+	public ApiResponse updateStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , ApiStaffFull ApiStaffFull){
-
-		Gson gson = new Gson();
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			
-			AuthErr error = new AuthErr("error");
-			return gson.toJson(error); 
+			ApiResponse error = new ApiResponse("error");
+			return error; 
 			
 		}else{
 			
-			AuthErr put = staffService.updateStaff(ApiStaffFull);
-			return gson.toJson(put); 
+			ApiResponse put = staffService.updateStaff(ApiStaffFull);
+			return put; 
 		}
 		
 	}
+	
+	/**
+	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects
+	 * @return
+	 */
+	
+	@Path("/{staffId}/subjects")
+	public SubClassRestFulAPI getSubjectService(){
+		return new SubClassRestFulAPI(); 
+	}
+	
 	
 	
 	
