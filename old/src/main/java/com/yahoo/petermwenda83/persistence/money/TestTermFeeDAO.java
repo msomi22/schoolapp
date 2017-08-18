@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.money;
 
 import static org.junit.Assert.*;
@@ -13,10 +13,10 @@ import org.junit.Test;
 import com.yahoo.petermwenda83.bean.money.Deposit;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestTermFeeDAO {
 	
 
@@ -37,9 +37,9 @@ public class TestTermFeeDAO {
 	
 	private TermFeeDAO store;
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.TermFeeDAO#getTermFee(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testGetTermFee() {
@@ -51,9 +51,9 @@ public class TestTermFeeDAO {
 		//assertEquals(t.getTermAmount(),TERM_FEE,0);
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.TermFeeDAO#putTermFee(com.yahoo.petermwenda83.bean.money.TermFee)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testPutTermFee() {
@@ -65,9 +65,9 @@ public class TestTermFeeDAO {
 		//assertTrue(store.putTermFee(t));
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.TermFeeDAO#updateTermFee(com.yahoo.petermwenda83.bean.money.TermFee)}.
-	 */
+	 *//*
 	
 	@Ignore
 	@Test
@@ -85,9 +85,10 @@ public class TestTermFeeDAO {
 	@Test
 	public final void testgetTermFeeList() {
 		store = new TermFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<TermFee> dlist = store.getTermFeeList(SCHOOL_UUID);	
+		List<TermFee> dlist = store.getTermFeeList(SCHOOL_UUID);	
 		for (TermFee d : dlist) {
 			System.out.println(d);	
-		}*/
+		}
 	}
 }
+*/

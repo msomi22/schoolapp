@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.exam;
 
 import static org.junit.Assert.*;
@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestPerfomanceDAO {
 	
 	private final String databaseName = "schooldb";
@@ -34,9 +34,9 @@ public class TestPerfomanceDAO {
 	
 	PerfomanceDAO store = new PerfomanceDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#PerfomanceDAO(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testPerfomanceDAOStringStringStringStringInt() {
@@ -45,54 +45,54 @@ public class TestPerfomanceDAO {
 		System.out.println("perfomance: " + perfomance.getScore()); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#getStreamPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetStreamPerformance() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#getClassPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetClassPerformance() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#deletePerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testDeletePerfomance() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#getStreamSubjectPerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetStreamSubjectPerfomance() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#getClassSubjectPerfomance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetClassSubjectPerfomance() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO#getPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetPerformance() {
@@ -100,3 +100,4 @@ public class TestPerfomanceDAO {
 	}
 
 }
+*/

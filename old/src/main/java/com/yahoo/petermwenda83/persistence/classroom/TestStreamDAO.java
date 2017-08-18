@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.classroom;
 
 import org.junit.Ignore;
@@ -8,10 +8,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStreamDAO {
 	
 	final String databaseName = "schooldb";
@@ -32,74 +32,75 @@ public class TestStreamDAO {
 	
 	private StreamDAO store;
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.StreamDAO#getroom(java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetroom() {
 		store = new StreamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		ClassRoom c = new ClassRoom();
-		/*c = store.getroom(SCHOOL_UUID, UUID);
+		c = store.getroom(SCHOOL_UUID, UUID);
 		assertEquals(c.getUuid(),UUID);
 		assertEquals(c.getSchoolAccountUuid(),SCHOOL_UUID);
-		assertEquals(c.getRoomName(),ROOM_NAME);*/
+		assertEquals(c.getRoomName(),ROOM_NAME);
 		
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.StreamDAO#putroom(com.yahoo.petermwenda83.bean.classroom.ClassRoom)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testPutroom() {
 		store = new StreamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		ClassRoom c = new ClassRoom();
 		c.setUuid(UUID_NEW);
-		/*c.setSchoolAccountUuid(SCHOOL_UUID);
+		c.setSchoolAccountUuid(SCHOOL_UUID);
 		c.setRoomName(ROOM_NAME_NEW);
-		assertTrue(store.putroom(c)); */
+		assertTrue(store.putroom(c)); 
 		
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.StreamDAO#updateroom(com.yahoo.petermwenda83.bean.classroom.ClassRoom)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testUpdateroom() {
 		store = new StreamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		ClassRoom c = new ClassRoom();
 		c.setUuid(UUID_NEW);
-		/*c.setSchoolAccountUuid(SCHOOL_UUID);
+		c.setSchoolAccountUuid(SCHOOL_UUID);
 		c.setRoomName(ROOM_NAME_UPDATE);
-		assertTrue(store.updateroom(c));  */
+		assertTrue(store.updateroom(c));  
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.StreamDAO#deleteroom(com.yahoo.petermwenda83.bean.classroom.ClassRoom)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testDeleteroom() {
 		store = new StreamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		ClassRoom c = new ClassRoom();
-		/*c.setUuid(UUID_NEW);
+		c.setUuid(UUID_NEW);
 		c.setSchoolAccountUuid(SCHOOL_UUID);
-		assertTrue(store.deleteroom(c)); */
+		assertTrue(store.deleteroom(c)); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.StreamDAO#getAllRooms(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetAllRooms() {
 		store = new StreamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<ClassRoom> list = store.getAllRooms(SCHOOL_UUID);
+		List<ClassRoom> list = store.getAllRooms(SCHOOL_UUID);
 		for (ClassRoom cl : list) {
 			System.out.println(cl); 
-		}*/
+		}
 	}
 
 }
+*/

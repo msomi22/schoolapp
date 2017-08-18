@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.utils;
 
 import static org.junit.Assert.*;
@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStudentUtils {
 	
 	final String databaseName = "schooldb";
@@ -24,9 +24,9 @@ public class TestStudentUtils {
 	
 	private StudentUtils store;
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.utils.StudentUtils#getStudents(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetStudents() {
@@ -35,9 +35,9 @@ public class TestStudentUtils {
 		
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.utils.StudentUtils#getIncomingCount(java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testGetIncomingCount() {
@@ -46,3 +46,4 @@ public class TestStudentUtils {
 	}
 
 }
+*/

@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.classroom;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import org.junit.Test;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestClassDAO {
 	
 	final String databaseName = "schooldb";
@@ -32,9 +32,9 @@ public class TestClassDAO {
 			     CLASS_NAME_NEW = "new",
 			     CLASS_NAME_UPDATE = "update";
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.ClassDAO#getClass(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetClassString() {
@@ -44,9 +44,9 @@ public class TestClassDAO {
 		//assertEquals(c.getClassName(),CLASS_NAME);
 	}
 	
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.ClassDAO#getClass(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testPutClass() {
@@ -58,9 +58,9 @@ public class TestClassDAO {
 		
 	}
 	
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.classroom.ClassDAO#getClass(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testUpdateClass() {
@@ -83,3 +83,4 @@ public class TestClassDAO {
 	}
 
 }
+*/

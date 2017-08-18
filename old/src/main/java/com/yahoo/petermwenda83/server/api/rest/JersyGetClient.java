@@ -1,9 +1,11 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import sun.misc.BASE64Encoder;
 
 public class JersyGetClient {
 	
@@ -17,8 +19,20 @@ public class JersyGetClient {
         String name = "demo";
         String password = "12345678";
         String auth = name + ":" + password;
-        String authEncoded = new BASE64Encoder().encode(auth.getBytes());
+        
+        String authEncoded = "";
+        
+        try {
+        	
+			  authEncoded = Base64.getEncoder().encodeToString(auth.getBytes("utf-8")); 
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        
+        
         System.out.println("Base64 encoded auth string: " + authEncoded);
+        
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
         ClientResponse resp = webResource.accept("application/json")

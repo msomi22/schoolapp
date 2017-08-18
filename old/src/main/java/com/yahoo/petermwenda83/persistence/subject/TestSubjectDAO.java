@@ -2,7 +2,7 @@
  * Account Management System
  * This software belong to Peter Mwenda's and Miwgi Ndungu's Company
  * copywrite peter&MigwiSoftwares.co.ltd
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.subject;
 
 import static org.junit.Assert.assertEquals;
@@ -15,10 +15,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.subject.Subject;
 
-/**
+*//**
  * @author peter<a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
- */
+ *//*
 public class TestSubjectDAO {
 	
 
@@ -63,9 +63,9 @@ final String uuid = "4a053537-b2cb-429a-a95b-fb529f692a2e";
 
 private SubjectDAO store;
 
-	/**
+	*//**
 	 * Subject method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#getSubject(java.lang.String)}.
-	 */
+	 *//*
     @Ignore
 	@Test
 	public void testGetSubject() {
@@ -73,18 +73,18 @@ private SubjectDAO store;
 		
 		Subject subject = new Subject();
 		
-		/*subject = store.getSubject(SUB_UUID);
-		assertEquals(subject.getUuid(),SUB_UUID);*/
-		/*assertEquals(subject.getSubjectcode(),SUB_CODE);
+		subject = store.getSubject(SUB_UUID);
+		assertEquals(subject.getUuid(),SUB_UUID);
+		assertEquals(subject.getSubjectcode(),SUB_CODE);
 		assertEquals(subject.getSubjectname(),SUB_NAME);
-		assertEquals(subject.getSubjectcategory(),SUB_CAT);*/
+		assertEquals(subject.getSubjectcategory(),SUB_CAT);
 		
 	}
      
-     /**
+     *//**
      * Subject method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#getSubjects(java.lang.String)}.
 	 *
-     */
+     *//*
     @Ignore
  	@Test
      public void testGetSubjects() {
@@ -92,20 +92,20 @@ private SubjectDAO store;
  		
  		Subject subject = new Subject();
  		
- 		/*subject = store.getSubjects(SUB_CODE);
- 		assertEquals(subject.getUuid(),SUB_UUID);*/
- 	/*	assertEquals(subject.getSubjectcode(),SUB_CODE);
+ 		subject = store.getSubjects(SUB_CODE);
+ 		assertEquals(subject.getUuid(),SUB_UUID);
+ 		assertEquals(subject.getSubjectcode(),SUB_CODE);
  		assertEquals(subject.getSubjectname(),SUB_NAME);
- 		assertEquals(subject.getSubjectcategory(),SUB_CAT);*/
+ 		assertEquals(subject.getSubjectcategory(),SUB_CAT);
  		
  	}
      
      
 
 
-	/**
+	*//**
 	 * SubjectUi method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#putSubject(com.yahoo.petermwenda83.bean.student.Subject)}.
-	 */
+	 *//*
    @Ignore
 	@Test
 	public void testPutSubject() {
@@ -114,33 +114,33 @@ private SubjectDAO store;
     	Subject sub = new Subject();
     	String subUuid = sub.getUuid();
 		sub.setUuid(subUuid);
-		/*sub.setSubjectcode(SUB_CODE_4);
+		sub.setSubjectcode(SUB_CODE_4);
 		sub.setSubjectname(SUB_NAME_4);
-	    sub.setSubjectcategory(SUB_CAT_4); */
+	    sub.setSubjectcategory(SUB_CAT_4); 
 	    assertTrue(store.putSubject(sub));
 	}
 
 	
 
-	/**
+	*//**
 	 * SubjectUi method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#editSubject(com.yahoo.petermwenda83.bean.student.Subject)}.
-	 */
+	 *//*
     @Ignore
 	@Test
 	public void testEditSubject() {
     	store = new SubjectDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
     	Subject sub = new Subject();
-    /*	sub.setSubjectname(SUB_NAME_3);
+    	sub.setSubjectname(SUB_NAME_3);
     	sub.setSubjectcode(SUB_CODE_3);
-    	sub.setSubjectcategory(SUB_CAT);*/
+    	sub.setSubjectcategory(SUB_CAT);
     	sub.setUuid(SUB_UUID_3);
     	//assertTrue(store.editSubject(sub,SUB_UUID_3));
 	}
 
 
-	/**
+	*//**
 	 * SubjectUi method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#deleteStudent(com.yahoo.petermwenda83.bean.student.Subject)}.
-	 */
+	 *//*
 	 @Ignore
 	@Test
 	public void testDeleteStudent() {
@@ -151,23 +151,24 @@ private SubjectDAO store;
 			//assertTrue(store.deleteStudent(sub));
 	} 
 
-	/**
+	*//**
 	 * SubjectUi method for {@link com.yahoo.petermwenda83.persistence.subject.SubjectDAO#getAllStudent()}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testGetAllStudent() {
 		 store = new SubjectDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<Subject> list = store.getAllSubjects();	
+		List<Subject> list = store.getAllSubjects();	
 		//assertEquals(list.size(), 11);
 		//System.out.println(list);
 		for (Subject l : list) {
 			System.out.println(l);
 			
-		}*/
+		}
 		
 	}
 
 	
 	
 }
+*/

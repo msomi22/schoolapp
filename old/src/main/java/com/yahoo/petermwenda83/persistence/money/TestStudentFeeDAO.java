@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.money;
 
 import static org.junit.Assert.assertEquals;
@@ -14,10 +14,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStudentFeeDAO {
 	
 
@@ -57,136 +57,137 @@ public class TestStudentFeeDAO {
 	final Date DATE_PAID =  new Date();
 	
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#getStudentFeeByStudentUuid(java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testGetStudentFeeByStudentUuid() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		StudentFee sf = new StudentFee();
-		/*sf = store.getStudentFeeByStudentUuid(SCHOOL_UUID, STUDENT_UUID,TERM,YEAR);
+		sf = store.getStudentFeeByStudentUuid(SCHOOL_UUID, STUDENT_UUID,TERM,YEAR);
 		assertEquals(sf.getUuid(),UUID);
 		assertEquals(sf.getSchoolAccountUuid(),SCHOOL_UUID);
 		assertEquals(sf.getStudentUuid(),STUDENT_UUID);
 		assertEquals(sf.getTransactionID(),TRANSCATION_ID);
 		assertEquals(sf.getAmountPaid(),AMOUNT_PAID,0);
-		assertEquals(sf.getSystemUser(),SYSTEM_USER);*/
+		assertEquals(sf.getSystemUser(),SYSTEM_USER);
 		//assertEquals(sf.getDatePaid(),DATE_PAID);
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#getStudentFeeByTransactionId(java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testGetStudentFeeByTransactionId() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		StudentFee sf = new StudentFee();
-		/*sf = store.getStudentFeeByTransactionId(SCHOOL_UUID, TRANSCATION_ID);
+		sf = store.getStudentFeeByTransactionId(SCHOOL_UUID, TRANSCATION_ID);
 		assertEquals(sf.getUuid(),UUID);
 		assertEquals(sf.getSchoolAccountUuid(),SCHOOL_UUID);
 		assertEquals(sf.getStudentUuid(),STUDENT_UUID);
 		assertEquals(sf.getTransactionID(),TRANSCATION_ID);
 		assertEquals(sf.getAmountPaid(),AMOUNT_PAID,0);
-		assertEquals(sf.getSystemUser(),SYSTEM_USER);*/
+		assertEquals(sf.getSystemUser(),SYSTEM_USER);
 		//assertEquals(sf.getDatePaid(),DATE_PAID);
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#putStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testPutStudentFee() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		StudentFee sf = new StudentFee();
 		//sf.setUuid(UUID_NEW);
-		/*sf.setSchoolAccountUuid(SCHOOL_UUID);
+		sf.setSchoolAccountUuid(SCHOOL_UUID);
 		sf.setStudentUuid(STUDENTUUID_NEW);
 		sf.setTransactionID(TRANSCATION_ID_NEW);
 		sf.setAmountPaid(AMOUNT_PAID_NEW);
 		sf.setDatePaid(DATE_PAID);
 		sf.setTerm(TERM);
 		sf.setYear(YEAR);
-		sf.setSystemUser(SYSTEM_USER_NEW);*/
+		sf.setSystemUser(SYSTEM_USER_NEW);
 		assertTrue(store.putStudentFee(sf)); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#updateStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testUpdateStudentFee() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		StudentFee sf = new StudentFee();
 		//sf.setUuid(UUID_NEW);
-		/*sf.setSchoolAccountUuid(SCHOOL_UUID);
+		sf.setSchoolAccountUuid(SCHOOL_UUID);
 		sf.setStudentUuid(STUDENTUUID_NEW);
 		sf.setTransactionID(TRANSCATION_ID_NEW);
 		sf.setAmountPaid(AMOUNT_PAID_UPDATE);
 		sf.setDatePaid(DATE_PAID);
 		sf.setTerm(TERM);
 		sf.setYear(YEAR);
-		sf.setSystemUser(SYSTEM_USER_UPDATE);*/
+		sf.setSystemUser(SYSTEM_USER_UPDATE);
 		assertTrue(store.updateStudentFee(sf)); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#deleteStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testDeleteStudentFee() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		StudentFee sf = new StudentFee();
-		/*sf.setSchoolAccountUuid(SCHOOL_UUID);
+		sf.setSchoolAccountUuid(SCHOOL_UUID);
 		sf.setStudentUuid(STUDENTUUID_NEW);
 		assertTrue(store.deleteStudentFee(sf));
-		*/
+		
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#getStudentFeeList(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testGetStudentFeeList() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<StudentFee> list = store.getStudentFeeList(SCHOOL_UUID,TERM,YEAR);
+		List<StudentFee> list = store.getStudentFeeList(SCHOOL_UUID,TERM,YEAR);
 		for (StudentFee l : list) {
 					System.out.println(l);	
 				}
-			*/
+			
 	}
 	
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#getStudentFeeList(java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public final void testGetStudentFeeByStudentUuidList() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<StudentFee> list = store.getStudentFeeByStudentUuidList(SCHOOL_UUID,STUDENT_UUID,TERM,YEAR);
+		List<StudentFee> list = store.getStudentFeeByStudentUuidList(SCHOOL_UUID,STUDENT_UUID,TERM,YEAR);
 		for (StudentFee l : list) {
 					System.out.println(l);	
-				}*/
+				}
 			
 	}
 	
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.money.StudentFeeDAO#getStudentFeeList(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public final void testGetStudentFeeDistinctList() {
 		store = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		/*List<StudentFee> list = store.getStudentFeeDistinctList(SCHOOL_UUID,TERM,YEAR);
+		List<StudentFee> list = store.getStudentFeeDistinctList(SCHOOL_UUID,TERM,YEAR);
 		for (StudentFee l : list) {
 					System.out.println(l);	
 				}
-			*/
+			
 	}
 
 }
+*/

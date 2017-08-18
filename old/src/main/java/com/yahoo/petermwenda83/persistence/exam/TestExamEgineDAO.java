@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.exam;
 
 import org.junit.Ignore;
@@ -8,10 +8,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestExamEgineDAO {
 	
 
@@ -32,9 +32,9 @@ public class TestExamEgineDAO {
 	private final String STREAM_ID = "4DA86139-6A72-4089-8858-6A3A613FDFE6", STREAM_ID_NEW = "59E5F556-4B04-43B2-8139-E2D39A7836C6";
 	private final String SCLASS_ID = "C143978A-E021-4015-BC67-5A00D6C910D1";
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO#studentScoreExist(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testStudentScoreExist() {
@@ -42,9 +42,9 @@ public class TestExamEgineDAO {
 		System.out.println("exist: " + exist); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO#putPerfomance(com.yahoo.petermwenda83.bean.exam.Perfomance, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testPutPerfomance() {
@@ -93,3 +93,4 @@ public class TestExamEgineDAO {
 	}
 
 }
+*/

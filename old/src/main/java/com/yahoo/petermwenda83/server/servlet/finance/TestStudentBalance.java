@@ -1,22 +1,22 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.server.servlet.finance;
 
 //import org.junit.Ignore;
 import org.junit.Test;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStudentBalance {
 	
 	
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.server.servlet.finance.StudentBalance#findBalance(java.util.Date, java.lang.String, int, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testFindBalance() {
@@ -32,3 +32,4 @@ public class TestStudentBalance {
 	}
 
 }
+*/

@@ -4,12 +4,11 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig;
-
-import sun.misc.BASE64Decoder;
 
 /**
  * @author peter
@@ -33,14 +32,20 @@ public class RestAUth {
 			String[] authParts = auth.split("\\s+");
 			String authInfo = authParts[1];
 			// Decode the data back to original string
-			byte[] bytes = null;
+			
+			byte[] base64decodedBytes = Base64.getDecoder().decode(authInfo); 
+			
+			
 			try {
-				bytes = new BASE64Decoder().decodeBuffer(authInfo);
+				
+				decodedAuth = new String(base64decodedBytes, "utf-8");
+				
 			} catch (IOException e) {
+				
 				e.printStackTrace();
 			}
 
-			decodedAuth = new String(bytes);
+			
 			//System.out.println("*****    auth: "+ decodedAuth);
 
 			String[] parts = decodedAuth.split(":"); 

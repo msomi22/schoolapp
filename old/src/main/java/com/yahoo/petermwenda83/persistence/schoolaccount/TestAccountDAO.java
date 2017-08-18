@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.persistence.schoolaccount;
 
 import static org.junit.Assert.assertEquals;
@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestAccountDAO {
 	
 	final String databaseName = "schooldb";
@@ -56,9 +56,9 @@ public class TestAccountDAO {
 	private AccountDAO store;
 
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#getSchoolByUsername(java.lang.String)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetSchoolByUsername() {
@@ -73,9 +73,9 @@ public class TestAccountDAO {
 		assertEquals(s.getEmail(),EMAIL);
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#put(com.yahoo.petermwenda83.bean.account.Account)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testPut() {
@@ -91,9 +91,9 @@ public class TestAccountDAO {
 		assertTrue(store.putAccount(s));
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#update(com.yahoo.petermwenda83.bean.account.Account)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testUpdate() {
@@ -108,9 +108,9 @@ public class TestAccountDAO {
 		assertTrue(store.updateAccount(s)); 
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#delete(com.yahoo.petermwenda83.bean.account.Account)}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testDelete() {
@@ -118,9 +118,9 @@ public class TestAccountDAO {
 		//Account s = new Account();
 	}
 
-	/**
+	*//**
 	 * Test method for {@link com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO#getAllSchools()}.
-	 */
+	 *//*
 	@Ignore
 	@Test
 	public void testGetAllSchools() {
@@ -133,3 +133,4 @@ public class TestAccountDAO {
 	}
 
 }
+*/
