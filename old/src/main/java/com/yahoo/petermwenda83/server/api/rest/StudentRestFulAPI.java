@@ -18,12 +18,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.Authorization;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 
-/**
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+/** 
  * 
  * @author peter
  *
@@ -47,9 +47,8 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Get students per class.", 
 		    notes = "Returns List of students in the given class.", 
-		    response = APIStudent.class,
-		    authorizations = @Authorization(value = "api_key", type = "api_key")
-		  )
+		    response = APIStudent.class)
+		  
 	@GET
 	@Path("/{accountId}/{sreamId}") 
 	public List<APIStudent> getStudentPerStream(@PathParam("accountId") String accountId, 

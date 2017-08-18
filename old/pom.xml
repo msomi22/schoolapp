@@ -151,13 +151,8 @@
 			<artifactId>json</artifactId>
 			<version>20160810</version>
 		</dependency>
-		<!--  
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20080701</version>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.json</groupId> <artifactId>json</artifactId> 
+			<version>20080701</version> </dependency> -->
 
 
 		<dependency>
@@ -322,7 +317,7 @@
 		</dependency>
 
 
-		
+
 		<!-- First declare the APIs we depend on and need for compilation. All 
 			of them are provided by JBoss WildFly -->
 
@@ -397,19 +392,12 @@
 		<!-- start swagger configuration -->
 
 		<dependency>
-			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-core</artifactId>
-			<scope>compile</scope>
-			<version>1.5.1-M2</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.ws.rs</groupId>
-					<artifactId>jsr311-api</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jersey2-jaxrs</artifactId>
+			<version>1.5.0</version>
 		</dependency>
-		
-		
+
+
 
 
 
@@ -455,35 +443,13 @@
 		<pluginManagement>
 			<plugins>
 
-
-				<plugin>
-					<groupId>com.yahoo.petermwenda83.server.api</groupId>
-					<artifactId>swagger-maven-plugin</artifactId>
-					<version>3.0.1</version>
-					<configuration>
-						<apiSources>
-							<apiSource>
-								<springmvc>false</springmvc>
-								<locations>com.yahoo.petermwenda83.server.api.rest</locations>
-								<schemes>http,https</schemes>
-								<host>localhost:8080</host>
-								<basePath>/api</basePath>
-								<templatePath>${basedir}/target/templates/strapdown.html.hbs</templatePath>
-								<outputPath>${basedir}/target/generated/document.html</outputPath>
-								<swaggerDirectory>generated/swagger-ui</swaggerDirectory>
-							</apiSource>
-						</apiSources>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>compile</phase>
-							<goals>
-								<goal>generate</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-
+				<!-- <plugin> <groupId>com.yahoo.petermwenda83.server.api</groupId> <artifactId>swagger-maven-plugin</artifactId> 
+					<version>3.0.1</version> <configuration> <apiSources> <apiSource> <springmvc>false</springmvc> 
+					<locations>com.yahoo.petermwenda83.server.api.rest</locations> <schemes>http,https</schemes> 
+					<host>localhost:8080</host> <basePath>/api</basePath> <templatePath>${basedir}/target/templates/strapdown.html.hbs</templatePath> 
+					<outputPath>${basedir}/target/generated/document.html</outputPath> <swaggerDirectory>generated/swagger-ui</swaggerDirectory> 
+					</apiSource> </apiSources> </configuration> <executions> <execution> <phase>compile</phase> 
+					<goals> <goal>generate</goal> </goals> </execution> </executions> </plugin> -->
 
 
 
