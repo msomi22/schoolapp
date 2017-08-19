@@ -1,0 +1,10 @@
+
+To limit to sockets that listen on port 80 (as opposed to clients that connect to port 80):
+
+sudo lsof -i tcp:80 -s tcp:listen
+To kill them automatically:
+
+sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill
+
+
+sudo docker run -p 80:8080 swaggerapi/swagger-ui
