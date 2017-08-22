@@ -21,8 +21,8 @@ public class Bootstrap extends HttpServlet{
 	@Override
 	  public void init(ServletConfig config) throws ServletException {
 	    Info info = new Info()
-	            .title("School Swagger API")
-	            .description("This is APPLE_TECH school API server.")
+	            .title("School Swagger REST API")
+	            .description("This is APPLE-TECH School API Server.")
 	            .termsOfService("http://swagger.io/terms/")
 	            .contact(new Contact()
 	                    .email("apiteam@swagger.io"))
@@ -33,15 +33,18 @@ public class Bootstrap extends HttpServlet{
 	    ServletContext context = config.getServletContext();
 	    Swagger swagger = new Swagger()
 	            .info(info);
-	    swagger.securityDefinition("appleTech_auth",
+	    
+	    swagger.securityDefinition("apple_tech_auth",
 	            new OAuth2Definition()
-	                    .implicit("http://localhost:8080/oauth/dialog")
-	                    .scope("email", "Access to your email address")
-	                    .scope("staff", "Access to staff"));
+	                    .implicit("http://localhost:8080/school/oauth/dialog")
+	                    .scope("email", "Access to your email address"));
+	                   // .scope("staff", "Access to staff"));
+	    
 	    swagger.tag(new Tag()
-	            .name("staff")
-	            .description("Everything about Staff in a school")
-	            .externalDocs(new ExternalDocs("Find out more", "http://swagger.io")));
+	            .name("School")
+	            .description("Everything about AppleTech School RESTFUL API") 
+	            .externalDocs(new ExternalDocs("Find out more", "http://www.appletech.co.ke")));
+	    
 	    context.setAttribute("swagger", swagger);
 	   
 	  }

@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @Path("/student") 
-@Api(value = "/student", description = "Operations about students")
+@Api(value = "/student") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class StudentRestFulAPI{
@@ -45,8 +45,8 @@ public class StudentRestFulAPI{
 	 * @return
 	 */
 	
-	@ApiOperation(value = "Get students per class.", 
-		    notes = "Returns List of students in the given class.", 
+	@ApiOperation(value = "Get students per stream given the streamId.", 
+		    notes = "Returns List of students in the given sream.", 
 		    response = APIStudent.class)
 		  
 	@GET

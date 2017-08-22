@@ -17,6 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 
 /**
@@ -26,6 +30,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
  *
  */
 @Path("/staff") 
+@Api(value = "/staff") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class StaffRestFulAPI {
@@ -40,6 +45,10 @@ public class StaffRestFulAPI {
 	 * @param apiStaff
 	 * @return
 	 */
+	
+	@ApiOperation(value = "Register a staff.", 
+		    notes = "Returns whethet staff was Registred successfully or not.", 
+		    response = APIStaff.class)
 	@POST
 	@Path("/{accountId}")
 	public ApiResponse putStatff(@PathParam("accountId") String accountId, 
@@ -83,6 +92,11 @@ public class StaffRestFulAPI {
 	 * @return
 	 */
 	
+
+	@ApiOperation(value = "Update a staff.", 
+		    notes = "Returns whethet staff was updated successfully or not.", 
+		    response = APIStaff.class)
+	
 	@PUT
 	@Path("/{accountId}")
 	public ApiResponse updateStatff(@PathParam("accountId") String accountId, 
@@ -105,6 +119,7 @@ public class StaffRestFulAPI {
 	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects
 	 * @return
 	 */
+	
 	
 	@Path("/{staffId}/subjects")
 	public SubClassRestFulAPI getSubjectService(){
