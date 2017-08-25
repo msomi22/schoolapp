@@ -1,0 +1,5 @@
+
+
+
+
+keytool -genkey -alias domain_name -keyalg RSA -keystore keystore.jks -keysize 4096

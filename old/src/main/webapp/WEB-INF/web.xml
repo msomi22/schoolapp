@@ -168,4 +168,29 @@
     <session-timeout>500</session-timeout>
   </session-config>
   
+  
+  
+  
+  
+  <!-- to enable https given that the server has been configures to accept secure http -->
+  
+  <!-- 
+  
+  <security-constraint>
+  <web-resource-collection>
+      <url-pattern>/*</url-pattern>
+  </web-resource-collection>
+  <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+  </user-data-constraint>
+</security-constraint>
+  
+  
+   -->
+  
+  
+  
+  
+  
+  
 </web-app>
