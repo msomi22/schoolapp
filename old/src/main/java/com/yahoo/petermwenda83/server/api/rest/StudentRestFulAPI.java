@@ -19,9 +19,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 
 /** 
  * 
@@ -45,9 +45,12 @@ public class StudentRestFulAPI{
 	 * @return
 	 */
 	
-	@ApiOperation(value = "Get students per stream given the streamId.", 
+	@ApiOperation(value = "Get students per stream for the given stream Id.", 
 		    notes = "Returns List of students in the given sream.", 
 		    response = APIStudent.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stream Id or account Id not found.") 
+	} )
 		  
 	@GET
 	@Path("/{accountId}/{sreamId}") 

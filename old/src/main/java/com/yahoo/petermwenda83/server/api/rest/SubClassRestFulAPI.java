@@ -35,9 +35,13 @@ public class SubClassRestFulAPI {
 
 	StaffService staffService = new StaffService();
 
-	@ApiOperation(value = "Asign subject and class to a staff.", 
-		    notes = "Returns whethet subject and class was assigned successfully or not.", 
+	@ApiOperation(value = "Asign 'subject and class' to a staff.", 
+		    notes = "Returns whethet 'subject and class' was assigned successfully or not.", 
 		    response = SubClass.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found!.") 
+	} )
+	
 	@POST
 	public ApiResponse addSubject(SubClass subClass, @HeaderParam("authorization") String auth){
 		
@@ -56,10 +60,12 @@ public class SubClassRestFulAPI {
 	@Path("/{subClassId}")
 	@PUT
 	@ApiOperation(value = "Updated asigned subject and class for the given staff.", 
-    notes = "Returns whethet subject and class was updated successfully or not.", 
+    notes = "Returns whethet 'subject and class' was updated successfully or not.", 
     response = SubClass.class)
+	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists") 
 	} )
+	
 	public ApiResponse updateComment(@PathParam("subClassId") String subClassId, SubClass subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
@@ -76,9 +82,12 @@ public class SubClassRestFulAPI {
 	
 	@DELETE
 	@Path("/{subClassId}/{accountId}")
-	@ApiOperation(value = "Delete subject and class for a staff.", 
-    notes = "Returns whethet subject and class was deleted successfully or not.", 
+	@ApiOperation(value = "Delete subject and class for the given staff.", 
+    notes = "Returns whethet 'subject and class' was deleted successfully or not.", 
     response = SubClass.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists or account Id not found.") 
+	} )
 	
 	public ApiResponse deleteComment(@PathParam("accountId") String accountId, @PathParam("subClassId") String subClassId,
 			@HeaderParam("authorization") String auth){
@@ -95,9 +104,12 @@ public class SubClassRestFulAPI {
 
 	
 	
-	@ApiOperation(value = "Get lists of subject and class for a staff.", 
-		    notes = "Returns a list of class and subject.", 
+	@ApiOperation(value = "Get lists of 'subject and class' for the given staff.",  
+		    notes = "Returns a list of 'class and subject' for the given staff.", 
 		    response = SubClass.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stff with such Id doesn't exists or account Id not found.") 
+	} )
 	
 	@GET
 	@Path("/{accountId}") 

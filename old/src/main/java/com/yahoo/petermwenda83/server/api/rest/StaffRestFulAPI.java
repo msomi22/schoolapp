@@ -20,6 +20,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 
@@ -40,6 +41,10 @@ public class StaffRestFulAPI {
 	@ApiOperation(value = "Register a new staff.", 
 		    notes = "Returns whethet staff was Registred successfully or not.", 
 		    response = APIStaff.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	
 	@POST
 	@Path("/{accountId}")
 	public ApiResponse putStatff(@PathParam("accountId") String accountId, 
@@ -77,6 +82,9 @@ public class StaffRestFulAPI {
 	@ApiOperation(value = "Update a staff.", 
 		    notes = "Returns whethet staff was updated successfully or not.", 
 		    response = APIStaff.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
 	
 	@PUT
 	@Path("/{accountId}")
