@@ -164,31 +164,14 @@
     <location>/404.jsp</location>
   </error-page>
   
+  <error-page>
+    <error-code>405</error-code>
+    <location>/405.jsp</location>
+  </error-page>
+  
   <session-config>
     <session-timeout>500</session-timeout>
   </session-config>
-  
-  
-  
-  
-  
-  <!-- to enable https given that the server has been configures to accept secure http -->
-  
-  <!-- 
-  
-  <security-constraint>
-  <web-resource-collection>
-      <url-pattern>/*</url-pattern>
-  </web-resource-collection>
-  <user-data-constraint>
-      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-  </user-data-constraint>
-</security-constraint>
-  
-  
-   -->
-  
-  
   
   
   

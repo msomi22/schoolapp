@@ -27,13 +27,11 @@ public class GenericTst {
 		//http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-737HDHJ877S/subjects
 		//http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-737HDHJ877S/subjects
 
-		
-		
 		String schoolUrl = "http://localhost:8080/school/webapi/staff/"+staffId+"/subjects";
-		System.out.print("url - " + schoolUrl); 
 		String username2 = "demo";
 		String password2 = "12345678";
-		System.out.print(Generic.getBalance(schoolUrl, username2, password2));
+		System.out.println();
+		System.out.println(Generic.schoolTest(schoolUrl, username2, password2));
 		
 	}
 
