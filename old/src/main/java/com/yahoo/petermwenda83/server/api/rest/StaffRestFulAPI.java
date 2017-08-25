@@ -37,16 +37,7 @@ public class StaffRestFulAPI {
 
 	StaffService staffService = new StaffService();
 	
-	/**
-	 * http://localhost:8080/school/webapi/staff/{accountId}
-	 * 
-	 * @param accountId
-	 * @param auth
-	 * @param apiStaff
-	 * @return
-	 */
-	
-	@ApiOperation(value = "Register a staff.", 
+	@ApiOperation(value = "Register a new staff.", 
 		    notes = "Returns whethet staff was Registred successfully or not.", 
 		    response = APIStaff.class)
 	@POST
@@ -83,16 +74,6 @@ public class StaffRestFulAPI {
 	}
 	
 	
-	/**
-	 * http://localhost:8080/school/webapi/staff/{accountId}
-	 * 
-	 * @param accountId
-	 * @param auth
-	 * @param ApiStaffFull
-	 * @return
-	 */
-	
-
 	@ApiOperation(value = "Update a staff.", 
 		    notes = "Returns whethet staff was updated successfully or not.", 
 		    response = APIStaff.class)
@@ -115,19 +96,11 @@ public class StaffRestFulAPI {
 		
 	}
 	
-	/**
-	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects
-	 * @return
-	 */
-	
 	
 	@Path("/{staffId}/subjects")
 	public SubClassRestFulAPI getSubjectService(){
 		return new SubClassRestFulAPI(); 
 	}
-	
-	
-	
 	
 	
 	
@@ -145,78 +118,5 @@ public class StaffRestFulAPI {
 		return valid;
 	}
 
-	/**
-	 *   {  
-		   "acessLevelId":"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265",
-		   "staffNo":"3060",
-		   "firstname":"Peter",
-		   "middlename":"Mwenda",
-		   "lastname":"Njeru",
-		   "gender":"M",
-		   "mobile":"718953974",
-		   "email":"peter.mwenda@adcea.com",
-		   "username":"msomi22",
-		   "password":"12345667890"
-		}
-		
-		
-		
-		<staff>
-		   <acessLevelId>BDF7F33D-1936-43F3-B14B-8FC3EA3A1265</acessLevelId>
-		   <email>peter.mwenda@adcea.com</email>
-		   <firstname>Peter</firstname>
-		   <gender>M</gender>
-		   <lastname>Njeru</lastname>
-		   <middlename>Mwenda</middlename>
-		   <mobile>718953974</mobile>
-		   <password>12345667890</password>
-		   <staffNo>456</staffNo>
-		   <username>msomi22</username>
-		</staff>
-		
-		
-		
-		{  
-		   "acessLevelId":"C3915245-00EE-4EF4-9898-ACE59683DD60",
-		   "staffNo":"1234",
-		   "isActive":"1",
-		   "firstname":"NICK",
-		   "middlename":"KARANI",
-		   "lastname":"NK",
-		   "gender":"M",
-		   "mobile":"7736636633",
-		   "email":"na",
-		   "username":"principal",
-		   "password":"demo",
-		   "uuid":"38EFA2D4-352D-4BC0-887F-9CA227950501",
-		   "accountId":"E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-		   "logedUserId":"5498156A-FE83-43F4-9592-36281E377FE4",
-		   "logedUserAccessId":"1CC7F06E-9938-4850-81FB-9CC249C7CFA2"
-		}
-		
-		{  
-			   "acessLevelId":"C3915245-00EE-4EF4-9898-ACE59683DD60",
-			   "staffNo":"1234",
-			   "isActive":"1",
-			   "firstname":"NICK",
-			   "middlename":"KARANI",
-			   "lastname":"NK",
-			   "gender":"M",
-			   "mobile":"773663663",
-			   "email":"na@info.co.ke",
-			   "username":"principal",
-			   "password":"demo",
-			   "uuid":"38EFA2D4-352D-4BC0-887F-9CA227950501",
-			   "accountId":"E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-			   "logedUserId":"38EFA2D4-352D-4BC0-887F-9CA227950501",
-			   "logedUserAccessId":"C3915245-00EE-4EF4-9898-ACE59683DD60" 
-			}
-
-
-		
-		
-		
-		
-	 */
-
+	
 }

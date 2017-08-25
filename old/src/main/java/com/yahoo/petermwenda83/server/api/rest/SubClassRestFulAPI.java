@@ -19,15 +19,15 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 
-/**
+
+/** http://localhost:8080/school/webapi/swagger.json
  *
  * @author peter
  *
  */
-@Api(value = "/Staff_Subjects")  
+
 @Path("/")
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
@@ -35,16 +35,6 @@ public class SubClassRestFulAPI {
 
 	StaffService staffService = new StaffService();
 
-	/**
-	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects
-	 * 
-	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects
-	 * 
-	 * @param subClass
-	 * @param auth
-	 * @return
-	 */
-	
 	@ApiOperation(value = "Asign subject and class to a staff.", 
 		    notes = "Returns whethet subject and class was assigned successfully or not.", 
 		    response = SubClass.class)
@@ -62,23 +52,14 @@ public class SubClassRestFulAPI {
 	}
 	
 
-	/**
-	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{subjectId}
-	 * 
-	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/a8382b24-7154-4722-8c6f-9f1b961a481a
-	 * 
-	 * @param subClassId
-	 * @param subClass
-	 * @param auth
-	 * @return
-	 */
 	
-	@ApiOperation(value = "Updated asigned subject and class for the given staff.", 
-		    notes = "Returns whethet subject and class was updated successfully or not.", 
-		    response = SubClass.class)
-	
-	@PUT
 	@Path("/{subClassId}")
+	@PUT
+	@ApiOperation(value = "Updated asigned subject and class for the given staff.", 
+    notes = "Returns whethet subject and class was updated successfully or not.", 
+    response = SubClass.class)
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists") 
+	} )
 	public ApiResponse updateComment(@PathParam("subClassId") String subClassId, SubClass subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
@@ -92,26 +73,13 @@ public class SubClassRestFulAPI {
 	}
 	
 
-
-	/** 
-	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{sub_class_id}/{accountId} 
-	 * 
-	 *   e.g 
-	 *   
-	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/F754E5B4-5340-41FF-9F48-89C6AB5EC130/E3CDC578-37BA-4CDB-B150-DAB0409270CD  
-	 *   
-	 * @param accountId
-	 * @param subClassId
-	 * @param auth
-	 * @return
-	 */
-	
-	@ApiOperation(value = "Delete subject and class for a staff.", 
-		    notes = "Returns whethet subject and class was deleted successfully or not.", 
-		    response = SubClass.class)
 	
 	@DELETE
 	@Path("/{subClassId}/{accountId}")
+	@ApiOperation(value = "Delete subject and class for a staff.", 
+    notes = "Returns whethet subject and class was deleted successfully or not.", 
+    response = SubClass.class)
+	
 	public ApiResponse deleteComment(@PathParam("accountId") String accountId, @PathParam("subClassId") String subClassId,
 			@HeaderParam("authorization") String auth){
 		
@@ -125,16 +93,7 @@ public class SubClassRestFulAPI {
 		return staffService.deleteSubjectClass(subClassId); 
 	}
 
-	/**  
-	 * http://localhost:8080/school/webapi/staff/{staffId}/subjects/{accountId}  
-	 *    e.g 
-	 * http://localhost:8080/school/webapi/staff/5498156A-FE83-43F4-9592-36281E377FE4/subjects/E3CDC578-37BA-4CDB-B150-DAB0409270CD
-	 * 
-	 * @param accountId
-	 * @param staffId
-	 * @param auth
-	 * @return
-	 */
+	
 	
 	@ApiOperation(value = "Get lists of subject and class for a staff.", 
 		    notes = "Returns a list of class and subject.", 

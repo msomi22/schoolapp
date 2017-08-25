@@ -5,14 +5,21 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author peter
- *
+ * 
  */
-@XmlRootElement(name = "ApiResponse")  //only needed if we also want to generate XML     
+@XmlRootElement(name = "ApiResponse")  //only needed if we also want to generate XML    
+
+@ApiModel( value = "ApiResponse", description = "A Generic API Response." )
 public class ApiResponse {
 	
+	@ApiModelProperty( value = "Response message", required = true ) 
 	private String message;
+	@ApiModelProperty( value = "Response message description", required = true ) 
 	private String description;
 	
 	public ApiResponse(){

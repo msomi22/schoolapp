@@ -27,3 +27,8 @@ This README would normally document whatever steps are necessary to get your app
 
 * Repo owner or admin
 * Other community or team contact
+
+
+
+
+http://localhost:8080/school/webapi/swagger.json
