@@ -20,6 +20,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
+<!-- testing -->
+
+
 <%
 	if (session == null) {
 		response.sendRedirect("../index.jsp");
