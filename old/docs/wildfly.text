@@ -44,6 +44,27 @@
 
 
 
+**************************************************************
+* Domain Mode
+*All the servers managed by Domain are known as members of domain. 
+*All the members of domain can share same configuration/deployments. 
+*In Domain mode we can create a server group and then can add number of servers to that group. 
+*With this whatever we do on this Server Group, everything will get replicated to each server in Server Groups.
+
+* Start wildfly in domain mode
+
+* ./domain.sh
+
+*Notice the difference between the number of services that got started:
+
+1) In Standalone (183 out 0f 232)  And
+
+2) Domain mode (207 out of 255)
+
+
+
+
+
  
 
 
