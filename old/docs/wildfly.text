@@ -1,0 +1,49 @@
+
+* To run Wildfly at localhost port 8080
+* Just run the ./standalone.sh
+* Admin console will be http://localhost:9990/console
+
+* To run the server at diffrent port
+
+* ./standalone.sh -Djboss.socket.binding.port-offset=1000
+* The new port will be  8080 + 1000 = 9080
+* Admin console will be http://localhost:10990/console
+* i.e 9990 + 1000 = 10990
+
+
+* Binding public interface to different ip(s), default is 127.0.0.1
+* ./standalone.sh -b=192.168.1.1 
+
+
+*  bind to all available IP addresses, then you can do:
+* ./standalone.sh -b=0.0.0.0
+
+* WildFly “management” interface can be bound to a specific IP address as:
+* ./standalone.sh -bmanagement=192.168.1.14
+
+* Or, bind “management” interface to all available IP addresses as:
+* ./standalone.sh -bmanagement=0.0.0.0
+
+* Of course, you can bind WildFly “public” and “management” interface    together as:
+* ./standalone.sh -b=0.0.0.0 -bmanagement=0.0.0.0 
+
+*****************************************************************
+# sample online app
+******************************************************************
+* curl -O http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip
+
+*unzip wildfly-8.1.0.Final.zip
+*./wildfly-8.1.0.Final/bin/standalone.sh
+*git clone https://github.com/javaee-samples/javaee7-samples.git
+*cd javaee7-samples
+*mvn -f websocket/chat/pom.xml wildfly:deploy
+* chat will be available at http://localhost:8080/chat/ 
+
+*more info at (http://blog.arungupta.me/websocket-chat-wildfly-openshift-techtip51/)
+
+
+
+
+ 
+
+
