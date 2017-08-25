@@ -55,9 +55,14 @@ public class StudentService {
 			apiStudent.setFinalYear(student.getFinalYear());
 			apiStudent.setAdmissionDate(student.getAdmissionDate());
 			
+			apiStudent.setMessage("success");
+			apiStudent.setDescription("Ok"); 
+						
 			streamStudents.add(apiStudent); 
 			
 		});
+		
+		
 		
 		return streamStudents; 
 	}
