@@ -21,41 +21,56 @@ public class Generic {
 
 
 	public static String schoolTest(String url,String username,String password) {
-
-		//
+		
+		
+		
+		
 		String authEncoded = getAuthBase64(username,password);
-
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
 
-		/*Form form = new Form();
+		Form form = new Form();
 		form.add("teacherId", "5498156A-FE83-43F4-9592-737HDHJ877S");    
 		form.add("subjectId", "F1972BF2-C788-4F41-94FE-FBA1869C92BC");
 		form.add("streamId", "D3733507-C113-4795-91ED-D3CD8039EA03");    
-		form.add("accountId", "E3CDC578-37BA-4CDB-B150-DAB0409270CD");*/
+		form.add("accountId", "E3CDC578-37BA-4CDB-B150-DAB0409270CD");
 		
-		 String input = "{\"teacherId\": \"5498156A-FE83-43F4-9592-737HDHJ877S\", "
-	                  + "\"subjectId\":\"F1972BF2-C788-4F41-94FE-FBA1869C92BC\","
-	                  + "\"streamId\":\"D3733507-C113-4795-91ED-D3CD8039EA03\", "
-	                  + "\"accountId\":\"E3CDC578-37BA-4CDB-B150-DAB0409270CD\"}";
 
-
-		/*ClientResponse response = webResource
-				.accept("application/json")		     
+		ClientResponse response = webResource
+				.accept("application/json")
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
 				.header("Authorization", "Basic " + authEncoded)
-				.post(ClientResponse.class, form);*/
+				.post(ClientResponse.class, form);
 		
-		 // POST method
-        ClientResponse response2 = webResource.accept("application/json")
-                .type("application/json").post(ClientResponse.class, input);
-        
-        
+		
+		System.out.println(response); 
+		
+		/*String authEncoded = getAuthBase64(username,password);
 
-		if(response2.getStatus() != 200){
+		Client restClient = Client.create();
+		WebResource webResource = restClient.resource(url);
+		
+		
+		String input = "{\"teacherId\":\"5498156A-FE83-43F4-9592-737HDHJ877S\","
+                       + "\"subjectId\":\"F1972BF2-C788-4F41-94FE-FBA1869C92BC\","
+                       + "\"streamId\":\"D3733507-C113-4795-91ED-D3CD8039EA03\","
+                       + "\"accountId\":\"E3CDC578-37BA-4CDB-B150-DAB0409270CD\"}";
+
+        // POST method
+        ClientResponse response = webResource
+        		                    .accept("application/json")	
+        		                    .header("Authorization", "Basic " + authEncoded)
+                                    .type("application/json")
+                                    .post(ClientResponse.class, input);*/
+        
+       
+		
+		
+		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
 
-		String output = response2.getEntity(String.class);
+		String output = response.getEntity(String.class);
 
 		return output;
 	}
@@ -87,8 +102,6 @@ public class Generic {
 
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
-		}else {
-			System.err.println("OK");
 		}
 
 		String output = response.getEntity(String.class);
