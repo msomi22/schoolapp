@@ -1,34 +1,27 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+AppleTech school Information System
 
 
 
+### REST API GUIDE ###
 
-http://localhost:8080/school/webapi/swagger.json
+* Install swagger-ui (Find online guides on how to install)
+* Make sure you have curl installed
+* Demo credentials are : username:demo password : 123456
+* In base64 the credentials will be : ZGVtbzoxMjM0NTY3OA==
+
+### Running swagger-ui with docker ###
+ 
+* sudo docker run -p 81:8080 swaggerapi/swagger-ui
+* swagger-ui will be available at localhost:81
+* paste the below url in your browser
+* http://localhost:8080/school/webapi/swagger.json
+*
+* Sample curl request
+
+* ************************************************************************
+curl -X GET "http://localhost:8080/school/webapi/staff/38EFA2D4-352D-4BC0-887F-9CA227950501/subjects/E3CDC578-37BA-4CDB-B150-DAB0409270CD" -H "accept: application/json" -H "authorization:Basic ZGVtbzoxMjM0NTY3OA=="
+
+* ************************************************************************
+
