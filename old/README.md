@@ -15,9 +15,9 @@ AppleTech school Information System
  
 * sudo docker run -p 81:8080 swaggerapi/swagger-ui
 * swagger-ui will be available at localhost:81
-* paste the below url in your browser
+* paste the below url on swagger-ui
 * http://localhost:8080/school/webapi/swagger.json
-*
+
 * Sample curl request
 
 * ************************************************************************
