@@ -327,6 +327,8 @@ public class SafaricomService {
 		
 	}
 	
+	
+	
 	@XmlRootElement(name = "Balances") 
 	static class Balances{
 
@@ -527,7 +529,7 @@ public class SafaricomService {
 	
 	
 	@XmlRootElement(name = "VCResponse") 
-	class VCResponse{
+	static class VCResponse{
 		@JsonProperty
 		private String TransactionType;
 		@JsonProperty

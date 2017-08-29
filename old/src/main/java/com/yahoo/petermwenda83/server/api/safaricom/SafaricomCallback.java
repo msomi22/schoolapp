@@ -28,9 +28,9 @@ import io.swagger.annotations.ApiResponses;
  * http://localhost:8080/school/webapi/account/balance
  * http://localhost:8080/school/webapi/account/timeout
  * 
- * http://3782cd77.ngrok.io/school/webapi/account/validation
- * http://3782cd77.ngrok.io/school/webapi/account/confirmation
- * 
+ * http://localhost:8080/school/webapi/account/validation
+ * http://localhost:8080/school/webapi/account/confirmation
+
  * @author peter
  *
  */
@@ -124,11 +124,32 @@ public class SafaricomCallback {
 	//validation and confirmation URLs on M-Pesa 
 	@POST
 	@Path("/{validation}") 
-	public VCResponse validationURL(VCResponse vcresponse) {
+	public VCResponse validationURL(@PathParam("validation") String validation, VCResponse vresponse) {
+		
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(vresponse);  
+		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
+		
+		response.getBillRefNumber();
+		response.getBusinessShortCode();
+		response.getInvoiceNumber();
+		response.getMSISDN();
+		response.getOrgAccountBalance();//important
+		response.getThirdPartyTransID();
+		response.getTransactionType();
+		response.getTransAmount();
+		response.getTransID();
+		response.getTransTime();
+		
+		response.getFirstName();
+		response.getLastName();
+		response.getMiddleName();
+		
+		//put into the DB
 
-		System.out.println(vcresponse + "validation"); 
+		System.out.println(vresponse + " " + validation); 
 
-		return vcresponse;
+		return vresponse;
 	}
 	
 	
@@ -144,11 +165,34 @@ public class SafaricomCallback {
 	//validation and confirmation URLs on M-Pesa 
 	@POST
 	@Path("/{confirmation}") 
-	public VCResponse confirmationURL(VCResponse vcresponse) {
+	public VCResponse confirmationURL(@PathParam("confirmation") String confirmation,VCResponse cresponse) {
+		
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(cresponse);  
+		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
+		
+		response.getBillRefNumber();
+		response.getBusinessShortCode();
+		response.getInvoiceNumber();
+		response.getMSISDN();
+		response.getOrgAccountBalance();//important
+		response.getThirdPartyTransID();
+		response.getTransactionType();
+		response.getTransAmount();
+		response.getTransID();
+		response.getTransTime();
+		
+		response.getFirstName();
+		response.getLastName();
+		response.getMiddleName();
+		
+		//update DB
+		
+		
         
-		System.out.println(vcresponse + "confirmation"); 
+		System.out.println(response + " " + confirmation); 
 
-		return vcresponse;
+		return cresponse;
 	}
 
 
