@@ -37,7 +37,7 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-	
+
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 
 	//get class list
@@ -56,7 +56,9 @@
 %>
 <jsp:include page="header.jsp" />
 
+<!-- Styled checkbox -->
 
+<link href="css/styledCheckbox/style.css" rel="stylesheet"/>
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
@@ -77,11 +79,11 @@
 							<div class="profile_img">
 								<div id="crop-avatar">
 									<!-- Current avatar -->
-									<img class="img-responsive avatar-view" src="images/peter.jpg"
+									<img class="img-responsive avatar-view" src="images/user.png"
 										alt="Avatar" title="Change the avatar">
 								</div>
 							</div>
-							<h3>Peter Mwenda</h3>
+							<h3>Student's Name</h3>
 
 							<ul class="list-unstyled user_data">
 								<li><i class="fa fa-map-marker user-profile-icon"></i>
@@ -131,7 +133,7 @@
 										data-toggle="tab" aria-expanded="true">General Info</a></li>
 									<li role="presentation" class=""><a href="#tab_content2"
 										role="tab" id="profile-tab" data-toggle="tab"
-										aria-expanded="false">Subjects & Classroom</a></li>
+										aria-expanded="false">Subjects Info</a></li>
 									<li role="presentation" class=""><a href="#tab_content3"
 										role="tab" id="profile-tab2" data-toggle="tab"
 										aria-expanded="false">Primary Info</a></li>
@@ -291,7 +293,7 @@
 
 
 
-											<br> <br>
+											<br> <br> <br>
 
 
 
@@ -327,29 +329,7 @@
 
 
 
-
-
-
-
-
-											
-
-
-
-
-
-											<br> <br> <br>
-
-										</div>
-										<!-- end general info -->
-
-									</div>
-									<div role="tabpanel" class="tab-pane fade" id="tab_content2"
-										aria-labelledby="profile-tab">
-
-										<!-- start sub and classroom -->
-										
-										<div class="row">
+											<div class="row">
 												<div class="col-md-5 col-md-offset-1">
 
 
@@ -413,20 +393,279 @@
 												</div>
 
 											</div>
+
+
+											<br> <br>
+
+											<div class="row">
+
+												<div class="col-md-3 col-md-offset-5">
+
+													<button type="button" id="submit_gen"
+														class="btn btn-primary form-control">Apply
+														Changes</button>
+
+												</div>
+
+
+											</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+											<br> <br> <br>
+
+										</div>
+										<!-- end general info -->
+
+									</div>
+									<div role="tabpanel" class="tab-pane fade" id="tab_content2"
+										aria-labelledby="profile-tab">
+
+										<!-- start subjects -->
 										
+										<br> <br>
+
+										<div class="row">
+
+											<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+												<input id="math" type="checkbox" class="form-control  chk" checked /><label for="math">
+												Mathematics</label>
+
+											</div>
+											
+											<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+												<input id="eng" type="checkbox" class="form-control  chk" checked/><label for="eng">
+												English</label>
+
+											</div>
+											
+											<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
+												<input id="chem" type="checkbox" class="form-control  chk" /><label for="chem">
+												Chemistry</label>
+
+											</div>
+											
+											
+											
+											
+											
+											<br> <br>
+											
+											<div class="col-md-3 col-md-offset-5">
+
+												<button type="button" id="submit_pri"
+													class="btn btn-primary form-control">Apply Changes</button>
+
+											</div>
+											
+
+
+										</div>
+
+
 										
-										<!-- end sub and classroom -->
+
+
+
+										<!-- end subjects -->
+										
+										<br> <br> <br>
 
 									</div>
 									<div role="tabpanel" class="tab-pane fade" id="tab_content3"
 										aria-labelledby="profile-tab">
-										<p>Primary school info</p>
+
+
+										<!-- Primary's info -->
+
+										<div id="primarySchoolDetails">
+
+											<div class="row">
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>School's Name</h4>
+													<input type="text" id="schoolname"
+														class="form-control formelement" name="schoolname"
+														placeholder="School name" pattern="[A-Za-z]{3,30}"
+														title="School Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Index Number</h4>
+													<input type="text" id="indexno"
+														class="form-control formelement" name="indexno"
+														placeholder="Index Number" pattern="[0-9]{9}"
+														title="Index Number,Only numbers are allowed and should be 9 numbers">
+
+												</div>
+
+
+
+
+
+											</div>
+
+
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>KCPE YEAR</h4>
+													<input type="text" id="kcpeyear"
+														class="form-control formelement" name="kcpeyear"
+														placeholder="KCPE year" pattern="[0-9]{4}"
+														title="KCPE year,enter an year">
+
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>KCPE MARKS</h4>
+													<input type="text" id="kcpemarks"
+														class="form-control formelement" name="kcpemarks"
+														placeholder="KCPE marks" pattern="[0-9]{1,3}"
+														title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
+
+												</div>
+
+
+
+
+
+											</div>
+
+										</div>
+
+
+
+										<br> <br>
+
+										<div class="row">
+
+											<div class="col-md-3 col-md-offset-5">
+
+												<button type="button" id="submit_pri"
+													class="btn btn-primary form-control">Apply Changes</button>
+
+											</div>
+
+
+										</div>
+
+
+
+
+										<!-- ./end primary info -->
+										<br> <br> <br>
+
 									</div>
 
-									<!-- Parent's info -->
+
 									<div role="tabpanel" class="tab-pane fade" id="tab_content4"
 										aria-labelledby="profile-tab">
-										<p>Student parent's Info</p>
+
+
+										<!-- Parent's info -->
+
+										<div id="parentDetails">
+
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>First Name</h4>
+													<input type="text" id="pfname"
+														class="form-control formelement" name="pfname"
+														placeholder="Parent's First name" pattern="[A-Za-z]{3,20}"
+														title="First Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Last Name</h4>
+													<input type="text" id="plname"
+														class="form-control formelement" name="plname"
+														placeholder="Parent's Last name" pattern="[A-Za-z]{3,20}"
+														title="Last Name,Only characters are allowed and should be less than 20 characters">
+
+												</div>
+
+
+
+
+
+											</div>
+
+
+											<div class="row">
+
+
+
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Phone Number</h4>
+													<input type="text" id="phone"
+														class="form-control formelement" name="phone"
+														placeholder="Phone number" pattern="[0-9]{10}"
+														title="Phone,enter a valid number e.g 0712345678">
+
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<h4>Email</h4>
+													<input type="email" id="email"
+														class="form-control formelement" name="email">
+
+												</div>
+
+
+
+
+
+											</div>
+
+										</div>
+
+
+										<br> <br>
+
+										<div class="row">
+
+											<div class="col-md-3 col-md-offset-5">
+
+												<button type="button" id="submit_pri"
+													class="btn btn-primary form-control">Apply Changes</button>
+
+											</div>
+
+
+										</div>
+
+
+
+										<!-- ./end parent's info -->
+										<br> <br> <br>
+
+
+
+
 									</div>
 
 
