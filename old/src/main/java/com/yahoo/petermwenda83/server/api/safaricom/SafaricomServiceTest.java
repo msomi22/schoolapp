@@ -26,7 +26,12 @@ public class SafaricomServiceTest {
 		//String consumer_Secret = "GeGSs75GrGGa5zAv";
 
 
-		System.out.println(SafaricomService.getBalance(balUrl, consumer_key, consumer_secret)); 
+		//System.out.println(SafaricomService.getBalance(balUrl, consumer_key, consumer_secret)); 
+		
+		System.out.println(SafaricomService.SimulateRequest(consumer_key,consumer_secret)); 
+		
+		//System.out.println(SafaricomService.registerURLS(consumer_key,consumer_secret)); 
+		
 		//System.out.println(Generic.getAccessToken(url, username, password));
 
 		//String staffId = "5498156A-FE83-43F4-9592-737HDHJ877S";

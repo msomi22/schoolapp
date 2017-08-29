@@ -6,6 +6,11 @@ package com.yahoo.petermwenda83.server.api.safaricom;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -19,6 +24,78 @@ import com.yahoo.petermwenda83.server.api.safaricom.bean.AccountBalance;
  *
  */
 public class SafaricomService {
+	
+	
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public static String SimulateRequest(String username,String password) {
+		
+		String url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate";
+		Client restClient = Client.create();
+		WebResource webResource = restClient.resource(url);
+		SimulateRequest simulateRequest = new SimulateRequest();
+		
+		String query = JsonFromObj.getJsonStringFromObject(simulateRequest); 
+		
+		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
+		String authEncoded = getAccessToken(url,username,password);
+		
+		// POST method
+        ClientResponse response = webResource
+        		                    .accept("application/json")	
+        		                    .header("Authorization", "Bearer " + authEncoded)
+                                    .type("application/json")
+                                    .post(ClientResponse.class, query);
+
+		if(response.getStatus() != 200){
+			System.err.println("Unable to connect to the server");
+		}
+
+		String output = response.getEntity(String.class);
+		
+		return output;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public static String registerURLS(String username,String password) {
+		String url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl";
+		Client restClient = Client.create();
+		WebResource webResource = restClient.resource(url);
+		
+		RegisterURL registerURL = new RegisterURL();
+		String query = JsonFromObj.getJsonStringFromObject(registerURL); 
+		
+		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
+		String authEncoded = getAccessToken(url,username,password);
+
+		 // POST method
+        ClientResponse response = webResource
+        		                    .accept("application/json")	
+        		                    .header("Authorization", "Bearer " + authEncoded)
+                                    .type("application/json")
+                                    .post(ClientResponse.class, query);
+
+		if(response.getStatus() != 200){
+			System.err.println("Unable to connect to the server");
+		}
+
+		String output = response.getEntity(String.class);
+		
+		return output;
+	}
+	
+	
 
 
 	
@@ -132,6 +209,89 @@ public class SafaricomService {
 	
 	/**
 	 * 
+	 * @param accountBalance
+	 * @param balType
+	 * @return
+	 */
+	public static String getBalance(String accountBalance, String balType) {
+
+		String[] balanceParts = {};
+		String bal = "";
+		String currency = "";
+		String balance = "";
+
+
+		switch(balType) {
+		case "Working_Account":
+			balanceParts = accountBalance.split("\\|");  
+			if(StringUtils.equalsIgnoreCase(balanceParts[0], "Working Account")) {
+				currency = balanceParts[1];
+				bal = balanceParts[2]; 
+				balance = currency + " " + bal; 
+				return balance;
+			}else {
+				return "Balance Unkown"; 
+			}
+
+		case "Utility_Account":
+			balanceParts = accountBalance.split("\\|");  
+			if(StringUtils.equalsIgnoreCase(balanceParts[0], "Utility Account")) {
+				currency = balanceParts[1];
+				bal = balanceParts[2]; 
+				balance = currency + " " + bal; 
+				return balance;
+			}else {
+				return "Balance Unkown"; 
+			}
+
+
+		case "Float_Account":
+			balanceParts = accountBalance.split("\\|");  
+			if(StringUtils.equalsIgnoreCase(balanceParts[0], "Float Account")) {
+				currency = balanceParts[1];
+				bal = balanceParts[2]; 
+				balance = currency + " " + bal; 
+				return balance;
+			}else {
+				return "Balance Unkown"; 
+			}
+
+
+		case "Charges_Paid_Account":
+			balanceParts = accountBalance.split("\\|");  
+			if(StringUtils.equalsIgnoreCase(balanceParts[0], "Charges Paid Account")) {
+				currency = balanceParts[1];
+				bal = balanceParts[2]; 
+				balance = currency + " " + bal; 
+				return balance;
+			}else {
+				return "Balance Unkown"; 
+			}
+
+
+		case "Organization_Settlement_Account":
+			balanceParts = accountBalance.split("\\|");  
+			if(StringUtils.equalsIgnoreCase(balanceParts[0], "Organization Settlement Account")) {
+				currency = balanceParts[1];
+				bal = balanceParts[2]; 
+				balance = currency + " " + bal; 
+				return balance;
+			}else {
+				return "Balance Unkown"; 
+			}
+
+
+		default:
+			return "Balance Unkown";
+
+		}
+
+	}
+
+	
+	
+	/**
+	 * 
 	 * @author peter
 	 *
 	 */
@@ -166,6 +326,367 @@ public class SafaricomService {
 		}
 		
 	}
+	
+	@XmlRootElement(name = "Balances") 
+	static class Balances{
+
+		@JsonProperty
+		private String WorkingAccount;
+		@JsonProperty
+		private String FloatAccount;
+		@JsonProperty
+		private String UtilityAccount;
+		@JsonProperty
+		private String ChargesPaidAccount;
+		@JsonProperty
+		private String OrganizationSettlementAccount;
+
+		public Balances(){
+			WorkingAccount = "";
+			FloatAccount = "";
+			UtilityAccount = "";
+			ChargesPaidAccount = "";
+			OrganizationSettlementAccount = "";
+		}
+
+		public String getWorkingAccount() {
+			return WorkingAccount;
+		}
+
+		public void setWorkingAccount(String workingAccount) {
+			WorkingAccount = workingAccount;
+		}
+
+		public String getFloatAccount() {
+			return FloatAccount;
+		}
+
+		public void setFloatAccount(String floatAccount) {
+			FloatAccount = floatAccount;
+		}
+
+		public String getUtilityAccount() {
+			return UtilityAccount;
+		}
+
+		public void setUtilityAccount(String utilityAccount) {
+			UtilityAccount = utilityAccount;
+		}
+
+		public String getChargesPaidAccount() {
+			return ChargesPaidAccount;
+		}
+
+		public void setChargesPaidAccount(String chargesPaidAccount) {
+			ChargesPaidAccount = chargesPaidAccount;
+		}
+
+		public String getOrganizationSettlementAccount() {
+			return OrganizationSettlementAccount;
+		}
+
+		public void setOrganizationSettlementAccount(String organizationSettlementAccount) {
+			OrganizationSettlementAccount = organizationSettlementAccount;
+		}
+
+		@Override
+		public String toString() {
+			return "Balances [WorkingAccount=" + WorkingAccount + ", FloatAccount=" + FloatAccount + ", UtilityAccount="
+					+ UtilityAccount + ", ChargesPaidAccount=" + ChargesPaidAccount + ", OrganizationSettlementAccount="
+					+ OrganizationSettlementAccount + "]";
+		}
+
+
+
+	}
+	
+	
+	/**
+	 * 
+	 * @author peter
+	 *
+	 */
+	static class RegisterURL{
+		private String ShortCode;
+		private String ResponseType;
+		private String ConfirmationURL;
+		private String ValidationURL;
+		
+		public RegisterURL(){
+			ShortCode = "600321";
+			ResponseType = "Completed";
+			ConfirmationURL = "http://3782cd77.ngrok.io/school/webapi/account/confirmation";
+			ValidationURL = "http://3782cd77.ngrok.io/school/webapi/account/validation";
+		}
+
+		public String getShortCode() {
+			return ShortCode;
+		}
+
+		public void setShortCode(String shortCode) {
+			ShortCode = shortCode;
+		}
+
+		public String getResponseType() {
+			return ResponseType;
+		}
+
+		public void setResponseType(String responseType) {
+			ResponseType = responseType;
+		}
+
+		public String getConfirmationURL() {
+			return ConfirmationURL;
+		}
+
+		public void setConfirmationURL(String confirmationURL) {
+			ConfirmationURL = confirmationURL;
+		}
+
+		public String getValidationURL() {
+			return ValidationURL;
+		}
+
+		public void setValidationURL(String validationURL) {
+			ValidationURL = validationURL;
+		}
+
+		@Override
+		public String toString() {
+			return "RegisterURL [ShortCode=" + ShortCode + ", ResponseType=" + ResponseType
+					+ ", ConfirmationURL=" + ConfirmationURL + ", ValidationURL=" + ValidationURL + "]";
+		}
+		
+	}
+	
+	
+	static class SimulateRequest{
+		private String ShortCode;
+		private String CommandID;
+		private String Amount;
+		private String Msisdn;
+		private String BillRefNumber;
+		
+		public SimulateRequest() {
+			ShortCode = "600321";
+		    CommandID = "CustomerPayBillOnline";
+		    Amount = "1000";
+		    Msisdn = "254708374149";
+		    BillRefNumber = "xxx";
+		}
+
+		public String getShortCode() {
+			return ShortCode;
+		}
+
+		public void setShortCode(String shortCode) {
+			ShortCode = shortCode;
+		}
+
+		public String getCommandID() {
+			return CommandID;
+		}
+
+		public void setCommandID(String commandID) {
+			CommandID = commandID;
+		}
+
+		public String getAmount() {
+			return Amount;
+		}
+
+		public void setAmount(String amount) {
+			Amount = amount;
+		}
+
+		public String getMsisdn() {
+			return Msisdn;
+		}
+
+		public void setMsisdn(String msisdn) {
+			Msisdn = msisdn;
+		}
+
+		public String getBillRefNumber() {
+			return BillRefNumber;
+		}
+
+		public void setBillRefNumber(String billRefNumber) {
+			BillRefNumber = billRefNumber;
+		}
+
+		@Override
+		public String toString() {
+			return "SimulateRequest [ShortCode=" + ShortCode + ", CommandID=" + CommandID + ", Amount=" + Amount
+					+ ", Msisdn=" + Msisdn + ", BillRefNumber=" + BillRefNumber + "]";
+		}
+		
+	}
+	
+	
+	
+	
+	@XmlRootElement(name = "VCResponse") 
+	class VCResponse{
+		@JsonProperty
+		private String TransactionType;
+		@JsonProperty
+		private String TransID;
+		@JsonProperty
+		private String TransTime;
+		@JsonProperty
+		private String TransAmount;
+		@JsonProperty
+		private String BusinessShortCode;
+		@JsonProperty
+		private String BillRefNumber;
+		@JsonProperty
+		private String InvoiceNumber;
+		@JsonProperty
+		private String OrgAccountBalance;
+		@JsonProperty
+		private String ThirdPartyTransID;
+		@JsonProperty
+		private String MSISDN;
+		@JsonProperty
+		private String FirstName;
+		@JsonProperty
+		private String MiddleName;
+		@JsonProperty
+		private String LastName;
+
+		public VCResponse() {
+			TransactionType = "";
+			TransID = "";
+			TransTime = "";
+			TransAmount = "";
+			BusinessShortCode = "";
+			BillRefNumber = "";
+			InvoiceNumber = "";
+			OrgAccountBalance = "";
+			ThirdPartyTransID = "";
+			MSISDN = "";
+			FirstName = "";
+			MiddleName = "";
+			LastName = "";
+
+		}
+
+		public String getTransactionType() {
+			return TransactionType;
+		}
+
+		public void setTransactionType(String transactionType) {
+			TransactionType = transactionType;
+		}
+
+		public String getTransID() {
+			return TransID;
+		}
+
+		public void setTransID(String transID) {
+			TransID = transID;
+		}
+
+		public String getTransTime() {
+			return TransTime;
+		}
+
+		public void setTransTime(String transTime) {
+			TransTime = transTime;
+		}
+
+		public String getTransAmount() {
+			return TransAmount;
+		}
+
+		public void setTransAmount(String transAmount) {
+			TransAmount = transAmount;
+		}
+
+		public String getBusinessShortCode() {
+			return BusinessShortCode;
+		}
+
+		public void setBusinessShortCode(String businessShortCode) {
+			BusinessShortCode = businessShortCode;
+		}
+
+		public String getBillRefNumber() {
+			return BillRefNumber;
+		}
+
+		public void setBillRefNumber(String billRefNumber) {
+			BillRefNumber = billRefNumber;
+		}
+
+		public String getInvoiceNumber() {
+			return InvoiceNumber;
+		}
+
+		public void setInvoiceNumber(String invoiceNumber) {
+			InvoiceNumber = invoiceNumber;
+		}
+
+		public String getOrgAccountBalance() {
+			return OrgAccountBalance;
+		}
+
+		public void setOrgAccountBalance(String orgAccountBalance) {
+			OrgAccountBalance = orgAccountBalance;
+		}
+
+		public String getThirdPartyTransID() {
+			return ThirdPartyTransID;
+		}
+
+		public void setThirdPartyTransID(String thirdPartyTransID) {
+			ThirdPartyTransID = thirdPartyTransID;
+		}
+
+		public String getMSISDN() {
+			return MSISDN;
+		}
+
+		public void setMSISDN(String mSISDN) {
+			MSISDN = mSISDN;
+		}
+
+		public String getFirstName() {
+			return FirstName;
+		}
+
+		public void setFirstName(String firstName) {
+			FirstName = firstName;
+		}
+
+		public String getMiddleName() {
+			return MiddleName;
+		}
+
+		public void setMiddleName(String middleName) {
+			MiddleName = middleName;
+		}
+
+		public String getLastName() {
+			return LastName;
+		}
+
+		public void setLastName(String lastName) {
+			LastName = lastName;
+		}
+
+		@Override
+		public String toString() {
+			return "VCResponse [TransactionType=" + TransactionType + ", TransID=" + TransID + ", TransTime="
+					+ TransTime + ", TransAmount=" + TransAmount + ", BusinessShortCode=" + BusinessShortCode
+					+ ", BillRefNumber=" + BillRefNumber + ", InvoiceNumber=" + InvoiceNumber + ", OrgAccountBalance="
+					+ OrgAccountBalance + ", ThirdPartyTransID=" + ThirdPartyTransID + ", MSISDN=" + MSISDN
+					+ ", FirstName=" + FirstName + ", MiddleName=" + MiddleName + ", LastName=" + LastName + "]";
+		}
+		
+	}
+
 	
 	
 	
