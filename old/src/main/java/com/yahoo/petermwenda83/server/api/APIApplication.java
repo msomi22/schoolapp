@@ -10,6 +10,7 @@ import javax.ws.rs.core.Application;
 import com.yahoo.petermwenda83.server.api.rest.StaffRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.StudentRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.SubClassRestFulAPI;
+import com.yahoo.petermwenda83.server.api.safaricom.SafaricomCallback;
 
 import io.swagger.jaxrs.config.BeanConfig;
 
@@ -40,6 +41,7 @@ public class APIApplication extends Application{
 	        set.add(SubClassRestFulAPI.class);
 	        set.add(StaffRestFulAPI.class);
 	        set.add(StudentRestFulAPI.class);
+	        set.add(SafaricomCallback.class);
 	        
 	        set.add(io.swagger.jaxrs.listing.ApiListingResource.class);
 	        set.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);

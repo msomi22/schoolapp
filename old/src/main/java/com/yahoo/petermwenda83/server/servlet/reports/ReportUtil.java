@@ -81,7 +81,11 @@ public class ReportUtil {
 	 * @return
 	 */
 	public static String getInitials(String accountId, String streamId, String subjectId, TeacherSubjectDAO teacherSubjectDAO) { 
-		return teacherSubjectDAO.getTeacherSubject(accountId, streamId, subjectId).getTeacherId();
+		String teacher = "";
+		if(teacherSubjectDAO.getTeacherSubject(accountId, streamId, subjectId) !=null) {
+			teacher = teacherSubjectDAO.getTeacherSubject(accountId, streamId, subjectId).getTeacherId();
+		}
+		return teacher;
 	}
 
 

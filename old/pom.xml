@@ -495,7 +495,13 @@
 
 
 
+		<!-- add JavaLite -->
 
+		<dependency>
+			<groupId>org.javalite</groupId>
+			<artifactId>javalite-common</artifactId>
+			<version>1.4.11</version>
+		</dependency>
 
 
 

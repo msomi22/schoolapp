@@ -13,12 +13,17 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -69,6 +74,23 @@ public class StudentRestFulAPI{
 		}
 
 		return studentService.getStudentPerStream(accountId,sreamId);  
+	}
+	
+	
+	
+	@POST
+	@Path("/{accountId}/{regNo}")  
+	public FeeResponse studentPayFee(@PathParam("accountId") String accountId, 
+			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee) {
+		
+		FeeResponse FeeResponse = new FeeResponse();
+		
+		 StudentPayFee StudentPayFee;
+		 ApiResponse ApiResponse;
+		
+		
+		
+		return FeeResponse;
 	}
 
 	
