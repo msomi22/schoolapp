@@ -238,6 +238,9 @@ $("#kcpeyear").datepicker({
 <!-- Staff js -->
 <script src="js/staff.js"></script>
 
+<!-- exam js -->
+<script src="js/exam.js"></script>
+
 
 <!-- excel import -->
 

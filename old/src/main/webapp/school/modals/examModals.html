@@ -1,0 +1,79 @@
+<!-- Add a new/edit exam -->
+
+<div id="exam" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="examTiltle">Add a new Exam</h4>
+			</div>
+
+			<form method="post" action="#" id="examForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2">
+								<label for="cname">Code</label>
+
+								<input type="text" id="cname" class="form-control formelement"
+									name="cname" placeholder="Exam Code" pattern="[a-zA-Z0-9\s]{2,4}"
+									title="Exam,Only alphanumeric characters are allowed and should be more than one and less than 4 characters"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="dname">Description</label>
+								<input type="text" id="dname" name="dname"
+									class="form-control formelement" placeholder="Description"
+									pattern="[a-zA-Z0-9\s]{3,30}"
+									title="Description,Only characters are allowed and should be more than three and less than 30 characters "
+									required>
+							</div>
+
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="score">Out of (Score)</label>
+								<input type="text" id="score" class="form-control formelement"
+									name="score" placeholder="Out of (Score)" pattern="[0-9]{3}"
+									title="Score,enter a valid number e.g 15,30,100 e.t.c">
+								
+							</div>
+
+							
+
+							
+
+
+						</div>
+
+						<input type="hidden" name="" id="" value="not_set"> <input
+							type="hidden" name="" id="" value="not_set">
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-info pull-right" id="exam_btn">
+						Submit  <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>

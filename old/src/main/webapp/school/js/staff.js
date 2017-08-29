@@ -5,7 +5,9 @@
 	 
 	 function StaffModal(id){
 		 
-		 if(id=="edit"){
+		 if(id =="edit"){
+			 
+			// alert(id);
 			 $('#staffTiltle').text("Edit Staff Details");
 			 
 			 $('#staff_btn').text("Save Changes");
@@ -16,6 +18,8 @@
 			 
 			 $('#staffTiltle').text("Add a new Staff");
 			 $('#staff_btn').text("Submit");
+			 
+			 $('#staffForm').get(0).reset();
 			 
 			 
 		 }
@@ -30,7 +34,7 @@
 		 
 		 $('#disableTitle').text("Disable staff");
 		 
-		 $('#disableSms').text("Are you sure you want to Disable "+ staff+"?");
+		 $('#disableSms').text("Are you sure you want to Disable staff, "+ staff+"?");
 		 $('#Dis_modal').modal('show');
 	 }
 	 

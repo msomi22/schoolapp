@@ -28,7 +28,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Title</h3>
+				<h2>Staffs List</h2>
 			</div>
 		</div>
 
@@ -107,7 +107,7 @@
 										
 										<td>
 										 
-										<button class="btn btn-warning editStaff" id="Edit" onclick="StaffModal(this.id)"> Edit  <span class="fa fa-edit"></span></button>
+										<button class="btn btn-warning editStaff" id="edit" onclick="StaffModal(this.id)"> Edit  <span class="fa fa-edit"></span></button>
 										<button class="btn btn-danger" id="Code Code" onclick="disableStaff(this.id)"> Disable  <span class="fa fa-chain-broken"></span></button>
 										</td>
 
