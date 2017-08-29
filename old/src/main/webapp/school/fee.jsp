@@ -93,7 +93,12 @@
 	private String yearPaid;
 	private Timestamp datePaid; -->
 
-							<div class="col-md-6 col-md-offset-3 cards">
+							<div class="col-md-6 col-md-offset-3 cards formelement">
+							<div class="row secondary-assent">
+							<br>
+							<br>
+							
+							</div>
 								<div class="row">
 									<div class="col-md-6">
 										<h3>Amount Paid:</h3>
