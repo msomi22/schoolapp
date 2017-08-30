@@ -129,7 +129,7 @@
 												done</small>
 												
 												
-										<button class="btn btn-primary secondary-assent pull-right" onclick="popImport()">
+										<button class="btn btn-primary secondary-assent pull-right" onclick="popImport()" disabled>
 										<i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i> Import Students
 										 </button>
 										</h1>

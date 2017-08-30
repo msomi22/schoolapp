@@ -28,7 +28,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Title</h3>
+				<h2>Staffs List</h2>
 			</div>
 		</div>
 
@@ -43,20 +43,86 @@
 
 
 
-						<h1>Test the Api call via jquery</h1>
+						<!-- <h1>Test the Api call via jquery</h1>
 
 
 						<button class="btn btn-primary btn-block" onclick="StaffApiCall()">
-							Test API call</button>
+							Test API call</button> -->
+
+
+						<div class="row ">
+
+							<div class="col-md-4 pull-right">
+								<h3 class="pull-right">
+									Add a new Staff
+									<button class="btn btn-primary" style="border-radius: 90%" id="add"
+										onclick="StaffModal(this.id)">
+										<i class="fa fa-user-plus fa-2x"></i>
+									</button>
+
+								</h3>
+
+							</div>
+
+						</div>
 
 
 
 
 
 
+						<div class="table-responsive">
+							<table class="table table-striped jambo_table bulk_action"
+								id="staffs">
+								<thead>
+									<tr class="headings secondary-assent">
+
+										<th class="column-title">#</th>
+										<th class="column-title">Staff No</th>
+										<th class="column-title">First name</th>
+										<th class="column-title">Middle name</th>
+										<th class="column-title">Last name</th>
+										<th class="column-title">Gender</th>
+										<th class="column-title">Mobile</th>
+										<th class="column-title">Email</th>
+										<th class="column-title">Modify</th>
+
+									</tr>
+								</thead>
+
+								<tbody class='tablebody'>
 
 
-						content here
+
+									<tr class="tabledit" style='color: black;'>
+
+										<td width="5%">1</td>
+										<td class="center">777</td>
+										<td class="center">Code</td>
+										<td class="center">Code</td>
+										<td class="center">Code</td>
+										<td class="center">Male</td>
+										<td class="center">0712345678</td>
+										<td class="center">code@code.com</td>
+										
+										<td>
+										 
+										<button class="btn btn-warning editStaff" id="edit" onclick="StaffModal(this.id)"> Edit  <span class="fa fa-edit"></span></button>
+										<button class="btn btn-danger" id="Code Code" onclick="disableStaff(this.id)"> Disable  <span class="fa fa-chain-broken"></span></button>
+										</td>
+
+									</tr>
+
+
+								</tbody>
+
+
+							</table>
+
+						</div>
+
+
+
 
 
 
@@ -78,6 +144,15 @@
 	</div>
 </div>
 <!-- /page content -->
+
+
+
+<!-- State Modal -->
+<jsp:include page="modals/statemodals.html" />
+
+
+<!-- Staff Modal -->
+<jsp:include page="modals/staffModals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />

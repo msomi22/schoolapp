@@ -179,7 +179,7 @@
 
                   <li><a><i class="fa fa-money"></i> Finance <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="#">Fee</a></li>
+                      <li><a href="fee.jsp">Fee</a></li>
                       <li><a href="#">Pocket Money</a></li> 
                     </ul>
                   </li>

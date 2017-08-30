@@ -1,0 +1,98 @@
+<!-- Add a new/edit staff -->
+
+<div id="staff" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="staffTiltle">Add a new Staff</h4>
+			</div>
+
+			<form method="post" action="#" id="staffForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2">
+								<label for="fname">First Name</label>
+
+								<input type="text" id="fname" class="form-control formelement"
+									name="fname" placeholder="First Name" pattern="[A-Za-z]{3,20}"
+									title="First Name,Only characters are allowed and should be more than two and less than 20 characters"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="mname">Middle Name</label>
+								<input type="text" id="mname" name="mname"
+									class="form-control formelement" placeholder="Middle Name"
+									pattern="[A-Za-z]{3,20}"
+									title="Middle Name,Only characters are allowed and should be less than 20 characters ">
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="lname" >Last Name</label>
+								<input type="text" id="lname" name="lname"
+									class="form-control formelement" placeholder="Last Name"
+									pattern="[A-Za-z]{3,20}"
+									title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="gender">Gender</label>
+								<select id="gender" name="gender" class="form-control formelement">
+									<option value="Male">Male</option>
+									<option value="Female">Female</option>
+								</select>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="email" >Email</label>
+								<input type="email" id="email" class="form-control formelement"
+									name="email">
+
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="phone" >Phone Number</label>
+								<input type="text" id="phone" class="form-control formelement"
+									name="phone" placeholder="Phone number" pattern="[0-9]{8}"
+									title="Phone,enter a valid number e.g 0712345678">
+
+							</div>
+
+
+
+						</div>
+
+						<input type="hidden" name="" id="" value="not_set"> <input
+							type="hidden" name="" id="" value="not_set">
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-info pull-right" id="staff_btn">
+						Submit  <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>

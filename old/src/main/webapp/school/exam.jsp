@@ -6,47 +6,38 @@
 
 
 <%
+	if (session == null) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-  if (session == null) {
-       response.sendRedirect("../index.jsp");
-       //return;
-    }
+	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(username)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
 
-    String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-    if (StringUtils.isEmpty(username)) {
-        response.sendRedirect("../index.jsp");
-        //return;
-    }
-
-    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-   
+	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 %>
 <jsp:include page="header.jsp" />
 
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Title</h3>
-              </div>
-            </div>
-            
-            <div class="clearfix"></div>
+<!-- page content -->
+<div class="right_col" role="main">
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h2>Exams List</h2>
+			</div>
+		</div>
 
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_content">
+		<div class="clearfix"></div>
 
-
-
-
-
-
-                  content here
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
 
 
 
@@ -54,21 +45,114 @@
 
 
 
+						<div class="row ">
+
+							<div class="col-md-4 pull-right">
+								<h3 class="pull-right">
+									Add a new Exam
+									<button class="btn btn-primary" style="border-radius: 90%"
+										id="add" onclick="examModal(this.id)">
+										<i class="fa fa-plus-circle fa-2x"></i>
+									</button>
+
+								</h3>
+
+							</div>
+
+						</div>
 
 
 
 
-                    
-                    
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /page content -->
 
-        <!-- footer -->
+
+						<div class="table-responsive">
+							<table class="table table-striped jambo_table bulk_action"
+								id="exams">
+								<thead>
+									<tr class="headings secondary-assent">
+
+										<th class="column-title">#</th>
+										<th class="column-title">Exam Code</th>
+										<th class="column-title">Description</th>
+										<th class="column-title">Out of (Score)</th>
+										<th class="column-title">Modify</th>
+
+									</tr>
+								</thead>
+
+								<tbody class='tablebody'>
+
+
+
+									<tr class="tabledit" style='color: black;'>
+
+										<td width="5%">1</td>
+										<td class="center">P1</td>
+										<td class="center">Paper 1</td>
+										<td class="center">80</td>
+
+										<td>
+
+											<button class="btn btn-warning editExam" id="edit"
+												onclick="examModal(this.id)">
+												Edit <span class="fa fa-edit"></span>
+											</button>
+											<button class="btn btn-danger" id="P1"
+												onclick="disableExam(this.id)">
+												Disable <span class="fa fa-chain-broken"></span>
+											</button>
+										</td>
+
+									</tr>
+
+
+								</tbody>
+
+
+							</table>
+
+						</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /page content -->
+
+<!-- State Modal -->
+<jsp:include page="modals/statemodals.html" />
+
+
+<!-- exam Modal -->
+<jsp:include page="modals/examModals.html" />
+
+<!-- footer -->
 <jsp:include page="footer.jsp" />
-        
