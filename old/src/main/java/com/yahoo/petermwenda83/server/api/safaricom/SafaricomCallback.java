@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
+import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
 import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.Balances;
 import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.VCResponse;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameter;
@@ -29,7 +31,7 @@ import io.swagger.annotations.ApiResponses;
  * http://localhost:8080/school/webapi/account/timeout
  * 
  * http://localhost:8080/school/webapi/account/validation
- * http://localhost:8080/school/webapi/account/confirmation
+ * http://localhost:8080/school/webapi/account/mpesa/confirmation
 
  * @author peter
  *
@@ -124,7 +126,7 @@ public class SafaricomCallback {
 	//validation and confirmation URLs on M-Pesa 
 	@POST
 	@Path("/{validation}") 
-	public VCResponse validationURL(@PathParam("validation") String validation, VCResponse vresponse) {
+	public String validationURL(@PathParam("validation") String validation, VCResponse vresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(vresponse);  
@@ -149,9 +151,49 @@ public class SafaricomCallback {
 
 		System.out.println(vresponse + " " + validation); 
 
-		return vresponse;
+		Response MPESAresponse = new Response();
+		String TOMPESA = JsonFromObj.getJsonStringFromObject(MPESAresponse); 
+		
+		System.out.println();
+		System.out.println(TOMPESA); 
+		
+		
+		return TOMPESA;
 	}
 	
+	
+	class Response{
+		
+		private String ResponseCode;
+		private String ResponseDesc;
+		
+		public Response() {
+			ResponseCode = "00000000";
+			ResponseDesc = "success";
+		}
+
+		public String getResponseCode() {
+			return ResponseCode;
+		}
+
+		public void setResponseCode(String responseCode) {
+			ResponseCode = responseCode;
+		}
+
+		public String getResponseDesc() {
+			return ResponseDesc;
+		}
+
+		public void setResponseDesc(String responseDesc) {
+			ResponseDesc = responseDesc;
+		}
+
+		@Override
+		public String toString() {
+			return "Response [ResponseCode=" + ResponseCode + ", ResponseDesc=" + ResponseDesc + "]";
+		}
+		
+	}
 	
 	
 
@@ -164,8 +206,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("/{confirmation}") 
-	public VCResponse confirmationURL(@PathParam("confirmation") String confirmation,VCResponse cresponse) {
+	@Path("{mpesa}/{confirmation}")  
+	public VCResponse confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(cresponse);  

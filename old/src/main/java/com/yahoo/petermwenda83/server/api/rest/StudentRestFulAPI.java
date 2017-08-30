@@ -23,6 +23,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -76,21 +77,73 @@ public class StudentRestFulAPI{
 		return studentService.getStudentPerStream(accountId,sreamId);  
 	}
 	
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param studentPayFee
+	 * @param auth
+	 * @return
+	 */
 	
+	@ApiOperation(value = "Pay student Fee.", 
+		    notes = "Whether fee was paid successfully or not.", 
+		    response = APIStudent.class)
 	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	} )
 	@POST
 	@Path("/{accountId}/{regNo}")  
 	public FeeResponse studentPayFee(@PathParam("accountId") String accountId, 
-			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee) {
+			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
 		
-		FeeResponse FeeResponse = new FeeResponse();
+		FeeResponse feeResponse = new FeeResponse();
 		
-		 StudentPayFee StudentPayFee;
-		 ApiResponse ApiResponse;
+		ApiResponse apiResponse = new ApiResponse();
+		apiResponse.setMessage("error");
+		apiResponse.setDescription("User not authenticated");
 		
+		feeResponse.setApiResponse(apiResponse); 
 		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return feeResponse; 
+		}
 		
-		return FeeResponse;
+		return studentService.payFee(studentPayFee); 
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param auth
+	 * @return
+	 */
+	
+	@ApiOperation(value = "Get student fee basic information.", 
+		    notes = "Student basic info object.", 
+		    response = APIStudent.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	} )
+	@GET 
+	@Path("/{accountId}/{regNo}") 
+	public StudentResponse getStudent(@PathParam("accountId") String accountId, 
+			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
+
+		StudentResponse  response = new StudentResponse(); 
+		
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+		
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.getStudent(accountId,regNo);  
 	}
 
 	
