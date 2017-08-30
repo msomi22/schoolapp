@@ -6,21 +6,34 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 
 /**
  * @author peter
  *
  */
+
+@XmlRootElement(name = "StudentFeeAPI") 
 public class StudentFeeAPI{
 	
+	@JsonProperty
 	private String regNo;
+	@JsonProperty
 	private String firstname;
+	@JsonProperty
 	private String middlename;
+	@JsonProperty
 	private String lastname;
+	@JsonProperty
 	private String stream;
+	@JsonProperty
 	private String isBoarding;
+	@JsonProperty
 	private String balance;
+	@JsonProperty
 	private List<StudentFee> feeHistory;
 	
 	public StudentFeeAPI(){

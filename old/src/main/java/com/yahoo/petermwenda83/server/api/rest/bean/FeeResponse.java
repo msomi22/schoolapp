@@ -3,13 +3,20 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author peter
  *
  */
+@XmlRootElement(name = "FeeResponse") 
 public class FeeResponse {
 	
+	@JsonProperty
 	private StudentPayFee StudentPayFee;
+	@JsonProperty
 	private ApiResponse ApiResponse;
 
 	/**

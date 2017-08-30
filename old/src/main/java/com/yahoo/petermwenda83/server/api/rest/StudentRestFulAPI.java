@@ -88,7 +88,7 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Pay student Fee.", 
 		    notes = "Whether fee was paid successfully or not.", 
-		    response = APIStudent.class)
+		    response = StudentPayFee.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
@@ -122,7 +122,7 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Get student fee basic information.", 
 		    notes = "Student basic info object.", 
-		    response = APIStudent.class)
+		    response = StudentResponse.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
