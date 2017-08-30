@@ -41,6 +41,8 @@ public class SafaricomService {
 		
 		String query = JsonFromObj.getJsonStringFromObject(simulateRequest); 
 		
+		//System.out.println(query);
+		
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
 		
@@ -75,6 +77,8 @@ public class SafaricomService {
 		
 		RegisterURL registerURL = new RegisterURL();
 		String query = JsonFromObj.getJsonStringFromObject(registerURL); 
+		
+		//System.out.println(query);
 		
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
@@ -417,7 +421,7 @@ public class SafaricomService {
 		public RegisterURL(){
 			ShortCode = "600321";
 			ResponseType = "Completed";
-			ConfirmationURL = "http://3782cd77.ngrok.io/school/webapi/account/confirmation";
+			ConfirmationURL = "http://3782cd77.ngrok.io/school/webapi/account/mpesa/confirmation";
 			ValidationURL = "http://3782cd77.ngrok.io/school/webapi/account/validation";
 		}
 
