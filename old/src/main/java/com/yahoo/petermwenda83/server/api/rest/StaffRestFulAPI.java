@@ -80,7 +80,7 @@ public class StaffRestFulAPI {
 	
 	
 	@ApiOperation(value = "Update a staff.", 
-		    notes = "Returns whethet staff was updated successfully or not.", 
+		    notes = "Returns whether staff was updated successfully or not.", 
 		    response = APIStaff.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 

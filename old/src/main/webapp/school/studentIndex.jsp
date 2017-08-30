@@ -228,7 +228,7 @@
                   <td class="center"><%=student.getLastname() %></td>
                   <td class="center"><%=student.getGender() %></td>
                   <td class="center"><%="" %></td>
-                  <td class="center"> <a href="profile.jsp"> Profile</a> </td>                 
+                  <td class="center"> <a href="profile.jsp?regno=<%=student.getRegNo() %>" > Profile</a> </td>                 
 
                 </tr>
 

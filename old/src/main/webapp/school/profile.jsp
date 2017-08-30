@@ -39,6 +39,9 @@
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	
+	//get student's details
+	int reg= Integer.parseInt( request.getParameter("regno"));
 
 	//get class list
 	ClassDAO classDAO = ClassDAO.getInstance();
@@ -83,7 +86,7 @@
 										alt="Avatar" title="Change the avatar">
 								</div>
 							</div>
-							<h3>Student's Name</h3>
+							<h3>Student's Name <%= reg %></h3>
 
 							<ul class="list-unstyled user_data">
 								<li><i class="fa fa-map-marker user-profile-icon"></i>

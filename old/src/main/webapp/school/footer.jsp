@@ -153,6 +153,12 @@ $("#kcpeyear").datepicker({
 	src="../vendors/sumoselect/jquery.sumoselect.js"></script>
 	
 	
+	<!-- Json conversion -->
+	
+	<script
+	src="js/json/jquery.serializejson.js"></script>
+	
+	
 	   <script type="text/javascript">
         $(document).ready(function () {
             window.asd = $('.SlectBox').SumoSelect({ csvDispCount: 4, captionFormatAllSelected: "Selected all exams" });
