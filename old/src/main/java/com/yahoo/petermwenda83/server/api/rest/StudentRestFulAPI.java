@@ -14,6 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -147,6 +148,13 @@ public class StudentRestFulAPI{
 		return studentService.getStudent(accountId,regNo);  
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param student
+	 * @param auth
+	 * @return
+	 */
 
 	@POST
 	@Path("/{accountId}")  
@@ -165,6 +173,34 @@ public class StudentRestFulAPI{
 		}
 
 		return studentService.addNewStudent(accountId,student);
+
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param student
+	 * @param auth
+	 * @return
+	 */
+	
+	@PUT
+	@Path("/{accountId}")  
+	public Object updateStudent(@PathParam("accountId") String accountId, StudentInfo student, @HeaderParam("authorization") String auth) {
+
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.updateStudent(accountId, student);
 
 	}
 
