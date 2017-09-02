@@ -289,13 +289,13 @@ public class StudentService {
 			
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegStream())) { 
+		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
 			
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getCurrentStream())) {
+		}else if(StringUtils.isBlank(student.getCurrentStream()) && streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
@@ -501,13 +501,13 @@ public class StudentService {
 			
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegStream())) { 
+		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
 			
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getCurrentStream())) {
+		}else if(StringUtils.isBlank(student.getCurrentStream()) && streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
