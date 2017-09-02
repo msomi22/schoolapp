@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
 
@@ -50,14 +51,14 @@ public class StudentRestFulAPI{
 	 * @param auth
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Get students per stream for the given stream Id.", 
-		    notes = "Returns List of students in the given sream.", 
-		    response = APIStudent.class)
-	
+			notes = "Returns List of students in the given sream.", 
+			response = APIStudent.class)
+
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stream Id or account Id not found.") 
 	} )
-		  
+
 	@GET
 	@Path("/{accountId}/{sreamId}") 
 	public List<APIStudent> getStudentPerStream(@PathParam("accountId") String accountId, 
@@ -67,7 +68,7 @@ public class StudentRestFulAPI{
 		APIStudent re = new APIStudent();
 		re.setMessage("error");
 		re.setDescription("User not authenticated");
-		
+
 		response.add(re);
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
@@ -76,7 +77,7 @@ public class StudentRestFulAPI{
 
 		return studentService.getStudentPerStream(accountId,sreamId);  
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -85,33 +86,33 @@ public class StudentRestFulAPI{
 	 * @param auth
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Pay student Fee.", 
-		    notes = "Whether fee was paid successfully or not.", 
-		    response = StudentPayFee.class)
-	
+			notes = "Whether fee was paid successfully or not.", 
+			response = StudentPayFee.class)
+
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
 	@POST
 	@Path("/{accountId}/{regNo}")  
 	public FeeResponse studentPayFee(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
-		
+
 		FeeResponse feeResponse = new FeeResponse();
-		
+
 		ApiResponse apiResponse = new ApiResponse();
 		apiResponse.setMessage("error");
 		apiResponse.setDescription("User not authenticated");
-		
+
 		feeResponse.setApiResponse(apiResponse); 
-		
+
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return feeResponse; 
 		}
-		
+
 		return studentService.payFee(studentPayFee); 
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -119,11 +120,11 @@ public class StudentRestFulAPI{
 	 * @param auth
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Get student fee basic information.", 
-		    notes = "Student basic info object.", 
-		    response = StudentResponse.class)
-	
+			notes = "Student basic info object.", 
+			response = StudentResponse.class)
+
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
 	@GET 
@@ -132,12 +133,12 @@ public class StudentRestFulAPI{
 			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
 
 		StudentResponse  response = new StudentResponse(); 
-		
+
 		ApiResponse re = new ApiResponse(); 
 		re.setMessage("error");
 		re.setDescription("User not authenticated");
 		response.setApiResponse(re);
-		
+
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
@@ -146,6 +147,25 @@ public class StudentRestFulAPI{
 		return studentService.getStudent(accountId,regNo);  
 	}
 
-	
+
+	@POST
+	@Path("/{accountId}")  
+	public Object newStudent(@PathParam("accountId") String accountId, StudentInfo student, @HeaderParam("authorization") String auth) {
+
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.addNewStudent(accountId,student);
+
+	}
 
 }
