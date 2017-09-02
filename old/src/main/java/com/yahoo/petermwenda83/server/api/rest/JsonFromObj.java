@@ -7,6 +7,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 import com.yahoo.petermwenda83.server.api.safaricom.Result;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.SafResponse;
+import com.yahoo.petermwenda83.server.api.safaricom.bean.VCResponse;
 
 public class JsonFromObj {
 
@@ -16,7 +17,7 @@ public class JsonFromObj {
 
 	public static void main(String[] args) {
 		
-		System.out.println(getJsonStringFromObject(new SafResponse()));
+		System.out.println(getJsonStringFromObject(new VCResponse()));
 		
 		//System.out.println(StaffRestFulAPI.validMobileNo("h718953974"));  
 
