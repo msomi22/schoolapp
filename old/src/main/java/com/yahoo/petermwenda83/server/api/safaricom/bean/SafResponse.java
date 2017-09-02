@@ -13,7 +13,6 @@ import com.yahoo.petermwenda83.server.api.safaricom.Result;
  *
  */
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement(name = "SafResponse") 
 public class SafResponse {
 	

@@ -7,20 +7,21 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
 import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.Balances;
-import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.VCResponse;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameter;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameters;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.SafResponse;
+import com.yahoo.petermwenda83.server.api.safaricom.bean.VCResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ import io.swagger.annotations.ApiResponses;
  * http://localhost:8080/school/webapi/account/balance
  * http://localhost:8080/school/webapi/account/timeout
  * 
- * http://localhost:8080/school/webapi/account/validation
+ * http://localhost:8080/school/webapi/account/broker/validation
  * http://localhost:8080/school/webapi/account/mpesa/confirmation
 
  * @author peter
@@ -125,8 +126,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("/{validation}") 
-	public String validationURL(@PathParam("validation") String validation, VCResponse vresponse) {
+	@Path("{broker}/{validation}") 
+	public String validationURL(@PathParam("broker") String broker, @PathParam("validation") String validation, VCResponse vresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(vresponse);  
@@ -154,6 +155,8 @@ public class SafaricomCallback {
 		Response MPESAresponse = new Response();
 		String TOMPESA = JsonFromObj.getJsonStringFromObject(MPESAresponse); 
 		
+		//TOMPESA = TOMPESA+";";
+		
 		System.out.println();
 		System.out.println(TOMPESA); 
 		
@@ -161,10 +164,60 @@ public class SafaricomCallback {
 		return TOMPESA;
 	}
 	
+	@ApiOperation(value = "Confirmation Response From Safaricom MPESA.", 
+			notes = "Response Message.", 
+			response = VCResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found.") 
+	} )
+
+	//validation and confirmation URLs on M-Pesa 
+	@POST
+	@Path("{mpesa}/{confirmation}")  
+	public String confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
+		
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(cresponse);  
+		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
+		
+		response.getBillRefNumber();
+		response.getBusinessShortCode();
+		response.getInvoiceNumber();
+		response.getMSISDN();
+		response.getOrgAccountBalance();//important
+		response.getThirdPartyTransID();
+		response.getTransactionType();
+		response.getTransAmount();
+		response.getTransID();
+		response.getTransTime();
+		
+		response.getFirstName();
+		response.getLastName();
+		response.getMiddleName();
+		
+		//update DB
+		
+		
+        
+		System.out.println(response + " " + confirmation); 
+
+		return jsonObject;
+	}
+
+
+
 	
+
+	/**
+	 * 
+	 * @author peter
+	 *
+	 */
 	class Response{
 		
+		@JsonProperty
 		private String ResponseCode;
+		@JsonProperty
 		private String ResponseDesc;
 		
 		public Response() {
@@ -197,50 +250,6 @@ public class SafaricomCallback {
 	
 	
 
-	@ApiOperation(value = "Confirmation Response From Safaricom MPESA.", 
-			notes = "Response Message.", 
-			response = VCResponse.class)
-
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found.") 
-	} )
-
-	//validation and confirmation URLs on M-Pesa 
-	@POST
-	@Path("{mpesa}/{confirmation}")  
-	public VCResponse confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
-		
-		Gson gson = new Gson();
-		String jsonObject = gson.toJson(cresponse);  
-		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
-		
-		response.getBillRefNumber();
-		response.getBusinessShortCode();
-		response.getInvoiceNumber();
-		response.getMSISDN();
-		response.getOrgAccountBalance();//important
-		response.getThirdPartyTransID();
-		response.getTransactionType();
-		response.getTransAmount();
-		response.getTransID();
-		response.getTransTime();
-		
-		response.getFirstName();
-		response.getLastName();
-		response.getMiddleName();
-		
-		//update DB
-		
-		
-        
-		System.out.println(response + " " + confirmation); 
-
-		return cresponse;
-	}
-
-
-
-	
-	
 
 
 }

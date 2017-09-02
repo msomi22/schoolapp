@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
@@ -19,10 +21,6 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.*;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
-import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 
 /**
@@ -37,6 +35,7 @@ public class StudentService {
 	private static StreamDAO streamDAO;
 	private static StudentFeeDAO studentFeeDAO;
 	private static SysConfigDAO sysConfigDAO;
+	private static EmailValidator emailValidator;
 
 	static{
 		studentDAO = StudentDAO.getInstance();
@@ -45,6 +44,7 @@ public class StudentService {
 		streamDAO = StreamDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
+		emailValidator = EmailValidator.getInstance();
 	}
 
 	/**
@@ -105,42 +105,42 @@ public class StudentService {
 
 		//validation
 		if(StringUtils.isEmpty(studentPayFee.getAccountId())) {
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("AccountId is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
 			return feeResponse;
 
 		}else if(accountDAO.getAccountById(studentPayFee.getAccountId()) != null) { 
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("AccountId is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
 			return feeResponse;
 
 		}else if(StringUtils.isEmpty(studentPayFee.getStaffId())) { 
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
 			return feeResponse;
 
 		}else if(staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId()) != null) {
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
 			return feeResponse;
 
 		}else if(studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRefNo()) == null) {
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Student RegNo is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
 			return feeResponse;
 
 		}else if(!StringUtils.isNumeric(studentPayFee.getAmount())) {
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Amount is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
@@ -148,7 +148,7 @@ public class StudentService {
 
 
 		}else if(Integer.valueOf(studentPayFee.getAmount()) < 1 || Integer.valueOf(studentPayFee.getAmount()) > 100000) {
-			
+
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Amount is invalid!");
 			feeResponse.setApiResponse(apiResponse); 
@@ -167,7 +167,7 @@ public class StudentService {
 
 			studentPayFee.getYear();
 			studentPayFee.getTerm();
-			
+
 			apiResponse.setMessage("success");
 			apiResponse.setDescription("OK");
 
@@ -245,13 +245,161 @@ public class StudentService {
 
 		return response;
 	}
+
 	/**
 	 * 
-	 * @author peter
-	 *
+	 * @param accountId
+	 * @param student
+	 * @return
 	 */
+	public Object addNewStudent(String accountId, StudentInfo student) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+
+		if(StringUtils.isBlank(accountId)) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account Id is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getUuid())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Student Id is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getRegNo()) && !validaLength(student.getRegNo()) ) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("RegNo is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getRegStream())) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Registration stream is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getCurrentStream())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Current stream is invalid.");
+
+		}else if(StringUtils.isBlank(student.getIsBoarding())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("IsBoarding' but be set.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getFirstname()) && !validaLength(student.getFirstname())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Firstname is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getMiddlename()) && !validaLength(student.getMiddlename())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Middlename is invalid."); 
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getGender())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Gender is invalid."); 
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getDob())) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("DOB is invalid."); 
+			
+			return apiResponse;
+
+		}else if(student.hasParent()) { 
+
+			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent name is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getParentEmail()) && !emailValidator.isValid(student.getParentEmail())) {  
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent email is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getParentMobile()) && !StringUtils.isNumeric(student.getParentMobile()) &&
+					  student.getParentMobile().length() > 9) {  
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent mobile is invalid."); 
+				
+				return apiResponse;
+
+			}
 
 
 
+		}else if(student.hasPrimary()) {  
+
+			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Primary school name is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getIndex()) ) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Primary school index is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getKcpeyear()) && student.getKcpemark().length() !=4 ) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("K.C.P.E year is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getKcpemark()) && !StringUtils.isNumeric(student.getKcpemark()) && 
+					Integer.valueOf(student.getKcpemark()) < 100 && Integer.valueOf(student.getKcpemark()) > 500) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("K.C.P.E makrs invalid."); 
+				
+				return apiResponse;
+
+			}
+		}else {
+			
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			
+			sysConfig.getTerm();
+			sysConfig.getYear();
+
+
+
+			apiResponse.setMessage("success");
+			apiResponse.setDescription("Student added successfully.");
+			
+			return apiResponse;
+
+		}
+		
+		
+		return apiResponse;
+	}
+
+
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean validaLength(String value) {
+		if(value.length() < 3) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 
 }
