@@ -3,8 +3,10 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,11 +16,15 @@ import org.apache.commons.validator.routines.EmailValidator;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.bean.student.StudentPrimary;
+import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
+import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
+import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.*;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
@@ -36,6 +42,11 @@ public class StudentService {
 	private static StudentFeeDAO studentFeeDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static EmailValidator emailValidator;
+	
+	private static PrimaryDAO primaryDAO;
+	private static ParentsDAO parentsDAO;
+	
+	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
 
 	static{
 		studentDAO = StudentDAO.getInstance();
@@ -45,6 +56,9 @@ public class StudentService {
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
 		emailValidator = EmailValidator.getInstance();
+		
+		parentsDAO= ParentsDAO.getInstance();
+		primaryDAO=PrimaryDAO.getInstance();
 	}
 
 	/**
@@ -303,7 +317,8 @@ public class StudentService {
 			
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getGender())) {
+		}else if(StringUtils.isBlank(student.getGender()) &&
+				(!StringUtils.equalsIgnoreCase(student.getGender(), "M")  || !StringUtils.equalsIgnoreCase(student.getGender(), "F") ) ) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
 			
@@ -372,13 +387,80 @@ public class StudentService {
 			
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 			
-			sysConfig.getTerm();
-			sysConfig.getYear();
-
-
-
+			//basic
+			Student newstudent = new Student();
+			newstudent.setRegStream(student.getRegStream()); 
+			newstudent.setCurrentStream(student.getCurrentStream());
+			newstudent.setIsActive(student.getIsActive());
+			newstudent.setIsAlumni(student.getIsAlumni());
+			newstudent.setIsBoarding(student.getIsBoarding());
+			newstudent.setRegNo(student.getRegNo());
+			newstudent.setFirstname(student.getFirstname());
+			newstudent.setMiddlename(student.getMiddlename());
+			newstudent.setLastname(student.getLastname());
+			newstudent.setGender(student.getGender().toUpperCase());
+			newstudent.setDob(student.getDob());
+			newstudent.setBcertNo(student.getBcertNo());
+			newstudent.setCounty(student.getCounty());
+			newstudent.setRegTerm(sysConfig.getTerm());
+			newstudent.setFinalYear(Integer.valueOf(sysConfig.getYear()) + 3); 
+			newstudent.setFinalTerm(3); 
+			newstudent.setPassport(renameImage(student.getPassport(),student.getRegNo()));
+			newstudent.setLastUpdated(new Date().toString());  
+			
+			
+			String response = "";
+			
+			if(studentDAO.putStudent(newstudent)) {
+				
+				response = "Student basic info saved successfully.";
+				
+				//parent
+				if(student.hasParent()) {
+					StudentParent studentParent= new StudentParent();
+					studentParent.setAccountId(accountId);
+					studentParent.setStudentId(student.getUuid());
+					studentParent.setName(student.getParentName());
+					studentParent.setMobile(student.getParentMobile());
+					studentParent.setEmail(student.getParentEmail()); 
+					
+					if(parentsDAO.putParent(studentParent)) {
+						
+						response += "Student parent info saved successfully.";
+						
+					}else {
+						
+						response += "Student parent info NOT saved.";
+						
+					}
+				}
+				
+				//primary
+				if(student.hasPrimary()) {
+					StudentPrimary studentPrimary= new StudentPrimary();
+					studentPrimary.setAccountId(accountId);
+					studentPrimary.setStudentId(student.getUuid());
+					studentPrimary.setSchoolName(student.getSchoolName());
+					studentPrimary.setIndex(student.getIndex());
+					studentPrimary.setKcpemark(student.getKcpemark());
+					studentPrimary.setKcpeyear(student.getKcpeyear());
+					
+					if(primaryDAO.putStudentPrimary(studentPrimary)) {
+						
+						response += "Student primary info saved successfully.";
+						
+					}else { 
+						
+						response += "Student primary info NOT saved.";
+						
+					}
+				}
+				
+			}
+			
+			
 			apiResponse.setMessage("success");
-			apiResponse.setDescription("Student added successfully.");
+			apiResponse.setDescription(response); 
 			
 			return apiResponse;
 
@@ -386,6 +468,237 @@ public class StudentService {
 		
 		
 		return apiResponse;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param student
+	 * @return
+	 */
+	public Object updateStudent(String accountId, StudentInfo student) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+
+		if(StringUtils.isBlank(accountId)) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account Id is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getUuid()) && studentDAO.getStudentById(accountId, student.getUuid()) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Student Id is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getRegNo()) && !validaLength(student.getRegNo()) ) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("RegNo is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getRegStream())) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Registration stream is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getCurrentStream())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Current stream is invalid.");
+
+		}else if(StringUtils.isBlank(student.getIsBoarding())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("IsBoarding' but be set.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getFirstname()) && !validaLength(student.getFirstname())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Firstname is invalid.");
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getMiddlename()) && !validaLength(student.getMiddlename())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Middlename is invalid."); 
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getGender()) &&
+				(!StringUtils.equalsIgnoreCase(student.getGender(), "M")  || !StringUtils.equalsIgnoreCase(student.getGender(), "F") ) ) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Gender is invalid."); 
+			
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(student.getDob())) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("DOB is invalid."); 
+			
+			return apiResponse;
+
+		}else if(student.hasParent()) { 
+
+			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent name is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getParentEmail()) && !emailValidator.isValid(student.getParentEmail())) {  
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent email is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getParentMobile()) && !StringUtils.isNumeric(student.getParentMobile()) &&
+					  student.getParentMobile().length() > 9) {  
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Parent mobile is invalid."); 
+				
+				return apiResponse;
+
+			}
+
+
+
+		}else if(student.hasPrimary()) {  
+
+			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Primary school name is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getIndex()) ) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Primary school index is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getKcpeyear()) && student.getKcpemark().length() !=4 ) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("K.C.P.E year is invalid."); 
+				
+				return apiResponse;
+
+			}else if(StringUtils.isBlank(student.getKcpemark()) && !StringUtils.isNumeric(student.getKcpemark()) && 
+					Integer.valueOf(student.getKcpemark()) < 100 && Integer.valueOf(student.getKcpemark()) > 500) { 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("K.C.P.E makrs invalid."); 
+				
+				return apiResponse;
+
+			}
+		}else {
+			
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			
+			//basic
+			Student newstudent = studentDAO.getStudentById(accountId, student.getUuid());
+			
+			newstudent.setRegStream(student.getRegStream()); 
+			newstudent.setCurrentStream(student.getCurrentStream());
+			newstudent.setIsActive(student.getIsActive());
+			newstudent.setIsAlumni(student.getIsAlumni());
+			newstudent.setIsBoarding(student.getIsBoarding());
+			newstudent.setRegNo(student.getRegNo());
+			newstudent.setFirstname(student.getFirstname());
+			newstudent.setMiddlename(student.getMiddlename());
+			newstudent.setLastname(student.getLastname());
+			newstudent.setGender(student.getGender().toUpperCase());
+			newstudent.setDob(student.getDob());
+			newstudent.setBcertNo(student.getBcertNo());
+			newstudent.setCounty(student.getCounty());
+			newstudent.setRegTerm(sysConfig.getTerm());
+			newstudent.setFinalYear(student.getFinalYear()); 
+			newstudent.setFinalTerm(student.getFinalTerm()); 
+			newstudent.setPassport(renameImage(student.getPassport(),student.getRegNo()));
+			newstudent.setLastUpdated(new Date().toString());  
+			
+			
+			String response = "";
+			
+			if(studentDAO.updateStudent(newstudent)) { 
+				
+				response = "Student basic info updated successfully.";
+				
+				//parent
+				if(student.hasParent()) {
+					StudentParent studentParent = parentsDAO.getParent(accountId, student.getUuid()); 
+					studentParent.setName(student.getParentName());
+					studentParent.setMobile(student.getParentMobile());
+					studentParent.setEmail(student.getParentEmail()); 
+					
+					if(parentsDAO.updateParent(studentParent)) { 
+						
+						response += "Student parent info updated successfully.";
+						
+					}else {
+						
+						response += "Student parent info NOT updated.";
+						
+					}
+				}
+				
+				//primary
+				if(student.hasPrimary()) {
+					StudentPrimary studentPrimary = primaryDAO.getStudentPrimary(accountId, student.getUuid()); 
+					studentPrimary.setSchoolName(student.getSchoolName());
+					studentPrimary.setIndex(student.getIndex());
+					studentPrimary.setKcpemark(student.getKcpemark());
+					studentPrimary.setKcpeyear(student.getKcpeyear());
+					
+					if(primaryDAO.updateStudentPrimary(studentPrimary)) { 
+						
+						response += "Student primary info updated successfully.";
+						
+					}else { 
+						
+						response += "Student primary info NOT updated.";
+						
+					}
+				}
+				
+			}
+			
+			
+			apiResponse.setMessage("success");
+			apiResponse.setDescription(response); 
+			
+			return apiResponse;
+
+		}
+		
+		
+		return apiResponse;
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param initalName
+	 * @param regNo
+	 * @return
+	 */
+	private String renameImage(String initalName,String regNo) {
+		 String renamed= initalName;
+		
+		 File passport = new File(DATA_DIRECTORY+initalName); 
+
+		 if(passport.renameTo(new File(DATA_DIRECTORY+regNo+".png")))
+			 renamed= regNo+".png";
+		return renamed;
+		
 	}
 
 
