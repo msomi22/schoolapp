@@ -116,12 +116,12 @@ public class StaffService {
 				apiResponse.setDescription("Password Can't be Empty!"); 
 
 			}else if(staffDAO.getStaffByStaffNo(staff.getAccountId(), staff.getStaffNo()) != null){
-				response = "StaffNo already exist.";
+				response = "StaffNo "+staff.getStaffNo() +" already exist.";
 				apiResponse = new ApiResponse("error");
 				apiResponse.setDescription(response);
 
 			}else if(staffDAO.getStaffByUsername(staff.getAccountId(), staff.getUsername()) != null){
-				response = "Staff username already exist.";
+				response = "Staff username, "+staff.getUsername() +" already exist.";
 				apiResponse = new ApiResponse("error");
 				apiResponse.setDescription(response);
 

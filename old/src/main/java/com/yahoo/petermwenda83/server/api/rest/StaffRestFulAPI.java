@@ -39,7 +39,7 @@ public class StaffRestFulAPI {
 	StaffService staffService = new StaffService();
 	
 	@ApiOperation(value = "Register a new staff.", 
-		    notes = "Returns whethet staff was Registred successfully or not.", 
+		    notes = "Returns whether staff was Registred successfully or not.", 
 		    response = APIStaff.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
