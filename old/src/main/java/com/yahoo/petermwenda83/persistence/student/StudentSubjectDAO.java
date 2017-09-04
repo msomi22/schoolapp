@@ -47,12 +47,42 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
     
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#getSubjectById(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public StudentSubject getSubjectById(String accountId, String uuid) {
+		StudentSubject studentsub = null;
+        ResultSet rset = null;
+        try(
+        		  Connection conn = dbutils.getConnection();
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentSubject WHERE accountId = ? AND uuid = ?;");       
+        		
+        		){
+        	
+        	 pstmt.setString(1, accountId);
+        	 pstmt.setString(2, uuid);
+	         rset = pstmt.executeQuery();
+	     while(rset.next()){
+	
+	    	 studentsub  = beanProcessor.toBean(rset,StudentSubject.class);
+	   }
+        		
+        }catch(SQLException e){
+        	 logger.error("SQL Exception when getting Subjects for accountId " + accountId + " and uuid " + uuid);
+             logger.error(ExceptionUtils.getStackTrace(e));
+        }
+       
+		return studentsub; 
+	}
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#StudentSubject(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public StudentSubject studentSubject(String studentId,String subjectId) {
+	public StudentSubject getstudentSubject(String studentId,String subjectId) {
 		StudentSubject studentsub = null;
         ResultSet rset = null;
         try(
@@ -140,7 +170,7 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#deleteStudentSubject(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean deleteStudentSubject(String accountId,String studentId) {
+	public boolean deleteAllSubject(String accountId,String studentId) {
 		 boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
@@ -169,22 +199,21 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentSubjectDAO#deleteStudentSubject(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean deleteStudentSubject(String accountId, String studentId, String subjectId) {
+	public boolean deleteSubject(String accountId, String id) {
 		 boolean success = true; 
 	      try(
 	      		  Connection conn = dbutils.getConnection();
 	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentSubject"
-	         	      		+ " WHERE accountId = ? AND studentId =? AND subjectId =? ;");       
+	         	      		+ " WHERE accountId = ? AND uuid =?;");       
 	      		
 	      		){
 	      	
 	      	 pstmt.setString(1, accountId);
-	      	 pstmt.setString(2, studentId); 
-	      	 pstmt.setString(3, subjectId); 
+	      	 pstmt.setString(2, id); 
 		     pstmt.executeUpdate();
 		     
 	      }catch(SQLException e){
-	      	   logger.error("SQL Exception when deletting studentSubject for studentId " + studentId);
+	      	   logger.error("SQL Exception when deletting studentSubject for id " + id);
 	           logger.error(ExceptionUtils.getStackTrace(e));
 	           System.out.println(ExceptionUtils.getStackTrace(e));
 	           success = false;
@@ -194,5 +223,4 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 			return success;
 	}
 
-	
 }

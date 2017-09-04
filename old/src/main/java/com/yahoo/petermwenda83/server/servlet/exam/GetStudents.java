@@ -103,7 +103,7 @@ public class GetStudents extends HttpServlet{
 
 			students.forEach(student -> {
 
-				if(studentSubjectDAO.studentSubject(student.getUuid(), subjectId) != null){ 
+				if(studentSubjectDAO.getstudentSubject(student.getUuid(), subjectId) != null){ 
 					selectedStudents.add(student);
 				}
 
