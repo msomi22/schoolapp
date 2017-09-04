@@ -37,7 +37,7 @@ public class GeneralService {
 			List<Object>  list = new ArrayList<>();
 			streamDAO.getStreamList(accountId).forEach(stream -> {
 				ApiStream apiStream = new ApiStream();
-				apiStream.setAccountId(stream.getUuid());
+				apiStream.setAccountId(stream.getAccountId());
 				apiStream.setClassRoomId(stream.getClassRoomId());
 				apiStream.setDescription(stream.getDescription());
 				apiStream.setUuid(stream.getUuid()); 
