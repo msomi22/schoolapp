@@ -11,6 +11,7 @@ import java.util.List;
 //import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
@@ -46,6 +48,8 @@ public class StudentRestFulAPI{
 
 	/**
 	 * http://localhost:8080/school/webapi/student/{accountId}/{streamId}
+	 * 
+	 * http://localhost:8080/school/webapi/student/subject 
 	 * 
 	 * @param accountId
 	 * @param sreamId
@@ -124,7 +128,7 @@ public class StudentRestFulAPI{
 
 	@ApiOperation(value = "Get student fee basic information.", 
 			notes = "Student basic info object.", 
-			response = StudentResponse.class)
+			response = StudentInfo.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
@@ -155,6 +159,13 @@ public class StudentRestFulAPI{
 	 * @param auth
 	 * @return
 	 */
+	
+	@ApiOperation(value = "Register a new student.", 
+			notes = "Student basic info object.", 
+			response = StudentInfo.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
 
 	@POST
 	@Path("/{accountId}")  
@@ -184,6 +195,13 @@ public class StudentRestFulAPI{
 	 * @return
 	 */
 	
+	@ApiOperation(value = "Update student details.", 
+			notes = "Student basic info object.", 
+			response = StudentInfo.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	
 	@PUT
 	@Path("/{accountId}")  
 	public Object updateStudent(@PathParam("accountId") String accountId, StudentInfo student, @HeaderParam("authorization") String auth) {
@@ -203,5 +221,89 @@ public class StudentRestFulAPI{
 		return studentService.updateStudent(accountId, student);
 
 	}
+	
+	
+	@ApiOperation(value = "Assign a subject to a student.", 
+			notes = "Student subject info object.", 
+			response = ApiSubject.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
+	} )
+	
+	@POST
+	@Path("/subject")   
+	public Object addSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
+		
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, apiSubject.getAccountId())){
+			return response; 
+		}
+		
+		return studentService.assignSubject(apiSubject);
+	}
+	
+	@ApiOperation(value = "Updated student's subject.", 
+			notes = "Student subject info object.", 
+			response = ApiSubject.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
+	} )
+	
+	@PUT
+	@Path("/subject")   
+	public Object updateSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
+		
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, apiSubject.getAccountId())){
+			return response; 
+		}
+		
+		return studentService.updateSubject(apiSubject);
+	}
+	
+	@ApiOperation(value = "Delete subject that has been assigned to a student.", 
+			notes = "Student_subject_id.", 
+			response = ApiSubject.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
+	} )
+	
+	@DELETE
+	@Path("/subject")   
+	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, String id) {
+		
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+		
+		return studentService.deleteSubject(accountId,id);
+	}
+	
+	
+	
+	
+	
 
 }
