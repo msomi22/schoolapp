@@ -457,7 +457,6 @@ public class AdminService {
 		if(accountDAO.getAccData() != null) {
 			list = accountDAO.getAccData();
 			
-			System.out.println(list);
 		}
 		
 		List<ApiAccData> apiAccDataList =  new  ArrayList<>(); 
