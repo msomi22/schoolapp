@@ -280,7 +280,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO AccData" 
-						+"(uuid,pitch,roll,raw,addDate) VALUES (?,?,?,?,?);");
+						+"(uuid,pitch,roll,yaw,addDate) VALUES (?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, accData.getUuid());
