@@ -30,8 +30,8 @@ import io.swagger.annotations.ApiResponses;
  * http://localhost:8080/school/webapi/account/balance
  * http://localhost:8080/school/webapi/account/timeout
  * 
- * http://localhost:8080/school/webapi/account/broker/validation
- * http://localhost:8080/school/webapi/account/mpesa/confirmation
+ * http://localhost:8080/school/webapi/account/validation
+ * http://localhost:8080/school/webapi/account/confirmation
 
  * @author peter
  *
