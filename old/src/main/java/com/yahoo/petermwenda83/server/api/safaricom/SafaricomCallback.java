@@ -126,7 +126,7 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("{broker}/{validation}") 
+	@Path("broker/validation") 
 	public String validationURL(@PathParam("broker") String broker, @PathParam("validation") String validation, VCResponse vresponse) {
 		
 		Gson gson = new Gson();
@@ -173,7 +173,7 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("{mpesa}/{confirmation}")  
+	@Path("mpesa/confirmation")  
 	public String confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
 		
 		Gson gson = new Gson();
