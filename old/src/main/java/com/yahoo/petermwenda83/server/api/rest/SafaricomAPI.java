@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.api.safaricom;
+package com.yahoo.petermwenda83.server.api.rest;
 
 import java.util.List;
 
@@ -16,8 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
-import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
-import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.Balances;
+import com.yahoo.petermwenda83.server.api.safaricom.Result;
+import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService;
+import com.yahoo.petermwenda83.server.api.safaricom.bean.Balances;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameter;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameters;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.SafResponse;
@@ -41,7 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "/account") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class SafaricomCallback {
+public class SafaricomAPI {
 
 	@ApiOperation(value = "Log Response From Safaricom MPESA.", 
 			notes = "Response Message.", 
@@ -126,8 +127,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("broker/validation") 
-	public String validationURL(@PathParam("broker") String broker, @PathParam("validation") String validation, VCResponse vresponse) {
+	@Path("/validation") 
+	public String validationURL(VCResponse vresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(vresponse);  
@@ -150,7 +151,7 @@ public class SafaricomCallback {
 		
 		//put into the DB
 
-		System.out.println(vresponse + " " + validation); 
+		System.out.println(vresponse + "  validation"); 
 
 		Response MPESAresponse = new Response();
 		String TOMPESA = JsonFromObj.getJsonStringFromObject(MPESAresponse); 
@@ -173,8 +174,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("mpesa/confirmation")  
-	public String confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
+	@Path("/confirmation")  
+	public String confirmationURL(VCResponse cresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(cresponse);  
@@ -199,7 +200,7 @@ public class SafaricomCallback {
 		
 		
         
-		System.out.println(response + " " + confirmation); 
+		System.out.println(response + "  confirmation"); 
 
 		return jsonObject;
 	}
