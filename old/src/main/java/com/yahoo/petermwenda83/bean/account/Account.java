@@ -42,7 +42,7 @@ public class Account extends StorableBean{
 	private Timestamp creationDate;
 
 	public Account() {
-		isActive = "";
+		isActive = "";//1=active , 0 = inactive
 		name = "";
 		motto = "";
 		website = "";

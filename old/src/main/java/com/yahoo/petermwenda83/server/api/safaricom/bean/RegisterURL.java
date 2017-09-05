@@ -1,0 +1,66 @@
+/**
+ * 
+ */
+package com.yahoo.petermwenda83.server.api.safaricom.bean;
+
+/**
+ * 
+ * @author peter
+ *
+ */
+public class RegisterURL{
+	private String ShortCode;
+	private String ResponseType;
+	private String ConfirmationURL;
+	private String ValidationURL;
+	
+	public RegisterURL(){
+		ShortCode = "600321";
+		ResponseType = "Completed";
+		ConfirmationURL = "http://bc0ef872.ngrok.io/school/webapi/account/confirmation";
+		ValidationURL = "http://bc0ef872.ngrok.io/school/webapi/account/validation";
+	}
+
+	public String getShortCode() {
+		return ShortCode;
+	}
+
+	public void setShortCode(String shortCode) {
+		ShortCode = shortCode;
+	}
+
+	public String getResponseType() {
+		return ResponseType;
+	}
+
+	public void setResponseType(String responseType) {
+		ResponseType = responseType;
+	}
+
+	public String getConfirmationURL() {
+		return ConfirmationURL;
+	}
+
+	public void setConfirmationURL(String confirmationURL) {
+		ConfirmationURL = confirmationURL;
+	}
+
+	public String getValidationURL() {
+		return ValidationURL;
+	}
+
+	public void setValidationURL(String validationURL) {
+		ValidationURL = validationURL;
+	}
+
+	@Override
+	public String toString() {
+		return "RegisterURL [ShortCode=" + ShortCode + ", ResponseType=" + ResponseType
+				+ ", ConfirmationURL=" + ConfirmationURL + ", ValidationURL=" + ValidationURL + "]";
+	}
+	
+}
+
+
+
+

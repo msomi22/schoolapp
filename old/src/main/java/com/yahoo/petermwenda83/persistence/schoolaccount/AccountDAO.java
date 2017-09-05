@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
+import com.yahoo.petermwenda83.server.api.rest.admin.AccData;
 
 /**
  * @author peter
@@ -152,19 +153,27 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Account" 
-						+"(Uuid,StatusUuid,SchoolName,Username,Password,Mobile,PostalAddress,Town,Email,DayBoarding,CreationDate) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+						+"(uuid,isActive,name,motto,website,logo,signature,username,password,mobile,email,address,"
+						+ "town,isBoarding,isMixed,lastUpdated,CreationDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 				){
+
 			pstmt.setString(1, school.getUuid());
-			/*pstmt.setString(2, school.getStatusUuid());
-	            pstmt.setString(3, school.getSchoolName());
-	            pstmt.setString(4, school.getUsername());
-	            pstmt.setString(5, school.getPassword());
-	            pstmt.setString(6, school.getMobile());
-	            pstmt.setString(7, school.getPostalAddress());
-	            pstmt.setString(8, school.getTown());
-	            pstmt.setString(9, school.getEmail());
-	            pstmt.setString(10, school.getDayBoarding());*/
-			pstmt.setTimestamp(11, new Timestamp(school.getCreationDate().getTime()));
+			pstmt.setString(2, school.getIsActive());
+			pstmt.setString(3, school.getName());
+			pstmt.setString(4, school.getMotto());
+			pstmt.setString(5, school.getWebsite());
+			pstmt.setString(6, school.getLogo());
+			pstmt.setString(7, school.getSignature());
+			pstmt.setString(8, school.getUsername());
+			pstmt.setString(9, school.getPassword());
+			pstmt.setString(10, school.getMobile());
+			pstmt.setString(11, school.getEmail());
+			pstmt.setString(12, school.getAddress());
+			pstmt.setString(13, school.getTown());
+			pstmt.setString(14, school.getIsBoarding());
+			pstmt.setString(15, school.getIsMixed());
+			pstmt.setString(16, school.getLastUpdated());
+			pstmt.setTimestamp(17, new Timestamp(school.getCreationDate().getTime()));
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -185,19 +194,26 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	public boolean updateAccount(Account school) {
 		boolean success = true; 
 		try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE Account SET SchoolName =?,Username =?,Password =?,"
-						+ "Mobile =?,PostalAddress =?,Town =?,Email =?,DayBoarding =?,StatusUuid =? WHERE Uuid = ? ;");
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Account SET isActive =? ,name =? ,motto  =? ,website  =? ,"
+						+ "logo =? ,signature =? ,username =? ,password =? ,mobile =? ,email =? ,address =? ," + 
+						"town =? ,isBoarding =? ,isMixed =? ,lastUpdated =? WHERE Uuid = ?;"); 
 				){
-			/*pstmt.setString(1, school.getSchoolName());
-	            pstmt.setString(2, school.getUsername());
-	            pstmt.setString(3, school.getPassword());
-	            pstmt.setString(4, school.getMobile());
-	            pstmt.setString(5, school.getPostalAddress());
-	            pstmt.setString(6, school.getTown());
-	            pstmt.setString(7, school.getEmail());
-	            pstmt.setString(8, school.getDayBoarding());
-	            pstmt.setString(9, school.getStatusUuid());*/
-			pstmt.setString(10, school.getUuid());
+			pstmt.setString(1, school.getIsActive());
+			pstmt.setString(2, school.getName());
+			pstmt.setString(3, school.getMotto());
+			pstmt.setString(4, school.getWebsite());
+			pstmt.setString(5, school.getLogo());
+			pstmt.setString(6, school.getSignature());
+			pstmt.setString(7, school.getUsername());
+			pstmt.setString(8, school.getPassword());
+			pstmt.setString(9, school.getMobile());
+			pstmt.setString(10, school.getEmail());
+			pstmt.setString(11, school.getAddress());
+			pstmt.setString(12, school.getTown());
+			pstmt.setString(13, school.getIsBoarding());
+			pstmt.setString(14, school.getIsMixed());
+			pstmt.setString(15, school.getLastUpdated());
+			pstmt.setString(16, school.getUuid());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -210,13 +226,27 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 		return success;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#delete(com.yahoo.petermwenda83.bean.account.Account)
 	 */
 	@Override
 	public boolean deleteAccount(String uuid) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = true; 
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Account SET isActive = ?  WHERE Uuid = ?;"); 
+				){
+			pstmt.setString(1, "0");
+			pstmt.setString(2, uuid);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to deleting account for uuid " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+		return success;
 	}
 
 	/**
@@ -234,6 +264,59 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 		} catch(SQLException e){
 			logger.error("SQL Exception when getting all Schools");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#putAccData(com.yahoo.petermwenda83.server.api.rest.admin.AccData)
+	 */
+	@Override
+	public boolean putAccData(AccData accData) {
+		boolean success = true; 
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO AccData" 
+						+"(uuid,pitch,roll,raw,addDate) VALUES (?,?,?,?,?);");
+				){
+
+			pstmt.setString(1, accData.getUuid());
+			pstmt.setString(2, accData.getPitch());
+			pstmt.setString(3, accData.getRoll());
+			pstmt.setString(4, accData.getYaw());
+			pstmt.setTimestamp(5, accData.getAddDate()); 
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put accData " + accData);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+
+		return success;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getAccData()
+	 */
+	@Override
+	public List<AccData> getAccData() {
+		List<AccData> list =new  ArrayList<>(); 
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AccData ORDER BY addDate DESC;");   
+				ResultSet rset = pstmt.executeQuery();
+				) {
+
+			list = beanProcessor.toBeanList(rset, AccData.class);
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all AccData");
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -28,6 +29,7 @@ import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.*;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 
@@ -49,6 +51,8 @@ public class StudentService {
 	private static ParentsDAO parentsDAO;
 	
 	private static StudentSubjectDAO studentSubjectDAO;
+	
+	private static SubjectDAO subjectDAO;
 
 	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
 
@@ -65,6 +69,8 @@ public class StudentService {
 		primaryDAO=PrimaryDAO.getInstance();
 		
 		studentSubjectDAO = StudentSubjectDAO.getInstance();
+		
+		subjectDAO = SubjectDAO.getInstance();
 	}
 
 	/**
@@ -782,6 +788,36 @@ public class StudentService {
 
 		return apiResponse;
 	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @return
+	 */
+	public List<Object> getSubjects(String accountId, String studentId) {
+		List<StudentSubject>  subjectlist = new ArrayList<>();
+		if(studentSubjectDAO.getStudentSubjects(studentId) != null) {
+			subjectlist = studentSubjectDAO.getStudentSubjects(studentId); 
+		}
+		ApiSubject apiSubject = new ApiSubject();
+		List<ApiSubject>  apiSubjectList = new ArrayList<>();
+		
+		subjectlist.forEach(sub -> {
+			apiSubject.setAccountId(sub.getAccountId());
+			apiSubject.setStudentId(sub.getStudentId());
+			apiSubject.setSubjectId(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getDescription());
+			apiSubject.setUuid(sub.getUuid()); 
+			sub.getAllocationDate();
+			apiSubjectList.add(apiSubject);
+			
+		});
+		
+		return apiSubjectList.stream().collect(Collectors.toList());
+	} 
+
+
 
 
 
@@ -817,6 +853,6 @@ public class StudentService {
 		}
 	}
 
-
+	
 
 }

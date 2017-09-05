@@ -7,6 +7,8 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 //import java.util.List;
 
@@ -220,6 +222,34 @@ public class StudentRestFulAPI{
 
 		return studentService.updateStudent(accountId, student);
 
+	}
+	
+	
+	@ApiOperation(value = "Get student's subjects.", 
+			notes = "Student subject List.", 
+			response = ApiSubject.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
+	} )
+	
+	@GET
+	@Path("/subject/{studentId}/{accountId}")    
+	public List<Object> getSubject(@HeaderParam("authorization") String auth, @PathParam("studentId") String studentId,
+			@PathParam("accountId") String accountId) {
+		
+		 List<ApiResponse>  response = new ArrayList<>(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.add(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response.stream().collect(Collectors.toList());  
+		}
+		
+		return studentService.getSubjects(accountId,studentId);
 	}
 	
 	

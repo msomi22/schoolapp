@@ -8,7 +8,6 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -17,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
-import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService.Balances;
+import com.yahoo.petermwenda83.server.api.safaricom.bean.Balances;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameter;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameters;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.SafResponse;
@@ -31,8 +30,8 @@ import io.swagger.annotations.ApiResponses;
  * http://localhost:8080/school/webapi/account/balance
  * http://localhost:8080/school/webapi/account/timeout
  * 
- * http://localhost:8080/school/webapi/account/broker/validation
- * http://localhost:8080/school/webapi/account/mpesa/confirmation
+ * http://localhost:8080/school/webapi/account/validation
+ * http://localhost:8080/school/webapi/account/confirmation
 
  * @author peter
  *
@@ -41,7 +40,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "/account") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class SafaricomCallback {
+public class SafaricomAPI {
 
 	@ApiOperation(value = "Log Response From Safaricom MPESA.", 
 			notes = "Response Message.", 
@@ -51,9 +50,9 @@ public class SafaricomCallback {
 	} )
 
 	@POST
-	@Path("/{balance}") 
+	@Path("/balance") 
 	@Produces(value = {MediaType.APPLICATION_JSON})  
-	public Balances getAcctBalResponse(@PathParam("balance") String balance,SafResponse object) {
+	public Balances getAcctBalResponse(SafResponse object) {
 
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(object); 
@@ -106,10 +105,10 @@ public class SafaricomCallback {
 	} )
 
 	@POST
-	@Path("/{timeout}") 
-	public SafResponse getAcctBalTimeoutResponse(@PathParam("timeout") String timeout, SafResponse object) {
+	@Path("/timeout") 
+	public SafResponse getAcctBalTimeoutResponse(SafResponse object) {
 
-		System.out.println(object + " --- " + timeout);  
+		System.out.println(object + " ---  timeout");  
 
 		return object;
 	}
@@ -126,8 +125,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("{broker}/{validation}") 
-	public String validationURL(@PathParam("broker") String broker, @PathParam("validation") String validation, VCResponse vresponse) {
+	@Path("/validation") 
+	public String validationURL(VCResponse vresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(vresponse);  
@@ -150,7 +149,7 @@ public class SafaricomCallback {
 		
 		//put into the DB
 
-		System.out.println(vresponse + " " + validation); 
+		System.out.println(vresponse + "  validation"); 
 
 		Response MPESAresponse = new Response();
 		String TOMPESA = JsonFromObj.getJsonStringFromObject(MPESAresponse); 
@@ -173,8 +172,8 @@ public class SafaricomCallback {
 
 	//validation and confirmation URLs on M-Pesa 
 	@POST
-	@Path("{mpesa}/{confirmation}")  
-	public String confirmationURL(@PathParam("mpesa") String mpesa, @PathParam("confirmation") String confirmation,VCResponse cresponse) {
+	@Path("/confirmation")  
+	public String confirmationURL(VCResponse cresponse) {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(cresponse);  
@@ -199,7 +198,7 @@ public class SafaricomCallback {
 		
 		
         
-		System.out.println(response + " " + confirmation); 
+		System.out.println(response + "  confirmation"); 
 
 		return jsonObject;
 	}
