@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.yahoo.petermwenda83.server.api.rest;
+package com.yahoo.petermwenda83.server.api.safaricom;
 
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -16,8 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
-import com.yahoo.petermwenda83.server.api.safaricom.Result;
-import com.yahoo.petermwenda83.server.api.safaricom.SafaricomService;
+import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.Balances;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameter;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.ResultParameters;
@@ -52,9 +50,9 @@ public class SafaricomAPI {
 	} )
 
 	@POST
-	@Path("/{balance}") 
+	@Path("/balance") 
 	@Produces(value = {MediaType.APPLICATION_JSON})  
-	public Balances getAcctBalResponse(@PathParam("balance") String balance,SafResponse object) {
+	public Balances getAcctBalResponse(SafResponse object) {
 
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(object); 
@@ -107,10 +105,10 @@ public class SafaricomAPI {
 	} )
 
 	@POST
-	@Path("/{timeout}") 
-	public SafResponse getAcctBalTimeoutResponse(@PathParam("timeout") String timeout, SafResponse object) {
+	@Path("/timeout") 
+	public SafResponse getAcctBalTimeoutResponse(SafResponse object) {
 
-		System.out.println(object + " --- " + timeout);  
+		System.out.println(object + " ---  timeout");  
 
 		return object;
 	}

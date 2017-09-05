@@ -8,10 +8,10 @@ import java.util.*;
 import javax.ws.rs.core.Application;
 
 import com.yahoo.petermwenda83.server.api.rest.GeneralRestFulAPI;
-import com.yahoo.petermwenda83.server.api.rest.SafaricomAPI;
 import com.yahoo.petermwenda83.server.api.rest.StaffRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.StudentRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.SubClassRestFulAPI;
+import com.yahoo.petermwenda83.server.api.safaricom.SafaricomAPI;
 
 import io.swagger.jaxrs.config.BeanConfig;
 
