@@ -10,7 +10,13 @@ public class TestData {
 		
 		String data = "{\"Roll\":\"-13.20123\",\"Pitch\":\"13.21731\",\"Yaw\":\"-0.6401809\"}";
 		
-		//AdminService.saveToFile(data);
+		System.out.println("**************");
+		System.out.println(data);
+		System.out.println("****************");
+		
+		AdminService adminService = new AdminService();
+		
+		adminService.putData(data);
 		
 
 	}

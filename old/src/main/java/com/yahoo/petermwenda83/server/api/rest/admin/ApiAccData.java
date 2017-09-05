@@ -5,28 +5,31 @@ package com.yahoo.petermwenda83.server.api.rest.admin;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.UUID;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author peter
  *
  */
-public class AccData {
+
+@XmlRootElement(name = "ApiAccData")
+public class ApiAccData {
 	
 	private String uuid;
-	private String roll;
-	private String pitch;
-	private String yaw;
+	private String Roll;
+	private String Pitch;
+	private String Yaw;
 	private Timestamp addDate;
-	
+
 	/**
 	 * 
 	 */
-	public AccData() {
-		uuid = UUID.randomUUID().toString();
-		roll = "";
-		pitch = "";
-		yaw = "";
+	public ApiAccData() {
+		uuid = "";
+		Roll = "";
+		Pitch = "";
+		Yaw = "";
 		addDate = new Timestamp(new Date().getTime());
 	}
 
@@ -39,27 +42,27 @@ public class AccData {
 	}
 
 	public String getRoll() {
-		return roll;
+		return Roll;
 	}
 
 	public void setRoll(String roll) {
-		this.roll = roll;
+		Roll = roll;
 	}
 
 	public String getPitch() {
-		return pitch;
+		return Pitch;
 	}
 
 	public void setPitch(String pitch) {
-		this.pitch = pitch;
+		Pitch = pitch;
 	}
 
 	public String getYaw() {
-		return yaw;
+		return Yaw;
 	}
 
 	public void setYaw(String yaw) {
-		this.yaw = yaw;
+		Yaw = yaw;
 	}
 
 	public Timestamp getAddDate() {
@@ -72,10 +75,10 @@ public class AccData {
 
 	@Override
 	public String toString() {
-		return "AccData [uuid=" + uuid + ", roll=" + roll + ", pitch=" + pitch + ", yaw=" + yaw + ", addDate=" + addDate
-				+ "]";
+		return "ApiAccData [uuid=" + uuid + ", Roll=" + Roll + ", Pitch=" + Pitch + ", Yaw=" + Yaw + ", addDate="
+				+ addDate + "]";
 	}
 
 	
-
+	
 }

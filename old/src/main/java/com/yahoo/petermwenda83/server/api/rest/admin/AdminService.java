@@ -3,23 +3,13 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.staff.AcessLevel;
@@ -284,13 +274,29 @@ public class AdminService {
 		int[] lowerLimits = {83,75,66,56,54,48,42,40,35,31,26,1};
 		int[] upperLimits = {100,82,74,65,55,53,47,41,39,34,30,25};
 		int[] points = {12,11,10,9,8,7,6,5,4,3,2,1};
-
+		String[] desc = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
+		
 		for(int count=0;count<gradingSystemIds.length;count++) {
 			GradingSystem gradingSystem = new GradingSystem();
+			gradingSystem.setUuid(gradingSystemIds[count]);
+			gradingSystem.setAccountId(accountId);
+			gradingSystem.setCategoryId(gcateId);
+			gradingSystem.setLowerLimit(lowerLimits[count]);
+			gradingSystem.setUpperLimit(upperLimits[count]);
+			gradingSystem.setPoints(points[count]);
+			gradingSystem.setDescription(desc[count]);
+			//TODO put
 
 		}
 
 
+		
+		Miscellanous miscellanous = new Miscellanous();
+		
+		/*6A017FB8-5E19-4441-A3DA-B3EB780E81A1	E3CDC578-37BA-4CDB-B150-DAB0409270CD	CLOSING_DATE	Tue 03	 April	2016	
+		7B6C4D4E-DE72-4F81-A166-6AF01C5B11D5	E3CDC578-37BA-4CDB-B150-DAB0409270CD	OPENING_DATE	Wed 07	 May	2016	
+		5B0F3957-0B88-45C9-8772-7F7A94E16DBF	E3CDC578-37BA-4CDB-B150-DAB0409270CD	HEAD_TEACHER_REMARKS	for the fantastic term	 it has been awesome to see you grow and develop	 hope you have a wonderful holiday .For your performance	 all we can say is ...
+*/
 
 
 
@@ -410,37 +416,67 @@ public class AdminService {
 	 * 
 	 * @param data
 	 */
-	public void saveToFile(String data) {
-		String USER = System.getProperty("user.name");
-		String UPLOAD_DIR =  "/home/"+USER+"/Desktop/"; 
-		String filename = "pydata.txt";
-		String path = UPLOAD_DIR+"/"+filename;
+	public Object putData(String data) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		ApiAccData apiAccData = new ApiAccData();
+		Gson gson = new Gson();
+		apiAccData = gson.fromJson(data, ApiAccData.class);
+		
+		
 		
 		AccData accData = new AccData();
-		Gson gson = new Gson();
-		accData = gson.fromJson(data, AccData.class);
+		accData.setAddDate(apiAccData.getAddDate());
+		accData.setPitch(apiAccData.getPitch());
+		accData.setRoll(apiAccData.getRoll());
+		accData.setYaw(apiAccData.getYaw());
 		
 		System.out.println(accData); 
 		
-		//PRY
-		String formated = accData.getPitch()+"|"+accData.getRoll()+"|"+accData.getYaw();  
-
-		Logger logger = Logger.getLogger("MyLog");
-		Appender fh = null;
-		try {
-			fh = new FileAppender(new SimpleLayout(), path);
+		
+		if(accountDAO.putAccData(accData)) {
+			apiResponse.setMessage("success");
+			apiResponse.setDescription("Data saved successfully.");
 			
-			logger.addAppender(fh);
-			fh.setLayout(new SimpleLayout());
-			logger.info(formated); 
-			
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}else {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Data NOT saved.");
 		}
 		
-
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ApiAccData> getAccData(){
+		List<AccData> list = new  ArrayList<>(); 
+		
+		if(accountDAO.getAccData() != null) {
+			list = accountDAO.getAccData();
+			
+			System.out.println(list);
+		}
+		
+		List<ApiAccData> apiAccDataList =  new  ArrayList<>(); 
+		
+		list.forEach(data -> {
+			
+			ApiAccData apiAccData = new ApiAccData();
+			apiAccData.setUuid(data.getUuid());
+			apiAccData.setAddDate(data.getAddDate());
+			apiAccData.setPitch(data.getPitch());
+			apiAccData.setRoll(data.getRoll());
+			apiAccData.setYaw(data.getYaw());
+			
+			apiAccDataList.add(apiAccData);
+			
+			
+		});
+		
+		return apiAccDataList;
 	}
 
 

@@ -313,8 +313,8 @@ CREATE TABLE Staff (
     middlename text,
     lastname text,
     gender text, 
-    mobile text UNIQUE NOT NULL,,
-    email text UNIQUE NOT NULL,,
+    mobile text UNIQUE NOT NULL,
+    email text UNIQUE NOT NULL,
     username text UNIQUE NOT NULL,
     password text,
     lastUpdated text,
@@ -322,6 +322,8 @@ CREATE TABLE Staff (
 );
 \COPY Staff(uuid,accountId,acessLevelId,staffNo,isActive,firstname,middlename,lastname,gender,mobile,email,username,password,lastUpdated) FROM '/tmp/Staff.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE Staff OWNER TO school;
+--uuid  accountId   acessLevelId    staffNo isActive    firstname   middlename  lastname    
+--gender  mobile  email   username    password    lastUpdated
 
 -- -------------------
 -- Table TeacherSubject
@@ -749,3 +751,22 @@ CREATE TABLE chat (
 ALTER TABLE chat OWNER TO school;
 
 
+--=========================
+-- 10.  AccData management
+-- =========================
+-- -------------------
+-- Table AccData
+-- -------------------
+CREATE TABLE AccData (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    pitch text,
+    roll text,
+    raw text,
+    addDate timestamp with time zone DEFAULT now()
+
+);
+ALTER TABLE AccData OWNER TO school;
+
+
+INSERT INTO AccData (uuid,pitch,roll,raw) VALUES ('79B82D8A-34B1-4E18-B04D-010265997C1F','1','2','3');
