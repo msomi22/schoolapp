@@ -8,7 +8,7 @@
 }
 
 .bg-color {
-	background-color: #D7E8EF !important;
+	background-color: #014081 !important;
 }
 
 .whiteme {
@@ -16,15 +16,20 @@
 }
 
 .themeColor {
-	background-color: #2A3F54 !important;
+	background-color: #014081 !important;
 	border-color: #F7F7F7 !important;
 	color: #fff;
 }
 
 .secondary-assent{
-	background-color: #1ABB9C !important;
+	background-color: #008ABB !important;
 	color: #fff;
 	
+}
+
+.loading{
+	background-color: #3A60DB;
+	color:white;
 }
 
 .error{
@@ -36,7 +41,7 @@
 
 .mono{
 	
-	background-color: #3B5976 !important;
+	background-color: #008ABB !important;
 }
 
 .btn-primary {

@@ -144,7 +144,7 @@ html , body{
     padding: 0 0 4px 0
 }
 .left_col {
-    background: #2A3F54
+    background: #014081;
 }
 .nav-sm .container.body .col-md-3.left_col {
     min-height: 100%;
@@ -356,7 +356,7 @@ body .container.body .right_col {
 .nav_title {
     width: 230px;
     float: left;
-    background: #2A3F54;
+    background: #014081;
     border-radius: 0;
     height: 57px
 }
@@ -1282,7 +1282,7 @@ table.countries_list td {
 }
 .dataTables_paginate a {
     padding: 6px 9px !important;
-    background: #1abb9c !important;
+    background: #008ABB !important;
     border-color: #ddd !important
 }
 .paging_full_numbers a.paginate_active {
@@ -1300,7 +1300,7 @@ table.jambo_table {
     border: 1px solid rgba(221, 221, 221, 0.78)
 }
 table.jambo_table thead {
-    background: rgba(52, 73, 94, 0.94);
+    background: #008ABB;
     color: #ECF0F1
 }
 table.jambo_table tbody tr:hover td {

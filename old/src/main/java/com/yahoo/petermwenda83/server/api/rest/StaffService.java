@@ -194,7 +194,7 @@ public class StaffService {
 			if (StringUtils.isBlank(apiStaffFull.getFirstname())) { 
 
 				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Firt Name Can't be Empty!"); 
+				apiResponse.setDescription("First Name Can't be Empty!"); 
 
 			}else if (StringUtils.isBlank(apiStaffFull.getMiddlename())) { 
 
@@ -229,7 +229,7 @@ public class StaffService {
 			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
 
 				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("StudentId invalid!");  
+				apiResponse.setDescription("Staff details invalid!");  
 
 			}/*else if(staffDAO.getStaffByStaffNo(apiStaffFull.getAccountId(), apiStaffFull.getStaffNo()) != null){
 

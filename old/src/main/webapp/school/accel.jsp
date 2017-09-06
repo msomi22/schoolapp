@@ -1,4 +1,3 @@
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
@@ -6,38 +5,21 @@
 
 
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
+<%-- <%@page import="com.yahoo.petermwenda83.persistence"%>
+<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%> --%>
 
 
 <%
-	if (session == null) {
-		response.sendRedirect("../index.jsp");
-		//return;
-	}
-
-	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-	if (StringUtils.isEmpty(username)) {
-		response.sendRedirect("../index.jsp");
-		//return;
-	}
-
-	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-	
-	
-	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
-	
-	StaffDAO staffDAO= StaffDAO.getInstance();
+	/* StaffDAO staffDAO= StaffDAO.getInstance();
 	
 	 List<Staff> staffList = new ArrayList<>();
-     if(staffDAO.getStaff(accountId) != null){
-    	 staffList = staffDAO.getStaff(accountId);
-     }
-     
-     int staffCount = 0;
+	 if(staffDAO.getStaff(accountId) != null){
+		 staffList = staffDAO.getStaff(accountId);
+	 }
+	 
+	 int staffCount = 0; */
 %>
-<jsp:include page="header.jsp" />
+<jsp:include page="header2.jsp" />
 
 
 
@@ -49,7 +31,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h2>Staffs List</h2>
+				<h2>Accelerometer Readings</h2>
 			</div>
 		</div>
 
@@ -73,15 +55,21 @@
 
 						<div class="row ">
 
-							<div class="col-md-4 pull-right">
-								<h3 class="pull-right">
-									Add a new Staff
-									<button class="btn btn-primary" style="border-radius: 90%" id="add"
-										onclick="StaffModal(this.id)">
-										<i class="fa fa-user-plus fa-2x"></i>
-									</button>
+							<div class="col-md-4">
+								<h3 class="">Degrees Readings</h3>
 
-								</h3>
+							</div>
+
+						</div>
+
+						<div class="row" id="preload">
+
+							<div
+								class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+
+
+								<img src="../school/images/Preload.gif" class="img-responsive" />
+
 
 							</div>
 
@@ -94,31 +82,26 @@
 
 						<div class="table-responsive">
 							<table class="table table-striped jambo_table bulk_action"
-								id="staffs">
-								<thead>
+								id="accel">
+								<!-- <thead>
 									<tr class="headings secondary-assent">
 
 										<th class="column-title">#</th>
-										<th class="column-title">Staff No</th>
-										<th class="column-title">First name</th>
-										<th class="column-title hidden">Middle name</th>
-										<th class="column-title">Last name</th>
-										<th class="column-title">Gender</th>
-										<th class="column-title">Mobile</th>
-										<th class="column-title">Email</th>
-										<th class="column-title">User name</th>
-										
-										<th class="column-title">Modify</th>
+										<th class="column-title">Roll</th>
+										<th class="column-title">Pitch</th>
+										<th class="column-title">Yaw</th>
+
+
 
 									</tr>
-								</thead>
+								</thead> -->
 
 								<tbody class='tablebody'>
 
-								 <%
+									<%--  <%
                   for(Staff staff : staffList){                   
-                    %>
-
+                    %> --%>
+									<%-- 
 									<tr class="tabledit" style='color: black;'>
 
 										<td width="5%"><%=staffCount %></td>
@@ -145,13 +128,64 @@
                     staffCount++;
                   }
                   
-                  %>
+                  %> --%>
+
+									<!-- <tr class="tabledit">
+
+										<td class="center">#</td>
+										<td class="center btn btn-info">7.77</td>
+										<td class="center btn btn-warning">40.888</td>
+
+										<td class="center btn btn-warning">42.77</td>
 
 
+									</tr> -->
+
+
+									<!-- <tr class="tabledit" style='color: black;'>
+
+										<td width="5%">#</td>
+										<td class="center">
+											<button class="btn btn-info btn-block" >
+												7.77</button>
+										</td>
+										<td class="center">
+											<button class="btn btn-warning btn-block" >
+												40.88</button>
+										</td>
+										<td class="center">
+											<button class="btn btn-warning btn-block"
+												>
+												42.77
+											</button></td>
+
+
+
+
+
+									</tr> -->
 								</tbody>
 
 
 							</table>
+
+
+
+
+							<!--  <table id="example" class="display" width="100%">
+							 
+							 <thead>
+							 <tr class="headings secondary-assent">
+							  <th class="column-title hidden">uuid</th>
+							 <th class="column-title">addDate</th>
+										<th class="column-title">pitch</th>
+										<th class="column-title">roll</th>
+										<th class="column-title">yaw</th>
+							 
+							 </tr>
+							 
+							 </thead>
+							 </table> -->
 
 						</div>
 
@@ -184,15 +218,13 @@
 
 
 
-<!-- Staff Modal -->
-<jsp:include page="modals/staffModals.jsp" />
-
 
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
-<jsp:include page="footer.jsp" />
+<jsp:include page="footer2.jsp" />
+
 
 
 

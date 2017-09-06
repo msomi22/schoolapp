@@ -1,6 +1,13 @@
  $("#staffs").DataTable({
+	 
+	 "scrollY":        "550px",
+     "scrollCollapse": true,
+     "paging":         false
 		 
+     
+     
 	 });
+
 	 
 	 
 	 function StaffModal(id){
@@ -12,12 +19,15 @@
 			 
 			 $('#staff_btn').text("Save Changes");
 			 
+			 $("#staff_btn").attr("onclick","updateStaffApiCall()");
+			 
 
 			 
 		 }else if(id == "add"){
 			 
 			 $('#staffTiltle').text("Add a new Staff");
 			 $('#staff_btn').text("Submit");
+			 $("#staff_btn").attr("onclick","StaffApiCall()");
 			 
 			 $('#staffForm').get(0).reset();
 			 
@@ -45,7 +55,7 @@
 		.click(
 				function() {
 					
-					$("#staffno")
+					$("#staffNo")
 							.val(
 									$(this).closest('tr')
 											.children()[1].textContent);
@@ -69,15 +79,21 @@
 							$(this).closest('tr')
 									.children()[5].textContent);
 					
-					$("#email")
+					$("#phone")
 					.val(
 							$(this).closest('tr')
 									.children()[6].textContent);
 					
-					$("#phone")
+					$("#email")
 					.val(
 							$(this).closest('tr')
 									.children()[7].textContent);
+					
+					
+					$("#username")
+					.val(
+							$(this).closest('tr')
+									.children()[8].textContent);
 					
 					
 					

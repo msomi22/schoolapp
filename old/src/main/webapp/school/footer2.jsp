@@ -9,21 +9,6 @@
 
 <%@ page import="java.util.Calendar"%>
 
-<%
-	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-
-	CacheManager mgr = CacheManager.getInstance();
-	Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-	Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-
-	Account account = new Account();
-	Element element;
-
-	if ((element = accountsCache.get(username)) != null) {
-		account = (Account) element.getObjectValue();
-	}
-%>
-
 
 
 
@@ -34,17 +19,19 @@
 <div class="row">
 
 	<div class="col-md-4 col-md-offset-2 col-sm-6">
+	
+	
+	AlanDick and Company Ltd
 
-	Contacts: (<%=account.getEmail() + " , " + account.getMobile()%>)
-	Motto:
-	<%=account.getMotto()%>
+	
 	
 	</div>
 
 
 	<div class="col-md-2 col-sm-6 col-md-offset-4">
-		&copy; AppleTech Limited.
-		<%=Calendar.getInstance().get(Calendar.YEAR)%>.
+	
+	Accelerometer Sync Version 1.0
+		
 	</div>
 	
 	
@@ -200,6 +187,9 @@ $("#kcpeyear").datepicker({
 <script src="js/apiCalls/staffApi.js"></script>
 
 
+<script src="js/apiCalls/accelAPI.js"></script>
+
+
 
 
 
@@ -261,12 +251,10 @@ $("#kcpeyear").datepicker({
 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+
 <script>
 
-/* 
-    function arrayToTable(tableData) {
+  /*   function arrayToTable(tableData) {
         var table = $('#accel');
         $(tableData).each(function (i, rowData) {
             var row = $('<tr class="tabledit" style="color: black;"></tr>');
@@ -295,6 +283,16 @@ $("#kcpeyear").datepicker({
     }); */
     
     
+   /*  $("#accel").DataTable({
+   	 
+   	 "scrollY":        "550px",
+        "scrollCollapse": true,
+        "paging":         false
+   		 
+        
+        
+   	 });
+      */
     
 </script>
 
