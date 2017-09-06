@@ -14,6 +14,8 @@ import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.bean.subject.Category;
+import com.yahoo.petermwenda83.bean.subject.SubCategory;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.admin.ApiAccount;
@@ -275,7 +277,7 @@ public class AdminService {
 		int[] upperLimits = {100,82,74,65,55,53,47,41,39,34,30,25};
 		int[] points = {12,11,10,9,8,7,6,5,4,3,2,1};
 		String[] desc = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
-		
+
 		for(int count=0;count<gradingSystemIds.length;count++) {
 			GradingSystem gradingSystem = new GradingSystem();
 			gradingSystem.setUuid(gradingSystemIds[count]);
@@ -290,14 +292,75 @@ public class AdminService {
 		}
 
 
-		
-		Miscellanous miscellanous = new Miscellanous();
-		
-		/*6A017FB8-5E19-4441-A3DA-B3EB780E81A1	E3CDC578-37BA-4CDB-B150-DAB0409270CD	CLOSING_DATE	Tue 03	 April	2016	
-		7B6C4D4E-DE72-4F81-A166-6AF01C5B11D5	E3CDC578-37BA-4CDB-B150-DAB0409270CD	OPENING_DATE	Wed 07	 May	2016	
-		5B0F3957-0B88-45C9-8772-7F7A94E16DBF	E3CDC578-37BA-4CDB-B150-DAB0409270CD	HEAD_TEACHER_REMARKS	for the fantastic term	 it has been awesome to see you grow and develop	 hope you have a wonderful holiday .For your performance	 all we can say is ...
-*/
 
+
+		String[] miscellanousIds = {"6A017FB8-5E19-4441-A3DA-B3EB780E81A1","7B6C4D4E-DE72-4F81-A166-6AF01C5B11D5","5B0F3957-0B88-45C9-8772-7F7A94E16DBF"};
+		String[] keys = {"CLOSING_DATE","OPENING_DATE","HEAD_TEACHER_REMARKS"};
+		String[] values = {"Tue 03 April 2016","Wed 07 May 2016","for the fantastic term it has been awesome to see you grow and develop hope you have a wonderful holiday .For your performance all we can say is ..."};
+		
+
+		for(int count=0;count<miscellanousIds.length;count++) {
+			Miscellanous miscellanous = new Miscellanous();
+			miscellanous.setUuid(miscellanousIds[count]);
+			miscellanous.setAccountId(accountId);
+			miscellanous.setKey(keys[count]);
+			miscellanous.setValue(values[count]);
+		}
+
+		String[] uuids = {"45207ABB-C547-43B6-A1FD-E9359C0F8DDF","D6C95E77-6B48-416C-AD3F-2752EB20EF23",
+				"B517BB4D-3E7F-4879-AAEB-297B43C0FD1F","FB824121-1003-44AF-B283-F163A5FC5E8F",
+				"4BB37A08-D180-47DF-8401-B3162F84E23F","D71F66A7-DCDA-4D54-BA42-612596B30E52",
+				"12039F0B-A39F-4399-B2CA-19A3D10F0A4D","82B17C63-6BBA-4B5C-B387-43DD1E74B2B1",
+				"7DBC3E02-DB92-4A34-A506-D2ED184F02A9","B393510A-2D03-44D1-8A0C-73FBEC1BEDD7",
+				"E96657DE-DFEB-4073-AA93-4F83155DCD09","FE1F19D5-C88D-411E-9543-40CE59979BEC","E8246333-CD6C-48CE-8E12-16FDCD87C903"};
+		String[] catIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","3F0330CD-47F9-42B4-B736-0E11CBB4988A",
+				"B8C59DA7-1013-4879-B40A-630F0E647497",
+				"44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
+				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F",
+				"6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA"};
+		String[] subIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323","4f59580d-1a16-4669-9ed5-4b89615d6903",
+				"552c0a24-6038-440f-add5-2dadfb9a23bd","44f23b3c-e066-4b45-931c-0e8073d3a93a","de0c86be-9bcb-4d3b-8098-b06687536c1f",
+				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4","0e5dc1c6-f62f-4a36-a1ec-064173332694",
+				"e1729cc2-524a-4069-b4a4-be5aec8473fe","b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
+
+		for(int count=0;count<uuids.length;count++) {
+
+			SubCategory subCategory = new SubCategory();
+			subCategory.setUuid(uuids[count]);
+			subCategory.setAccountId(accountId);
+			subCategory.setCategoryId(catIds[count]);
+			subCategory.setSubjectId(subIds[count]);
+		}
+
+
+		
+
+		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
+				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
+				"44f23b3c-e066-4b45-931c-0e8073d3a93a","de0c86be-9bcb-4d3b-8098-b06687536c1f",
+				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4",
+				"0e5dc1c6-f62f-4a36-a1ec-064173332694","e1729cc2-524a-4069-b4a4-be5aec8473fe",
+				"b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
+		String[] subcatIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","3F0330CD-47F9-42B4-B736-0E11CBB4988A",
+				"B8C59DA7-1013-4879-B40A-630F0E647497","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
+				"44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
+				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F",
+				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
+				"6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA"};
+		String[] subCodes = {"ENG","KIS","MAT","CHE","PHY","BIO","HIS","CRE","GEO","B/S","AGR","HSC","COM"};
+		String[] numCodes = {"100","101","102","103","104","105","106","107","108","109","110","111","112"};
+		String[] subDesc = {"English","Kiswahili","Mathematics","Chemistry","Physics","Biology","History",
+				"Christian Religion","Geography","Business","Agriculture","Home Science","Computer Studies"};
+
+		for(int count=0;count<subjectIds.length;count++) {
+			Subject subject = new Subject();
+			subject.setUuid(subjectIds[count]);
+			subject.setAccountId(accountId);
+			subject.setCategoryId(subcatIds[count]);
+			subject.setCode(subCodes[count]);
+			subject.setNumericCode(numCodes[count]);
+			subject.setDescription(subDesc[count]);
+		}
 
 
 		return false;
@@ -417,64 +480,64 @@ public class AdminService {
 	 * @param data
 	 */
 	public Object putData(String data) {
-		
+
 		ApiResponse apiResponse = new ApiResponse(); 
-		
+
 		ApiAccData apiAccData = new ApiAccData();
 		Gson gson = new Gson();
 		apiAccData = gson.fromJson(data, ApiAccData.class);
-		
-		
-		
+
+
+
 		AccData accData = new AccData();
 		accData.setAddDate(apiAccData.getAddDate());
 		accData.setPitch(apiAccData.getPitch());
 		accData.setRoll(apiAccData.getRoll());
 		accData.setYaw(apiAccData.getYaw());
-		
+
 		//System.out.println(accData); 
-		
-		
+
+
 		if(accountDAO.putAccData(accData)) {
 			apiResponse.setMessage("success");
 			apiResponse.setDescription("Data saved successfully.");
-			
+
 		}else {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Data NOT saved.");
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public List<ApiAccData> getAccData(){
 		List<AccData> list = new  ArrayList<>(); 
-		
+
 		if(accountDAO.getAccData() != null) {
 			list = accountDAO.getAccData();
-			
+
 		}
-		
+
 		List<ApiAccData> apiAccDataList =  new  ArrayList<>(); 
-		
+
 		list.forEach(data -> {
-			
+
 			ApiAccData apiAccData = new ApiAccData();
 			apiAccData.setUuid(data.getUuid());
 			apiAccData.setAddDate(data.getAddDate());
 			apiAccData.setPitch(data.getPitch());
 			apiAccData.setRoll(data.getRoll());
 			apiAccData.setYaw(data.getYaw());
-			
+
 			apiAccDataList.add(apiAccData);
-			
-			
+
+
 		});
-		
+
 		return apiAccDataList;
 	}
 
