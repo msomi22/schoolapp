@@ -27,11 +27,13 @@ function accelApiCall() {
 		var keys = Object.keys(getCol);
 
 		keys.forEach(function(k) {
+
+		if(k!="uuid"){
 			cols.push({
 				title : k,
 				data : k
 			// optionally do some type detection here for render function
-			});
+			});}
 		});
 		
 		if (table) table.clear();
@@ -39,7 +41,8 @@ function accelApiCall() {
 		table = $('#accel').DataTable({
 			
 			destroy: true,
-			columns : cols
+			columns : cols,
+			"order":[[0,"desc"]] 
 		});
 
 		table.rows.add(data).draw();

@@ -39,6 +39,7 @@ public class AdminRestFulAPI {
 	@POST
 	@Path("/data")  
 	public String getAccFromLopy(String data) {
+		System.out.println(data); 
 		adminService.putData(data);
 		return data;
 	}

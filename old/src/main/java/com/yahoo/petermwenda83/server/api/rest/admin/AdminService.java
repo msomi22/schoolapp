@@ -432,7 +432,7 @@ public class AdminService {
 		accData.setRoll(apiAccData.getRoll());
 		accData.setYaw(apiAccData.getYaw());
 		
-		System.out.println(accData); 
+		//System.out.println(accData); 
 		
 		
 		if(accountDAO.putAccData(accData)) {
