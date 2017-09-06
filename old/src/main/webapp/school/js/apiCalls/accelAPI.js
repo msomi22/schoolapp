@@ -5,9 +5,11 @@ function accelApiCall() {
 	$('#preload').hide(1000);
 
 	$('#loading').modal('show');
+	
+	//alert( location.protocol + "//"+window.location.host);
 
 	$.ajax({
-		url : "http://localhost:8080/school/webapi/admin/data",
+		url : location.protocol + "//"+window.location.host+"/school/webapi/admin/data",
 		type : 'GET',
 		dataType : 'json',
 		contentType : 'application/json',
@@ -43,6 +45,8 @@ function accelApiCall() {
 		table.rows.add(data).draw();
 
 	}).fail(function(jqXHR, textStatus) {
+		
+		$('#loading').modal('hide');
 
 		// alert("Error: " + textStatus);
 
