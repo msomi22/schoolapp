@@ -4,6 +4,7 @@
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -16,7 +17,14 @@ import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.SubCategory;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO;
+import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.admin.ApiAccount;
 
@@ -28,12 +36,27 @@ public class AdminService {
 
 	private static AccountDAO accountDAO;
 	private static EmailValidator emailValidator;
+	
+	private static AcessLevelDAO acessLevelDAO;
+	private static ClassDAO classDAO;
+	private static CategoryDAO categoryDAO;
+	private static GradingSystemDAO gradingSystemDAO;
+	private static MiscellanousDAO miscellanousDAO;
+	private static SubCategoryDAO subCategoryDAO;
+	private static SubjectDAO subjectDAO;
 
 	static {
 		accountDAO = AccountDAO.getInstance();
 		emailValidator = EmailValidator.getInstance();
+		
+		acessLevelDAO = AcessLevelDAO.getInstance();
+		classDAO = ClassDAO.getInstance();
+		categoryDAO = CategoryDAO.getInstance();
+		gradingSystemDAO = GradingSystemDAO.getInstance();
+		miscellanousDAO = MiscellanousDAO.getInstance();
+		subCategoryDAO = SubCategoryDAO.getInstance();
+		subjectDAO = SubjectDAO.getInstance();
 	}
-
 
 	/**
 	 * 
@@ -85,9 +108,19 @@ public class AdminService {
 	public Object newAccount(ApiAccount apiAccount) {
 
 		ApiResponse apiResponse = new ApiResponse(); 
+		
+		String accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e";
+		apiAccount.setAccountId(accountId);
+		apiAccount.setUuid(accountId); 
+		apiAccount.setIsActive("1"); 
 
 
-		if(StringUtils.isBlank(apiAccount.getName()) && apiAccount.getName().length() < 5) { 
+		if(accountDAO.getAccountById(accountId) != null) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account already added."); 
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(apiAccount.getName()) || apiAccount.getName().length() < 5) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School name.");
 			return apiResponse;
@@ -97,12 +130,12 @@ public class AdminService {
 			apiResponse.setDescription("The school name is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getMotto()) && apiAccount.getMotto().length() < 5) {
+		}else if(StringUtils.isBlank(apiAccount.getMotto()) || apiAccount.getMotto().length() < 5) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School motto.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getUsername()) && apiAccount.getUsername().length() < 3) {
+		}else if(StringUtils.isBlank(apiAccount.getUsername()) || apiAccount.getUsername().length() < 3) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School username.");
 			return apiResponse;
@@ -112,12 +145,12 @@ public class AdminService {
 			apiResponse.setDescription("The school username is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getPassword())&& apiAccount.getPassword().length() < 4) {
+		}else if(StringUtils.isBlank(apiAccount.getPassword()) || apiAccount.getPassword().length() < 4) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School password.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getMobile()) && !StringUtils.isNumeric(apiAccount.getMobile()) && 
+		}else if(StringUtils.isBlank(apiAccount.getMobile()) || !StringUtils.isNumeric(apiAccount.getMobile()) && 
 				apiAccount.getMobile().length() !=9) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School mobile number.");
@@ -128,7 +161,7 @@ public class AdminService {
 			apiResponse.setDescription("The school mobile is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getEmail()) && !emailValidator.isValid(apiAccount.getEmail())) {
+		}else if(StringUtils.isBlank(apiAccount.getEmail()) || !emailValidator.isValid(apiAccount.getEmail())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School email address.");
 			return apiResponse;
@@ -138,22 +171,22 @@ public class AdminService {
 			apiResponse.setDescription("The school email is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getAddress()) && apiAccount.getAddress().length() < 2) {
+		}else if(StringUtils.isBlank(apiAccount.getAddress()) || apiAccount.getAddress().length() < 2) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School postal address.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getTown()) && apiAccount.getTown().length() < 3) {
+		}else if(StringUtils.isBlank(apiAccount.getTown()) || apiAccount.getTown().length() < 3) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid town.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getIsBoarding())) {
+		}else if(StringUtils.isBlank(apiAccount.getIsBoarding()) || !validBoarding(apiAccount.getIsBoarding())) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid IsBoarding!.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getIsMixed())) {
+		}else if(StringUtils.isBlank(apiAccount.getIsMixed()) || !validMixed(apiAccount.getIsMixed())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid IsMixed!.");
 			return apiResponse;
@@ -166,24 +199,14 @@ public class AdminService {
 			account = apiAccount;
 
 			account.setIsActive("1"); 
+			
 
 			if(accountDAO.putAccount(account)) {
 
-				boolean pop = pupulateDefaluts(account.getUuid()); 
-
-				if(pop) {
-					apiResponse.setMessage("success");
-					apiResponse.setDescription("Account registered successfully");
-					return apiResponse;
-				}else {
-					apiResponse.setMessage("success");
-					apiResponse.setDescription("Account registered successfully, but some default data NOT set!!!");
-					return apiResponse;
-				}
-
-
-
-
+				Object object = pupulateDefaluts(account.getUuid()); 
+				
+				return object;
+				
 
 			}else {
 				apiResponse.setMessage("error");
@@ -196,27 +219,17 @@ public class AdminService {
 
 	}
 
-
 	/**
 	 * 
 	 * @param uuid
 	 * @return
 	 */
-	private boolean pupulateDefaluts(String accountId) {
-		//TODO
-
-		/**
-		 * 1. AcessLevel
-		 * 2. Category
-		 * 3. classRoom
-		 * 4. GradingSystem
-		 * 5. Miscellaneous (Miscellan^ous) 'e'
-		 * 6. subCategory
-		 * 7. Subject
-		 * 8. 
-		 * 
-		 */
-
+	private Object pupulateDefaluts(String accountId) {
+		
+		ApiResponse apiResponse = new ApiResponse("success");  
+		
+		String resposne = "Account registered successfully,";
+		
 		String[] accessIds = {"C3915245-00EE-4EF4-9898-ACE59683DD60","615F04C1-00BF-499C-AC7A-B46B69243AAA",
 				"0DE968C9-7309-C481-58F7-AB6CDB1011EH","1CC7F06E-9938-4850-81FB-9CC249C7CFA2",
 				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
@@ -228,8 +241,30 @@ public class AdminService {
 			acessLevel.setUuid(accessIds[count]); 
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
+			acessLevelDAO.putPosition(acessLevel);
+			
+			resposne +=" AcessLevel(s) aded,"; 
 			//TODO , put
 		}
+
+
+		String[] classRoomIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
+				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD"};
+
+		String[] classes = {"FORM 1","FORM 2","FORM 3","FORM 4"};
+
+		for(int count=0;count<classRoomIds.length;count++) {
+			ClassRoom classRoom = new ClassRoom();
+			classRoom.setUuid(classRoomIds[count]);
+			classRoom.setAccountId(accountId);
+			classRoom.setDescription(classes[count]); 
+			classDAO.putClassRoom(classRoom);
+
+			resposne +=" ClassRoom(s) added,";
+			//TODO put
+		}
+		
+		
 
 
 		String[] categoryIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
@@ -246,20 +281,9 @@ public class AdminService {
 			category.setAccountId(accountId);
 			category.setMaxNo(String.valueOf(maxNo[count]));
 			category.setDescription(categorys[count]);
-			//TODO put
-		}
-
-		String[] classRoomIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
-				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD"};
-
-		String[] classes = {"FORM 1","FORM 2","FORM 3","FORM 4"};
-
-		for(int count=0;count<classRoomIds.length;count++) {
-			ClassRoom classRoom = new ClassRoom();
-			classRoom.setUuid(classRoomIds[count]);
-			classRoom.setAccountId(accountId);
-			classRoom.setDescription(classes[count]); 
-
+			categoryDAO.putCategory(category);
+			
+			resposne +=" Category(ies) added,"; 
 			//TODO put
 		}
 
@@ -287,8 +311,10 @@ public class AdminService {
 			gradingSystem.setUpperLimit(upperLimits[count]);
 			gradingSystem.setPoints(points[count]);
 			gradingSystem.setDescription(desc[count]);
+			gradingSystemDAO.putGradingSystem(gradingSystem);
+			
+			resposne +=" Grading System added,";
 			//TODO put
-
 		}
 
 
@@ -305,6 +331,10 @@ public class AdminService {
 			miscellanous.setAccountId(accountId);
 			miscellanous.setKey(keys[count]);
 			miscellanous.setValue(values[count]);
+			miscellanousDAO.putMiscellanous(miscellanous);
+			
+			resposne +=" Miscellanous key and values added,";
+			//TODO put
 		}
 
 		String[] uuids = {"45207ABB-C547-43B6-A1FD-E9359C0F8DDF","D6C95E77-6B48-416C-AD3F-2752EB20EF23",
@@ -330,6 +360,10 @@ public class AdminService {
 			subCategory.setAccountId(accountId);
 			subCategory.setCategoryId(catIds[count]);
 			subCategory.setSubjectId(subIds[count]);
+			subCategoryDAO.putSubCategory(subCategory);
+			
+			resposne +=" Subject Category(s) added,";
+			//TODO put
 		}
 
 
@@ -360,10 +394,17 @@ public class AdminService {
 			subject.setCode(subCodes[count]);
 			subject.setNumericCode(numCodes[count]);
 			subject.setDescription(subDesc[count]);
+			subjectDAO.putSubject(subject);
+			
+			resposne +=" Subject(s) added."; 
+			//TODO put
 		}
+		
+		
+		apiResponse.setDescription(resposne);
 
 
-		return false;
+		return apiResponse;
 	}
 
 	/**
@@ -376,7 +417,7 @@ public class AdminService {
 		ApiResponse apiResponse = new ApiResponse(); 
 
 
-		if(StringUtils.isBlank(apiAccount.getName()) && apiAccount.getName().length() < 5) { 
+		if(StringUtils.isBlank(apiAccount.getName()) || apiAccount.getName().length() < 5) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School name.");
 			return apiResponse;
@@ -386,12 +427,12 @@ public class AdminService {
 			apiResponse.setDescription("The school name is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getMotto()) && apiAccount.getMotto().length() < 5) {
+		}else if(StringUtils.isBlank(apiAccount.getMotto()) || apiAccount.getMotto().length() < 5) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School motto.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getUsername()) && apiAccount.getUsername().length() < 3) {
+		}else if(StringUtils.isBlank(apiAccount.getUsername()) || apiAccount.getUsername().length() < 3) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School username.");
 			return apiResponse;
@@ -401,12 +442,12 @@ public class AdminService {
 			apiResponse.setDescription("The school username is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getPassword())&& apiAccount.getPassword().length() < 4) {
+		}else if(StringUtils.isBlank(apiAccount.getPassword()) || apiAccount.getPassword().length() < 4) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School password.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getMobile()) && !StringUtils.isNumeric(apiAccount.getMobile()) && 
+		}else if(StringUtils.isBlank(apiAccount.getMobile()) || !StringUtils.isNumeric(apiAccount.getMobile()) && 
 				apiAccount.getMobile().length() !=9) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School mobile number.");
@@ -417,7 +458,7 @@ public class AdminService {
 			apiResponse.setDescription("The school mobile is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getEmail()) && !emailValidator.isValid(apiAccount.getEmail())) {
+		}else if(StringUtils.isBlank(apiAccount.getEmail()) || !emailValidator.isValid(apiAccount.getEmail())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School email address.");
 			return apiResponse;
@@ -427,22 +468,22 @@ public class AdminService {
 			apiResponse.setDescription("The school email is in use.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getAddress()) && apiAccount.getAddress().length() < 2) {
+		}else if(StringUtils.isBlank(apiAccount.getAddress()) || apiAccount.getAddress().length() < 2) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School postal address.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getTown()) && apiAccount.getTown().length() < 3) {
+		}else if(StringUtils.isBlank(apiAccount.getTown()) || apiAccount.getTown().length() < 3) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid town.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getIsBoarding())) {
+		}else if(StringUtils.isBlank(apiAccount.getIsBoarding()) || !validBoarding(apiAccount.getIsBoarding())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid IsBoarding!.");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(apiAccount.getIsMixed())) {
+		}else if(StringUtils.isBlank(apiAccount.getIsMixed()) || !validMixed(apiAccount.getIsMixed())) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid IsMixed!.");
 			return apiResponse;
@@ -474,6 +515,42 @@ public class AdminService {
 
 	}
 
+
+	
+	/**
+	 * 
+	 * @param isMixed
+	 * @return
+	 */
+	private boolean validMixed(String isMixed) {
+		String[] allowed = {"0","1"};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		
+		if(allowedList.contains(isMixed)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+    /**
+     * 
+     * @param isBoarding
+     * @return
+     */
+	private boolean validBoarding(String isBoarding) {
+		String[] allowed = {"0","1","2"}; 
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		
+		if(allowedList.contains(isBoarding)) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 
 	/**
 	 * 
