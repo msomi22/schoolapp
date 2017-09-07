@@ -1,4 +1,17 @@
 
+function showAntennae(){
+	
+	$('#showAntennae').modal('show');
+	
+	
+	
+	
+	
+	
+}
+
+
+
 var table;
 function accelApiCall() {
 	
@@ -97,9 +110,17 @@ function accelApiCall() {
 
 $(document).ready(function() {
 
-	setInterval(function() {
+	/*setInterval(function() {
 		accelApiCall();
-	}, 7000)
+	}, 7000)*/
+	
+	$('#sites').DataTable({});
+	
+	
+	$('#antennae').DataTable({});
+	
+	
+	
 
 }
 

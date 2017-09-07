@@ -144,7 +144,7 @@
               
               <ul class="nav navbar-nav navbar-right">
               
-               <li class="pull-left"> <h2>Accelerometer Sync</h2>  </li>  
+               <li class="pull-left"> <h2>Antennae Readings</h2>  </li>  
                 <li class="">
                   
                 </li>

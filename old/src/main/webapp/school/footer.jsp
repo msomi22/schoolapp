@@ -261,42 +261,6 @@ $("#kcpeyear").datepicker({
 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
-<script>
-
-/* 
-    function arrayToTable(tableData) {
-        var table = $('#accel');
-        $(tableData).each(function (i, rowData) {
-            var row = $('<tr class="tabledit" style="color: black;"></tr>');
-            $(rowData).each(function (j, cellData) {
-                row.append($('<td class="center">'+cellData+'</td>'));
-            });
-            table.append(row);
-        });
-        return table;
-    }
-    
-    
-
-    $.ajax({
-        type: "GET",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        
-        
-        url: "http://codetroids.com/data.csv",
-        success: function (data) {
-        	alert(data);
-            $('.x_content').append(arrayToTable(Papa.parse(data).data));
-        }
-    }); */
-    
-    
-    
-</script>
 
 
 
