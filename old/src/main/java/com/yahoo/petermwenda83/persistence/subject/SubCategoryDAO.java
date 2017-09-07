@@ -138,22 +138,57 @@ public class SubCategoryDAO extends GenericDAO implements SchoolSubCategoryDAO {
 		return list;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubCategoryDAO#putSubCategory(com.yahoo.petermwenda83.bean.subject.SubCategory)
 	 */
 	@Override
 	public boolean putSubCategory(SubCategory subCategory) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = true; 
+		  
+		 try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO SubCategory (uuid,accountId,categoryId,subjectId) VALUES (?,?,?,?);");
+   		){
+	            pstmt.setString(1, subCategory.getUuid());
+	            pstmt.setString(2, subCategory.getAccountId());
+	            pstmt.setString(3, subCategory.getCategoryId());
+	            pstmt.setString(4, subCategory.getSubjectId());
+	            pstmt.executeUpdate();
+			 
+		 }catch(SQLException e){
+		   logger.error("SQL Exception trying to put SubCategory " + subCategory);
+           logger.error(ExceptionUtils.getStackTrace(e)); 
+           System.out.println(ExceptionUtils.getStackTrace(e));
+           success = false;
+		 }
+		
+		return success;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolSubCategoryDAO#deleteSubCategory(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean deleteSubCategory(String accountId, String uuid) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = true; 
+	      try(
+	      		  Connection conn = dbutils.getConnection();
+	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM SubCategory"
+	         	      		+ " WHERE accountId = ? AND uuid =?;");       
+	      		){
+	      	
+	      	     pstmt.setString(1, accountId);
+	      	     pstmt.setString(2, uuid);
+		         pstmt.executeUpdate();
+		     
+	      }catch(SQLException e){
+	      	   logger.error("SQL Exception when deletting SubCategory for accountId " + accountId + " with stream id " + uuid);
+	           logger.error(ExceptionUtils.getStackTrace(e));
+	           System.out.println(ExceptionUtils.getStackTrace(e));
+	           success = false;
+	           
+	      }
+	      
+			return success;
 	}
 
 }

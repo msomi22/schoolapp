@@ -5,6 +5,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
+import com.yahoo.petermwenda83.server.api.rest.bean.admin.ApiAccount;
 import com.yahoo.petermwenda83.server.api.safaricom.Result;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.SafResponse;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.VCResponse;
@@ -17,7 +18,7 @@ public class JsonFromObj {
 
 	public static void main(String[] args) {
 		
-		System.out.println(getJsonStringFromObject(new VCResponse()));
+		System.out.println(getJsonStringFromObject(new ApiAccount()));
 		
 		//System.out.println(StaffRestFulAPI.validMobileNo("h718953974"));  
 

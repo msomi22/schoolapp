@@ -135,22 +135,61 @@ public class CategoryDAO extends GenericDAO implements SchoolCategoryDAO {
 		return list;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolCategoryDAO#putCategory(com.yahoo.petermwenda83.bean.subject.Category)
 	 */
 	@Override
 	public boolean putCategory(Category category) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean success = true;
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Category" 
+						+"(uuid,accountId,description,maxNo) VALUES (?,?,?,?);");
+				){
+
+			pstmt.setString(1, category.getUuid());
+			pstmt.setString(2, category.getAccountId());
+			pstmt.setString(3, category.getDescription());
+			pstmt.setString(4, category.getMaxNo());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put Category " + category);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+		return success;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.subject.SchoolCategoryDAO#updateCategory(com.yahoo.petermwenda83.bean.subject.Category)
 	 */
 	@Override
 	public boolean updateCategory(Category category) {
-		// TODO Auto-generated method stub
-		return false;
+
+		boolean success = true;
+
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE Category SET description = ?, maxNo =? "
+						+ "WHERE uuid = ? AND accountId = ?;");
+				) {           			 	            
+			pstmt.setString(1, category.getDescription());
+			pstmt.setString(2, category.getMaxNo());
+			pstmt.setString(3, category.getUuid());
+			pstmt.setString(4, category.getAccountId());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating category " + category);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
+		return success;
 	}
 
 	/**

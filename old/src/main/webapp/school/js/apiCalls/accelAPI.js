@@ -27,14 +27,16 @@ function accelApiCall() {
 		var keys = Object.keys(getCol);
 
 		keys.forEach(function(k) {
-			
-			if(k!="uuid"){
+
+		if(k!="uuid"){
+
 			cols.push({
 				title : k,
 				data : k
 			// optionally do some type detection here for render function
-			});
-			}
+
+			});}
+
 		});
 		
 		if (table) table.clear();
@@ -43,8 +45,10 @@ function accelApiCall() {
 			
 			destroy: true,
 			columns : cols,
+
 			"order": [[ 0, "desc" ]],
 			"iDisplayLength": 100
+
 		});
 
 		table.rows.add(data).draw();

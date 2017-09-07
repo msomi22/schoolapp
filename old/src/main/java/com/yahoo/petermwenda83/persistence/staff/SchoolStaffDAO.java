@@ -19,6 +19,7 @@ public interface SchoolStaffDAO {
 	 * @return
 	 */
 	public Staff getStaff(String accountId, String uuid);
+	
 	/**
 	 * 
 	 * @param accountId
@@ -33,6 +34,13 @@ public interface SchoolStaffDAO {
 	 * @return
 	 */
 	public Staff getStaffByUsername(String accountId, String username);
+	/**
+	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public Staff getStaffByKes(String accountId, String key);
 	/**
 	 * 
 	 * @param accountId
@@ -80,5 +88,12 @@ public interface SchoolStaffDAO {
 	 * @return
 	 */
 	public List<Staff> getStaff(String accountId, int startIndex , int endIndex); 
+	/**
+	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public List<Staff> findDuplicate(String accountId, String key); 
 
 }

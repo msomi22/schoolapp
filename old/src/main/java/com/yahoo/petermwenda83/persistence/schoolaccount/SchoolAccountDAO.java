@@ -26,6 +26,9 @@ public interface SchoolAccountDAO {
 	 */
 	public Account getAccount(String credentials,String isActive);
 	
+	
+	public List<Account> findAccountDuplicate(String credentials);
+	
 	/**
 	 * 
 	 * @param school

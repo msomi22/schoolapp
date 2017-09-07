@@ -106,16 +106,58 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#putPosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
+	 */
 	@Override
 	public boolean putPosition(AcessLevel acessLevel) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean success = true;
+
+		try(   Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO AcessLevel" 
+						+"(uuid,accountId,description) VALUES (?,?,?);");
+				){
+
+			pstmt.setString(1, acessLevel.getUuid());
+			pstmt.setString(2, acessLevel.getAccountId());
+			pstmt.setString(3, acessLevel.getDescription());
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception trying to put acessLevel " + acessLevel);
+			logger.error(ExceptionUtils.getStackTrace(e)); 
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		}
+
+		return success;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
+	 */
 	@Override
 	public boolean updatePosition(AcessLevel acessLevel) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success = true;
+
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE AcessLevel SET description = ?"
+						+ "WHERE uuid = ? AND accountId = ?;");
+				) {           			 	            
+			pstmt.setString(1, acessLevel.getDescription());
+			pstmt.setString(2, acessLevel.getUuid());
+			pstmt.setString(3, acessLevel.getAccountId());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating acessLevel " + acessLevel);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
+
+		return success;
 	}
 
 	@Override
