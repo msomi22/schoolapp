@@ -58,13 +58,18 @@ public class StaffService {
 
 		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
-
+		
 		if(StringUtils.equals(staff.getAcessLevelId(), principal)){
 
 			if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), principal) != null ){
 				response = "Principal can not be added twice";
-				apiResponse = new ApiResponse("error");
+				apiResponse.setMessage("error");
 				apiResponse.setDescription(response);
+				return apiResponse;
+
+			}else {
+				apiResponse = addStaff(staff,"p");
+				return apiResponse;
 
 			}
 
@@ -73,99 +78,144 @@ public class StaffService {
 
 			if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), deputy_Principal) != null ){
 				response = "Deputy Principal can not be added twice";
-				apiResponse = new ApiResponse("error");
+				apiResponse.setMessage("error");
 				apiResponse.setDescription(response);
+				return apiResponse;
+
+			}else {
+				apiResponse = addStaff(staff,"dp");
+				return apiResponse;
 
 			}
 
 
-		}else{
+		}else {
 
-			if (StringUtils.isBlank(staff.getStaffNo())) { 
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff Number Can't be Empty!"); 
-				return apiResponse;
 
-			}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getStaffNo()) != null) { 
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff Number already exist!"); 
-				return apiResponse;
-
-			}else if (StringUtils.isBlank(staff.getFirstname())) { 
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Firt Name Can't be Empty!"); 
-
-			}else if (StringUtils.isBlank(staff.getMiddlename())) { 
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Middle Name Can't be Empty!"); 
-
-			}else if (!validGender(staff.getGender())) { 
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Gender Can't be Empty!"); 
-
-			}else if(!validMobileNo(staff.getMobile())){
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Phone Number Not Valid!"); 
-
-			}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getMobile()) != null) { 
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff Phone Number already exist!"); 
-				return apiResponse;
-
-			}else if (!emailValidator.isValid(staff.getEmail())) {
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Email Address Not Valid!"); 
-
-			}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getEmail()) != null) { 
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff Email Address already exist!"); 
-				return apiResponse;
-
-			}else if (StringUtils.isBlank(staff.getUsername())) { 
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Username Can't be Empty!"); 
-
-			}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getUsername()) != null) { 
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff Username already exist!"); 
-				return apiResponse;
-
-			}else if (StringUtils.isBlank(staff.getPassword())) { 
-
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Password Can't be Empty!"); 
-
-			}else if(staffDAO.getStaffByStaffNo(staff.getAccountId(), staff.getStaffNo()) != null){
-				response = "StaffNo "+staff.getStaffNo() +" already exist.";
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription(response);
-
-			}else if(staffDAO.getStaffByUsername(staff.getAccountId(), staff.getUsername()) != null){
-				response = "Staff username, "+staff.getUsername() +" already exist.";
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription(response);
-
-			}else if(staffDAO.putStaff(staff)){
-				response = "Staff was registered successfully.";
-				apiResponse = new ApiResponse("success");
-				apiResponse.setDescription(response);
-
-			}else{
-				response = "Something went wrong, try again later.";
-				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription(response);
-			}
+			response = "You are not permitted to perform this operation.";
+			apiResponse.setMessage("error");
+			apiResponse.setDescription(response);
+			return apiResponse;
 
 		}
 
+	}
 
-		return apiResponse;
+
+	/**
+	 * 
+	 * @param staff
+	 * @return
+	 */
+	 
+	private ApiResponse addStaff(Staff staff, String from) {
+		
+		String  response = "";
+		ApiResponse apiResponse = new ApiResponse();
+		
+		//System.out.println(from); 
+
+
+		if (StringUtils.isBlank(staff.getStaffNo())) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff Number Can't be Empty!"); 
+			return apiResponse;
+
+		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getStaffNo()) != null) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff Number already exist!"); 
+			return apiResponse;
+
+		}else if (StringUtils.isBlank(staff.getFirstname())) { 
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Firt Name Can't be Empty!"); 
+			return apiResponse;
+
+		}else if (StringUtils.isBlank(staff.getMiddlename())) { 
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Middle Name Can't be Empty!"); 
+			return apiResponse;
+
+		}else if (!validGender(staff.getGender())) { 
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Gender Can't be Empty!"); 
+			return apiResponse;
+
+		}else if(!validMobileNo(staff.getMobile())){
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Phone Number Not Valid!"); 
+			return apiResponse;
+
+		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getMobile()) != null) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff Phone Number already exist!"); 
+			return apiResponse;
+
+		}else if (!emailValidator.isValid(staff.getEmail())) {
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Email Address Not Valid!"); 
+			return apiResponse;
+
+		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getEmail()) != null) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff Email Address already exist!"); 
+			return apiResponse;
+
+		}else if (StringUtils.isBlank(staff.getUsername())) { 
+
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Username Can't be Empty!"); 
+			return apiResponse;
+
+		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getUsername()) != null) { 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff Username already exist!"); 
+			return apiResponse;
+
+		}else if (StringUtils.isBlank(staff.getPassword())) { 
+
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Password Can't be Empty!"); 
+			return apiResponse;
+
+		}else if(staffDAO.getStaffByStaffNo(staff.getAccountId(), staff.getStaffNo()) != null){
+			response = "StaffNo "+staff.getStaffNo() +" already exist.";
+			apiResponse.setMessage("error");
+			apiResponse.setDescription(response);
+			return apiResponse;
+
+		}else if(staffDAO.getStaffByUsername(staff.getAccountId(), staff.getUsername()) != null){
+			response = "Staff username, "+staff.getUsername() +" already exist.";
+			apiResponse.setMessage("error");
+			apiResponse.setDescription(response);
+			return apiResponse;
+
+		}else {
+			
+			if(staffDAO.putStaff(staff)){
+				response = "Staff was registered successfully.";
+				apiResponse.setMessage("success");
+				apiResponse.setDescription(response);
+				
+				return apiResponse;
+
+			}else{
+				response = "Something went wrong, try again later.";
+				apiResponse.setMessage("error");
+				apiResponse.setDescription(response);
+				
+				return apiResponse;
+				
+			}
+			
+			
+		}
+
 	}
 
 
@@ -531,7 +581,7 @@ public class StaffService {
 	private boolean hasDuplicate(String value,String accountId) { 
 		List<Staff> accountList = new ArrayList<>();
 		//if not account with such a key, return true and proceed
-		
+
 		if(staffDAO.findDuplicate(accountId, value) == null) { 
 			return false;
 		}else {
@@ -540,18 +590,18 @@ public class StaffService {
 			//if only one account has such a key, return true and proceed
 			if(accountList.size() == 1) {
 				return false;
-				
-			//if you reach here, there are more than one accounts sharing the provided key, return false.
+
+				//if you reach here, there are more than one accounts sharing the provided key, return false.
 			}else if(accountList.size() > 1) {
-				
+
 				return true;
-				
+
 			}else if(accountList.size() == 0) {
 				return false;
-				
+
 			}else {
 				return false;
-				
+
 			}
 		}
 	}
