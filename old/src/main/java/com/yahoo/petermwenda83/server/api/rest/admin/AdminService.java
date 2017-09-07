@@ -5,9 +5,12 @@ package com.yahoo.petermwenda83.server.api.rest.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
+
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.Miscellanous;
@@ -36,7 +39,7 @@ public class AdminService {
 
 	private static AccountDAO accountDAO;
 	private static EmailValidator emailValidator;
-	
+
 	private static AcessLevelDAO acessLevelDAO;
 	private static ClassDAO classDAO;
 	private static CategoryDAO categoryDAO;
@@ -48,7 +51,7 @@ public class AdminService {
 	static {
 		accountDAO = AccountDAO.getInstance();
 		emailValidator = EmailValidator.getInstance();
-		
+
 		acessLevelDAO = AcessLevelDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
 		categoryDAO = CategoryDAO.getInstance();
@@ -108,16 +111,18 @@ public class AdminService {
 	public Object newAccount(ApiAccount apiAccount) {
 
 		ApiResponse apiResponse = new ApiResponse(); 
-		
-		String accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e";
-		apiAccount.setAccountId(accountId);
-		apiAccount.setUuid(accountId); 
-		apiAccount.setIsActive("1"); 
+
+		String accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
 
 
 		if(accountDAO.getAccountById(accountId) != null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Account already added."); 
+			return apiResponse;
+
+		}else if(!isActiveValid(apiAccount.getIsActive())) {  
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Isactive can either be 1 or 0");
 			return apiResponse;
 
 		}else if(StringUtils.isBlank(apiAccount.getName()) || apiAccount.getName().length() < 5) { 
@@ -196,17 +201,29 @@ public class AdminService {
 
 
 			Account account = new Account();
-			account = apiAccount;
-
-			account.setIsActive("1"); 
-			
+			account.setIsActive("1");
+			account.setName(apiAccount.getName());
+			account.setMotto(apiAccount.getMotto());
+			account.setWebsite(apiAccount.getWebsite());
+			account.setLogo(apiAccount.getLogo());
+			account.setSignature(apiAccount.getSignature());
+			account.setUsername(apiAccount.getUsername());
+			account.setPassword(apiAccount.getPassword());
+			account.setMobile(apiAccount.getMobile());
+			account.setEmail(apiAccount.getEmail());
+			account.setAddress(apiAccount.getAddress());
+			account.setTown(apiAccount.getTown());
+			account.setIsBoarding(apiAccount.getIsBoarding());
+			account.setIsMixed(apiAccount.getIsMixed()); 
+			account.setLastUpdated(new Date().toString());
+			account.setUuid(accountId);
 
 			if(accountDAO.putAccount(account)) {
 
 				Object object = pupulateDefaluts(account.getUuid()); 
-				
+
 				return object;
-				
+
 
 			}else {
 				apiResponse.setMessage("error");
@@ -219,33 +236,36 @@ public class AdminService {
 
 	}
 
+
 	/**
 	 * 
 	 * @param uuid
 	 * @return
 	 */
 	private Object pupulateDefaluts(String accountId) {
-		
+
 		ApiResponse apiResponse = new ApiResponse("success");  
-		
+
 		String resposne = "Account registered successfully,";
-		
+
 		String[] accessIds = {"C3915245-00EE-4EF4-9898-ACE59683DD60","615F04C1-00BF-499C-AC7A-B46B69243AAA",
 				"0DE968C9-7309-C481-58F7-AB6CDB1011EH","1CC7F06E-9938-4850-81FB-9CC249C7CFA2",
 				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
 		"0DE968C9-7309-C481-58F7-AB6CDB1011EF"};
 		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar"};
 
+		String astr = "";
 		for(int count=0;count<accessIds.length;count++) {
 			AcessLevel acessLevel = new AcessLevel();
 			acessLevel.setUuid(accessIds[count]); 
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
 			acessLevelDAO.putPosition(acessLevel);
-			
-			resposne +=" AcessLevel(s) aded,"; 
-			//TODO , put
+			astr = " AcessLevel(s) added,";
 		}
+		
+		resposne +=astr; 
+		astr = "";
 
 
 		String[] classRoomIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
@@ -259,13 +279,11 @@ public class AdminService {
 			classRoom.setAccountId(accountId);
 			classRoom.setDescription(classes[count]); 
 			classDAO.putClassRoom(classRoom);
-
-			resposne +=" ClassRoom(s) added,";
-			//TODO put
+			astr =" ClassRoom(s) added,";
 		}
 		
-		
-
+		resposne += astr; 
+		astr = "";
 
 		String[] categoryIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
 				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
@@ -282,10 +300,11 @@ public class AdminService {
 			category.setMaxNo(String.valueOf(maxNo[count]));
 			category.setDescription(categorys[count]);
 			categoryDAO.putCategory(category);
-			
-			resposne +=" Category(ies) added,"; 
-			//TODO put
+			astr =" Category(ies) added,"; 
 		}
+		
+		resposne += astr; 
+		astr = "";
 
 
 		String[] gradingSystemIds = {"1EABC062-DC76-42FC-A817-52D89C8CDAE9","C8593353-1810-46DF-897C-1173537B78CC",
@@ -312,18 +331,16 @@ public class AdminService {
 			gradingSystem.setPoints(points[count]);
 			gradingSystem.setDescription(desc[count]);
 			gradingSystemDAO.putGradingSystem(gradingSystem);
-			
-			resposne +=" Grading System added,";
-			//TODO put
+			astr =" Grading System added,";
 		}
-
-
-
+		
+		resposne += astr; 
+		astr = "";
 
 		String[] miscellanousIds = {"6A017FB8-5E19-4441-A3DA-B3EB780E81A1","7B6C4D4E-DE72-4F81-A166-6AF01C5B11D5","5B0F3957-0B88-45C9-8772-7F7A94E16DBF"};
 		String[] keys = {"CLOSING_DATE","OPENING_DATE","HEAD_TEACHER_REMARKS"};
 		String[] values = {"Tue 03 April 2016","Wed 07 May 2016","for the fantastic term it has been awesome to see you grow and develop hope you have a wonderful holiday .For your performance all we can say is ..."};
-		
+
 
 		for(int count=0;count<miscellanousIds.length;count++) {
 			Miscellanous miscellanous = new Miscellanous();
@@ -332,10 +349,11 @@ public class AdminService {
 			miscellanous.setKey(keys[count]);
 			miscellanous.setValue(values[count]);
 			miscellanousDAO.putMiscellanous(miscellanous);
-			
-			resposne +=" Miscellanous key and values added,";
-			//TODO put
+			astr =" Miscellanous key and values added,";
 		}
+		
+		resposne += astr; 
+		astr = "";
 
 		String[] uuids = {"45207ABB-C547-43B6-A1FD-E9359C0F8DDF","D6C95E77-6B48-416C-AD3F-2752EB20EF23",
 				"B517BB4D-3E7F-4879-AAEB-297B43C0FD1F","FB824121-1003-44AF-B283-F163A5FC5E8F",
@@ -361,13 +379,10 @@ public class AdminService {
 			subCategory.setCategoryId(catIds[count]);
 			subCategory.setSubjectId(subIds[count]);
 			subCategoryDAO.putSubCategory(subCategory);
-			
-			resposne +=" Subject Category(s) added,";
-			//TODO put
+			astr =" Subject Category(s) added,";
 		}
-
-
-		
+		resposne += astr; 
+		astr = "";
 
 		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
 				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
@@ -395,12 +410,13 @@ public class AdminService {
 			subject.setNumericCode(numCodes[count]);
 			subject.setDescription(subDesc[count]);
 			subjectDAO.putSubject(subject);
-			
-			resposne +=" Subject(s) added."; 
-			//TODO put
+			astr =" Subject(s) added."; 
 		}
 		
-		
+		resposne += astr; 
+		astr = "";
+
+
 		apiResponse.setDescription(resposne);
 
 
@@ -417,12 +433,17 @@ public class AdminService {
 		ApiResponse apiResponse = new ApiResponse(); 
 
 
-		if(StringUtils.isBlank(apiAccount.getName()) || apiAccount.getName().length() < 5) { 
+		 if(!isActiveValid(apiAccount.getIsActive())) {  
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Isactive can either be 1 or 0");
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(apiAccount.getName()) || apiAccount.getName().length() < 5) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid School name.");
 			return apiResponse;
 
-		}else if(hasDuplicate(apiAccount.getName(),apiAccount.getAccountId())) {  
+		}else if(hasDuplicate(apiAccount.getName())) {   
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("The school name is in use.");
 			return apiResponse;
@@ -437,7 +458,7 @@ public class AdminService {
 			apiResponse.setDescription("Invalid School username.");
 			return apiResponse;
 
-		}else if(hasDuplicate(apiAccount.getUsername(),apiAccount.getAccountId())) {
+		}else if(hasDuplicate(apiAccount.getUsername())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("The school username is in use.");
 			return apiResponse;
@@ -453,7 +474,7 @@ public class AdminService {
 			apiResponse.setDescription("Invalid School mobile number.");
 			return apiResponse;
 
-		}else if(hasDuplicate(apiAccount.getMobile(),apiAccount.getAccountId())) {
+		}else if(hasDuplicate(apiAccount.getMobile())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("The school mobile is in use.");
 			return apiResponse;
@@ -463,7 +484,7 @@ public class AdminService {
 			apiResponse.setDescription("Invalid School email address.");
 			return apiResponse;
 
-		}else if(hasDuplicate(apiAccount.getEmail(),apiAccount.getAccountId())) {
+		}else if(hasDuplicate(apiAccount.getEmail())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("The school email is in use.");
 			return apiResponse;
@@ -488,7 +509,7 @@ public class AdminService {
 			apiResponse.setDescription("Invalid IsMixed!.");
 			return apiResponse;
 
-		}else if(accountDAO.getAccountById(apiAccount.getAccountId()) == null) {
+		}else if(accountDAO.getAccountById(apiAccount.getUuid()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Account not found!");
 			return apiResponse;
@@ -497,8 +518,23 @@ public class AdminService {
 
 
 
-			Account account = accountDAO.getAccountById(apiAccount.getAccountId());
-			account = apiAccount;
+			Account account = accountDAO.getAccountById(apiAccount.getUuid());
+			account.setIsActive(apiAccount.getIsActive()); 
+			account.setName(apiAccount.getName());
+			account.setMotto(apiAccount.getMotto());
+			account.setWebsite(apiAccount.getWebsite());
+			account.setLogo(apiAccount.getLogo());
+			account.setSignature(apiAccount.getSignature());
+			account.setUsername(apiAccount.getUsername());
+			account.setPassword(apiAccount.getPassword());
+			account.setMobile(apiAccount.getMobile());
+			account.setEmail(apiAccount.getEmail());
+			account.setAddress(apiAccount.getAddress());
+			account.setTown(apiAccount.getTown());
+			account.setIsBoarding(apiAccount.getIsBoarding());
+			account.setIsMixed(apiAccount.getIsMixed()); 
+			account.setLastUpdated(new Date().toString());
+
 
 			if(accountDAO.updateAccount(account)) {
 				apiResponse.setMessage("success");
@@ -515,8 +551,25 @@ public class AdminService {
 
 	}
 
+	/**
+	 * 
+	 * @param isActive
+	 * @return
+	 */
+	private boolean isActiveValid(String isActive) {
+		String[] allowed = {"0","1"};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
 
-	
+		if(allowedList.contains(isActive)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+
+
 	/**
 	 * 
 	 * @param isMixed
@@ -526,30 +579,30 @@ public class AdminService {
 		String[] allowed = {"0","1"};
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
-		
+
 		if(allowedList.contains(isMixed)) {
 			return true;
 		}else {
 			return false;
 		}
 	}
-	
-    /**
-     * 
-     * @param isBoarding
-     * @return
-     */
+
+	/**
+	 * 
+	 * @param isBoarding
+	 * @return
+	 */
 	private boolean validBoarding(String isBoarding) {
 		String[] allowed = {"0","1","2"}; 
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
-		
+
 		if(allowedList.contains(isBoarding)) {
 			return true;
 		}else {
 			return false;
 		}
-		
+
 	}
 
 	/**
@@ -623,21 +676,33 @@ public class AdminService {
 	 * to detect duplicate value
 	 * 
 	 * @param value
-	 * @param accountid
 	 * @return
 	 */
-	private boolean hasDuplicate(String value, String accountId) { 
-		Account account = new Account();
-		if(accountDAO.getAccount(value, "1") == null) {
-			return true;
+	private boolean hasDuplicate(String value) { 
+		List<Account> accountList = new ArrayList<>();
+		//if not account with such a key, return true and proceed
+		
+		if(accountDAO.findAccountDuplicate(value) == null) { 
+			return false;
 		}else {
-			account = accountDAO.getAccount(value, "1");
-			if(StringUtils.equals(account.getAccountId(), accountId)) {
+			accountList = accountDAO.findAccountDuplicate(value); 
+			//System.out.println("size: " + accountList.size() + " key: " + value ); 
+			//if only one account has such a key, return true and proceed
+			if(accountList.size() == 1) {
+				return false;
+				
+			//if you reach here, there are more than one accounts sharing the provided key, return false.
+			}else if(accountList.size() > 1) {
+				
 				return true;
+				
+			}else if(accountList.size() == 0) {
+				return false;
+				
 			}else {
 				return false;
+				
 			}
-
 		}
 	}
 

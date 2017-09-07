@@ -58,7 +58,7 @@ public class AdminRestFulAPI {
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
-		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getAccountId())){
+		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getUuid())){
 			return response; 
 		}
 		
@@ -86,7 +86,7 @@ public class AdminRestFulAPI {
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
-		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getAccountId())){
+		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getUuid())){
 			return response; 
 		}
 		

@@ -270,6 +270,47 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 		return list;
 	}
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#findAccountDuplicate(java.lang.String)
+	 */
+	@Override
+	public List<Account> findAccountDuplicate(String credentials) {
+		List<Account> accountList = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Account WHERE username = ? OR mobile =? OR"
+						+ " email =? OR name =?;"); 
+				) {
+			
+			pstmt.setString(1, credentials);
+			pstmt.setString(2, credentials);
+			pstmt.setString(3, credentials);
+			pstmt.setString(4, credentials);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				accountList = beanProcessor.toBeanList(rset, Account.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying Account List for credentials " + credentials);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return accountList;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#putAccData(com.yahoo.petermwenda83.server.api.rest.admin.AccData)
