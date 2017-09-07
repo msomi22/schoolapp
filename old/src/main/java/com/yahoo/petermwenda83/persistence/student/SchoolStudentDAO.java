@@ -28,6 +28,13 @@ public interface SchoolStudentDAO {
 	 * insensitive. An empty list is returned if no Student matches the query.
 	 */
 	public List<Student> searchStudent(String accountId, String query);
+	/**
+	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public List<Student> findDuplicate(String accountId, String key);
 
 	public boolean putStudent(Student student);
 

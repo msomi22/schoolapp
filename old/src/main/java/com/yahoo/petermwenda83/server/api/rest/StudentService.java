@@ -6,6 +6,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -301,6 +302,12 @@ public class StudentService {
 
 			return apiResponse;
 
+		}else if(studentDAO.getStudentByregNo(accountId, student.getRegNo()) != null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("RegNo exist!");
+
+			return apiResponse;
+
 		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
@@ -328,9 +335,8 @@ public class StudentService {
 			apiResponse.setDescription("Middlename is invalid."); 
 
 			return apiResponse;
-
-		}else if(StringUtils.isBlank(student.getGender()) &&
-				(!StringUtils.equalsIgnoreCase(student.getGender(), "M")  || !StringUtils.equalsIgnoreCase(student.getGender(), "F") ) ) {
+			
+		}else if(!validGender(student.getGender())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
 
@@ -513,6 +519,11 @@ public class StudentService {
 
 			return apiResponse;
 
+		}else if(hasDuplicate(student.getRegNo(),accountId)) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Student RegNo duplicated not allowed!");
+			return apiResponse;
+
 		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
@@ -541,8 +552,7 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getGender()) &&
-				(!StringUtils.equalsIgnoreCase(student.getGender(), "M")  || !StringUtils.equalsIgnoreCase(student.getGender(), "F") ) ) {
+		}else if(!validGender(student.getGender())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
 
@@ -816,10 +826,63 @@ public class StudentService {
 		
 		return apiSubjectList.stream().collect(Collectors.toList());
 	} 
+	
+	
+	
+	
+	/**
+	 * to detect duplicate value
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean hasDuplicate(String value, String accountId) { 
+		List<Student> accountList = new ArrayList<>();
+		//if not account with such a key, return true and proceed
+		
+		if(studentDAO.findDuplicate(accountId, value) == null) { 
+			return false;
+		}else {
+			accountList = studentDAO.findDuplicate(accountId, value); 
+			//System.out.println("size: " + accountList.size() + " key: " + value ); 
+			//if only one account has such a key, return true and proceed
+			if(accountList.size() == 1) {
+				return false;
+				
+			//if you reach here, there are more than one accounts sharing the provided key, return false.
+			}else if(accountList.size() > 1) {
+				
+				return true;
+				
+			}else if(accountList.size() == 0) {
+				return false;
+				
+			}else {
+				return false;
+				
+			}
+		}
+	}
 
 
 
 
+
+	/**
+	 * 
+	 * @param gender
+	 * @return
+	 */
+	private boolean validGender(String gender) {
+		String[] allowed = {"M","F","m","f"};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(gender)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 	/**

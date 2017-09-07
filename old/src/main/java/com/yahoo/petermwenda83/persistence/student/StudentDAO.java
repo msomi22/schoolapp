@@ -510,6 +510,34 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		return count;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#findDuplicate(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Student> findDuplicate(String accountId, String key) {
+		List<Student> studentList = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId =? AND (regNo = ? OR bcertNo =?);"); 
+				) {
+			
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, key);
+			pstmt.setString(3, key);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying Student List for key " + key);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;
+	}
+
 
 
 

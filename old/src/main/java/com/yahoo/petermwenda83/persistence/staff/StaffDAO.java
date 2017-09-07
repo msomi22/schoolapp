@@ -151,6 +151,38 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	}
 	
 	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByKes(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Staff getStaffByKes(String accountId, String key) {
+		Staff staff = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND "
+						+ "(staffNo =? OR mobile =? OR email =? OR username =?) ;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, key);
+			pstmt.setString(3, key);
+			pstmt.setString(4, key);
+			pstmt.setString(5, key);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				staff  = beanProcessor.toBean(rset,Staff.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with key " + key);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return staff; 
+	}
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByAccessLevel(java.lang.String, java.lang.String)
@@ -373,6 +405,38 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		return count;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#findDuplicate(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Staff> findDuplicate(String accountId, String key) {
+		List<Staff> staffList = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId =? AND "
+						+ "(staffNo = ? OR mobile =? OR email=? OR username =?);"); 
+				) {
+			
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, key);
+			pstmt.setString(3, key);
+			pstmt.setString(4, key);
+			pstmt.setString(5, key);
+			
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				staffList = beanProcessor.toBeanList(rset, Staff.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying Staff List for key " + key);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return staffList;
+	}
+
+	
 	
 
 }
