@@ -903,6 +903,8 @@ public class ClassRankingList extends HttpServlet{
 		}
 
 		
+		//TODO
+		
 		List<SubjectAnalysis>  subjectPerformance = new ArrayList<>(); 
 
 		subjectPerformance = getclassSubjectPerformance(accountId, exams, subjectDAO, perfomanceDAO, classroomId, 
@@ -1299,6 +1301,9 @@ public class ClassRankingList extends HttpServlet{
 					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
 				}
 
+				/*System.out.println("********************"); 
+				System.out.println(exam1.size()); 
+				System.out.println("********************"); */
 				totalExam1 =ReportUtil.findSubjectPerformance(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, 
 						examType);
 
