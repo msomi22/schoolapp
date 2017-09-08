@@ -38,7 +38,7 @@
 		<div class="clearfix"></div>
 
 		<div class="row">
-			<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="col-md-12 col-sm-12 col-xs-12 cards">
 				<div class="x_panel">
 					<div class="x_content">
 
@@ -102,15 +102,15 @@
 										<td class="center hidden"></td>
 										<td>
 
-											<button class="btn btn-info showAntennae" 
-												onclick="showAntennae()">
+											<button class="btn btn-info showAntennae"
+												onclick="showAntennae('norefresh')">
 												Show Antennae Info <span class="fa fa-info"></span>
 											</button>
 										</td>
 
 									</tr>
-									
-									
+
+
 									<tr class="tabledit" style='color: black;'>
 
 										<td class="center hidden"></td>
@@ -122,16 +122,16 @@
 										<td class="center hidden"></td>
 										<td>
 
-											<button class="btn btn-info showAntennae" 
-												onclick="showAntennae()">
+											<button class="btn btn-info showAntennae"
+												onclick="showAntennae('norefresh')">
 												Show Antennae Info <span class="fa fa-info"></span>
 											</button>
 										</td>
 
 									</tr>
-									
-									
-									
+
+
+
 									<tr class="tabledit" style='color: black;'>
 
 										<td class="center hidden"></td>
@@ -143,16 +143,16 @@
 										<td class="center hidden"></td>
 										<td>
 
-											<button class="btn btn-info showAntennae" 
-												onclick="showAntennae()">
+											<button class="btn btn-info showAntennae"
+												onclick="showAntennae('norefresh')">
 												Show Antennae Info <span class="fa fa-info"></span>
 											</button>
-											
+
 										</td>
 
 									</tr>
-									
-									
+
+
 									<tr class="tabledit" style='color: black;'>
 
 										<td class="center hidden"></td>
@@ -164,14 +164,14 @@
 										<td class="center hidden"></td>
 										<td>
 
-											<button class="btn btn-info showAntennae" 
-												onclick="showAntennae()">
+											<button class="btn btn-info showAntennae"
+												onclick="showAntennae('norefresh')">
 												Show Antennae Info <span class="fa fa-info"></span>
 											</button>
 										</td>
 
 									</tr>
-									
+
 									<tr class="tabledit" style='color: black;'>
 
 										<td class="center hidden"></td>
@@ -183,8 +183,8 @@
 										<td class="center hidden"></td>
 										<td>
 
-											<button class="btn btn-info showAntennae" 
-												onclick="showAntennae()">
+											<button class="btn btn-info showAntennae"
+												onclick="showAntennae('norefresh')">
 												Show Antennae Info <span class="fa fa-info"></span>
 											</button>
 										</td>
@@ -258,8 +258,8 @@
 
 									</tr> -->
 								</tbody>
-								
-								
+
+
 								<!-- <tfoot>
 									<tr class="headings secondary-assent">
 										<th class="column-title hidden">id</th>

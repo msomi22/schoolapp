@@ -1,33 +1,55 @@
+function showAntennae(state) {
 
-function showAntennae(){
-	
-	$('#showAntennae').modal('show');
-	
-	
-	
-	
-	
-	
+	if (state == "refresh") {
+
+		$('#showAntennae').modal('show');
+
+		$('#newAntenna').modal('hide');
+		
+		$('#preload').show(1000);
+		$('#antennaList').hide(1000)
+		
+		setTimeout(function() {
+
+			$('#preload').hide(1000);
+			
+			$('#antennaList').show(1000)
+			
+		}, 3500);
+		
+		
+
+	} else if (state == "norefresh") {
+
+		$('#showAntennae').modal('show');
+		$('#newAntenna').modal('hide');
+
+	} else {
+		$('#newAntenna').modal('show');
+		$('#showAntennae').modal('hide');
+
+	}
+
 }
-
-
 
 var table;
 function accelApiCall() {
-	
+
 	$('#preload').hide(1000);
 
 	$('#loading').modal('show');
-	
-	//alert( location.protocol + "//"+window.location.host);
 
-	$.ajax({
-		url : location.protocol + "//"+window.location.host+"/school/webapi/admin/data",
-		type : 'GET',
-		dataType : 'json',
-		contentType : 'application/json',
-		accept : 'application/json',
-	}).done(function(data) {
+	// alert( location.protocol + "//"+window.location.host);
+
+	$.ajax(
+			{
+				url : location.protocol + "//" + window.location.host
+						+ "/school/webapi/admin/data",
+				type : 'GET',
+				dataType : 'json',
+				contentType : 'application/json',
+				accept : 'application/json',
+			}).done(function(data) {
 
 		// alert(data);
 
@@ -40,30 +62,31 @@ function accelApiCall() {
 		var keys = Object.keys(getCol);
 
 		keys.forEach(function(k) {
-			
-			if(k!="uuid"){
-			cols.push({
-				title : k,
-				data : k
-			// optionally do some type detection here for render function
-			});
+
+			if (k != "uuid") {
+				cols.push({
+					title : k,
+					data : k
+				// optionally do some type detection here for render function
+				});
 			}
 		});
-		
-		if (table) table.clear();
+
+		if (table)
+			table.clear();
 
 		table = $('#accel').DataTable({
-			
-			destroy: true,
+
+			destroy : true,
 			columns : cols,
-			"order": [[ 0, "desc" ]],
-			"iDisplayLength": 100
+			"order" : [ [ 0, "desc" ] ],
+			"iDisplayLength" : 100
 		});
 
 		table.rows.add(data).draw();
 
 	}).fail(function(jqXHR, textStatus) {
-		
+
 		$('#loading').modal('hide');
 
 		// alert("Error: " + textStatus);
@@ -79,8 +102,6 @@ function accelApiCall() {
 			$('#error').modal('hide');
 		}, 2500);
 	});
-
-	
 
 }
 
@@ -110,17 +131,13 @@ function accelApiCall() {
 
 $(document).ready(function() {
 
-	/*setInterval(function() {
-		accelApiCall();
-	}, 7000)*/
-	
+	/*
+	 * setInterval(function() { accelApiCall(); }, 7000)
+	 */
+
 	$('#sites').DataTable({});
-	
-	
+
 	$('#antennae').DataTable({});
-	
-	
-	
 
 }
 
@@ -156,4 +173,52 @@ $(document).ready(function() {
 
 	// promise syntax to render after xhr completes
 	xhrcall.done(renderTable);
+});
+
+var map;
+
+var adc = {
+		lat : -1.272819,
+		lng : 36.813288
+	};
+
+// google.maps.event.addDomListener(window, 'load', initialize);
+
+function initialize() {
+
+	
+	/*var mapCanvas = document.getElementById('map');
+	var mapOptions = {
+		center : new google.maps.LatLng(adc),
+		zoom : 8,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	}
+
+	
+	map = new google.maps.Map(mapCanvas, mapOptions);
+	
+	var marker = new google.maps.Marker({
+		position : adc,
+		map : map
+	});*/
+	
+	
+     map = new google.maps.Map(document.getElementById('map'), {
+       zoom: 15,
+       center: adc,
+       mapTypeId : google.maps.MapTypeId.ROADMAP
+     });
+     
+     var marker = new google.maps.Marker({
+	       position: adc,
+	       map: map
+	     });
+     
+}
+
+$('#showAntennae').on('shown.bs.modal', function() {
+	google.maps.event.trigger(map, "resize");
+	
+	map.setCenter(adc);
+	
 });

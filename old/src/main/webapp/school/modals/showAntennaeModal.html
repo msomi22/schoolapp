@@ -2,17 +2,20 @@
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header alert alert-info">
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Site's Antennae and Location</h4>
 			</div>
-			<div class="modal-body ">
+			<div class="modal-body bg_modal">
 
 
 				<div class="row">
 					<div class="col-md-12">
-						<h2>Location space</h2>
+						<h4>Site's Location</h4>
+
+
+						<div id="map"></div>
 					</div>
 
 
@@ -21,13 +24,43 @@
 				<br> <br>
 
 				<div class="row">
+					<div class="col-md-4">
+						<h4>Site's Antennae List</h4>
 
-					<h4>Antennae List</h4>
+					</div>
+
+
+					<div class="col-md-6 pull-right">
+						<h4 class="pull-right">
+							Add a new Antenna
+							<button class="btn btn-primary" style="border-radius: 90%"
+								id="add" onclick="showAntennae('add')">
+								<i class="fa fa-plus fa-2x"></i>
+							</button>
+
+						</h4>
+
+					</div>
+
+
+
+					<div class="row" id="preload" style="display:none">
+
+						<div
+							class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+
+
+							<img src="../school/images/Preload.gif" class="img-responsive" />
+
+
+						</div>
+
+					</div>
 
 					<div class="row">
 
-						<div class="table-responsive">
-							<table class="table table-striped" id="#">
+						<div class="col-md-12 table-responsive">
+							<table class="table table-striped" id="antennaList">
 								<thead>
 									<tr class="headings secondary-assent">
 										<th class="column-title hidden">id</th>
@@ -141,10 +174,124 @@
 			</div>
 
 
-			<!-- <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
-      </div> -->
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Ok</button>
+			</div>
 
+		</div>
+
+	</div>
+</div>
+
+
+
+
+
+<div id="newAntenna" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="staffTiltle">Add a new Antenna</h4>
+			</div>
+
+			<form method="post" action="#" id="antennaForm">
+				<div class="modal-body bg_modal">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+
+
+
+
+							<div class="col-md-8 col-md-offset-2">
+							<br>
+							
+								<label for="name">Name</label> <input type="text" id="name"
+									class="form-control formelement2" name="name"
+									placeholder="Antenna Name" pattern="[A-Za-z]{3,20}"
+									title="Antenna Name,Only characters are allowed and should be more than two and less than 20 characters"
+									required>
+							</div>
+							
+							
+
+							<div class="col-md-8 col-md-offset-2">
+							<br>
+							
+								<label for="make">Make</label> <input type="text" id="make"
+									name="make" class="form-control formelement2"
+									placeholder="Antenna Make" pattern="[A-Za-z]{3,20}"
+									title="Atenna Make,Only characters are allowed and should be less than 20 characters "
+									required>
+									
+									<br>
+							<br>
+							</div>
+
+
+							<!-- <div class="col-md-8 col-md-offset-2">
+								<label for="Azimuth">Azimuth</label> <input type="text"
+									id="Azimuth" name="Azimuth" class="form-control formelement2"
+									placeholder="Azimuth value" pattern="[0-9]{1,20}"
+									title="Azimuth,Only numbers are allowed and should be integer or float"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="Roll">Roll</label> <input type="text" id="Roll"
+									name="Roll" class="form-control formelement2"
+									placeholder="Roll value" pattern="[0-9]{1,20}"
+									title="Roll,Only numbers are allowed and should be integer or float"
+									required>
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="Pitch">Pitch</label> <input type="text" id="Pitch"
+									name="Pitch" class="form-control formelement2"
+									placeholder="Pitch value" pattern="[0-9]{1,20}"
+									title="Azimuth,Only numbers are allowed and should be integer or float"
+									required>
+							</div> -->
+
+
+
+
+
+
+
+
+
+
+						</div>
+
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="submit" onclick="showAntennae('refresh')"
+						class="btn btn-info pull-right" id="staff_btn">
+						Submit <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal" onclick="showAntennae('norefresh')">Close</button>
+				</div>
+
+			</form>
 		</div>
 
 	</div>

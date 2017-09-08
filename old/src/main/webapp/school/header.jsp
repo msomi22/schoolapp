@@ -97,7 +97,7 @@
     <link href="../vendors/sumoselect/sumoselect.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.css" rel="stylesheet">
+    <link href="../build/css/custom2.css" rel="stylesheet">
     
     
   <!-- custom form elements style -->
@@ -105,7 +105,7 @@
   
 <link rel="stylesheet" href="css/formelementBorder.css">
 
-<link rel="stylesheet" href="css/ui-styling.css">
+<link rel="stylesheet" href="css/ui-styling2.css">
 
 
     
