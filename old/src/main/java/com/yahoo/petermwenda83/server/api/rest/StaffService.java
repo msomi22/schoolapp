@@ -58,7 +58,7 @@ public class StaffService {
 
 		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
-		
+
 		if(StringUtils.equals(staff.getAcessLevelId(), principal)){
 
 			if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), principal) != null ){
@@ -107,12 +107,12 @@ public class StaffService {
 	 * @param staff
 	 * @return
 	 */
-	 
+
 	private ApiResponse addStaff(Staff staff, String from) {
-		
+
 		String  response = "";
 		ApiResponse apiResponse = new ApiResponse();
-		
+
 		//System.out.println(from); 
 
 
@@ -196,24 +196,24 @@ public class StaffService {
 			return apiResponse;
 
 		}else {
-			
+
 			if(staffDAO.putStaff(staff)){
 				response = "Staff was registered successfully.";
 				apiResponse.setMessage("success");
 				apiResponse.setDescription(response);
-				
+
 				return apiResponse;
 
 			}else{
 				response = "Something went wrong, try again later.";
 				apiResponse.setMessage("error");
 				apiResponse.setDescription(response);
-				
+
 				return apiResponse;
-				
+
 			}
-			
-			
+
+
 		}
 
 	}
@@ -569,6 +569,53 @@ public class StaffService {
 
 		return teacherSubjectDAO.getTeacherSubjects(staffId) != null ? tsList : new ArrayList<APITeacherSubject>();
 	}
+
+
+
+	/**
+	 * 
+	 * @param action
+	 * @param accountId
+	 * @param staffId
+	 * @return
+	 */
+	public Object staffStatus(String action, String accountId, String staffId) {
+		
+		ApiResponse response = new ApiResponse(); 
+		
+		if(staffDAO.getStaff(accountId, staffId) != null) {
+			
+			Staff staff = staffDAO.getStaff(accountId, staffId);
+			
+			if(StringUtils.equals(action, "activate")) {
+				staff.setIsActive("1");
+			}else if(StringUtils.equals(action, "activate")) {
+				staff.setIsActive("0"); 
+			}else {
+				response.setMessage("error");
+				response.setDescription("Invalid status."); 
+				return response;
+			}
+			
+			if(staffDAO.updateStaff(staff)) {
+				response.setMessage("success");
+				response.setDescription("Staff updated successfully.");  
+				return response;
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later."); 
+				return response;
+				
+			}
+		}
+		
+		
+		
+		return response;
+	}
+
+
 
 
 

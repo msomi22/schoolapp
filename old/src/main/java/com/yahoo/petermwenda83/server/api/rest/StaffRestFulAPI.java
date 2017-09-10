@@ -37,100 +37,120 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 public class StaffRestFulAPI {
 
 	StaffService staffService = new StaffService();
-	
+
 	@ApiOperation(value = "Register a new staff.", 
-		    notes = "Returns whether staff was Registred successfully or not.", 
-		    response = APIStaff.class)
-	
+			notes = "Returns whether staff was Registred successfully or not.", 
+			response = APIStaff.class)
+
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
 	} )
-	
+
 	@POST
 	@Path("/{accountId}")
 	public ApiResponse putStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , APIStaff apiStaff){
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			
+
 			ApiResponse error = new ApiResponse("error");
 			return error; 
-			
+
 		}else {
-        	
-        	Staff staff = new Staff();
-    		staff.setAccountId(accountId);
-    		staff.setAcessLevelId(apiStaff.getAcessLevelId());
-    		staff.setStaffNo(apiStaff.getStaffNo());
-    		staff.setFirstname(apiStaff.getFirstname());
-    		staff.setMiddlename(apiStaff.getMiddlename());
-    		staff.setLastname(apiStaff.getLastname());
-    		staff.setGender(apiStaff.getGender().toUpperCase());
-    		staff.setMobile(apiStaff.getMobile());
-    		staff.setEmail(apiStaff.getEmail());
-    		staff.setUsername(apiStaff.getUsername());
-    		staff.setPassword(apiStaff.getPassword());
-    		
-    		ApiResponse put = staffService.putStaff(staff);
-    		return put; 
-    		
-        }
-		
-		
+
+			Staff staff = new Staff();
+			staff.setAccountId(accountId);
+			staff.setAcessLevelId(apiStaff.getAcessLevelId());
+			staff.setStaffNo(apiStaff.getStaffNo());
+			staff.setFirstname(apiStaff.getFirstname());
+			staff.setMiddlename(apiStaff.getMiddlename());
+			staff.setLastname(apiStaff.getLastname());
+			staff.setGender(apiStaff.getGender().toUpperCase());
+			staff.setMobile(apiStaff.getMobile());
+			staff.setEmail(apiStaff.getEmail());
+			staff.setUsername(apiStaff.getUsername());
+			staff.setPassword(apiStaff.getPassword());
+
+			ApiResponse put = staffService.putStaff(staff);
+			return put; 
+
+		}
+
+
 	}
-	
-	
+
+
 	@ApiOperation(value = "Update a staff.", 
-		    notes = "Returns whether staff was updated successfully or not.", 
-		    response = APIStaff.class)
-	
+			notes = "Returns whether staff was updated successfully or not.", 
+			response = APIStaff.class)
+
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
 	} )
-	
+
 	@PUT
 	@Path("/{accountId}")
 	public ApiResponse updateStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , ApiStaffFull ApiStaffFull){
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			
+
 			ApiResponse error = new ApiResponse("error");
 			return error; 
-			
+
 		}else{
-			
+
 			ApiResponse put = staffService.updateStaff(ApiStaffFull);
 			return put; 
 		}
-		
+
 	}
+
+
+	@ApiOperation(value = "Update a staff (change status).", 
+			notes = "Pass account and student id, return whether staff was updated.", 
+			response = ApiResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
 	
-	
-	//TODO activate/in-activate 
-	
-	
-	
-	
-	
+	@PUT
+	@Path("/{action}/{accountId}/{staffId}")   
+	public Object changeStatus(@PathParam("action") String action, @PathParam("accountId") String accountId, 
+			@PathParam("staffId") String staffId, @HeaderParam("authorization") String auth) {
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}
+
+		return staffService.staffStatus(action, accountId, staffId);
+	}
+
+
+
+
+
 	@Path("/{staffId}/subjects")
 	public SubClassRestFulAPI getSubjectService(){
 		return new SubClassRestFulAPI(); 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @param mobile
 	 * @return
 	 */
 	public static boolean validMobileNo(String mobile){
 		boolean valid = false;
-		
+
 		if(mobile.length() == 9 && StringUtils.isNumeric(mobile)){
 			valid = true;
 		}
-		
+
 		return valid;
 	}
 
-	
+
 }

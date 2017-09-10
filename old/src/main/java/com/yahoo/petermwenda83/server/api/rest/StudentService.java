@@ -837,29 +837,101 @@ public class StudentService {
 	 * @param studentIds
 	 * @return
 	 */
-	public Object studentStatus(String accountId, String action, List<com.yahoo.petermwenda83.server.api.rest.bean.Student> students) { 
-		
-		ApiResponse response = new ApiResponse();   
+	public Object studentStatus(String accountId, String action, List<StudentStatus> students) { 
+
+		ApiResponse response = new ApiResponse(); 
+		boolean update = false;
 
 		if(StringUtils.equals(action, "activate")) {
-			
-			System.out.println(students);
-			
+
+			for(StudentStatus studentid : students) {
+			   
+				if(studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
+					Student student = studentDAO.getStudentById(accountId, studentid.getUuid()); 
+					student.setIsActive("1");  
+					student.setIsAlumni("0"); 
+					update = studentDAO.updateStudent(student);
+				}
+			}
+
+			if(update) {
+				response.setMessage("success");
+				response.setDescription("Student(s) activated successfully."); 
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later."); 
+				
+			}
+
 		}else if(StringUtils.equals(action, "inactivate")) {
 			
-			System.out.println(students);
+			for(StudentStatus studentid : students) {
+
+				if(studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
+					Student student = studentDAO.getStudentById(accountId, studentid.getUuid());
+					student.setIsActive("0");  
+					student.setIsAlumni("1");  
+					update = studentDAO.updateStudent(student);
+				}
+			}
 			
+			if(update) {
+				response.setMessage("success");
+				response.setDescription("Student(s) inactivated successfully."); 
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later."); 
+				
+			}
+
+
+
 		}else {
-			
+
 			response.setMessage("error");
 			response.setDescription("Invalid action '"+action+"'"); 
-			
+
 		}
-		
-		
-		return null;
+
+
+		return response;
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param changeClass
+	 * @return
+	 */
+	public Object changeClass(String accountId, List<ChangeClass> changeClass) {
+
+		ApiResponse response = new ApiResponse();
+		boolean update = false;
+
+		for(ChangeClass stream : changeClass) {
+			
+			if(studentDAO.getStudentById(accountId, stream.getStudentId()) != null) {
+				Student student = studentDAO.getStudentById(accountId, stream.getStudentId()); 
+				student.setCurrentStream(stream.getNewClassId()); 
+				update = studentDAO.updateStudent(student);
+			}
+		
+		}
+		
+		if(update) {
+			response.setMessage("success");
+			response.setDescription("Class changed successfully."); 
+
+		}else {
+			response.setMessage("error");
+			response.setDescription("Something went wrong, try again later."); 
+			
+		}
+
+		return response;
+	}
 
 
 
@@ -949,6 +1021,7 @@ public class StudentService {
 			return true;
 		}
 	}
+
 
 
 }

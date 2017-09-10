@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 
 @XmlRootElement(name = "Student") 
-public class Student {
+public class StudentStatus {
 	
 	@JsonProperty
 	private String uuid;
@@ -21,7 +21,7 @@ public class Student {
 	/**
 	 * 
 	 */
-	public Student() {
+	public StudentStatus() {
 		uuid = "";
 	}
 
