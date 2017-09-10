@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class GeneralRestFulAPI {
-	
+
 	GeneralService generalService = new GeneralService();
 
 	/**
@@ -48,13 +48,13 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@GET
 	@Path("/{accountId}")  
 	public List<Object> getAllStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
-		
+
 		List<Object>  response = new ArrayList<>();
-		
+
 		ApiResponse re = new ApiResponse();
 		re.setMessage("error");
 		re.setDescription("User not authenticated");
@@ -64,10 +64,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.getStreamList(accountId); 
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -81,12 +81,12 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@GET
 	@Path("/{accountId}/{uuid}")   
 	public Object getStream(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid,
-			     @HeaderParam("authorization") String auth) {
-		
+			@HeaderParam("authorization") String auth) {
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -94,10 +94,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.getStream(accountId,uuid);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -105,18 +105,18 @@ public class GeneralRestFulAPI {
 	 * @param apiStream
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Add new stream.", 
 			notes = "Stream basic details.", 
 			response = ApiStream.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@POST
 	@Path("/{accountId}")  
 	public Object newStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
-		
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -124,10 +124,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.putStream(apiStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -135,18 +135,18 @@ public class GeneralRestFulAPI {
 	 * @param apiStream
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Update stream info.", 
 			notes = "Stream details.", 
 			response = ApiStream.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@PUT
 	@Path("/{accountId}")  
 	public Object updateStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
-		
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -154,10 +154,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.updateStream(apiStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -171,11 +171,11 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@DELETE
 	@Path("/{accountId}")  
 	public Object deleteStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, String uuid) {
-		
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -183,10 +183,39 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.deleteStream(accountId,uuid);
 	}
+
+
+
+	//TODO  exams
+
+	public Object getExam() {
+
+		return null;
+	}
+
+	public Object getExams() {
+
+		return null;
+	}
+
+	public Object newExam() {
+
+		return null;
+	}
 	
+	public Object updateExam() {
+
+		return null;
+	}
 	
+	public Object deleteExam() {
+
+		return null;
+	}
+
+
 
 }

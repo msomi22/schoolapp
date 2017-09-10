@@ -26,6 +26,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.Student;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
@@ -328,6 +329,34 @@ public class StudentRestFulAPI{
 		}
 		
 		return studentService.deleteSubject(accountId,id);
+	}
+	
+	
+	@ApiOperation(value = "change student status i.e activate/inactivate etc.", 
+			notes = "other student status include isboarding and isalumni .", 
+			response = Student.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "action/account not found.") 
+	} )
+	//TODO activate/in-activate 
+	@PUT
+	@Path("/{action}/{accountId}")  
+	public Object activateStudent(@PathParam("action") String action, @PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth ,List<Student> students) {  
+		
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+		 
+		return studentService.studentStatus(accountId,action,students);  
 	}
 	
 	

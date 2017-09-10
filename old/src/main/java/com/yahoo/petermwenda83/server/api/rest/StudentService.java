@@ -50,9 +50,9 @@ public class StudentService {
 
 	private static PrimaryDAO primaryDAO;
 	private static ParentsDAO parentsDAO;
-	
+
 	private static StudentSubjectDAO studentSubjectDAO;
-	
+
 	private static SubjectDAO subjectDAO;
 
 	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
@@ -68,9 +68,9 @@ public class StudentService {
 
 		parentsDAO= ParentsDAO.getInstance();
 		primaryDAO=PrimaryDAO.getInstance();
-		
+
 		studentSubjectDAO = StudentSubjectDAO.getInstance();
-		
+
 		subjectDAO = SubjectDAO.getInstance();
 	}
 
@@ -335,7 +335,7 @@ public class StudentService {
 			apiResponse.setDescription("Middlename is invalid."); 
 
 			return apiResponse;
-			
+
 		}else if(!validGender(student.getGender())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
@@ -702,8 +702,8 @@ public class StudentService {
 	}
 
 
-	
-	
+
+
 
 	/** 
 	 * 
@@ -712,28 +712,28 @@ public class StudentService {
 	 * @return
 	 */
 	public Object deleteSubject(String accountId, String uuid) {
-		
+
 		ApiResponse apiResponse = new ApiResponse();
 
 		if(studentSubjectDAO.getSubjectById(accountId, uuid) == null) {
 			apiResponse.setMessage("error"); 
 			apiResponse.setDescription("invalid id.");
 			return apiResponse;
-			
+
 		}else {
-			
+
 			if(studentSubjectDAO.deleteSubject(accountId, uuid)) {
 				apiResponse.setMessage("success"); 
 				apiResponse.setDescription("Subject was removed successfully.");
-				
+
 			}else {
-				
+
 				apiResponse.setMessage("error"); 
 				apiResponse.setDescription("Subject not removed!");
 			}
-			
+
 		}
-		
+
 		return apiResponse;
 	}
 	/** 
@@ -742,24 +742,24 @@ public class StudentService {
 	 * @return
 	 */
 	public Object updateSubject(ApiSubject apiSubject) {
-		
+
 		ApiResponse apiResponse = new ApiResponse();
-		
+
 		if(studentSubjectDAO.getSubjectById(apiSubject.getAccountId(), apiSubject.getUuid()) == null) {
 			apiResponse.setMessage("error"); 
 			apiResponse.setDescription("Invalid id!");
-			
+
 		}else {
 			StudentSubject studentsub = studentSubjectDAO.getSubjectById(apiSubject.getAccountId(), apiSubject.getUuid());
 			studentsub.setSubjectId(apiSubject.getSubjectId());
 			studentsub.setStudentId(apiSubject.getStudentId());
-		
+
 			apiResponse.setMessage("sucess"); 
 			apiResponse.setDescription("Not Applicable for now!");
-			
+
 		}
 
-		
+
 		return apiResponse;
 	}
 	/** 
@@ -776,30 +776,30 @@ public class StudentService {
 			apiResponse.setMessage("error"); 
 			apiResponse.setDescription("Subject already assigned!");
 			return apiResponse;
-			
-			
+
+
 		}else {
 			StudentSubject studentsub = new StudentSubject();
 			studentsub.setAccountId(apiSubject.getAccountId());
 			studentsub.setStudentId(apiSubject.getStudentId()); 
 			studentsub.setSubjectId(apiSubject.getSubjectId());
-			
+
 			if(studentSubjectDAO.putStudentSubject(studentsub)) {
 				apiResponse.setMessage("success"); 
 				apiResponse.setDescription("Subject assiged successfully.");  
-				
+
 			}else {
 				apiResponse.setMessage("error"); 
 				apiResponse.setDescription("Subject not assiged!"); 
-				
+
 			}
-			
+
 		}
 
 		return apiResponse;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -813,7 +813,7 @@ public class StudentService {
 		}
 		ApiSubject apiSubject = new ApiSubject();
 		List<ApiSubject>  apiSubjectList = new ArrayList<>();
-		
+
 		subjectlist.forEach(sub -> {
 			apiSubject.setAccountId(sub.getAccountId());
 			apiSubject.setStudentId(sub.getStudentId());
@@ -821,15 +821,49 @@ public class StudentService {
 			apiSubject.setUuid(sub.getUuid()); 
 			sub.getAllocationDate();
 			apiSubjectList.add(apiSubject);
-			
+
 		});
-		
+
 		return apiSubjectList.stream().collect(Collectors.toList());
 	} 
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param action
+	 * @param studentIds
+	 * @return
+	 */
+	public Object studentStatus(String accountId, String action, List<com.yahoo.petermwenda83.server.api.rest.bean.Student> students) { 
+		
+		ApiResponse response = new ApiResponse();   
+
+		if(StringUtils.equals(action, "activate")) {
+			
+			System.out.println(students);
+			
+		}else if(StringUtils.equals(action, "inactivate")) {
+			
+			System.out.println(students);
+			
+		}else {
+			
+			response.setMessage("error");
+			response.setDescription("Invalid action '"+action+"'"); 
+			
+		}
+		
+		
+		return null;
+	}
+
+
+
+
+
 	/**
 	 * to detect duplicate value
 	 * 
@@ -839,7 +873,7 @@ public class StudentService {
 	private boolean hasDuplicate(String value, String accountId) { 
 		List<Student> accountList = new ArrayList<>();
 		//if not account with such a key, return true and proceed
-		
+
 		if(studentDAO.findDuplicate(accountId, value) == null) { 
 			return false;
 		}else {
@@ -848,18 +882,18 @@ public class StudentService {
 			//if only one account has such a key, return true and proceed
 			if(accountList.size() == 1) {
 				return false;
-				
-			//if you reach here, there are more than one accounts sharing the provided key, return false.
+
+				//if you reach here, there are more than one accounts sharing the provided key, return false.
 			}else if(accountList.size() > 1) {
-				
+
 				return true;
-				
+
 			}else if(accountList.size() == 0) {
 				return false;
-				
+
 			}else {
 				return false;
-				
+
 			}
 		}
 	}
@@ -916,6 +950,5 @@ public class StudentService {
 		}
 	}
 
-	
 
 }
