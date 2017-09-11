@@ -353,36 +353,6 @@ public class GeneralRestFulAPI {
 	
 	*/
 	
-	/**
-	 * 
-	 * @param accountId
-	 * @param auth
-	 * @param apiSysConfig
-	 * @return
-	 */
-
-	@ApiOperation(value = "ApiSysConfig object to update.", 
-			notes = "Pass apiSysConfig object to be updated.", 
-			response = ApiSysConfig.class)
-
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
-	} )
-	@PUT
-	@Path("config/{accountId}")  
-	public Object updateConfig(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
-			ApiSysConfig apiSysConfig) {
-		
-		ApiResponse response = new ApiResponse();
-		response.setMessage("error");
-		response.setDescription("User not authenticated");
-
-		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response; 
-		}
-
-		return generalService.updateConfig(apiSysConfig); 
-	}
-	
 	
 
 }
