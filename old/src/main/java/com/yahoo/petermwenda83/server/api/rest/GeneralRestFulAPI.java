@@ -17,8 +17,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -33,7 +36,7 @@ import io.swagger.annotations.ApiResponses;
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class GeneralRestFulAPI {
-	
+
 	GeneralService generalService = new GeneralService();
 
 	/**
@@ -48,13 +51,13 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@GET
 	@Path("/{accountId}")  
 	public List<Object> getAllStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
-		
+
 		List<Object>  response = new ArrayList<>();
-		
+
 		ApiResponse re = new ApiResponse();
 		re.setMessage("error");
 		re.setDescription("User not authenticated");
@@ -64,10 +67,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.getStreamList(accountId); 
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -81,12 +84,12 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@GET
 	@Path("/{accountId}/{uuid}")   
 	public Object getStream(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid,
-			     @HeaderParam("authorization") String auth) {
-		
+			@HeaderParam("authorization") String auth) {
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -94,10 +97,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.getStream(accountId,uuid);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -105,18 +108,18 @@ public class GeneralRestFulAPI {
 	 * @param apiStream
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Add new stream.", 
 			notes = "Stream basic details.", 
 			response = ApiStream.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@POST
 	@Path("/{accountId}")  
 	public Object newStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
-		
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -124,10 +127,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.putStream(apiStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -135,18 +138,18 @@ public class GeneralRestFulAPI {
 	 * @param apiStream
 	 * @return
 	 */
-	
+
 	@ApiOperation(value = "Update stream info.", 
 			notes = "Stream details.", 
 			response = ApiStream.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@PUT
 	@Path("/{accountId}")  
 	public Object updateStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
-		
+
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
@@ -154,10 +157,10 @@ public class GeneralRestFulAPI {
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
-		
+
 		return generalService.updateStream(apiStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -171,10 +174,41 @@ public class GeneralRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	
+
 	@DELETE
 	@Path("/{accountId}")  
 	public Object deleteStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, String uuid) {
+
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.deleteStream(accountId,uuid);
+	}
+
+
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param examId
+	 * @param auth
+	 * @return
+	 *//*
+	@ApiOperation(value = "Return ApiExam object.", 
+			notes = "Pass account and exam Ids.", 
+			response = ApiExam.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("exam/{accountId}/{examId}")  
+	public Object getExam(@PathParam("accountId") String accountId,@PathParam("examId") String examId,
+			@HeaderParam("authorization") String auth) {
 		
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
@@ -184,7 +218,134 @@ public class GeneralRestFulAPI {
 			return response; 
 		}
 		
-		return generalService.deleteStream(accountId,uuid);
+		
+		return generalService.getExam(accountId, examId); 
+	}
+	
+	*//**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 *//*
+	@ApiOperation(value = "Return List of ApiExam objects.", 
+			notes = "Pass account Id.", 
+			response = ApiExam.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("exam/{accountId}")  
+	public List<Object> getExams(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) { 
+		
+		List<Object> list = new ArrayList<>();
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		list.add(response);
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return list;  
+		}
+		
+		
+
+		return generalService.getStreamList(accountId); 
+	}
+	
+	*//**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param apiExam
+	 * @return
+	 *//*
+	
+	@ApiOperation(value = "ApiExam object to add.", 
+			notes = "Pass ApiExam object to be added.", 
+			response = ApiExam.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	
+	@POST 
+	@Path("exam/{accountId}")  
+	public Object newExam(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
+			ApiExam apiExam) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.newExam(apiExam); 
+	}
+	
+
+	*//**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param apiExam
+	 * @return
+	 *//*
+
+	@ApiOperation(value = "ApiExam object to update.", 
+			notes = "Pass ApiExam object to be updated.", 
+			response = ApiExam.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	
+	@PUT
+	@Path("exam/{accountId}")  
+	public Object updateExam(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, 
+			ApiExam apiExam) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.updateExam(apiExam); 
+	}
+	
+	*/
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param apiSysConfig
+	 * @return
+	 */
+
+	@ApiOperation(value = "ApiSysConfig object to update.", 
+			notes = "Pass apiSysConfig object to be updated.", 
+			response = ApiSysConfig.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("config/{accountId}")  
+	public Object updateConfig(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
+			ApiSysConfig apiSysConfig) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.updateConfig(apiSysConfig); 
 	}
 	
 	

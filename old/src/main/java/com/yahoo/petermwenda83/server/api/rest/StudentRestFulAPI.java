@@ -25,7 +25,9 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
+import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
@@ -223,7 +225,13 @@ public class StudentRestFulAPI{
 
 	}
 	
-	
+	/**
+	 * 
+	 * @param auth
+	 * @param studentId
+	 * @param accountId
+	 * @return
+	 */
 	@ApiOperation(value = "Get student's subjects.", 
 			notes = "Student subject List.", 
 			response = ApiSubject.class)
@@ -259,6 +267,12 @@ public class StudentRestFulAPI{
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
 	} )
 	
+	/**
+	 * 
+	 * @param auth
+	 * @param apiSubject
+	 * @return
+	 */
 	@POST
 	@Path("/subject")   
 	public Object addSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
@@ -278,6 +292,12 @@ public class StudentRestFulAPI{
 		return studentService.assignSubject(apiSubject);
 	}
 	
+	/**
+	 * 
+	 * @param auth
+	 * @param apiSubject
+	 * @return
+	 */
 	@ApiOperation(value = "Updated student's subject.", 
 			notes = "Student subject info object.", 
 			response = ApiSubject.class)
@@ -304,6 +324,13 @@ public class StudentRestFulAPI{
 		return studentService.updateSubject(apiSubject);
 	}
 	
+	/**
+	 * 
+	 * @param auth
+	 * @param accountId
+	 * @param id
+	 * @return
+	 */
 	@ApiOperation(value = "Delete subject that has been assigned to a student.", 
 			notes = "Student_subject_id.", 
 			response = ApiSubject.class)
@@ -330,7 +357,67 @@ public class StudentRestFulAPI{
 		return studentService.deleteSubject(accountId,id);
 	}
 	
+	/**
+	 * 
+	 * @param action
+	 * @param accountId
+	 * @param auth
+	 * @param students
+	 * @return
+	 */
+	@ApiOperation(value = "change student status i.e activate/inactivate etc.", 
+			notes = "other student status include isboarding and isalumni .", 
+			response = StudentStatus.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "action/account not found.") 
+	} )
 	
+	@PUT
+	@Path("/{action}/{accountId}")  
+	public Object studentStatus(@PathParam("action") String action, @PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth ,List<StudentStatus> students) {  
+		
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+		 
+		return studentService.studentStatus(accountId,action,students);  
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @param changeClass
+	 * @return
+	 */
+	@ApiOperation(value = "change student class .", 
+			notes = "pass student-change class object ", 
+			response = ChangeClass.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
+	} )
+	@PUT
+	@Path("/changeclass/{accountId}")   
+	public Object changeClass(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth ,List<ChangeClass> changeClass) {
+		
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+		
+		return studentService.changeClass(accountId, changeClass); 
+	}
 	
 	
 	

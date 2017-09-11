@@ -54,6 +54,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -94,6 +95,7 @@ public class StudentReportCard extends HttpServlet{
 	private static ClassDAO classDAO;
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static MiscellanousDAO miscellanousDAO;
+	private static ClassMeanDAO classMeanDAO;
 
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -145,6 +147,8 @@ public class StudentReportCard extends HttpServlet{
 		classDAO = ClassDAO.getInstance();
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
+		
+		classMeanDAO = ClassMeanDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}

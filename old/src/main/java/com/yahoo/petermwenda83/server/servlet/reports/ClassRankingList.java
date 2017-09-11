@@ -45,6 +45,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.exam.ClassMean;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -52,6 +53,7 @@ import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -88,7 +90,7 @@ public class ClassRankingList extends HttpServlet{
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
-	//private static SysConfigDAO sysConfigDAO;
+	private static ClassMeanDAO classMeanDAO;
 	private static ClassDAO classDAO;
 	private static PrimaryDAO primaryDAO;
 
@@ -143,7 +145,7 @@ public class ClassRankingList extends HttpServlet{
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
-		//sysConfigDAO = SysConfigDAO.getInstance();
+		classMeanDAO = ClassMeanDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 
@@ -460,6 +462,18 @@ public class ClassRankingList extends HttpServlet{
 		PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(classMean + " / " + performanceList.size() + " Grade : " + grade,  timesRomanNormal6));
 		mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 		mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
+		
+		//TODO save class mean 
+		ClassMean class_stream_Mean = new ClassMean();
+		class_stream_Mean.setAccountId(accountId);
+		class_stream_Mean.setClassId(classroomId);
+		class_stream_Mean.setStreamId(streamId);
+		class_stream_Mean.setStreammean(Double.valueOf(classMean));
+		class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
+		class_stream_Mean.setTerm(term);
+		class_stream_Mean.setYear(year); 
+	
+		//classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, exams.toString(), term, year);
 
 		classTable.addCell(mainGradeInfoCell);
 		classTable.addCell(mainGradeDescCell);
@@ -1299,6 +1313,9 @@ public class ClassRankingList extends HttpServlet{
 					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
 				}
 
+				/*System.out.println("********************"); 
+				System.out.println(exam1.size()); 
+				System.out.println("********************"); */
 				totalExam1 =ReportUtil.findSubjectPerformance(accountId, exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, 
 						examType);
 

@@ -5,6 +5,7 @@ package com.yahoo.petermwenda83.server.api.rest.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +16,19 @@ import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.SubCategory;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO;
@@ -47,6 +54,10 @@ public class AdminService {
 	private static MiscellanousDAO miscellanousDAO;
 	private static SubCategoryDAO subCategoryDAO;
 	private static SubjectDAO subjectDAO;
+	
+	private static StreamDAO streamDAO;
+	private static ExamDAO examDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	static {
 		accountDAO = AccountDAO.getInstance();
@@ -59,6 +70,10 @@ public class AdminService {
 		miscellanousDAO = MiscellanousDAO.getInstance();
 		subCategoryDAO = SubCategoryDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
+		
+		streamDAO = StreamDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 	}
 
 	/**
@@ -284,6 +299,31 @@ public class AdminService {
 		
 		resposne += astr; 
 		astr = "";
+		
+		
+		
+		String[] streamIds = {"4DA86139-6A72-4089-8858-6A3A613FDFE6","59E5F556-4B04-43B2-8139-E2D39A7836C6",
+				"46398A47-93F2-4591-B36F-1C28B03CC2F3","D3733507-C113-4795-91ED-D3CD8039EA03",
+				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63"};
+		String[] classIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
+				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD",
+				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9"};
+		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S"};
+	
+		for(int count=0;count<streamIds.length;count++) {
+			Stream stream = new Stream();
+			stream.setUuid(streamIds[count]);
+			stream.setAccountId(accountId);
+			stream.setClassRoomId(classIds[count]);
+			stream.setDescription(streams[count]); 
+			streamDAO.putStream(stream);
+			astr =" Stream(s) added,";
+		}
+		
+		resposne += astr; 
+		astr = "";
+		
+		
 
 		String[] categoryIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
 				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
@@ -415,8 +455,46 @@ public class AdminService {
 		
 		resposne += astr; 
 		astr = "";
-
-
+		
+		
+		
+		
+		
+		
+		
+		String[] examIds = {"AE24F15B-5038-4A15-8607-1DB2A7A0B7DE","4531A31D-1F8A-40D7-BFE6-D3CB3D91951A",
+				"69A569CA-1D4F-458E-99DD-FB2BE705BF5C","D50E6399-B913-42F2-A5B6-F0D4BAAF9571",
+				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1"};
+		String[] examCodes = {"P1","P2","P3","C1","C2","ET"};
+		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term"};
+		int[] examOutof = {60,80,40,30,30,70}; 
+		
+		for(int count=0;count<examIds.length;count++) {
+			Exam exam = new Exam();
+			exam.setUuid(examIds[count]);
+			exam.setAccountId(accountId);
+			exam.setCode(examCodes[count]);
+			exam.setDescription(examDesc[count]);
+			exam.setOutOf(examOutof[count]);  
+			examDAO.putExam(exam);
+			astr =" Exam(s) added."; 
+		}
+		resposne += astr; 
+		astr = "";
+		
+		
+		SysConfig systemConfig = new SysConfig();
+		systemConfig.setAccountId(accountId);
+		systemConfig.setCansendSMS("0");
+		systemConfig.setExamId(examIds[4]);
+		systemConfig.setTerm("1");
+		systemConfig.setYear(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));  
+		sysConfigDAO.putSysConfig(systemConfig);
+		astr =" systemConfig added."; 
+		
+		resposne += astr; 
+		astr = "";
+		
 		apiResponse.setDescription(resposne);
 
 
