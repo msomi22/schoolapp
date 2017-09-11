@@ -17,7 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
+
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
@@ -69,6 +69,41 @@ public class GeneralRestFulAPI {
 		}
 
 		return generalService.getStreamList(accountId); 
+	}
+
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get stream list per class.", 
+			notes = "Returns stream list for the given class.", 
+			response = ApiStream.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+
+	@GET
+	@Path("/{accountId}/{classId}")   
+	public List<Object> getStreamPerClass(@PathParam("accountId") String accountId,@PathParam("classId") String classId, 
+			@HeaderParam("authorization") String auth) {
+
+		List<Object>  response = new ArrayList<>();
+
+		ApiResponse re = new ApiResponse();
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+
+		response.add(re);
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.getStreamListPerClass(accountId,classId); 
 	}
 
 	/**

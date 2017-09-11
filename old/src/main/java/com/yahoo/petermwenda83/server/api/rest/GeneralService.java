@@ -74,6 +74,43 @@ public class GeneralService {
 		}
 
 	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public List<Object> getStreamListPerClass(String accountId, String classId) {
+
+		if(streamDAO.getStreamList(accountId,classId) != null) {
+
+			List<Object>  list = new ArrayList<>();
+			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
+				ApiStream apiStream = new ApiStream();
+				apiStream.setAccountId(stream.getAccountId());
+				apiStream.setClassRoomId(stream.getClassRoomId());
+				apiStream.setDescription(stream.getDescription());
+				apiStream.setUuid(stream.getUuid()); 
+
+				list.add(apiStream);
+			});
+
+			return list;
+
+		}else {
+
+			List<Object>  response = new ArrayList<>();
+			ApiResponse re = new ApiResponse();
+			re.setMessage("error");
+			re.setDescription("No stream to display.");
+
+			response.add(re);
+			return response;
+
+		}
+
+	}
 
 	/**
 	 * 
