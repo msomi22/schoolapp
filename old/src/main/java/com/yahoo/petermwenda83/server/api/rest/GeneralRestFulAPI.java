@@ -198,7 +198,7 @@ public class GeneralRestFulAPI {
 	 * @param examId
 	 * @param auth
 	 * @return
-	 */
+	 *//*
 	@ApiOperation(value = "Return ApiExam object.", 
 			notes = "Pass account and exam Ids.", 
 			response = ApiExam.class)
@@ -222,12 +222,12 @@ public class GeneralRestFulAPI {
 		return generalService.getExam(accountId, examId); 
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @return
-	 */
+	 *//*
 	@ApiOperation(value = "Return List of ApiExam objects.", 
 			notes = "Pass account Id.", 
 			response = ApiExam.class)
@@ -253,13 +253,13 @@ public class GeneralRestFulAPI {
 		return generalService.getStreamList(accountId); 
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @param apiExam
 	 * @return
-	 */
+	 *//*
 	
 	@ApiOperation(value = "ApiExam object to add.", 
 			notes = "Pass ApiExam object to be added.", 
@@ -285,13 +285,13 @@ public class GeneralRestFulAPI {
 	}
 	
 
-	/**
+	*//**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @param apiExam
 	 * @return
-	 */
+	 *//*
 
 	@ApiOperation(value = "ApiExam object to update.", 
 			notes = "Pass ApiExam object to be updated.", 
@@ -316,7 +316,7 @@ public class GeneralRestFulAPI {
 		return generalService.updateExam(apiExam); 
 	}
 	
-	
+	*/
 	
 	/**
 	 * 

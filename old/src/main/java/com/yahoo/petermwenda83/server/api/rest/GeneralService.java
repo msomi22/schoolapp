@@ -225,7 +225,7 @@ public class GeneralService {
 	 * @param accountId
 	 * @param examId
 	 * @return
-	 */
+	 *//*
 	public Object getExam(String accountId, String examId){
 
 		ApiResponse apiResponse = new ApiResponse();
@@ -250,11 +250,11 @@ public class GeneralService {
 		}
 
 	}
-	/**
+	*//**
 	 * 
 	 * @param accountId
 	 * @return
-	 */
+	 *//*
 	public List<ApiExam> getExams(String accountId){
 		List<ApiExam> apiExamList = new ArrayList<>();
 
@@ -273,11 +273,11 @@ public class GeneralService {
 		return apiExamList;
 	}
 
-	/**
+	*//**
 	 * 
 	 * @param apiExam
 	 * @return
-	 */
+	 *//*
 	public Object newExam(ApiExam apiExam) {
 
 		ApiResponse apiResponse = new ApiResponse();
@@ -324,11 +324,11 @@ public class GeneralService {
 		return apiResponse;
 	}
 
-	/**
+	*//**
 	 * 
 	 * @param apiExam
 	 * @return
-	 */
+	 *//*
 	public Object updateExam(ApiExam apiExam) {
 		ApiResponse apiResponse = new ApiResponse();
 
@@ -371,7 +371,7 @@ public class GeneralService {
 
 		}
 		return apiResponse;
-	}
+	}*/
 	
 	/**
 	 * 
