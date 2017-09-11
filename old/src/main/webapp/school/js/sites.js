@@ -1,27 +1,27 @@
 function showAntennae(state) {
+	
+	
+	setInterval(function() { accelApiCall(); }, 21000)
 
 	if (state == "refresh") {
 
 		$('#showAntennae').modal('show');
 
 		$('#newAntenna').modal('hide');
-		
+
 		$('#preload').show(1000);
 		$('#antennaList').hide(1000)
-		
-		/*setTimeout(function() {
 
-			$('#preload').hide(1000);
-			
-			$('#antennaList').show(1000)
-			
-		}, 3500);*/
-		
+		/*
+		 * setTimeout(function() {
+		 * 
+		 * $('#preload').hide(1000);
+		 * 
+		 * $('#antennaList').show(1000)
+		 *  }, 3500);
+		 */
+
 		accelApiCall();
-		
-		
-		
-		
 
 	} else if (state == "norefresh") {
 
@@ -41,10 +41,10 @@ var table;
 function accelApiCall() {
 
 	$('#preload').show(1000);
-	
+
 	$('#antennaSiteList').hide(1000);
 
-	//$('#loading').modal('show');
+	// $('#loading').modal('show');
 
 	// alert( location.protocol + "//"+window.location.host);
 
@@ -58,34 +58,29 @@ function accelApiCall() {
 				accept : 'application/json',
 			}).done(function(data) {
 
-		//alert(data.roll);
-				
-				for (var i=0; i<data.length; i++){
-				    for (var name in data[i]) {
-				    	
-				        console.log("Item name: "+name);
-				        
-				        console.log("Roll : "+data[i].yaw);
-				        console.log("Pitch: "+data[i].pitch);
-				        
-				        $('#roll').text(data[i].yaw);
-				        $('#pitch').text(data[i].pitch);
-				    }
-				}
+		// alert(data.roll);
 
-		//$('#loading').modal('hide');
-				
-			
+		for (var i = 0; i < data.length; i++) {
+			for ( var name in data[i]) {
 
-	
-		
-		
+				console.log("Item name: " + name);
+
+				console.log("Roll : " + data[i].yaw);
+				console.log("Pitch: " + data[i].pitch);
+
+				$('#roll').text(data[i].yaw);
+				$('#pitch').text(data[i].pitch);
+			}
+		}
+
+		// $('#loading').modal('hide');
+
 		setTimeout(function() {
 
 			$('#preload').hide(1000);
-			
+
 			$('#antennaSiteList').show(1000)
-			
+
 		}, 3500);
 
 	}).fail(function(jqXHR, textStatus) {
@@ -138,107 +133,119 @@ $(document).ready(function() {
 	 * setInterval(function() { accelApiCall(); }, 7000)
 	 */
 
-	
-
 }
 
 );
 
-$(document).ready(function() {
-	
-	$('#sites').DataTable({});
+$(document).ready(
+		function() {
 
-	//$('#antennaList').DataTable({});
-	
-	$('#example').DataTable({
-		searching: false,
-		'bSort': false,
-		destroy: true
-	});
+			$('#sites').DataTable({});
 
-	
+			$('#antennaSiteList tbody').on(
+					'click',
+					'tr',
+					function() {
 
-	// callback function that configures and initializes DataTables
-	function renderTable(xhrdata) {
-		var cols = [];
+						table = $('#antennaSiteList').DataTable({});
 
-		var exampleRecord = xhrdata[0];
+						var pos = table.row(this).index();
+						var row = table.row(pos).data();// row = It contains all
+														// the data in that row
 
-		var keys = Object.keys(exampleRecord);
+						console.log('Row data:' + row);
 
-		keys.forEach(function(k) {
-			
-			if(k!= 'uuid'){
-			cols.push({
-				title : k,
-				data : k
-			// optionally do some type detection here for render function
+						window.location = location.protocol + "//"
+								+ window.location.host
+								+ "/school/school/accel.jsp";
+
+					});
+
+			// $('#antennaList').DataTable({});
+
+			$('#example').DataTable({
+				searching : false,
+				'bSort' : false,
+				destroy : true
 			});
-			
+
+			// callback function that configures and initializes DataTables
+			function renderTable(xhrdata) {
+				var cols = [];
+
+				var exampleRecord = xhrdata[0];
+
+				var keys = Object.keys(exampleRecord);
+
+				keys.forEach(function(k) {
+
+					if (k != 'uuid') {
+						cols.push({
+							title : k,
+							data : k
+						// optionally do some type detection here for render
+						// function
+						});
+
+					}
+				});
+
+				var table = $('#example').DataTable({
+					searching : false,
+					destroy : true,
+					'bSort' : false,
+					columns : cols
+				});
+
+				table.rows.add(xhrdata).draw();
 			}
+
+			// xhr call to retrieve data
+			var xhrcall = $
+					.ajax('http://localhost:8080/school/webapi/admin/data');
+
+			// promise syntax to render after xhr completes
+			xhrcall.done(renderTable);
 		});
-
-		var table = $('#example').DataTable({
-			searching: false,
-			destroy: true,
-			'bSort': false,
-			columns : cols
-		});
-
-		table.rows.add(xhrdata).draw();
-	}
-
-	// xhr call to retrieve data
-	var xhrcall = $.ajax('http://localhost:8080/school/webapi/admin/data');
-
-	// promise syntax to render after xhr completes
-	xhrcall.done(renderTable);
-});
 
 var map;
 
 var adc = {
-		lat : -1.272819,
-		lng : 36.813288
-	};
+	lat : -1.272819,
+	lng : 36.813288
+};
 
 // google.maps.event.addDomListener(window, 'load', initialize);
 
 function initialize() {
 
-	
-	/*var mapCanvas = document.getElementById('map');
-	var mapOptions = {
-		center : new google.maps.LatLng(adc),
-		zoom : 8,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	}
+	/*
+	 * var mapCanvas = document.getElementById('map'); var mapOptions = { center :
+	 * new google.maps.LatLng(adc), zoom : 8, mapTypeId :
+	 * google.maps.MapTypeId.ROADMAP }
+	 * 
+	 * 
+	 * map = new google.maps.Map(mapCanvas, mapOptions);
+	 * 
+	 * var marker = new google.maps.Marker({ position : adc, map : map });
+	 */
 
-	
-	map = new google.maps.Map(mapCanvas, mapOptions);
-	
+	map = new google.maps.Map(document.getElementById('map'), {
+		zoom : 15,
+		center : adc,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	});
+
 	var marker = new google.maps.Marker({
 		position : adc,
 		map : map
-	});*/
-	
-	
-     map = new google.maps.Map(document.getElementById('map'), {
-       zoom: 15,
-       center: adc,
-       mapTypeId : google.maps.MapTypeId.ROADMAP
-     });
-     
-     var marker = new google.maps.Marker({
-	       position: adc,
-	       map: map
-	     });
-     
+	});
+
 }
 
 $('#showAntennae').on('shown.bs.modal', function() {
 	google.maps.event.trigger(map, "resize");
-	
+
 	map.setCenter(adc);
-	
+
 });

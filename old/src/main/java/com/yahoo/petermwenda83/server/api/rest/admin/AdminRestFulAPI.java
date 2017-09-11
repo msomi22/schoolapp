@@ -3,7 +3,10 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -99,7 +102,7 @@ public class AdminRestFulAPI {
 	
 	
 	
-	/*@GET
+	@GET
 	@Path("/data")  
 	public List<ApiAccData> getAccData() { 
 		return adminService.getAccData();
@@ -114,6 +117,6 @@ public class AdminRestFulAPI {
 		return data;
 	}
 	
-	*/
+	
 
 }

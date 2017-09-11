@@ -230,6 +230,8 @@ $("#kcpeyear").datepicker({
 	
 	 */
 	 
+	
+	 
 
 	
 
@@ -245,6 +247,10 @@ $("#kcpeyear").datepicker({
 
 <!-- exam js -->
 <script src="js/exam.js"></script>
+
+
+<!-- stream js -->
+<script src="js/stream.js"></script>
 
 
 <!-- excel import -->

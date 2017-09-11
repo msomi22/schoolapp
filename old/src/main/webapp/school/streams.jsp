@@ -51,7 +51,7 @@
 								<h3 class="pull-right">
 									Add a new Stream
 									<button class="btn btn-primary" style="border-radius: 90%"
-										id="add" onclick="examModal(this.id)">
+										id="add" onclick="streamModal(this.id)">
 										<i class="fa fa-plus-circle fa-2x"></i>
 									</button>
 
@@ -66,20 +66,30 @@
 
 						<div class="row">
 						<div class="col-md-4 col-md-offset-4">
-						<h2><select class="form-control formelement" onchange="fetchStreams()"></select></h2>
+						<h2><select class="form-control formelement" onchange="fetchStreams()">
+						
+						<option>Form 1</option>
+						
+						<option>Form 2</option>
+						
+						<option>Form 3</option>
+						
+						<option>Form 4</option>
+						
+						
+						</select></h2>
 						</div>
 						</div>
 
-						<div class="table-responsive">
+						<div class="col-md-6 col-md-offset-3 table-responsive">
 							<table class="table table-striped jambo_table bulk_action"
-								id="exams">
+								id="streams">
 								<thead>
 									<tr class="headings secondary-assent">
 
 										<th class="column-title">#</th>
-										<th class="column-title">Exam Code</th>
+										<th class="column-title hidden">Class ID</th>
 										<th class="column-title">Description</th>
-										<th class="column-title">Out of (Score)</th>
 										<th class="column-title">Modify</th>
 
 									</tr>
@@ -92,19 +102,17 @@
 									<tr class="tabledit" style='color: black;'>
 
 										<td width="5%">1</td>
-										<td class="center">P1</td>
-										<td class="center">Paper 1</td>
-										<td class="center">80</td>
-
+										<td class="center hidden">### ###</td>
+										<td class="center">Form 1N</td>
 										<td>
 
-											<button class="btn btn-warning editExam" id="edit"
-												onclick="examModal(this.id)">
+											<button class="btn btn-warning editStream" id="edit"
+												onclick="streamModal(this.id)">
 												Edit <span class="fa fa-edit"></span>
 											</button>
-											<button class="btn btn-danger" id="P1"
-												onclick="disableExam(this.id)">
-												Disable <span class="fa fa-chain-broken"></span>
+											<button class="btn btn-danger" id="Form 1N"
+												onclick="delStream(this.id)">
+												Delete <span class="fa fa-trash"></span>
 											</button>
 										</td>
 
@@ -155,8 +163,10 @@
 <jsp:include page="modals/statemodals.html" />
 
 
-<!-- exam Modal -->
-<jsp:include page="modals/examModals.html" />
+
+
+<!-- stream Modal -->
+<jsp:include page="modals/streamModals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
