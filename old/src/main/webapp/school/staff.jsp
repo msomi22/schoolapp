@@ -108,6 +108,8 @@
 										<th class="column-title">Email</th>
 										<th class="column-title">User name</th>
 										
+										<th class="column-title hidden">uuid</th>
+										
 										<th class="column-title">Modify</th>
 
 									</tr>
@@ -116,7 +118,11 @@
 								<tbody class='tablebody'>
 
 								 <%
-                  for(Staff staff : staffList){                   
+								 String name;
+                  for(Staff staff : staffList){  
+                	  
+                	  name= staff.getFirstname()+" "+staff.getLastname();
+                	  
                     %>
 
 									<tr class="tabledit" style='color: black;'>
@@ -130,12 +136,13 @@
 										<td class="center"><%=staff.getMobile() %></td>
 										<td class="center"><%=staff.getEmail() %></td>
 										<td class="center"><%=staff.getUsername() %></td>
+										<td class="center hidden"><%=staff.getUuid() %></td>
 										
 										
 										<td>
 										 
 										<button class="btn btn-warning editStaff" id="edit" onclick="StaffModal(this.id)"> Edit  <span class="fa fa-edit"></span></button>
-										<button class="btn btn-danger" id="Code Code" onclick="disableStaff(this.id)"> Disable  <span class="fa fa-chain-broken"></span></button>
+										<button class="btn btn-danger" id="Code" onclick="disableStaff('<%=name%>')"> Disable  <span class="fa fa-chain-broken"></span></button>
 										</td>
 
 									</tr>
@@ -143,12 +150,8 @@
 									
 							  <%      
                     staffCount++;
-                  }
-                  
-                  %>
-
-
-								</tbody>
+                  }%>	
+                  </tbody>
 
 
 							</table>

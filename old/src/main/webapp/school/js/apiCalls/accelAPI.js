@@ -3,6 +3,8 @@ var table;
 function accelApiCall() {
 	
 	$('#preload').hide(1000);
+	
+	//$('#accel').show(1000);
 
 	$('#loading').modal('show');
 	
@@ -35,7 +37,8 @@ function accelApiCall() {
 				data : k
 			// optionally do some type detection here for render function
 
-			});}
+			});
+			}
 
 		});
 		
@@ -100,6 +103,8 @@ function accelApiCall() {
  */
 
 $(document).ready(function() {
+	
+	//$('#accel').hide(1000);
 
 	setInterval(function() {
 		accelApiCall();
@@ -120,14 +125,18 @@ $(document).ready(function() {
 		var keys = Object.keys(exampleRecord);
 
 		keys.forEach(function(k) {
+			
+			if(k != "uuid"){
 			cols.push({
+				
 				title : k,
 				data : k
 			// optionally do some type detection here for render function
 			});
+			}
 		});
 
-		var table = $('#example').DataTable({
+		var table = $('#example2').DataTable({
 			columns : cols
 		});
 

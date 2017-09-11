@@ -350,7 +350,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 		List<AccData> list =new  ArrayList<>(); 
 		try(   
 				Connection conn = dbutils.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AccData ORDER BY addDate DESC;");   
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AccData ORDER BY addDate DESC LIMIT 1;");   
 				ResultSet rset = pstmt.executeQuery();
 				) {
 

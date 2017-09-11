@@ -348,7 +348,7 @@ public class StaffService {
 			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
 
 				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Staff details invalid!");  
+				apiResponse.setDescription("Staff details invalid!" + apiStaffFull.getAccountId() +"  "+apiStaffFull.getUuid());  
 
 			}else{
 

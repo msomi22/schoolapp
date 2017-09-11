@@ -19,7 +19,7 @@
 			 
 			 $('#staff_btn').text("Save Changes");
 			 
-			 $("#staff_btn").attr("onclick","updateStaffApiCall()");
+			 $("#staff_btn").attr("onclick","updateStaffApiCall('update')");
 			 
 
 			 
@@ -94,6 +94,11 @@
 					.val(
 							$(this).closest('tr')
 									.children()[8].textContent);
+					
+					$("#uuid")
+					.val(
+							$(this).closest('tr')
+									.children()[9].textContent);
 					
 					
 					

@@ -119,11 +119,22 @@ function StaffApiCall() {
   }
 
 
-function updateStaffApiCall(){
+function updateStaffApiCall(state){
 	
 	
 	
 	//alert ("Swapp worked");
+	
+	
+	if(state=='disable'){
+		
+		
+		
+		
+		
+	}else if(state == 'update'){
+	
+	
 	
 	$("#staffForm")
 	.submit(
@@ -240,4 +251,5 @@ function updateStaffApiCall(){
 						})
 
 			});
+}
 }

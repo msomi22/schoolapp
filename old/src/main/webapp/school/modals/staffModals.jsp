@@ -79,14 +79,14 @@
 
 							</div>
 
-							
+
 
 							<div class="col-md-8 col-md-offset-2">
-							
-							<br> <br>
 
-							<hr></hr>
-							
+								<br> <br>
+
+								<hr></hr>
+
 								<label for="username">User name</label> <input type="text"
 									id="username" class="form-control formelement" name="username"
 									placeholder="Username" pattern="[A-Za-z0-9]{3,20}"
@@ -108,9 +108,14 @@
 
 
 							<%
-						String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+								String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+							%>
+							
+							<input type="hidden" name="uuid" id="uuid"
+								value="n0t_set">
 
-%>
+							<input type="hidden" name="accountId" id="accountId"
+								value="<%=accountId%>">
 
 
 

@@ -83,7 +83,8 @@
 						<div class="table-responsive">
 							<table class="table table-striped jambo_table bulk_action"
 								id="accel">
-								<!-- <thead>
+								<thead>
+								
 									<tr class="headings secondary-assent">
 
 										<th class="column-title">#</th>
@@ -94,7 +95,7 @@
 
 
 									</tr>
-								</thead> -->
+								</thead> 
 
 								<tbody class='tablebody'>
 
@@ -172,11 +173,11 @@
 
 
 
-							<!--  <table id="example" class="display" width="100%">
+						 <!-- <table id="example2" class="display" width="100%">
 							 
 							 <thead>
 							 <tr class="headings secondary-assent">
-							  <th class="column-title hidden">uuid</th>
+							 
 							 <th class="column-title">addDate</th>
 										<th class="column-title">pitch</th>
 										<th class="column-title">roll</th>
@@ -185,7 +186,7 @@
 							 </tr>
 							 
 							 </thead>
-							 </table> -->
+							 </table>  -->
 
 						</div>
 
@@ -223,7 +224,7 @@
 <jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
-<jsp:include page="footer2.jsp" />
+<jsp:include page="footer3.jsp" />
 
 
 

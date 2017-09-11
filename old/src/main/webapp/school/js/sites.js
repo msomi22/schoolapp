@@ -9,13 +9,17 @@ function showAntennae(state) {
 		$('#preload').show(1000);
 		$('#antennaList').hide(1000)
 		
-		setTimeout(function() {
+		/*setTimeout(function() {
 
 			$('#preload').hide(1000);
 			
 			$('#antennaList').show(1000)
 			
-		}, 3500);
+		}, 3500);*/
+		
+		accelApiCall();
+		
+		
 		
 		
 
@@ -23,6 +27,7 @@ function showAntennae(state) {
 
 		$('#showAntennae').modal('show');
 		$('#newAntenna').modal('hide');
+		accelApiCall();
 
 	} else {
 		$('#newAntenna').modal('show');
@@ -35,9 +40,11 @@ function showAntennae(state) {
 var table;
 function accelApiCall() {
 
-	$('#preload').hide(1000);
+	$('#preload').show(1000);
+	
+	$('#antennaSiteList').hide(1000);
 
-	$('#loading').modal('show');
+	//$('#loading').modal('show');
 
 	// alert( location.protocol + "//"+window.location.host);
 
@@ -51,39 +58,35 @@ function accelApiCall() {
 				accept : 'application/json',
 			}).done(function(data) {
 
-		// alert(data);
+		//alert(data.roll);
+				
+				for (var i=0; i<data.length; i++){
+				    for (var name in data[i]) {
+				    	
+				        console.log("Item name: "+name);
+				        
+				        console.log("Roll : "+data[i].yaw);
+				        console.log("Pitch: "+data[i].pitch);
+				        
+				        $('#roll').text(data[i].yaw);
+				        $('#pitch').text(data[i].pitch);
+				    }
+				}
 
-		$('#loading').modal('hide');
+		//$('#loading').modal('hide');
+				
+			
 
-		var cols = [];
+	
+		
+		
+		setTimeout(function() {
 
-		var getCol = data[0];
-
-		var keys = Object.keys(getCol);
-
-		keys.forEach(function(k) {
-
-			if (k != "uuid") {
-				cols.push({
-					title : k,
-					data : k
-				// optionally do some type detection here for render function
-				});
-			}
-		});
-
-		if (table)
-			table.clear();
-
-		table = $('#accel').DataTable({
-
-			destroy : true,
-			columns : cols,
-			"order" : [ [ 0, "desc" ] ],
-			"iDisplayLength" : 100
-		});
-
-		table.rows.add(data).draw();
+			$('#preload').hide(1000);
+			
+			$('#antennaSiteList').show(1000)
+			
+		}, 3500);
 
 	}).fail(function(jqXHR, textStatus) {
 
@@ -135,15 +138,25 @@ $(document).ready(function() {
 	 * setInterval(function() { accelApiCall(); }, 7000)
 	 */
 
-	$('#sites').DataTable({});
-
-	$('#antennae').DataTable({});
+	
 
 }
 
 );
 
 $(document).ready(function() {
+	
+	$('#sites').DataTable({});
+
+	//$('#antennaList').DataTable({});
+	
+	$('#example').DataTable({
+		searching: false,
+		'bSort': false,
+		destroy: true
+	});
+
+	
 
 	// callback function that configures and initializes DataTables
 	function renderTable(xhrdata) {
@@ -154,14 +167,21 @@ $(document).ready(function() {
 		var keys = Object.keys(exampleRecord);
 
 		keys.forEach(function(k) {
+			
+			if(k!= 'uuid'){
 			cols.push({
 				title : k,
 				data : k
 			// optionally do some type detection here for render function
 			});
+			
+			}
 		});
 
 		var table = $('#example').DataTable({
+			searching: false,
+			destroy: true,
+			'bSort': false,
 			columns : cols
 		});
 
