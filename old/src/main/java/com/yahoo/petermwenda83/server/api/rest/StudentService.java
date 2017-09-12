@@ -4,6 +4,7 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -31,6 +33,7 @@ import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
 import com.yahoo.petermwenda83.server.api.rest.bean.*;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 
@@ -845,7 +848,7 @@ public class StudentService {
 		if(StringUtils.equals(action, "activate")) {
 
 			for(StudentStatus studentid : students) {
-			   
+
 				if(studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
 					Student student = studentDAO.getStudentById(accountId, studentid.getUuid()); 
 					student.setIsActive("1");  
@@ -861,11 +864,11 @@ public class StudentService {
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, try again later."); 
-				
+
 			}
 
 		}else if(StringUtils.equals(action, "inactivate")) {
-			
+
 			for(StudentStatus studentid : students) {
 
 				if(studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
@@ -875,7 +878,7 @@ public class StudentService {
 					update = studentDAO.updateStudent(student);
 				}
 			}
-			
+
 			if(update) {
 				response.setMessage("success");
 				response.setDescription("Student(s) inactivated successfully."); 
@@ -883,7 +886,7 @@ public class StudentService {
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, try again later."); 
-				
+
 			}
 
 
@@ -911,15 +914,15 @@ public class StudentService {
 		boolean update = false;
 
 		for(ChangeClass stream : changeClass) {
-			
+
 			if(studentDAO.getStudentById(accountId, stream.getStudentId()) != null) {
 				Student student = studentDAO.getStudentById(accountId, stream.getStudentId()); 
 				student.setCurrentStream(stream.getNewClassId()); 
 				update = studentDAO.updateStudent(student);
 			}
-		
+
 		}
-		
+
 		if(update) {
 			response.setMessage("success");
 			response.setDescription("Class changed successfully."); 
@@ -927,11 +930,93 @@ public class StudentService {
 		}else {
 			response.setMessage("error");
 			response.setDescription("Something went wrong, try again later."); 
-			
+
 		}
 
 		return response;
 	}
+
+	/** TODO
+	 * 
+	 * @param accountId
+	 * @param filter
+	 * @return
+	 */
+
+	public Object getStudentFilter(String accountId, StudentFilter filter) {
+		
+		System.out.println(filter); 
+
+		List<StudentInfo> studentInfoList = new ArrayList<>();
+
+		if(filter.getStart() >= 0 && filter.getSize() > 0){ 
+			studentDAO.getAllStudent(accountId, filter.getStart(), filter.getSize()).forEach(student -> {
+				StudentInfo studentInfo = new StudentInfo();
+
+				try {
+					BeanUtils.copyProperties(studentInfo, student); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+
+				studentInfoList.add(studentInfo);
+			});
+
+		}else if(!StringUtils.isBlank(filter.getQuery())) {
+			studentDAO.searchStudent(accountId, filter.getQuery()).forEach(student -> {
+				StudentInfo studentInfo = new StudentInfo();
+
+				try {
+					BeanUtils.copyProperties(studentInfo, student); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+
+				studentInfoList.add(studentInfo);
+			});
+		}else if(!StringUtils.isBlank(filter.getCurrentStream())){
+
+			studentDAO.getStudentByStream(accountId, filter.getCurrentStream()).forEach(student -> {
+				StudentInfo studentInfo = new StudentInfo();
+
+				try {
+					BeanUtils.copyProperties(studentInfo, student); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+
+				studentInfoList.add(studentInfo);
+			});
+		
+			
+		}else {
+			studentDAO.getAllStudent(accountId, 0, 15).forEach(student -> {
+				StudentInfo studentInfo = new StudentInfo();
+
+				try {
+					BeanUtils.copyProperties(studentInfo, student); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+
+				studentInfoList.add(studentInfo);
+			});
+			
+		}
+
+
+		return studentInfoList;
+	}
+
+
 
 
 

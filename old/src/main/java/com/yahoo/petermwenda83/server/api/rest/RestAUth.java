@@ -104,8 +104,8 @@ public class RestAUth {
 
 			if(parts.length == 2){
 
-				if(StringUtils.equals(parts[0], PropertiesConfig.getConfigValue("REST_USERNAME")) && 
-						StringUtils.equals(parts[1], PropertiesConfig.getConfigValue("REST_PASSWORD"))){
+				if(StringUtils.equals(parts[0], PropertiesConfig.getConfigValue("REST_ADMIN_USERNAME")) && 
+						StringUtils.equals(parts[1], PropertiesConfig.getConfigValue("REST_ADMIN_PASSWORD"))){
 					success= true;
 				}
 			}
