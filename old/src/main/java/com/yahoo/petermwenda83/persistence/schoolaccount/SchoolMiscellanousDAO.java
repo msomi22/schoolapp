@@ -23,6 +23,14 @@ public interface SchoolMiscellanousDAO {
 	
 	/**
 	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public Miscellanous getMiscById(String accountId,String uuid); 
+	
+	/**
+	 * 
 	 * @param misc
 	 * @return
 	 */

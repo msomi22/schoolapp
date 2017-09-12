@@ -3,18 +3,26 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
+import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
@@ -29,6 +37,8 @@ public class GeneralService {
 	private static AccountDAO accountDAO;
 	private static ExamDAO examDAO;
 	private static SysConfigDAO sysConfigDAO;
+	private static MiscellanousDAO miscellanousDAO;
+	private static GradingSystemDAO gradingSystemDAO;
 
 	static {
 		streamDAO = StreamDAO.getInstance();
@@ -36,6 +46,10 @@ public class GeneralService {
 
 		examDAO = ExamDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
+
+		miscellanousDAO = MiscellanousDAO.getInstance();
+
+		gradingSystemDAO = GradingSystemDAO.getInstance();
 	}
 	/**
 	 * 
@@ -72,8 +86,8 @@ public class GeneralService {
 		}
 
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -285,11 +299,11 @@ public class GeneralService {
 		}
 
 	}
-	*//**
-	 * 
-	 * @param accountId
-	 * @return
-	 *//*
+	  *//**
+	  * 
+	  * @param accountId
+	  * @return
+	  *//*
 	public List<ApiExam> getExams(String accountId){
 		List<ApiExam> apiExamList = new ArrayList<>();
 
@@ -308,11 +322,11 @@ public class GeneralService {
 		return apiExamList;
 	}
 
-	*//**
-	 * 
-	 * @param apiExam
-	 * @return
-	 *//*
+	   *//**
+	   * 
+	   * @param apiExam
+	   * @return
+	   *//*
 	public Object newExam(ApiExam apiExam) {
 
 		ApiResponse apiResponse = new ApiResponse();
@@ -359,11 +373,11 @@ public class GeneralService {
 		return apiResponse;
 	}
 
-	*//**
-	 * 
-	 * @param apiExam
-	 * @return
-	 *//*
+	    *//**
+	    * 
+	    * @param apiExam
+	    * @return
+	    *//*
 	public Object updateExam(ApiExam apiExam) {
 		ApiResponse apiResponse = new ApiResponse();
 
@@ -407,67 +421,245 @@ public class GeneralService {
 		}
 		return apiResponse;
 	}*/
-	
+
 	/**
 	 * 
 	 * @param apiSysConfig
 	 * @return
 	 */
-	 
+
 	public Object updateConfig(ApiSysConfig apiSysConfig) {
-		
+
 		ApiResponse apiResponse = new ApiResponse();
-		
+
 		if(StringUtils.isBlank(apiSysConfig.getCansendSMS())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid sms code!");
-			
+
 		}else if(StringUtils.isBlank(apiSysConfig.getExamId())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid exam id!");
-			 
+
 		}else if(examDAO.getExam(apiSysConfig.getAccountId(), apiSysConfig.getExamId()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid exam id!");
-			
+
 		}else if(StringUtils.isBlank(apiSysConfig.getTerm())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid term!");
-			
+
 		}else if(!validTerm(apiSysConfig.getTerm())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid term!");
-			
+
 		}else if(StringUtils.isBlank(apiSysConfig.getYear())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid year!");
-			
+
 		}else if(!validYear(apiSysConfig.getYear())) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid year!");
-			
+
 		}else {
 			SysConfig config = sysConfigDAO.getSysConfig(apiSysConfig.getAccountId());
 			config.setCansendSMS(apiSysConfig.getCansendSMS());
 			config.setExamId(apiSysConfig.getExamId());
 			config.setTerm(apiSysConfig.getTerm());
 			config.setYear(apiSysConfig.getYear());
-			
+
 			if(sysConfigDAO.updateSysConfig(config)) {
 				apiResponse.setMessage("success");
 				apiResponse.setDescription("Config updated successfully."); 
-				
+
 			}else {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Something went wrong, try again later!"); 
 			}
-			
+
 		}
-		
+
 		return apiResponse;
 	}
 
-	
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param misc
+	 * @return
+	 */
+	public Object updateMisc(String accountId, ApiMisc misc) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+		if(miscellanousDAO.getMiscById(accountId, misc.getUuid()) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Key not found!");
+			return apiResponse;
+
+		}else {
+
+			Miscellanous miscellanous = miscellanousDAO.getMiscById(accountId, misc.getUuid());
+			miscellanous.setValue(misc.getValue()); 
+
+			if(miscellanousDAO.putMiscellanous(miscellanous)) {
+				apiResponse.setMessage("success");
+				apiResponse.setDescription("Value updated sucessfully!");
+				return apiResponse;
+
+			}else {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Unexpected error occured!");
+				return apiResponse;
+			}
+
+		}
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param uuid
+	 * @return
+	 */
+	public Object getGradingScaleById(String accountId, String uuid) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+		if(gradingSystemDAO.getGradingSystem(accountId, uuid) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Id not found!");
+			return apiResponse;
+
+		}else {
+			
+			ApiGradingScale scale = new ApiGradingScale();
+			try {
+				BeanUtils.copyProperties(scale, gradingSystemDAO.getGradingSystem(accountId, uuid));
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return scale; 
+		}
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param categoryId
+	 * @return
+	 */
+	public Object getGradingScaleByCat(String accountId, String categoryId) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+		if(gradingSystemDAO.getGradingSystemList(accountId, categoryId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Id not found!");
+			return apiResponse;
+
+		}else {
+			
+            List<ApiGradingScale> apiGradingScaleList = new ArrayList<>();
+			gradingSystemDAO.getGradingSystemList(accountId, categoryId).forEach(scale ->{
+				ApiGradingScale apiGradingScale = new ApiGradingScale();
+				try {
+					BeanUtils.copyProperties(apiGradingScale, scale);
+					apiGradingScaleList.add(apiGradingScale); 
+					
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+			});
+			
+			
+			return apiGradingScaleList; 
+		}
+
+	}
+
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param scale
+	 * @return
+	 */
+	public Object addGradingScale(String accountId, ApiGradingScale scale) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+		GradingSystem gradingSystem = new GradingSystem();
+		gradingSystem.setAccountId(accountId);
+		gradingSystem.setCategoryId(scale.getCategoryId());
+		gradingSystem.setDescription(scale.getDescription());
+		gradingSystem.setLowerLimit(scale.getLowerLimit());
+		gradingSystem.setUpperLimit(scale.getUpperLimit());
+		gradingSystem.setPoints(scale.getPoints());
+
+		if(gradingSystemDAO.putGradingSystem(gradingSystem)) {
+			apiResponse.setMessage("success");
+			apiResponse.setDescription("Grading scale added sucessfully!");
+			return apiResponse;
+
+		}else {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Unexpected error occured!");
+			return apiResponse;
+		}
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param scale
+	 * @return
+	 */
+	public Object updateGradingScale(String accountId, ApiGradingScale scale) {
+
+		ApiResponse apiResponse = new ApiResponse();
+
+		if(gradingSystemDAO.getGradingSystem(accountId, scale.getUuid()) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("ScaleId not found!");
+			return apiResponse;
+
+		}else {
+
+
+			GradingSystem gradingSystem = gradingSystemDAO.getGradingSystem(accountId, scale.getUuid());
+			gradingSystem.setLowerLimit(scale.getLowerLimit());
+			gradingSystem.setUpperLimit(scale.getUpperLimit());
+			gradingSystem.setDescription(scale.getDescription());
+			gradingSystem.setPoints(scale.getPoints()); 
+
+			if(gradingSystemDAO.updateGradingSystem(gradingSystem)) {
+				apiResponse.setMessage("success");
+				apiResponse.setDescription("Grading scale updated sucessfully!");
+				return apiResponse;
+
+			}else {
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("Unexpected error occured!");
+				return apiResponse;
+			}
+
+		}
+
+	}
+
+
+
+
+
+
+
 
 	/**
 	 * 
@@ -492,14 +684,14 @@ public class GeneralService {
 	 */
 	private boolean validYear(String year) {
 		if(StringUtils.isNumeric(year)) {
-			
+
 			if(year.length() != 4) {
 				return false;
-				
+
 			}else {
 				return true;
 			}
-			
+
 		}else {
 			return false;
 		}
