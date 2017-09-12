@@ -21,8 +21,17 @@ def testGet():
 	return response
 
 
+def testGet2():
+	account = 'E3CDC578-37BA-4CDB-B150-DAB0409270CD'
+	cat = '55DD5463-6ECB-48A3-B6E7-03548A9E37FE'
+	url = 'http://localhost:8080/school/webapi/config/scale/cat/'+account+'/'+cat
+	headers = {'content-type': 'application/json'}
+	resp = requests.get(url, data={}, auth=('demo', '12345678'),headers=headers)
+	response = str(resp.content)
+	return response
 
 
 #print testPost()
-print testGet()
+#print testGet()
+print testGet2() 
 
