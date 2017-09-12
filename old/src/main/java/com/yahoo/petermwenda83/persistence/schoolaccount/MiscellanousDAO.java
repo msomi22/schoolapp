@@ -78,6 +78,37 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
      
 		return miscellanous.getValue(); 
 	}
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolMiscellanousDAO#getMiscById(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Miscellanous getMiscById(String accountId, String uuid) {
+		Miscellanous miscellanous = null;
+        ResultSet rset = null;
+     try(
+     		 Connection conn = dbutils.getConnection();
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Miscellanous WHERE accountId =? AND uuid = ?;");       
+     		
+     		){
+     	
+     	 pstmt.setString(1, accountId);
+     	 pstmt.setString(2, uuid); 
+	      rset = pstmt.executeQuery();
+	     while(rset.next()){
+	
+	    	 miscellanous  = beanProcessor.toBean(rset,Miscellanous.class);
+	   }
+     	
+     }catch(SQLException e){
+     	  logger.error("SQL Exception when getting for accountId "+accountId+" with uuid: " + uuid);
+          logger.error(ExceptionUtils.getStackTrace(e));
+          System.out.println(ExceptionUtils.getStackTrace(e));
+     }
+     
+		return miscellanous; 
+	}
+
 
 	
 
@@ -156,5 +187,6 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 		return list;
 	}
 
+	
 	
 }
