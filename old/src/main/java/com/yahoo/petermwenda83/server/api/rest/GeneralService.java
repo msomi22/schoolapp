@@ -10,13 +10,11 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.classroom.Stream;
-import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
@@ -50,6 +48,43 @@ public class GeneralService {
 
 			List<Object>  list = new ArrayList<>();
 			streamDAO.getStreamList(accountId).forEach(stream -> {
+				ApiStream apiStream = new ApiStream();
+				apiStream.setAccountId(stream.getAccountId());
+				apiStream.setClassRoomId(stream.getClassRoomId());
+				apiStream.setDescription(stream.getDescription());
+				apiStream.setUuid(stream.getUuid()); 
+
+				list.add(apiStream);
+			});
+
+			return list;
+
+		}else {
+
+			List<Object>  response = new ArrayList<>();
+			ApiResponse re = new ApiResponse();
+			re.setMessage("error");
+			re.setDescription("No stream to display.");
+
+			response.add(re);
+			return response;
+
+		}
+
+	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public List<Object> getStreamListPerClass(String accountId, String classId) {
+
+		if(streamDAO.getStreamList(accountId,classId) != null) {
+
+			List<Object>  list = new ArrayList<>();
+			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
 				ApiStream apiStream = new ApiStream();
 				apiStream.setAccountId(stream.getAccountId());
 				apiStream.setClassRoomId(stream.getClassRoomId());
