@@ -3,12 +3,14 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -54,7 +56,7 @@ public class AdminService {
 	private static MiscellanousDAO miscellanousDAO;
 	private static SubCategoryDAO subCategoryDAO;
 	private static SubjectDAO subjectDAO;
-	
+
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
 	private static SysConfigDAO sysConfigDAO;
@@ -70,7 +72,7 @@ public class AdminService {
 		miscellanousDAO = MiscellanousDAO.getInstance();
 		subCategoryDAO = SubCategoryDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
-		
+
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
@@ -278,7 +280,7 @@ public class AdminService {
 			acessLevelDAO.putPosition(acessLevel);
 			astr = " AcessLevel(s) added,";
 		}
-		
+
 		resposne +=astr; 
 		astr = "";
 
@@ -296,12 +298,12 @@ public class AdminService {
 			classDAO.putClassRoom(classRoom);
 			astr =" ClassRoom(s) added,";
 		}
-		
+
 		resposne += astr; 
 		astr = "";
-		
-		
-		
+
+
+
 		String[] streamIds = {"4DA86139-6A72-4089-8858-6A3A613FDFE6","59E5F556-4B04-43B2-8139-E2D39A7836C6",
 				"46398A47-93F2-4591-B36F-1C28B03CC2F3","D3733507-C113-4795-91ED-D3CD8039EA03",
 				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63"};
@@ -309,7 +311,7 @@ public class AdminService {
 				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD",
 				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9"};
 		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S"};
-	
+
 		for(int count=0;count<streamIds.length;count++) {
 			Stream stream = new Stream();
 			stream.setUuid(streamIds[count]);
@@ -319,11 +321,11 @@ public class AdminService {
 			streamDAO.putStream(stream);
 			astr =" Stream(s) added,";
 		}
-		
+
 		resposne += astr; 
 		astr = "";
-		
-		
+
+
 
 		String[] categoryIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
 				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
@@ -342,7 +344,7 @@ public class AdminService {
 			categoryDAO.putCategory(category);
 			astr =" Category(ies) added,"; 
 		}
-		
+
 		resposne += astr; 
 		astr = "";
 
@@ -373,7 +375,7 @@ public class AdminService {
 			gradingSystemDAO.putGradingSystem(gradingSystem);
 			astr =" Grading System added,";
 		}
-		
+
 		resposne += astr; 
 		astr = "";
 
@@ -391,7 +393,7 @@ public class AdminService {
 			miscellanousDAO.putMiscellanous(miscellanous);
 			astr =" Miscellanous key and values added,";
 		}
-		
+
 		resposne += astr; 
 		astr = "";
 
@@ -452,23 +454,23 @@ public class AdminService {
 			subjectDAO.putSubject(subject);
 			astr =" Subject(s) added."; 
 		}
-		
+
 		resposne += astr; 
 		astr = "";
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		String[] examIds = {"AE24F15B-5038-4A15-8607-1DB2A7A0B7DE","4531A31D-1F8A-40D7-BFE6-D3CB3D91951A",
 				"69A569CA-1D4F-458E-99DD-FB2BE705BF5C","D50E6399-B913-42F2-A5B6-F0D4BAAF9571",
 				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1"};
 		String[] examCodes = {"P1","P2","P3","C1","C2","ET"};
 		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term"};
 		int[] examOutof = {60,80,40,30,30,70}; 
-		
+
 		for(int count=0;count<examIds.length;count++) {
 			Exam exam = new Exam();
 			exam.setUuid(examIds[count]);
@@ -481,8 +483,8 @@ public class AdminService {
 		}
 		resposne += astr; 
 		astr = "";
-		
-		
+
+
 		SysConfig systemConfig = new SysConfig();
 		systemConfig.setAccountId(accountId);
 		systemConfig.setCansendSMS("0");
@@ -491,10 +493,10 @@ public class AdminService {
 		systemConfig.setYear(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));  
 		sysConfigDAO.putSysConfig(systemConfig);
 		astr =" systemConfig added."; 
-		
+
 		resposne += astr; 
 		astr = "";
-		
+
 		apiResponse.setDescription(resposne);
 
 
@@ -511,7 +513,7 @@ public class AdminService {
 		ApiResponse apiResponse = new ApiResponse(); 
 
 
-		 if(!isActiveValid(apiAccount.getIsActive())) {  
+		if(!isActiveValid(apiAccount.getIsActive())) {  
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Isactive can either be 1 or 0");
 			return apiResponse;
@@ -628,6 +630,70 @@ public class AdminService {
 		return apiResponse;
 
 	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public Object getAccount(String accountId) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+
+		if(accountDAO.getAccountById(accountId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account not found!");
+			return apiResponse;
+
+		}else {
+			ApiAccount apiAccount = new ApiAccount();
+
+			try {
+				BeanUtils.copyProperties(apiAccount, accountDAO.getAccountById(accountId));
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+			return apiAccount;
+		}
+
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Object getAccountList() {
+
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(accountDAO.getAccounts() == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("No account found!");
+			return apiResponse;
+			
+		}else {
+			List<ApiAccount> ListapiAccount = new ArrayList<>();
+			accountDAO.getAccounts().forEach(account -> {
+				ApiAccount apiAccount = new ApiAccount();
+				
+				try {
+					BeanUtils.copyProperties(apiAccount, account); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				ListapiAccount.add(apiAccount);
+			});
+			
+			return ListapiAccount; 
+			
+		}
+	}
+
 
 	/**
 	 * 
@@ -759,7 +825,7 @@ public class AdminService {
 	private boolean hasDuplicate(String value) { 
 		List<Account> accountList = new ArrayList<>();
 		//if not account with such a key, return true and proceed
-		
+
 		if(accountDAO.findAccountDuplicate(value) == null) { 
 			return false;
 		}else {
@@ -768,22 +834,21 @@ public class AdminService {
 			//if only one account has such a key, return true and proceed
 			if(accountList.size() == 1) {
 				return false;
-				
-			//if you reach here, there are more than one accounts sharing the provided key, return false.
+
+				//if you reach here, there are more than one accounts sharing the provided key, return false.
 			}else if(accountList.size() > 1) {
-				
+
 				return true;
-				
+
 			}else if(accountList.size() == 0) {
 				return false;
-				
+
 			}else {
 				return false;
-				
+
 			}
 		}
 	}
-
 
 
 }

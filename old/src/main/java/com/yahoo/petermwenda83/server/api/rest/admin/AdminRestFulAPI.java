@@ -4,10 +4,12 @@
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.RestAUth;
@@ -31,6 +33,53 @@ import io.swagger.annotations.ApiResponses;
 public class AdminRestFulAPI {
 	
 	AdminService adminService = new AdminService();
+	
+	
+	@ApiOperation(value = "Get Account details .", 
+			notes = "Returns Account object given the Id.", 
+			response = ApiAccount.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	
+	@GET
+	@Path("/{accountId}") 
+	public Object getStaff(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return adminService.getAccount(accountId); 
+		}
+	
+	}
+	
+	@ApiOperation(value = "Get Account List details .", 
+			notes = "Returns Account List.", 
+			response = ApiAccount.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	
+	@GET
+	@Path("/all") 
+	public Object getStaffList(@HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isAdminAuthenticated(auth)){ 
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return adminService.getAccountList(); 
+		}
+		
+	}
+	
 	
 	
 	

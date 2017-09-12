@@ -4,6 +4,7 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -37,6 +38,56 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 public class StaffRestFulAPI {
 
 	StaffService staffService = new StaffService();
+	
+	@ApiOperation(value = "Get staff details .", 
+			notes = "Returns staff object given the Id.", 
+			response = APIStaff.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account/staff Id not found.") 
+	} )
+	
+	@GET
+	@Path("/{accountId}/{staffId}") 
+	public Object getStaff(@PathParam("accountId") String accountId,@PathParam("staffId") String staffId, 
+			@HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return staffService.getStaff(accountId,staffId);
+		}
+	
+	}
+	
+	@ApiOperation(value = "Get staff List details .", 
+			notes = "Returns staff List.", 
+			response = APIStaff.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	
+	@GET
+	@Path("/{accountId}")
+	public Object getStaffList(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return staffService.getStaffList(accountId);
+		}
+		
+	}
+	
+	
+	
+	
 
 	@ApiOperation(value = "Register a new staff.", 
 			notes = "Returns whether staff was Registred successfully or not.", 
