@@ -563,16 +563,23 @@ public class GeneralService {
 
 		}else {
 			
-			ApiGradingScale scale = new ApiGradingScale();
+            List<ApiGradingScale> apiGradingScaleList = new ArrayList<>();
+			gradingSystemDAO.getGradingSystemList(accountId, categoryId).forEach(scale ->{
+				ApiGradingScale apiGradingScale = new ApiGradingScale();
+				try {
+					BeanUtils.copyProperties(apiGradingScale, scale);
+					apiGradingScaleList.add(apiGradingScale); 
+					
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+			});
 			
-			try {
-				BeanUtils.copyProperties(scale, gradingSystemDAO.getGradingSystemList(accountId, categoryId)); 
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			return scale; 
+			
+			return apiGradingScaleList; 
 		}
 
 	}

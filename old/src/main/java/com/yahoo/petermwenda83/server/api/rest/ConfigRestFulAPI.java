@@ -51,7 +51,7 @@ public class ConfigRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 	@PUT
-	@Path("{accountId}")   
+	@Path("/{accountId}")   
 	public Object updateConfig(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
 			ApiSysConfig apiSysConfig) {
 
@@ -74,9 +74,8 @@ public class ConfigRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-
-	@Path("misc/{accountId}")    
 	@PUT
+	@Path("/misc/{accountId}")    
 	public Object updateMusc(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiMisc misc) {
 
 		ApiResponse response = new ApiResponse();
@@ -104,8 +103,8 @@ public class ConfigRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId/id not found.") 
 	} )
 	@GET
-	@Path("scale/{accountId}/{id}")  
-	public Object getGradingScaleById(@PathParam("accountId") String accountId, @PathParam("id") String id, 
+	@Path("/scale/{accountId}/{uuid}")  
+	public Object getGradingScaleById(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid, 
 			@HeaderParam("authorization") String auth) {
 
 		ApiResponse response = new ApiResponse();
@@ -116,7 +115,7 @@ public class ConfigRestFulAPI {
 			return response; 
 		}
 
-		return generalService.getGradingScaleById(accountId, id); 
+		return generalService.getGradingScaleById(accountId, uuid); 
 	}
 
 	/**
@@ -133,7 +132,7 @@ public class ConfigRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId/categoryId not found.") 
 	} )
 	@GET
-	@Path("scale/{accountId}/{categoryId}")  
+	@Path("/scale/cat/{accountId}/{categoryId}")  
 	public Object getGradingScale(@PathParam("accountId") String accountId,@PathParam("categoryId") String categoryId,
 			@HeaderParam("authorization") String auth) {
 
@@ -163,7 +162,7 @@ public class ConfigRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 
-	@Path("scale/{accountId}") 
+	@Path("/scale/{accountId}") 
 	@POST
 	public Object addGradingScale(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
 			ApiGradingScale scale) {
@@ -192,7 +191,7 @@ public class ConfigRestFulAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	@Path("scale/{accountId}") 
+	@Path("/scale/{accountId}") 
 	@PUT
 	public Object updateGradingScale(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
 			ApiGradingScale scale) {
