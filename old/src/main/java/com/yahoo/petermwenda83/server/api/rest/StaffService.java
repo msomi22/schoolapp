@@ -748,8 +748,8 @@ public class StaffService {
 					String message = "Hello " + firstname + ", your new password is, " + newpassword;
 					
 					//String account,String mobile,String message,String apiUsername,String apiKey
-					System.out.println(api.getApiKey() + " -- " + api.getApisecret()); 
-					SmsObject smsObject = new SmsObject(accountId,staff.getMobile(),message,api.getApiKey(),api.getApisecret());
+					//System.out.println(api.getApiKey() + " -- " + api.getApisecret()); 
+					SmsObject smsObject = new SmsObject(accountId,staff.getMobile(),message,api.getApisecret(),api.getApiKey());
 					description = SmsUtil.sendSMS(smsObject); 
 					msg = "success";
 					
