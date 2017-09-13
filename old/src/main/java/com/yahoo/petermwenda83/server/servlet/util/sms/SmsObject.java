@@ -22,7 +22,9 @@ public class SmsObject {
 		apiUsername = "";
 		apiKey = "";
 	}
-	
+	/**
+	 * @param args
+	 */
 	public SmsObject(String ... args) {
 		
 		if(args.length == 5) {

@@ -63,7 +63,7 @@ public class SmsUtil {
 	       }
 	       catch (Exception e) {
 	    	   description = "Encountered an error while sending " + e.getMessage();
-	           System.out.println("Encountered an error while sending " + e.getMessage());
+	           System.out.println("Encountered an error while sending " + e.getMessage() + " *");
 	        }
 			
 		}
