@@ -209,16 +209,23 @@ public class ConfigRestFulAPI {
 	}
 
 
+	@ApiOperation(value = "Get SMS Account balance.", 
+			notes = "Returns SMS Account Balance.", 
+			response = ApiResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	
 	@Path("/smsbal/{accountId}") 
 	@GET
-	public String getSMSBalance(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+	public Object getSMSBalance(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
 		
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response.toString();  
+			return response;  
 		}
 		return AccountBalance.getBalance(accountId);
 	}

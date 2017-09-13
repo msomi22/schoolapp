@@ -13,6 +13,7 @@ import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.server.api.ApiConstants;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 public class AccountBalance {
 	
 	private static AccountDAO accountDAO;
@@ -27,15 +28,20 @@ public class AccountBalance {
 	 * 
 	 */
 	
-	public static String getBalance(String accountId) {
+	public static Object getBalance(String accountId) {
 		
-		String balance = "";
+		
+		ApiResponse apiResponse = new ApiResponse("error"); 
 		
 		if(accountDAO.getAccountById(accountId) == null) {
-			return "Account not found!"; 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account not found!");
+			return apiResponse;
 			
 		}else if(apiCredentialDAO.getApiCredential(accountId, ApiConstants.SMS) == null) {
-			return "API Credentials not found!"; 
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("API Credentials not found!");
+			return apiResponse;
 			
 		}else {
 			
@@ -48,8 +54,13 @@ public class AccountBalance {
 			AfricasTalkingGateway gateway = new AfricasTalkingGateway(username, apiKey);
 			
 			try {
+				  String balance = "";
+				
 			       JSONObject result = gateway.getUserData();
 			       balance = result.getString("balance");
+			       apiResponse.setMessage("sucess"); 
+				   apiResponse.setDescription(balance);
+				   return apiResponse;
 			   }
 			   
 			   catch(Exception e){
@@ -59,7 +70,7 @@ public class AccountBalance {
 			
 		}
 		
-		return balance;
+		return apiResponse;
 	}
 	
 }
