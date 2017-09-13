@@ -65,20 +65,20 @@ public class PerStudentSMSResult {
 	public static boolean valideRequest(String accountId, String regNo, String subjectsNo, String examType) {
 		
 		if(studentDAO.getStudentByregNo(accountId, regNo) == null) {
-			System.out.println("1");
+			//System.out.println("1");
 			return false;
 		}else if(!StringUtils.isNumeric(subjectsNo)) { 
-			System.out.println("2");
+			//System.out.println("2");
 			return false;
 		}else if(!validSubNo(subjectsNo)) { 
-			System.out.println("3");
+			//System.out.println("3");
 			return false;
 		}else if(!validExamType(examType)) { 
-			System.out.println("4");
+			//System.out.println("4");
 			return false;
 		}
 		else {
-			System.out.println("5");
+			//System.out.println("5");
 			return true;
 		}
 	}
@@ -144,7 +144,7 @@ public class PerStudentSMSResult {
 		
 		String[] examIds = null;// = new String[3]; 
 		
-		System.out.println("******" + exams.size()); 
+		//System.out.println("******" + exams.size()); 
 		//System.out.println(" *---* " + examIds.length); 
 		
 		ApiResponse response = new ApiResponse();
@@ -210,18 +210,7 @@ public class PerStudentSMSResult {
 	 * @return
 	 */
 	private static boolean validExamType(String examType) {
-		/*
-		if(StringUtils.isBlank(examType)) {
-			return true;
-		}else {
-			
-			if(StringUtils.equals(examType, ReportUtil.EXAM_TYPE)) {
-				return true;
-			}else {
-				return true;
-			}
-			
-		}*/
+		
 		return true;
 	}
 

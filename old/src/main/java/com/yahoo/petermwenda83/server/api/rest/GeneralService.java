@@ -798,7 +798,10 @@ public class GeneralService {
 				
 				Student student = studentDAO.getStudentById(accountId, performance.getStudentId());
 				
-				studentScore += student.getFirstname() + " " + student.getMiddlename() + " , ";
+				String name = student.getFirstname() + " " + student.getMiddlename() + " , ";
+				
+				
+				studentScore += name;
 				
 				int totalMean = performance.getTotalMean();
 				
@@ -806,7 +809,7 @@ public class GeneralService {
 					
 					mean = (double)totalMean / 7;
 					
-					studentScore = "Total: " + totalMean + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+					studentScore += "Total: " + totalMean + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
 									accountId, gradingSystemDAO) ;
 					
@@ -814,7 +817,7 @@ public class GeneralService {
 				}else {
 					mean = (double)totalMean / 11; 
 				
-					studentScore = "Total: " + totalMean + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+					studentScore += "Total: " + totalMean + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
 									accountId, gradingSystemDAO);
 					
@@ -868,6 +871,10 @@ public class GeneralService {
 			}
 			
 			apiResponse.setMessage("sucess");
+			
+			if(StringUtils.isBlank(subMessage)) {
+				subMessage = "Result not found!";
+			}
 			apiResponse.setDescription(subMessage);
 			
 			
