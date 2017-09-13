@@ -219,11 +219,11 @@ public class StreamDAO extends GenericDAO implements SchoolStreamDAO {
 	 */
 	@Override
 	public List<Stream> getStreamList(String accountId, String classRoomId) {
-		List<Stream> list = new ArrayList<>();
+		List<Stream> list = null;
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE accountId = ? AND classRoomId =?;");    		   
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE accountId = ? AND classroomid =?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);  
          	   pstmt.setString(2, classRoomId);  

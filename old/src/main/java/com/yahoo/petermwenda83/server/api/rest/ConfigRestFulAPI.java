@@ -208,6 +208,12 @@ public class ConfigRestFulAPI {
 		return generalService.updateGradingScale(accountId,scale);
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
 
 	@ApiOperation(value = "Get SMS Account balance.", 
 			notes = "Returns SMS Account Balance.", 

@@ -20,8 +20,6 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -121,20 +119,19 @@ public class GeneralRestFulAPI {
 	} )
 
 	@GET
-	@Path("/stream/{accountId}/{classId}")   
-	public List<Object> getStreamPerClass(@PathParam("accountId") String accountId,@PathParam("classId") String classId, 
+	@Path("/streams/{accountId}/{classId}")   
+	public Object getStreamPerClass(@PathParam("accountId") String accountId,@PathParam("classId") String classId, 
 			@HeaderParam("authorization") String auth) {
-
-		List<Object>  response = new ArrayList<>();
+		
+		//System.out.println(accountId + " -- " + classId); 
 
 		ApiResponse re = new ApiResponse();
 		re.setMessage("error");
 		re.setDescription("User not authenticated");
 
-		response.add(re);
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response; 
+			return re; 
 		}
 
 		return generalService.getStreamListPerClass(accountId,classId); 
