@@ -76,19 +76,20 @@ CREATE TABLE  outGoingSMS (
 ALTER TABLE outGoingSMS OWNER TO school;
 
 -- -------------------
--- Table smsApi
+-- Table ApiCredential 
 -- -------------------
 
-CREATE TABLE  smsApi (
+CREATE TABLE  ApiCredential (
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
+    apiType text,
     apiKey text,
     apiPassword text
  
 );
-\COPY smsApi(uuid,accountId,apiKey,apiPassword) FROM '/tmp/smsApi.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE smsApi OWNER TO school;
+\COPY ApiCredential(uuid,accountId,apiType,apiKey,apiPassword) FROM '/tmp/ApiCredential.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE ApiCredential OWNER TO school;
 
 
 -- =========================
