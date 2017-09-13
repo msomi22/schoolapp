@@ -17,6 +17,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.servlet.util.sms.AccountBalance;
 
 import io.swagger.annotations.Api;
@@ -217,7 +218,7 @@ public class ConfigRestFulAPI {
 
 	@ApiOperation(value = "Get SMS Account balance.", 
 			notes = "Returns SMS Account Balance.", 
-			response = ApiResponse.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
