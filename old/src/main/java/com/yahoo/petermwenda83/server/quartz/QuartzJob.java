@@ -16,22 +16,22 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
-import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 
 
 public class QuartzJob implements Job{
 
 	private static SmsSendDAO smsSendDAO;
-	private static SmsApiDAO smsApiDAO;
+	private static ApiCredentialDAO smsApiDAO;
 	
 	public QuartzJob() {
 		super();
 		smsSendDAO = SmsSendDAO.getInstance();
-		smsApiDAO = SmsApiDAO.getInstance();
+		smsApiDAO = ApiCredentialDAO.getInstance();
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class QuartzJob implements Job{
 						//send message
 						AfricasTalking africasTalking = new AfricasTalking();
 						// Specify your login credentials
-						if(smsApiDAO.getSmsApi(accountId) !=null){
-							SmsApi smsApi = smsApiDAO.getSmsApi(accountId);  
+						if(smsApiDAO.getApiCredential(accountId) !=null){
+							ApiCredential smsApi = smsApiDAO.getApiCredential(accountId);  
 							String username = smsApi.getApiPassword();
 							String apiKey   = smsApi.getApiKey();
 							africasTalking.setMessage(message); 

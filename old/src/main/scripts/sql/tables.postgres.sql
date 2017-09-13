@@ -75,6 +75,23 @@ CREATE TABLE  outGoingSMS (
 \COPY outGoingSMS(uuid,accountId,status,mobile,message,smsCost) FROM '/tmp/outGoingSMS.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE outGoingSMS OWNER TO school;
 
+
+
+-- -------------------
+-- Table incomingSMS
+-- -------------------
+
+CREATE TABLE  incomingSMS (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    mobile text,
+    message text,
+    receiveDate timestamp with time zone DEFAULT now()
+);
+--\COPY incomingSMS(uuid,accountId,mobile,message) FROM '/tmp/incomingSMS.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE incomingSMS OWNER TO school;
+
 -- -------------------
 -- Table ApiCredential 
 -- -------------------

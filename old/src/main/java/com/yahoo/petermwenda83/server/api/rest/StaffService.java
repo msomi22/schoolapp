@@ -14,19 +14,24 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.AapiConstants;
 import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
+import com.yahoo.petermwenda83.server.servlet.util.sms.SmsObject;
+import com.yahoo.petermwenda83.server.servlet.util.sms.SmsUtil;
 
 /**
  * @author peter
@@ -41,6 +46,7 @@ public class StaffService {
 	
 	private static AccountDAO accountDAO;
 
+	private static ApiCredentialDAO smsApiDAO;
 
 	private static EmailValidator emailValidator;
 
@@ -51,6 +57,8 @@ public class StaffService {
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		
 		accountDAO = AccountDAO.getInstance();
+		
+		smsApiDAO = ApiCredentialDAO.getInstance();
 
 		emailValidator = EmailValidator.getInstance();
 	}
@@ -724,6 +732,25 @@ public class StaffService {
 			staff.setPassword(password);
 			
 			if(staffDAO.putStaff(staff)) {
+				
+				//send new password via SMS
+				if(smsApiDAO.getApiCredential(accountDAO.getAccount(account, "1").getUuid(), AapiConstants.SMS) != null) {
+					
+					//send SMS
+					String accountId = accountDAO.getAccount(account, "1").getUuid();
+					
+					ApiCredential api = smsApiDAO.getApiCredential(accountId, AapiConstants.SMS);
+					//prepare SMS
+					String firstname = StringUtils.capitalize(staff.getFirstname().substring(0, Math.min(staff.getFirstname().length(), 7)).toLowerCase()); 
+					String message = "Hello " + firstname + ", your new password is, " + newpassword;
+					
+					//String account,String mobile,String message,String apiUsername,String apiKey
+					SmsObject smsObject = new SmsObject(accountId,staff.getMobile(),message,api.getApiKey(),api.getApiPassword());
+					SmsUtil.sendSMS(smsObject); 
+					
+				}
+				
+				
 				//password reset success
 				apiResponse.setMessage("success"); 
 				apiResponse.setDescription("Password reset success!");
