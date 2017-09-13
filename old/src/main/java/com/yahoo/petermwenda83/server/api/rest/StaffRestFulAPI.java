@@ -15,15 +15,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
-
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 
 /**
  * 
@@ -178,6 +178,20 @@ public class StaffRestFulAPI {
 		return staffService.staffStatus(action, accountId, staffId);
 	}
 
+	@GET
+	@Path("/reset/password/{account}/{query}/")      
+	public Object recoverPassword(@PathParam("account") String account, 
+			@PathParam("query") String query, @HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isAdminAuthenticated(auth)){
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}
+		
+		return staffService.recoverPassword(account, query);
+		
+	}
 
 
 

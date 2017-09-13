@@ -155,7 +155,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByKes(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Staff getStaffByKes(String accountId, String key) {
+	public Staff getStaffByKeys(String accountId, String key) {
 		Staff staff = null;
 		ResultSet rset = null;
 		try(
@@ -278,7 +278,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 			pstmt.setString(8, staff.getMobile());
 			pstmt.setString(9, staff.getEmail());
 			pstmt.setString(10, staff.getUsername());
-			pstmt.setString(11, SecurityUtil.getMD5Hash(staff.getPassword()));  
+			pstmt.setString(11, staff.getPassword()); //SecurityUtil.getMD5Hash() 
 			pstmt.setString(12, staff.getLastupdated());
 			pstmt.setString(13, staff.getUuid());
 			pstmt.setString(14, staff.getAccountId());

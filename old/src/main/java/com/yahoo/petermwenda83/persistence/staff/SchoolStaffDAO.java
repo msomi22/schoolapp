@@ -40,7 +40,7 @@ public interface SchoolStaffDAO {
 	 * @param key
 	 * @return
 	 */
-	public Staff getStaffByKes(String accountId, String key);
+	public Staff getStaffByKeys(String accountId, String key);
 	/**
 	 * 
 	 * @param accountId

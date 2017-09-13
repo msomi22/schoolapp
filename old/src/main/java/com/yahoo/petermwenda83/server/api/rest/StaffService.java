@@ -10,12 +10,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.staff.TeacherSubject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
@@ -24,6 +26,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
+import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 
 /**
  * @author peter
@@ -35,6 +38,8 @@ public class StaffService {
 	private static StreamDAO streamDAO;
 	private static SubjectDAO subjectDAO;
 	private static TeacherSubjectDAO teacherSubjectDAO;
+	
+	private static AccountDAO accountDAO;
 
 
 	private static EmailValidator emailValidator;
@@ -44,6 +49,8 @@ public class StaffService {
 		streamDAO = StreamDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
+		
+		accountDAO = AccountDAO.getInstance();
 
 		emailValidator = EmailValidator.getInstance();
 	}
@@ -123,7 +130,7 @@ public class StaffService {
 			apiResponse.setDescription("Staff Number Can't be Empty!"); 
 			return apiResponse;
 
-		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getStaffNo()) != null) { 
+		}else if (staffDAO.getStaffByKeys(staff.getAccountId(), staff.getStaffNo()) != null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff Number already exist!"); 
 			return apiResponse;
@@ -152,7 +159,7 @@ public class StaffService {
 			apiResponse.setDescription("Phone Number Not Valid!"); 
 			return apiResponse;
 
-		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getMobile()) != null) { 
+		}else if (staffDAO.getStaffByKeys(staff.getAccountId(), staff.getMobile()) != null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff Phone Number already exist!"); 
 			return apiResponse;
@@ -163,7 +170,7 @@ public class StaffService {
 			apiResponse.setDescription("Email Address Not Valid!"); 
 			return apiResponse;
 
-		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getEmail()) != null) { 
+		}else if (staffDAO.getStaffByKeys(staff.getAccountId(), staff.getEmail()) != null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff Email Address already exist!"); 
 			return apiResponse;
@@ -174,7 +181,7 @@ public class StaffService {
 			apiResponse.setDescription("Username Can't be Empty!"); 
 			return apiResponse;
 
-		}else if (staffDAO.getStaffByKes(staff.getAccountId(), staff.getUsername()) != null) { 
+		}else if (staffDAO.getStaffByKeys(staff.getAccountId(), staff.getUsername()) != null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Staff Username already exist!"); 
 			return apiResponse;
@@ -684,6 +691,57 @@ public class StaffService {
 		}
 		
 	}
+	
+	
+	/**
+	 * 
+	 * @param account
+	 * @param query
+	 * @return
+	 */
+	public Object recoverPassword(String account,String query) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(accountDAO.getAccount(account, "1") == null) {
+			//account not found
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account not found!");
+			return apiResponse;
+			
+		}else if(staffDAO.getStaffByKeys(accountDAO.getAccount(account, "1").getUuid(), query) == null) {
+			//staff not found
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Staff not found!");
+			return apiResponse;
+			
+		}else {
+			
+			Staff staff = staffDAO.getStaffByKeys(accountDAO.getAccount(account, "1").getUuid(), query);
+	        String newpassword = RandomStringUtils.randomAlphabetic(5);
+			String password = SecurityUtil.getMD5Hash(newpassword);   
+			
+			staff.setPassword(password);
+			
+			if(staffDAO.putStaff(staff)) {
+				//password reset success
+				apiResponse.setMessage("success"); 
+				apiResponse.setDescription("Password reset success!");
+				return apiResponse;
+				
+			}else {
+				//an error occurred while resetting your password, please contact Admin 
+				apiResponse.setMessage("error");
+				apiResponse.setDescription("An error occurred while resetting your password, please contact Admin!");
+				return apiResponse;
+				
+			}
+			
+		}
+	}
+	
+	
+	
 
 
 
