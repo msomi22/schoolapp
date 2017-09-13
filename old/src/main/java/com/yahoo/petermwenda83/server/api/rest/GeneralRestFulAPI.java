@@ -390,7 +390,7 @@ public class GeneralRestFulAPI {
 	
 	@ApiOperation(value = "Get stream list.", 
 			notes = "Stream details.", 
-			response = Response.class)
+			response = SmsExams.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
