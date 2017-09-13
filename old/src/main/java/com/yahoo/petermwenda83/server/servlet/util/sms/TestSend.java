@@ -1,17 +1,17 @@
 /**
  * 
- */
+ *//*
 package com.yahoo.petermwenda83.server.servlet.util.sms;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestSend {
 
-	/**
+	*//**
 	 * 
-	 */
+	 *//*
 	public TestSend() {
 		// TODO Auto-generated constructor stub
 		//Basic Y29tUGxleDpyZVN0KkAhQXBp
@@ -34,3 +34,4 @@ public class TestSend {
 	}
 
 }
+*/
