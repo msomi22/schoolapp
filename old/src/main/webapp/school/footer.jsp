@@ -199,6 +199,8 @@ $("#kcpeyear").datepicker({
 
 <script src="js/apiCalls/staffApi.js"></script>
 
+<script src="js/apiCalls/streamApi.js"></script>
+
 
 
 

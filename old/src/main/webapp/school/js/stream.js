@@ -6,7 +6,7 @@
 	 
 	 function streamModal(id){
 		 
-		 if(id =="edit"){
+		 if(id =="edit_stream"){
 			 
 			// alert(id);
 			 $('#streamTiltle').text("Edit Stream Details");
@@ -45,15 +45,9 @@
 	 $(".editStream")
 		.click(
 				function() {
+					console.log('clicked');
 					
-					$("#desc")
-							.val(
-									$(this).closest('tr')
-											.children()[2].textContent);
-					$("#classId")
-							.val(
-									$(this).closest('tr')
-											.children()[1].textContent);
+					
 
 					
 

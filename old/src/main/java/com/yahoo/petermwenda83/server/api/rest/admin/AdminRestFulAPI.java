@@ -4,6 +4,8 @@
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
 
+import java.util.List;
+
 import javax.ws.rs.BeanParam;
 
 import javax.ws.rs.Consumes;
@@ -152,7 +154,7 @@ public class AdminRestFulAPI {
 	
 	
 	
-	/*@GET
+	@GET
 	@Path("/data")  
 	public List<ApiAccData> getAccData() { 
 		return adminService.getAccData();
@@ -165,7 +167,7 @@ public class AdminRestFulAPI {
 		System.out.println(data); 
 		adminService.putData(data);
 		return data;
-	}*/
+	}
 	
 	
 

@@ -1,111 +1,191 @@
-$(document).ready(function() {
-	
-	
+var table;
+
+var uName = "demo";
+var passwrd = "12345678";
+
+$(document)
+		.ready(
+				function() {
+
+					$
+							.ajax(
+									{
+										url : "http://localhost:8080/school/webapi/general/class/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+										type : 'GET',
+										contentType : 'application/json',
+										accept : 'application/json',
+										beforeSend : function(xhr) {
+											xhr.setRequestHeader(
+													'Authorization', 'Basic '
+															+ btoa(uName + ":"
+																	+ passwrd));
+										}
+									})
+							.done(
+									function(data) {
+
+										var classSelect = $('.populateOptions');
+										classSelect.empty();
+										// classSelect.options[classSelect.options.length]
+										// = new Option('Form 1', 'Value1');
+
+										for (var i = 0; i < data.length; i++) {
+											classSelect.append('<option id='
+													+ data[i].sysid + ' value='
+													+ data[i].uuid + '>'
+													+ data[i].description
+													+ '</option>');
+											// classSelect.options[classSelect.options.length]
+											// = new Option(data[i].description,
+											// data[i].uuid);
+										}
+										
+										
+
+										console.log(data);
+										
+										var classId = $("#classesList");
+										var classIdVal = classId.options[classId.selectedIndex].value;
+										
+										//var classId= $('#classesList').val();
+										console.log(classIdVal);
+										
+										fetchStreams(classIdVal);
+
+
+									}).fail(function(jqXHR, textStatus) {
+
+								// alert("Error: " + textStatus);
+								console.log(textStatus);
+
+							});
+					
+										
+
+				});
+
+
+
+
+
+function fetchStreams(classID) {
+
 	$
-	.ajax(
-			{
-				url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
-				type : 'GET',
-				dataType : 'json',
-				data : JSON.stringify($(
-						'#staffForm')
-						.serializeJSON()),
-				contentType : 'application/json',
-				accept : 'application/json',
-				beforeSend : function(xhr) {
-					xhr
-							.setRequestHeader(
-									'Authorization',
-									'Basic '
-											+ btoa(uName
-													+ ":"
-													+ passwrd));
-				}
-			})
-	.done(
-			function(data) {
+			.ajax(
+					{
+						url : location.protocol
+								+ "//"
+								+ window.location.host
+								+ "/school/webapi/general/stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/classID/",
+						type : 'GET',
+						dataType : 'json',
+						contentType : 'application/json',
+						accept : 'application/json',
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader('Authorization', 'Basic '
+									+ btoa(uName + ":" + passwrd));
+						}
+					})
+			.done(
+					function(data) {
 
-				// alert(data.description);
+						// alert(data);
+						console.log(data);
+						
+						if(data["message"] != "error"){
 
-				if (data.description
-						.includes("successfully")) {
+						var cols = [];
 
-					$('#success').modal('show');
+						var getCol = data[0];
 
-					$('#successTitle').text(
-							data.description);
+						var keys = Object.keys(getCol);
 
-					setTimeout(function() {
+						keys.forEach(function(k) {
 
-						$('#staffForm').get(0)
-								.reset();
-						$('#staff').modal('hide');
-					}, 2500);
+							if (k == "description") {
 
-					setTimeout(
-							function() {
+								cols.push({
+									title : "Description",
+									data : k,
+								// optionally do some type detection here for
+								// render function
 
-								$('#success')
-										.modal(
-												'hide');
-							}, 3000);
+								});
+							} else {
 
-				} else if (data.description
-						.includes("exist")) {
+								cols.push({
+									title : k,
+									data : k,
+								});
 
-					$('#error').modal('show');
+							}
 
-					$('#errorTitle').text(
-							"Staff Exists");
+						});
 
-					$('#errorSms').text(
-							data.description);
+						if (table)
+							table.clear();
 
-					setTimeout(function() {
+						table = $('#streams')
+								.DataTable(
+										{
 
-						$('#error').modal('hide');
-					}, 2500);
+											destroy : true,
+											columns : cols,
+											"columnDefs" : [
+													{
+														"targets" : [ 0 ],
+														"visible" : false,
+														"searchable" : false
+													},
+													{
+														"targets" : [ 1 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 2 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 4 ],
+														"data" : null,
+														"defaultContent" : '<button class="btn btn-warning editStream" id="edit_stream" onclick="streamModal(this.id)">Edit <span class="fa fa-edit"></span></button><button class="btn btn-danger" id="Form 1N"onclick="delStream(this.id)">Delete <span class="fa fa-trash"></span></button>'
+													} ],
+											searching : false,
+											"bPaginate" : false,
+											"bLengthChange" : false,
 
-				} else {
+											"order" : [ [ 0, "desc" ] ]
 
-					$('#warning').modal('show');
+										});
 
-					$('#warningTitle').text(
-							"Details Input Error");
+						table.rows.add(data).draw();
 
-					$('#warningSms').text(
-							data.description);
+						$('#streams tbody').on(
+								'click',
+								'button',
+								function() {
+									var data = table.row($(this).parents('tr'))
+											.data();
+									
+									console.log(data);
+									
+									
+									//console.log($("#desc").val(data[3]));
+									$("#desc").val(data['description']);
+									console.log(data['description']);
+									$("#classId").val(data['classRoomId']);
+									
+									
+								});
+						
+						}
 
-					setTimeout(
-							function() {
+					}).fail(function(jqXHR, textStatus) {
 
-								$('#warning')
-										.modal(
-												'hide');
-							}, 2500);
+				console.log(textStatus);
+			});
 
-				}
-
-			}).fail(function(jqXHR, textStatus) {
-
-		// alert("Error: " + textStatus);
-
-		$('#error').modal('show');
-
-		$('errorTitle').text("Fatal Error");
-
-		$('errorSms').text(textStatus);
-
-		setTimeout(function() {
-
-			$('#error').modal('hide');
-		}, 2500);
-	})
-	
-	
-	
-
-});
+}
 
 function StaffApiCall() {
 
