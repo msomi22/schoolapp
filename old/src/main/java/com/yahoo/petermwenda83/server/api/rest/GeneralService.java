@@ -875,6 +875,7 @@ public class GeneralService {
 			if(StringUtils.isBlank(subMessage)) {
 				subMessage = "Result not found!";
 			}
+			
 			apiResponse.setDescription(subMessage);
 			
 			
