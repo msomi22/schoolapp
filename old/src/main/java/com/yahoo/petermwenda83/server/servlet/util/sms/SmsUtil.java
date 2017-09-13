@@ -50,7 +50,7 @@ public class SmsUtil {
 	                  
 	                  OutGoingSMS outGoingSMS = new OutGoingSMS();
 	                  outGoingSMS.setAccountId(smsObject.getAccount()); 
-	                  outGoingSMS.setMessage(result.getString("messageId"));
+	                  outGoingSMS.setMessage(smsObject.getMessage());//result.getString("messageId")
 	                  outGoingSMS.setMobile(result.getString("number"));
 	                  outGoingSMS.setStatus(result.getString("status"));
 	                  outGoingSMS.setSmsCost(result.getString("cost")); 
