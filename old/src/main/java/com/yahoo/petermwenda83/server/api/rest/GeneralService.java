@@ -138,11 +138,14 @@ public class GeneralService {
 	 * @param accountId
 	 * @return
 	 */
-	public List<Object> getStreamListPerClass(String accountId, String classId) {
+	public Object getStreamListPerClass(String accountId, String classId) {
 
+		//System.out.println(streamDAO.getStreamList(accountId,classId)); 
+		
 		if(streamDAO.getStreamList(accountId,classId) != null) {
 
-			List<Object>  list = new ArrayList<>();
+			List<ApiStream>  list = new ArrayList<>();
+			
 			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
 				ApiStream apiStream = new ApiStream();
 				apiStream.setAccountId(stream.getAccountId());
@@ -157,13 +160,11 @@ public class GeneralService {
 
 		}else {
 
-			List<Object>  response = new ArrayList<>();
 			ApiResponse re = new ApiResponse();
 			re.setMessage("error");
 			re.setDescription("No stream to display.");
 
-			response.add(re);
-			return response;
+			return re;
 
 		}
 

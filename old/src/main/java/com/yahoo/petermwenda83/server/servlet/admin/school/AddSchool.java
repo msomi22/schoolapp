@@ -17,7 +17,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.account.SmsApi;
+import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
@@ -31,7 +31,8 @@ import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
-import com.yahoo.petermwenda83.persistence.schoolaccount.SmsApiDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
+import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.session.AdminSessionConstants;
@@ -72,7 +73,7 @@ public class AddSchool extends HttpServlet{
 	private static ExamDAO examDAO;
 	
 	private static OtherFeeDAO otherFeeDAO;
-	private static SmsApiDAO smsApiDAO;
+	private static ApiCredentialDAO smsApiDAO;
 	
 
 
@@ -94,7 +95,7 @@ public class AddSchool extends HttpServlet{
        miscellanousDAO = MiscellanousDAO.getInstance();
        examDAO = ExamDAO.getInstance();
        otherFeeDAO = OtherFeeDAO.getInstance();
-       smsApiDAO = SmsApiDAO.getInstance();
+       smsApiDAO = ApiCredentialDAO.getInstance();
    }
    
   
@@ -237,11 +238,12 @@ public class AddSchool extends HttpServlet{
 	    	   }
 	    	   
 	    	   
-	    	   SmsApi smsApi = new SmsApi();
+	    	   ApiCredential smsApi = new ApiCredential();
 			   smsApi.setApiKey("QWERTYUIOPASDFGHJKLZXCVBNM");
-			   smsApi.setApiPassword("QWERTY"); 
+			   smsApi.setApisecret("QWERTY"); 
+			   smsApi.setApiType(ApiConstants.SYSTEM);
 			   smsApi.setAccountId(account.getUuid());
-			   smsApiDAO.putSmsApi(smsApi);
+			   smsApiDAO.putApiCredential(smsApi);
 	    	   
 			   
 			   paramHash.clear();

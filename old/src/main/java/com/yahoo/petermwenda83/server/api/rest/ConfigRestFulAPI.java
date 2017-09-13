@@ -17,6 +17,8 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.servlet.util.sms.AccountBalance;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -207,7 +209,33 @@ public class ConfigRestFulAPI {
 		return generalService.updateGradingScale(accountId,scale);
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
 
+	@ApiOperation(value = "Get SMS Account balance.", 
+			notes = "Returns SMS Account Balance.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	
+	@Path("/smsbal/{accountId}") 
+	@GET
+	public Object getSMSBalance(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response;  
+		}
+		return AccountBalance.getBalance(accountId);
+	}
 
 
 
