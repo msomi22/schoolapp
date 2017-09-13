@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
@@ -23,6 +25,8 @@ import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
@@ -30,6 +34,9 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+import com.yahoo.petermwenda83.server.servlet.reports.PerStudentSMSResult;
+import com.yahoo.petermwenda83.server.servlet.reports.Performance2;
+import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 
 /**
  * @author peter
@@ -45,6 +52,10 @@ public class GeneralService {
 	private static MiscellanousDAO miscellanousDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 
+	private static SubjectDAO subjectDAO;
+
+
+
 	static {
 		streamDAO = StreamDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
@@ -55,8 +66,10 @@ public class GeneralService {
 		miscellanousDAO = MiscellanousDAO.getInstance();
 
 		gradingSystemDAO = GradingSystemDAO.getInstance();
-		
+
 		classDAO = ClassDAO.getInstance();
+
+		subjectDAO = SubjectDAO.getInstance();
 
 
 	}
@@ -95,8 +108,8 @@ public class GeneralService {
 		}
 
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -141,11 +154,11 @@ public class GeneralService {
 	public Object getStreamListPerClass(String accountId, String classId) {
 
 		//System.out.println(streamDAO.getStreamList(accountId,classId)); 
-		
+
 		if(streamDAO.getStreamList(accountId,classId) != null) {
 
 			List<ApiStream>  list = new ArrayList<>();
-			
+
 			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
 				ApiStream apiStream = new ApiStream();
 				apiStream.setAccountId(stream.getAccountId());
@@ -169,9 +182,9 @@ public class GeneralService {
 		}
 
 	}
-	
-	
-	
+
+
+
 
 	/**
 	 * 
@@ -348,11 +361,11 @@ public class GeneralService {
 		}
 
 	}
-	  /**
-	  * 
-	  * @param accountId
-	  * @return
-	  */
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
 	public List<ApiExam> getExams(String accountId){
 		List<ApiExam> apiExamList = new ArrayList<>();
 
@@ -371,11 +384,11 @@ public class GeneralService {
 		return apiExamList;
 	}
 
-	   /**
-	   * 
-	   * @param apiExam
-	   * @return
-	   */
+	/**
+	 * 
+	 * @param apiExam
+	 * @return
+	 */
 	public Object newExam(ApiExam apiExam) {
 
 		ApiResponse apiResponse = new ApiResponse();
@@ -422,11 +435,11 @@ public class GeneralService {
 		return apiResponse;
 	}
 
-	    /**
-	    * 
-	    * @param apiExam
-	    * @return
-	    */
+	/**
+	 * 
+	 * @param apiExam
+	 * @return
+	 */
 	public Object updateExam(ApiExam apiExam) {
 		ApiResponse apiResponse = new ApiResponse();
 
@@ -581,7 +594,7 @@ public class GeneralService {
 			return apiResponse;
 
 		}else {
-			
+
 			ApiGradingScale scale = new ApiGradingScale();
 			try {
 				BeanUtils.copyProperties(scale, gradingSystemDAO.getGradingSystem(accountId, uuid));
@@ -590,7 +603,7 @@ public class GeneralService {
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			
+
 			return scale; 
 		}
 	}
@@ -611,23 +624,23 @@ public class GeneralService {
 			return apiResponse;
 
 		}else {
-			
-            List<ApiGradingScale> apiGradingScaleList = new ArrayList<>();
+
+			List<ApiGradingScale> apiGradingScaleList = new ArrayList<>();
 			gradingSystemDAO.getGradingSystemList(accountId, categoryId).forEach(scale ->{
 				ApiGradingScale apiGradingScale = new ApiGradingScale();
 				try {
 					BeanUtils.copyProperties(apiGradingScale, scale);
 					apiGradingScaleList.add(apiGradingScale); 
-					
+
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-				
+
 			});
-			
-			
+
+
 			return apiGradingScaleList; 
 		}
 
@@ -704,7 +717,156 @@ public class GeneralService {
 	}
 
 
+	//TODO
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param parentsCategory
+	 * @return
+	 */
 
+
+	public Object sendSMSToParents(String accountId, String parentsCategory) { 
+
+		switch (parentsCategory){
+
+		case ApiConstants.P_ALL: 
+
+			return "";
+
+		case ApiConstants.P_F_1: 
+
+			return "";
+
+		case ApiConstants.P_F_2: 
+
+			return "";
+
+		case ApiConstants.P_F_3: 
+
+			return "";
+
+		case ApiConstants.P_F_4: 
+
+			return "";
+
+		default:
+			return null;
+
+
+		}
+
+	}
+
+
+	/**
+	 * 
+	 * @param accountId account id 
+	 * @param studentId student id 
+	 * @param examIds exams ( 3 of them )
+	 * @param subjects7 either 7 or 11
+	 * @param examType if P123 , the p1,p2,p3 else other exams, leave it blank for other exams 
+	 * @return
+	 */
+	 
+	public Object sendExamResultSMS(String accountId, String studentId, String[] examIds, boolean subjects7,String examType) {
+		
+		ApiResponse apiResponse = new ApiResponse();
+		String subMessage = "";
+		
+		if(PerStudentSMSResult.geStudentResult(accountId, studentId, examIds, subjects7, examType) == null) {
+			//error
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Unexpected error occured!");
+		}else {
+			
+			List<Performance2> performance2List = PerStudentSMSResult.geStudentResult(accountId, studentId, examIds, subjects7, examType);
+			
+			for(Performance2 performance : performance2List) {
+				
+				performance.getStudentId();
+				performance.getStreamId();
+				
+				double mean = 0;
+				
+				String studentScore = "";
+				
+				int totalMean = performance.getTotalMean();
+				
+				if(subjects7) {
+					
+					mean = (double)totalMean / 7;
+					
+					studentScore = "Total: " + totalMean + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
+									accountId, gradingSystemDAO);
+					
+					
+				}else {
+					mean = (double)totalMean / 11; 
+				
+					studentScore = "Total: " + totalMean + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
+							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
+									accountId, gradingSystemDAO);
+					
+				}
+				
+				
+				List<Subject> subjects = subjectDAO.getSubjects(accountId);
+				
+
+				Map<String,Integer> exam1 = performance.getExam1();
+				Map<String,Integer> exam2 = performance.getExam2();
+				Map<String,Integer> exam3 = performance.getExam3(); 
+				
+				
+				
+				subMessage += studentScore+"."; 
+
+				for(Subject subject :  subjects) {
+				
+					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+
+					if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+						exam1Score = "";
+					}
+					if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+						exam2Score = "";
+					}
+					if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+						exam3Score = "";
+					}
+
+					String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, examIds.length);
+					
+					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
+					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
+
+					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
+
+					String average = examAverage + " " + avgrade +  " " + avgpoints;
+					
+					if(Integer.valueOf(average) > 0) {
+						subMessage += subject.getCode()+" "+average + ","; 
+					}
+					
+					
+
+				}
+				
+			}
+			
+			apiResponse.setMessage("sucess");
+			apiResponse.setDescription(subMessage);
+			
+			
+		}
+		
+		return apiResponse;
+	}
 
 
 
