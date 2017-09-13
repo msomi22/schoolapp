@@ -7,7 +7,7 @@ package com.yahoo.petermwenda83.server.api;
  * @author peter
  *
  */
-public class AapiConstants {
+public class ApiConstants {
 
 	public static final String SMS = "SMS_API";
 	public static final String MPESA = "MPESA_API";

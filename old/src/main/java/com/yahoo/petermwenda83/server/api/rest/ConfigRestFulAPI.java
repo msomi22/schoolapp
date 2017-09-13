@@ -17,6 +17,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+import com.yahoo.petermwenda83.server.servlet.util.sms.AccountBalance;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -208,6 +209,19 @@ public class ConfigRestFulAPI {
 	}
 
 
+	@Path("/smsbal/{accountId}") 
+	@GET
+	public String getSMSBalance(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response.toString();  
+		}
+		return AccountBalance.getBalance(accountId);
+	}
 
 
 

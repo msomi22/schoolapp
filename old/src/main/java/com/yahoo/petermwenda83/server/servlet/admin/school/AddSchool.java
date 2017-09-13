@@ -32,7 +32,7 @@ import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
-import com.yahoo.petermwenda83.server.api.AapiConstants;
+import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.session.AdminSessionConstants;
@@ -241,7 +241,7 @@ public class AddSchool extends HttpServlet{
 	    	   ApiCredential smsApi = new ApiCredential();
 			   smsApi.setApiKey("QWERTYUIOPASDFGHJKLZXCVBNM");
 			   smsApi.setApiPassword("QWERTY"); 
-			   smsApi.setApiType(AapiConstants.SYSTEM);
+			   smsApi.setApiType(ApiConstants.SYSTEM);
 			   smsApi.setAccountId(account.getUuid());
 			   smsApiDAO.putApiCredential(smsApi);
 	    	   

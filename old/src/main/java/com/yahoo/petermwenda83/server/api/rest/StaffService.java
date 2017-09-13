@@ -23,7 +23,7 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
-import com.yahoo.petermwenda83.server.api.AapiConstants;
+import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
@@ -734,12 +734,12 @@ public class StaffService {
 			if(staffDAO.putStaff(staff)) {
 				
 				//send new password via SMS
-				if(smsApiDAO.getApiCredential(accountDAO.getAccount(account, "1").getUuid(), AapiConstants.SMS) != null) {
+				if(smsApiDAO.getApiCredential(accountDAO.getAccount(account, "1").getUuid(), ApiConstants.SMS) != null) {
 					
 					//send SMS
 					String accountId = accountDAO.getAccount(account, "1").getUuid();
 					
-					ApiCredential api = smsApiDAO.getApiCredential(accountId, AapiConstants.SMS);
+					ApiCredential api = smsApiDAO.getApiCredential(accountId, ApiConstants.SMS);
 					//prepare SMS
 					String firstname = StringUtils.capitalize(staff.getFirstname().substring(0, Math.min(staff.getFirstname().length(), 7)).toLowerCase()); 
 					String message = "Hello " + firstname + ", your new password is, " + newpassword;
