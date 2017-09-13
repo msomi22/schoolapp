@@ -731,7 +731,10 @@ public class StaffService {
 			
 			staff.setPassword(password);
 			
-			if(staffDAO.putStaff(staff)) {
+			if(staffDAO.updateStaff(staff)) {
+				
+				String description = "";
+				String msg = "";
 				
 				//send new password via SMS
 				if(smsApiDAO.getApiCredential(accountDAO.getAccount(account, "1").getUuid(), ApiConstants.SMS) != null) {
@@ -745,15 +748,20 @@ public class StaffService {
 					String message = "Hello " + firstname + ", your new password is, " + newpassword;
 					
 					//String account,String mobile,String message,String apiUsername,String apiKey
-					SmsObject smsObject = new SmsObject(accountId,staff.getMobile(),message,api.getApiKey(),api.getApiPassword());
-					SmsUtil.sendSMS(smsObject); 
+					System.out.println(api.getApiKey() + " -- " + api.getApisecret()); 
+					SmsObject smsObject = new SmsObject(accountId,staff.getMobile(),message,api.getApiKey(),api.getApisecret());
+					description = SmsUtil.sendSMS(smsObject); 
+					msg = "success";
 					
+				}else {
+					description = "Invalid API!";
+					msg = "error";
 				}
 				
 				
 				//password reset success
-				apiResponse.setMessage("success"); 
-				apiResponse.setDescription("Password reset success!");
+				apiResponse.setMessage(msg); 
+				apiResponse.setDescription(description); 
 				return apiResponse;
 				
 			}else {

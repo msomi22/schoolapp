@@ -48,7 +48,7 @@ public class AccountBalance {
 			ApiCredential smsApi = apiCredentialDAO.getApiCredential(accountId, ApiConstants.SMS);
 			
 			
-			String username = smsApi.getApiPassword();
+			String username = smsApi.getApisecret();
 			String apiKey = smsApi.getApiKey();
 			
 			AfricasTalkingGateway gateway = new AfricasTalkingGateway(username, apiKey);

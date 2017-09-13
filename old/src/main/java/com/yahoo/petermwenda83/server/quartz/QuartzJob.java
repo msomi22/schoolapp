@@ -73,7 +73,7 @@ public class QuartzJob implements Job{
 						// Specify your login credentials
 						if(smsApiDAO.getApiCredential(accountId) !=null){
 							ApiCredential smsApi = smsApiDAO.getApiCredential(accountId);  
-							String username = smsApi.getApiPassword();
+							String username = smsApi.getApisecret();
 							String apiKey   = smsApi.getApiKey();
 							africasTalking.setMessage(message); 
 							africasTalking.setRecipients(phone); 

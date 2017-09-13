@@ -20,6 +20,7 @@ import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -177,6 +178,15 @@ public class StaffRestFulAPI {
 
 		return staffService.staffStatus(action, accountId, staffId);
 	}
+	
+	
+
+	@ApiOperation(value = "Reset staff password.", 
+			notes = "Reset staff password.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
 
 	@GET
 	@Path("/reset/password/{account}/{query}/")      

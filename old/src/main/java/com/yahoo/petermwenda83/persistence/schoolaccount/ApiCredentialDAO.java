@@ -108,14 +108,14 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ApiCredential" 
-			        		+"(uuid,accountId,apiType,apiKey,apiPassword) VALUES (?,?,?,?,?);");
+			        		+"(uuid,accountId,apiType,apiKey,apisecret) VALUES (?,?,?,?,?);");
       		){
 			   
 	            pstmt.setString(1, smsApi.getUuid());
 	            pstmt.setString(2, smsApi.getAccountId());
 	            pstmt.setString(3, smsApi.getApiType());
 	            pstmt.setString(4, smsApi.getApiKey());
-	            pstmt.setString(5, smsApi.getApiPassword()); 
+	            pstmt.setString(5, smsApi.getApisecret()); 
 	            pstmt.executeUpdate();
 			 
 		 }catch(SQLException e){
@@ -135,11 +135,11 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 		boolean success = true;
         try (  Connection conn = dbutils.getConnection();
         	   PreparedStatement pstmt = conn.prepareStatement("UPDATE ApiCredential SET apiKey =?,"
-        	      + "apiPassword=? WHERE apiType =? AND uuid = ? AND accountId = ?;");
+        	      + "apisecret=? WHERE apiType =? AND uuid = ? AND accountId = ?;");
         	) { 
         	   
 	            pstmt.setString(1, smsApi.getApiKey());
-	            pstmt.setString(2, smsApi.getApiPassword()); 
+	            pstmt.setString(2, smsApi.getApisecret()); 
 	            pstmt.setString(3, smsApi.getApiType());
 	            pstmt.setString(4, smsApi.getUuid());
 	            pstmt.setString(5, smsApi.getAccountId());

@@ -102,10 +102,10 @@ CREATE TABLE  ApiCredential (
     accountId text REFERENCES Account(uuid),
     apiType text,
     apiKey text,
-    apiPassword text
+    apisecret text
  
 );
-\COPY ApiCredential(uuid,accountId,apiType,apiKey,apiPassword) FROM '/tmp/ApiCredential.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY ApiCredential(uuid,accountId,apiType,apiKey,apisecret) FROM '/tmp/ApiCredential.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE ApiCredential OWNER TO school;
 
 

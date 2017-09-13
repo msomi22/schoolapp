@@ -22,16 +22,20 @@ public class SmsUtil {
 	}
 	
 	
-	public static void sendSMS(SmsObject smsObject){
+	public static String sendSMS(SmsObject smsObject){
+		
+		String description = "";
 		
 		String mobile = smsObject.getMobile();
 		
 		if(!StringUtils.isNumeric(mobile)) {
-			//invalid number
-			 System.out.println("invalid number!");
+			description = "Invalid number!";
+			return description;
+			
 		}else if(mobile.length() != 9){  
-			//invalid number
-			 System.out.println("invalid number!");
+			description = "Invalid number!";
+			return description;
+			
 		}else {
 			
 			AfricasTalkingGateway gateway  = new AfricasTalkingGateway(smsObject.getApiUsername(), smsObject.getApiKey());
@@ -50,15 +54,21 @@ public class SmsUtil {
 	                  outGoingSMS.setMobile(result.getString("number"));
 	                  outGoingSMS.setStatus(result.getString("status"));
 	                  outGoingSMS.setSmsCost(result.getString("cost")); 
+	                  
 	                  outGoingSMSDAO.putOutGoingSMS(outGoingSMS);
+	        
+	                  description = "Message sent successfully.";
 	                 
 	        }
 	       }
 	       catch (Exception e) {
+	    	   description = "Encountered an error while sending " + e.getMessage();
 	           System.out.println("Encountered an error while sending " + e.getMessage());
 	        }
 			
 		}
+		
+		return description;
 	}
 	
 	

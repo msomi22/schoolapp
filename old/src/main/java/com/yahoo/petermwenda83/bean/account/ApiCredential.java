@@ -13,7 +13,7 @@ public class ApiCredential extends StorableBean{
 	
 	private String  apiType;
 	private String  apiKey;
-	private String apiPassword;
+	private String apisecret;
 
 	/**
 	 * 
@@ -21,7 +21,7 @@ public class ApiCredential extends StorableBean{
 	public ApiCredential() {
 		apiType = "";
 		apiKey = "";
-		apiPassword = "";
+		apisecret = "";
 	}
 	
 	public String getApiType() {
@@ -40,17 +40,19 @@ public class ApiCredential extends StorableBean{
 		this.apiKey = apiKey;
 	}
 
-	public String getApiPassword() {
-		return apiPassword;
+	
+
+	public String getApisecret() {
+		return apisecret;
 	}
 
-	public void setApiPassword(String apiPassword) {
-		this.apiPassword = apiPassword;
+	public void setApisecret(String apisecret) {
+		this.apisecret = apisecret;
 	}
 
 	@Override
 	public String toString() {
-		return "ApiCredential [apiType=" + apiType + ", apiKey=" + apiKey + ", apiPassword=" + apiPassword + "]";
+		return "ApiCredential [apiType=" + apiType + ", apiKey=" + apiKey + ", apisecret=" + apisecret + "]";
 	}
 
 	/**

@@ -240,7 +240,7 @@ public class AddSchool extends HttpServlet{
 	    	   
 	    	   ApiCredential smsApi = new ApiCredential();
 			   smsApi.setApiKey("QWERTYUIOPASDFGHJKLZXCVBNM");
-			   smsApi.setApiPassword("QWERTY"); 
+			   smsApi.setApisecret("QWERTY"); 
 			   smsApi.setApiType(ApiConstants.SYSTEM);
 			   smsApi.setAccountId(account.getUuid());
 			   smsApiDAO.putApiCredential(smsApi);
