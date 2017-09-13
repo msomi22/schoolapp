@@ -20,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
-import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.api.rest.bean.SmsExams;
 import com.yahoo.petermwenda83.server.servlet.reports.PerStudentSMSResult;
 
@@ -404,16 +403,20 @@ public class GeneralRestFulAPI {
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated!");
-
+		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 			
-		}else if(!PerStudentSMSResult.validateRequest(accountId, regNo, subjectsNo, examType,exams)) {
+		}else if(!PerStudentSMSResult.valideRequest(accountId, regNo, subjectsNo, examType)) {
 		
 			response.setMessage("error");
 			response.setDescription("Invalid Parameters!");
 			return response; 
 			
+		}else if(!PerStudentSMSResult.validaExams(accountId,exams)){
+			response.setMessage("error");
+			response.setDescription("Invalid Exams!");
+			return response; 
 		}else {
 			
 			boolean sub7  = false;
@@ -425,9 +428,8 @@ public class GeneralRestFulAPI {
 			
 		}
 	}
-	
-	
-	
+
+
 	
 
 }

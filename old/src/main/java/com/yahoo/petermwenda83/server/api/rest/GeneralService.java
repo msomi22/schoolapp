@@ -17,6 +17,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
@@ -25,6 +26,7 @@ import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiClass;
@@ -53,6 +55,7 @@ public class GeneralService {
 	private static GradingSystemDAO gradingSystemDAO;
 
 	private static SubjectDAO subjectDAO;
+	private static StudentDAO studentDAO;
 
 
 
@@ -70,6 +73,7 @@ public class GeneralService {
 		classDAO = ClassDAO.getInstance();
 
 		subjectDAO = SubjectDAO.getInstance();
+		studentDAO = StudentDAO.getInstance();
 
 
 	}
@@ -792,6 +796,10 @@ public class GeneralService {
 				
 				String studentScore = "";
 				
+				Student student = studentDAO.getStudentById(accountId, performance.getStudentId());
+				
+				studentScore += student.getFirstname() + " " + student.getMiddlename() + " , ";
+				
 				int totalMean = performance.getTotalMean();
 				
 				if(subjects7) {
@@ -800,7 +808,7 @@ public class GeneralService {
 					
 					studentScore = "Total: " + totalMean + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
-									accountId, gradingSystemDAO);
+									accountId, gradingSystemDAO) ;
 					
 					
 				}else {
@@ -822,7 +830,7 @@ public class GeneralService {
 				
 				
 				
-				subMessage += studentScore+"."; 
+				subMessage += studentScore + " . "; 
 
 				for(Subject subject :  subjects) {
 				
@@ -847,10 +855,10 @@ public class GeneralService {
 
 					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
 
-					String average = examAverage + " " + avgrade +  " " + avgpoints;
+					String average = examAverage + " " + avgrade;// +  " " + avgpoints;
 					
-					if(Integer.valueOf(average) > 0) {
-						subMessage += subject.getCode()+" "+average + ","; 
+					if(Integer.valueOf(examAverage) > 0) {
+						subMessage += subject.getCode()+" "+average + ", "; 
 					}
 					
 					

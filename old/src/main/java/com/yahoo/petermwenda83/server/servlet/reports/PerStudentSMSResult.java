@@ -21,6 +21,7 @@ import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.rest.GeneralService;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.SmsExams;
 
 /**
@@ -53,35 +54,78 @@ public class PerStudentSMSResult {
 	}
 	
 	
-	
-	public static boolean validateRequest(String accountId, String regNo, String subjectsNo, String examType, List<SmsExams> exams) {
-		
-		boolean valid = false;
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param subjectsNo
+	 * @param examType
+	 * @return
+	 */
+	public static boolean valideRequest(String accountId, String regNo, String subjectsNo, String examType) {
 		
 		if(studentDAO.getStudentByregNo(accountId, regNo) == null) {
+			System.out.println("1");
 			return false;
 		}else if(!StringUtils.isNumeric(subjectsNo)) { 
+			System.out.println("2");
 			return false;
-		}else if(Integer.valueOf(subjectsNo) != 7 || Integer.valueOf(subjectsNo) != 11) { 
+		}else if(!validSubNo(subjectsNo)) { 
+			System.out.println("3");
 			return false;
 		}else if(!validExamType(examType)) { 
-			return false;
-		}else if(exams.size() < 0 || exams.size() > 3) {  
+			System.out.println("4");
 			return false;
 		}
 		else {
+			System.out.println("5");
+			return true;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param subjectsNo
+	 * @return
+	 */
+	private static boolean validSubNo(String subjectsNo) {
+		
+		if(Integer.valueOf(subjectsNo) == 7) {
+			return true;
 			
-			for(SmsExams exam : exams) {
-				if(examDAO.getExamByCode(accountId, exam.getExamCode()) == null) {
-					valid = false;
-				}else {
-					valid = true;
-				}
-			}
+		}else if(Integer.valueOf(subjectsNo) == 11) {
+			return true;
+			
+		}else {
+			return false;
+		}
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param exams
+	 * @return
+	 */
+	public static boolean validaExams(String accountId,List<SmsExams> exams) {
+		boolean valid = false;
+		
+		if(exams.size() <= 0) {
+			valid = false;
+			
+		}else if(exams.size() > 3) {
+			valid = false;
 			
 		}
-		return valid;
 		
+		for(SmsExams exam : exams) {
+			if(examDAO.getExamByCode(accountId, exam.getExamCode()) == null) {
+				valid = false;
+			}else {
+				valid = true;
+			}
+		}
+		return valid;
 	}
 	
 	
@@ -98,16 +142,65 @@ public class PerStudentSMSResult {
 		
 		String studentId = studentDAO.getStudentByregNo(accountId, regNo).getUuid(); 
 		
-		String[] examIds = {};
+		String[] examIds = null;// = new String[3]; 
 		
-		int count = 0;
-		for(SmsExams id : exams) {
-			Exam exam = examDAO.getExamByCode(accountId, id.getExamCode()); 
-			examIds[count] = exam.getUuid(); 
+		System.out.println("******" + exams.size()); 
+		//System.out.println(" *---* " + examIds.length); 
+		
+		ApiResponse response = new ApiResponse();
+		
+		
+		if(exams.size() == 1) {
+			
+			examIds = new String[1];
+			SmsExams code = exams.get(0);
+			Exam exam = examDAO.getExamByCode(accountId, code.getExamCode());
+			examIds[0] = exam.getUuid();  
+
+			return generalService.sendExamResultSMS(accountId, studentId, examIds, subjectsNo, examType);
+			
+			
+		}else if(exams.size() == 2) {
+			
+			examIds = new String[2];
+			SmsExams code1 = exams.get(0);
+			SmsExams code2 = exams.get(1);
+			
+			Exam exam1 = examDAO.getExamByCode(accountId, code1.getExamCode());
+			Exam exam2 = examDAO.getExamByCode(accountId, code2.getExamCode());
+			
+			examIds[0] = exam1.getUuid();
+			examIds[1] = exam2.getUuid();
+
+			return generalService.sendExamResultSMS(accountId, studentId, examIds, subjectsNo, examType);
+			
+			
+		}if(exams.size() == 3) {
+			
+			examIds = new String[3]; 
+			SmsExams code1 = exams.get(0);
+			SmsExams code2 = exams.get(1);
+			SmsExams code3 = exams.get(2); 
+			
+			Exam exam1 = examDAO.getExamByCode(accountId, code1.getExamCode());
+			Exam exam2 = examDAO.getExamByCode(accountId, code2.getExamCode());
+			Exam exam3 = examDAO.getExamByCode(accountId, code3.getExamCode());
+			
+			examIds[0] = exam1.getUuid();
+			examIds[1] = exam2.getUuid();
+			examIds[2] = exam3.getUuid();
+
+			return generalService.sendExamResultSMS(accountId, studentId, examIds, subjectsNo, examType);
+			
+			
+		}else {
+			
+			response.setMessage("error");
+			response.setDescription("Invalid number os exams!");
+			return response;
+			
 		}
-	
-		return generalService.sendExamResultSMS(accountId, studentId, examIds, subjectsNo, examType);
-	
+		
 	}
 	
 
@@ -117,7 +210,7 @@ public class PerStudentSMSResult {
 	 * @return
 	 */
 	private static boolean validExamType(String examType) {
-		
+		/*
 		if(StringUtils.isBlank(examType)) {
 			return true;
 		}else {
@@ -125,11 +218,11 @@ public class PerStudentSMSResult {
 			if(StringUtils.equals(examType, ReportUtil.EXAM_TYPE)) {
 				return true;
 			}else {
-				return false;
+				return true;
 			}
 			
-		}
-		
+		}*/
+		return true;
 	}
 
 	/**
