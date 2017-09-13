@@ -31,8 +31,8 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 
-@Path("/stream") 
-@Api(value = "/stream") 
+@Path("/general") 
+@Api(value = "/general") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class GeneralRestFulAPI {
@@ -53,7 +53,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@GET
-	@Path("/{accountId}")  
+	@Path("/stream/{accountId}")  
 	public List<Object> getAllStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
 
 		List<Object>  response = new ArrayList<>();
@@ -121,7 +121,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@GET
-	@Path("/{accountId}/{classId}")   
+	@Path("/stream/{accountId}/{classId}")   
 	public List<Object> getStreamPerClass(@PathParam("accountId") String accountId,@PathParam("classId") String classId, 
 			@HeaderParam("authorization") String auth) {
 
@@ -155,7 +155,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@GET
-	@Path("/{accountId}/{uuid}")   
+	@Path("/stream/{accountId}/{uuid}")   
 	public Object getStream(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid,
 			@HeaderParam("authorization") String auth) {
 
@@ -186,7 +186,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@POST
-	@Path("/{accountId}")  
+	@Path("/stream/{accountId}")  
 	public Object newStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
 
 		ApiResponse response = new ApiResponse();
@@ -216,7 +216,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@PUT
-	@Path("/{accountId}")  
+	@Path("/stream/{accountId}")  
 	public Object updateStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiStream apiStream) {
 
 		ApiResponse response = new ApiResponse();
@@ -245,7 +245,7 @@ public class GeneralRestFulAPI {
 	} )
 
 	@DELETE
-	@Path("/{accountId}")  
+	@Path("/stream/{accountId}")  
 	public Object deleteStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, String uuid) {
 
 		ApiResponse response = new ApiResponse();
