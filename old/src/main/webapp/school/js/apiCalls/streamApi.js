@@ -1,3 +1,112 @@
+$(document).ready(function() {
+	
+	
+	$
+	.ajax(
+			{
+				url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+				type : 'GET',
+				dataType : 'json',
+				data : JSON.stringify($(
+						'#staffForm')
+						.serializeJSON()),
+				contentType : 'application/json',
+				accept : 'application/json',
+				beforeSend : function(xhr) {
+					xhr
+							.setRequestHeader(
+									'Authorization',
+									'Basic '
+											+ btoa(uName
+													+ ":"
+													+ passwrd));
+				}
+			})
+	.done(
+			function(data) {
+
+				// alert(data.description);
+
+				if (data.description
+						.includes("successfully")) {
+
+					$('#success').modal('show');
+
+					$('#successTitle').text(
+							data.description);
+
+					setTimeout(function() {
+
+						$('#staffForm').get(0)
+								.reset();
+						$('#staff').modal('hide');
+					}, 2500);
+
+					setTimeout(
+							function() {
+
+								$('#success')
+										.modal(
+												'hide');
+							}, 3000);
+
+				} else if (data.description
+						.includes("exist")) {
+
+					$('#error').modal('show');
+
+					$('#errorTitle').text(
+							"Staff Exists");
+
+					$('#errorSms').text(
+							data.description);
+
+					setTimeout(function() {
+
+						$('#error').modal('hide');
+					}, 2500);
+
+				} else {
+
+					$('#warning').modal('show');
+
+					$('#warningTitle').text(
+							"Details Input Error");
+
+					$('#warningSms').text(
+							data.description);
+
+					setTimeout(
+							function() {
+
+								$('#warning')
+										.modal(
+												'hide');
+							}, 2500);
+
+				}
+
+			}).fail(function(jqXHR, textStatus) {
+
+		// alert("Error: " + textStatus);
+
+		$('#error').modal('show');
+
+		$('errorTitle').text("Fatal Error");
+
+		$('errorSms').text(textStatus);
+
+		setTimeout(function() {
+
+			$('#error').modal('hide');
+		}, 2500);
+	})
+	
+	
+	
+
+});
+
 function StaffApiCall() {
 
 	$("#staffForm")

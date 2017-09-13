@@ -17,7 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
@@ -69,6 +69,40 @@ public class GeneralRestFulAPI {
 		}
 
 		return generalService.getStreamList(accountId); 
+	}
+
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get class list.", 
+			notes = "Class details.", 
+			response = ApiStream.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+
+	@GET
+	@Path("/class/{accountId}")  
+	public List<Object> getAllClassRooms(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+
+		List<Object>  response = new ArrayList<>();
+
+		ApiResponse re = new ApiResponse();
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+
+		response.add(re);
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.getClassList(accountId); 
 	}
 
 	
@@ -233,7 +267,7 @@ public class GeneralRestFulAPI {
 	 * @param examId
 	 * @param auth
 	 * @return
-	 *//*
+	 */
 	@ApiOperation(value = "Return ApiExam object.", 
 			notes = "Pass account and exam Ids.", 
 			response = ApiExam.class)
@@ -241,7 +275,7 @@ public class GeneralRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 	@GET
-	@Path("exam/{accountId}/{examId}")  
+	@Path("/exam/{accountId}/{examId}")  
 	public Object getExam(@PathParam("accountId") String accountId,@PathParam("examId") String examId,
 			@HeaderParam("authorization") String auth) {
 		
@@ -257,12 +291,12 @@ public class GeneralRestFulAPI {
 		return generalService.getExam(accountId, examId); 
 	}
 	
-	*//**
+	/**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @return
-	 *//*
+	 */
 	@ApiOperation(value = "Return List of ApiExam objects.", 
 			notes = "Pass account Id.", 
 			response = ApiExam.class)
@@ -270,7 +304,7 @@ public class GeneralRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 	@GET
-	@Path("exam/{accountId}")  
+	@Path("/exam/{accountId}")  
 	public List<Object> getExams(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) { 
 		
 		List<Object> list = new ArrayList<>();
@@ -288,13 +322,13 @@ public class GeneralRestFulAPI {
 		return generalService.getStreamList(accountId); 
 	}
 	
-	*//**
+	/**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @param apiExam
 	 * @return
-	 *//*
+	 */
 	
 	@ApiOperation(value = "ApiExam object to add.", 
 			notes = "Pass ApiExam object to be added.", 
@@ -304,7 +338,7 @@ public class GeneralRestFulAPI {
 	} )
 	
 	@POST 
-	@Path("exam/{accountId}")  
+	@Path("/exam/{accountId}")  
 	public Object newExam(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth,
 			ApiExam apiExam) {
 		
@@ -320,13 +354,13 @@ public class GeneralRestFulAPI {
 	}
 	
 
-	*//**
+	/**
 	 * 
 	 * @param accountId
 	 * @param auth
 	 * @param apiExam
 	 * @return
-	 *//*
+	 */
 
 	@ApiOperation(value = "ApiExam object to update.", 
 			notes = "Pass ApiExam object to be updated.", 
@@ -336,7 +370,7 @@ public class GeneralRestFulAPI {
 	} )
 	
 	@PUT
-	@Path("exam/{accountId}")  
+	@Path("/exam/{accountId}")  
 	public Object updateExam(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, 
 			ApiExam apiExam) {
 		
@@ -351,7 +385,7 @@ public class GeneralRestFulAPI {
 		return generalService.updateExam(apiExam); 
 	}
 	
-	*/
+	
 	
 	
 

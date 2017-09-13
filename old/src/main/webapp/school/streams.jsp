@@ -19,6 +19,8 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+	
+	
 %>
 <jsp:include page="header.jsp" />
 
