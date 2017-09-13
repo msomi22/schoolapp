@@ -3,7 +3,8 @@
  */
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
-import java.util.List;
+
+import javax.ws.rs.BeanParam;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,8 +12,10 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+//import com.yahoo.petermwenda83.server.api.filter.AccountFilter;
 import com.yahoo.petermwenda83.server.api.rest.RestAUth;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.admin.ApiAccount;
@@ -36,6 +39,53 @@ public class AdminRestFulAPI {
 	AdminService adminService = new AdminService();
 	
 	
+	@ApiOperation(value = "Get Account details .", 
+			notes = "Returns Account object given the Id.", 
+			response = ApiAccount.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	
+	@GET
+	@Path("/{accountId}") 
+	public Object getStaff(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth) {
+		
+		if(!RestAUth.isAdminAuthenticated(auth)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return adminService.getAccount(accountId); 
+		}
+	
+	}
+	
+	@ApiOperation(value = "Get List of all Accounts.", 
+			notes = "Returns List of all the Accounts.", 
+			response = ApiAccount.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found!") 
+	} )
+	
+	@GET
+	@Path("/all") 
+	public Object getStaffList(@HeaderParam("authorization") String auth, @BeanParam  AccountFilter filter) {
+		
+		if(!RestAUth.isAdminAuthenticated(auth)){ 
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else {
+			return adminService.getAccountList(); 
+		}
+		
+	}
+	
+	
+	
 	
 	/**
 	 * 
@@ -44,7 +94,7 @@ public class AdminRestFulAPI {
 	 * @return
 	 */
 	@ApiOperation(value = "Register a new school account.", 
-			notes = "Account details.", 
+			notes = "Account object to add.", 
 			response = ApiAccount.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account exist.") 
@@ -59,7 +109,7 @@ public class AdminRestFulAPI {
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
-		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getUuid())){
+		if(!RestAUth.isAdminAuthenticated(auth)){
 			return response; 
 		}
 		
@@ -73,7 +123,7 @@ public class AdminRestFulAPI {
 	 * @return
 	 */
 	@ApiOperation(value = "Update school account details.", 
-			notes = "Account details.", 
+			notes = "Account object to update.", 
 			response = ApiAccount.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account doesn't exist.") 
@@ -87,7 +137,7 @@ public class AdminRestFulAPI {
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
-		if(!RestAUth.isUserAuthenticated(auth, apiAccount.getUuid())){
+		if(!RestAUth.isAdminAuthenticated(auth)){
 			return response; 
 		}
 		
@@ -102,7 +152,7 @@ public class AdminRestFulAPI {
 	
 	
 	
-	@GET
+	/*@GET
 	@Path("/data")  
 	public List<ApiAccData> getAccData() { 
 		return adminService.getAccData();
@@ -115,7 +165,7 @@ public class AdminRestFulAPI {
 		System.out.println(data); 
 		adminService.putData(data);
 		return data;
-	}
+	}*/
 	
 	
 

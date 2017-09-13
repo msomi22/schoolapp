@@ -3,11 +3,13 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -580,13 +582,13 @@ public class StaffService {
 	 * @return
 	 */
 	public Object staffStatus(String action, String accountId, String staffId) {
-		
+
 		ApiResponse response = new ApiResponse(); 
-		
+
 		if(staffDAO.getStaff(accountId, staffId) != null) {
-			
+
 			Staff staff = staffDAO.getStaff(accountId, staffId);
-			
+
 			if(StringUtils.equals(action, "activate")) {
 				staff.setIsActive("1");
 			}else if(StringUtils.equals(action, "activate")) {
@@ -596,23 +598,91 @@ public class StaffService {
 				response.setDescription("Invalid status."); 
 				return response;
 			}
-			
+
 			if(staffDAO.updateStaff(staff)) {
 				response.setMessage("success");
 				response.setDescription("Staff updated successfully.");  
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, try again later."); 
 				return response;
-				
+
 			}
 		}
-		
-		
-		
+
+
+
 		return response;
+	}
+
+
+	/**
+	 * TODO
+	 * @param accountId
+	 * @param staffId
+	 * @return
+	 */
+	public Object getStaff(String accountId, String staffId) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(staffDAO.getStaff(accountId, staffId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account/Staff not found!");
+			return apiResponse;
+
+			
+		}else {
+			ApiStaffFull apiStaffFull = new ApiStaffFull();
+			
+			try {
+				BeanUtils.copyProperties(apiStaffFull, staffDAO.getStaff(accountId, staffId)); 
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+			return apiStaffFull;
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public Object getStaffList(String accountId) {
+		
+		ApiResponse apiResponse = new ApiResponse(); 
+		
+		if(staffDAO.getStaff(accountId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Account not found!");
+			return apiResponse;
+			
+		}else {
+			List<ApiStaffFull> apiStaffFullList = new ArrayList<>();
+			staffDAO.getStaff(accountId).forEach(staff -> {
+				ApiStaffFull apiStaffFull = new ApiStaffFull();
+				
+				try {
+					BeanUtils.copyProperties(apiStaffFull, staff); 
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				apiStaffFullList.add(apiStaffFull);
+			});
+
+			return apiStaffFullList;
+		}
+		
 	}
 
 
@@ -675,7 +745,5 @@ public class StaffService {
 
 		return valid;
 	}
-
-
 
 }

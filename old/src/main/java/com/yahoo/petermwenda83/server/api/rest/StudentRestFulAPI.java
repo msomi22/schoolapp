@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.BeanParam;
+
 //import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
@@ -102,7 +105,7 @@ public class StudentRestFulAPI{
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
 	@POST
-	@Path("/{accountId}/{regNo}")  
+	@Path("/fee/{accountId}/{regNo}")  
 	public FeeResponse studentPayFee(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
 
@@ -129,6 +132,41 @@ public class StudentRestFulAPI{
 	 * @return
 	 */
 
+	@ApiOperation(value = "Get student basic information based on search query.", 
+			notes = "Enter a search query (regNo/firstname/middlename/lastname/bcertNo) .", 
+			response = StudentInfo.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found!") 
+	} )
+	@GET 
+	@Path("/{accountId}") 
+	public Object getStudentFilter(@PathParam("accountId") String accountId, 
+			@BeanParam  StudentFilter filter, @HeaderParam("authorization") String auth) { 
+
+		StudentResponse  response = new StudentResponse(); 
+
+		ApiResponse re = new ApiResponse(); 
+		re.setMessage("error");
+		re.setDescription("User not authenticated");
+		response.setApiResponse(re);
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.getStudentFilter(accountId,filter);  
+	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param auth
+	 * @return
+	 */
+
 	@ApiOperation(value = "Get student fee basic information.", 
 			notes = "Student basic info object.", 
 			response = StudentInfo.class)
@@ -136,7 +174,7 @@ public class StudentRestFulAPI{
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
 	@GET 
-	@Path("/{accountId}/{regNo}") 
+	@Path("/fee/{accountId}/{regNo}") 
 	public StudentResponse getStudent(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
 

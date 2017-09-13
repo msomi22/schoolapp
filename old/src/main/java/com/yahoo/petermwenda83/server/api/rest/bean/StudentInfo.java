@@ -5,8 +5,6 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author peter
  *
@@ -14,63 +12,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "StudentInfo")
 public class StudentInfo {
 	
-	@JsonProperty
 	private String uuid;
-	@JsonProperty
 	private String accountId;
-	@JsonProperty
 	private String regStream;
-	@JsonProperty
 	private String currentStream;
-	@JsonProperty
 	private String isActive;
-	@JsonProperty
 	private String isAlumni;
-	@JsonProperty
 	private String isBoarding;
-	@JsonProperty
 	private String regNo;
-	@JsonProperty
 	private String firstname;
-	@JsonProperty
 	private String middlename;
-	@JsonProperty
 	private String lastname;
-	@JsonProperty
 	private String gender;
-	@JsonProperty
 	private String dob;
-	@JsonProperty
 	private String bcertNo;
-	@JsonProperty
 	private String county;
-	@JsonProperty
 	private String regTerm;
-	@JsonProperty
 	private int finalYear;
-	@JsonProperty
 	private int finalTerm;
-	@JsonProperty
 	private String passport;
 	
-	@JsonProperty
 	private boolean hasParent;
-	@JsonProperty
 	private String parentName;
-	@JsonProperty
 	private String parentMobile;
-	@JsonProperty
 	private String parentEmail;
 	
-	@JsonProperty
 	private boolean hasPrimary;
-	@JsonProperty
 	private String schoolName;
-	@JsonProperty
 	private String index;
-	@JsonProperty
 	private String kcpeyear;
-	@JsonProperty
 	private String kcpemark;
 
 	/**
