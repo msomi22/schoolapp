@@ -297,7 +297,7 @@ public class GeneralService {
 
 		if(streamDAO.getStream(accountId, uuid) == null) {
 			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid account/Stream Id(s)!");  
+			apiResponse.setDescription("Invalid account/Stream Id(s)!"+ uuid + "  "+accountId);  
 			return apiResponse;
 
 		}else {
@@ -353,8 +353,8 @@ public class GeneralService {
 	  * @param accountId
 	  * @return
 	  */
-	public List<ApiExam> getExams(String accountId){
-		List<ApiExam> apiExamList = new ArrayList<>();
+	public List<Object> getExams(String accountId){
+		List<Object> apiExamList = new ArrayList<>();
 
 		if(examDAO.getExamList(accountId) != null) {
 			examDAO.getExamList(accountId).forEach(exam -> {

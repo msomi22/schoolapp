@@ -58,12 +58,12 @@ public class StreamDAO extends GenericDAO implements SchoolStreamDAO {
         ResultSet rset = null;
         try(
         		  Connection conn = dbutils.getConnection();
-           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE accountId = ? AND uuid =? ;");       
+           	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE uuid =? ;");       
         		
         		){
         	
-        	 pstmt.setString(1, accountId);
-        	 pstmt.setString(2, uuid);
+        	// pstmt.setString(1, accountId);
+        	 pstmt.setString(1, uuid);
 	         rset = pstmt.executeQuery();
 	     while(rset.next()){
 	

@@ -12,6 +12,10 @@
 			 
 			 $('#exam_btn').text("Save Changes");
 			 
+			 $('#exam_btn').attr('onclick', 'updateExam(this.form)');
+			 
+			 
+			 
 
 			 
 		 }else if(id == "add"){
@@ -19,6 +23,7 @@
 			 $('#examTiltle').text("Add a new Exam");
 			 $('#exam_btn').text("Submit");
 			 
+			 $('#exam_btn').attr('onclick', 'addExam(this.form)');
 			 $('#examForm').get(0).reset();
 			 
 			 

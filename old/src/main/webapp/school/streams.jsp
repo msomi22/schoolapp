@@ -162,14 +162,22 @@
 </div>
 <!-- /page content -->
 
+
+
+<!-- stream Modal -->
+<jsp:include page="modals/streamModals.html" />
+
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 
 
 
 
-<!-- stream Modal -->
-<jsp:include page="modals/streamModals.html" />
-
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+<!-- stream js -->
+<script src="js/apiCalls/streamApi.js"></script>
+
+
+<script src="js/stream.js"></script>

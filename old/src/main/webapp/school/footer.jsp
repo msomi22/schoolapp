@@ -199,7 +199,7 @@ $("#kcpeyear").datepicker({
 
 <script src="js/apiCalls/staffApi.js"></script>
 
-<script src="js/apiCalls/streamApi.js"></script>
+
 
 
 
@@ -251,8 +251,7 @@ $("#kcpeyear").datepicker({
 <script src="js/exam.js"></script>
 
 
-<!-- stream js -->
-<script src="js/stream.js"></script>
+
 
 
 <!-- excel import -->

@@ -3,6 +3,13 @@ var table;
 var uName = "demo";
 var passwrd = "12345678";
 
+var currentClassId = "";
+
+var currentAccId = "";
+
+var base_url = location.protocol + "//" + window.location.host
+		+ "/school/webapi/general/";
+
 $(document)
 		.ready(
 				function() {
@@ -10,7 +17,8 @@ $(document)
 					$
 							.ajax(
 									{
-										url : "http://localhost:8080/school/webapi/general/class/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+										url : base_url
+												+ "class/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
 										type : 'GET',
 										contentType : 'application/json',
 										accept : 'application/json',
@@ -39,19 +47,17 @@ $(document)
 											// = new Option(data[i].description,
 											// data[i].uuid);
 										}
-										
-										
 
 										console.log(data);
-										
-										var classId = $("#classesList");
-										var classIdVal = classId.options[classId.selectedIndex].value;
-										
-										//var classId= $('#classesList').val();
-										console.log(classIdVal);
-										
-										fetchStreams(classIdVal);
 
+										var classId = document
+												.getElementById('classesList');
+										var classIdVal = classId.options[classId.selectedIndex].value;
+
+										// var classId= $('#classesList').val();
+										console.log(classIdVal);
+
+										fetchStreams(classIdVal);
 
 									}).fail(function(jqXHR, textStatus) {
 
@@ -59,24 +65,19 @@ $(document)
 								console.log(textStatus);
 
 							});
-					
-										
 
 				});
 
-
-
-
-
 function fetchStreams(classID) {
+
+	currentAccId = classID;
 
 	$
 			.ajax(
 					{
-						url : location.protocol
-								+ "//"
-								+ window.location.host
-								+ "/school/webapi/general/stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/classID/",
+						url : base_url
+								+ "streams/E3CDC578-37BA-4CDB-B150-DAB0409270CD/"
+								+ classID + "/",
 						type : 'GET',
 						dataType : 'json',
 						contentType : 'application/json',
@@ -91,93 +92,109 @@ function fetchStreams(classID) {
 
 						// alert(data);
 						console.log(data);
-						
-						if(data["message"] != "error"){
 
-						var cols = [];
+						if (data["message"] != "error") {
 
-						var getCol = data[0];
+							var cols = [];
 
-						var keys = Object.keys(getCol);
+							var getCol = data[0];
 
-						keys.forEach(function(k) {
+							console.log(getCol);
 
-							if (k == "description") {
+							currentAccId = getCol["accountId"];
+							$("#accountId").val(currentAccId);
+							$("#accountId_add").val(currentAccId);
 
-								cols.push({
-									title : "Description",
-									data : k,
-								// optionally do some type detection here for
-								// render function
+							var keys = Object.keys(getCol);
 
-								});
-							} else {
+							keys.forEach(function(k) {
 
-								cols.push({
-									title : k,
-									data : k,
-								});
+								if (k == "description") {
 
-							}
+									cols.push({
+										title : "Description",
+										data : k,
+									// optionally do some type detection here
+									// for
+									// render function
 
-						});
+									});
+								} else {
 
-						if (table)
-							table.clear();
+									cols.push({
+										title : k,
+										data : k,
+									});
 
-						table = $('#streams')
-								.DataTable(
-										{
+								}
 
-											destroy : true,
-											columns : cols,
-											"columnDefs" : [
-													{
-														"targets" : [ 0 ],
-														"visible" : false,
-														"searchable" : false
-													},
-													{
-														"targets" : [ 1 ],
-														"visible" : false
-													},
-													{
-														"targets" : [ 2 ],
-														"visible" : false
-													},
-													{
-														"targets" : [ 4 ],
-														"data" : null,
-														"defaultContent" : '<button class="btn btn-warning editStream" id="edit_stream" onclick="streamModal(this.id)">Edit <span class="fa fa-edit"></span></button><button class="btn btn-danger" id="Form 1N"onclick="delStream(this.id)">Delete <span class="fa fa-trash"></span></button>'
-													} ],
-											searching : false,
-											"bPaginate" : false,
-											"bLengthChange" : false,
+							});
 
-											"order" : [ [ 0, "desc" ] ]
+							if (table)
+								table.clear();
 
-										});
+							table = $('#streams')
+									.DataTable(
+											{
 
-						table.rows.add(data).draw();
+												destroy : true,
+												columns : cols,
+												"columnDefs" : [
+														{
+															"targets" : [ 0 ],
+															"visible" : false,
+															"searchable" : false
+														},
+														{
+															"targets" : [ 1 ],
+															"visible" : false
+														},
+														{
+															"targets" : [ 2 ],
+															"visible" : false
+														},
+														{
+															"targets" : [ 4 ],
+															"data" : null,
+															"defaultContent" : '<button class="btn btn-warning editStream" id="edit_stream" onclick="streamModal(this.id)">Edit <span class="fa fa-edit"></span></button><button class="btn btn-danger" id="Form 1N"onclick="delStream(this.id)">Delete <span class="fa fa-trash"></span></button>'
+														} ],
+												searching : false,
+												"bPaginate" : false,
+												"bLengthChange" : false,
 
-						$('#streams tbody').on(
-								'click',
-								'button',
-								function() {
-									var data = table.row($(this).parents('tr'))
-											.data();
-									
-									console.log(data);
-									
-									
-									//console.log($("#desc").val(data[3]));
-									$("#desc").val(data['description']);
-									console.log(data['description']);
-									$("#classId").val(data['classRoomId']);
-									
-									
-								});
-						
+												"order" : [ [ 0, "desc" ] ]
+
+											});
+
+							table.rows.add(data).draw();
+
+							$('#streams tbody').on(
+									'click',
+									'button',
+									function() {
+										var data = table.row(
+												$(this).parents('tr')).data();
+
+										console.log(data);
+
+										// console.log($("#desc").val(data[3]));
+										$("#desc").val(data['description']);
+										console.log(data['description']);
+										console.log(data['accountId']);
+										$("#classId_edit").val(
+												data['classRoomId']);
+
+										$("#uuid").val(data['uuid']);
+
+										$("#del_uuid").val(data['uuid']);
+
+										console.log(data['uuid']);
+
+										currentClassId = data['classRoomId'];
+										$("#accountId").val(data['accountId']);
+
+									});
+
 						}
 
 					}).fail(function(jqXHR, textStatus) {
@@ -187,29 +204,156 @@ function fetchStreams(classID) {
 
 }
 
-function StaffApiCall() {
+function addNewStream() {
 
-	$("#staffForm")
+	// $('#stream_btn_add').prop("type", "button");
+
+	// console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+
+	/*
+	 * $("#addStreamForm") .submit( function(e) { // e.preventDefault();
+	 * 
+	 * 
+	 * });
+	 */
+
+	var myform = $("#addStreamForm")[0];
+	if (!myform.checkValidity()) {
+		if (myform.reportValidity) {
+			myform.reportValidity();
+		} else {
+			// warn IE users somehow :)
+		}
+	} else {
+
+		// console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+		
+		
+		
+
+		console.log(currentClassId);
+
+		$.ajax(
+				{
+					url : base_url
+							+ "stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+					type : 'POST',
+					dataType : 'json',
+					data : JSON.stringify($('#addStreamForm').serializeJSON()),
+					contentType : 'application/json',
+					accept : 'application/json',
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader('Authorization', 'Basic '
+								+ btoa(uName + ":" + passwrd));
+					}
+				}).done(function(data) {
+
+		
+
+		//	$('#addStreamForm').get(0).reset();
+
+		//	console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+
+			if (data.description.includes("successfully")) {
+				
+				
+				currentClassId = $('#classId_add').val();
+				
+				$("#classesList").val(currentClassId);
+				
+				
+
+				$('#success').modal('show');
+
+				$('#successTitle').text(data.description);
+				$('#successSms').text(data.description);
+
+				$('#classesList').val($('#classId_add').val());
+
+				$('#addStreamForm').get(0).reset();
+
+				setTimeout(function() {
+
+					$('#addStreamModal').modal('hide');
+				}, 2500);
+
+				setTimeout(function() {
+
+					$('#success').modal('hide');
+				}, 3000);
+
+				fetchStreams(currentClassId);
+
+			} else if (data.description.includes("exist")) {
+
+				$('#error').modal('show');
+
+				$('#errorTitle').text("Stream Exists");
+
+				$('#errorSms').text(data.description);
+
+				setTimeout(function() {
+
+					$('#error').modal('hide');
+				}, 2500);
+
+			} else {
+
+				$('#warning').modal('show');
+
+				$('#warningTitle').text("Details Input Error");
+
+				$('#warningSms').text(data.description);
+
+				setTimeout(function() {
+
+					$('#warning').modal('hide');
+				}, 2500);
+
+			}
+
+		}).fail(function(jqXHR, textStatus) {
+
+			// alert("Error: " + textStatus);
+
+			$('#error').modal('show');
+
+			$('#errorTitle').text("Fatal Error");
+
+			$('#errorSms').text(textStatus);
+
+			setTimeout(function() {
+
+				$('#error').modal('hide');
+			}, 2500);
+		})
+	}
+
+}
+
+function updateStreamApiCall() {
+
+	// alert ("Swapp worked");
+	
+	
+
+	$("#editStreamForm")
 			.submit(
 					function(e) {
 						e.preventDefault();
-
-						var dataTxt = ' {  "acessLevelId":"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","staffNo":"3060","firstname":"Peter","middlename":"Mwenda","lastname":"Njeru","gender":"M","mobile":"718953974","email":"peter.mwenda@adcea.com","username":"msomi22","password":"12345667890" } ';
-
-						var dataObj = JSON.parse(dataTxt);
-						var uName = "demo";
-						var passwrd = "12345678";
-
-						// alert(JSON.stringify($('#staffForm').serializeJSON()));
+						
+						
+						
 
 						$
 								.ajax(
 										{
-											url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
-											type : 'POST',
+											url : base_url
+													+ "stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+											type : 'PUT',
 											dataType : 'json',
 											data : JSON.stringify($(
-													'#staffForm')
+													'#editStreamForm')
 													.serializeJSON()),
 											contentType : 'application/json',
 											accept : 'application/json',
@@ -230,17 +374,29 @@ function StaffApiCall() {
 
 											if (data.description
 													.includes("successfully")) {
+												
+												
+												currentClassId = $('#classId_edit').val();
+												
+												$("#classesList").val(currentClassId);
+												
+												
+												
 
 												$('#success').modal('show');
 
 												$('#successTitle').text(
 														data.description);
 
+												$('#successSms').text(
+														data.description);
+
 												setTimeout(function() {
 
-													$('#staffForm').get(0)
+													$('#editStreamForm').get(0)
 															.reset();
-													$('#staff').modal('hide');
+													$('#updateStreamModal')
+															.modal('hide');
 												}, 2500);
 
 												setTimeout(
@@ -251,13 +407,15 @@ function StaffApiCall() {
 																			'hide');
 														}, 3000);
 
+												fetchStreams(currentClassId);
+
 											} else if (data.description
-													.includes("exist")) {
+													.includes("wrong")) {
 
 												$('#error').modal('show');
 
 												$('#errorTitle').text(
-														"Staff Exists");
+														"Fatal Error");
 
 												$('#errorSms').text(
 														data.description);
@@ -289,13 +447,14 @@ function StaffApiCall() {
 
 										}).fail(function(jqXHR, textStatus) {
 
-									// alert("Error: " + textStatus);
+									// alert("Error: " +
+									// textStatus);
 
 									$('#error').modal('show');
 
-									$('errorTitle').text("Fatal Error");
+									$('#errorTitle').text("Fatal Error");
 
-									$('errorSms').text(textStatus);
+									$('#errorSms').text(textStatus);
 
 									setTimeout(function() {
 
@@ -307,130 +466,185 @@ function StaffApiCall() {
 
 }
 
-function updateStaffApiCall(state) {
+function delStreamApiCall() {
 
-	// alert ("Swapp worked");
+	var uuid = $('#del_uuid').val();
 
-	if (state == 'disable') {
+	console.log(uuid);
 
-	} else if (state == 'update') {
+	$.ajax(
+			{
+				url : base_url
+						+ "stream/delete/E3CDC578-37BA-4CDB-B150-DAB0409270CD/"
+						+ uuid + "/",
+				type : 'DELETE',
+				dataType : 'json',
+				contentType : 'application/json',
+				accept : 'application/json',
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader('Authorization', 'Basic '
+							+ btoa(uName + ":" + passwrd));
+				}
+			}).done(function(data) {
 
-		$("#staffForm")
-				.submit(
-						function(e) {
-							e.preventDefault();
+		// alert(data.description);
 
-							var dataTxt = ' {  "acessLevelId":"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","staffNo":"3060","firstname":"Peter","middlename":"Mwenda","lastname":"Njeru","gender":"M","mobile":"718953974","email":"peter.mwenda@adcea.com","username":"msomi22","password":"12345667890" } ';
+		if (data.description.includes("successfully")) {
 
-							var dataObj = JSON.parse(dataTxt);
-							var uName = "demo";
-							var passwrd = "12345678";
+			$('#success').modal('show');
 
-							// alert(JSON.stringify($('#staffForm').serializeJSON()));
+			$('#successTitle').text("Deletion State");
 
-							$
-									.ajax(
-											{
-												url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
-												type : 'PUT',
-												dataType : 'json',
-												data : JSON.stringify($(
-														'#staffForm')
-														.serializeJSON()),
-												contentType : 'application/json',
-												accept : 'application/json',
-												beforeSend : function(xhr) {
-													xhr
-															.setRequestHeader(
-																	'Authorization',
-																	'Basic '
-																			+ btoa(uName
-																					+ ":"
-																					+ passwrd));
-												}
-											})
-									.done(
-											function(data) {
+			$('#successSms').text(data.description);
 
-												// alert(data.description);
+			setTimeout(function() {
 
-												if (data.description
-														.includes("successfully")) {
+				$('#delStream').get(0).reset();
+				$('#del_modal').modal('hide');
+			}, 2500);
 
-													$('#success').modal('show');
+			setTimeout(function() {
 
-													$('#successTitle').text(
-															data.description);
+				$('#success').modal('hide');
+			}, 3000);
 
-													setTimeout(function() {
+			fetchStreams(currentClassId);
 
-														$('#staffForm').get(0)
-																.reset();
-														$('#staff').modal(
-																'hide');
-													}, 2500);
+		} else if (data.description.includes("wrong")) {
 
-													setTimeout(function() {
+			$('#error').modal('show');
 
-														$('#success').modal(
-																'hide');
-													}, 3000);
+			$('#errorTitle').text("Fatal Error");
 
-												} else if (data.description
-														.includes("wrong")) {
+			$('#errorSms').text(data.description);
 
-													$('#error').modal('show');
+			setTimeout(function() {
 
-													$('#errorTitle').text(
-															"Fatal Error");
+				$('#error').modal('hide');
+			}, 2500);
 
-													$('#errorSms').text(
-															data.description);
+		} else {
 
-													setTimeout(function() {
+			$('#warning').modal('show');
 
-														$('#error').modal(
-																'hide');
-													}, 2500);
+			$('#warningTitle').text("Details Input Error");
 
-												} else {
+			$('#warningSms').text(data.description);
 
-													$('#warning').modal('show');
+			setTimeout(function() {
 
-													$('#warningTitle')
-															.text(
-																	"Details Input Error");
+				$('#warning').modal('hide');
+			}, 2500);
 
-													$('#warningSms').text(
-															data.description);
+		}
 
-													setTimeout(function() {
+	}).fail(function(jqXHR, textStatus) {
 
-														$('#warning').modal(
-																'hide');
-													}, 2500);
+		// alert("Error: " +
+		// textStatus);
 
-												}
+		$('#error').modal('show');
 
-											}).fail(
-											function(jqXHR, textStatus) {
+		$('#errorTitle').text("Fatal Error");
 
-												// alert("Error: " +
-												// textStatus);
+		$('#errorSms').text(textStatus);
 
-												$('#error').modal('show');
+		setTimeout(function() {
 
-												$('errorTitle').text(
-														"Fatal Error");
+			$('#error').modal('hide');
+		}, 2500);
+	})
 
-												$('errorSms').text(textStatus);
-
-												setTimeout(function() {
-
-													$('#error').modal('hide');
-												}, 2500);
-											})
-
-						});
-	}
 }
+
+/*
+ * if(!this.checkValidity()) { event.preventDefault(); //
+ * $('#stream_btn_add').prop("type", "submit"); }else{
+ * 
+ * event.preventDefault();
+ * 
+ * //$('#stream_btn_add').prop("type", "button");
+ *  // alert(JSON.stringify($('#staffForm').serializeJSON())); currentClassId=
+ * $('#classId_add').val();
+ * 
+ * 
+ * console.log(currentClassId);
+ *  $ .ajax( { url :
+ * "http://localhost:8080/school/webapi/general/stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+ * type : 'POST', dataType : 'json', data : JSON.stringify($( '#addStreamForm')
+ * .serializeJSON()), contentType : 'application/json', accept :
+ * 'application/json', beforeSend : function(xhr) { xhr .setRequestHeader(
+ * 'Authorization', 'Basic ' + btoa(uName + ":" + passwrd)); } }) .done(
+ * function(data) {
+ *  // alert(data.description);
+ * 
+ * $('#addStreamForm').get(0) .reset();
+ * 
+ * 
+ * console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+ * 
+ * 
+ * 
+ * if (data.description .includes("successfully")) {
+ * 
+ * $('#success').modal('show');
+ * 
+ * $('#successTitle').text( data.description);
+ * 
+ * 
+ * $('#classesList').val($('#classId_add').val());
+ * 
+ * $('#addStreamForm').get(0) .reset();
+ * 
+ * setTimeout(function() {
+ * 
+ * 
+ * $('#addStreamModal').modal('hide'); }, 2500);
+ * 
+ * setTimeout( function() {
+ * 
+ * $('#success') .modal( 'hide'); }, 3000);
+ * 
+ * 
+ * 
+ * fetchStreams(currentClassId);
+ * 
+ *  } else if (data.description .includes("exist")) {
+ * 
+ * $('#error').modal('show');
+ * 
+ * $('#errorTitle').text( "Stream Exists");
+ * 
+ * $('#errorSms').text( data.description);
+ * 
+ * setTimeout(function() {
+ * 
+ * $('#error').modal('hide'); }, 2500);
+ *  } else {
+ * 
+ * $('#warning').modal('show');
+ * 
+ * $('#warningTitle').text( "Details Input Error");
+ * 
+ * $('#warningSms').text( data.description);
+ * 
+ * setTimeout( function() {
+ * 
+ * $('#warning') .modal( 'hide'); }, 2500);
+ *  }
+ * 
+ * }).fail(function(jqXHR, textStatus) {
+ *  // alert("Error: " + textStatus);
+ * 
+ * $('#error').modal('show');
+ * 
+ * $('#errorTitle').text("Fatal Error");
+ * 
+ * $('#errorSms').text(textStatus);
+ * 
+ * setTimeout(function() {
+ * 
+ * $('#error').modal('hide'); }, 2500); })
+ * 
+ *  }
+ */
