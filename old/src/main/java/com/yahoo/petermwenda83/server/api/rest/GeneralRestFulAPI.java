@@ -20,6 +20,9 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiExam;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
+import com.yahoo.petermwenda83.server.api.rest.bean.SmsExams;
+import com.yahoo.petermwenda83.server.servlet.reports.PerStudentSMSResult;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -384,6 +387,49 @@ public class GeneralRestFulAPI {
 	
 	
 	
+	@ApiOperation(value = "Get stream list.", 
+			notes = "Stream details.", 
+			response = SmsExams.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+
+	@POST 
+	@Path("/result/{accountId}/{regNo}/{examType}/{subjectsNo}")     
+	public Object getStudentExamResult(@PathParam("subjectsNo") String subjectsNo, @PathParam("examType") String examType,
+			@PathParam("regNo") String regNo, @PathParam("accountId") String accountId,
+			@HeaderParam("authorization") String auth, List<SmsExams> exams ) {
+
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated!");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+			
+		}else if(!PerStudentSMSResult.valideRequest(accountId, regNo, subjectsNo, examType)) {
+		
+			response.setMessage("error");
+			response.setDescription("Invalid Parameters!");
+			return response; 
+			
+		}else if(!PerStudentSMSResult.validaExams(accountId,exams)){
+			response.setMessage("error");
+			response.setDescription("Invalid Exams!");
+			return response; 
+		}else {
+			
+			boolean sub7  = false;
+			if(Integer.valueOf(subjectsNo) == 7) {
+				sub7 = true;
+			}
+			
+			return PerStudentSMSResult.processResult(accountId, regNo, sub7, examType ,exams);
+			
+		}
+	}
+
+
 	
 
 }
