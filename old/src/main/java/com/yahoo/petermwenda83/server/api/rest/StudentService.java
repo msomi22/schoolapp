@@ -250,16 +250,15 @@ public class StudentService {
 	 * @param regNo
 	 * @return
 	 */
-	public StudentResponse getStudent(String accountId, String regNo) {
+	public Object getStudent(String accountId, String regNo) {
 
-		StudentResponse response = new StudentResponse();
+		StudentResponse studentResponse = new StudentResponse();
 
 		if(studentDAO.getStudentByregNo(accountId, regNo) == null) {
-			ApiResponse apiResponse = new ApiResponse();
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("RegNo/AccountId Not found!"); 
+			Response response = new Response();
+			response.setMessage("error");
+			response.setDescription("RegNo/AccountId Not found!"); 
 
-			response.setApiResponse(apiResponse);
 			return response;
 
 		}else {
@@ -304,13 +303,13 @@ public class StudentService {
 			apiResponse.setMessage("success");
 			apiResponse.setDescription("OK"); 
 
-			response.setApiResponse(apiResponse);
-			response.setStudentFeeAPI(studentFeeAPI);
+			studentResponse.setApiResponse(apiResponse);
+			studentResponse.setStudentFeeAPI(studentFeeAPI);
 
 
 		}
 
-		return response;
+		return studentResponse;
 	}
 
 	/**

@@ -30,6 +30,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
@@ -201,17 +202,14 @@ public class StudentRestFulAPI{
 	} )
 	@GET 
 	@Path("/fee/{accountId}/{regNo}") 
-	public StudentResponse getStudentFeeInfo(@PathParam("accountId") String accountId, 
+	public Object getStudentFeeInfo(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
 
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
-
-
+		
+		Response response = new Response(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
