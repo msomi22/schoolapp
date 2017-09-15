@@ -72,10 +72,11 @@
 								<thead>
 									<tr class="headings secondary-assent">
 
-										<th class="column-title">#</th>
-										<th class="column-title">Exam Code</th>
+										<th class="column-title">uuid</th>
+										<th class="column-title">accountId</th>
+										<th class="column-title">code</th>
 										<th class="column-title">Description</th>
-										<th class="column-title">Out of (Score)</th>
+										<th class="column-title">outOf</th>
 										<th class="column-title">Modify</th>
 
 									</tr>
@@ -85,7 +86,7 @@
 
 
 
-									<tr class="tabledit" style='color: black;'>
+									<!-- <tr class="tabledit" style='color: black;'>
 
 										<td width="5%">1</td>
 										<td class="center">P1</td>
@@ -104,7 +105,7 @@
 											</button>
 										</td>
 
-									</tr>
+									</tr> -->
 
 
 								</tbody>
@@ -147,12 +148,21 @@
 </div>
 <!-- /page content -->
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
-
 
 <!-- exam Modal -->
 <jsp:include page="modals/examModals.html" />
 
+
+
+<!-- State Modal -->
+<jsp:include page="modals/statemodals.html" />
+
+
+
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+<script src="js/apiCalls/examApi.js"></script>
+
+

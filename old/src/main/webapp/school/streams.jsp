@@ -68,7 +68,7 @@
 
 						<div class="row">
 						<div class="col-md-4 col-md-offset-4">
-						<h2><select class="form-control formelement" onchange="fetchStreams()">
+						<h2><select class="form-control formelement populateOptions" onchange="fetchStreams(this.value)" id="classesList">
 						
 						<option>Form 1</option>
 						
@@ -89,8 +89,9 @@
 								<thead>
 									<tr class="headings secondary-assent">
 
-										<th class="column-title">#</th>
-										<th class="column-title hidden">Class ID</th>
+										<th class="column-title">UUID</th>
+										<th class="column-title">Class ID</th>
+										<th class="column-title">Account ID</th>
 										<th class="column-title">Description</th>
 										<th class="column-title">Modify</th>
 
@@ -101,7 +102,7 @@
 
 
 
-									<tr class="tabledit" style='color: black;'>
+									<!-- <tr class="tabledit" style='color: black;'>
 
 										<td width="5%">1</td>
 										<td class="center hidden">### ###</td>
@@ -118,7 +119,7 @@
 											</button>
 										</td>
 
-									</tr>
+									</tr> -->
 
 
 								</tbody>
@@ -161,14 +162,22 @@
 </div>
 <!-- /page content -->
 
+
+
+<!-- stream Modal -->
+<jsp:include page="modals/streamModals.html" />
+
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 
 
 
 
-<!-- stream Modal -->
-<jsp:include page="modals/streamModals.html" />
-
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+<!-- stream js -->
+<script src="js/apiCalls/streamApi.js"></script>
+
+
+<script src="js/stream.js"></script>

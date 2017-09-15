@@ -203,6 +203,8 @@ $("#kcpeyear").datepicker({
 
 
 
+
+
 <script>
 	var timepicker = new Pikaday({
 		field : document.getElementById('dob'),
@@ -249,21 +251,20 @@ $("#kcpeyear").datepicker({
 <script src="js/exam.js"></script>
 
 
-<!-- stream js -->
-<script src="js/stream.js"></script>
+
 
 
 <!-- excel import -->
 
    <!-- uncomment the next line here and in xlsxworker.js for encoding support -->
 <!--<script src="dist/cpexcel.js"></script>-->
-<script src="js/excelImport/shim.js"></script>
+<!-- <script src="js/excelImport/shim.js"></script>
 <script src="js/excelImport/jszip.js"></script>
-<script src="js/excelImport/xlsx.js"></script>
+<script src="js/excelImport/xlsx.js"></script> -->
 <!-- uncomment the next line here and in xlsxworker.js for ODS support -->
-<script src="js/excelImport/ods.js"></script>
+<!-- <script src="js/excelImport/ods.js"></script> -->
 
-<script src="js/excelImport/processImportData.js"></script>
+<script src="js/excelImport/excelImport.js"></script>
 
 
 

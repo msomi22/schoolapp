@@ -6,37 +6,56 @@
 	 
 	 function streamModal(id){
 		 
-		 if(id =="edit"){
+		 if(id =="edit_stream"){
 			 
 			// alert(id);
-			 $('#streamTiltle').text("Edit Stream Details");
+			/* $('#streamTiltle').text("Edit Stream Details");
 			 
-			 $('#stream_btn').text("Save Changes");
+			 //$('#stream_btn').text("Save Changes");
+			 
+			// $('#stream_btn').text("Save Changes");
+			 $("#stream_btn_add").hide();
+			 $("#stream_btn_update").show(1000);*/
+			 
+			 $('#updateStreamModal').modal('show');
 			 
 
 			 
 		 }else if(id == "add"){
 			 
-			 $('#streamTiltle').text("Add a new Stream");
-			 $('#stream_btn').text("Submit");
+			 /*$('#streamForm').get(0).reset();
 			 
-			 $('#streamForm').get(0).reset();
+			 $('#streamTiltle').text("Add a new Stream");
+			// $('#stream_btn').text("Submit");
+			 
+			 $("#stream_btn_update").hide();
+			 $("#stream_btn_add").show(1000);*/
+			 
+			 $('#addStreamForm').get(0)
+				.reset();
+			 
+			 
+			 console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+			 
+			 $('#addStreamModal').modal('show');
+			 
+			 
 			 
 			 
 		 }
 		 
 		 
-		 $('#stream').modal('show');
+		/// $('#stream').modal('show');
 		 
 		 }
 	 
 	 
 	 function delStream(stream){
 		 
-		 $('#disableTitle').text("Delete Stream");
+		 $('#delTitle').text("Delete Stream");
 		 
-		 $('#disableSms').text("Are you sure you want to Delete stream,"+ stream+"?");
-		 $('#Dis_modal').modal('show');
+		 $('#delSms').text("Are you sure you want to Delete this stream?");
+		 $('#del_modal').modal('show');
 	 }
 	 
 	 
@@ -45,15 +64,9 @@
 	 $(".editStream")
 		.click(
 				function() {
+					console.log('clicked');
 					
-					$("#desc")
-							.val(
-									$(this).closest('tr')
-											.children()[2].textContent);
-					$("#classId")
-							.val(
-									$(this).closest('tr')
-											.children()[1].textContent);
+					
 
 					
 

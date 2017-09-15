@@ -245,8 +245,8 @@ public class GeneralRestFulAPI {
 	} )
 
 	@DELETE
-	@Path("/stream/{accountId}")  
-	public Object deleteStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, String uuid) {
+	@Path("/stream/delete/{accountId}/{uuid}")  
+	public Object deleteStream(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, @PathParam("uuid") String uuid) {
 
 		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
@@ -319,7 +319,7 @@ public class GeneralRestFulAPI {
 		
 		
 
-		return generalService.getStreamList(accountId); 
+		return generalService.getExams(accountId); 
 	}
 	
 	/**
