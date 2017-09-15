@@ -87,6 +87,9 @@
 								</div>
 							</div>
 							<h3>Student's Name <%= reg %></h3>
+							
+							<input type="hidden" id="passedParam" name="regno" value="<%= reg %>">
+							
 
 							<ul class="list-unstyled user_data">
 								<li><i class="fa fa-map-marker user-profile-icon"></i>
@@ -689,3 +692,10 @@
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+
+
+<script src="js/updateStudent.js"></script>
+
+
