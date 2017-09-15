@@ -40,7 +40,7 @@
 								<br> <br> <label for="desc">Stream Name</label> <input
 									type="text" id="desc_add" name="description"
 									class="form-control formelement" placeholder="Description"
-									pattern="[a-zA-Z0-9\s]{3,30}"
+									pattern="[a-zA-Z]{1}" maxlength="1"
 									title="Stream Name,Only characters are allowed and should be more than three and less than 30 characters "
 									required> <br>
 							</div>
@@ -139,7 +139,7 @@
 								<br> <br> <label for="desc">Stream Name</label> <input
 									type="text" id="desc" name="description"
 									class="form-control formelement" placeholder="Description"
-									pattern="[a-zA-Z0-9\s]{3,30}"
+									pattern="[a-zA-Z]{1}" maxlength="1"
 									title="Stream Name,Only characters are allowed and should be more than three and less than 30 characters "
 									required> <br>
 							</div>
@@ -182,7 +182,7 @@
 					
 					
 					
-					<button type="submit" onclick="updateStreamApiCall()" class="btn btn-info pull-right" id="stream_btn_update">
+					<button type="button" onclick="updateStreamApiCall()" class="btn btn-info pull-right" id="stream_btn_update">
 						Save Changes <i class="fa fa-save"></i>
 					</button>
 					
