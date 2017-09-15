@@ -178,7 +178,9 @@ function fetchStreams(classID) {
 										console.log(data);
 
 										// console.log($("#desc").val(data[3]));
-										$("#desc").val(data['description']);
+										
+										var desc= data['description'];
+										$("#desc").val(desc.substr(6,1));
 										console.log(data['description']);
 										console.log(data['accountId']);
 										$("#classId_edit").val(
@@ -337,16 +339,16 @@ function updateStreamApiCall() {
 	
 	
 
-	$("#editStreamForm")
-			.submit(
-					function(e) {
-						e.preventDefault();
-						
-						
-						
-
-						$
-								.ajax(
+	
+			var myform = $("#editStreamForm")[0];
+	if (!myform.checkValidity()) {
+		if (myform.reportValidity) {
+			myform.reportValidity();
+		} else {
+			// warn IE users somehow :)
+		}
+	} else {
+								$.ajax(
 										{
 											url : base_url
 													+ "stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
@@ -460,9 +462,8 @@ function updateStreamApiCall() {
 
 										$('#error').modal('hide');
 									}, 2500);
-								})
-
-					});
+								});
+	}					
 
 }
 
