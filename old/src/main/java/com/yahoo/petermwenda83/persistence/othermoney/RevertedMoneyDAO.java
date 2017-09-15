@@ -147,7 +147,8 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 		List<RevertedMoney> list = null;
 		try (
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ? LIMIT ? OFFSET ?;");
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ?"
+						+ "ORDER BY dateReverted DESC LIMIT ? OFFSET ?;");
 				) {
 			pstmt.setString(1, studentId);    
 			pstmt.setInt(2, endIndex - startIndex);
@@ -173,7 +174,8 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 		List<RevertedMoney> list = null;
 		try (
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ? AND studentId = ?;");
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ? AND studentId = ?"
+						+ "ORDER BY dateReverted DESC ;");
 				) {
 			
 			pstmt.setString(1, studentId);    

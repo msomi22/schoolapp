@@ -57,7 +57,7 @@ public class StudentService {
 	private static OtherFeeDAO otherFeeDAO;
 	private static StudentOtherFeeDAO studentOtherFeeDAO;
 	private static RevertedMoneyDAO revertedMoneyDAO;
-	
+
 	private static SysConfigDAO sysConfigDAO;
 	private static EmailValidator emailValidator;
 
@@ -79,7 +79,7 @@ public class StudentService {
 		otherFeeDAO = OtherFeeDAO.getInstance();
 		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
 		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
-		
+
 		sysConfigDAO = SysConfigDAO.getInstance();
 		emailValidator = EmailValidator.getInstance();
 
@@ -99,62 +99,62 @@ public class StudentService {
 	 * @return
 	 */
 	public Object getStudentById(String accountId, String studentId) {
-		
+
 		ApiResponse apiResponse = new ApiResponse();
-		
+
 		APIStudent apiStudent = new APIStudent();
-		
-		
-		
+
+
+
 		if(studentDAO.getStudentById(accountId, studentId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("studentId is invalid!");
-			
+
 		}else {
-			
+
 			try {
-				
-				
-				
+
+
+
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
-				
+
 				APIParentPrimary apiParentPrimary = new APIParentPrimary();
-				
+
 				//primary
 				if(primaryDAO.getStudentPrimary(accountId, studentId) != null) {
-					
+
 					StudentPrimary primary = primaryDAO.getStudentPrimary(accountId, studentId);
-					
+
 					apiParentPrimary.setSchoolName(primary.getSchoolName());
 					apiParentPrimary.setIndex(primary.getIndex());
 					apiParentPrimary.setKcpemark(primary.getKcpemark());
 					apiParentPrimary.setKcpeyear(primary.getKcpeyear());
 				}
-				
-				
-				
+
+
+
 				//parent
 				if(parentsDAO.getParent(accountId, studentId) != null) {
-					
+
 					StudentParent studentParent = parentsDAO.getParent(accountId, studentId);
-					
+
 					apiParentPrimary.setParentName(studentParent.getName());
 					apiParentPrimary.setParentEmail(studentParent.getEmail());
 					apiParentPrimary.setParentMobile(studentParent.getMobile());
 				}
-				
-				
-				
+
+
+
 				apiStudent.setApiParentPrimary(apiParentPrimary);
-				
+
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-		
+
 		return apiStudent;
 	}
 
@@ -340,7 +340,7 @@ public class StudentService {
 				feeHistory = studentFeeDAO.getStudentFeeList(accountId, student.getUuid(), term, year);
 				feeHistory.forEach(feeHist ->{
 					APIStudentFee apiStudentFee = new APIStudentFee();
-					
+
 					try {
 						BeanUtils.copyProperties(apiStudentFee, feeHist); 
 					} catch (IllegalAccessException e) {
@@ -348,57 +348,67 @@ public class StudentService {
 					} catch (InvocationTargetException e) {
 						e.printStackTrace();
 					}
-					
+
 					apiStudentFeeList.add(apiStudentFee);
 				});
-				
+
 			}
 
 			studentFeeAPI.setFeeHistory(apiStudentFeeList);
-			
+
 			List<APIStudentOtherFee> otherfeeHistory = new ArrayList<>();
 			List<RevertedFee> revertedFeeList  = new ArrayList<>();
-			
+
 			if(studentOtherFeeDAO.getStudentOtherFeeList(accountId, student.getUuid()) != null) {
+
 				List<StudentOtherFee> list = studentOtherFeeDAO.getStudentOtherFeeList(accountId, student.getUuid());
+
 				for(StudentOtherFee otherfee : list) {
 					APIStudentOtherFee studentOtherFee = new APIStudentOtherFee();
-					OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, otherfee.getUuid());
-					studentOtherFee.setAmount(String.valueOf(otherFee.getAmount())); 
-					studentOtherFee.setDateAllocated(otherfee.getDateAllocated().toString());
-					studentOtherFee.setOtherFeeId(otherFee.getDescription()); 
-					studentOtherFee.setTermPiad(otherfee.getTermPiad()); 
-					
-					otherfeeHistory.add(studentOtherFee);
+
+					if(otherFeeDAO.getOtherFee(accountId, otherfee.getOtherFeeId()) != null) {
+						
+						OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, otherfee.getOtherFeeId());
+
+						studentOtherFee.setAmount(String.valueOf(otherFee.getAmount())); 
+						studentOtherFee.setDateAllocated(otherfee.getDateAllocated().toString());
+						studentOtherFee.setOtherFeeId(otherFee.getDescription()); 
+						studentOtherFee.setTermPiad(otherfee.getTerm()); 
+
+						otherfeeHistory.add(studentOtherFee);
+					}
+
+
 				}
-				
+
 			}
-			
+
 			if(revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid()) != null) {
-				List<RevertedMoney> list = revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid());
+				
+				List<RevertedMoney> revertedMoneyList = revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid());
+				
 				RevertedFee revertedFee = new RevertedFee();
-				
-				for(RevertedMoney rfee : list) {
-					OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, rfee.getUuid());
-					revertedFee.setAmount(String.valueOf(otherFee.getAmount()));
-					revertedFee.setOtherFeeId(otherFee.getDescription());
-					revertedFee.setDateReverted(rfee.getDateReverted().toString()); 
-					
-					revertedFeeList.add(revertedFee);
+
+				for(RevertedMoney revertedMoney : revertedMoneyList) {
+
+					if(otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId()) != null) {
+						
+						OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId());
+						
+						revertedFee.setAmount(String.valueOf(otherFee.getAmount()));
+						revertedFee.setOtherFeeId(otherFee.getDescription());
+						revertedFee.setDateReverted(revertedMoney.getDateReverted().toString()); 
+						revertedFeeList.add(revertedFee);
+					}
 				}
-				
+
 			}
-			
-			
-			
+
+
+
 			studentFeeAPI.setOtherfeeHistory(otherfeeHistory);
 			studentFeeAPI.setRevertedFeeList(revertedFeeList);  
 
-			ApiResponse apiResponse = new ApiResponse();
-			apiResponse.setMessage("success");
-			apiResponse.setDescription("OK"); 
-
-			studentResponse.setApiResponse(apiResponse);
 			studentResponse.setStudentFeeAPI(studentFeeAPI);
 
 
@@ -1081,9 +1091,9 @@ public class StudentService {
 		List<StudentInfo> studentInfoList = new ArrayList<>();
 
 		if(filter.getStart() >= 0 && filter.getSize() > 0){ 
-			
+
 			studentDAO.getAllStudent(accountId, filter.getStart(), filter.getSize()).forEach(student -> {
-				
+
 				StudentInfo studentInfo = new StudentInfo();
 
 				try {
@@ -1098,7 +1108,7 @@ public class StudentService {
 			});
 
 		}else if(!StringUtils.isBlank(filter.getQuery())) {
-			
+
 			studentDAO.searchStudent(accountId, filter.getQuery()).forEach(student -> {
 				StudentInfo studentInfo = new StudentInfo();
 

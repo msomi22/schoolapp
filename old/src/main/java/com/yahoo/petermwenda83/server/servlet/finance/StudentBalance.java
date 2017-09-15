@@ -32,12 +32,6 @@ import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
  */
 public class StudentBalance {
 
-	/*private static final String databaseName = "schooldb";
-	private static final String Host = "localhost";
-	private static final String databaseUsername = "school";
-	private static final String databasePassword = "AllaManO1";
-	private static final int databasePort = 5432;*/
-
 	private static SysConfigDAO sysConfigDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static StudentFeeDAO studentFeeDAO;
@@ -55,12 +49,6 @@ public class StudentBalance {
 		accountDAO = AccountDAO.getInstance();
 		otherFeeDAO = OtherFeeDAO.getInstance();
 
-		/*
-		sysConfigDAO = new SysConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		termFeeDAO = new TermFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		studentFeeDAO = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		studentOtherMoniesDAO = new StudentOtherFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		studentDAO = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);*/
 	}
 
 
@@ -92,31 +80,20 @@ public class StudentBalance {
 
 		Student student = studentDAO.getStudentById(accountId, studentId);
 		int finalYear = Integer.valueOf(student.getFinalYear()); 
-		//System.out.println("finalYear:" + finalYear);
-
+		
 		double balance = 0;
 		double amountPaid = 0;
 		double otherPaid = 0;
 
 		String admYear = yearformatter.format(student.getAdmissionDate());  
-
-		//System.out.println("admYear:" + admYear);
-
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 
 		currentYear = sysConfig.getYear();
 		currentTerm = sysConfig.getTerm();
 
-		//System.out.println("currentYear:" + currentYear);
-		//System.out.println("currentTerm:" + currentTerm);
-
 		int admYr = Integer.parseInt(admYear);
 		int admTm = Integer.parseInt(student.getRegTerm());
 		int crrntYr = Integer.parseInt(currentYear);
-
-		//System.out.println("admYr:" + admYr);
-		//System.out.println("admTm:" + admTm);
-		//System.out.println("crrntYr:" + crrntYr);
 
 		if(admTm == 2){   
 			terms = new String [] {"2","3"}; 
@@ -130,52 +107,56 @@ public class StudentBalance {
 		while(admYr <= crrntYr && crrntYr <= finalYear){ 
 			//start from admission year
 			String year = Integer.toString(admYr);
+			long yearLong = (long)admYr;
 			String term = "";
 
 			for(int i=0;i<terms.length;i++){
 				term = terms[i];
 
-				//start finding the balance here
-				studentFeeList = studentFeeDAO.getStudentFeeList(accountId, studentId, term, year);
-				otherFeeList = studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, year);
-
-				//System.out.println("studentFeeList:" + studentFeeList.size());
-				//System.out.println("otherFeeList:" + otherFeeList.size());
-
+				if(studentFeeDAO.getStudentFeeList(accountId, studentId, term, year) != null) {
+					studentFeeList = studentFeeDAO.getStudentFeeList(accountId, studentId, term, year);
+				}
+				
+				
+				
+				if(studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, yearLong) != null) {
+					otherFeeList = studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, yearLong);
+				}
+				
 
 				TermFee admTermFee = new TermFee();
-				admTermFee = termFeeDAO.getFee(accountId,term, year);
-
-				//System.out.println("TermFee:" + admTermFee.getBoaderAmount() + " ** " + admTermFee.getDayAmount());
+				if(termFeeDAO.getFee(accountId,term, year) != null) {
+					admTermFee = termFeeDAO.getFee(accountId,term, year);
+				}
+				
 
 				amountPaid = 0;
 				otherPaid = 0;
 
+				if(!studentFeeList.isEmpty()) {
 				for(StudentFee studentFee :studentFeeList){
 					amountPaid +=studentFee.getAmountPaid();//amount paid per term
 					paidHas = studentFee.getPaidHas();//last payment type , boarders = 1, day = 0
-					//System.out.println("amountPaid: " + studentFee.getAmountPaid()+ ", total: " + amountPaid + ", term: " +term+ ", year: " + year + ", paidHas: " + paidHas);
-
+				  }
 				}
-
+               
+				if(!otherFeeList.isEmpty()) {
 				for(StudentOtherFee otherFee : otherFeeList){
-					
+					double amount = 0;
 					if(otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()) != null) { 
-						otherPaid += otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()).getAmount();
+						amount = otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()).getAmount();
+						otherPaid += amount; 
+						amount = 0;
 					}
-					
-					//System.out.println("otherPaid: " + otherFee.getAmountPiad() + " , total:" + otherPaid);
+				  }
 				}
 
 				if(StringUtils.equals(paidHas, "1")){
-
 					balance += (admTermFee.getBoaderAmount() + otherPaid) - amountPaid;
-					//System.out.println("balance 1: " + balance + " += " +admTermFee.getBoaderAmount() + " + " + otherPaid + " - " + amountPaid);
-
+	
 				}else if(StringUtils.equals(paidHas, "0")) {
-
 					balance += (admTermFee.getDayAmount() + otherPaid) - amountPaid;
-					//System.out.println("balance 0: " + balance + " += " +admTermFee.getDayAmount() + " + " + otherPaid + " - " + amountPaid);
+					
 				}
 
 				// clear our list at the end to ensure a clean start

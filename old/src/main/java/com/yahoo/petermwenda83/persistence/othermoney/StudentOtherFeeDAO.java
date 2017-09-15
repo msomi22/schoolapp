@@ -57,7 +57,8 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE accountId =? AND studentId =? AND otherFeeId =?;");       
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE accountId =? AND studentId =? AND"
+						+ " otherFeeId =?;");       
 
 				){
 
@@ -71,7 +72,8 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting StudentOtherFee for studentId " + studentId );
+			logger.error("SQL Exception when getting StudentOtherFee for accountId " + accountId + " and studentId "
+					+ "" + studentId + " and otherFeeId" + otherFeeId);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
@@ -86,14 +88,15 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentOtherFee" 
-						+"(uuid, accountId, studentId, otherFeeId, termPiad, datePaid) VALUES (?,?,?,?,?);");
+						+"(uuid, accountId, studentId, otherFeeId, term, dateallocated) VALUES (?,?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, studentOtherFee.getUuid());
 			pstmt.setString(2, studentOtherFee.getAccountId());
 			pstmt.setString(3, studentOtherFee.getStudentId());
 			pstmt.setString(4, studentOtherFee.getOtherFeeId());
-			pstmt.setTimestamp(5, studentOtherFee.getDateAllocated());
+			pstmt.setString(5, studentOtherFee.getTerm());
+			pstmt.setTimestamp(6, studentOtherFee.getDateAllocated());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -128,7 +131,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
-			logger.error("SQL Exception trying to put StudentOtherFee: "+studentOtherFee);
+			logger.error("SQL Exception trying to update StudentOtherFee " + studentOtherFee);
 			logger.error(ExceptionUtils.getStackTrace(e)); 
 			System.out.println(ExceptionUtils.getStackTrace(e));
 			success = false;
@@ -148,7 +151,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE "
-						+ "accountId = ? AND studentId =? LIMIT ? OFFSET ?;");
+						+ "accountId = ? AND studentId =? ORDER BY dateallocated DESC LIMIT ? OFFSET ?;");
 				) {
 			psmt.setString(1, accountId);
 			psmt.setString(2, studentId);
@@ -159,7 +162,8 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get StudentOtherFee List for studentId " + studentId);
+			logger.error("SQLException when trying to get StudentOtherFee List for accountId " + accountId + " and "
+					+ "studentId " + studentId + " and startIndex " + startIndex + " and endIndex " + endIndex);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 		}
@@ -167,27 +171,28 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		return List;
 	}
 
-	/**
+	/** TODO
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#StudentOtherFeeList(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String termPiad, String yearPaid) {
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String term, long year) {
 		List<StudentOtherFee> List = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE "
-						+ "accountId = ? AND studentId =? AND termPiad =? AND yearPaid =?;");
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE accountId =? AND studentId =?"
+						+ " AND term =? AND EXTRACT(YEAR FROM dateallocated) =?  ORDER BY dateallocated DESC;"); 
 				) {
 			psmt.setString(1, accountId);
 			psmt.setString(2, studentId);
-			psmt.setString(3, termPiad);
-			psmt.setString(4, yearPaid);
+			psmt.setString(3, term);
+			psmt.setLong(4, year);
+			
 			try(ResultSet rset = psmt.executeQuery();){
-
 				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get StudentOtherFee List for studentId " + studentId);
+			logger.error("SQLException when trying to get StudentOtherFee List for accountId " + accountId + " and "
+					+ "studentId " + studentId + " and term " + term + " and year " + year);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 		}
@@ -204,7 +209,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE "
-						+ "accountId = ? AND studentId =? ;");
+						+ "accountId = ? AND studentId =? ORDER BY dateallocated DESC;");
 				) {
 			psmt.setString(1, accountId);
 			psmt.setString(2, studentId);
@@ -213,7 +218,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException when trying to get StudentOtherFee List for studentId " + studentId);
+			logger.error("SQLException when trying to get StudentOtherFee List for accountId " + accountId + " and studentId " + studentId );
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 		}

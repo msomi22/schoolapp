@@ -5,10 +5,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.ws.rs.BeanParam;
 
 //import java.util.List;
@@ -35,8 +32,6 @@ import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
-import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -203,14 +198,10 @@ public class StudentRestFulAPI{
 	public Object getStudentFilter(@PathParam("accountId") String accountId, 
 			@BeanParam  StudentFilter filter, @HeaderParam("authorization") String auth) { 
 
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
-
-
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
@@ -239,14 +230,11 @@ public class StudentRestFulAPI{
 	@Path("/{accountId}")  
 	public Object newStudent(@PathParam("accountId") String accountId, StudentInfo student, @HeaderParam("authorization") String auth) {
 
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
-
-
+		
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
@@ -273,14 +261,10 @@ public class StudentRestFulAPI{
 	@PUT
 	@Path("/{accountId}")  
 	public Object updateStudent(@PathParam("accountId") String accountId, StudentInfo student, @HeaderParam("authorization") String auth) {
-
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
-
+		
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
@@ -306,19 +290,15 @@ public class StudentRestFulAPI{
 	
 	@GET
 	@Path("/subject/{studentId}/{accountId}")    
-	public List<Object> getSubject(@HeaderParam("authorization") String auth, @PathParam("studentId") String studentId,
+	public Object getSubject(@HeaderParam("authorization") String auth, @PathParam("studentId") String studentId,
 			@PathParam("accountId") String accountId) {
 		
-		 List<ApiResponse>  response = new ArrayList<>(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.add(re);
-
-
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response.stream().collect(Collectors.toList());  
+			return response;  
 		}
 		
 		return studentService.getSubjects(accountId,studentId);
@@ -342,13 +322,9 @@ public class StudentRestFulAPI{
 	@Path("/subject")   
 	public Object addSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
 		
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
-
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
 		if(!RestAUth.isUserAuthenticated(auth, apiSubject.getAccountId())){
 			return response; 
@@ -374,12 +350,9 @@ public class StudentRestFulAPI{
 	@Path("/subject")   
 	public Object updateSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
 		
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
 
 		if(!RestAUth.isUserAuthenticated(auth, apiSubject.getAccountId())){
@@ -407,12 +380,9 @@ public class StudentRestFulAPI{
 	@Path("/subject")   
 	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, String id) {
 		
-		StudentResponse  response = new StudentResponse(); 
-
-		ApiResponse re = new ApiResponse(); 
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
-		response.setApiResponse(re);
+		ApiResponse response = new ApiResponse(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){

@@ -14,11 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class StudentResponse {
 	
 	private StudentFeeAPI studentFeeAPI;
-	private ApiResponse apiResponse;
-
+	
 	public StudentResponse(){
 		studentFeeAPI = new StudentFeeAPI();
-		apiResponse = new ApiResponse();
+		
 	}
 
 	public StudentFeeAPI getStudentFeeAPI() {
@@ -29,17 +28,10 @@ public class StudentResponse {
 		this.studentFeeAPI = studentFeeAPI;
 	}
 
-	public ApiResponse getApiResponse() {
-		return apiResponse;
-	}
-
-	public void setApiResponse(ApiResponse apiResponse) {
-		this.apiResponse = apiResponse;
-	}
 
 	@Override
 	public String toString() {
-		return "Response [studentFeeAPI=" + studentFeeAPI + ", apiResponse=" + apiResponse + "]";
+		return "Response [studentFeeAPI=" + studentFeeAPI + "]";
 	}
 
 }

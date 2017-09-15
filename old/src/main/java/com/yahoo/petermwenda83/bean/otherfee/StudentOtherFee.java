@@ -17,7 +17,7 @@ public class StudentOtherFee extends StorableBean{
 	
 	private String studentId;
 	private String otherFeeId;
-	private String termPiad; 
+	private String term; 
 	private Timestamp dateAllocated;
 	
 	/**
@@ -26,7 +26,7 @@ public class StudentOtherFee extends StorableBean{
 	public StudentOtherFee() {
 		studentId = "";
 		otherFeeId = "";
-		termPiad = "";
+		term = "";
 		dateAllocated = new Timestamp(new Date().getTime());
 	}
 	
@@ -46,12 +46,12 @@ public class StudentOtherFee extends StorableBean{
 		this.otherFeeId = otherFeeId;
 	}
 
-	public String getTermPiad() {
-		return termPiad;
+	public String getTerm() {
+		return term;
 	}
 
-	public void setTermPiad(String termPiad) {
-		this.termPiad = termPiad;
+	public void setTerm(String term) {
+		this.term = term;
 	}
 
 	public Timestamp getDateAllocated() {
@@ -64,7 +64,7 @@ public class StudentOtherFee extends StorableBean{
 
 	@Override
 	public String toString() {
-		return "StudentOtherFee [studentId=" + studentId + ", otherFeeId=" + otherFeeId + ", termPiad=" + termPiad
+		return "StudentOtherFee [studentId=" + studentId + ", otherFeeId=" + otherFeeId + ", term=" + term
 				+ ", dateAllocated=" + dateAllocated + "]";
 	}
 
