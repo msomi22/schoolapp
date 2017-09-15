@@ -83,7 +83,7 @@ function validateScore(id) {
 					// $('#edit'+id).remove('.glyphicon');
 
 					// var obj = jQuery.parseJSON(data);
-					if (data.responseMessage === "OK") {
+					if (data.responseMessage.includes("OK")) {
 
 						$('#edit' + id).addClass('glyphicon glyphicon-ok secondary-assent');
 						
@@ -92,7 +92,7 @@ function validateScore(id) {
 						// glyphicon-ok"></span>');
 					}
 
-					else if (data.responseMessage.includes("Score not allowed")) {
+					else if (data.responseMessage.includes("not valid")) {
 
 						$('#edit' + id).addClass('glyphicon glyphicon-remove error');
 						Cells[6].innerText = "";
