@@ -365,7 +365,7 @@ public class GeneralService {
 		}
 
 	}
-<<<<<<< HEAD
+
 	  /**
 	  * 
 	  * @param accountId
@@ -373,15 +373,7 @@ public class GeneralService {
 	  */
 	public List<Object> getExams(String accountId){
 		List<Object> apiExamList = new ArrayList<>();
-=======
-	/**
-	 * 
-	 * @param accountId
-	 * @return
-	 */
-	public List<ApiExam> getExams(String accountId){
-		List<ApiExam> apiExamList = new ArrayList<>();
->>>>>>> 075939885e7b84cc6994486a4e5e9eba5a4d7da9
+
 
 		if(examDAO.getExamList(accountId) != null) {
 			examDAO.getExamList(accountId).forEach(exam -> {

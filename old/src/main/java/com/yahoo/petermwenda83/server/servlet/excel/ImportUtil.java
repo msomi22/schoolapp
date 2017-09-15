@@ -123,7 +123,7 @@ public class ImportUtil {
 								return ("Blank K.C.P.E marks " + kcpe.replace(".0", "") + " on line " + count);
 							} 
 
-							if(!StringUtils.isNumeric(kcpe) ){
+							if(!StringUtils.isNumeric(kcpe.replace(".0", "")) ){
 								return ("Invalid K.C.P.E marks " + kcpe.replace(".0", "") + " on line " + count);
 							}
 

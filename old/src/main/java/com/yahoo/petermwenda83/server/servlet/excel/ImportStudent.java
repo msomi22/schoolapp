@@ -5,6 +5,7 @@ package com.yahoo.petermwenda83.server.servlet.excel;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +26,10 @@ import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -100,7 +105,16 @@ public class ImportStudent extends HttpServlet{
 
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		// Parse the request    
+		// Parse the request  
+		
+		JsonObject jsonObject = new JsonObject();
+		
+		OutputStream out = response.getOutputStream();
+		response.setContentType("application/json;charset=UTF-8");
+		
+		Gson gson = new GsonBuilder().disableHtmlEscaping()
+				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+				.setPrettyPrinting().serializeNulls().create();
 
 		try {
 
@@ -108,6 +122,11 @@ public class ImportStudent extends HttpServlet{
 			Iterator<FileItem> iter = items.iterator();
 
 			FileItem item;
+			
+			if(!iter.hasNext()) {
+				
+				jsonObject.addProperty("responseMessage", "Upload failed, no data supplied");
+			}
 
 			while (iter.hasNext()) {
 				item = iter.next();
@@ -117,6 +136,9 @@ public class ImportStudent extends HttpServlet{
 						uploadedFile = processUploadedFiles(item,user);
 
 						String feedback = importUtil.processUploadedFiles(uploadedFile,accounId, studentDAO, streamDAO);
+						
+						
+						jsonObject.addProperty("responseMessage", feedback);
 
 						session.setAttribute(UPLOAD_FEEDBACK,"<p class='error'>"+feedback+"<p>");
 
@@ -135,8 +157,16 @@ public class ImportStudent extends HttpServlet{
 		} 
 
 
-		response.sendRedirect("***.jsp");
-		return;
+	//	response.sendRedirect("***.jsp");
+	//	return;
+		
+		out.write(gson.toJson(jsonObject).getBytes());
+		
+		//out.write(jsonObject);
+		
+		
+		out.flush();
+		out.close();
 
 	}
 
