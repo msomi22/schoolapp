@@ -225,9 +225,25 @@ public class ImportUtil {
 							gender =  row.getCell(3)+"";
 							kcpe =  row.getCell(4)+"";
 							isDay = row.getCell(5)+"";
+							
+							String status = "";
+							
+							//"Day", "Boarder"
+							if(StringUtils.equalsIgnoreCase(isDay, "Day")) {
+								status = "";
+								
+							}else {
+								status = "";
+								
+							}
+							
+							regNo = regNo.replace(".0", "");
+							kcpe = kcpe.replace(".0", "");
 
 							System.out.println("regNo : " + regNo + " , firstName: " + firstName + " , middleName: " + middleName +
 									" , gender:" + gender + " , kcpe:" + kcpe + " , isDay: " + isDay);
+							
+							System.out.println("stream : " + stream);
 							
 
 
@@ -238,7 +254,7 @@ public class ImportUtil {
 
 				}
 				
-				System.out.println("stream : " + stream);
+				
 
 
 			}
