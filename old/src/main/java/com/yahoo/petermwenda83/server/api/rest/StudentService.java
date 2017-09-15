@@ -77,6 +77,43 @@ public class StudentService {
 		subjectDAO = SubjectDAO.getInstance();
 	}
 
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @return
+	 */
+	public Object getStudentById(String accountId, String studentId) {
+		
+		ApiResponse apiResponse = new ApiResponse();
+		
+		APIStudent apiStudent = new APIStudent();
+		
+		if(studentDAO.getStudentById(accountId, studentId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("studentId is invalid!");
+			
+		}else {
+			
+			try {
+				
+				
+				
+				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
+				
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return apiStudent;
+	}
+
+
 	/**
 	 * @param sreamId
 	 * @return
@@ -944,7 +981,7 @@ public class StudentService {
 	 */
 
 	public Object getStudentFilter(String accountId, StudentFilter filter) {
-		
+
 		System.out.println(filter); 
 
 		List<StudentInfo> studentInfoList = new ArrayList<>();
@@ -993,8 +1030,8 @@ public class StudentService {
 
 				studentInfoList.add(studentInfo);
 			});
-		
-			
+
+
 		}else {
 			studentDAO.getAllStudent(accountId, 0, 15).forEach(student -> {
 				StudentInfo studentInfo = new StudentInfo();
@@ -1009,7 +1046,7 @@ public class StudentService {
 
 				studentInfoList.add(studentInfo);
 			});
-			
+
 		}
 
 
