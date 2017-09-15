@@ -240,11 +240,23 @@ public class GeneralService {
 			apiResponse.setDescription("A stream with such a name already exist! '" + apiStream.getDescription() + "'");  
 			return apiResponse;
 
-		}else {
+		}else if(!validSream(apiStream.getDescription())){
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Invalid Stream Description!");
+			return apiResponse;
+			
+		}else if(classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()) == null){
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Invalid Class!");
+			return apiResponse;
+			
+		}
+		else {
 			Stream stream = new Stream();
 			stream.setAccountId(apiStream.getAccountId());
 			stream.setClassRoomId(apiStream.getClassRoomId());
-			stream.setDescription(apiStream.getDescription());
+			String classroom = classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()).getDescription();
+			stream.setDescription(classroom + " " + apiStream.getDescription());
 
 			if(streamDAO.putStream(stream)) {
 				apiResponse.setMessage("success");
@@ -260,6 +272,8 @@ public class GeneralService {
 
 		return apiResponse;
 	}
+	
+
 	/**
 	 * 
 	 * @param apiStream
@@ -279,11 +293,22 @@ public class GeneralService {
 			apiResponse.setDescription("Stream not found!");
 			return apiResponse;
 
+		}else if(!validSream(apiStream.getDescription())){
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Invalid Stream Description!");
+			return apiResponse;
+			
+		}else if(classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()) == null){
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("Invalid Class!");
+			return apiResponse;
+			
 		}else {
 
 			Stream stream = streamDAO.getStream(apiStream.getAccountId(), apiStream.getUuid());
 			stream.setClassRoomId(apiStream.getClassRoomId());
-			stream.setDescription(apiStream.getDescription());
+			String classroom = classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()).getDescription();
+			stream.setDescription(classroom + " " + apiStream.getDescription());
 
 			if(streamDAO.updateStream(stream)) { 
 				apiResponse.setMessage("success");
@@ -923,6 +948,25 @@ public class GeneralService {
 
 		}else {
 			return false;
+		}
+	}
+
+	
+	
+	/**
+	 * 
+	 * @param description
+	 * @return
+	 */
+	private boolean validSream(String description) {
+		String[] alphabets = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+		List<String> alphabetList = new ArrayList<>();
+		alphabetList = Arrays.asList(alphabets);
+		
+		if(alphabetList.contains(description.toUpperCase())) {
+			return true;
+		}else {
+		return false;
 		}
 	}
 
