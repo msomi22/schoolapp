@@ -180,7 +180,7 @@ function fetchStreams(classID) {
 										// console.log($("#desc").val(data[3]));
 										
 										var desc= data['description'];
-										$("#desc").val(desc.substr(6,1));
+										$("#desc").val(desc.substr(7,1));
 										console.log(data['description']);
 										console.log(data['accountId']);
 										$("#classId_edit").val(
