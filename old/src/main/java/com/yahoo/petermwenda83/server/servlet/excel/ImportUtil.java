@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 
@@ -178,12 +182,13 @@ public class ImportUtil {
 	 * @param studentDAO
 	 * @param primaryDAO
 	 * @param streamDAO
+	 * @param sysConfigDAO 
 	 * @throws IOException 
 	 * @throws InvalidFormatException 
 	 * @throws EncryptedDocumentException 
 	 */
-	public void saveStudent(File uploadedFile, String accounId, StudentDAO studentDAO, PrimaryDAO primaryDAO,
-			StreamDAO streamDAO) throws IOException, EncryptedDocumentException, InvalidFormatException {
+	public void saveStudent(File uploadedFile, String accountId, StudentDAO studentDAO, PrimaryDAO primaryDAO,
+			StreamDAO streamDAO, SysConfigDAO sysConfigDAO) throws IOException, EncryptedDocumentException, InvalidFormatException {
 
 
 		if(uploadedFile !=null){
@@ -203,10 +208,13 @@ public class ImportUtil {
 				String gender = "";
 				String kcpe = "";
 				String isDay = "";
+				String status = "";
+				
 
 				int totalColumn = 0;
 				for(int i=0; i<=totalRow; i++){
 					XSSFRow row = mySheet.getRow(i);
+					
 					if(row !=null){
 						totalColumn = row.getLastCellNum();
 					}
@@ -226,31 +234,71 @@ public class ImportUtil {
 							kcpe =  row.getCell(4)+"";
 							isDay = row.getCell(5)+"";
 							
-							String status = "";
 							
 							//"Day", "Boarder"
+							////boarders = 1, day = 0
 							if(StringUtils.equalsIgnoreCase(isDay, "Day")) {
-								status = "";
+								status = "0";
 								
 							}else {
-								status = "";
-								
+								status = "1";
 							}
 							
 							regNo = regNo.replace(".0", "");
 							kcpe = kcpe.replace(".0", "");
 
-							System.out.println("regNo : " + regNo + " , firstName: " + firstName + " , middleName: " + middleName +
-									" , gender:" + gender + " , kcpe:" + kcpe + " , isDay: " + isDay);
 							
-							System.out.println("stream : " + stream);
 							
 
 
 						}//end if
 
+						
 
 					}
+					
+					if(i>1) {//skip the first line (header) 
+						/**
+						System.out.println("regNo : " + regNo + " , firstName: " + firstName + " , middleName: " + middleName +
+								" , gender:" + gender + " , kcpe:" + kcpe + " , isDay: " + isDay);
+						
+						System.out.println("stream : " + stream);*/
+						
+						Student student = new Student();
+						student.setAccountId(accountId);
+						student.setIsActive("1");
+						student.setIsAlumni("0");
+						student.setIsBoarding(status);
+						
+						student.setCurrentStream(streamDAO.getStreamByDesc(accountId, stream).getUuid());
+						student.setRegStream(streamDAO.getStreamByDesc(accountId, stream).getUuid()); 
+						
+						String regterm = "";
+						String regyear = "";
+						if(sysConfigDAO.getSysConfig(accountId) != null) {
+							SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+							regterm = sysConfig.getTerm();
+							regyear = sysConfig.getYear();
+						}
+						
+						int finaly = Integer.valueOf(regyear) + 3;
+						
+						
+						student.setRegTerm(regterm);
+						student.setFinalTerm(3); 
+						student.setFinalYear(finaly); 
+						
+						student.setRegNo(regNo);
+						student.setFirstname(firstName);
+						student.setMiddlename(middleName);
+						student.setGender(gender);
+						
+						student.setLastUpdated(new Date().toString()); 
+						
+						studentDAO.putStudent(student);
+						
+					}
+					
 
 				}
 				

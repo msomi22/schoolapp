@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -54,6 +55,7 @@ public class ImportStudent extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static PrimaryDAO primaryDAO;
 	private static StreamDAO streamDAO;
+	private static SysConfigDAO sysConfigDAO;
 
 	/**
 	 * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
@@ -75,6 +77,7 @@ public class ImportStudent extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 
 	}
 
@@ -144,7 +147,7 @@ public class ImportStudent extends HttpServlet{
 
 						// Process the file into the database if it is ok
 						if(StringUtils.equals(feedback, UPLOAD_SUCCESS)) {
-							importUtil.saveStudent(uploadedFile, accounId, studentDAO, primaryDAO, streamDAO);
+							importUtil.saveStudent(uploadedFile, accounId, studentDAO, primaryDAO, streamDAO,sysConfigDAO);
 						}
 
 					}	
