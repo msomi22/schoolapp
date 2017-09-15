@@ -19,8 +19,10 @@ public interface SchoolStudentOtherFeeDAO {
 	
 	public boolean updateStudentOtherFee(StudentOtherFee studentOtherFee);
 	
-	public List<StudentOtherFee> StudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex);
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex);
 	
-	public List<StudentOtherFee> StudentOtherFeeList(String accountId, String studentId, String termPiad, String yearPaid);
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String termPiad, String yearPaid);
+	
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId);
 
 }

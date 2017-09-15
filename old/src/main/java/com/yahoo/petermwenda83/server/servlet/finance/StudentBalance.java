@@ -20,6 +20,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -43,6 +44,7 @@ public class StudentBalance {
 	private static StudentOtherFeeDAO studentOtherMoniesDAO;
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
+	private static OtherFeeDAO otherFeeDAO;
 
 	static{
 		sysConfigDAO = SysConfigDAO.getInstance();
@@ -51,6 +53,7 @@ public class StudentBalance {
 		studentOtherMoniesDAO = StudentOtherFeeDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
+		otherFeeDAO = OtherFeeDAO.getInstance();
 
 		/*
 		sysConfigDAO = new SysConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
@@ -134,7 +137,7 @@ public class StudentBalance {
 
 				//start finding the balance here
 				studentFeeList = studentFeeDAO.getStudentFeeList(accountId, studentId, term, year);
-				otherFeeList = studentOtherMoniesDAO.StudentOtherFeeList(accountId, studentId, term, year);
+				otherFeeList = studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, year);
 
 				//System.out.println("studentFeeList:" + studentFeeList.size());
 				//System.out.println("otherFeeList:" + otherFeeList.size());
@@ -156,7 +159,11 @@ public class StudentBalance {
 				}
 
 				for(StudentOtherFee otherFee : otherFeeList){
-					otherPaid += otherFee.getAmountPiad();
+					
+					if(otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()) != null) { 
+						otherPaid += otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()).getAmount();
+					}
+					
 					//System.out.println("otherPaid: " + otherFee.getAmountPiad() + " , total:" + otherPaid);
 				}
 

@@ -599,15 +599,12 @@ CREATE TABLE  StudentOtherFee (
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES student(uuid),
     otherFeeId text REFERENCES OtherFee(uuid),
-    amountPiad integer NOT NULL CHECK (amountPiad>=0),
-    payMode text,
-    termPiad text,
-    yearPaid text,
-    datePaid timestamp with time zone DEFAULT now()
+    term text,
+    dateAllocated timestamp with time zone DEFAULT now()
   
   
 );
-\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,amountPiad,payMode,termPiad,yearPaid) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,term) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentOtherFee OWNER TO school;
 
 

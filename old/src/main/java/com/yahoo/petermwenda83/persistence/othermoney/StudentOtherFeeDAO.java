@@ -86,18 +86,14 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentOtherFee" 
-						+"(uuid, accountId, studentId, otherFeeId, amountPiad, payMode, termPiad, yearPaid, datePaid) VALUES (?,?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, studentId, otherFeeId, termPiad, datePaid) VALUES (?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, studentOtherFee.getUuid());
 			pstmt.setString(2, studentOtherFee.getAccountId());
 			pstmt.setString(3, studentOtherFee.getStudentId());
 			pstmt.setString(4, studentOtherFee.getOtherFeeId());
-			pstmt.setInt(5, studentOtherFee.getAmountPiad());
-			pstmt.setString(6, studentOtherFee.getPayMode());
-			pstmt.setString(7, studentOtherFee.getTermPiad());
-			pstmt.setString(8, studentOtherFee.getYearPaid());
-			pstmt.setTimestamp(9, studentOtherFee.getDatePaid());
+			pstmt.setTimestamp(5, studentOtherFee.getDateAllocated());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -119,16 +115,16 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 	public boolean updateStudentOtherFee(StudentOtherFee studentOtherFee) {
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentOtherFee SET amountPiad = ? WHERE accountId =?"
-						+ "AND studentId =? AND otherFeeId = ?;");
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentOtherFee SET otherFeeId = ? WHERE accountId =?"
+						+ "AND studentId =? AND uuid = ?;");
 				){
 
 
 
-			pstmt.setInt(1, studentOtherFee.getAmountPiad());
+			pstmt.setString(1, studentOtherFee.getOtherFeeId());
 			pstmt.setString(2, studentOtherFee.getAccountId());
 			pstmt.setString(3, studentOtherFee.getStudentId());
-			pstmt.setString(4, studentOtherFee.getOtherFeeId());
+			pstmt.setString(4, studentOtherFee.getUuid());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -147,7 +143,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#StudentOtherFeeList(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public List<StudentOtherFee> StudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex) {
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex) {
 		List<StudentOtherFee> List = null;
 		try(
 				Connection conn = dbutils.getConnection();
@@ -175,7 +171,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#StudentOtherFeeList(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherFee> StudentOtherFeeList(String accountId, String studentId, String termPiad, String yearPaid) {
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String termPiad, String yearPaid) {
 		List<StudentOtherFee> List = null;
 		try(
 				Connection conn = dbutils.getConnection();
@@ -186,6 +182,32 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 			psmt.setString(2, studentId);
 			psmt.setString(3, termPiad);
 			psmt.setString(4, yearPaid);
+			try(ResultSet rset = psmt.executeQuery();){
+
+				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get StudentOtherFee List for studentId " + studentId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return List;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#StudentOtherFeeList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId) {
+		List<StudentOtherFee> List = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM StudentOtherFee WHERE "
+						+ "accountId = ? AND studentId =? ;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, studentId);
 			try(ResultSet rset = psmt.executeQuery();){
 
 				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);

@@ -19,6 +19,9 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
+import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
@@ -27,6 +30,9 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
@@ -48,6 +54,10 @@ public class StudentService {
 	private static StaffDAO staffDAO;
 	private static StreamDAO streamDAO;
 	private static StudentFeeDAO studentFeeDAO;
+	private static OtherFeeDAO otherFeeDAO;
+	private static StudentOtherFeeDAO studentOtherFeeDAO;
+	private static RevertedMoneyDAO revertedMoneyDAO;
+	
 	private static SysConfigDAO sysConfigDAO;
 	private static EmailValidator emailValidator;
 
@@ -66,6 +76,10 @@ public class StudentService {
 		staffDAO = StaffDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
+		otherFeeDAO = OtherFeeDAO.getInstance();
+		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
+		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
+		
 		sysConfigDAO = SysConfigDAO.getInstance();
 		emailValidator = EmailValidator.getInstance();
 
@@ -341,6 +355,44 @@ public class StudentService {
 			}
 
 			studentFeeAPI.setFeeHistory(apiStudentFeeList);
+			
+			List<APIStudentOtherFee> otherfeeHistory = new ArrayList<>();
+			List<RevertedFee> revertedFeeList  = new ArrayList<>();
+			
+			if(studentOtherFeeDAO.getStudentOtherFeeList(accountId, student.getUuid()) != null) {
+				List<StudentOtherFee> list = studentOtherFeeDAO.getStudentOtherFeeList(accountId, student.getUuid());
+				for(StudentOtherFee otherfee : list) {
+					APIStudentOtherFee studentOtherFee = new APIStudentOtherFee();
+					OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, otherfee.getUuid());
+					studentOtherFee.setAmount(String.valueOf(otherFee.getAmount())); 
+					studentOtherFee.setDateAllocated(otherfee.getDateAllocated().toString());
+					studentOtherFee.setOtherFeeId(otherFee.getDescription()); 
+					studentOtherFee.setTermPiad(otherfee.getTermPiad()); 
+					
+					otherfeeHistory.add(studentOtherFee);
+				}
+				
+			}
+			
+			if(revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid()) != null) {
+				List<RevertedMoney> list = revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid());
+				RevertedFee revertedFee = new RevertedFee();
+				
+				for(RevertedMoney rfee : list) {
+					OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, rfee.getUuid());
+					revertedFee.setAmount(String.valueOf(otherFee.getAmount()));
+					revertedFee.setOtherFeeId(otherFee.getDescription());
+					revertedFee.setDateReverted(rfee.getDateReverted().toString()); 
+					
+					revertedFeeList.add(revertedFee);
+				}
+				
+			}
+			
+			
+			
+			studentFeeAPI.setOtherfeeHistory(otherfeeHistory);
+			studentFeeAPI.setRevertedFeeList(revertedFeeList);  
 
 			ApiResponse apiResponse = new ApiResponse();
 			apiResponse.setMessage("success");

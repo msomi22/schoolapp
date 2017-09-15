@@ -25,6 +25,7 @@ public class StudentFeeAPI{
 	private String balance;
 	private List<APIStudentFee> feeHistory;
 	private List<APIStudentOtherFee> otherfeeHistory;
+	private List<RevertedFee> revertedFeeList;
 	
 	public StudentFeeAPI(){
 		regNo = "";
@@ -36,6 +37,7 @@ public class StudentFeeAPI{
 		balance = "";
 		feeHistory = new ArrayList<>();
 		otherfeeHistory = new ArrayList<>();
+		revertedFeeList = new ArrayList<>();
 	}
 
 	public String getRegNo() {
@@ -110,11 +112,20 @@ public class StudentFeeAPI{
 		this.otherfeeHistory = otherfeeHistory;
 	}
 
+	public List<RevertedFee> getRevertedFeeList() {
+		return revertedFeeList;
+	}
+
+	public void setRevertedFeeList(List<RevertedFee> revertedFeeList) {
+		this.revertedFeeList = revertedFeeList;
+	}
+
 	@Override
 	public String toString() {
 		return "StudentFeeAPI [regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename
 				+ ", lastname=" + lastname + ", stream=" + stream + ", isBoarding=" + isBoarding + ", balance="
-				+ balance + ", feeHistory=" + feeHistory + ", otherfeeHistory=" + otherfeeHistory + "]";
+				+ balance + ", feeHistory=" + feeHistory + ", otherfeeHistory=" + otherfeeHistory + ", revertedFeeList="
+				+ revertedFeeList + "]";
 	}
 
 	

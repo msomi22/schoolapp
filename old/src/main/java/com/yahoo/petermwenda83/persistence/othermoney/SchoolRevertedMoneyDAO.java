@@ -20,5 +20,7 @@ public interface SchoolRevertedMoneyDAO {
 	public boolean deleteRevertedMoney(String accountId, String studentId, String uuid);
 	
 	public List<RevertedMoney> getRevertedMoneyList(String studentId, int startIndex, int endIndex);
+	
+	public List<RevertedMoney> getRevertedMoneyList(String accountId,String studentId);
 
 }

@@ -165,4 +165,30 @@ public class RevertedMoneyDAO extends GenericDAO implements SchoolRevertedMoneyD
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolRevertedMoneyDAO#getRevertedMoneyList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<RevertedMoney> getRevertedMoneyList(String accountId, String studentId) {
+		List<RevertedMoney> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM RevertedMoney WHERE studentId = ? AND studentId = ?;");
+				) {
+			
+			pstmt.setString(1, studentId);    
+			pstmt.setString(2,studentId);
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, RevertedMoney.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting RevertedMoney  List for studentId " +  studentId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
+
 }
