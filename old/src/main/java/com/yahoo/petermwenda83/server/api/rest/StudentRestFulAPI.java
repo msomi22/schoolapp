@@ -132,7 +132,7 @@ public class StudentRestFulAPI{
 	} )
 	@POST
 	@Path("/fee/{accountId}/{regNo}")  
-	public FeeResponse studentPayFee(@PathParam("accountId") String accountId, 
+	public FeeResponse payFee(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
 
 		FeeResponse feeResponse = new FeeResponse();
@@ -201,7 +201,7 @@ public class StudentRestFulAPI{
 	} )
 	@GET 
 	@Path("/fee/{accountId}/{regNo}") 
-	public StudentResponse getStudent(@PathParam("accountId") String accountId, 
+	public StudentResponse getStudentFeeInfo(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
 
 		StudentResponse  response = new StudentResponse(); 
