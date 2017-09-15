@@ -8,9 +8,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yahoo.petermwenda83.bean.money.StudentFee;
-
 /**
  * @author peter
  *
@@ -19,22 +16,15 @@ import com.yahoo.petermwenda83.bean.money.StudentFee;
 @XmlRootElement(name = "StudentFeeAPI") 
 public class StudentFeeAPI{
 	
-	@JsonProperty
 	private String regNo;
-	@JsonProperty
 	private String firstname;
-	@JsonProperty
 	private String middlename;
-	@JsonProperty
 	private String lastname;
-	@JsonProperty
 	private String stream;
-	@JsonProperty
 	private String isBoarding;
-	@JsonProperty
 	private String balance;
-	@JsonProperty
-	private List<StudentFee> feeHistory;
+	private List<APIStudentFee> feeHistory;
+	private List<APIStudentOtherFee> otherfeeHistory;
 	
 	public StudentFeeAPI(){
 		regNo = "";
@@ -45,6 +35,7 @@ public class StudentFeeAPI{
 		isBoarding = "";
 		balance = "";
 		feeHistory = new ArrayList<>();
+		otherfeeHistory = new ArrayList<>();
 	}
 
 	public String getRegNo() {
@@ -103,20 +94,30 @@ public class StudentFeeAPI{
 		this.balance = balance;
 	}
 
-	public List<StudentFee> getFeeHistory() {
+	public List<APIStudentFee> getFeeHistory() {
 		return feeHistory;
 	}
 
-	public void setFeeHistory(List<StudentFee> feeHistory) {
+	public void setFeeHistory(List<APIStudentFee> feeHistory) {
 		this.feeHistory = feeHistory;
+	}
+
+	public List<APIStudentOtherFee> getOtherfeeHistory() {
+		return otherfeeHistory;
+	}
+
+	public void setOtherfeeHistory(List<APIStudentOtherFee> otherfeeHistory) {
+		this.otherfeeHistory = otherfeeHistory;
 	}
 
 	@Override
 	public String toString() {
 		return "StudentFeeAPI [regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename
 				+ ", lastname=" + lastname + ", stream=" + stream + ", isBoarding=" + isBoarding + ", balance="
-				+ balance + ", feeHistory=" + feeHistory + "]";
+				+ balance + ", feeHistory=" + feeHistory + ", otherfeeHistory=" + otherfeeHistory + "]";
 	}
+
+	
 	
 	
 }

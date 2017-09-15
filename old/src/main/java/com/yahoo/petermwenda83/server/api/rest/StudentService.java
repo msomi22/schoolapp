@@ -90,6 +90,8 @@ public class StudentService {
 		
 		APIStudent apiStudent = new APIStudent();
 		
+		
+		
 		if(studentDAO.getStudentById(accountId, studentId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("studentId is invalid!");
@@ -101,6 +103,35 @@ public class StudentService {
 				
 				
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
+				
+				APIParentPrimary apiParentPrimary = new APIParentPrimary();
+				
+				//primary
+				if(primaryDAO.getStudentPrimary(accountId, studentId) != null) {
+					
+					StudentPrimary primary = primaryDAO.getStudentPrimary(accountId, studentId);
+					
+					apiParentPrimary.setSchoolName(primary.getSchoolName());
+					apiParentPrimary.setIndex(primary.getIndex());
+					apiParentPrimary.setKcpemark(primary.getKcpemark());
+					apiParentPrimary.setKcpeyear(primary.getKcpeyear());
+				}
+				
+				
+				
+				//parent
+				if(parentsDAO.getParent(accountId, studentId) != null) {
+					
+					StudentParent studentParent = parentsDAO.getParent(accountId, studentId);
+					
+					apiParentPrimary.setParentName(studentParent.getName());
+					apiParentPrimary.setParentEmail(studentParent.getEmail());
+					apiParentPrimary.setParentMobile(studentParent.getMobile());
+				}
+				
+				
+				
+				apiStudent.setApiParentPrimary(apiParentPrimary);
 				
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
@@ -145,10 +176,7 @@ public class StudentService {
 			apiStudent.setLastUpdated(student.getLastUpdated()); 
 			apiStudent.setFinalTerm(student.getFinalTerm());
 			apiStudent.setFinalYear(student.getFinalYear());
-			apiStudent.setAdmissionDate(student.getAdmissionDate());
-
-			apiStudent.setMessage("success");
-			apiStudent.setDescription("Ok"); 
+			apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
 
 			streamStudents.add(apiStudent); 
 
@@ -250,7 +278,7 @@ public class StudentService {
 	 * @param regNo
 	 * @return
 	 */
-	public Object getStudent(String accountId, String regNo) {
+	public Object getStudentFee(String accountId, String regNo) {
 
 		StudentResponse studentResponse = new StudentResponse();
 
@@ -293,11 +321,26 @@ public class StudentService {
 			String year = sysConfigDAO.getSysConfig(accountId).getYear();
 
 			List<StudentFee> feeHistory = new ArrayList<>();
+			List<APIStudentFee> apiStudentFeeList  = new ArrayList<>();
 			if(studentFeeDAO.getStudentFeeList(accountId, student.getUuid(), term, year) != null) {
 				feeHistory = studentFeeDAO.getStudentFeeList(accountId, student.getUuid(), term, year);
+				feeHistory.forEach(feeHist ->{
+					APIStudentFee apiStudentFee = new APIStudentFee();
+					
+					try {
+						BeanUtils.copyProperties(apiStudentFee, feeHist); 
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					
+					apiStudentFeeList.add(apiStudentFee);
+				});
+				
 			}
 
-			studentFeeAPI.setFeeHistory(feeHistory);
+			studentFeeAPI.setFeeHistory(apiStudentFeeList);
 
 			ApiResponse apiResponse = new ApiResponse();
 			apiResponse.setMessage("success");
@@ -986,7 +1029,9 @@ public class StudentService {
 		List<StudentInfo> studentInfoList = new ArrayList<>();
 
 		if(filter.getStart() >= 0 && filter.getSize() > 0){ 
+			
 			studentDAO.getAllStudent(accountId, filter.getStart(), filter.getSize()).forEach(student -> {
+				
 				StudentInfo studentInfo = new StudentInfo();
 
 				try {
@@ -1001,6 +1046,7 @@ public class StudentService {
 			});
 
 		}else if(!StringUtils.isBlank(filter.getQuery())) {
+			
 			studentDAO.searchStudent(accountId, filter.getQuery()).forEach(student -> {
 				StudentInfo studentInfo = new StudentInfo();
 

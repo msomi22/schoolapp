@@ -5,8 +5,6 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author peter
  *
@@ -15,9 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "StudentResponse") 
 public class StudentResponse {
 	
-	@JsonProperty
 	private StudentFeeAPI studentFeeAPI;
-	@JsonProperty
 	private ApiResponse apiResponse;
 
 	public StudentResponse(){

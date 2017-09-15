@@ -31,6 +31,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
@@ -77,7 +78,7 @@ public class StudentRestFulAPI{
 			@PathParam("studentId") String studentId , @HeaderParam("authorization") String auth) { 
 
 		
-		APIStudent response = new APIStudent();
+		ApiResponse response = new ApiResponse();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
@@ -99,15 +100,13 @@ public class StudentRestFulAPI{
 
 	@GET
 	@Path("/{accountId}/{sreamId}") 
-	public List<APIStudent> getStudentPerStream(@PathParam("accountId") String accountId, 
+	public Object getStudentPerStream(@PathParam("accountId") String accountId, 
 			@PathParam("sreamId") String sreamId , @HeaderParam("authorization") String auth) { 
 
-		List<APIStudent>  response = new ArrayList<>();
-		APIStudent re = new APIStudent();
-		re.setMessage("error");
-		re.setDescription("User not authenticated");
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
-		response.add(re);
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
@@ -115,6 +114,40 @@ public class StudentRestFulAPI{
 
 		return studentService.getStudentPerStream(accountId,sreamId);  
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param auth
+	 * @return
+	 */
+
+	@ApiOperation(value = "Get student fee basic information.", 
+			notes = "Student basic info object.", 
+			response = StudentFeeAPI.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	} )
+	@GET 
+	@Path("/fee/{accountId}/{regNo}") 
+	public Object getStudentFeeInfo(@PathParam("accountId") String accountId, 
+			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
+
+		
+		Response response = new Response(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.getStudentFee(accountId,regNo);  
+	}
+
 
 	/**
 	 * 
@@ -186,37 +219,7 @@ public class StudentRestFulAPI{
 	}
 	
 	
-	/**
-	 * 
-	 * @param accountId
-	 * @param regNo
-	 * @param auth
-	 * @return
-	 */
-
-	@ApiOperation(value = "Get student fee basic information.", 
-			notes = "Student basic info object.", 
-			response = StudentInfo.class)
-
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
-	} )
-	@GET 
-	@Path("/fee/{accountId}/{regNo}") 
-	public Object getStudentFeeInfo(@PathParam("accountId") String accountId, 
-			@PathParam("regNo") String regNo , @HeaderParam("authorization") String auth) { 
-
-		
-		Response response = new Response(); 
-		response.setMessage("error");
-		response.setDescription("User not authenticated");
-		
-		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response; 
-		}
-
-		return studentService.getStudent(accountId,regNo);  
-	}
-
+	
 	/**
 	 * 
 	 * @param accountId
