@@ -79,7 +79,7 @@ public class TestStudentOtherFeeDAO {
 		String term = "1";
 		long year = 2017;
 		
-		System.out.println(storable.getStudentOtherFeeList(accountId, studentId, term, year));
+		System.out.println(storable.getStudentOFeeList(accountId, studentId, term, year));
 	}
 
 	/**

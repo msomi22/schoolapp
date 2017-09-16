@@ -21,7 +21,7 @@ public interface SchoolStudentOtherFeeDAO {
 	
 	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex);
 	
-	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String term, long year);
+	public List<StudentOtherFee> getStudentOFeeList(String accountId, String studentId, String term, long year);
 	
 	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId);
 

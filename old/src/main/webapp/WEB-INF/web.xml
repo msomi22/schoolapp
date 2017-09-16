@@ -78,6 +78,17 @@
   
   
   
+  <servlet>
+    <servlet-name>FeeReceipt</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.fee.FeeReceipt</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>FeeReceipt</servlet-name>
+    <url-pattern>/school/feeReceipt</url-pattern>
+  </servlet-mapping>
+  
+  
   
   <servlet>
     <servlet-name>StudentReportCard</servlet-name>

@@ -175,7 +175,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#StudentOtherFeeList(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, String term, long year) {
+	public List<StudentOtherFee> getStudentOFeeList(String accountId, String studentId, String term, long year) {
 		List<StudentOtherFee> List = null;
 		try(
 				Connection conn = dbutils.getConnection();

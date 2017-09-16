@@ -119,8 +119,8 @@ public class StudentBalance {
 				
 				
 				
-				if(studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, yearLong) != null) {
-					otherFeeList = studentOtherMoniesDAO.getStudentOtherFeeList(accountId, studentId, term, yearLong);
+				if(studentOtherMoniesDAO.getStudentOFeeList(accountId, studentId, term, yearLong) != null) {
+					otherFeeList = studentOtherMoniesDAO.getStudentOFeeList(accountId, studentId, term, yearLong);
 				}
 				
 

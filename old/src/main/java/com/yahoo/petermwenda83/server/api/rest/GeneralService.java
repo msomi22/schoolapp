@@ -912,6 +912,24 @@ public class GeneralService {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	//TDOD fee and other fee
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
