@@ -83,6 +83,42 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 
 	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#getStudentFee(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public StudentFee getStudentFee(String accountId, String studentId, String payMode, String termPiad,
+			String yearPaid) {
+		StudentFee studentFee = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentFee WHERE accountId = ?"
+						+ " AND studentId =? AND payMode =? AND termPiad =? AND yearPaid =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, payMode);
+			pstmt.setString(4, termPiad);
+			pstmt.setString(5, yearPaid);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				studentFee  = beanProcessor.toBean(rset,StudentFee.class);
+			}
+		}catch(SQLException e){    
+			logger.error("SQL Exception when getting studentFee for accountId  " + accountId +" and studentId " 
+					+ studentId + " and payMode " + payMode + " and termPiad " + termPiad + " and yearPaid " + yearPaid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return studentFee; 
+	}
+
+
+
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#putStudentFee(com.yahoo.petermwenda83.bean.money.StudentFee)
 	 */
 	@Override
@@ -193,7 +229,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 			pstmt.setString(2, studentId); 
 			pstmt.setString(3, termPiad); 
 			pstmt.setString(4, yearPaid); 
-			
+
 			try( ResultSet rset = pstmt.executeQuery();){
 
 				list = beanProcessor.toBeanList(rset, StudentFee.class);
@@ -206,5 +242,6 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		return list;
 	}
+
 
 }

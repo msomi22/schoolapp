@@ -254,38 +254,38 @@ public class FeeReceipt extends HttpServlet{
 
 		if(feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(), sysConfig.getYear(), 
 				FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null) {
-
+			
 			String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(), sysConfig.getYear(), 
 					FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
 
 			List<FeeBreakdownDesc> feeBreakdownDescList = feeBreakdownDescDAO.getFeeBreakdownDescList(accountId, feeBreakdownId);
+			
+			if(studentFeeDAO.getStudentFee(accountId, studentId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(), sysConfig.getYear()) != null) {
+				int count = 1;
+				for(FeeBreakdownDesc gokefee : feeBreakdownDescList) {
 
-			int count = 1;
-			for(FeeBreakdownDesc gokefee : feeBreakdownDescList) {
+					PdfPCell countCell = new PdfPCell(new Phrase(""+count,timesRomanNormal8));
+					countCell.setBorder(Rectangle.NO_BORDER);
 
-				PdfPCell countCell = new PdfPCell(new Phrase(""+count,timesRomanNormal8));
-				countCell.setBorder(Rectangle.NO_BORDER);
+					String description = gokefee.getFeeDescription().substring(0, Math.min(gokefee.getFeeDescription().length(), 20));
 
-				String description = gokefee.getFeeDescription().substring(0, Math.min(gokefee.getFeeDescription().length(), 20));
+					PdfPCell refNoCell = new PdfPCell(new Phrase(""+description,timesRomanNormal8));
+					refNoCell.setBorder(Rectangle.NO_BORDER);
 
-				PdfPCell refNoCell = new PdfPCell(new Phrase(""+description,timesRomanNormal8));
-				refNoCell.setBorder(Rectangle.NO_BORDER);
+					PdfPCell dateCell2 = new PdfPCell(new Phrase(""+nf.format(gokefee.getAmount()),timesRomanNormal8));
+					dateCell2.setBorder(Rectangle.NO_BORDER);
 
-				PdfPCell dateCell2 = new PdfPCell(new Phrase(""+nf.format(gokefee.getAmount()),timesRomanNormal8));
-				dateCell2.setBorder(Rectangle.NO_BORDER);
+					gokeTotal += gokefee.getAmount();
 
-				gokeTotal += gokefee.getAmount();
+					gvmtFundsTable.addCell(countCell);
+					gvmtFundsTable.addCell(refNoCell);
+					gvmtFundsTable.addCell(dateCell2);
 
-				gvmtFundsTable.addCell(countCell);
-				gvmtFundsTable.addCell(refNoCell);
-				gvmtFundsTable.addCell(dateCell2);
+					count++;
 
-				count++;
+				}
 
 			}
-
-
-
 		}
 
 

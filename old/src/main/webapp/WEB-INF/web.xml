@@ -170,6 +170,15 @@
     <url-pattern>/schoolLogin</url-pattern>
   </servlet-mapping>
   
+  
+   <listener>
+    <listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
+    </listener>
+  
+  
+  
+  
+  
   <error-page>
     <error-code>404</error-code>
     <location>/404.jsp</location>

@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -29,6 +30,7 @@ import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.guardian.ParentsDAO;
+import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
@@ -40,7 +42,22 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
-import com.yahoo.petermwenda83.server.api.rest.bean.*;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIParentPrimary;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStudentFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIStudentOtherFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
+import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
+import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.api.rest.bean.RevertedFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
+import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 
 /**
@@ -67,7 +84,9 @@ public class StudentService {
 	private static StudentSubjectDAO studentSubjectDAO;
 
 	private static SubjectDAO subjectDAO;
-
+	
+	private static FeeBreakdownDAO feeBreakdownDAO;
+	
 	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
 
 	static{
@@ -89,6 +108,8 @@ public class StudentService {
 		studentSubjectDAO = StudentSubjectDAO.getInstance();
 
 		subjectDAO = SubjectDAO.getInstance();
+		
+		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
 	}
 
 
@@ -235,7 +256,7 @@ public class StudentService {
 			response.setDescription("Staff is invalid!");
 			return response;
 
-		}else if(studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRefNo()) == null) {
+		}else if(studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo()) == null) {
 
 			response.setMessage("error");
 			response.setDescription("Student RegNo is invalid!");
@@ -256,30 +277,28 @@ public class StudentService {
 
 		}else {
 
-			studentPayFee.getAccountId();
-			studentPayFee.getStaffId();
-
-			studentPayFee.getRegNo();
-			studentPayFee.getAmount();
-			studentPayFee.getRefNo();
-			studentPayFee.getPaymentMode();
-			studentPayFee.getTransactionId();
-
-			studentPayFee.getYear();
-			studentPayFee.getTerm();
+			Student student = studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo());
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId()); 
 			
 			StudentFee studentFee = new StudentFee(); 
-			studentFee.getAccountId();
-			studentFee.getAmountPaid();
-			studentFee.getDatePaid();
-			//studentFee.get  TODO
+			studentFee.setAccountId(studentPayFee.getAccountId());
+			studentFee.setStudentId(student.getUuid());
+			studentFee.setAmountPaid(Integer.valueOf(studentPayFee.getAmount()));
+			studentFee.setPayMode(studentPayFee.getPaymentMode());
+			studentFee.setTransactionId(studentPayFee.getTransactionId());
+			studentFee.setPaidHas(student.getIsBoarding()); 
+			studentFee.setTermPiad(sysConfig.getTerm());
+			studentFee.setYearPaid(sysConfig.getYear());
 			
-			
-			
-			studentFeeDAO.putStudentFee(studentFee);
-
-			response.setMessage("success");
-			response.setDescription("OK");
+			if(studentFeeDAO.putStudentFee(studentFee)) {
+				response.setMessage("success");
+				response.setDescription("Fee paid successsfully."); 
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, contact Admin!");
+				
+			}
 
 		}
 
@@ -287,11 +306,74 @@ public class StudentService {
 		return response;
 	}
 	
-	//TODO
-	public Object addGoKeMoney(StudentPayFee studentPayFee) {
-		//studentFeeDAO.putStudentFee();
+	/**
+	 * 
+	 * @param goKeMoney
+	 * @return
+	 */
+	public Object addGoKeMoney(GoKeMoney goKeMoney) {
 		
-		return null;
+		Response response = new Response();
+		
+		if(studentDAO.getStudentById(goKeMoney.getAccountId(), goKeMoney.getStudentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Invalid studentId!");
+			return response;
+			
+		}else if(sysConfigDAO.getSysConfig(goKeMoney.getAccountId())== null){
+			response.setMessage("error");
+			response.setDescription("Unexpected error occured, contact Admin!"); 
+			return response;
+			
+		}
+		if(feeBreakdownDAO.getFeeBreakdown(goKeMoney.getAccountId(), FeeConstants.GVMT_MONEY_CODE, sysConfigDAO.getSysConfig(goKeMoney.getAccountId()).getTerm(),
+				sysConfigDAO.getSysConfig(goKeMoney.getAccountId()).getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE) == null){ 
+			response.setMessage("error");
+			response.setDescription("Term/Year not set or GoKe money inactive! Contact Admin.");  
+			return response;
+			
+		}else {
+			
+			Student student = studentDAO.getStudentById(goKeMoney.getAccountId(), goKeMoney.getStudentId());
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(goKeMoney.getAccountId()); 
+			
+			String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(goKeMoney.getAccountId(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+					sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
+			
+			
+			StudentFee studentFee = new StudentFee(); 
+			studentFee.setAccountId(goKeMoney.getAccountId());
+			studentFee.setStudentId(student.getUuid());
+			studentFee.setAmountPaid((int)FeeConstants.getGoKeFee(goKeMoney.getAccountId(), feeBreakdownId));   
+			studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
+			studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
+			studentFee.setPaidHas(student.getIsBoarding()); 
+			studentFee.setTermPiad(sysConfig.getTerm());
+			studentFee.setYearPaid(sysConfig.getYear());
+			
+			if(studentFeeDAO.getStudentFee(goKeMoney.getAccountId(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
+					sysConfig.getTerm(), sysConfig.getYear()) == null) {
+				
+				if(studentFeeDAO.putStudentFee(studentFee)) {
+					response.setMessage("success");
+					response.setDescription("GoKe Fee paid successsfully."); 
+					return response;
+					
+				}else {
+					response.setMessage("error");
+					response.setDescription("Something went wrong, contact Admin!");
+					return response;
+					
+				}
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("GoKe money already assigned!");
+				return response;
+			}
+			
+		}
+		
 	}
 	
 	
@@ -1083,7 +1165,7 @@ public class StudentService {
 		return response;
 	}
 
-	/** TODO
+	/** 
 	 * 
 	 * @param accountId
 	 * @param filter
@@ -1091,8 +1173,6 @@ public class StudentService {
 	 */
 
 	public Object getStudentFilter(String accountId, StudentFilter filter) {
-
-		System.out.println(filter); 
 
 		List<StudentInfo> studentInfoList = new ArrayList<>();
 

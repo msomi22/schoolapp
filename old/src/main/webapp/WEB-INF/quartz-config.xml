@@ -28,7 +28,7 @@
 			<name>MyJob</name>
 			<job-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</job-class>
 		</job>
-		<!-- 
+		
 		<trigger>
 			<simple>
 				<name>TenSecondIntervals</name>
@@ -36,7 +36,7 @@
 				<repeat-count>-1</repeat-count>
 			</simple>
 		</trigger>
-       -->
+       
 	</schedule>
 
 

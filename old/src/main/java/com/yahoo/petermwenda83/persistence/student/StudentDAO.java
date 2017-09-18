@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -351,7 +350,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudent(java.lang.String, int, int)
 	 */
 	public List<Student> getAllStudent(String accountId, int startIndex , int endIndex){
-		List<Student> studentList = new ArrayList<>();
+		List<Student> studentList = null;
 
 		try(
 				Connection conn = dbutils.getConnection();
@@ -536,6 +535,34 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		}
 
 		return studentList;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getActiveStudents(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Student> getActiveStudents(String accountId, String isActive) {
+		List<Student> studentList = null;
+
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
+						+ "accountId = ? AND isActive = ?;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, isActive);
+			
+			try(ResultSet rset = psmt.executeQuery();){
+
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;		
 	}
 
 
