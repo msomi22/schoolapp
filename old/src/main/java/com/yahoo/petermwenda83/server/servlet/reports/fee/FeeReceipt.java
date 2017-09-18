@@ -186,7 +186,7 @@ public class FeeReceipt extends HttpServlet{
 		Account account = accountDAO.getAccountById(accountId);
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 
-		SimpleDateFormat format = new SimpleDateFormat("MMMM dd HH:mm:ss ", Locale.ENGLISH); 
+		SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy zzzz", Locale.ENGLISH);  
 
 		Locale locale = new Locale("en","KE"); 
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);

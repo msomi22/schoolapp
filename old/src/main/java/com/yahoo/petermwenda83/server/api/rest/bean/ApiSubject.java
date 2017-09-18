@@ -15,14 +15,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "ApiSubject") 
 public class ApiSubject {
 	
-	@JsonProperty
 	private String uuid;
-	@JsonProperty
 	private String accountId;
-	@JsonProperty
 	private String studentId;
-	@JsonProperty
 	private String subjectId;
+	private String description;
 
 	/**
 	 * 
@@ -32,6 +29,7 @@ public class ApiSubject {
 		accountId = "";
 		studentId = "";
 		subjectId = "";
+		description = "";
 	}
 
 	public String getUuid() {
@@ -66,13 +64,18 @@ public class ApiSubject {
 		this.subjectId = subjectId;
 	}
 
-	/**
-	 * 
-	 */
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	public String toString() {
 		return "ApiSubject [uuid=" + uuid + ", accountId=" + accountId + ", studentId=" + studentId + ", subjectId="
-				+ subjectId + "]";
+				+ subjectId + ", description=" + description + "]";
 	}
 
 }

@@ -989,7 +989,17 @@ public class StudentService {
 
 		}else {
 			
-			return subjectDAO.getSubjects(accountId);
+			ApiSubject apiSubject = new ApiSubject();
+			List<ApiSubject> apiSubjectList = new ArrayList<>();
+			subjectDAO.getSubjects(accountId).forEach(subject ->{
+				
+				apiSubject.setAccountId(accountId);
+				apiSubject.setDescription(subject.getDescription());
+				apiSubject.setSubjectId(subject.getUuid());
+				apiSubjectList.add(apiSubject);
+			});
+
+			return apiSubjectList; 
 
 		}
 
@@ -1049,9 +1059,10 @@ public class StudentService {
 		subjectlist.forEach(sub -> {
 			apiSubject.setAccountId(sub.getAccountId());
 			apiSubject.setStudentId(sub.getStudentId());
-			apiSubject.setSubjectId(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getDescription());
+			apiSubject.setSubjectId(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getUuid());
 			apiSubject.setUuid(sub.getUuid()); 
-			sub.getAllocationDate();
+			apiSubject.setDescription(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getDescription());
+			
 			apiSubjectList.add(apiSubject);
 
 		});

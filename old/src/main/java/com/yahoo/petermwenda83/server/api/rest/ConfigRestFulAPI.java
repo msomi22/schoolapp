@@ -239,40 +239,4 @@ public class ConfigRestFulAPI {
 
 
 
-	//term fee TODO
-	public Object getTermFee(String term, String year) {
-		return null;
-	}
-	
-	public Object getTermFees(String accountId) {
-		return null;
-	}
-	
-	public Object putTermFee() {
-		return null;
-	}
-	
-	public Object updateTermFee() {
-		return null;
-	}
-	
-	//term other fee TODO
-	public Object getOtherFee(String term, String year) {
-		return null;
-	}
-	
-	public Object getOtherFees(String accountId) {
-		return null;
-	}
-	
-	public Object putOtherFee() {
-		return null;
-	}
-	
-	public Object updateOtherFee() {
-		return null;
-	}
-
-
-
 }
