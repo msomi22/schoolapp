@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -79,59 +77,68 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		return feeBreakdown; 
 	}
 
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdown(java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdown(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public FeeBreakdown getFeeBreakdown(String accountId,String feeCategory, String feeCode) {
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory, String term, String year,
+			String status) {
 		FeeBreakdown feeBreakdown = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdown WHERE accountId = ?"
-						+ " AND feeCategory =? AND feeCode =?;");       
+						+ " AND feeCategory =? AND term =? AND year =? AND status =?;");       
 
 				){
 
 			pstmt.setString(1, accountId);
 			pstmt.setString(2, feeCategory);
-			pstmt.setString(3, feeCode);
+			pstmt.setString(3, term);
+			pstmt.setString(4, year);
+			pstmt.setString(5, status);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 				feeBreakdown  = beanProcessor.toBean(rset, FeeBreakdown.class);
 			}
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting FeeBreakdown for accountId  " + accountId +" and feeCategory " + feeCategory + " and  feeCode" + feeCode );
+			logger.error("SQL Exception when getting FeeBreakdown for accountId  " + accountId +" and feeCategory " + feeCategory +
+					" and  term " + term + " and year " + year + " and status " + status);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
 		return feeBreakdown; 
 	}
 
+
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdownList(java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdown(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<FeeBreakdown> getFeeBreakdownList(String accountId, String feeCategory) {
-		List<FeeBreakdown> list = null;
-		try (
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory) {
+		FeeBreakdown feeBreakdown = null;
+		ResultSet rset = null;
+		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdown WHERE"
-						+ " accountId = ? AND feeCategory = ?;");
-				) {
-			pstmt.setString(1, accountId);      
-			pstmt.setString(2, feeCategory); 
-			try( ResultSet rset = pstmt.executeQuery();){
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdown WHERE accountId = ?"
+						+ " AND feeCategory =? ;");       
 
-				list = beanProcessor.toBeanList(rset, FeeBreakdown.class);
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, feeCategory);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				feeBreakdown  = beanProcessor.toBean(rset, FeeBreakdown.class);
 			}
-		} catch (SQLException e) {
-			logger.error("SQLException when getting FeeBreakdown List for accountId " + accountId + " and feeCategory "  + feeCategory); 
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting FeeBreakdown for accountId  " + accountId +" and feeCategory " + feeCategory);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
-
-		return list;
+		return feeBreakdown; 
 	}
 
 	/**
@@ -142,17 +149,15 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO FeeBreakdown" 
-						+"(uuid, accountId, feeCategory, feeCode, feeDescription, amount, term, year) VALUES (?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, feeCategory, term, year, status) VALUES (?,?,?,?,?,?);");
 				){ 
-
+			
 			pstmt.setString(1, feeBreakdown.getUuid());
 			pstmt.setString(2, feeBreakdown.getAccountId());
 			pstmt.setString(3, feeBreakdown.getFeeCategory());
-			pstmt.setString(4, feeBreakdown.getFeeCode());
-			pstmt.setString(5, feeBreakdown.getFeeDescription());
-			pstmt.setInt(6, feeBreakdown.getAmount());
-			pstmt.setString(7, feeBreakdown.getTerm());
-			pstmt.setString(8, feeBreakdown.getYear());
+			pstmt.setString(4, feeBreakdown.getTerm());
+			pstmt.setString(5, feeBreakdown.getYear());
+			pstmt.setString(7, feeBreakdown.getStatus());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -172,20 +177,16 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 	public boolean updateFeeBreakdown(FeeBreakdown feeBreakdown) {
 		boolean success = true;
 		try (  Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE FeeBreakdown SET feeCode =?, feeDescription = ?,"
-						+ "amount =?,term =?,year =? WHERE accountId =? "
-						+ "AND feeCategory =? AND uuid =?;");
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE FeeBreakdown SET feeCategory =?,"
+						+ "term =?, year =?, status =? WHERE accountId =? AND uuid =?;");
 				) {           			 	            
 
-
-			pstmt.setString(1, feeBreakdown.getFeeCode());
-			pstmt.setString(2, feeBreakdown.getFeeDescription());
-			pstmt.setInt(3, feeBreakdown.getAmount());
-			pstmt.setString(4, feeBreakdown.getTerm());
-			pstmt.setString(5, feeBreakdown.getYear());
-			pstmt.setString(6, feeBreakdown.getAccountId());
-			pstmt.setString(7, feeBreakdown.getFeeCategory());
-			pstmt.setString(8, feeBreakdown.getUuid());			
+			pstmt.setString(1, feeBreakdown.getFeeCategory());
+			pstmt.setString(2, feeBreakdown.getTerm());
+			pstmt.setString(3, feeBreakdown.getYear());
+			pstmt.setString(4, feeBreakdown.getStatus());
+			pstmt.setString(5, feeBreakdown.getAccountId());
+			pstmt.setString(6, feeBreakdown.getUuid());			
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

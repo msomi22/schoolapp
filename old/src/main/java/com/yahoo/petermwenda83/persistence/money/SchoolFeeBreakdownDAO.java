@@ -3,8 +3,6 @@
  */
 package com.yahoo.petermwenda83.persistence.money;
 
-import java.util.List;
-
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 
 /**
@@ -24,17 +22,21 @@ public interface SchoolFeeBreakdownDAO {
 	/**
 	 * 
 	 * @param accountId
-	 * @param feeCode
+	 * @param feeCategory
+	 * @param term
+	 * @param year
+	 * @param status
 	 * @return
 	 */
-	public FeeBreakdown getFeeBreakdown(String accountId,String feeCategory, String feeCode); 
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory, String term, String year, String status); 
+	
 	/**
 	 * 
 	 * @param accountId
 	 * @param feeCategory
 	 * @return
 	 */
-	public List<FeeBreakdown> getFeeBreakdownList(String accountId, String feeCategory); 
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory); 
 	/**
 	 * 
 	 * @param feeBreakdown

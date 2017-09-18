@@ -206,62 +206,53 @@ public class StudentService {
 	 * @param studentPayFee
 	 * @return
 	 */
-	public FeeResponse payFee(StudentPayFee studentPayFee) {
+	public Object payFee(StudentPayFee studentPayFee) {
 
-		FeeResponse feeResponse = new FeeResponse();
-
-		ApiResponse apiResponse = new ApiResponse();
+		Response response = new Response();
 
 		//validation
 		if(StringUtils.isEmpty(studentPayFee.getAccountId())) {
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("AccountId is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("AccountId is invalid!");
+			return response;
 
 		}else if(accountDAO.getAccountById(studentPayFee.getAccountId()) != null) { 
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("AccountId is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("AccountId is invalid!");
+			return response;
 
 		}else if(StringUtils.isEmpty(studentPayFee.getStaffId())) { 
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Staff is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("Staff is invalid!");
+			return response;
 
 		}else if(staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId()) != null) {
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Staff is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("Staff is invalid!");
+			return response;
 
 		}else if(studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRefNo()) == null) {
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Student RegNo is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("Student RegNo is invalid!");
+			return response;
 
 		}else if(!StringUtils.isNumeric(studentPayFee.getAmount())) {
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Amount is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("Amount is invalid!");
+			return response;
 
 
 		}else if(Integer.valueOf(studentPayFee.getAmount()) < 1 || Integer.valueOf(studentPayFee.getAmount()) > 100000) {
 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Amount is invalid!");
-			feeResponse.setApiResponse(apiResponse); 
-			return feeResponse;
+			response.setMessage("error");
+			response.setDescription("Amount is invalid!");
+			return response;
 
 		}else {
 
@@ -276,16 +267,36 @@ public class StudentService {
 
 			studentPayFee.getYear();
 			studentPayFee.getTerm();
+			
+			StudentFee studentFee = new StudentFee(); 
+			studentFee.getAccountId();
+			studentFee.getAmountPaid();
+			studentFee.getDatePaid();
+			//studentFee.get  TODO
+			
+			
+			
+			studentFeeDAO.putStudentFee(studentFee);
 
-			apiResponse.setMessage("success");
-			apiResponse.setDescription("OK");
+			response.setMessage("success");
+			response.setDescription("OK");
 
-			feeResponse.setStudentPayFee(studentPayFee); 
 		}
 
 
-		return feeResponse;
+		return response;
 	}
+	
+	//TODO
+	public Object addGoKeMoney(StudentPayFee studentPayFee) {
+		//studentFeeDAO.putStudentFee();
+		
+		return null;
+	}
+	
+	
+	
+	
 	/**
 	 * 
 	 * @param accountId
@@ -885,26 +896,21 @@ public class StudentService {
 	 * @param apiSubject
 	 * @return
 	 */
-	public Object updateSubject(ApiSubject apiSubject) {
+	public Object getListofSubjects(String accountId) { 
 
-		ApiResponse apiResponse = new ApiResponse();
+		Response response = new Response();
 
-		if(studentSubjectDAO.getSubjectById(apiSubject.getAccountId(), apiSubject.getUuid()) == null) {
-			apiResponse.setMessage("error"); 
-			apiResponse.setDescription("Invalid id!");
+		if(subjectDAO.getSubjects(accountId) == null) { 
+			response.setMessage("error"); 
+			response.setDescription("Invalid accountId!");
+			return response;
 
 		}else {
-			StudentSubject studentsub = studentSubjectDAO.getSubjectById(apiSubject.getAccountId(), apiSubject.getUuid());
-			studentsub.setSubjectId(apiSubject.getSubjectId());
-			studentsub.setStudentId(apiSubject.getStudentId());
-
-			apiResponse.setMessage("sucess"); 
-			apiResponse.setDescription("Not Applicable for now!");
+			
+			return subjectDAO.getSubjects(accountId);
 
 		}
 
-
-		return apiResponse;
 	}
 	/** 
 	 * 
