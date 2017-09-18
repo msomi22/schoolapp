@@ -161,7 +161,7 @@ public class StudentRestFulAPI{
 	} )
 	@POST
 	@Path("/fee/{accountId}/{regNo}")  
-	public FeeResponse payFee(@PathParam("accountId") String accountId, 
+	public Object payFee(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
 
 		FeeResponse feeResponse = new FeeResponse();
@@ -339,27 +339,26 @@ public class StudentRestFulAPI{
 	 * @param apiSubject
 	 * @return
 	 */
-	@ApiOperation(value = "Updated student's subject.", 
-			notes = "Student subject info object.", 
+	@ApiOperation(value = "Get List of all subjects.", 
+			notes = "Return list of subjects.", 
 			response = ApiSubject.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
 	} )
 	
-	@PUT
-	@Path("/subject")   
-	public Object updateSubject(@HeaderParam("authorization") String auth, ApiSubject apiSubject) {
+	@GET
+	@Path("/subjects/{accountId}")   
+	public Object getSubjects(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId) {
 		
 		ApiResponse response = new ApiResponse(); 
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
-
-
-		if(!RestAUth.isUserAuthenticated(auth, apiSubject.getAccountId())){
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
 		
-		return studentService.updateSubject(apiSubject);
+		return studentService.getListofSubjects(accountId);  
 	}
 	
 	/**
