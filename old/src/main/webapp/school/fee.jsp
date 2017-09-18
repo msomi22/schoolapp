@@ -64,7 +64,8 @@
 											<label for="regno">Enter Reg N0_:</label> <input type="text"
 												id="regno" name="regno"
 												class="form-control formelement cards"
-												placeholder="Registration number" pattern="[0-9]{4}"
+												placeholder="Registration number" pattern="[0-9]{3,4}"
+												maxlength="4"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -93,8 +94,153 @@
 	private String yearPaid;
 	private Timestamp datePaid; -->
 
-							<div class="col-md-6 col-md-offset-3 cards formelement">
-							<div class="row secondary-assent">
+							<div class="col-md-11 col-md-offset-1 cards formelement">
+								<div class="row secondary-assent">
+									Studen't Info <br> <br>
+
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<h4 id="regNo">Reg No: ######</h4>
+									</div>
+
+									<div class="col-md-4">
+										<h4 id="firstname" >First Name: ######</h4>
+									</div>
+									<div class="col-md-4">
+										<h4 id="middlename">Middle Name: ######</h4>
+									</div>
+								</div>
+
+
+								<div class="row">
+									
+
+
+									<div class="col-md-4">
+										<h4 id="lastname">Last Name: ######</h4>
+									</div>
+								
+									<div class="col-md-4">
+										<h4 id="stream">Stream: ######</h4>
+									</div>
+
+
+									<div class="col-md-4">
+										<h4 id="isBoarding">Boarding: ######</h4>
+									</div>
+
+								</div>
+
+
+
+
+								
+
+
+								<div class="row">
+									<div class="col-md-6">
+										<h4 class="pull-right" id="balance">
+											<b>Balance: ######</b>
+										</h4>
+									</div>
+
+								</div>
+
+
+
+
+
+								<br> <br>
+
+							</div>
+
+						</div>
+
+
+						<div class="row">
+							<br> <br>
+
+
+
+							<div class="col-md-6 col-md-offset-1 cards formelement">
+								<div class="row secondary-assent">
+									Student's Fee History <br> <br>
+
+								</div>
+								<div class="scale">
+									<div class="row">
+										<div class="col-md-4 col-md-offset-1">
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Transaction ID: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Year Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+											<hr class="hr_list">
+										</div>
+
+
+
+										<div class="col-md-4 col-md-offset-1">
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Transaction ID: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Year Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+
+											<hr class="hr_list">
+										</div>
+
+
+
+										<div class="col-md-4 col-md-offset-1">
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Transaction ID: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Year Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+
+											<hr class="hr_list">
+										</div>
+
+										<div class="col-md-4 col-md-offset-1">
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Amount Paid: ######</h6>
+											<h6>Payment Mode: ######</h6>
+											<h6>Transaction ID: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Year Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+
+											<hr class="hr_list">
+										</div>
+
+
+									</div>
+
+
+
+
+								</div>
+
+
+
+							</div>
+
+
+
+							<!--  	<div class="col-md-4 col-md-offset-1 cards formelement">
+							<div class="row secondary-assent">Studen't Info
 							<br>
 							<br>
 							
@@ -183,10 +329,108 @@
 
 
 							</div>
+ -->
 
 
+
+
+							<div class="col-md-4  col-md-offset-1 cards formelement">
+							
+							<div id="showOtherHistory">
+							<br>
+							<button class="btn btn-primary btn-block" onclick="showOtherHistory()">Show other History</button>
+							
+							</div>
+							
+							<div id="OtherHistory" style="display: none">
+
+
+
+								<div class="row secondary-assent">
+									Other Student's Fee History <br> <br>
+
+								</div>
+
+								<div class="scale">
+									<div class="row">
+										<div class="col-md-11 col-md-offset-1">
+											<h6>Description: ######</h6>
+											<h6>Amount: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+											<hr class="hr_list">
+										</div>
+
+
+									</div>
+
+									<div class="row">
+										<div class="col-md-11 col-md-offset-1">
+											<h6>Description: ######</h6>
+											<h6>Amount: ######</h6>
+											<h6>Term Paid: ######</h6>
+											<h6>Date Paid: ######</h6>
+											<hr class="hr_list">
+										</div>
+
+
+									</div>
+
+
+
+									<br> 
+								</div>
+
+
+
+
+
+								<div class="row secondary-assent">
+									Reverted Student's Fee History <br> <br>
+
+								</div>
+
+								<div class="scale">
+									<div class="row">
+										<div class="col-md-11 col-md-offset-1">
+											<h6>Description: ######</h6>
+											<h6>Amount: ######</h6>
+											<h6>Date Reverted: ######</h6>
+											<hr class="hr_list">
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-11 col-md-offset-1">
+											<h6>Description: ######</h6>
+											<h6>Amount: ######</h6>
+											<h6>Date Reverted: ######</h6>
+											<hr class="hr_list">
+										</div>
+									</div>
+
+
+								</div>
+
+
+							</div>
+
+
+
+
+
+
+
+							<br> <br>
+							
+							</div>
 
 						</div>
+
+						<br> <br>
+
+
+
 
 
 
@@ -223,6 +467,10 @@
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+<!-- fee js -->
+<script src="js/fee.js"></script>
 
 
 

@@ -2,6 +2,23 @@
 	color: #000;
 }
 
+.scale_old{
+	overflow-y: scroll;
+	overflow-x:hidden;
+	height: 370px; 
+}
+
+.hr_list{
+	
+	
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #1ABB9C;
+    margin: 1em 0;
+    padding: 0; 
+}
+
 .bg-blue {
 	background-color:#D7E8EF  !important;
 	border-color: #D7E8EF !important;
