@@ -588,6 +588,26 @@ CREATE TABLE  OtherFee (
 ALTER TABLE OtherFee OWNER TO school;
 
 
+-- -------------------
+-- Table  FeeBreakdown 
+-- -------------------
+
+CREATE TABLE  FeeBreakdown (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    feeCategory text,
+    feeCode text,
+    feeDescription text,
+    amount integer NOT NULL CHECK (amount>=0),
+    term text,
+    year text
+  
+);
+\COPY FeeBreakdown(uuid,accountId,feeCategory,feeCode,feeDescription,amount,term,year) FROM '/tmp/FeeBreakdown.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE FeeBreakdown OWNER TO school;
+
+
 
 -- -------------------
 -- Table  StudentOtherFee

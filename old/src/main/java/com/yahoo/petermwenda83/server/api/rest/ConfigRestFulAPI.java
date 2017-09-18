@@ -240,7 +240,7 @@ public class ConfigRestFulAPI {
 
 
 	//term fee TODO
-	public Object getTermFee(String term, String yaer) {
+	public Object getTermFee(String term, String year) {
 		return null;
 	}
 	
@@ -257,7 +257,7 @@ public class ConfigRestFulAPI {
 	}
 	
 	//term other fee TODO
-	public Object getOtherFee(String term, String yaer) {
+	public Object getOtherFee(String term, String year) {
 		return null;
 	}
 	
