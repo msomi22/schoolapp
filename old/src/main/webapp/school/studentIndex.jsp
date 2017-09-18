@@ -168,7 +168,7 @@
 
 			<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count pull-right">
 				<span class="count_top"><i class="fa fa-user"></i>Add new student </span>
-				<div class="count"><a role="button" class="btn btn-lg btn-primary secondary-assent" href="registerStudent.jsp"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a></div>
+				<div class="count"><a role="button" class="btn btn-lg btn-primary secondary-assent" href="registerStudent.jsp"><i class="fa fa-user-plus" aria-hidden="true"></i></a></div>
 
 			</div>
 
@@ -195,7 +195,7 @@
                 <div class="x_content">
 
                   <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action">
+                    <table class="table table-striped jambo_table bulk_action" id="studentsList">
                         <thead>
                           <tr class="headings secondary-assent">
 
@@ -228,7 +228,7 @@
                   <td class="center"><%=student.getLastname() %></td>
                   <td class="center"><%=student.getGender() %></td>
                   <td class="center"><%="" %></td>
-                  <td class="center"> <a href="profile.jsp?regno=<%=student.getRegNo() %>" > Profile</a> </td>                 
+                  <td class="center"> <a href="profile.jsp?uuid=<%=student.getUuid() %>" > Profile</a> </td>                 
 
                 </tr>
 

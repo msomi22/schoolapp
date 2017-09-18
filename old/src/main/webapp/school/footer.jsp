@@ -217,6 +217,15 @@ $("#kcpeyear").datepicker({
 		use24hour : false,
 		format : 'YYYY-MM-DD'
 	});
+	
+	
+	
+	$('#studentsList').DataTable({
+		
+		"bPaginate" : false,
+		"bLengthChange" : false
+		
+	});
 
 	/* var yearpicker = new Pikaday({
 		field : document.getElementById('kcpeyear'),
