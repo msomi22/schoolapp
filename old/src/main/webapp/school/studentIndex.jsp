@@ -195,7 +195,7 @@
                 <div class="x_content">
 
                   <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action">
+                    <table class="table table-striped jambo_table bulk_action" id="studentsList">
                         <thead>
                           <tr class="headings secondary-assent">
 

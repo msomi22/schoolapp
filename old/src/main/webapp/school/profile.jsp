@@ -206,7 +206,8 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>Gender</h4>
-														<select name="gender" id="gender" class="form-control formelement">
+														<select name="gender" id="gender"
+															class="form-control formelement">
 															<option value="M">Male</option>
 															<option value="F">Female</option>
 														</select>
@@ -214,7 +215,8 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>County</h4>
-														<select name="county" id="county" class="form-control formelement">
+														<select name="county" id="county"
+															class="form-control formelement">
 															<option value='Baringo'>Baringo</option>
 															<option value='Bomet'>Bomet</option>
 															<option value='Bungoma'>Bungoma</option>
@@ -317,7 +319,8 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>Type</h4>
-														<select name="isBoarding" id="isBoarding" class="form-control formelement">
+														<select name="isBoarding" id="isBoarding"
+															class="form-control formelement">
 															<option value="1">Boarding</option>
 															<option value="0">Day</option>
 														</select>
@@ -348,7 +351,8 @@
 
 														<h4>Class</h4>
 
-														<select class="form-control formelement" name="classroom" id="classroom">
+														<select class="form-control formelement" name="classroom"
+															id="classroom">
 															<%
 																if (classroomList != null) {
 																	for (ClassRoom classroom : classroomList) {
@@ -449,43 +453,25 @@
 
 											<!-- start subjects -->
 
-											<br> <br>
+											<br>
+											
+										
 
 											<div class="row">
 
-												<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
-													<input id="math" type="checkbox" class="form-control  chk"
-														checked /><label for="math"> Mathematics</label>
+												<div class="col-md-6 col-md-offset-3 alert alert-info">
+													Checked represents subjects assigned to the student</div>
 
-												</div>
+												
 
-												<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
-													<input id="eng" type="checkbox" class="form-control  chk"
-														checked /><label for="eng"> English</label>
+											</div>
 
-												</div>
+											<br> <br> <br>
 
-												<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12">
-													<input id="chem" type="checkbox" class="form-control  chk" /><label
-														for="chem"> Chemistry</label>
-
-												</div>
+											<div class="row">
 
 
-
-
-
-												<br> <br>
-
-												<div class="col-md-3 col-md-offset-5">
-
-													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control">Apply
-														Changes</button>
-
-												</div>
-
-
+												<div id="subjectList"></div>
 
 											</div>
 

@@ -7,77 +7,173 @@ var currentClassId = "";
 
 var currentAccId = "";
 
+var returnData = {};
+
+var url = "";
+var request_type = 'GET';
+
 var base_url = location.protocol + "//" + window.location.host
 		+ "/school/webapi/student/";
 
-$(document).ready(
-		function() {
-			// init update :)
+$(document).ready(function() {
+	// init update :)
 
-			console.log($('#passedParam').val());
+	console.log($('#passedParam').val());
+	url = "one/" + $('#passedParam').val();
 
-			$.ajax(
-					{
-						url : base_url + "one/" + $('#passedParam').val(),
-						type : 'GET',
-						contentType : 'application/json',
-						accept : 'application/json',
-						beforeSend : function(xhr) {
-							xhr.setRequestHeader('Authorization', 'Basic '
-									+ btoa(uName + ":" + passwrd));
-						}
-					}).done(
-					function(data) {
+	fetchBasicInfo();
 
-						console.log(data);
+	fetchSubjects();
 
-						// registry.byId("updateStudentInfo").setValues(data);
+});
 
-						/*
-						 * $( '#updateStudentInfo input, #updateStudentInfo
-						 * select') .each( function(index) { var input =
-						 * $(this); console .log('Type: ' + input .attr('type') +
-						 * 'Name: ' + input .attr('name') + 'Value: ' + input
-						 * .val()); });
-						 */
+function fetchBasicInfo() {
 
-						$.each(data, function(key, value) {
-							$("#updateStudentInfo").find(
-									"input[name='" + key + "']").val(value);
+	apiCall(function(data) {
 
-							if (key === "apiParentPrimary") {
+		console.log('Async call');
+		console.log(data);
 
-								$.each(data['apiParentPrimary'], function(key,
-										value) {
-									$("#updateStudentInfo").find(
-											"input[name='" + key + "']").val(
-											value);
-								});
+		$.each(data, function(key, value) {
+			$("#updateStudentInfo").find("input[name='" + key + "']")
+					.val(value);
 
-							}
+			if (key === "apiParentPrimary") {
 
-							if (key === "currentStream") {
-								$('#currentStream').val(value.trim());
+				$.each(data['apiParentPrimary'], function(key, value) {
+					$("#updateStudentInfo").find("input[name='" + key + "']")
+							.val(value);
+				});
 
-								console.log(key + " value:" + value.trim());
+			}
 
-							}
+			if (key === "currentStream") {
+				$('#currentStream').val(value.trim());
 
-							if (key === "gender")
-								$('#gender').val(value.trim());
+				console.log(key + " value:" + value.trim());
 
-							if (key === "isBoarding")
-								$('#isBoarding').val(value.trim());
+			}
 
-							if (key === "county")
-								$('#county').val(value.trim());
-						});
+			if (key === "gender")
+				$('#gender').val(value.trim());
 
-					}).fail(function(jqXHR, textStatus) {
+			if (key === "isBoarding")
+				$('#isBoarding').val(value.trim());
 
-				// alert("Error: " + textStatus);
-				console.log(textStatus);
-
-			});
+			if (key === "county")
+				$('#county').val(value.trim());
 
 		});
+
+	});
+
+	// var m_data= apiCall();
+
+	/*setTimeout(function() {
+
+		// console.log(returnData);
+
+	}, 2000);*/
+
+}
+
+
+function fetchSubjects(){
+	
+	
+	url = "subject/" + $('#passedParam').val();
+	
+	
+	apiCall(function (data){
+		
+		console.log("Subjects loadded");
+		
+		
+		
+		for(var i=0; i < data.length; i++){
+			
+			console.log(data[i]);
+			
+			$('#subjectList').append('<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'+data[i]['subjectId']+'" type="checkbox" class="form-control  chk" checked /><label for="math">'+ data[i]['subjectId']+'</label> </div>');	
+			
+		}
+		
+	});
+	
+	
+	
+	
+	
+	
+}
+
+
+
+function apiCall(handleData) {
+
+	$.ajax(
+			{
+				url : base_url + url,
+				type : request_type,
+				contentType : 'application/json',
+				accept : 'application/json',
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader('Authorization', 'Basic '
+							+ btoa(uName + ":" + passwrd));
+				}
+			}).done(function(data) {
+
+		// console.log(data);
+
+		returnData = data;
+
+		// console.log(returnData);
+
+		handleData(data);
+
+		//returnData = callBack(data);
+		//return returnData;
+
+	}).fail(function(jqXHR, textStatus) {
+
+		// alert("Error: " + textStatus);
+		console.log(textStatus);
+
+		returnData = textStatus;
+
+	});
+
+	return returnData;
+}
+
+/*
+ * Just joking around with Async calls
+ * function callBack(data) {
+
+	returnData = data;
+
+	// console.log(returnData);
+
+	return returnData;
+
+}*/
+
+/*
+ * In case i see a need to alter the search box, please reference this guide
+ * This is very simple. First you must hide the default search box :
+ * 
+ * .dataTables_filter { display: none; } Example of your own designed search
+ * box, placed somewhere in the HTML :
+ * 
+ * <input type="text" id="searchbox"> script to search / filter when typing in
+ * the search box
+ * 
+ * $("#searchbox").keyup(function() { dataTable.fnFilter(this.value); });
+ * working demo -> http://jsfiddle.net/TbrtF/
+ * 
+ * If you are using DataTables 1.10 the JS should look like:
+ * 
+ * $("#searchbox").on("keyup search input paste cut", function() {
+ * dataTable.search(this.value).draw(); });
+ * 
+ */

@@ -289,9 +289,9 @@ public class StudentRestFulAPI{
 	} )
 	
 	@GET
-	@Path("/subject/{studentId}/{accountId}")    
-	public Object getSubject(@HeaderParam("authorization") String auth, @PathParam("studentId") String studentId,
-			@PathParam("accountId") String accountId) {
+	@Path("/subject/{accountId}/{studentId}")    
+	public Object getSubject(@HeaderParam("authorization") String auth,
+			@PathParam("accountId") String accountId, @PathParam("studentId") String studentId) {
 		
 		ApiResponse response = new ApiResponse(); 
 		response.setMessage("error");
