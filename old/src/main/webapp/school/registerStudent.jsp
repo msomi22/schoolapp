@@ -221,8 +221,8 @@
 												<div class="col-md-5 col-md-offset-1">
 													<h4>Gender</h4>
 													<select name="gender" class="form-control formelement">
-														<option value="male">Male</option>
-														<option value="female">Female</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
 													</select>
 												</div>
 
