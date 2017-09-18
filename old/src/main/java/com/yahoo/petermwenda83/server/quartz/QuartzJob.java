@@ -63,8 +63,6 @@ public class QuartzJob implements Job{
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
-		System.out.println("quartz **** "); 
-		
 		synchGoKeMoney();
 
 		try {
@@ -91,10 +89,10 @@ public class QuartzJob implements Job{
 	 */
 	private void synchGoKeMoney() {
 		accountDAO.getAccounts().parallelStream().forEach(account -> {
-
+			
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
 			studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
-
+			
 				if(feeBreakdownDAO.getFeeBreakdown(account.getUuid(), 
 						FeeConstants.GVMT_MONEY_CODE,
 						sysConfig.getTerm(),
@@ -113,28 +111,28 @@ public class QuartzJob implements Job{
 					studentFee.setPaidHas(student.getIsBoarding()); 
 					studentFee.setTermPiad(sysConfig.getTerm());
 					studentFee.setYearPaid(sysConfig.getYear());
-
+					
 					if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
-							sysConfig.getTerm(), sysConfig.getYear()) != null) {
+							sysConfig.getTerm(), sysConfig.getYear()) == null) {
 
 						if(studentFeeDAO.putStudentFee(studentFee)) {
 							//log success
-							System.out.println("GoKe money add success"); 
+							//System.out.println("GoKe money add success"); 
 
 						}else {
 							//log error, contact Admin_ 
-							System.out.println("error, contact Admin"); 
+							//System.out.println("error, contact Admin"); 
 
 						}
 
 					}else {
 						//log error, student has already been assigned GoKe money 
-						System.out.println("error, student has already been assigned GoKe money"); 
+						//System.out.println("error, student has already been assigned GoKe money"); 
 					}
 
 				}else {
 					//log error, GoKe money not set
-					System.out.println("error, GoKe money not set"); 
+					//System.out.println("error, GoKe money not set"); 
 				}
 
 
