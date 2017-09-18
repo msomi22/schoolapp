@@ -64,6 +64,11 @@
 <!-- Styled checkbox -->
 
 <link href="css/styledCheckbox/style.css" rel="stylesheet" />
+
+<!-- Cropper -->
+
+<link rel="stylesheet" href="css/cropper/cropper.min.css">
+<link rel="stylesheet" href="css/cropper/main.css">
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
@@ -80,15 +85,47 @@
 				<div class="x_panel">
 					<div class="x_content">
 
-						<form action="#" method="POST" id="updateStudentInfo">
+						
 
 							<div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-								<div class="profile_img">
-									<div id="crop-avatar">
-										<!-- Current avatar -->
-										<img class="img-responsive avatar-view" src="images/user.png"
-											alt="Avatar" title="Change the avatar">
-									</div>
+								<div class="profile_img" id="crop-avatar">
+								
+								<!-- Current avatar -->
+											<div class="avatar-view" title="Change the avatar">
+												<img src="images/user.png" alt="Avatar">
+												<!-- Since i can't get the dist dir need to create a preview here simiar 
+												to the one in the cropping option, thus i will have to look at the code
+												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
+												 -->
+
+
+											</div>
+											<!-- Cropper Modal -->
+											<jsp:include page="modals/cropper.html" />
+
+											<!-- Loading state -->
+											<div class="loading" aria-label="Loading" role="img"
+												tabindex="-1"></div>
+								
+									<%-- <div class="col-md-2 col-sm-2" >
+
+											<!-- Current avatar -->
+											<div class="avatar-view" title="Change the avatar">
+												<img src="images/user.png" alt="Avatar">
+												<!-- Since i can't get the dist dir need to create a preview here simiar 
+												to the one in the cropping option, thus i will have to look at the code
+												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
+												 -->
+
+
+											</div>
+											<!-- Cropper Modal -->
+											<jsp:include page="modals/cropper.html" />
+
+											<!-- Loading state -->
+											<div class="loading" aria-label="Loading" role="img"
+												tabindex="-1"></div>
+										</div> --%>
 								</div>
 								<h3>
 									Student's Name
@@ -138,6 +175,11 @@
 
 
 							<div class="col-md-9 col-sm-9 col-xs-12">
+							
+							<form action="#" method="POST" id="updateStudentInfo">
+							
+							<input type="hidden" name="profile_url" id="profile_url"
+												value="">
 
 								<div class="" role="tabpanel" data-example-id="togglable-tabs">
 									<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -420,7 +462,7 @@
 													<div class="col-md-3 col-md-offset-5">
 
 														<button type="button" id="submit_gen"
-															class="btn btn-primary form-control">Apply
+															class="btn btn-primary form-control" disabled>Apply
 															Changes</button>
 
 													</div>
@@ -561,7 +603,7 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control">Apply
+														class="btn btn-primary form-control" disabled>Apply
 														Changes</button>
 
 												</div>
@@ -654,7 +696,7 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control">Apply
+														class="btn btn-primary form-control" disabled>Apply
 														Changes</button>
 
 												</div>
@@ -676,12 +718,14 @@
 
 									</div>
 								</div>
+								
+								</form>
 							</div>
 
 
 
 
-						</form>
+					
 					</div>
 				</div>
 			</div>

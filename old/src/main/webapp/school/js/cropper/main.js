@@ -279,6 +279,9 @@
         if (data.result) {
          this.url = data.newImage;
         $('#profile_url').val(data.result);
+        
+        
+        console.log($('#profile_url').val());
         	
         	//alert($('#profile_url').val());
 

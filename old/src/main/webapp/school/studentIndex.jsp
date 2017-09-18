@@ -168,7 +168,7 @@
 
 			<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count pull-right">
 				<span class="count_top"><i class="fa fa-user"></i>Add new student </span>
-				<div class="count"><a role="button" class="btn btn-lg btn-primary secondary-assent" href="registerStudent.jsp"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a></div>
+				<div class="count"><a role="button" class="btn btn-lg btn-primary secondary-assent" href="registerStudent.jsp"><i class="fa fa-user-plus" aria-hidden="true"></i></a></div>
 
 			</div>
 
@@ -184,7 +184,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Students test change <small>List</small></h2>
+                    <h2>Students <small>List</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>                      
