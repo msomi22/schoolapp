@@ -53,6 +53,17 @@
 						<div class="row ">
 
 							<div class="col-md-4 col-md-offset-4">
+							
+							<div id="regNoInfo" class="alert alert-info">
+							<h5 id="regNoInfoSms">Enter a student's registration number to view school fees details.
+							</h5> </div>
+							
+							
+							<div id="regNoError" style="display:none" class="alert">
+							<h5 id="regNoErrorSms">Enter a student's registration number to view school fees details.</h5></div>
+							
+							
+							
 
 
 								<form method="get" action="">
@@ -65,7 +76,7 @@
 												id="regno" name="regno"
 												class="form-control formelement cards"
 												placeholder="Registration number" pattern="[0-9]{3,4}"
-												maxlength="4"
+												maxlength="4" onkeyup="fetchFeeDetails(this.value)"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -96,9 +107,10 @@
 
 							<div class="col-md-11 col-md-offset-1 cards formelement">
 								<div class="row secondary-assent">
-									Studen't Info <br> <br>
+									<h4 class="fee_header">Student's Info </h4>
 
 								</div>
+								<div id="studentsInfo">
 								<div class="row">
 									<div class="col-md-4">
 										<h4 id="regNo">Reg No: ######</h4>
@@ -152,6 +164,8 @@
 
 
 								<br> <br>
+								
+								</div>
 
 							</div>
 
@@ -164,15 +178,24 @@
 
 
 							<div class="col-md-6 col-md-offset-1 cards formelement">
+							
+							
+							<div id="showHistory">
+							<br>
+							<button class="btn btn-primary btn-block" id="btn_history" onclick="showHistory('history')" disabled>Show History</button>
+							
+							</div>
+							
+							
+							<div id="history" style="display:none" >
+							
 								<div class="row secondary-assent">
-									Student's Fee History <br> <br>
+									<h4 class="fee_header">Student's Fee History</h4>
 
 								</div>
-								<div class="scale">
-									<div class="row">
-										<div class="col-md-4 col-md-offset-1">
-											<h6>Amount Paid: ######</h6>
-											<h6>Payment Mode: ######</h6>
+								<div >
+									<div class="row" id="feeHistory">
+										<!-- <div class="col-md-4 col-md-offset-1">
 											<h6>Amount Paid: ######</h6>
 											<h6>Payment Mode: ######</h6>
 											<h6>Transaction ID: ######</h6>
@@ -223,7 +246,7 @@
 											<h6>Date Paid: ######</h6>
 
 											<hr class="hr_list">
-										</div>
+										</div> -->
 
 
 									</div>
@@ -231,6 +254,8 @@
 
 
 
+								</div>
+								
 								</div>
 
 
@@ -338,7 +363,7 @@
 							
 							<div id="showOtherHistory">
 							<br>
-							<button class="btn btn-primary btn-block" onclick="showOtherHistory()">Show other History</button>
+							<button class="btn btn-primary btn-block" id="btn_otherHistory" onclick="showHistory('other')" disabled>Show other History</button>
 							
 							</div>
 							
@@ -347,12 +372,12 @@
 
 
 								<div class="row secondary-assent">
-									Other Student's Fee History <br> <br>
+									<h6 class="fee_header">Other Student's Fee History </h6>
 
 								</div>
 
-								<div class="scale">
-									<div class="row">
+								<div id="otherfeeHistory">
+									<div class="row" >
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -386,11 +411,11 @@
 
 
 								<div class="row secondary-assent">
-									Reverted Student's Fee History <br> <br>
+									<h6 class="fee_header">Reverted Student's Fee History</h6>
 
 								</div>
 
-								<div class="scale">
+								<div id="revertedFeeList">
 									<div class="row">
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
@@ -421,7 +446,7 @@
 
 
 
-							<br> <br>
+							
 							
 							</div>
 

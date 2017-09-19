@@ -31,23 +31,23 @@
 <!-- footer content -->
 <footer class="mono whiteme">
 
-<div class="row">
+	<div class="row">
 
-	<div class="col-md-4 col-md-offset-2 col-sm-6">
+		<div class="col-md-4 col-md-offset-2 col-sm-6">
 
-	Contacts: (<%=account.getEmail() + " , " + account.getMobile()%>)
-	Motto:
-	<%=account.getMotto()%>
-	
-	</div>
+			Contacts: (<%=account.getEmail() + " , " + account.getMobile()%>)
+			Motto:
+			<%=account.getMotto()%>
+
+		</div>
 
 
-	<div class="col-md-2 col-sm-6 col-md-offset-4">
-		&copy; AppleTech Limited.
-		<%=Calendar.getInstance().get(Calendar.YEAR)%>.
-	</div>
-	
-	
+		<div class="col-md-2 col-sm-6 col-md-offset-4">
+			&copy; AppleTech Limited.
+			<%=Calendar.getInstance().get(Calendar.YEAR)%>.
+		</div>
+
+
 	</div>
 
 
@@ -72,16 +72,16 @@
 
 
 <script>
-$("#kcpeyear").datepicker({
-	format : "yyyy",
-	viewMode : "years",
-	startDate: '-48m',
-    endDate:'dateToday',
-	minViewMode:"years",
-	clearBtn:true,
-	autoclose:true
-	
-});
+	$("#kcpeyear").datepicker({
+		format : "yyyy",
+		viewMode : "years",
+		startDate : '-48m',
+		endDate : 'dateToday',
+		minViewMode : "years",
+		clearBtn : true,
+		autoclose : true
+
+	});
 </script>
 
 <!-- Cropper -->
@@ -148,34 +148,32 @@ $("#kcpeyear").datepicker({
 	src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
 
-<script
-	src="../vendors/sumoselect/jquery.sumoselect.js"></script>
-	
-	
-	<!-- Json conversion -->
-	
-	<script
-	src="js/json/jquery.serializejson.js"></script>
-	
-	
-	   <script type="text/javascript">
-        $(document).ready(function () {
-            window.asd = $('.SlectBox').SumoSelect({ csvDispCount: 4, captionFormatAllSelected: "Selected all exams" });
-          
+<script src="../vendors/sumoselect/jquery.sumoselect.js"></script>
 
 
-            $('.SlectBox').on('sumo:opened', function(o) {
-              console.log("dropdown opened", o)
-            });
-            
-            
-            $('.SlectBox').on('sumo:closed', function(o) {
-                console.log("dropdown closed", o);
-                validateExamSelected();
-              });
+<!-- Json conversion -->
 
-        });
-    </script>
+<script src="js/json/jquery.serializejson.js"></script>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		window.asd = $('.SlectBox').SumoSelect({
+			csvDispCount : 4,
+			captionFormatAllSelected : "Selected all exams"
+		});
+
+		$('.SlectBox').on('sumo:opened', function(o) {
+			console.log("dropdown opened", o)
+		});
+
+		$('.SlectBox').on('sumo:closed', function(o) {
+			console.log("dropdown closed", o);
+			validateExamSelected();
+		});
+
+	});
+</script>
 
 <script src="../build/js/custom.js"></script>
 <!-- validate js -->
@@ -217,14 +215,12 @@ $("#kcpeyear").datepicker({
 		use24hour : false,
 		format : 'YYYY-MM-DD'
 	});
-	
-	
-	
+
 	$('#studentsList').DataTable({
-		
+
 		"bPaginate" : false,
 		"bLengthChange" : false
-		
+
 	});
 
 	/* var yearpicker = new Pikaday({
@@ -240,14 +236,37 @@ $("#kcpeyear").datepicker({
 	}); 
 	
 	 */
-	 
-	
 
-	 
-	 
+	var global_url = location.protocol + "//" + window.location.host
+			+ "/school/webapi/";
 
+	var global_request_type = 'GET';
 
-	
+	function globalApiCall(handleData) {
+
+		$.ajax(
+				{
+					url : global_url,
+					type : global_request_type,
+					contentType : 'application/json',
+					accept : 'application/json',
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA==');
+					}
+				}).done(function(data) {
+
+			console.log(data);
+			handleData(data);
+
+		}).fail(function(jqXHR, textStatus) {
+
+			
+			console.log(textStatus);
+
+			
+
+		});
+	}
 </script>
 
 <!-- Staff js -->
@@ -262,7 +281,7 @@ $("#kcpeyear").datepicker({
 
 <!-- excel import -->
 
-   <!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!-- uncomment the next line here and in xlsxworker.js for encoding support -->
 <!--<script src="dist/cpexcel.js"></script>-->
 <!-- <script src="js/excelImport/shim.js"></script>
 <script src="js/excelImport/jszip.js"></script>
