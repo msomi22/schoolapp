@@ -172,5 +172,32 @@ public class OtherFeeDAO extends GenericDAO implements SchoolOtherFeeDAO {
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherFeeDAO#getOtherFeeList(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<OtherFee> getOtherFeeList(String accountId, String term, String year) {
+		List<OtherFee> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE"
+						+ " accountId = ? AND term = ? AND year = ?;");
+				) {
+			pstmt.setString(1, accountId);      
+			pstmt.setString(2, term); 
+			pstmt.setString(3, year); 
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, OtherFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting OtherFee  List for accountId " + accountId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
+
 
 }

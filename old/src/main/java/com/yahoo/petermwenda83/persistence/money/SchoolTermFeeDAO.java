@@ -15,5 +15,7 @@ public interface SchoolTermFeeDAO {
 	public boolean updateFee(TermFee termFee); 
 	
 	public List<TermFee> getTermFeeList(String accountId, int startIndex , int endIndex); 
+	
+	public List<TermFee> getTermFeeList(String accountId); 
 
 }

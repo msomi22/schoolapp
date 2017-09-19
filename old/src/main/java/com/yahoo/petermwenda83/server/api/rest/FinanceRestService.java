@@ -5,6 +5,8 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
+import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
+import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 
 /**
@@ -15,10 +17,14 @@ public class FinanceRestService {
 
 	private static FeeBreakdownDescDAO feeBreakdownDescDAO;
 	private static FeeBreakdownDAO feeBreakdownDAO;
+	private static TermFeeDAO termFeeDAO;
+	private static OtherFeeDAO otherFeeDAO;
 
 	static {
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
+		termFeeDAO = TermFeeDAO.getInstance();
+		otherFeeDAO = OtherFeeDAO.getInstance();
 	}
 	
 	//TODO 
@@ -26,10 +32,10 @@ public class FinanceRestService {
 	/**
 	 * 
 	 * @param accountId
-	 * @param feeBreakdownId
 	 * @return
 	 */
-	public Object getFeeBreakDown(String accountId, String feeBreakdownId) {
+	 
+	public Object getFeeBreakDown(String accountId) {
 
 		Response response = new Response();
 
@@ -75,12 +81,46 @@ public class FinanceRestService {
 
 
 	//term fee TODO
-	public Object getTermFee(String term, String year) {
-		return null;
+	/**
+	 * 
+	 * @param accountId
+	 * @param term
+	 * @param year
+	 * @return
+	 */
+	public Object getTermFee(String accountId, String term, String year) {
+		
+		Response response = new Response();
+		
+		if(termFeeDAO.getFee(accountId, term, year) == null) {
+			response.setMessage("error");
+			response.setDescription("Term fee not found!");
+			return response;
+			
+		}else {
+			
+			return termFeeDAO.getFee(accountId, term, year);
+		}
+		
 	}
-
+     /**
+      * 
+      * @param accountId
+      * @return
+      */
 	public Object getTermFees(String accountId) {
-		return null;
+		
+		Response response = new Response();
+		
+		if(termFeeDAO.getTermFeeList(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Term fee not found!");
+			return response;
+			
+		}else {
+			return termFeeDAO.getTermFeeList(accountId);
+			
+		}
 	}
 
 	public Object putTermFee() {
@@ -92,13 +132,28 @@ public class FinanceRestService {
 	}
 
 	//term other fee TODO
-	public Object getOtherFee(String term, String year) {
-		return null;
+	/**
+	 * 
+	 * @param accountId
+	 * @param term
+	 * @param year
+	 * @return
+	 */
+	public Object getOtherFee(String accountId, String term, String year) {
+		
+		Response response = new Response();
+		
+		if(otherFeeDAO.getOtherFeeList(accountId, term, year) == null) {
+			response.setMessage("error");
+			response.setDescription("Fee not found!");
+			return response;
+		}else {
+			return otherFeeDAO.getOtherFeeList(accountId, term, year);
+			
+		}
+		
 	}
 
-	public Object getOtherFees(String accountId) {
-		return null;
-	}
 
 	public Object putOtherFee() {
 		return null;
