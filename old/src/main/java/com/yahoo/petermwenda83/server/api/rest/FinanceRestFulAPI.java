@@ -108,7 +108,7 @@ public class FinanceRestFulAPI {
 			return response; 
 		}
 
-		return financeRestService.getOtherFee(accountId, term, year); 
+		return financeRestService.getTermFee(accountId, term, year);
 	}
 	
 	
