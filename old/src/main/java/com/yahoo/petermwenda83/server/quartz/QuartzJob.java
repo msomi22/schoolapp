@@ -43,7 +43,7 @@ public class QuartzJob implements Job{
 	private static StudentFeeDAO studentFeeDAO;
 
 	private static SysConfigDAO sysConfigDAO;
-	
+
 	static {
 		smsSendDAO = SmsSendDAO.getInstance();
 		smsApiDAO = ApiCredentialDAO.getInstance();
@@ -57,7 +57,7 @@ public class QuartzJob implements Job{
 
 	public QuartzJob() {
 		super();
-		
+
 	}
 
 	@Override
@@ -88,58 +88,72 @@ public class QuartzJob implements Job{
 	 * 
 	 */
 	private void synchGoKeMoney() {
-		accountDAO.getAccounts().parallelStream().forEach(account -> {
-			
-			SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
-			studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
-			
-				if(feeBreakdownDAO.getFeeBreakdown(account.getUuid(), 
-						FeeConstants.GVMT_MONEY_CODE,
-						sysConfig.getTerm(),
-						sysConfig.getYear(), 
-						FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){ 
 
-					String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
-							sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
-
-					StudentFee studentFee = new StudentFee(); 
-					studentFee.setAccountId(account.getUuid());
-					studentFee.setStudentId(student.getUuid());
-					studentFee.setAmountPaid((int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdownId));   
-					studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
-					studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
-					studentFee.setPaidHas(student.getIsBoarding()); 
-					studentFee.setTermPiad(sysConfig.getTerm());
-					studentFee.setYearPaid(sysConfig.getYear());
+		if(accountDAO.getAccounts() != null) {
+			accountDAO.getAccounts().parallelStream().forEach(account -> {
+				
+				if(sysConfigDAO.getSysConfig(account.getUuid()) != null) {
 					
-					if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
-							sysConfig.getTerm(), sysConfig.getYear()) == null) {
+					SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+					
+					if(studentDAO.getActiveStudents(account.getUuid(), "1") != null) {
+						
 
-						if(studentFeeDAO.putStudentFee(studentFee)) {
-							//log success
-							//System.out.println("GoKe money add success"); 
+						studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
 
-						}else {
-							//log error, contact Admin_ 
-							//System.out.println("error, contact Admin"); 
+							if(feeBreakdownDAO.getFeeBreakdown(account.getUuid(), 
+									FeeConstants.GVMT_MONEY_CODE,
+									sysConfig.getTerm(),
+									sysConfig.getYear(), 
+									FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){ 
 
-						}
+								String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+										sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
 
-					}else {
-						//log error, student has already been assigned GoKe money 
-						//System.out.println("error, student has already been assigned GoKe money"); 
+								StudentFee studentFee = new StudentFee(); 
+								studentFee.setAccountId(account.getUuid());
+								studentFee.setStudentId(student.getUuid());
+								studentFee.setAmountPaid((int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdownId));   
+								studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
+								studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
+								studentFee.setPaidHas(student.getIsBoarding()); 
+								studentFee.setTermPiad(sysConfig.getTerm());
+								studentFee.setYearPaid(sysConfig.getYear());
+
+								if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
+										sysConfig.getTerm(), sysConfig.getYear()) == null) {
+
+									if(studentFeeDAO.putStudentFee(studentFee)) {
+										//log success
+										//System.out.println("GoKe money add success"); 
+
+									}else {
+										//log error, contact Admin_ 
+										//System.out.println("error, contact Admin"); 
+
+									}
+
+								}else {
+									//log error, student has already been assigned GoKe money 
+									//System.out.println("error, student has already been assigned GoKe money"); 
+								}
+
+							}else {
+								//log error, GoKe money not set
+								//System.out.println("error, GoKe money not set"); 
+							}
+
+
+
+						});
+						
 					}
-
-				}else {
-					//log error, GoKe money not set
-					//System.out.println("error, GoKe money not set"); 
+					
+					
 				}
 
-
-
 			});
-
-		});
+		}
 
 	}
 
