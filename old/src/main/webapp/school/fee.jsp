@@ -377,7 +377,7 @@
 								</div>
 
 								<div id="otherfeeHistory">
-									<div class="row" >
+									<!-- <div class="row" >
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -399,7 +399,7 @@
 										</div>
 
 
-									</div>
+									</div> -->
 
 
 
@@ -416,7 +416,7 @@
 								</div>
 
 								<div id="revertedFeeList">
-									<div class="row">
+									<!-- <div class="row">
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -433,7 +433,7 @@
 											<hr class="hr_list">
 										</div>
 									</div>
-
+ -->
 
 								</div>
 
