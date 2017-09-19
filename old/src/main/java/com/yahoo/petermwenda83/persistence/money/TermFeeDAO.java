@@ -271,5 +271,31 @@ public class TermFeeDAO extends GenericDAO implements SchoolTermFeeDAO {
 
 		return List;
 	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolTermFeeDAO#getTermFeeList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<TermFee> getTermFeeList(String accountId, String year) {
+		List<TermFee> List = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM TermFee WHERE "
+						+ "accountId = ? AND year =?;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, year);
+			try(ResultSet rset = psmt.executeQuery();){
+
+				List = beanProcessor.toBeanList(rset, TermFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Fee List for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return List;
+	}
 	
 }

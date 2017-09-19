@@ -37,6 +37,12 @@
     <load-on-startup>4</load-on-startup>
   </servlet>
   
+  <servlet>
+    <servlet-name>GetBackupScript</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.quartz.GetBackupScript</servlet-class>
+    <load-on-startup>7</load-on-startup>
+  </servlet>
+  
   
   
   <context-param>

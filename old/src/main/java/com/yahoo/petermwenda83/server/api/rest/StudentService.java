@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -84,9 +85,9 @@ public class StudentService {
 	private static StudentSubjectDAO studentSubjectDAO;
 
 	private static SubjectDAO subjectDAO;
-	
+
 	private static FeeBreakdownDAO feeBreakdownDAO;
-	
+
 	private static final String DATA_DIRECTORY = "/home/"+System.getProperty("user.name")+"/school/uploads/";
 
 	static{
@@ -108,7 +109,7 @@ public class StudentService {
 		studentSubjectDAO = StudentSubjectDAO.getInstance();
 
 		subjectDAO = SubjectDAO.getInstance();
-		
+
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
 	}
 
@@ -279,7 +280,7 @@ public class StudentService {
 
 			Student student = studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo());
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId()); 
-			
+
 			StudentFee studentFee = new StudentFee(); 
 			studentFee.setAccountId(studentPayFee.getAccountId());
 			studentFee.setStudentId(student.getUuid());
@@ -289,15 +290,15 @@ public class StudentService {
 			studentFee.setPaidHas(student.getIsBoarding()); 
 			studentFee.setTermPiad(sysConfig.getTerm());
 			studentFee.setYearPaid(sysConfig.getYear());
-			
+
 			if(studentFeeDAO.putStudentFee(studentFee)) {
 				response.setMessage("success");
 				response.setDescription("Fee paid successsfully."); 
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, contact Admin!");
-				
+
 			}
 
 		}
@@ -305,42 +306,42 @@ public class StudentService {
 
 		return response;
 	}
-	
+
 	/**
 	 * 
 	 * @param goKeMoney
 	 * @return
 	 */
 	public Object addGoKeMoney(GoKeMoney goKeMoney) {
-		
+
 		Response response = new Response();
-		
+
 		if(studentDAO.getStudentById(goKeMoney.getAccountId(), goKeMoney.getStudentId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Invalid studentId!");
 			return response;
-			
+
 		}else if(sysConfigDAO.getSysConfig(goKeMoney.getAccountId())== null){
 			response.setMessage("error");
 			response.setDescription("Unexpected error occured, contact Admin!"); 
 			return response;
-			
+
 		}
 		if(feeBreakdownDAO.getFeeBreakdown(goKeMoney.getAccountId(), FeeConstants.GVMT_MONEY_CODE, sysConfigDAO.getSysConfig(goKeMoney.getAccountId()).getTerm(),
 				sysConfigDAO.getSysConfig(goKeMoney.getAccountId()).getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE) == null){ 
 			response.setMessage("error");
 			response.setDescription("Term/Year not set or GoKe money inactive! Contact Admin.");  
 			return response;
-			
+
 		}else {
-			
+
 			Student student = studentDAO.getStudentById(goKeMoney.getAccountId(), goKeMoney.getStudentId());
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(goKeMoney.getAccountId()); 
-			
+
 			String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(goKeMoney.getAccountId(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
 					sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
-			
-			
+
+
 			StudentFee studentFee = new StudentFee(); 
 			studentFee.setAccountId(goKeMoney.getAccountId());
 			studentFee.setStudentId(student.getUuid());
@@ -350,35 +351,35 @@ public class StudentService {
 			studentFee.setPaidHas(student.getIsBoarding()); 
 			studentFee.setTermPiad(sysConfig.getTerm());
 			studentFee.setYearPaid(sysConfig.getYear());
-			
+
 			if(studentFeeDAO.getStudentFee(goKeMoney.getAccountId(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
 					sysConfig.getTerm(), sysConfig.getYear()) == null) {
-				
+
 				if(studentFeeDAO.putStudentFee(studentFee)) {
 					response.setMessage("success");
 					response.setDescription("GoKe Fee paid successsfully."); 
 					return response;
-					
+
 				}else {
 					response.setMessage("error");
 					response.setDescription("Something went wrong, contact Admin!");
 					return response;
-					
+
 				}
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("GoKe money already assigned!");
 				return response;
 			}
-			
+
 		}
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -460,7 +461,7 @@ public class StudentService {
 					APIStudentOtherFee studentOtherFee = new APIStudentOtherFee();
 
 					if(otherFeeDAO.getOtherFee(accountId, otherfee.getOtherFeeId()) != null) {
-						
+
 						OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, otherfee.getOtherFeeId());
 
 						studentOtherFee.setAmount(String.valueOf(otherFee.getAmount())); 
@@ -477,17 +478,17 @@ public class StudentService {
 			}
 
 			if(revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid()) != null) {
-				
+
 				List<RevertedMoney> revertedMoneyList = revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid());
-				
+
 				RevertedFee revertedFee = new RevertedFee();
 
 				for(RevertedMoney revertedMoney : revertedMoneyList) {
 
 					if(otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId()) != null) {
-						
+
 						OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId());
-						
+
 						revertedFee.setAmount(String.valueOf(otherFee.getAmount()));
 						revertedFee.setOtherFeeId(otherFee.getDescription());
 						revertedFee.setDateReverted(revertedMoney.getDateReverted().toString()); 
@@ -518,18 +519,19 @@ public class StudentService {
 	 */
 	public Object addNewStudent(String accountId, StudentInfo student) {
 
-		ApiResponse apiResponse = new ApiResponse();
+		Response apiResponse = new Response();
 
 
-		if(StringUtils.isBlank(accountId)) {
+		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			apiResponse.setMessage("error");
-			apiResponse.setDescription("Account Id is invalid.");
+			apiResponse.setDescription("System Config not set!");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getUuid())) {
+		}
+		else if(StringUtils.isBlank(accountId)) {
 			apiResponse.setMessage("error");
-			apiResponse.setDescription("Student Id is invalid.");
+			apiResponse.setDescription("Account Id is invalid.");
 
 			return apiResponse;
 
@@ -555,9 +557,9 @@ public class StudentService {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
-		}else if(StringUtils.isBlank(student.getIsBoarding())) {
+		}else if(!validStatus(student.getIsBoarding())) {
 			apiResponse.setMessage("error");
-			apiResponse.setDescription("IsBoarding' but be set.");
+			apiResponse.setDescription("IsBoarding not set.");
 
 			return apiResponse;
 
@@ -641,13 +643,15 @@ public class StudentService {
 		}else {
 
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+
 
 			//basic
 			Student newstudent = new Student();
 			newstudent.setRegStream(student.getRegStream()); 
 			newstudent.setCurrentStream(student.getCurrentStream());
-			newstudent.setIsActive(student.getIsActive());
-			newstudent.setIsAlumni(student.getIsAlumni());
+			newstudent.setIsActive("1");
+			newstudent.setIsAlumni("0");
 			newstudent.setIsBoarding(student.getIsBoarding());
 			newstudent.setRegNo(student.getRegNo());
 			newstudent.setFirstname(student.getFirstname());
@@ -658,7 +662,7 @@ public class StudentService {
 			newstudent.setBcertNo(student.getBcertNo());
 			newstudent.setCounty(student.getCounty());
 			newstudent.setRegTerm(sysConfig.getTerm());
-			newstudent.setFinalYear(Integer.valueOf(sysConfig.getYear()) + 3); 
+			newstudent.setFinalYear(year + 3); 
 			newstudent.setFinalTerm(3); 
 			newstudent.setPassport(renameImage(student.getPassport(),student.getRegNo()));
 			newstudent.setLastUpdated(new Date().toString());  
@@ -735,10 +739,17 @@ public class StudentService {
 	 */
 	public Object updateStudent(String accountId, StudentInfo student) {
 
-		ApiResponse apiResponse = new ApiResponse();
+		Response apiResponse = new Response();
 
 
-		if(StringUtils.isBlank(accountId)) {
+
+		if(sysConfigDAO.getSysConfig(accountId) == null) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("System Config not set!");
+
+			return apiResponse;
+
+		}else if(StringUtils.isBlank(accountId)) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Account Id is invalid.");
 
@@ -771,9 +782,21 @@ public class StudentService {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
-		}else if(StringUtils.isBlank(student.getIsBoarding())) {
+		}else if(!validStatus(student.getIsBoarding())) {
 			apiResponse.setMessage("error");
-			apiResponse.setDescription("IsBoarding' but be set.");
+			apiResponse.setDescription("IsBoarding not set.");
+
+			return apiResponse;
+
+		}else if(!validStatus(student.getIsActive())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("IsActive not set.");
+
+			return apiResponse;
+
+		}else if(!validStatus(student.getIsAlumni())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("IsAlumni not set.");
 
 			return apiResponse;
 
@@ -988,11 +1011,11 @@ public class StudentService {
 			return response;
 
 		}else {
-			
+
 			ApiSubject apiSubject = new ApiSubject();
 			List<ApiSubject> apiSubjectList = new ArrayList<>();
 			subjectDAO.getSubjects(accountId).forEach(subject ->{
-				
+
 				apiSubject.setAccountId(accountId);
 				apiSubject.setDescription(subject.getDescription());
 				apiSubject.setSubjectId(subject.getUuid());
@@ -1062,7 +1085,7 @@ public class StudentService {
 			apiSubject.setSubjectId(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getUuid());
 			apiSubject.setUuid(sub.getUuid()); 
 			apiSubject.setDescription(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getDescription());
-			
+
 			apiSubjectList.add(apiSubject);
 
 		});
@@ -1348,6 +1371,24 @@ public class StudentService {
 		}
 	}
 
+
+	
+
+	/**
+	 * 
+	 * @param isBoarding
+	 * @return
+	 */
+	private boolean validStatus(String isBoarding) {
+		String[] allowed = {"1","2",};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(isBoarding)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 }

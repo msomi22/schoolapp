@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.guardian.StudentParent;
@@ -106,9 +109,11 @@ public class StudentAjax extends HttpServlet {
 		
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 		
+		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		
 		
 		Student student= new Student();
-		//student.setUuid(student.getUuid());
 		student.setAccountId(accountId);
 		student.setCurrentStream(currentStream);
 		student.setFirstname(firstname);
@@ -120,11 +125,17 @@ public class StudentAjax extends HttpServlet {
 		student.setCounty(county);
 		student.setRegTerm(regTerm);
 		student.setRegStream(regStream);
-		student.setIsActive(isActive);
+		student.setIsActive("1");
 		student.setIsBoarding(isBoarding);
 		student.setRegNo(regNo);
-		student.setIsAlumni(isAlumni);
+		student.setIsAlumni("0");
 		student.setPassport(passport);
+		
+		student.setRegTerm(sysConfig.getTerm());
+		student.setFinalYear(year + 3); 
+		student.setFinalTerm(3); 
+		student.setLastUpdated(new Date().toString());  
+		
 		
 		
 		//Primary details

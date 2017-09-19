@@ -115,6 +115,29 @@ public class FinanceRestFulAPI {
 	}
 	
 	
+	@ApiOperation(value = "Get Term Fee List per year.", 
+			notes = "Returns List of fee charged for the given  year.", 
+			response = TermFee.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
+	} )
+	@GET
+	@Path("/termfee/{accountId}/{year}")    
+	public Object getTermFeePerYear(@PathParam("accountId") String accountId,
+			@PathParam("year") String year, @HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.getTermFeePerYear(accountId, year); 
+	}
+	
+	
 	@ApiOperation(value = "Get Other Term Fee List.", 
 			notes = "Returns List of Other fee charged for the given term and year.", 
 			response = OtherFee.class)
