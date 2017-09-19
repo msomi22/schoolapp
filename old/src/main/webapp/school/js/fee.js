@@ -69,7 +69,15 @@ function fetchFeeDetails() {
 
 	var regxReg = /[0-9]{3,4}/;
 	
-	$('#studentsInfo').hide(2000);
+	//$('#studentsInfo').hide(2000);
+	$('#name').text('Name : ##');
+	$('#regNO').text('Reg No: ##');
+	$('#stream').text('Stream : ##');
+	$('#isBoarding').text('Type : ##');
+	$('#balance').html('<b>Balance : ##</b>');
+	
+	
+	
 	$('#btn_otherHistory').prop('disabled',true);
 	$('#btn_history').prop('disabled',true);
 
@@ -107,7 +115,7 @@ function fetchFeeDetails() {
 			
 			
 			global_url=preserveUrl;
-			makeFetchCall()}, 3000
+			makeFetchCall()}, 1000
 		);
 
 	}
@@ -198,6 +206,8 @@ function makeFetchCall() {
 			$('#btn_otherHistory').prop('disabled',false);
 			$('#btn_history').prop('disabled',false);
 			
+			var name;
+			
 
 			$
 					.each(
@@ -208,15 +218,17 @@ function makeFetchCall() {
 									$('#regNo').text('Reg No : ' + value);
 
 								if (key === 'firstname')
-									$('#firstname').text(
-											'First Name : ' + value);
+									name='Name: '+value;
+									//$('#name').text('Name : ' + value);
 
-								if (key === 'middlename')
+								/*if (key === 'middlename')
 									$('#middlename').text(
-											'Middle Name : ' + value);
+											'Middle Name : ' + value);*/
 
-								if (key === 'lastname')
-									$('#lastname').text('Last Name : ' + value);
+								if (key === 'lastname'){
+									name = name +" "+value;$('#name').text(name);
+								}
+									//$('#lastname').text('Last Name : ' + value);
 
 								if (key === 'stream')
 									$('#stream').text('Stream : ' + value);

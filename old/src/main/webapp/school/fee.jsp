@@ -76,7 +76,7 @@
 												id="regno" name="regno"
 												class="form-control formelement cards"
 												placeholder="Registration number" pattern="[0-9]{3,4}"
-												maxlength="4" onkeyup="delayInput()"
+												maxlength="4" onkeyup="delayInput()" 
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -112,20 +112,30 @@
 								</div>
 								<div id="studentsInfo">
 								<div class="row">
-									<div class="col-md-4">
-										<h4 id="regNo">Reg No: ######</h4>
+									<div class="col-md-3">
+										<h4 id="regNo">Reg No: ###</h4>
 									</div>
 
-									<div class="col-md-4">
-										<h4 id="firstname" >First Name: ######</h4>
+									<div class="col-md-3">
+										<h4 id="name" > Name: ###</h4>
 									</div>
-									<div class="col-md-4">
+									
+									
+									<div class="col-md-3">
+										<h4 id="stream">Stream: ##</h4>
+									</div>
+
+
+									<div class="col-md-2">
+										<h4 id="isBoarding">Boarding: ##</h4>
+									</div>
+									<!-- <div class="col-md-4">
 										<h4 id="middlename">Middle Name: ######</h4>
-									</div>
+									</div> -->
 								</div>
 
 
-								<div class="row">
+								<!-- <div class="row">
 									
 
 
@@ -133,16 +143,8 @@
 										<h4 id="lastname">Last Name: ######</h4>
 									</div>
 								
-									<div class="col-md-4">
-										<h4 id="stream">Stream: ######</h4>
-									</div>
 
-
-									<div class="col-md-4">
-										<h4 id="isBoarding">Boarding: ######</h4>
-									</div>
-
-								</div>
+								</div> -->
 
 
 
@@ -151,9 +153,15 @@
 
 
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<h4 class="pull-right" id="balance">
 											<b>Balance: ######</b>
+										</h4>
+									</div>
+									
+									<div class="col-md-4">
+										<h4 class="pull-right" id="termfee">
+											<b>Term Fee: ######</b>
 										</h4>
 									</div>
 
