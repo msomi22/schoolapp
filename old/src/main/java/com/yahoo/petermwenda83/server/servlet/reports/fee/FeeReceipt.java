@@ -3,31 +3,38 @@
  */
 package com.yahoo.petermwenda83.server.servlet.reports.fee;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -42,13 +49,13 @@ import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
+import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
-import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -60,16 +67,23 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 /**
  * 
  * http://127.0.0.1:8080/school/school/feeReceipt 
+ * http://127.0.0.1:8080/school/school/feeReceipt?accountId=E3CDC578-37BA-4CDB-B150-DAB0409270CD&studentId=B3D6957B-0DAE-4E1B-A244-09C33F6FEF80
  * 
  * @author peter
  *
  */
 public class FeeReceipt extends HttpServlet{
 
+	private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNormal10= new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanNormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
+	
+	private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
+	
+	private static final String USER_SYSTEM = System.getProperty("user.name");
+	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
 
 	private Document document;
 	private PdfWriter writer;
@@ -82,7 +96,7 @@ public class FeeReceipt extends HttpServlet{
 	private static StudentFeeDAO studentFeeDAO;
 	private static OtherFeeDAO otherFeeDAO;
 	private static StudentOtherFeeDAO studentOtherFeeDAO;
-	private static RevertedMoneyDAO revertedMoneyDAO;
+	//private static RevertedMoneyDAO revertedMoneyDAO;
 	private static FeeBreakdownDAO feeBreakdownDAO;
 	private static FeeBreakdownDescDAO feeBreakdownDescDAO;
 
@@ -104,7 +118,7 @@ public class FeeReceipt extends HttpServlet{
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		otherFeeDAO = OtherFeeDAO.getInstance();
 		studentOtherFeeDAO = StudentOtherFeeDAO.getInstance();
-		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
+		///revertedMoneyDAO = RevertedMoneyDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
 
@@ -125,8 +139,16 @@ public class FeeReceipt extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession(true);
+		String accountId = StringUtils.trim(request.getParameter("accountId"));
+		String studentId = StringUtils.trim(request.getParameter("studentId"));
 
+		if(StringUtils.isBlank(accountId)) {
+			accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
+		}
+
+		if(StringUtils.isBlank(studentId)) {
+			studentId = "D961EF8B-1F5E-40BD-8F6B-3FD878C61691"; 
+		}
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -141,7 +163,6 @@ public class FeeReceipt extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			String accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD", studentId = "4F218688-6DE5-4E69-8690-66FBA2F0DC9F"; 
 			populatePDFDocument(accountId,studentId);  
 
 		} catch (DocumentException e) {
@@ -186,7 +207,7 @@ public class FeeReceipt extends HttpServlet{
 		Account account = accountDAO.getAccountById(accountId);
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 
-		SimpleDateFormat format = new SimpleDateFormat("MMMM dd HH:mm:ss ", Locale.ENGLISH); 
+		SimpleDateFormat format = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);  
 
 		Locale locale = new Locale("en","KE"); 
 		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
@@ -194,39 +215,89 @@ public class FeeReceipt extends HttpServlet{
 		int otherFeeTotal = 0;
 		int paidTotal = 0;
 
+		PdfPTable schoolTable = new PdfPTable(2); 
+		schoolTable.setWidthPercentage(100);  
+		schoolTable.setWidths(new int[]{70,30});  
 
-		String sch_info_ = "LOGO & SCHOOL INFO";
-		Paragraph sch_info_paragraph = new Paragraph(sch_info_,timesRomanBold10);
-		sch_info_paragraph.setAlignment(Element.ALIGN_CENTER);
+		PdfPCell logoCell = new PdfPCell();
+		logoCell.addElement(createImage(LOGO_PATH)); 
+		logoCell.setBorder(Rectangle.NO_BORDER); 
+		logoCell.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
-		String no = RandomStringUtils.randomAlphabetic(6); 
-		String date = format.format(new Date());
-
-		String receipt_title_ = "FREE EDUCATION & BASIC SCHOOL FUND \n"
-				+ "OPERATIONS ACCOUNT (OFFICIAL RECEIPT) \n"; 
-
-		Chunk receiptTite = new Chunk(receipt_title_,timesRomanBold10); 
-
-		Chunk receipt = new Chunk("RECEPT NO:",timesRomanNormal10); 
-		Chunk receiptNo = new Chunk(no,timesRomanNormal10); 
-
-		Chunk pDate = new Chunk(", DATE:",timesRomanNormal10); 
-		Chunk printDate = new Chunk(date,timesRomanNormal10); 
-
-		Paragraph receipt_title_paragraph = new Paragraph(receiptTite +""+ receipt + " " + receiptNo + " " + pDate + " " + printDate);
-		receipt_title_paragraph.setAlignment(Element.ALIGN_CENTER);
+		String sch_info = account.getName()+"\n"
+				+ "Motto: " + account.getMotto()+"\n"
+				+ "Website: " + account.getWebsite()+"\n" 
+				+ "Email: " + account.getEmail()+"\n"
+				+ "Mobile: " + account.getMobile()+"\n"
+				+ "P.O. BOX: " + account.getAddress() + " - " + account.getTown();
 
 
-		document.add(sch_info_paragraph); 
+		PdfPCell schoolInfoCell = new PdfPCell(new Phrase(sch_info,timesRomanBold12)); 
+		schoolInfoCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
+		//schoolInfoCell.setBackgroundColor(baseColor);
+		schoolInfoCell.setBorder(Rectangle.NO_BORDER);
+
+		schoolTable.addCell(schoolInfoCell);
+		schoolTable.addCell(logoCell);
+		
+		
+
+		String receiptNo = RandomStringUtils.randomAlphabetic(10); 
+		String printDate = format.format(new Date());
+
+
+		PdfPTable titleTable = new PdfPTable(2); 
+		titleTable.setWidthPercentage(100);  
+		titleTable.setWidths(new int[]{60,40}); 
+
+		String title = "FREE EDUCATION & BASIC SCHOOL FUNDS\nOPERATIONS ACCOUNT (OFFICIAL RECEIPT)";
+
+		PdfPCell titleCell = new PdfPCell(new Phrase(title, timesRomanNormal10)); 
+		titleCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
+		//titleCell.setBackgroundColor(baseColor);
+		titleCell.setBorder(Rectangle.NO_BORDER);
+		
+		String receipt_and_date = "RECEPT NO: " +receiptNo + "\nPINTED ON : " +printDate;
+
+		PdfPCell titleCell1 = new PdfPCell(new Phrase(receipt_and_date,timesRomanNormal10)); 
+		titleCell1.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
+		//titleCell1.setBackgroundColor(baseColor);
+		titleCell1.setBorder(Rectangle.NO_BORDER);
+
+		titleTable.addCell(titleCell);
+		titleTable.addCell(titleCell1);
+		
+		document.add(schoolTable); 
+		document.add(new Paragraph(Chunk.NEWLINE)); 
+		document.add(titleTable); 
 		document.add(new Paragraph(Chunk.NEWLINE)); 
 
-		document.add(receipt_title_paragraph); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
 
 
-		//TODO
+		PdfPTable studentInfoTable = new PdfPTable(1); 
+		studentInfoTable.setWidthPercentage(83);  
+		studentInfoTable.setWidths(new int[]{83}); 
 
-		Paragraph gvmt_fundsparagraph = new Paragraph("Free Education Fund",timesRomanBold10);
+		Student student = studentDAO.getStudentById(accountId, studentId);
+
+
+		String name = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
+
+		PdfPCell studentInfoCell = new PdfPCell(new Phrase("Name: " + name,timesRomanBold10)); 
+		studentInfoCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER); 
+		//studentInfoCell.setBackgroundColor(baseColor);
+		studentInfoCell.setBorder(Rectangle.NO_BORDER);
+
+		PdfPCell studentRegNoCell = new PdfPCell(new Phrase("RegNo: " + student.getRegNo(),timesRomanBold10)); 
+		studentRegNoCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER); 
+		//studentRegNoCell.setBackgroundColor(baseColor);
+		studentRegNoCell.setBorder(Rectangle.NO_BORDER);
+
+		studentInfoTable.addCell(studentInfoCell);
+		studentInfoTable.addCell(studentRegNoCell);
+
+
+		Paragraph gvmt_fundsparagraph = new Paragraph("Free Education Fund",timesRomanBold12_colored);
 		gvmt_fundsparagraph.setAlignment(Element.ALIGN_CENTER);
 
 		PdfPTable gvmtFundsTable = new PdfPTable(3); 
@@ -260,39 +331,39 @@ public class FeeReceipt extends HttpServlet{
 
 			List<FeeBreakdownDesc> feeBreakdownDescList = feeBreakdownDescDAO.getFeeBreakdownDescList(accountId, feeBreakdownId);
 
-			int count = 1;
-			for(FeeBreakdownDesc gokefee : feeBreakdownDescList) {
+			if(studentFeeDAO.getStudentFee(accountId, studentId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(), sysConfig.getYear()) != null) {
+				int count = 1;
+				for(FeeBreakdownDesc gokefee : feeBreakdownDescList) {
 
-				PdfPCell countCell = new PdfPCell(new Phrase(""+count,timesRomanNormal8));
-				countCell.setBorder(Rectangle.NO_BORDER);
+					PdfPCell countCell = new PdfPCell(new Phrase(""+count,timesRomanNormal8));
+					countCell.setBorder(Rectangle.NO_BORDER);
 
-				String description = gokefee.getFeeDescription().substring(0, Math.min(gokefee.getFeeDescription().length(), 20));
+					String description = gokefee.getFeeDescription().substring(0, Math.min(gokefee.getFeeDescription().length(), 20));
 
-				PdfPCell refNoCell = new PdfPCell(new Phrase(""+description,timesRomanNormal8));
-				refNoCell.setBorder(Rectangle.NO_BORDER);
+					PdfPCell refNoCell = new PdfPCell(new Phrase(""+description,timesRomanNormal8));
+					refNoCell.setBorder(Rectangle.NO_BORDER);
 
-				PdfPCell dateCell2 = new PdfPCell(new Phrase(""+nf.format(gokefee.getAmount()),timesRomanNormal8));
-				dateCell2.setBorder(Rectangle.NO_BORDER);
+					PdfPCell dateCell2 = new PdfPCell(new Phrase(""+nf.format(gokefee.getAmount()),timesRomanNormal8));
+					dateCell2.setBorder(Rectangle.NO_BORDER);
 
-				gokeTotal += gokefee.getAmount();
+					gokeTotal += gokefee.getAmount();
 
-				gvmtFundsTable.addCell(countCell);
-				gvmtFundsTable.addCell(refNoCell);
-				gvmtFundsTable.addCell(dateCell2);
+					gvmtFundsTable.addCell(countCell);
+					gvmtFundsTable.addCell(refNoCell);
+					gvmtFundsTable.addCell(dateCell2);
 
-				count++;
+					count++;
+
+				}
 
 			}
-
-
-
 		}
 
 
 
 		//TODO
 
-		Paragraph sch_fee_paragraph = new Paragraph("Other Payments",timesRomanBold10);
+		Paragraph sch_fee_paragraph = new Paragraph("Other Payments",timesRomanBold12_colored);
 		sch_fee_paragraph.setAlignment(Element.ALIGN_CENTER);
 
 		PdfPTable schFundsTable = new PdfPTable(4); 
@@ -348,7 +419,7 @@ public class FeeReceipt extends HttpServlet{
 
 				PdfPCell dateCell = new PdfPCell(new Phrase(""+format.format(ofee.getDateAllocated()),timesRomanNormal8));
 				dateCell.setBorder(Rectangle.NO_BORDER);
-				
+
 				otherFeeTotal += otherFee.getAmount();
 
 				schFundsTable.addCell(countCell);
@@ -367,12 +438,12 @@ public class FeeReceipt extends HttpServlet{
 
 		//TODO
 
-		Paragraph amount_paid_paragraph = new Paragraph("Fee Payment History",timesRomanBold10);
+		Paragraph amount_paid_paragraph = new Paragraph("Fee Payment History",timesRomanBold12_colored);
 		amount_paid_paragraph.setAlignment(Element.ALIGN_CENTER);
 
 		PdfPTable amntPaidTable = new PdfPTable(5);
 		amntPaidTable.setWidthPercentage(83); //73  
-		amntPaidTable.setWidths(new int[]{8,15,20,15,15});  
+		amntPaidTable.setWidths(new int[]{8,15,15,15,20});  
 
 		PdfPCell paid_count_Cell = new PdfPCell(new Phrase("No",timesRomanBold10)); 
 		paid_count_Cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -427,7 +498,7 @@ public class FeeReceipt extends HttpServlet{
 
 				PdfPCell dateCell = new PdfPCell(new Phrase(""+format.format(fee.getDatePaid()),timesRomanNormal8));
 				dateCell.setBorder(Rectangle.NO_BORDER);
-				
+
 				paidTotal += fee.getAmountPaid();
 
 				amntPaidTable.addCell(countCell);
@@ -448,7 +519,7 @@ public class FeeReceipt extends HttpServlet{
 
 
 		//TODO
-		Paragraph fee_anaysis_paragraph = new Paragraph("Fee Payment Summary",timesRomanBold10);
+		Paragraph fee_anaysis_paragraph = new Paragraph("Fee Payment Summary",timesRomanBold12_colored);
 		fee_anaysis_paragraph.setAlignment(Element.ALIGN_CENTER);
 
 
@@ -468,35 +539,33 @@ public class FeeReceipt extends HttpServlet{
 
 		summaryTable.addCell(sumary_desc_Cell);
 		summaryTable.addCell(sumary_amnt_Cell);
-		
-		
+
+
 		String termFee = "";
-	
+
 		if(termFeeDAO.getFee(accountId, sysConfig.getTerm(), sysConfig.getYear()) != null) {
 			TermFee fee = termFeeDAO.getFee(accountId, sysConfig.getTerm(), sysConfig.getYear());
-			
-			if(StringUtils.equals(account.getIsBoarding(), "1")) {//1 = boarding only
-				
-				termFee = nf.format(fee.getBoaderAmount()); 
-				
-			}else if(StringUtils.equals(account.getIsBoarding(), "0")) {//0 = day only
-				
-				termFee = nf.format(fee.getDayAmount()); 
-				
-			}else if(StringUtils.equals(account.getIsBoarding(), "2")) {//2 = day and boarding
-				
-				termFee = "Boarding: " + nf.format(fee.getBoaderAmount()) + " , Day: " + nf.format(fee.getDayAmount());
-				
-			}
-			
-		}
-		
 
-		
-		
-		double totalpaid = gokeTotal + paidTotal;
+			if(StringUtils.equals(account.getIsBoarding(), "1")) {//1 = boarding only
+
+				termFee = nf.format(fee.getBoaderAmount()); 
+
+			}else if(StringUtils.equals(account.getIsBoarding(), "0")) {//0 = day only
+
+				termFee = nf.format(fee.getDayAmount()); 
+
+			}else if(StringUtils.equals(account.getIsBoarding(), "2")) {//2 = day and boarding
+
+				termFee = "Boarding: " + nf.format(fee.getBoaderAmount()) + " , Day: " + nf.format(fee.getDayAmount());
+
+			}
+
+		}
+
+
+		double totalpaid =  paidTotal;
 		String totalPaid = nf.format(totalpaid); 
-		
+
 
 		StudentBalance studentBalance = new StudentBalance();
 		double feeBalance = studentBalance.findBalance(accountId, studentId);
@@ -538,49 +607,115 @@ public class FeeReceipt extends HttpServlet{
 		}
 
 
+		//TODO
+		document.add(studentInfoTable); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
+
 		document.add(gvmt_fundsparagraph); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
 		document.add(gvmtFundsTable); 
 
 		Paragraph paragraph = new Paragraph("TOTAL:   " + nf.format(gokeTotal),timesRomanBold10);
 		paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
 		paragraph.setIndentationLeft(238);
 		paragraph.setIndentationRight(20);
-		
+
 		document.add(paragraph); 
-		document.add(new Paragraph(Chunk.NEWLINE));  
+		//document.add(new Paragraph(Chunk.NEWLINE));  
 
 		document.add(sch_fee_paragraph); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
 		document.add(schFundsTable); 
-		
+
 		Paragraph paragraph2 = new Paragraph("TOTAL:   " + nf.format(otherFeeTotal),timesRomanBold10);
 		paragraph2.setAlignment(Element.ALIGN_JUSTIFIED);
 		paragraph2.setIndentationLeft(218);
 		paragraph2.setIndentationRight(20);
-		
+
 		document.add(paragraph2); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
 
 		document.add(amount_paid_paragraph); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
 		document.add(amntPaidTable); 
-		
+
 		Paragraph paragraph3 = new Paragraph("TOTAL:   " + nf.format(paidTotal),timesRomanBold10);
 		paragraph3.setAlignment(Element.ALIGN_JUSTIFIED);
 		paragraph3.setIndentationLeft(230);
 		paragraph3.setIndentationRight(20);
-		
+
 		document.add(paragraph3); 
-		document.add(new Paragraph(Chunk.NEWLINE)); 
+		//document.add(new Paragraph(Chunk.NEWLINE)); 
 
 		document.add(fee_anaysis_paragraph); 
-		document.add(new Paragraph(Chunk.NEWLINE));  
+		//document.add(new Paragraph(Chunk.NEWLINE));  
 		document.add(summaryTable); 
 
 
 
 	}
+	
+	
+	
+	
+	/**
+	 * @param realPath
+	 * @return
+	 */
+	private Element createImage(String realPath) {
+		Image img = null;
+
+		try {
+
+			File file = new File(realPath);
+			if(!file.exists()){
+				realPath = getServletContext().getRealPath("/images/default.jpg");
+
+			}
+
+			BufferedImage bufferedImage = ImageIO.read(new File(realPath));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+			ImageIO.write(resize(bufferedImage, 200,100), "png", baos);//w,h
+			img = Image.getInstance(baos.toByteArray());
+			img.scaleAbsolute(80f,40f); 
+			img.setAlignment(Element.ALIGN_LEFT);
+
+
+		} catch (BadElementException e) {
+			logger.error("BadElementException Exception while creating an image");
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+		} catch (MalformedURLException e) {
+			logger.error("MalformedURLException for the path");
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+		} catch (IOException e) {
+			logger.error("IOException while creating an image");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return img;
+	}
+
+
+	/**
+	 * @param img
+	 * @param newW
+	 * @param newH
+	 * @return
+	 */
+	private BufferedImage resize(BufferedImage img, int newW, int newH) { 
+		java.awt.Image tmp = img.getScaledInstance(newW, newH, java.awt.Image.SCALE_SMOOTH);
+		BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2d = dimg.createGraphics();
+		g2d.drawImage(tmp, 0, 0, null);
+		g2d.dispose();
+
+		return dimg;
+	} 
+
 
 	/**
 	 *

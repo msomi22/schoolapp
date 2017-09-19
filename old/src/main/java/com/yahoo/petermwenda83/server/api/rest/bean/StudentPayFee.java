@@ -21,7 +21,6 @@ public class StudentPayFee {
 	private String amount;
 	private String term;
 	private String year;
-	private String refNo;
 	private String feeBalance;
 
 	/**
@@ -36,7 +35,6 @@ public class StudentPayFee {
 		amount = "";
 		term = "";
 		year = "";
-		refNo = "";
 		feeBalance = "";
 		
 	}
@@ -105,13 +103,6 @@ public class StudentPayFee {
 		this.year = year;
 	}
 
-	public String getRefNo() {
-		return refNo;
-	}
-
-	public void setRefNo(String refNo) {
-		this.refNo = refNo;
-	}
 
 	public String getFeeBalance() {
 		return feeBalance;
@@ -126,7 +117,7 @@ public class StudentPayFee {
 	public String toString() {
 		return "StudentPayFee [accountId=" + accountId + ", regNo=" + regNo + ", staffId=" + staffId + ", paymentMode="
 				+ paymentMode + ", transactionId=" + transactionId + ", amount=" + amount + ", term=" + term + ", year="
-				+ year + ", refNo=" + refNo + ", feeBalance=" + feeBalance + "]";
+				+ year  + ", feeBalance=" + feeBalance + "]";
 	}
 	
 

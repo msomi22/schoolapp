@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,24 +19,51 @@ import org.quartz.JobExecutionException;
 
 import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
+import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
+import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
+import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 
 
 public class QuartzJob implements Job{
 
 	private static SmsSendDAO smsSendDAO;
 	private static ApiCredentialDAO smsApiDAO;
-	
-	public QuartzJob() {
-		super();
+
+	private static StudentDAO studentDAO;
+	private static AccountDAO accountDAO;
+	private static FeeBreakdownDAO feeBreakdownDAO;
+	private static StudentFeeDAO studentFeeDAO;
+
+	private static SysConfigDAO sysConfigDAO;
+
+	static {
 		smsSendDAO = SmsSendDAO.getInstance();
 		smsApiDAO = ApiCredentialDAO.getInstance();
+
+		studentDAO = StudentDAO.getInstance();
+		accountDAO = AccountDAO.getInstance();
+		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
+		studentFeeDAO = StudentFeeDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
+	}
+
+	public QuartzJob() {
+		super();
+
 	}
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+
+		synchGoKeMoney();
 
 		try {
 
@@ -55,73 +83,87 @@ public class QuartzJob implements Job{
 
 	}
 
-	private void checksentSMS() {
-		
-		List<OutGoingSMS> smslist = new ArrayList<>();
-		if(smsSendDAO.getSmsSend() !=null){
-			smslist = smsSendDAO.getSmsSend();
-			if(smslist !=null){
-				for(OutGoingSMS sms : smslist){
-					String phone = sms.getMobile();
-					String message = sms.getMessage(); 
-					String status = sms.getStatus();
-					String accountId = sms.getAccountId();
 
-					if(StringUtils.equalsIgnoreCase(status, "failed")){
-						//send message
-						AfricasTalking africasTalking = new AfricasTalking();
-						// Specify your login credentials
-						if(smsApiDAO.getApiCredential(accountId) !=null){
-							ApiCredential smsApi = smsApiDAO.getApiCredential(accountId);  
-							String username = smsApi.getApisecret();
-							String apiKey   = smsApi.getApiKey();
-							africasTalking.setMessage(message); 
-							africasTalking.setRecipients(phone); 
-							// Create a new instance of our awesome gateway class
-							//AfricasTalkingGateway gateway  = new AfricasTalkingGateway(username, apiKey);
-							try {/*
-								JSONArray results = gateway.sendMessage(africasTalking.getRecipients(), africasTalking.getMessage());
-								for( int i = 0; i < results.length(); ++i ) {
-									JSONObject result = results.getJSONObject(i);
+	/**
+	 * 
+	 */
+	private void synchGoKeMoney() {
 
-									//save to database
-									String thestatus ="";
-									String thenumber ="";
-									String themessage ="";
-									String thecost ="";
+		if(accountDAO.getAccounts() != null) {
+			accountDAO.getAccounts().parallelStream().forEach(account -> {
+				
+				if(sysConfigDAO.getSysConfig(account.getUuid()) != null) {
+					
+					SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+					
+					if(studentDAO.getActiveStudents(account.getUuid(), "1") != null) {
+						
 
-									thestatus = result.getString("status");
-									thenumber = result.getString("number");
-									themessage = message;
-									thecost = result.getString("cost");
+						studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
 
-									if(StringUtils.isBlank(thestatus)){
-										thestatus = "failed";
-									}if(StringUtils.isBlank(thenumber)){
-										thenumber = phone;
-									}if(StringUtils.isBlank(thecost)){
-										thecost = "1";
+							if(feeBreakdownDAO.getFeeBreakdown(account.getUuid(), 
+									FeeConstants.GVMT_MONEY_CODE,
+									sysConfig.getTerm(),
+									sysConfig.getYear(), 
+									FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){ 
+
+								String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+										sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
+
+								StudentFee studentFee = new StudentFee(); 
+								studentFee.setAccountId(account.getUuid());
+								studentFee.setStudentId(student.getUuid());
+								studentFee.setAmountPaid((int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdownId));   
+								studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
+								studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
+								studentFee.setPaidHas(student.getIsBoarding()); 
+								studentFee.setTermPiad(sysConfig.getTerm());
+								studentFee.setYearPaid(sysConfig.getYear());
+
+								if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
+										sysConfig.getTerm(), sysConfig.getYear()) == null) {
+
+									if(studentFeeDAO.putStudentFee(studentFee)) {
+										//log success
+										//System.out.println("GoKe money add success"); 
+
+									}else {
+										//log error, contact Admin_ 
+										//System.out.println("error, contact Admin"); 
+
 									}
-									OutGoingSMS outGoingSMS = smsSendDAO.getSmsSend(sms.getUuid());
-									outGoingSMS.setAccountId(accountId); 
-									outGoingSMS.setStatus(thestatus);
-									outGoingSMS.setMobile(thenumber);
-									outGoingSMS.setMessage(themessage.replaceAll("[\r\n]+", " "));
-									outGoingSMS.setSmsCost(thecost);
-									smsSendDAO.updateSmsSend(outGoingSMS);
 
+								}else {
+									//log error, student has already been assigned GoKe money 
+									//System.out.println("error, student has already been assigned GoKe money"); 
 								}
 
-							*/}
-
-							catch (Exception e) {
-								e.printStackTrace(); 
+							}else {
+								//log error, GoKe money not set
+								//System.out.println("error, GoKe money not set"); 
 							}
-						}
-					}//end if(smsApiDAO.getSmsApi(schooluuid) !=null){
+
+
+
+						});
+						
+					}
+					
+					
 				}
-			}
-		}//end if(smsSendDAO.getSmsSend() !=null){
+
+			});
+		}
+
+	}
+
+
+	/**
+	 * 
+	 */
+	private void checksentSMS() {
+
+
 	}
 
 	/**

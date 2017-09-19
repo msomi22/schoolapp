@@ -14,4 +14,6 @@ public interface SchoolOtherFeeDAO {
 	
 	public List<OtherFee> getOtherFeeList(String accountId,String term,String year,int startIndex, int endIndex);
 	
+	public List<OtherFee> getOtherFeeList(String accountId,String term,String year);
+	
 }

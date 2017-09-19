@@ -26,7 +26,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
-import com.yahoo.petermwenda83.server.api.rest.bean.FeeResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
@@ -154,7 +154,7 @@ public class StudentRestFulAPI{
 	 */
 
 	@ApiOperation(value = "Pay student Fee.", 
-			notes = "Whether fee was paid successfully or not.", 
+			notes = "Returns whether fee was paid successfully or not.", 
 			response = StudentPayFee.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
@@ -164,19 +164,47 @@ public class StudentRestFulAPI{
 	public Object payFee(@PathParam("accountId") String accountId, 
 			@PathParam("regNo") String regNo ,StudentPayFee studentPayFee, @HeaderParam("authorization") String auth) {
 
-		FeeResponse feeResponse = new FeeResponse();
 
-		ApiResponse apiResponse = new ApiResponse();
-		apiResponse.setMessage("error");
-		apiResponse.setDescription("User not authenticated");
-
-		feeResponse.setApiResponse(apiResponse); 
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return feeResponse; 
+			return response; 
 		}
 
 		return studentService.payFee(studentPayFee); 
+	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param studentPayFee
+	 * @param auth
+	 * @return
+	 */
+
+	@ApiOperation(value = "Pay GoKe student Fee.", 
+			notes = "Returns whether GoKe fee was paid successfully or not.", 
+			response = GoKeMoney.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	} )
+	@POST
+	@Path("/gokefee/{accountId}")  
+	public Object payGoKeFee(@PathParam("accountId") String accountId, GoKeMoney goKeMoney, @HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.addGoKeMoney(goKeMoney);
 	}
 
 	/**

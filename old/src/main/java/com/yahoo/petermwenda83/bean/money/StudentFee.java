@@ -23,8 +23,6 @@ public class StudentFee extends StorableBean{
 	private String yearPaid;
 	private Timestamp datePaid;
 
-	private int amountTokenizer;
-
 
 	public StudentFee() {
 		studentId = "";
@@ -35,8 +33,6 @@ public class StudentFee extends StorableBean{
 		termPiad = "";
 		yearPaid = "";
 		datePaid = new Timestamp(new Date().getTime());
-
-		amountTokenizer = 0;
 
 	}
 
@@ -186,24 +182,7 @@ public class StudentFee extends StorableBean{
 
 
 
-	/**
-	 * @return the amountTokenizer
-	 */
-	public int getAmountTokenizer() {
-		return amountTokenizer;
-	}
-
-
-
-	/**
-	 * @param amountTokenizer the amountTokenizer to set
-	 */
-	public void setAmountTokenizer(int amountTokenizer) {
-		this.amountTokenizer = amountTokenizer;
-	}
-
-
-
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -211,7 +190,7 @@ public class StudentFee extends StorableBean{
 	public String toString() {
 		return "StudentFee [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
 				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", termPiad=" + termPiad + ", yearPaid="
-				+ yearPaid + ", datePaid=" + datePaid + ", amountTokenizer=" + amountTokenizer + ", getUuid()="
+				+ yearPaid + ", datePaid=" + datePaid +  ", getUuid()="
 				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 

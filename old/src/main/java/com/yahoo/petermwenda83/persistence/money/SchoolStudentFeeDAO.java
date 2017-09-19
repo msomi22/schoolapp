@@ -8,6 +8,8 @@ public interface SchoolStudentFeeDAO {
 	
 	public StudentFee getStudentFee(String accountId , String uuid); 
 	
+	public StudentFee getStudentFee(String accountId, String studentId, String payMode, String termPiad,String yearPaid);  
+	
 	public boolean putStudentFee(StudentFee studentFee);
 	
 	public boolean updateStudentFee(StudentFee studentFee);

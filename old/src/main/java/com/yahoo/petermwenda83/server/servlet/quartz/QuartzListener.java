@@ -41,6 +41,9 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
                     .startNow()
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
                     .build(); 
+                    
+                    //create a trigger that simply fires every 5 minutes
+                    //“0 0/5 * * * ?”
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
                     scheduler = new StdSchedulerFactory().getScheduler();
