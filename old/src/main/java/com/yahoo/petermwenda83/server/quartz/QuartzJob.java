@@ -43,6 +43,12 @@ public class QuartzJob implements Job{
 	private static StudentFeeDAO studentFeeDAO;
 
 	private static SysConfigDAO sysConfigDAO;
+	
+	/**
+	 * s is the class that implements HTTPServlet.You can also use this.getServletContext() if its your servlet class. 
+	 */
+	
+	
 
 	static {
 		smsSendDAO = SmsSendDAO.getInstance();
@@ -170,9 +176,9 @@ public class QuartzJob implements Job{
 	 * 
 	 */
 	private void StartBackup() {
-		String user = System.getProperty("user.name");
-		String backup = "/home/"+user+"/svn/School/trunk/webapp/bin/backup.sh";
-		ProcessBuilder pb = new ProcessBuilder(backup,"arg","arg");
+		
+		String file = GetBackupScript.getBackupFile();
+		ProcessBuilder pb = new ProcessBuilder(file,"arg","arg");
 		try {
 			Process p = pb.start();
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); 
@@ -194,11 +200,31 @@ public class QuartzJob implements Job{
 	 * @throws IOException
 	 */
 	private void backUpWin() throws IOException {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("h-m-s_dd-MMM yyyy"); // hour,minutes,seconds day,Month, Year
-		String date = dateFormatter.format(new Date());
-		String pg = "  \"C:/Program Files/PostgreSQL/9.3/bin/pg_dump.exe\" -i -h localhost -p 5432 -U school -f c -b -v -f \"D:/pgBackup/schooldb.backup\" schooldb";
+		
+		String pg_version = "9.3";
+		String pg_home = " \"C:/Program Files/PostgreSQL/"+pg_version+"/bin/pg_dump.exe\"";  
+		String backupDir = " \"D:/pgBackup/schooldb.backup\" ";
+		
+		String pg = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+backupDir+" schooldb";
 		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 		java.lang.Process p = rt.exec(pg);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

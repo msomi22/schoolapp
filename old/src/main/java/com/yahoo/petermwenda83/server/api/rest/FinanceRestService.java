@@ -103,6 +103,30 @@ public class FinanceRestService {
 		}
 		
 	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param year
+	 * @return
+	 */
+	 
+	public Object getTermFeePerYear(String accountId,String year) {
+		
+		Response response = new Response();
+		
+		if(termFeeDAO.getTermFeeList(accountId, year) == null) {
+			response.setMessage("error");
+			response.setDescription("Term fee not found!");
+			return response;
+			
+		}else {
+			
+			return termFeeDAO.getTermFeeList(accountId, year);
+		}
+		
+	}
      /**
       * 
       * @param accountId

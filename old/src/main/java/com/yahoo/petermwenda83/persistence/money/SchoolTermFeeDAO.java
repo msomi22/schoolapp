@@ -17,5 +17,7 @@ public interface SchoolTermFeeDAO {
 	public List<TermFee> getTermFeeList(String accountId, int startIndex , int endIndex); 
 	
 	public List<TermFee> getTermFeeList(String accountId); 
+	
+	public List<TermFee> getTermFeeList(String accountId,String year); 
 
 }
