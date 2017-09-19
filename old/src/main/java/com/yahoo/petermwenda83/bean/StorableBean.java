@@ -12,6 +12,8 @@ package com.yahoo.petermwenda83.bean;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /***
  * This class represents an object in the School System architecture that can be
  * stored in the RDBMS as well as cached.
@@ -22,6 +24,7 @@ import java.util.UUID;
  */
 public class StorableBean implements Serializable {
 
+	@JsonIgnore
 	private int id;
 	private String uuid;
 	private String accountId;

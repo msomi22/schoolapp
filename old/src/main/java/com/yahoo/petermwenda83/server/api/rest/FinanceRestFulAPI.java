@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
+import com.yahoo.petermwenda83.bean.money.TermFee;
+import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 
 import io.swagger.annotations.Api;
@@ -38,7 +41,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Get Fee Breakdown List.", 
 			notes = "Returns List of fee Breakdown.", 
-			response = Object.class)
+			response = FeeBreakdown.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -68,7 +71,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Get Government money distribution List.", 
 			notes = "Returns List of money distributions based on the govenment policy.", 
-			response = Object.class)
+			response = FeeBreakdown.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -91,7 +94,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Get Term Fee List.", 
 			notes = "Returns List of fee charged for the given term and year.", 
-			response = Object.class)
+			response = TermFee.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
 	} )
@@ -114,7 +117,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Get Other Term Fee List.", 
 			notes = "Returns List of Other fee charged for the given term and year.", 
-			response = Object.class)
+			response = OtherFee.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
 	} )
