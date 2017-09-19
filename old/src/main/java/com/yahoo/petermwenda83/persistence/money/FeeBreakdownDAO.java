@@ -7,11 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
+import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -222,6 +225,32 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		}
 
 		return success;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdown(java.lang.String)
+	 */
+	@Override
+	public List<FeeBreakdown> getFeeBreakdown(String accountId) {
+		List<FeeBreakdown> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdown WHERE"
+						+ " accountId = ?;");
+				) {
+			pstmt.setString(1, accountId);      
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, FeeBreakdown.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting FeeBreakdown List for accountId " + accountId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
 	}
 
 }
