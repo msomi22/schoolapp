@@ -76,7 +76,7 @@
 												id="regno" name="regno"
 												class="form-control formelement cards"
 												placeholder="Registration number" pattern="[0-9]{3,4}"
-												maxlength="4" onkeyup="fetchFeeDetails(this.value)"
+												maxlength="4" onkeyup="delayInput()"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -377,7 +377,7 @@
 								</div>
 
 								<div id="otherfeeHistory">
-									<div class="row" >
+									<!-- <div class="row" >
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -399,7 +399,7 @@
 										</div>
 
 
-									</div>
+									</div> -->
 
 
 
@@ -416,7 +416,7 @@
 								</div>
 
 								<div id="revertedFeeList">
-									<div class="row">
+									<!-- <div class="row">
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -433,7 +433,7 @@
 											<hr class="hr_list">
 										</div>
 									</div>
-
+ -->
 
 								</div>
 

@@ -36,10 +36,36 @@ $('#OtherHistory').click(function() {
 });
 
 
+function delayInput(){
+	
+	setTimeout(function(){
+		
+		fetchFeeDetails()},3000)
+	
+}
 
 
 
-function fetchFeeDetails(regNo) {
+function fetchFeeDetails() {
+	
+	var regNo= $('#regno').val();
+	
+	
+	
+	$('#history').hide();
+
+	$('#showHistory').show();
+	
+	$('#showOtherHistory').show();
+
+	$('#OtherHistory').hide();
+	
+	
+	
+	
+	$('#feeHistory').html('');
+	$('#otherfeeHistory').html('');
+	$('#revertedFeeList').html('');
 
 	var regxReg = /[0-9]{3,4}/;
 	
@@ -81,8 +107,8 @@ function fetchFeeDetails(regNo) {
 			
 			
 			global_url=preserveUrl;
-			makeFetchCall(), 3000
-		});
+			makeFetchCall()}, 3000
+		);
 
 	}
 }
@@ -211,13 +237,18 @@ function makeFetchCall() {
 											'<b>Balance : ' + value + '</b>');
 
 								if (key === 'feeHistory') {
+									$('#feeHistory').html('');
+									$('#otherfeeHistory').html('');
+									$('#revertedFeeList').html('');
 									// $('#feeHistory').html("Loading");
 
 									// $.each(basicInfo['feeHistory'],
 									// function(key,
 									// value){
 
-									for (var i = 0; i < basicInfo['feeHistory'].length; i++)
+									for (var i = 0; i < basicInfo['feeHistory'].length; i++){
+										
+										
 
 										$('#feeHistory')
 												.append(
@@ -236,6 +267,7 @@ function makeFetchCall() {
 																+ '</h6> <hr class="hr_list"></div>');
 
 									// });
+								}
 								}
 
 								if (key === "otherfeeHistory") {
