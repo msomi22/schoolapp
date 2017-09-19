@@ -76,7 +76,7 @@
 												id="regno" name="regno"
 												class="form-control formelement cards"
 												placeholder="Registration number" pattern="[0-9]{3,4}"
-												maxlength="4" onkeyup="fetchFeeDetails(this.value)"
+												maxlength="4" onkeyup="delayInput()"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
