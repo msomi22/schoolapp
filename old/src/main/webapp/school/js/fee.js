@@ -1,5 +1,30 @@
 
 var preserveUrl=global_url;
+
+$(document).ready(function(){
+	
+	global_url= global_url + "finance/termfee/"+$('#accountId').val()+'/'+$('#term').val()+'/'+$('#year').val();
+	
+	globalApiCall(function(data) {
+
+		console.log('Async call of the global api term fee');
+		console.log(data);
+		
+		$('#boarder').val(data['boaderAmount']);
+		$('#day').val(data['dayAmount']);
+		
+		
+		
+		
+		global_url=preserveUrl;
+	});
+	
+	
+	
+})
+
+
+
 function showHistory(state) {
 
 	if (state === 'history') {
@@ -238,8 +263,11 @@ function makeFetchCall() {
 									if (value == '1') {
 										$('#isBoarding')
 												.text('Type : Boarding');
+										
+										$('#termfee').html('<b> Term Fee:'+$('#boarder').val()+'</b>');
 									} else {
 										$('#isBoarding').text('Type : Day');
+										$('#termfee').html('<b> Term Fee:'+$('#day').val()+'</b>');
 									}
 
 								}

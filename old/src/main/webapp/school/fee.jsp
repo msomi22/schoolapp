@@ -4,6 +4,10 @@
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<!-- Config -->
+<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
+<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
+
 
 <%
 	if (session == null) {
@@ -19,6 +23,16 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+
+	SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
+
+	SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+
+	int currentYear = Integer.parseInt(sysConfig.getYear());
+
+	int currentTerm = Integer.parseInt(sysConfig.getTerm());
 %>
 <jsp:include page="header.jsp" />
 
@@ -49,21 +63,34 @@
 						<button class="btn btn-primary btn-block" onclick="StaffApiCall()">
 							Test API call</button> -->
 
+						<input type="hidden" name="accountId" id="accountId"
+							value="<%=accountId%>"> <input type="hidden" name="year"
+							id="year" value="<%=currentYear%>"> <input type="hidden"
+							name="term" id="term" value="<%=currentTerm%>">
+
 
 						<div class="row ">
 
-							<div class="col-md-4 col-md-offset-4">
-							
-							<div id="regNoInfo" class="alert alert-info">
-							<h5 id="regNoInfoSms">Enter a student's registration number to view school fees details.
-							</h5> </div>
-							
-							
-							<div id="regNoError" style="display:none" class="alert">
-							<h5 id="regNoErrorSms">Enter a student's registration number to view school fees details.</h5></div>
-							
-							
-							
+							<div class="col-md-4 ">
+								<button class="btn btn-info pull-left cards">Generate
+									Receipt</button>
+							</div>
+
+							<div class="col-md-4">
+
+								<div id="regNoInfo" class="alert alert-info">
+									<h5 id="regNoInfoSms">Enter a student's registration
+										number to view school fees details.</h5>
+								</div>
+
+
+								<div id="regNoError" style="display: none" class="alert">
+									<h5 id="regNoErrorSms">Enter a student's registration
+										number to view school fees details.</h5>
+								</div>
+
+
+
 
 
 								<form method="get" action="">
@@ -76,7 +103,7 @@
 												id="regno" name="regno"
 												class="form-control formelement cards"
 												placeholder="Registration number" pattern="[0-9]{3,4}"
-												maxlength="4" onkeyup="delayInput()" 
+												maxlength="4" onkeyup="delayInput()"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -85,6 +112,15 @@
 								</form>
 
 
+
+							</div>
+
+
+							<div class="col-md-4">
+
+								<button class="btn btn-primary pull-right cards">
+									Make fee payment <i class="fa fa-plus-circle"></i>
+								</button>
 
 							</div>
 
@@ -104,38 +140,40 @@
 	private String termPiad;
 	private String yearPaid;
 	private Timestamp datePaid; -->
+							<input type="hidden" id="boarder" name="boarder" value="">
+							<input type="hidden" id="day" name="day" value="">
 
 							<div class="col-md-11 col-md-offset-1 cards formelement">
 								<div class="row secondary-assent">
-									<h4 class="fee_header">Student's Info </h4>
+									<h4 class="fee_header">Student's Info</h4>
 
 								</div>
 								<div id="studentsInfo">
-								<div class="row">
-									<div class="col-md-3">
-										<h4 id="regNo">Reg No: ###</h4>
-									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<h4 id="regNo">Reg No: ###</h4>
+										</div>
 
-									<div class="col-md-3">
-										<h4 id="name" > Name: ###</h4>
-									</div>
-									
-									
-									<div class="col-md-3">
-										<h4 id="stream">Stream: ##</h4>
-									</div>
+										<div class="col-md-3">
+											<h4 id="name">Name: ###</h4>
+										</div>
 
 
-									<div class="col-md-2">
-										<h4 id="isBoarding">Boarding: ##</h4>
-									</div>
-									<!-- <div class="col-md-4">
+										<div class="col-md-3">
+											<h4 id="stream">Stream: ##</h4>
+										</div>
+
+
+										<div class="col-md-2">
+											<h4 id="isBoarding">Boarding: ##</h4>
+										</div>
+										<!-- <div class="col-md-4">
 										<h4 id="middlename">Middle Name: ######</h4>
 									</div> -->
-								</div>
+									</div>
 
 
-								<!-- <div class="row">
+									<!-- <div class="row">
 									
 
 
@@ -149,30 +187,33 @@
 
 
 
-								
 
 
-								<div class="row">
-									<div class="col-md-4">
-										<h4 class="pull-right" id="balance">
-											<b>Balance: ######</b>
-										</h4>
+
+									<div class="row">
+										<div class="col-md-4">
+											<h4 class="pull-right" id="balance">
+												<b>Balance: ######</b>
+											</h4>
+										</div>
+
+										<div class="col-md-4">
+											<h4 class="pull-right" id="termfee">
+												<b>Term Fee: ######</b>
+
+
+
+											</h4>
+										</div>
+
 									</div>
-									
-									<div class="col-md-4">
-										<h4 class="pull-right" id="termfee">
-											<b>Term Fee: ######</b>
-										</h4>
-									</div>
-
-								</div>
 
 
 
 
 
-								<br> <br>
-								
+									<br> <br>
+
 								</div>
 
 							</div>
@@ -186,24 +227,26 @@
 
 
 							<div class="col-md-6 col-md-offset-1 cards formelement">
-							
-							
-							<div id="showHistory">
-							<br>
-							<button class="btn btn-primary btn-block" id="btn_history" onclick="showHistory('history')" disabled>Show History</button>
-							
-							</div>
-							
-							
-							<div id="history" style="display:none" >
-							
-								<div class="row secondary-assent">
-									<h4 class="fee_header">Student's Fee History</h4>
+
+
+								<div id="showHistory">
+									<br>
+									<button class="btn btn-primary btn-block" id="btn_history"
+										onclick="showHistory('history')" disabled>Show
+										History</button>
 
 								</div>
-								<div >
-									<div class="row" id="feeHistory">
-										<!-- <div class="col-md-4 col-md-offset-1">
+
+
+								<div id="history" style="display: none">
+
+									<div class="row secondary-assent">
+										<h4 class="fee_header">Student's Fee History</h4>
+
+									</div>
+									<div>
+										<div class="row" id="feeHistory">
+											<!-- <div class="col-md-4 col-md-offset-1">
 											<h6>Amount Paid: ######</h6>
 											<h6>Payment Mode: ######</h6>
 											<h6>Transaction ID: ######</h6>
@@ -257,13 +300,13 @@
 										</div> -->
 
 
+										</div>
+
+
+
+
 									</div>
 
-
-
-
-								</div>
-								
 								</div>
 
 
@@ -368,24 +411,26 @@
 
 
 							<div class="col-md-4  col-md-offset-1 cards formelement">
-							
-							<div id="showOtherHistory">
-							<br>
-							<button class="btn btn-primary btn-block" id="btn_otherHistory" onclick="showHistory('other')" disabled>Show other History</button>
-							
-							</div>
-							
-							<div id="OtherHistory" style="display: none">
 
-
-
-								<div class="row secondary-assent">
-									<h6 class="fee_header">Other Student's Fee History </h6>
+								<div id="showOtherHistory">
+									<br>
+									<button class="btn btn-primary btn-block" id="btn_otherHistory"
+										onclick="showHistory('other')" disabled>Show other
+										History</button>
 
 								</div>
 
-								<div id="otherfeeHistory">
-									<!-- <div class="row" >
+								<div id="OtherHistory" style="display: none">
+
+
+
+									<div class="row secondary-assent">
+										<h6 class="fee_header">Other Student's Fee History</h6>
+
+									</div>
+
+									<div id="otherfeeHistory">
+										<!-- <div class="row" >
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -411,20 +456,20 @@
 
 
 
-									<br> 
-								</div>
+										<br>
+									</div>
 
 
 
 
 
-								<div class="row secondary-assent">
-									<h6 class="fee_header">Reverted Student's Fee History</h6>
+									<div class="row secondary-assent">
+										<h6 class="fee_header">Reverted Student's Fee History</h6>
 
-								</div>
+									</div>
 
-								<div id="revertedFeeList">
-									<!-- <div class="row">
+									<div id="revertedFeeList">
+										<!-- <div class="row">
 										<div class="col-md-11 col-md-offset-1">
 											<h6>Description: ######</h6>
 											<h6>Amount: ######</h6>
@@ -443,10 +488,12 @@
 									</div>
  -->
 
+									</div>
+
+
 								</div>
 
 
-							</div>
 
 
 
@@ -454,8 +501,6 @@
 
 
 
-							
-							
 							</div>
 
 						</div>
