@@ -3,6 +3,8 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
@@ -315,11 +317,28 @@ public class FinanceRestService {
 	 */
 	private boolean hasDuplicate(OtherFee otherFee) {
 		
-		if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 1) {
-			return false;
-		}else {
-			return true;
+		boolean hasduplicate = true;
+		//if true , has duplicate
+		
+		System.out.println(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size()); 
+		
+		if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 0) {
+			hasduplicate = false;
+			
+		}else if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 1) {
+			
+			String id = otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).getUuid();
+			
+			if(StringUtils.equals(otherFee.getUuid(), id)) {
+				hasduplicate = false;
+				
+			}else {
+				hasduplicate = true;
+			}
+			
 		}
+		
+		return hasduplicate;
 		
 	}
 
