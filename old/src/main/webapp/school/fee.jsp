@@ -67,12 +67,16 @@
 							value="<%=accountId%>"> <input type="hidden" name="year"
 							id="year" value="<%=currentYear%>"> <input type="hidden"
 							name="term" id="term" value="<%=currentTerm%>">
+							
+							
+							<input type="hidden" name="studentId" id="studentId"
+							value="">
 
 
 						<div class="row ">
 
 							<div class="col-md-4 ">
-								<button class="btn btn-info pull-left cards">Generate
+								<button class="btn btn-info pull-left cards" id="genReceipt" onclick="generateReceipt()" disabled>Generate
 									Receipt</button>
 							</div>
 
@@ -98,16 +102,20 @@
 
 
 									<div class="form-group has-feedback">
-										<h3 class="">
-											<label for="regno">Enter Reg N0_:</label> <input type="text"
+										<div class="row">
+										<div class="col-md-2">
+											<label for="regno" >Reg N0_:</label>
+											</div>
+											<div class="col-md-10"> <input type="text"
 												id="regno" name="regno"
 												class="form-control formelement cards"
-												placeholder="Registration number" pattern="[0-9]{3,4}"
+												placeholder="Enter Reg number" pattern="[0-9]{3,4}"
 												maxlength="4" onkeyup="delayInput()"
 												title="Registration number, should contain numerics only and should be 4 numbers only"
 												required> <span
 												class="glyphicon glyphicon-search form-control-feedback"></span>
-										</h3>
+												</div>
+										</div>
 									</div>
 								</form>
 

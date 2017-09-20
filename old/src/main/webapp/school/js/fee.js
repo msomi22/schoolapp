@@ -23,6 +23,12 @@ $(document).ready(function(){
 	
 })
 
+function generateReceipt(){
+	
+	//window.location="feeReceipt?accountId="+$('#accountId').val()+"&studentId="+$('#studentId').val();
+	window.open("feeReceipt?accountId="+$('#accountId').val()+"&studentId="+$('#studentId').val(), "_blank");
+}
+
 
 
 function showHistory(state) {
@@ -63,18 +69,9 @@ $('#OtherHistory').click(function() {
 
 function delayInput(){
 	
-	setTimeout(function(){
-		
-		fetchFeeDetails()},3000)
-	
-}
-
-
-
-function fetchFeeDetails() {
-	
-	var regNo= $('#regno').val();
-	
+	$('#genReceipt').removeClass('btn-success');
+	$('#genReceipt').addClass('btn-info');
+	$('#genReceipt').prop('disabled', true);
 	
 	
 	$('#history').hide();
@@ -92,11 +89,11 @@ function fetchFeeDetails() {
 	$('#otherfeeHistory').html('');
 	$('#revertedFeeList').html('');
 
-	var regxReg = /[0-9]{3,4}/;
+	
 	
 	//$('#studentsInfo').hide(2000);
 	$('#name').text('Name : ##');
-	$('#regNO').text('Reg No: ##');
+	$('#regNo').text('Reg No: ##');
 	$('#stream').text('Stream : ##');
 	$('#isBoarding').text('Type : ##');
 	$('#balance').html('<b>Balance : ##</b>');
@@ -105,6 +102,26 @@ function fetchFeeDetails() {
 	
 	$('#btn_otherHistory').prop('disabled',true);
 	$('#btn_history').prop('disabled',true);
+	
+	setTimeout(function(){
+		
+		fetchFeeDetails()},3000)
+	
+}
+
+
+
+function fetchFeeDetails() {
+	
+	
+	
+	var regNo= $('#regno').val();
+	
+	var regxReg = /[0-9]{3,4}/;
+	
+	
+	
+	
 
 	if (regNo.Lenght < 2 | !regNo.match(regxReg)) {
 
@@ -238,7 +255,6 @@ function makeFetchCall() {
 					.each(
 							basicInfo,
 							function(key, value) {
-
 								if (key === 'regNo')
 									$('#regNo').text('Reg No : ' + value);
 
@@ -277,6 +293,13 @@ function makeFetchCall() {
 											'<b>Balance : ' + value + '</b>');
 
 								if (key === 'feeHistory') {
+									
+									$('#studentId').val(basicInfo['feeHistory'][0]['studentId']);
+									$('#genReceipt').removeClass('btn-info');
+									$('#genReceipt').addClass('btn-success');
+									$('#genReceipt').prop('disabled', false);
+									
+									
 									$('#feeHistory').html('');
 									$('#otherfeeHistory').html('');
 									$('#revertedFeeList').html('');
