@@ -126,7 +126,7 @@
 
 							<div class="col-md-4">
 
-								<button class="btn btn-primary pull-right cards">
+								<button class="btn btn-primary pull-right cards" onclick="initPayment()">
 									Make fee payment <i class="fa fa-plus-circle"></i>
 								</button>
 
@@ -323,98 +323,6 @@
 
 
 
-							<!--  	<div class="col-md-4 col-md-offset-1 cards formelement">
-							<div class="row secondary-assent">Studen't Info
-							<br>
-							<br>
-							
-							</div>
-								<div class="row">
-									<div class="col-md-6">
-										<h3>Amount Paid:</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">######</h3>
-									</div>
-								</div>
-
-
-								<div class="row">
-									<div class="col-md-6">
-										<h3>Payment Mode:</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">######</h3>
-									</div>
-								</div>
-
-
-								<div class="row">
-									<div class="col-md-6">
-										<h3>Transaction ID:</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">######</h3>
-									</div>
-
-								</div>
-
-
-								<div class="row">
-									<div class="col-md-6">
-										<h3>Term Paid:</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">######</h3>
-									</div>
-								</div>
-
-
-								<div class="row">
-									<div class="col-md-6">
-										<h3>Date Paid:</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">######</h3>
-									</div>
-
-								</div>
-
-
-
-
-								<br> <br>
-
-
-								<div class="row">
-									<div class="col-md-6">
-										<h3>
-											<b>Balance:</b>
-										</h3>
-									</div>
-
-									<div class="col-md-6">
-										<h3 class="pull-right">
-											<b> ######</b>
-										</h3>
-									</div>
-
-								</div>
-
-
-
-
-
-
-
-							</div>
- -->
-
 
 
 
@@ -546,10 +454,13 @@
 
 
 
+<!-- fee payment Modal -->
+<jsp:include page="modals/feePaymentModal.html" />
+
+
+
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
-
-
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
