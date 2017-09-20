@@ -23,6 +23,105 @@ $(document).ready(function(){
 	
 })
 
+
+function initPayment(){
+	
+	$('#feePayment').modal("show");
+}
+
+function feePayment(){
+	
+	var myform = $("#feePaymentForm")[0];
+	if (!myform.checkValidity()) {
+		if (myform.reportValidity) {
+			myform.reportValidity();
+		} else {
+			// warn IE users somehow :)
+		}
+	} else {
+		
+		console.log($('#accountId').val() +" Regno"+$('#p_regNo').val());
+		
+		$.ajax(
+				{
+					url : location.protocol + "//" + window.location.host+ "/school/webapi/student/fee/"+$('#accountId').val()+"/"+$('#p_regNo').val(),
+					type : 'POST',
+					dataType : 'json',
+					data : JSON.stringify($('#feePaymentForm').serializeJSON()),
+					contentType : 'application/json',
+					accept : 'application/json',
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA==');
+					}
+				}).done(function(data) {
+
+		
+
+		//	$('#addStreamForm').get(0).reset();
+
+		//	console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+
+			if (data.description.includes("success")) {
+				
+				
+				$('#success').modal('show');
+
+				$('#successTitle').text(data.description);
+				$('#successSms').text(data.description);
+
+
+				$('#feePaymentForm').get(0).reset();
+
+				setTimeout(function() {
+
+					$('#feePayment').modal('hide');
+				}, 2000);
+
+				setTimeout(function() {
+
+					$('#success').modal('hide');
+				}, 3000);
+
+				
+
+			} else if (data.message.includes("error")) {
+
+				$('#error').modal('show');
+
+				$('#errorTitle').text(data.description);
+
+				$('#errorSms').text(data.description);
+
+				setTimeout(function() {
+
+					$('#error').modal('hide');
+				}, 3500);
+
+			}
+
+		}).fail(function(jqXHR, textStatus) {
+
+			// alert("Error: " + textStatus);
+
+			$('#error').modal('show');
+
+			$('#errorTitle').text("Fatal Error");
+
+			$('#errorSms').text(textStatus);
+
+			setTimeout(function() {
+
+				$('#error').modal('hide');
+			}, 2500);
+		})
+	
+		
+		
+		
+	
+	}
+}
+
 function generateReceipt(){
 	
 	//window.location="feeReceipt?accountId="+$('#accountId').val()+"&studentId="+$('#studentId').val();

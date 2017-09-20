@@ -1,0 +1,106 @@
+<!-- make fee Payment -->
+
+<div id="feePayment" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="examTiltle">Make Fee Payment</h4>
+			</div>
+
+			<form method="post" action="#" id="feePaymentForm">
+				<div class="modal-body">
+				
+				
+
+					<div class="box-body">
+
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2">
+								<label for="p_regNo">Reg No_:</label>
+
+								<input type="text" id="p_regNo" class="form-control formelement"
+									name="regNo"  placeholder="Reg No" pattern="[0-9]{3,4}"
+									title="Reg No,Registration number, should contain numerics only and should be 3 or 4 numbers only"
+									maxlength="4"
+									required>
+									
+									<input type="hidden" name="staffId" id="staffId" value="">
+									<input type="hidden" name="term" id="term" value="">
+									<input type="hidden" name="year" id="year" value="">
+									<input type="hidden" name="feeBalance" id="feeBalance" value="">
+									
+							</div>
+							
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="p_mode">Payment Mode:</label>
+								<select class="form-control formelement" name="paymentMode" id="p_mode">
+								<option value="BANK">BANK Receipt</option>
+								
+								<option value="MPESA">MPESA</option>
+								
+								<option value="CASH">CASH</option>
+								
+								</select>
+							</div>
+
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="transactionId">Transaction ID:</label>
+								<input type="text" id="transactionId" class="form-control formelement"
+									name="transactionId" placeholder="Transaction ID" pattern="[A-Za-z0-9]{6,20}"
+									maxlength="20"
+									title="Transaction ID,enter a valid number ">
+								
+							</div>
+							
+							
+							<div class="col-md-8 col-md-offset-2">
+								<label for="amount">Amount:</label>
+								<input type="text" id="amount" class="form-control formelement"
+									name="amount" placeholder="Amount" pattern="[0-9]{2,5}"
+									maxlength="5"
+									title="Amount,enter a valid amount e.g 100, 1000, 1500 e.t.c">
+								
+							</div>
+							
+							
+							
+							
+							
+							
+							
+
+							
+
+
+						</div>
+
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary pull-right" id="btn_feePayment" onclick="feePayment()">
+						Submit  <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
