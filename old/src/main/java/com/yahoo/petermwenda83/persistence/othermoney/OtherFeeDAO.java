@@ -82,6 +82,76 @@ public class OtherFeeDAO extends GenericDAO implements SchoolOtherFeeDAO {
 		}
 		return otherFee; 
 	}
+	
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherFeeDAO#queryOtherFee(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public OtherFee queryOtherFee(String accountId, String query) {
+		OtherFee otherFee = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE accountId = ? AND"
+						+ " (term =? OR year =? OR description =?);");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, query);
+			pstmt.setString(3, query);
+			pstmt.setString(4, query);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				otherFee  = beanProcessor.toBean(rset,OtherFee.class);
+			}
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting OtherFee with accountId " + accountId + " and query : " + query);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return otherFee; 
+	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherFeeDAO#queryOtherFee(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public OtherFee queryOtherFee(String accountId, String description, String term, String year) {
+		OtherFee otherFee = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE accountId =? AND description =?"
+						+ "AND term=? AND year =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, description);
+			pstmt.setString(3, term);
+			pstmt.setString(4, year);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				otherFee  = beanProcessor.toBean(rset,OtherFee.class);
+			}
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting OtherFee with accountId " + accountId + " and description" + description +
+					" and term "  + term + " and year " + year );
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return otherFee; 
+	}
+
+	
+
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherFeeDAO#putOtherstype(com.yahoo.petermwenda83.bean.otherfee.OtherFee)
@@ -199,5 +269,33 @@ public class OtherFeeDAO extends GenericDAO implements SchoolOtherFeeDAO {
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolOtherFeeDAO#findDuplicate(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<OtherFee> findDuplicate(String accountId, String description, String term, String year) {
+		List<OtherFee> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM OtherFee WHERE"
+						+ " accountId = ? AND description =? AND term = ? AND year = ?;");
+				) {
+			pstmt.setString(1, accountId);      
+			pstmt.setString(2, description); 
+			pstmt.setString(3, term); 
+			pstmt.setString(4, year); 
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, OtherFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting OtherFee  List for " + accountId + " and description " + description +
+					" and term "  + term + " and year " + year ); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
 
 }

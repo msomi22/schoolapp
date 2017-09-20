@@ -239,7 +239,7 @@ public class StudentService {
 			response.setDescription("AccountId is invalid!");
 			return response;
 
-		}else if(accountDAO.getAccountById(studentPayFee.getAccountId()) != null) { 
+		}else if(accountDAO.getAccountById(studentPayFee.getAccountId()) == null) { 
 
 			response.setMessage("error");
 			response.setDescription("AccountId is invalid!");
@@ -1380,7 +1380,7 @@ public class StudentService {
 	 * @return
 	 */
 	private boolean validStatus(String isBoarding) {
-		String[] allowed = {"1","2",};
+		String[] allowed = {"1","2"};
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
 		if(allowedList.contains(isBoarding)) {

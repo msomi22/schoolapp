@@ -6,6 +6,8 @@ package com.yahoo.petermwenda83.server.api.rest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -158,6 +160,53 @@ public class FinanceRestFulAPI {
 		}
 
 		return financeRestService.getOtherFee(accountId, term, year);
+	}
+	
+	
+	@ApiOperation(value = "Add new Other Term Fee.", 
+			notes = "Returns whether Fee was added.", 
+			response = OtherFee.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
+	} )
+	@POST
+	@Path("/fee/other/{accountId}")    
+	public Object addTermOtherFee(@PathParam("accountId") String accountId, OtherFee otherFee,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.putOtherFee(otherFee);
+	}
+	
+	
+	
+	@ApiOperation(value = "Update Other Term Fee.", 
+			notes = "Returns whether Fee was updated.", 
+			response = OtherFee.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
+	} )
+	@PUT
+	@Path("/fee/other/{accountId}")    
+	public Object updateTermOtherFee(@PathParam("accountId") String accountId,OtherFee otherFee, 
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.updateOtherFee(otherFee);
 	}
 	
 	
