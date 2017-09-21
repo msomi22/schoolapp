@@ -64,6 +64,59 @@ public class FinanceRestFulAPI {
 
 		return financeRestService.getFeeBreakDown(accountId); 
 	}
+	
+	@ApiOperation(value = "Add new Fee Breakdown.", 
+			notes = "Returns whether Breakdown was added.", 
+			response = FeeBreakdown.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/fee/category/{accountId}/")  
+	public Object putFeeBreakdown(@PathParam("accountId") String accountId,FeeBreakdown feeBreakdown,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.addFeeBreakdown(feeBreakdown);
+	}
+	
+	@ApiOperation(value = "Update Fee Breakdown.", 
+			notes = "Returns whether Breakdown was updated.", 
+			response = FeeBreakdown.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("/fee/category/{accountId}/")  
+	public Object updateFeeBreakdown(@PathParam("accountId") String accountId, FeeBreakdown feeBreakdown,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.updateFeeBreakdown(feeBreakdown); 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 	/**

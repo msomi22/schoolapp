@@ -5,6 +5,7 @@ package com.yahoo.petermwenda83.server.api.rest;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
@@ -58,6 +59,110 @@ public class FinanceRestService {
 		}
 
 		return response;
+	}
+	/** TODO
+	 * 
+	 * @param feeBreakdown
+	 * @return
+	 */
+	public Object addFeeBreakdown(FeeBreakdown feeBreakdown) {
+
+		Response response = new Response();
+		
+		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) != null) { 
+			response.setMessage("error");
+			response.setDescription("GoKe Fee not already added!");
+			return response;
+			
+		}else if(FeeConstants.validTerm(feeBreakdown.getTerm())){
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+			
+		}else if(FeeConstants.validYear(feeBreakdown.getYear())){
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+			
+		}else if(FeeConstants.validFee(feeBreakdown.getAmount())){
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+			
+		}else if(FeeConstants.validStatus(feeBreakdown.getStatus())){
+			response.setMessage("error");
+			response.setDescription("Invalid status!");
+			return response;
+			
+		}else {
+			
+			feeBreakdown.setUuid(new FeeBreakdown().getUuid()); 
+			
+			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)){
+				response.setMessage("success");
+				response.setDescription("Info added successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+			}
+			
+		}
+
+	}
+	/**
+	 * 
+	 * @param feeBreakdown
+	 * @return
+	 */
+	public Object updateFeeBreakdown(FeeBreakdown feeBreakdown) {
+
+		Response response = new Response();
+		
+		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) == null) { 
+			response.setMessage("error");
+			response.setDescription("GoKe Fee not found!");
+			return response;
+			
+		}else if(FeeConstants.validTerm(feeBreakdown.getTerm())){
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+			
+		}else if(FeeConstants.validYear(feeBreakdown.getYear())){
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+			
+		}else if(FeeConstants.validFee(feeBreakdown.getAmount())){
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+			
+		}else if(FeeConstants.validStatus(feeBreakdown.getStatus())){
+			response.setMessage("error");
+			response.setDescription("Invalid status!");
+			return response;
+			
+		}else {
+			
+			
+			if(feeBreakdownDAO.updateFeeBreakdown(feeBreakdown)){ 
+				response.setMessage("success");
+				response.setDescription("Info updated successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+			}
+			
+			
+		}
+
 	}
 
 	/**

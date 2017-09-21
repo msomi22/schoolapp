@@ -97,8 +97,21 @@ public class FeeConstants {
 	}
 
 
-
-	//validTerm
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
+	public static boolean validStatus(String status) {
+		String[] allowed = {"1","0"}; 
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(status)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 
