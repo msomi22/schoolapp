@@ -84,7 +84,7 @@ public class FinanceRestService {
 			response.setDescription("Invalid year!");
 			return response;
 			
-		}else if(!FeeConstants.validFee(feeBreakdown.getAmount())){
+		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
@@ -136,7 +136,7 @@ public class FinanceRestService {
 			response.setDescription("Invalid year!");
 			return response;
 			
-		}else if(!FeeConstants.validFee(feeBreakdown.getAmount())){
+		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
