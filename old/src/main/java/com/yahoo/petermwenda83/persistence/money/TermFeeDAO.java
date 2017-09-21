@@ -297,5 +297,32 @@ public class TermFeeDAO extends GenericDAO implements SchoolTermFeeDAO {
 
 		return List;
 	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolTermFeeDAO#findDuplicate(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<TermFee> findDuplicate(String accountId, String term, String year) {
+		List<TermFee> List = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM TermFee WHERE "
+						+ "accountId = ? AND term =? AND year =?;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, term);
+			psmt.setString(3, year);
+			try(ResultSet rset = psmt.executeQuery();){
+
+				List = beanProcessor.toBeanList(rset, TermFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Fee List for accountId " + accountId + " and term " + term + " and year " + year);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return List;
+	}
 	
 }

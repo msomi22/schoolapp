@@ -14,7 +14,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
-import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -152,7 +151,7 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO FeeBreakdown" 
-						+"(uuid, accountId, feeCategory, term, year, status) VALUES (?,?,?,?,?,?);");
+						+"(uuid, accountId, feeCategory, term, year, status, amount) VALUES (?,?,?,?,?,?,?);");
 				){ 
 			
 			pstmt.setString(1, feeBreakdown.getUuid());
@@ -161,6 +160,7 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 			pstmt.setString(4, feeBreakdown.getTerm());
 			pstmt.setString(5, feeBreakdown.getYear());
 			pstmt.setString(7, feeBreakdown.getStatus());
+			pstmt.setInt(8, feeBreakdown.getAmount());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -181,15 +181,16 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		boolean success = true;
 		try (  Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE FeeBreakdown SET feeCategory =?,"
-						+ "term =?, year =?, status =? WHERE accountId =? AND uuid =?;");
+						+ "term =?, year =?, status =?, amount =? WHERE accountId =? AND uuid =?;");
 				) {           			 	            
 
 			pstmt.setString(1, feeBreakdown.getFeeCategory());
 			pstmt.setString(2, feeBreakdown.getTerm());
 			pstmt.setString(3, feeBreakdown.getYear());
 			pstmt.setString(4, feeBreakdown.getStatus());
-			pstmt.setString(5, feeBreakdown.getAccountId());
-			pstmt.setString(6, feeBreakdown.getUuid());			
+			pstmt.setInt(5, feeBreakdown.getAmount());
+			pstmt.setString(6, feeBreakdown.getAccountId());
+			pstmt.setString(7, feeBreakdown.getUuid());			
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

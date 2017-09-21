@@ -6,11 +6,11 @@ import com.yahoo.petermwenda83.bean.money.TermFee;
 
 public interface SchoolTermFeeDAO {
 	
-	public TermFee getFee(String accountId, String term,String year);
+	public TermFee getFee(String accountId, String term, String year);
 	
-	public boolean termFeeAded(String accountId, String term,String year);
+	public boolean termFeeAded(String accountId, String term, String year);
 	
-	public boolean putFee(TermFee termFee,String accountId, String term,String year);
+	public boolean putFee(TermFee termFee, String accountId, String term,String year);
 	
 	public boolean updateFee(TermFee termFee); 
 	
@@ -18,6 +18,8 @@ public interface SchoolTermFeeDAO {
 	
 	public List<TermFee> getTermFeeList(String accountId); 
 	
-	public List<TermFee> getTermFeeList(String accountId,String year); 
+	public List<TermFee> getTermFeeList(String accountId, String year); 
+	
+	public List<TermFee> findDuplicate(String accountId, String term, String year); 
 
 }

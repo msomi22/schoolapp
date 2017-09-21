@@ -599,10 +599,11 @@ CREATE TABLE  FeeBreakdown (
     feeCategory text,
     term text,
     year text,
-    status text
+    status text,
+    amount integer NOT NULL CHECK (amount>=0)
   
 );
-\COPY FeeBreakdown(uuid,accountId,feeCategory,term,year,status) FROM '/tmp/FeeBreakdown.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY FeeBreakdown(uuid,accountId,feeCategory,term,year,status,amount) FROM '/tmp/FeeBreakdown.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE FeeBreakdown OWNER TO school;
 
 
