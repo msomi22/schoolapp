@@ -186,7 +186,7 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 			psmt.setString(2, studentId);
 			psmt.setString(3, term);
 			psmt.setLong(4, year);
-			
+
 			try(ResultSet rset = psmt.executeQuery();){
 				List = beanProcessor.toBeanList(rset, StudentOtherFee.class);
 			}
@@ -224,6 +224,35 @@ public class StudentOtherFeeDAO extends GenericDAO implements SchoolStudentOther
 		}
 
 		return List;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.othermoney.SchoolStudentOtherFeeDAO#revertStudentOtherFee(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean revertStudentOtherFee(String accountId, String studentId, String otherFeeId) {
+		boolean success = true; 
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentOtherFee"
+						+ " WHERE accountId = ? AND studentId =? AND otherFeeId =? ;");       
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, otherFeeId);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting StudentOtherFee for accountId " + accountId + " and studentId  " 
+		                + studentId + " and otherFeeId " + otherFeeId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
 

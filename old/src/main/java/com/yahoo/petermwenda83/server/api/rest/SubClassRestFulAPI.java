@@ -37,7 +37,7 @@ public class SubClassRestFulAPI {
 
 	@ApiOperation(value = "Asign 'subject and class' to a staff.", 
 		    notes = "Returns whethet 'subject and class' was assigned successfully or not.", 
-		    response = SubClass.class)
+		    response = ApiResponse.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found!.") 
 	} )
@@ -61,7 +61,7 @@ public class SubClassRestFulAPI {
 	@PUT
 	@ApiOperation(value = "Updated asigned subject and class for the given staff.", 
     notes = "Returns whethet 'subject and class' was updated successfully or not.", 
-    response = SubClass.class)
+    response = ApiResponse.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists") 
 	} )
@@ -84,7 +84,7 @@ public class SubClassRestFulAPI {
 	@Path("/{subClassId}/{accountId}")
 	@ApiOperation(value = "Delete subject and class for the given staff.", 
     notes = "Returns whethet 'subject and class' was deleted successfully or not.", 
-    response = SubClass.class)
+    response = ApiResponse.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists or account Id not found.") 
 	} )

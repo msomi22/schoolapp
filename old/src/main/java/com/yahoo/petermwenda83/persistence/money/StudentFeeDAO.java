@@ -56,25 +56,27 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#getStudentFeeByStudentUuid(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public StudentFee getStudentFee(String accountId , String uuid) {
+	public StudentFee getStudentFee(String accountId , String studentId, String uuid) {
 		StudentFee studentFee = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentFee WHERE accountId = ?"
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentFee WHERE accountId = ? AND studentId =?"
 						+ " AND uuid =? ;");       
 
 				){
 
 			pstmt.setString(1, accountId);
-			pstmt.setString(2, uuid);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, uuid);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
 				studentFee  = beanProcessor.toBean(rset,StudentFee.class);
 			}
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting studentFee with id  " + uuid +" and accountId " + accountId);
+			logger.error("SQL Exception when getting studentFee with accountId  " + accountId +" and studentId " 
+		                  + studentId + " and uuid " + uuid);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
@@ -241,6 +243,39 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 		}
 
 		return list;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#revertStudentGokeFee(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean revertStudentGokeFee(String accountId, String studentId, String termPiad, String yearPaid,
+			String payMode) {
+		boolean success = true; 
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentFee"
+						+ " WHERE accountId =? AND studentId =? AND termPiad =? AND yearPaid =? AND payMode =? ;");       
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, termPiad);
+			pstmt.setString(4, yearPaid);
+			pstmt.setString(5, payMode);
+			pstmt.executeUpdate();
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deletting StudentFee for accountId " + accountId + " and studentId  " 
+		                + studentId + " and termPiad " + termPiad + " and  yearPaid " + yearPaid + " and payMode " + payMode);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+
+		}
+
+		return success;
 	}
 
 

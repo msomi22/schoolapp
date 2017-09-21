@@ -238,6 +238,30 @@ public class StreamDAO extends GenericDAO implements SchoolStreamDAO {
         return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolStreamDAO#findDuplicate(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Stream> findDuplicate(String accountId, String description) {
+		List<Stream> list = null;
+
+        try (
+        		 Connection conn = dbutils.getConnection();
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Stream WHERE accountId = ? AND description =?;");    		   
+     	   ) {
+         	   pstmt.setString(1, accountId);  
+         	   pstmt.setString(2, description);  
+         	   try( ResultSet rset = pstmt.executeQuery();){
+     	       
+     	       list = beanProcessor.toBeanList(rset, Stream.class);
+         	   }
+        } catch (SQLException e) {
+            logger.error("SQLException when getting Stream List for account  " + accountId  + " and description " + description); 
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return list;
+	}
+
 	
 	
 	

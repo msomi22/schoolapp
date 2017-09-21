@@ -19,6 +19,8 @@ public interface SchoolStudentOtherFeeDAO {
 	
 	public boolean updateStudentOtherFee(StudentOtherFee studentOtherFee);
 	
+	public boolean revertStudentOtherFee(String accountId, String studentId, String otherFeeId);
+	
 	public List<StudentOtherFee> getStudentOtherFeeList(String accountId, String studentId, int startIndex, int endIndex);
 	
 	public List<StudentOtherFee> getStudentOFeeList(String accountId, String studentId, String term, long year);

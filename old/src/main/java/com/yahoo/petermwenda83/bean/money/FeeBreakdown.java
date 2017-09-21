@@ -16,6 +16,7 @@ public class FeeBreakdown extends StorableBean{
 	private String term;
 	private String year;
 	private String status;
+	private int amount;
 
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class FeeBreakdown extends StorableBean{
 		feeCategory = "";
 		term = "";
 		status = "";
+		amount = 0;
 	}
 
 	
@@ -76,11 +78,25 @@ public class FeeBreakdown extends StorableBean{
 
 
 
+
+	public int getAmount() {
+		return amount;
+	}
+
+
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "FeeBreakdown [feeCategory=" + feeCategory + ", term=" + term + ", year=" + year + ", status=" + status
-				+ "]";
+				+ ", amount=" + amount + "]";
 	}
+
 
 
 

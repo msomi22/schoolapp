@@ -48,7 +48,7 @@ public class ConfigRestFulAPI {
 
 	@ApiOperation(value = "ApiSysConfig object to update.", 
 			notes = "Pass apiSysConfig object to be updated.", 
-			response = ApiSysConfig.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -72,7 +72,7 @@ public class ConfigRestFulAPI {
 
 	@ApiOperation(value = "ApiMisc object to update.", 
 			notes = "Pass ApiMisc object to be updated.", 
-			response = ApiMisc.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -159,7 +159,7 @@ public class ConfigRestFulAPI {
 	 */
 	@ApiOperation(value = "Grading Scale object to add.", 
 			notes = "Returns whether the scale was added.", 
-			response = ApiGradingScale.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -189,7 +189,7 @@ public class ConfigRestFulAPI {
 	 */
 	@ApiOperation(value = "Grading Scale object to update.", 
 			notes = "Returns whether the scale was updated.", 
-			response = ApiGradingScale.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )

@@ -82,26 +82,27 @@ public class FeeBreakdownDescDAO  extends GenericDAO  implements SchoolFeeBreakd
 	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDescDAO#getFeeBreakdownDesc(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public FeeBreakdownDesc getFeeBreakdownDesc(String accountId, String feeBreakdownId, String feeCode) {
+	public FeeBreakdownDesc getFeeBreakdownDesc(String accountId, String feeBreakdownId, String query) {
 		FeeBreakdownDesc feeBreakdownDesc = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdownDesc WHERE accountId = ?"
-						+ " AND feeBreakdownId =? AND feeCode =?;");       
+						+ " AND feeBreakdownId =? AND (feeCode =? OR feeDescription =?) ;");       
 
 				){
 
 			pstmt.setString(1, accountId);
 			pstmt.setString(2, feeBreakdownId);
-			pstmt.setString(3, feeCode);
+			pstmt.setString(3, query);
+			pstmt.setString(4, query);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 				feeBreakdownDesc  = beanProcessor.toBean(rset, FeeBreakdownDesc.class);
 			}
 		}catch(SQLException e){
 			logger.error("SQL Exception when getting FeeBreakdownDesc for accountId  " + accountId +" and feeBreakdownId " + feeBreakdownId +
-					" and  feeCode " + feeCode );
+					" and  query " + query );
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
@@ -215,6 +216,36 @@ public class FeeBreakdownDescDAO  extends GenericDAO  implements SchoolFeeBreakd
 		}
 
 		return success;
+	}
+
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDescDAO#findDuplicate(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<FeeBreakdownDesc> findDuplicate(String accountId, String feeBreakdownId, String query) {
+		List<FeeBreakdownDesc> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdownDesc WHERE"
+						+ " accountId = ? AND feeBreakdownId = ? AND (feeCode =? OR feeDescription =?) ;");
+				) {
+			pstmt.setString(1, accountId);      
+			pstmt.setString(2, feeBreakdownId); 
+			pstmt.setString(3, query); 
+			pstmt.setString(4, query); 
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, FeeBreakdownDesc.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting FeeBreakdownDesc List for accountId " + accountId + " "
+					+ "and feeBreakdownId "  + feeBreakdownId + " and query " + query ); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
 	}
 
 }

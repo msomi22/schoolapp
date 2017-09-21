@@ -25,7 +25,7 @@ public class StudentFeeAPI{
 	private String balance;
 	private List<APIStudentFee> feeHistory;
 	private List<APIStudentOtherFee> otherfeeHistory;
-	private List<RevertedFee> revertedFeeList;
+	private List<APIRevertFee> revertedFeeList;
 	
 	public StudentFeeAPI(){
 		regNo = "";
@@ -112,11 +112,11 @@ public class StudentFeeAPI{
 		this.otherfeeHistory = otherfeeHistory;
 	}
 
-	public List<RevertedFee> getRevertedFeeList() {
+	public List<APIRevertFee> getRevertedFeeList() {
 		return revertedFeeList;
 	}
 
-	public void setRevertedFeeList(List<RevertedFee> revertedFeeList) {
+	public void setRevertedFeeList(List<APIRevertFee> revertedFeeList) {
 		this.revertedFeeList = revertedFeeList;
 	}
 

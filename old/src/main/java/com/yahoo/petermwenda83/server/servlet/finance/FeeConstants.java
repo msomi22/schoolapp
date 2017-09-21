@@ -64,6 +64,22 @@ public class FeeConstants {
 
 		return valid;
 	}
+	
+	public static boolean validGoKeFee(int amount) {
+		boolean valid = true;
+
+		if(amount <= 0) {
+			valid = false;
+		}
+
+		//+2 147 483 647
+		// 100,000,000
+		if(amount > 100000000) { 
+			valid = false;
+		}
+
+		return valid;
+	}
 
 
 	/**
@@ -97,8 +113,21 @@ public class FeeConstants {
 	}
 
 
-
-	//validTerm
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
+	public static boolean validStatus(String status) {
+		String[] allowed = {"1","0"}; 
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(status)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 

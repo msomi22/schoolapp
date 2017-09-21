@@ -97,7 +97,7 @@ public class AdminRestFulAPI {
 	 */
 	@ApiOperation(value = "Register a new school account.", 
 			notes = "Account object to add.", 
-			response = ApiAccount.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account exist.") 
 	} )
@@ -126,7 +126,7 @@ public class AdminRestFulAPI {
 	 */
 	@ApiOperation(value = "Update school account details.", 
 			notes = "Account object to update.", 
-			response = ApiAccount.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account doesn't exist.") 
 	} )
@@ -145,13 +145,6 @@ public class AdminRestFulAPI {
 		
 		return adminService.updateAccount(apiAccount);
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	@GET

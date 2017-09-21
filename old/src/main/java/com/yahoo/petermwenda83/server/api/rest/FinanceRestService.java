@@ -3,6 +3,11 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
+import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
+import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
@@ -32,7 +37,6 @@ public class FinanceRestService {
 		accountDAO = AccountDAO.getInstance();
 	}
 
-	//TODO 
 
 	/**
 	 * 
@@ -55,6 +59,110 @@ public class FinanceRestService {
 		}
 
 		return response;
+	}
+	/** TODO
+	 * 
+	 * @param feeBreakdown
+	 * @return
+	 */
+	public Object addFeeBreakdown(FeeBreakdown feeBreakdown) {
+
+		Response response = new Response();
+		
+		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) != null) { 
+			response.setMessage("error");
+			response.setDescription("GoKe Fee already added!");
+			return response;
+			
+		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+			
+		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+			
+		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+			
+		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
+			response.setMessage("error");
+			response.setDescription("Invalid status!");
+			return response;
+			
+		}else {
+			
+			feeBreakdown.setUuid(new FeeBreakdown().getUuid()); 
+			
+			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)){
+				response.setMessage("success");
+				response.setDescription("Info added successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+			}
+			
+		}
+
+	}
+	/**
+	 * 
+	 * @param feeBreakdown
+	 * @return
+	 */
+	public Object updateFeeBreakdown(FeeBreakdown feeBreakdown) {
+
+		Response response = new Response();
+		
+		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) == null) { 
+			response.setMessage("error");
+			response.setDescription("GoKe Fee not found!");
+			return response;
+			
+		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+			
+		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+			
+		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+			
+		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
+			response.setMessage("error");
+			response.setDescription("Invalid status!");
+			return response;
+			
+		}else {
+			
+			
+			if(feeBreakdownDAO.updateFeeBreakdown(feeBreakdown)){ 
+				response.setMessage("success");
+				response.setDescription("Info updated successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+			}
+			
+			
+		}
+
 	}
 
 	/**
@@ -81,11 +189,160 @@ public class FinanceRestService {
 	}
 
 
+	/**
+	 * 
+	 * @param feeBreakdownDesc
+	 * @return
+	 */
+	public Object putGoKeMoney(FeeBreakdownDesc feeBreakdownDesc) {
+
+		Response response = new Response();
+
+		if(feeBreakdownDesc.getFeeCode().length() < 2) {
+			response.setMessage("error");
+			response.setDescription("Invalid code!");
+			return response;
+
+		}else if(feeBreakdownDesc.getFeeDescription().length() < 3) {
+			response.setMessage("error");
+			response.setDescription("Invalid description!");
+			return response;
+
+		}else if(!FeeConstants.validFee(feeBreakdownDesc.getAmount())) { 
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+
+		}else if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(), 
+				feeBreakdownDesc.getFeeCode()) != null) {
+			response.setMessage("error");
+			response.setDescription("Fee Code is in use!");
+			return response;
+
+		}else if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(), 
+				feeBreakdownDesc.getFeeDescription()) != null) {
+			response.setMessage("error");
+			response.setDescription("Fee Description is in use!");
+			return response;
+
+		}else {
+
+			feeBreakdownDesc.setUuid(new FeeBreakdownDesc().getUuid()); 
+
+			if(feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc)) {
+				response.setMessage("success");
+				response.setDescription("Info added successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param feeBreakdownDesc
+	 * @return
+	 */
+	public Object updatedGoKeMoney(FeeBreakdownDesc feeBreakdownDesc) {
+
+		Response response = new Response();
+
+
+		if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getUuid()) == null) {
+			response.setMessage("error");
+			response.setDescription("Fee not found!");
+			return response;
+
+		}else if(feeBreakdownDesc.getFeeCode().length() < 2) {
+			response.setMessage("error");
+			response.setDescription("Invalid code!");
+			return response;
+
+		}else if(feeBreakdownDesc.getFeeDescription().length() < 3) {
+			response.setMessage("error");
+			response.setDescription("Invalid description!");
+			return response;
+
+		}else if(!FeeConstants.validFee(feeBreakdownDesc.getAmount())) { 
+			response.setMessage("error");
+			response.setDescription("Invalid Amount!");
+			return response;
+
+		}else if(gokehasDuplicate(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(),
+				feeBreakdownDesc.getFeeCode(),feeBreakdownDesc.getUuid())) { 
+			response.setMessage("error");
+			response.setDescription("Code duplicate not allowed!");
+			return response;
+
+		}else if(gokehasDuplicate(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(),
+				feeBreakdownDesc.getFeeDescription(),feeBreakdownDesc.getUuid())) { 
+			response.setMessage("error");
+			response.setDescription("Description duplicate not allowed!");
+			return response;
+
+		}else {
+
+			if(feeBreakdownDescDAO.updateFeeBreakdownDesc(feeBreakdownDesc)) {
+				response.setMessage("success");
+				response.setDescription("Info updated successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+
+			}
+
+		}
 
 
 
 
-	//term fee TODO
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param uuid
+	 * @return
+	 */
+	public Object deleteGoKeMoney(String accountId, String uuid) {
+
+		Response response = new Response();
+
+		if(feeBreakdownDescDAO.getFeeBreakdownDesc(accountId, uuid) == null) {
+
+			response.setMessage("error");
+			response.setDescription("Nothing to delete!");
+			return response;
+
+		}else {
+
+			if(feeBreakdownDescDAO.deleteFeeBreakdownDesc(accountId, uuid)) {
+				response.setMessage("success");
+				response.setDescription("Info deleted successfully.!"); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please!");
+				return response;
+
+			}
+		}
+	}
+
+
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -152,15 +409,115 @@ public class FinanceRestService {
 		}
 	}
 
-	public Object putTermFee() {
-		return null;
+	/**
+	 * 
+	 * @param termFee
+	 * @return
+	 */
+	public Object putTermFee(TermFee termFee) {
+
+		Response response = new Response();
+
+		if(FeeConstants.validTerm(termFee.getTerm())) {
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+
+		}else if(FeeConstants.validYear(termFee.getYear())) {
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+
+		}else if(FeeConstants.validFee(termFee.getBoaderAmount())) {
+			response.setMessage("error");
+			response.setDescription("Invalid BoaderAmount!");
+			return response;
+
+		}else if(FeeConstants.validFee(termFee.getDayAmount())) {
+			response.setMessage("error");
+			response.setDescription("Invalid DayAmount!");
+			return response;
+
+		}else if(termFeeDAO.getFee(termFee.getAccountId(), termFee.getTerm(), termFee.getYear()) != null) {
+			response.setMessage("error");
+			response.setDescription("Term fee already added!");
+			return response;
+
+		}else {
+
+			termFee.setUuid(new TermFee().getUuid()); 
+
+			if(termFeeDAO.putFee(termFee, termFee.getAccountId(), termFee.getTerm(), termFee.getYear())) {
+				response.setMessage("sucess");
+				response.setDescription("Term Fee added successfully."); 
+				return response;
+
+			}else { 
+				response.setMessage("error");
+				response.setDescription("Contact Admin please.");
+				return response;
+
+			}
+
+		}
+
+	}
+	/**
+	 * 
+	 * @param termFee
+	 * @return
+	 */
+	public Object updateTermFee(TermFee termFee) {
+
+		Response response = new Response();
+
+		if(FeeConstants.validTerm(termFee.getTerm())) {
+			response.setMessage("error");
+			response.setDescription("Invalid term!");
+			return response;
+
+		}else if(FeeConstants.validYear(termFee.getYear())) {
+			response.setMessage("error");
+			response.setDescription("Invalid year!");
+			return response;
+
+		}else if(FeeConstants.validFee(termFee.getBoaderAmount())) {
+			response.setMessage("error");
+			response.setDescription("Invalid BoaderAmount!");
+			return response;
+
+		}else if(FeeConstants.validFee(termFee.getDayAmount())) {
+			response.setMessage("error");
+			response.setDescription("Invalid DayAmount!");
+			return response;
+
+		}else if(termFeeDAO.getFee(termFee.getAccountId(), termFee.getTerm(), termFee.getYear()) == null) {
+			response.setMessage("error");
+			response.setDescription("Invalid term/year!");
+			return response;
+
+		}/*else if(termfeehasDuplicate(termFee.getAccountId(), termFee.getTerm(), termFee.getYear(), termFee.getUuid())) {
+			response.setMessage("error");
+			response.setDescription("Term-Year fee exist!");
+			return response;
+		}*/else {
+
+			if(termFeeDAO.updateFee(termFee)) {
+
+				response.setMessage("sucess");
+				response.setDescription("Term Fee updated successfully."); 
+				return response;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("Contact Admin please.");
+				return response;
+
+			}
+		}
+
 	}
 
-	public Object updateTermFee() {
-		return null;
-	}
-
-	//term other fee TODO
 	/**
 	 * 
 	 * @param accountId
@@ -189,7 +546,7 @@ public class FinanceRestService {
 	 * @return
 	 */
 	public Object putOtherFee(OtherFee otherFee) {
-		
+
 		Response response = new Response();
 
 		if(otherFee.getDescription().length() < 3) { 
@@ -223,11 +580,11 @@ public class FinanceRestService {
 			return response;
 
 		}else {
-			
+
 			otherFee.setUuid(new OtherFee().getUuid()); 
 
 			if(otherFeeDAO.putOtherFee(otherFee)) {
-				
+
 				response.setMessage("sucess");
 				response.setDescription("Fee added successfully."); 
 				return response;
@@ -248,7 +605,7 @@ public class FinanceRestService {
 	 * @return
 	 */
 	public Object updateOtherFee(OtherFee otherFee) {
-		
+
 		Response response = new Response();
 
 		if(otherFee.getDescription().length() < 3) {
@@ -291,8 +648,13 @@ public class FinanceRestService {
 			response.setDescription("No duplicates!");
 			return response;
 
+		}else if(otherFeeDAO.getOtherFee(otherFee.getAccountId(), otherFee.getUuid()) == null) {
+			response.setMessage("error");
+			response.setDescription("Fee not found!");
+			return response;
+
 		}else {
-			
+
 			if(otherFeeDAO.updateOtherFee(otherFee)) {
 				response.setMessage("sucess");
 				response.setDescription("Fee updated successfully."); 
@@ -314,14 +676,90 @@ public class FinanceRestService {
 	 * @return
 	 */
 	private boolean hasDuplicate(OtherFee otherFee) {
-		
-		if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 1) {
-			return false;
-		}else {
-			return true;
+
+		boolean hasduplicate = true;
+
+		if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 0) {
+			hasduplicate = false;
+
+		}else if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 1) {
+
+			String id = otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).getUuid();
+
+			if(StringUtils.equals(otherFee.getUuid(), id)) {
+				hasduplicate = false;
+
+			}else {
+				hasduplicate = true;
+			}
+
 		}
-		
+
+		return hasduplicate;
+
 	}
 
-	
+	/**
+	 * 
+	 * @param accountId
+	 * @param feeBreakdownId
+	 * @param query
+	 * @param uuid
+	 * @return
+	 */
+
+	private boolean gokehasDuplicate(String accountId, String feeBreakdownId, String query, String uuid) {
+		boolean hasduplicate = true;
+
+		if(feeBreakdownDescDAO.findDuplicate(accountId, feeBreakdownId, query).size() == 0) {
+			hasduplicate = false;
+
+		}else if(feeBreakdownDescDAO.findDuplicate(accountId, feeBreakdownId, query).size() == 1) {
+
+			String id = feeBreakdownDescDAO.getFeeBreakdownDesc(accountId, feeBreakdownId, query).getUuid(); 
+
+			if(StringUtils.equals(uuid, id)) {
+				hasduplicate = false;
+
+			}else {
+				hasduplicate = true;
+			}
+
+		}
+
+		return hasduplicate;
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param term
+	 * @param year
+	 * @param uuid
+	 * @return
+	 */
+	public boolean termfeehasDuplicate(String accountId, String term, String year, String uuid) {
+		boolean hasduplicate = true;
+
+		if(termFeeDAO.findDuplicate(accountId, term, year).size() == 0) {
+			hasduplicate = false;
+
+		}else if(termFeeDAO.findDuplicate(accountId, term, year).size() == 1) {
+
+			String id = termFeeDAO.getFee(accountId, term, year).getUuid(); 
+
+			if(StringUtils.equals(uuid, id)) {
+				hasduplicate = false;
+
+			}else {
+				hasduplicate = true;
+			}
+
+		}
+
+		return hasduplicate;
+	}
+
+
+
 }

@@ -180,7 +180,7 @@ public class GeneralRestFulAPI {
 
 	@ApiOperation(value = "Add new stream.", 
 			notes = "Stream basic details.", 
-			response = ApiStream.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -210,7 +210,7 @@ public class GeneralRestFulAPI {
 
 	@ApiOperation(value = "Update stream info.", 
 			notes = "Stream details.", 
-			response = ApiStream.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -239,7 +239,7 @@ public class GeneralRestFulAPI {
 	 */
 	@ApiOperation(value = "Delete a stream.", 
 			notes = "Stream id.", 
-			response = ApiStream.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -332,7 +332,7 @@ public class GeneralRestFulAPI {
 	
 	@ApiOperation(value = "ApiExam object to add.", 
 			notes = "Pass ApiExam object to be added.", 
-			response = ApiExam.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -364,7 +364,7 @@ public class GeneralRestFulAPI {
 
 	@ApiOperation(value = "ApiExam object to update.", 
 			notes = "Pass ApiExam object to be updated.", 
-			response = ApiExam.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -389,7 +389,7 @@ public class GeneralRestFulAPI {
 	
 	@ApiOperation(value = "Get stream list.", 
 			notes = "Stream details.", 
-			response = SmsExams.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
