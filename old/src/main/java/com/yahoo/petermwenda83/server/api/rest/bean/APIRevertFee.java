@@ -7,7 +7,7 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
  * @author peter
  *
  */
-public class RevertedFee {
+public class APIRevertFee {
 	
 	private String otherFeeId;
 	private String amount;
@@ -16,7 +16,7 @@ public class RevertedFee {
 	/**
 	 * 
 	 */
-	public RevertedFee() {
+	public APIRevertFee() {
 		otherFeeId = "";
 		amount = "";
 		dateReverted = "";

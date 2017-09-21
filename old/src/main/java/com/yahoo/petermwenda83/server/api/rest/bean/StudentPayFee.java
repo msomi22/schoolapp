@@ -15,6 +15,7 @@ public class StudentPayFee {
 	
 	private String accountId;
 	private String regNo;
+	private String studentId;
 	private String staffId;
 	private String paymentMode;
 	private String transactionId;
@@ -29,6 +30,7 @@ public class StudentPayFee {
 	public StudentPayFee() {
 		accountId = "";
 		regNo = "";
+		studentId = "";
 		staffId = "";
 		paymentMode = "";
 		transactionId = "";
@@ -53,6 +55,14 @@ public class StudentPayFee {
 
 	public void setRegNo(String regNo) {
 		this.regNo = regNo;
+	}
+
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getStaffId() {
@@ -115,9 +125,9 @@ public class StudentPayFee {
 	
 	@Override
 	public String toString() {
-		return "StudentPayFee [accountId=" + accountId + ", regNo=" + regNo + ", staffId=" + staffId + ", paymentMode="
-				+ paymentMode + ", transactionId=" + transactionId + ", amount=" + amount + ", term=" + term + ", year="
-				+ year  + ", feeBalance=" + feeBalance + "]";
+		return "StudentPayFee [accountId=" + accountId + ", regNo=" + regNo + ", studentId=" + studentId + ", staffId="
+				+ staffId + ", paymentMode=" + paymentMode + ", transactionId=" + transactionId + ", amount=" + amount
+				+ ", term=" + term + ", year=" + year + ", feeBalance=" + feeBalance + "]";
 	}
 	
 

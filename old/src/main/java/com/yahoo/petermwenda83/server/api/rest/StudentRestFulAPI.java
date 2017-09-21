@@ -28,8 +28,11 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIOtherFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIRevertGoKeFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
+import com.yahoo.petermwenda83.server.api.rest.bean.UpdateFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import io.swagger.annotations.Api;
@@ -155,7 +158,7 @@ public class StudentRestFulAPI{
 
 	@ApiOperation(value = "Pay student Fee.", 
 			notes = "Returns whether fee was paid successfully or not.", 
-			response = StudentPayFee.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
 	} )
@@ -177,6 +180,30 @@ public class StudentRestFulAPI{
 	}
 	
 	
+	@ApiOperation(value = "Update Student Fee Info.", 
+			notes = "Returns whether Fee was updated successfully.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("/fee/{accountId}")  
+	public Object updateStudentFee(@PathParam("accountId") String accountId, 
+			UpdateFee updateFeeObj, @HeaderParam("authorization") String auth) {
+
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.updateFeeInfo(updateFeeObj);
+	}
+	
+	
 	/**
 	 * 
 	 * @param accountId
@@ -188,9 +215,9 @@ public class StudentRestFulAPI{
 
 	@ApiOperation(value = "Pay GoKe student Fee.", 
 			notes = "Returns whether GoKe fee was paid successfully or not.", 
-			response = GoKeMoney.class)
+			response = Response.class)
 
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId found.") 
 	} )
 	@POST
 	@Path("/gokefee/{accountId}")  
@@ -204,8 +231,101 @@ public class StudentRestFulAPI{
 			return response; 
 		}
 
-		return studentService.addGoKeMoney(goKeMoney);
+		return studentService.asignStudentGoKeMoney(goKeMoney);
 	}
+	
+	
+	@ApiOperation(value = "Revert GoKe Fee.", 
+			notes = "Returns whether GoKe Fee was Reverted.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId or regNo not found.") 
+	} )
+	@PUT
+	@Path("/gokefee/revert/{accountId}")   
+	public Object revertGoKeFee(@PathParam("accountId") String accountId, APIRevertGoKeFee revertGoKeFee,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.revertGoKeMoney(revertGoKeFee);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param apiOtherFee
+	 * @param auth
+	 * @return
+	 */
+	
+	@ApiOperation(value = "Assign Other Fee to a student.", 
+			notes = "Returns whether Other Fee was assigned.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("/other/fee/{accountId}")   
+	public Object assignOtherFee(@PathParam("accountId") String accountId, APIOtherFee apiOtherFee,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.assignOtherFee(apiOtherFee);
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param revertGoKeFee
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Revert Student Other Fee.", 
+			notes = "Returns whether Student Other Fee was Reverted.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("/other/fee/revert/{accountId}")    
+	public Object revertOtherFee(@PathParam("accountId") String accountId, APIOtherFee apiOtherFee,
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.revertOtheFee(apiOtherFee);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 
@@ -249,7 +369,7 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Register a new student.", 
 			notes = "Student basic info object.", 
-			response = StudentInfo.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -281,7 +401,7 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Update student details.", 
 			notes = "Student basic info object.", 
-			response = StudentInfo.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -335,7 +455,7 @@ public class StudentRestFulAPI{
 	
 	@ApiOperation(value = "Assign a subject to a student.", 
 			notes = "Student subject info object.", 
-			response = ApiSubject.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
 	} )
@@ -398,7 +518,7 @@ public class StudentRestFulAPI{
 	 */
 	@ApiOperation(value = "Delete subject that has been assigned to a student.", 
 			notes = "Student_subject_id.", 
-			response = ApiSubject.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
 	} )
@@ -429,7 +549,7 @@ public class StudentRestFulAPI{
 	 */
 	@ApiOperation(value = "change student status i.e activate/inactivate etc.", 
 			notes = "other student status include isboarding and isalumni .", 
-			response = StudentStatus.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "action/account not found.") 
 	} )
@@ -461,7 +581,7 @@ public class StudentRestFulAPI{
 	 */
 	@ApiOperation(value = "change student class .", 
 			notes = "pass student-change class object ", 
-			response = ChangeClass.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "account not found.") 
 	} )

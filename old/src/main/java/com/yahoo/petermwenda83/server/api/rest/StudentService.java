@@ -43,6 +43,7 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIOtherFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIParentPrimary;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudentFee;
@@ -52,12 +53,14 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
-import com.yahoo.petermwenda83.server.api.rest.bean.RevertedFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIRevertGoKeFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.APIRevertFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
+import com.yahoo.petermwenda83.server.api.rest.bean.UpdateFee;
 import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 
@@ -263,18 +266,25 @@ public class StudentService {
 			response.setDescription("Student RegNo is invalid!");
 			return response;
 
-		}else if(!StringUtils.isNumeric(studentPayFee.getAmount())) {
+		}else if(studentDAO.getStudentById(studentPayFee.getAccountId(), studentPayFee.getStudentId()) == null) { 
+
+			response.setMessage("error");
+			response.setDescription("Student StudentId is invalid!");
+			return response;
+
+		}else if(!StringUtils.equals(studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo()).getUuid(), 
+				studentDAO.getStudentById(studentPayFee.getAccountId(), studentPayFee.getStudentId()).getUuid())) {  
+
+			response.setMessage("error");
+			response.setDescription("Student RegNo-Id mismatch!"); 
+			return response;
+
+		}else if(!FeeConstants.validFee(Integer.valueOf(studentPayFee.getAmount()))) { 
 
 			response.setMessage("error");
 			response.setDescription("Amount is invalid!");
 			return response;
 
-
-		}else if(Integer.valueOf(studentPayFee.getAmount()) < 1 || Integer.valueOf(studentPayFee.getAmount()) > 100000) {
-
-			response.setMessage("error");
-			response.setDescription("Amount is invalid!");
-			return response;
 
 		}else {
 
@@ -306,13 +316,156 @@ public class StudentService {
 
 		return response;
 	}
+	
+	//TODO
+	/**
+	 * 
+	 * @param updateFeeObj
+	 * @return
+	 */
+	public Object updateFeeInfo(UpdateFee updateFeeObj) {
+		
+		Response response = new Response();
+		
+		if(studentFeeDAO.getStudentFee(updateFeeObj.getAccountId(), updateFeeObj.getStudentId(), updateFeeObj.getPaymentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Payment record not found!"); 
+			return response;
+			
+		}else {
+			
+			StudentFee studentFee = studentFeeDAO.getStudentFee(updateFeeObj.getAccountId(), updateFeeObj.getStudentId(), updateFeeObj.getPaymentId());
+			
+			if(studentFee.getAmountPaid() != updateFeeObj.getPreviousAmount()) {
+				response.setMessage("error");
+				response.setDescription("Previous amount incorrect!");  
+				return response;
+				
+			}else if(!FeeConstants.validFee(updateFeeObj.getCorrectAmount())) {  
+				response.setMessage("error");
+				response.setDescription("Amount is invalid!");
+				return response;
+				
+			}else {
+				
+				studentFee.setAmountPaid(updateFeeObj.getCorrectAmount()); 
+				
+				if(studentFeeDAO.updateStudentFee(studentFee)) {
+					response.setMessage("success");
+					response.setDescription("Amount updated sucessfully!");
+					return response;
+					
+				}else {
+					response.setMessage("error");
+					response.setDescription("Something went wrong, conatct Admin.");
+					return response;
+					
+				}
+				
+			}
+			
+			
+		}
+		
+	}
+	/**
+	 * 
+	 * @param apiOtherFee
+	 * @return
+	 */
+	public Object assignOtherFee(APIOtherFee apiOtherFee) {
+		
+		Response response = new Response();
+		
+		if(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getOtherFeeId(), apiOtherFee.getOtherFeeId()) != null) {
+			response.setMessage("error");
+			response.setDescription("Amount already assigned!"); 
+			return response;
+			
+		}else {
+			
+			StudentOtherFee studentOtherFee = new StudentOtherFee();
+			studentOtherFee.setAccountId(apiOtherFee.getAccountId());
+			studentOtherFee.setStudentId(apiOtherFee.getStudentId());
+			studentOtherFee.setOtherFeeId(apiOtherFee.getOtherFeeId());
+			studentOtherFee.setTerm(apiOtherFee.getTerm());
+			
+			if(studentOtherFeeDAO.putStudentOtherFee(studentOtherFee)) {
+				response.setMessage("success");
+				response.setDescription("Amount assigned sucessfully!");
+				return response;
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later.");
+				return response;
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @param otherFeeId
+	 * @return
+	 */
+	public Object revertOtheFee(APIOtherFee apiOtherFee) {
+		
+		Response response = new Response();
+		
+		if(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Nothing to delete!");
+			return response;
+			
+		}else {
+			
+			if(studentOtherFeeDAO.revertStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId())) {
+				
+				RevertedMoney revertedMoney = new RevertedMoney();
+				revertedMoney.setAccountId(apiOtherFee.getAccountId()); 
+				revertedMoney.setStudentId( apiOtherFee.getStudentId());
+				revertedMoney.setOtherFeeId(apiOtherFee.getOtherFeeId());
+				
+				if(revertedMoneyDAO.putRevertedMoney(revertedMoney)) {
+					response.setMessage("success");
+					response.setDescription("Fee reverted sucessfully!");
+					return response;
+					
+				}else {
+					
+					studentOtherFeeDAO.putStudentOtherFee(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId()));
+					
+					response.setMessage("error");
+					response.setDescription("Something went wrong, try again later.");
+					return response;
+					
+					
+					
+				}
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later.");
+				return response;
+				
+			}
+			
+		}
+	}
+	
+	
 
 	/**
 	 * 
 	 * @param goKeMoney
 	 * @return
 	 */
-	public Object addGoKeMoney(GoKeMoney goKeMoney) {
+	public Object asignStudentGoKeMoney(GoKeMoney goKeMoney) {
 
 		Response response = new Response();
 
@@ -377,6 +530,50 @@ public class StudentService {
 
 	}
 
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @return
+	 */
+	public Object revertGoKeMoney(APIRevertGoKeFee revertGoKeFee) {
+		
+		Response response = new Response();
+		
+		if(sysConfigDAO.getSysConfig(revertGoKeFee.getAccountId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Term-Year not set!"); 
+			return response;
+		}
+		
+		SysConfig sysConfig = sysConfigDAO.getSysConfig(revertGoKeFee.getAccountId()); 
+		
+		if(studentFeeDAO.getStudentFee(revertGoKeFee.getAccountId(), revertGoKeFee.getStudentId(), FeeConstants.GVMT_MONEY_CODE,
+				sysConfig.getTerm(), sysConfig.getYear()) == null) {
+			
+			response.setMessage("error");
+			response.setDescription("Nothing to delete!");
+			return response;
+			
+		}else {
+			
+			if(studentFeeDAO.revertStudentGokeFee(revertGoKeFee.getAccountId(), revertGoKeFee.getStudentId(), 
+					   revertGoKeFee.getTermPiad(), revertGoKeFee.getYearPaid(), FeeConstants.GVMT_MONEY_CODE)){
+				response.setMessage("success");
+				response.setDescription("GoKe Money reverted successfully.");
+				return response;
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Please contact Admin!");
+				return response;
+				
+			}
+			
+		}
+	
+	}
 
 
 
@@ -451,7 +648,7 @@ public class StudentService {
 			studentFeeAPI.setFeeHistory(apiStudentFeeList);
 
 			List<APIStudentOtherFee> otherfeeHistory = new ArrayList<>();
-			List<RevertedFee> revertedFeeList  = new ArrayList<>();
+			List<APIRevertFee> revertedFeeList  = new ArrayList<>();
 
 			if(studentOtherFeeDAO.getStudentOtherFeeList(accountId, student.getUuid()) != null) {
 
@@ -481,7 +678,7 @@ public class StudentService {
 
 				List<RevertedMoney> revertedMoneyList = revertedMoneyDAO.getRevertedMoneyList(accountId, student.getUuid());
 
-				RevertedFee revertedFee = new RevertedFee();
+				APIRevertFee revertedFee = new APIRevertFee();
 
 				for(RevertedMoney revertedMoney : revertedMoneyList) {
 
