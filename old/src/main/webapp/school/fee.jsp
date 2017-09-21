@@ -66,34 +66,33 @@
 						<input type="hidden" name="accountId" id="accountId"
 							value="<%=accountId%>"> <input type="hidden" name="year"
 							id="year" value="<%=currentYear%>"> <input type="hidden"
-							name="term" id="term" value="<%=currentTerm%>">
-							
-							
-							<input type="hidden" name="studentId" id="studentId"
-							value="">
+							name="term" id="term" value="<%=currentTerm%>"> <input
+							type="hidden" name="studentId" id="studentId" value="">
 
 
 						<div class="row ">
 
 							<div class="col-md-4 ">
-								<button class="btn btn-info pull-left cards" id="genReceipt" onclick="generateReceipt()" disabled>Generate
-									Receipt</button>
+								<button class="btn btn-info pull-left cards" id="genReceipt"
+									onclick="generateReceipt()" disabled>Generate Receipt</button>
 							</div>
 
 							<div class="col-md-4">
 
-								<div id="regNoInfo" class="alert alert-info">
-									<h5 id="regNoInfoSms">Enter a student's registration
-										number to view school fees details.</h5>
+								<div class="row">
+
+									<div id="regNoInfo" class="col-md-7 col-md-offset-3 alert alert-info">
+										<h5 id="regNoInfoSms">Enter a student's registration
+											number to view school fees details.</h5>
+									</div>
+
+
+									<div id="regNoError" style="display: none" class="col-md-7 col-md-offset-3 alert">
+										<h5 id="regNoErrorSms">Enter a student's registration
+											number to view school fees details.</h5>
+									</div>
+
 								</div>
-
-
-								<div id="regNoError" style="display: none" class="alert">
-									<h5 id="regNoErrorSms">Enter a student's registration
-										number to view school fees details.</h5>
-								</div>
-
-
 
 
 
@@ -103,18 +102,18 @@
 
 									<div class="form-group has-feedback">
 										<div class="row">
-										<div class="col-md-2">
-											<label for="regno" >Reg N0_:</label>
+											<div class="col-md-1">
+												<label for="regno">Reg N0_:</label>
 											</div>
-											<div class="col-md-10"> <input type="text"
-												id="regno" name="regno"
-												class="form-control formelement cards"
-												placeholder="Enter Reg number" pattern="[0-9]{3,4}"
-												maxlength="4" onkeyup="delayInput()"
-												title="Registration number, should contain numerics only and should be 4 numbers only"
-												required> <span
-												class="glyphicon glyphicon-search form-control-feedback"></span>
-												</div>
+											<div class="col-md-11">
+												<input type="text" id="regno" name="regno"
+													class="form-control formelement cards"
+													placeholder="Enter Reg number" pattern="[0-9]{3,4}"
+													maxlength="4" onkeyup="delayInput()"
+													title="Registration number, should contain numerics only and should be 4 numbers only"
+													required> <span
+													class="glyphicon glyphicon-search form-control-feedback"></span>
+											</div>
 										</div>
 									</div>
 								</form>
@@ -126,7 +125,8 @@
 
 							<div class="col-md-4">
 
-								<button class="btn btn-primary pull-right cards" onclick="initPayment()">
+								<button class="btn btn-primary pull-right cards"
+									onclick="initPayment()">
 									Make fee payment <i class="fa fa-plus-circle"></i>
 								</button>
 
