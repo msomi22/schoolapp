@@ -92,7 +92,7 @@ public class StaffRestFulAPI {
 
 	@ApiOperation(value = "Register a new staff.", 
 			notes = "Returns whether staff was Registred successfully or not.", 
-			response = APIStaff.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
 	} )
@@ -133,7 +133,7 @@ public class StaffRestFulAPI {
 
 	@ApiOperation(value = "Update a staff.", 
 			notes = "Returns whether staff was updated successfully or not.", 
-			response = APIStaff.class)
+			response = ApiResponse.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
 	} )
