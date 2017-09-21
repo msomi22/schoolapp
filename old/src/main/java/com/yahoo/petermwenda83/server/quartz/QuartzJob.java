@@ -3,39 +3,24 @@ package com.yahoo.petermwenda83.server.quartz;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.yahoo.petermwenda83.bean.account.ApiCredential;
-import com.yahoo.petermwenda83.bean.account.OutGoingSMS;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
-import com.yahoo.petermwenda83.bean.smsapi.AfricasTalking;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
-import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
-import com.yahoo.petermwenda83.persistence.schoolaccount.SmsSendDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 
 
 public class QuartzJob implements Job{
-
-	private static SmsSendDAO smsSendDAO;
-	private static ApiCredentialDAO smsApiDAO;
 
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
@@ -44,16 +29,8 @@ public class QuartzJob implements Job{
 
 	private static SysConfigDAO sysConfigDAO;
 	
-	/**
-	 * s is the class that implements HTTPServlet.You can also use this.getServletContext() if its your servlet class. 
-	 */
 	
-	
-
 	static {
-		smsSendDAO = SmsSendDAO.getInstance();
-		smsApiDAO = ApiCredentialDAO.getInstance();
-
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
@@ -112,38 +89,58 @@ public class QuartzJob implements Job{
 									sysConfig.getTerm(),
 									sysConfig.getYear(), 
 									FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){ 
+								
+								FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+										sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
 
-								String feeBreakdownId = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
-										sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE).getUuid();
+								int amountToEachStudent = (int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdown.getUuid());
+								
+								double totalAmount = feeBreakdown.getAmount();
+								int no_of_students = studentDAO.activeCount(account.getUuid(), "1"); 
+								double expected_amount_per_head = 0;
+								
+								if(no_of_students > 0 && totalAmount > 0) {
+									expected_amount_per_head = totalAmount / no_of_students;
+								}
+								
+								if(amountToEachStudent > expected_amount_per_head) {
+									//error
+									
+								}else {
+									//good
+									
+									
+									StudentFee studentFee = new StudentFee(); 
+									studentFee.setAccountId(account.getUuid());
+									studentFee.setStudentId(student.getUuid());
+									studentFee.setAmountPaid(amountToEachStudent);   
+									studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
+									studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
+									studentFee.setPaidHas(student.getIsBoarding()); 
+									studentFee.setTermPiad(sysConfig.getTerm());
+									studentFee.setYearPaid(sysConfig.getYear());
 
-								StudentFee studentFee = new StudentFee(); 
-								studentFee.setAccountId(account.getUuid());
-								studentFee.setStudentId(student.getUuid());
-								studentFee.setAmountPaid((int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdownId));   
-								studentFee.setPayMode(FeeConstants.GVMT_MONEY_CODE);
-								studentFee.setTransactionId(FeeConstants.GVMT_MONEY_CODE+RandomStringUtils.randomAlphabetic(5)); 
-								studentFee.setPaidHas(student.getIsBoarding()); 
-								studentFee.setTermPiad(sysConfig.getTerm());
-								studentFee.setYearPaid(sysConfig.getYear());
+									if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
+											sysConfig.getTerm(), sysConfig.getYear()) == null) {
 
-								if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
-										sysConfig.getTerm(), sysConfig.getYear()) == null) {
+										if(studentFeeDAO.putStudentFee(studentFee)) {
+											//log success
+											//System.out.println("GoKe money add success"); 
 
-									if(studentFeeDAO.putStudentFee(studentFee)) {
-										//log success
-										//System.out.println("GoKe money add success"); 
+										}else {
+											//log error, contact Admin_ 
+											//System.out.println("error, contact Admin"); 
+
+										}
 
 									}else {
-										//log error, contact Admin_ 
-										//System.out.println("error, contact Admin"); 
-
+										//log error, student has already been assigned GoKe money 
+										//System.out.println("error, student has already been assigned GoKe money"); 
 									}
-
-								}else {
-									//log error, student has already been assigned GoKe money 
-									//System.out.println("error, student has already been assigned GoKe money"); 
+									
 								}
-
+								
+								
 							}else {
 								//log error, GoKe money not set
 								//System.out.println("error, GoKe money not set"); 
