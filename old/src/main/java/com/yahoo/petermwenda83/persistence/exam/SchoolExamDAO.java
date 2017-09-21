@@ -15,14 +15,14 @@ public interface SchoolExamDAO {
 	
 	public Exam getExam(String accountId,String uuid);
 	
-	public Exam getExamByCode(String accountId,String code);
+	public Exam getExamByQuey(String accountId,String query);
 	
-	public Exam getExamByDesc(String accountId,String description);
-
 	public boolean putExam(Exam exam);
 	
 	public boolean updateExam(Exam exam);
 	
 	public List<Exam> getExamList(String accountId);
+	
+	public List<Exam> findDuplicate(String accountId, String query);
 
 }

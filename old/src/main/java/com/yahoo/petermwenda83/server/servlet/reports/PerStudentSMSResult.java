@@ -119,7 +119,7 @@ public class PerStudentSMSResult {
 		}
 		
 		for(SmsExams exam : exams) {
-			if(examDAO.getExamByCode(accountId, exam.getExamCode()) == null) {
+			if(examDAO.getExamByQuey(accountId, exam.getExamCode()) == null) {
 				valid = false;
 			}else {
 				valid = true;
@@ -154,7 +154,7 @@ public class PerStudentSMSResult {
 			
 			examIds = new String[1];
 			SmsExams code = exams.get(0);
-			Exam exam = examDAO.getExamByCode(accountId, code.getExamCode());
+			Exam exam = examDAO.getExamByQuey(accountId, code.getExamCode());
 			examIds[0] = exam.getUuid();  
 
 			return generalService.sendExamResultSMS(accountId, studentId, examIds, subjectsNo, examType);
@@ -166,8 +166,8 @@ public class PerStudentSMSResult {
 			SmsExams code1 = exams.get(0);
 			SmsExams code2 = exams.get(1);
 			
-			Exam exam1 = examDAO.getExamByCode(accountId, code1.getExamCode());
-			Exam exam2 = examDAO.getExamByCode(accountId, code2.getExamCode());
+			Exam exam1 = examDAO.getExamByQuey(accountId, code1.getExamCode());
+			Exam exam2 = examDAO.getExamByQuey(accountId, code2.getExamCode());
 			
 			examIds[0] = exam1.getUuid();
 			examIds[1] = exam2.getUuid();
@@ -182,9 +182,9 @@ public class PerStudentSMSResult {
 			SmsExams code2 = exams.get(1);
 			SmsExams code3 = exams.get(2); 
 			
-			Exam exam1 = examDAO.getExamByCode(accountId, code1.getExamCode());
-			Exam exam2 = examDAO.getExamByCode(accountId, code2.getExamCode());
-			Exam exam3 = examDAO.getExamByCode(accountId, code3.getExamCode());
+			Exam exam1 = examDAO.getExamByQuey(accountId, code1.getExamCode());
+			Exam exam2 = examDAO.getExamByQuey(accountId, code2.getExamCode());
+			Exam exam3 = examDAO.getExamByQuey(accountId, code3.getExamCode());
 			
 			examIds[0] = exam1.getUuid();
 			examIds[1] = exam2.getUuid();

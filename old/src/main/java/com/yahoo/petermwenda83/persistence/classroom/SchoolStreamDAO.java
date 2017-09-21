@@ -26,6 +26,13 @@ public interface SchoolStreamDAO {
 	 * @return
 	 */
 	public Stream getStreamByDesc(String accountId, String description);
+	/**
+	 * 
+	 * @param accountId
+	 * @param description
+	 * @return
+	 */
+	public List<Stream> findDuplicate(String accountId, String description);
 	
 	  /**
 	   * 

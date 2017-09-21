@@ -36,6 +36,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.servlet.reports.PerStudentSMSResult;
 import com.yahoo.petermwenda83.server.servlet.reports.Performance2;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
@@ -303,8 +304,13 @@ public class GeneralService {
 			apiResponse.setDescription("Invalid Class!");
 			return apiResponse;
 			
+		}else if(streamHasDuplicate(apiStream)){
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("No duplicate description!");
+			return apiResponse;
+			
 		}else {
-
+			
 			Stream stream = streamDAO.getStream(apiStream.getAccountId(), apiStream.getUuid());
 			stream.setClassRoomId(apiStream.getClassRoomId());
 			String classroom = classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()).getDescription();
@@ -422,27 +428,27 @@ public class GeneralService {
 	 */
 	public Object newExam(ApiExam apiExam) {
 
-		ApiResponse apiResponse = new ApiResponse();
+		Response response = new Response();
 
-		if(StringUtils.isBlank(apiExam.getCode())) {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam code!");
+		if(apiExam.getCode().length() < 2) {
+			response.setMessage("error");
+			response.setDescription("Invalid exam code!");
 
-		}else if(StringUtils.isBlank(apiExam.getDescription())) {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam description!");
+		}else if(apiExam.getDescription().length() < 4) {
+			response.setMessage("error");
+			response.setDescription("Invalid exam description!");
 
 		}else if(StringUtils.isBlank(String.valueOf(apiExam.getOutOf()))) { 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
 
 		}else if(!StringUtils.isNumeric(String.valueOf(apiExam.getOutOf()))) {   
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
 
 		}else if(apiExam.getOutOf() < 10 || apiExam.getOutOf() > 100) {   
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
 		}else {
 
 			Exam exam = new Exam();
@@ -452,18 +458,18 @@ public class GeneralService {
 			exam.setOutOf(apiExam.getOutOf()); 
 
 			if(examDAO.putExam(exam)) {
-				apiResponse.setMessage("success");
-				apiResponse.setDescription("Exam added successfully."); 
+				response.setMessage("success");
+				response.setDescription("Exam added successfully."); 
 
 			}else {
-				apiResponse.setMessage("error");
-				apiResponse.setDescription("Something went wrong!");
+				response.setMessage("error");
+				response.setDescription("Something went wrong!");
 
 			}
 
 
 		}
-		return apiResponse;
+		return response;
 	}
 
 	/**
@@ -472,27 +478,40 @@ public class GeneralService {
 	 * @return
 	 */
 	public Object updateExam(ApiExam apiExam) {
-		ApiResponse apiResponse = new ApiResponse();
+		Response response = new Response();
 
-		if(StringUtils.isBlank(apiExam.getCode())) {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam code!");
+		if(apiExam.getCode().length() < 2) {
+			response.setMessage("error");
+			response.setDescription("Invalid exam code!");
 
-		}else if(StringUtils.isBlank(apiExam.getDescription())) {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam description!");
+		}else if(apiExam.getDescription().length() < 4) {
+			response.setMessage("error");
+			response.setDescription("Invalid exam description!");
 
 		}else if(StringUtils.isBlank(String.valueOf(apiExam.getOutOf()))) { 
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
 
 		}else if(!StringUtils.isNumeric(String.valueOf(apiExam.getOutOf()))) {   
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
-
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
+		
 		}else if(apiExam.getOutOf() < 10 || apiExam.getOutOf() > 100) {   
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam ouOf!");
+			response.setMessage("error");
+			response.setDescription("Invalid exam ouOf!");
+			
+		}else if(examHasDuplicate(apiExam.getAccountId(), apiExam.getCode(), apiExam.getUuid())) {   
+			response.setMessage("error");
+			response.setDescription("Duplicate Code not allowed!");
+			
+		}else if(examHasDuplicate(apiExam.getAccountId(), apiExam.getDescription(), apiExam.getUuid())) {   
+			response.setMessage("error");
+			response.setDescription("Duplicate Description not allowed!");
+			
+		}else if(examDAO.getExam(apiExam.getAccountId(), apiExam.getUuid()) == null) {   
+			response.setMessage("error");
+			response.setDescription("Exam not found!");
+			
 		}else {
 
 			Exam exam = examDAO.getExam(apiExam.getAccountId(), apiExam.getUuid()); 
@@ -502,17 +521,17 @@ public class GeneralService {
 			exam.setOutOf(apiExam.getOutOf()); 
 
 			if(examDAO.updateExam(exam)) {
-				apiResponse.setMessage("success");
-				apiResponse.setDescription("Exam updated successfully."); 
+				response.setMessage("success");
+				response.setDescription("Exam updated successfully."); 
 
 			}else {
-				apiResponse.setMessage("error");
-				apiResponse.setDescription("Something went wrong!");
+				response.setMessage("error");
+				response.setDescription("Something went wrong!");
 
 			}
 
 		}
-		return apiResponse;
+		return response;
 	}
 
 	/**
@@ -913,25 +932,6 @@ public class GeneralService {
 
 
 	
-	
-	
-	
-	
-	
-	
-	//TDOD fee and other fee
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
 
 	/**
 	 * 
@@ -986,6 +986,75 @@ public class GeneralService {
 		}else {
 		return false;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param description
+	 * @param streamId
+	 * @return
+	 */
+	private boolean streamHasDuplicate(ApiStream apiStream) {
+		
+		boolean hasduplicate = true;
+		
+		String classroom = classDAO.getClassRoom(apiStream.getAccountId(), apiStream.getClassRoomId()).getDescription();
+		String stream = classroom + " " + apiStream.getDescription();
+		
+		if(streamDAO.findDuplicate(apiStream.getAccountId(), stream).size() == 0) {
+			hasduplicate = false;
+			
+		}else if(streamDAO.findDuplicate(apiStream.getAccountId(), stream).size() == 1) {
+			
+			String id = streamDAO.getStreamByDesc(apiStream.getAccountId(), stream).getUuid();
+			
+			if(StringUtils.equals(apiStream.getUuid(), id)) {
+				hasduplicate = false;
+				
+			}else {
+				hasduplicate = true;
+			}
+			
+		}
+		
+		return hasduplicate;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param query
+	 * @param examId
+	 * @return
+	 */
+	private boolean examHasDuplicate(String accountId, String query, String examId) {
+		
+		boolean hasduplicate = true;
+		
+		if(examDAO.findDuplicate(accountId, query) == null) {
+			hasduplicate = false;
+			
+		}else if(examDAO.findDuplicate(accountId, query).size() == 0) {
+			hasduplicate = false;
+			
+		}else if(examDAO.findDuplicate(accountId, query).size() == 1) {
+			
+			
+			String id = examDAO.getExamByQuey(accountId, query).getUuid(); 
+			
+			if(StringUtils.equals(examId, id)) {
+				hasduplicate = false;
+				
+			}else {
+				hasduplicate = true;
+			}
+			
+		}
+		
+		return hasduplicate;
 	}
 
 

@@ -318,9 +318,6 @@ public class FinanceRestService {
 	private boolean hasDuplicate(OtherFee otherFee) {
 		
 		boolean hasduplicate = true;
-		//if true , has duplicate
-		
-		System.out.println(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size()); 
 		
 		if(otherFeeDAO.findDuplicate(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()).size() == 0) {
 			hasduplicate = false;

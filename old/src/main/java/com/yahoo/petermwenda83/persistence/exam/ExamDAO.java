@@ -84,17 +84,18 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExamByName(java.lang.String)
 	 */
 	@Override
-	public Exam getExamByCode(String accountId,String code) {
+	public Exam getExamByQuey(String accountId, String query) {
 		Exam exam = null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Exam"
-						+ " WHERE accountId =? AND code = ?;");       
+						+ " WHERE accountId =? AND (code = ? OR description =?) ;");       
 				){
 
 			pstmt.setString(1, accountId); 
-			pstmt.setString(2, code); 
+			pstmt.setString(2, query); 
+			pstmt.setString(3, query); 
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -102,38 +103,7 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting Exam with code " + code);
-			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e)); 
-
-		}
-
-		return exam; 
-	}
-	
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#getExamByName(java.lang.String)
-	 */
-	@Override
-	public Exam getExamByDesc(String accountId,String description) {
-		Exam exam = null;
-		ResultSet rset = null;
-		try(
-				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Exam"
-						+ " WHERE accountId =? AND description = ?;");       
-				){
-
-			pstmt.setString(1, accountId); 
-			pstmt.setString(2, description); 
-			rset = pstmt.executeQuery();
-			while(rset.next()){
-
-				exam  = beanProcessor.toBean(rset,Exam.class);
-			}
-
-		}catch(SQLException e){
-			logger.error("SQL Exception when getting Exam with description " + description);
+			logger.error("SQL Exception when getting Exam with accountId " + accountId + " query " + query);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e)); 
 
@@ -221,6 +191,33 @@ public class ExamDAO extends GenericDAO implements SchoolExamDAO {
 
 	  } catch(SQLException e){
 	  	 logger.error("SQL Exception when getting Exam List for accountId " + accountId);
+	     logger.error(ExceptionUtils.getStackTrace(e));
+	     System.out.println(ExceptionUtils.getStackTrace(e)); 
+	  }
+		return list;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamDAO#findDuplicate(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Exam> findDuplicate(String accountId, String query) {
+		 List<Exam> list = null;
+		 try(   
+	  		Connection conn = dbutils.getConnection();
+	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Exam WHERE accountId = ? AND (code = ? OR description =?);");   
+			) {
+			 pstmt.setString(1,accountId);
+			 pstmt.setString(2,query);
+			 pstmt.setString(3,query);
+			 
+			 try(ResultSet rset = pstmt.executeQuery();){
+				 list = beanProcessor.toBeanList(rset, Exam.class);
+			}
+	        
+
+	  } catch(SQLException e){
+	  	 logger.error("SQL Exception when getting Exam List for accountId " + accountId + " and query " + query);
 	     logger.error(ExceptionUtils.getStackTrace(e));
 	     System.out.println(ExceptionUtils.getStackTrace(e)); 
 	  }
