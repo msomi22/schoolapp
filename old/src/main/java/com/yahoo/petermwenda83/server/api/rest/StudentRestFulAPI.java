@@ -273,7 +273,7 @@ public class StudentRestFulAPI{
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
-	@PUT
+	@POST
 	@Path("/other/fee/{accountId}")   
 	public Object assignOtherFee(@PathParam("accountId") String accountId, APIOtherFee apiOtherFee,
 			@HeaderParam("authorization") String auth) {
