@@ -71,25 +71,25 @@ public class FinanceRestService {
 		
 		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) != null) { 
 			response.setMessage("error");
-			response.setDescription("GoKe Fee not already added!");
+			response.setDescription("GoKe Fee already added!");
 			return response;
 			
-		}else if(FeeConstants.validTerm(feeBreakdown.getTerm())){
+		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
 			
-		}else if(FeeConstants.validYear(feeBreakdown.getYear())){
+		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
 			
-		}else if(FeeConstants.validFee(feeBreakdown.getAmount())){
+		}else if(!FeeConstants.validFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
 			
-		}else if(FeeConstants.validStatus(feeBreakdown.getStatus())){
+		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
 			response.setMessage("error");
 			response.setDescription("Invalid status!");
 			return response;
@@ -126,22 +126,22 @@ public class FinanceRestService {
 			response.setDescription("GoKe Fee not found!");
 			return response;
 			
-		}else if(FeeConstants.validTerm(feeBreakdown.getTerm())){
+		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
 			
-		}else if(FeeConstants.validYear(feeBreakdown.getYear())){
+		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
 			
-		}else if(FeeConstants.validFee(feeBreakdown.getAmount())){
+		}else if(!FeeConstants.validFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
 			
-		}else if(FeeConstants.validStatus(feeBreakdown.getStatus())){
+		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
 			response.setMessage("error");
 			response.setDescription("Invalid status!");
 			return response;

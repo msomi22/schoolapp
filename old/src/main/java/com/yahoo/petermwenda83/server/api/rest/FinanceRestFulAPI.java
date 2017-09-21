@@ -67,7 +67,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Add new Fee Breakdown.", 
 			notes = "Returns whether Breakdown was added.", 
-			response = FeeBreakdown.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -89,7 +89,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Update Fee Breakdown.", 
 			notes = "Returns whether Breakdown was updated.", 
-			response = FeeBreakdown.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -128,7 +128,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Get Government money distribution List.", 
 			notes = "Returns List of money distributions based on the govenment policy.", 
-			response = FeeBreakdown.class)
+			response = FeeBreakdownDesc.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -156,7 +156,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Add new Government money distribution property.", 
 			notes = "Returns whether Government money distribution property was added.", 
-			response = FeeBreakdown.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -184,7 +184,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Update Government money distribution property.", 
 			notes = "Returns whether Government money distribution property was updated.", 
-			response = FeeBreakdown.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -212,7 +212,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Delete Government money distribution property.", 
 			notes = "Returns whether Government money distribution property was deleted.", 
-			response = FeeBreakdown.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
@@ -314,7 +314,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Add Term Fee .", 
 			notes = "Returns whether term fee was added.", 
-			response = TermFee.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
 	} )
@@ -343,7 +343,7 @@ public class FinanceRestFulAPI {
 	 */
 	@ApiOperation(value = "Update Term Fee .", 
 			notes = "Returns whether term fee was updated.", 
-			response = TermFee.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
 	} )
@@ -424,7 +424,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Add new Other Term Fee.", 
 			notes = "Returns whether Fee was added.", 
-			response = OtherFee.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
 	} )
@@ -454,7 +454,7 @@ public class FinanceRestFulAPI {
 	
 	@ApiOperation(value = "Update Other Term Fee.", 
 			notes = "Returns whether Fee was updated.", 
-			response = OtherFee.class)
+			response = Response.class)
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
 	} )
