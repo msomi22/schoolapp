@@ -18,20 +18,72 @@ $(document).ready(
 				global_url = preserveUrl;
 			});
 
-		})
+		});
 
 function initPayment() {
 
 	$('#feePayment').modal("show");
 }
 
+function checkFormValidation(form) {
+
+	var myform = $(form)[0];
+	if (!myform.checkValidity()) {
+		if (myform.reportValidity) {
+			myform.reportValidity();
+			return false;
+		} else {
+			// warn IE users somehow :)
+		}
+	} else {
+
+		return true;
+	}
+}
+
+function preSubmitVerify(state) {
+
+	if (checkFormValidation($("#feePaymentForm"))) {
+
+		$('#preRegno').html('<b> Reg No_ : ' + $('#p_regNo').val() + '</b>');
+		$('#prePaymentMode').html('<b>Payment Mode : ' + $('#p_mode').val() + '</b>');
+		$('#preTransId').html('<b> Transaction ID : ' + $('#transactionId').val() + '</b>');
+		$('#preAmount').html('<b>Amount : ' + $('#amount').val() + '</b>');
+
+		$('#paymentSpace').toggle(2000);
+		$('#PreSubmitInfo').toggle(1000);
+
+		$('#btn_revertPaymentInfo').toggle(1000);
+		$('#btn_closepayment').toggle(2000);
+
+		if (state === 'init') {
+
+			$('#btn_feePayment').text('OK');
+
+			$('#btn_feePayment').attr('onclick', "feePayment()");
+
+		} else if (state === 'back') {
+
+			$('#btn_feePayment').text('Submit');
+			$('#btn_feePayment').attr('onclick', "preSubmitVerify('init')");
+
+		}
+
+	}
+}
 function regVerify() {
-	
+
 	$('#p_mode').prop('disabled', true);
-	
+
 	$('#transactionId').prop('disabled', true);
-	
+
 	$('#amount').prop('disabled', true);
+	
+	
+
+	$('#transactionId').val("");
+
+	$('#amount').val("");
 
 	setTimeout(function() {
 
@@ -235,14 +287,12 @@ function fetchFeeDetails(state) {
 					.html(
 							'<b>Please input a valid registration number e.g 900, 956 e.t.c </b>');
 		} else {
-			
-			
+
 			$('#PreRegNoInfo').addClass('alert-success');
 			$('#PreRegNoInfo').removeClass('alert-warning alert-danger');
 
-			$('#regNoVerSms')
-					.html(
-							'<b>Fetching student details, please wait...</b>');
+			$('#regNoVerSms').html(
+					'<b>Fetching student details, please wait...</b>');
 
 			setTimeout(
 					function() {
@@ -264,41 +314,49 @@ function fetchFeeDetails(state) {
 							if ((data.message)) {
 
 								$('#PreRegNoInfo').addClass('alert-danger');
-								$('#PreRegNoInfo').removeClass('alert-warning alert-success');
+								$('#PreRegNoInfo').removeClass(
+										'alert-warning alert-success');
 
 								$('#regNoVerSms').html(
 										'<b>' + data.description + '</b>');
 
 							} else {
-								
+
 								$('#p_mode').prop('disabled', false);
-								
+
 								$('#transactionId').prop('disabled', false);
-								
+
 								$('#amount').prop('disabled', false);
-								var fee="";
-								
+								var fee = "";
+
 								if (data['studentFeeAPI']['isBoarding'] == '1') {
-									
-									fee= "Boarding "+$('#boarder').val();
-									
+
+									fee = "Boarding " + $('#boarder').val();
+
 								} else {
-									fee= "Day "+ $('#day').val();
+									fee = "Day " + $('#day').val();
 								}
-								
 
 								$('#PreRegNoInfo').addClass('alert-success');
 								$('#PreRegNoInfo').removeClass(
 										'alert-danger alert-warning');
 
-								$('#regNoVerSms').html(
-										'<h4> Reg No : ' + data['studentFeeAPI']['regNo'] + '</h4>'
-												+ '<h4> First Name : ' + data['studentFeeAPI']['firstname']
-												+ '</h4>' + '<h4> Last Name : '
-												+ data['studentFeeAPI']['lastname'] + '</h4>'
-												+ '<h4> Stream : ' + data['studentFeeAPI']['stream']
-												+ '</h4>'
-												+'<h4> Term Fee : '+fee+'</h4>');
+								$('#regNoVerSms')
+										.html(
+												'<h4> Reg No : '
+														+ data['studentFeeAPI']['regNo']
+														+ '</h4>'
+														+ '<h4> First Name : '
+														+ data['studentFeeAPI']['firstname']
+														+ '</h4>'
+														+ '<h4> Last Name : '
+														+ data['studentFeeAPI']['lastname']
+														+ '</h4>'
+														+ '<h4> Stream : '
+														+ data['studentFeeAPI']['stream']
+														+ '</h4>'
+														+ '<h4> Term Fee : '
+														+ fee + '</h4>');
 
 							}
 
