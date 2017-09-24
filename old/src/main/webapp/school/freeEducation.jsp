@@ -114,6 +114,8 @@
 
 
 											<!-- Choose time span -->
+											
+											<input type="hidden" name="loggedId" id="loggedId" value="<%=accountId%>">
 
 
 
@@ -124,13 +126,13 @@
 											<div class="row">
 												
 
-												<div class="col-md-8 col-md-offset-2">
+												<div class="col-md-8 col-md-offset-2" >
 												
 												
 												
 											<div class="row">
 
-												<div class="col-md-2 col-md-offset-3">
+												<div class="col-md-4 col-md-offset-2">
 
 													<!-- Exam element -->
 
@@ -152,6 +154,8 @@
 
 
 											</div>
+											
+											<div id="govtCatList">
 
 													<div class="row">
 
@@ -236,84 +240,11 @@
 
 													</div>
 												</div>
-
-												<div class="col-md-8 col-md-offset-2">
-													<br>
-
-													<div class="row">
-
-														
-														<div class="col-md-2">
-															<label for="ewc">E.W & C </label>
-														</div>
-
-														<div class="col-md-4">
-															<input type="text" id="ewc"
-																placeholder="Enter E.W & C Amount"
-																class="form-control formelement" name="ewc" value="7777"
-																readonly="readonly">
-														</div>
-														
-														<div class="col-md-1">
-
-															<button class="btn btn-primary my_btn" type="button" id="none" onclick="editGovtCat(this.id)"
-																style="border-radius: 90%">
-																<i class="fa fa-pencil-square-o " aria-hidden="true"></i>
-															</button>
-
-														</div>
-														
-														<div class="col-md-1">
-
-															<button class="btn btn-primary my_btn"
-																style="border-radius: 90%">
-																<i class="fa fa-trash" aria-hidden="true"></i>
-															</button>
-
-														</div>
-
-													</div>
 												</div>
 
+											
 
-												<div class="col-md-8 col-md-offset-2">
-
-													<br>
-
-													<div class="row">
-														
-
-														<div class="col-md-2">
-															<label for="adminCost"> Administration Coast </label>
-														</div>
-
-														<div class="col-md-4">
-															<input type="text" id="adminCost"
-																placeholder="Enter Administration Amount"
-																class="form-control formelement" name="adminCost"
-																value="7777" readonly="readonly">
-														</div>
-														
-														<div class="col-md-1">
-
-															<button class="btn btn-primary my_btn"
-																style="border-radius: 90%">
-																<i class="fa fa-pencil-square-o " aria-hidden="true"></i>
-															</button>
-
-														</div>
-														
-														<div class="col-md-1">
-
-															<button class="btn btn-primary my_btn"
-																style="border-radius: 90%">
-																<i class="fa fa-trash" aria-hidden="true"></i>
-															</button>
-
-														</div>
-
-													</div>
-												</div>
+												
 
 
 												<div class="col-md-8 col-md-offset-2">
