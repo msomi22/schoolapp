@@ -32,6 +32,12 @@
 	background-color: #014081 !important;
 }
 
+.centerMe{
+	
+	text-align: center;;
+}
+
+
 #map {
 	width: 100%;
 	height: 200px;
@@ -50,6 +56,18 @@
 
 .secondary-assent {
 	background-color:#1ABB9C !important;
+	color: #fff;
+}
+
+.my_btn{
+	
+	background-color:#1ABB9C !important;
+	color: #fff;
+	
+}
+
+.my_btn:hover{
+	background-color:#2A3F54 !important;
 	color: #fff;
 }
 

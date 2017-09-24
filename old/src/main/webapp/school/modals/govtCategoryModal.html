@@ -1,0 +1,89 @@
+<!-- Add a new/edit govt category -->
+
+<div id="govtCategoryModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="govtCatTiltle">Add a new Govt Fund
+					Category</h4>
+			</div>
+
+			<form method="post" action="#" id="govtCatForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+							<div class="col-md-2 col-md-offset-2">
+								<label for="catname">Name</label>
+
+
+							</div>
+
+							<div class="col-md-4">
+								<input type="text" id="catname" class="form-control formelement"
+									name="catname" placeholder="Category Name"
+									pattern="[a-zA-Z\s]{3,30}"
+									title="Category name,Only characters are allowed and should be more than three and less than 30characters"
+									required>
+							</div>
+							
+							</div>
+							
+							<div class="row">
+							
+							<br>
+
+
+							<div class="col-md-2 col-md-offset-2">
+								<label for="amount">Amount</label> 
+								</div>
+								
+								<div class="col-md-4"><input type="text"
+									id="amount" name="amount" class="form-control formelement"
+									placeholder="Catergoty Amount" pattern="[0-9]{3,5}"
+									title="Amount,Only numbers are allowed and should be more than two and less than five digits e.g 500,2000 e.t.c "
+									required>
+							</div>
+							
+							</div>
+
+
+
+
+
+
+						
+
+						<input type="hidden" name="uuid" id="uuid" value="not_set">
+
+						<input type="hidden" name="accountId" id="accountId"
+							value="not_set">
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info pull-right"
+						id="govtCatbtn" onclick="addGovtCategory(this.form)">
+						Submit <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
