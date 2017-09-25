@@ -29,6 +29,7 @@ import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.student.StudentSubject;
@@ -68,6 +69,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.UpdateFee;
 import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
+import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 
 /**
  * @author peter
@@ -242,6 +244,8 @@ public class StudentService {
 	public Object payFee(StudentPayFee studentPayFee) {
 
 		Response response = new Response();
+		
+		System.out.println(studentPayFee); 
 
 		//validation
 		if(StringUtils.isEmpty(studentPayFee.getAccountId())) {
@@ -262,7 +266,7 @@ public class StudentService {
 			response.setDescription("Staff is invalid!");
 			return response;
 
-		}else if(staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId()) != null) {
+		}else if(staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId()) == null) {
 
 			response.setMessage("error");
 			response.setDescription("Staff is invalid!");
@@ -298,6 +302,13 @@ public class StudentService {
 
 			Student student = studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo());
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId()); 
+			
+			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
+			staff.getAcessLevelId();
+			//C3915245-00EE-4EF4-9898-ACE59683DD60,Principal
+			//0DE968C9-7309-C481-58F7-AB6CDB1011EF,Bursar
+			
+			
 
 			StudentFee studentFee = new StudentFee(); 
 			studentFee.setAccountId(studentPayFee.getAccountId());
@@ -308,6 +319,7 @@ public class StudentService {
 			studentFee.setPaidHas(student.getIsBoarding()); 
 			studentFee.setTermPiad(sysConfig.getTerm());
 			studentFee.setYearPaid(sysConfig.getYear());
+			studentFee.setTransactingStaffId(staff.getUuid());  
 
 			if(studentFeeDAO.putStudentFee(studentFee)) {
 				response.setMessage("success");
@@ -352,6 +364,22 @@ public class StudentService {
 			}else if(!FeeConstants.validFee(updateFeeObj.getCorrectAmount())) {  
 				response.setMessage("error");
 				response.setDescription("Amount is invalid!");
+				return response;
+				
+			}else if(staffDAO.getStaff(updateFeeObj.getAccountId(), updateFeeObj.getTransactingStaffId()) != null) {
+				response.setMessage("error");
+				response.setDescription("Staff is invalid!");
+				return response;
+             
+			}else if(accountDAO.getAccountById(updateFeeObj.getAccountId()) == null){
+				response.setMessage("error");
+				response.setDescription("SchoolId is invalid!");
+				return response;
+				
+			}else if(!StringUtils.equals(accountDAO.getAccountById(updateFeeObj.getAccountId()).getPassword(), 
+					SecurityUtil.getMD5Hash(updateFeeObj.getSchoolSecret()))){
+				response.setMessage("error");
+				response.setDescription("SchoolSecret is invalid!");
 				return response;
 				
 			}else {

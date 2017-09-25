@@ -129,7 +129,8 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentFee" 
-						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas,termPiad, yearPaid, datePaid) VALUES (?,?,?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, studentId, amountPaid, payMode, transactionId, paidHas,termPiad, yearPaid,transactingStaffId, datePaid) "
+						+ "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
 				){ 
 
 			pstmt.setString(1, studentFee.getUuid());
@@ -141,7 +142,8 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 			pstmt.setString(7, studentFee.getPaidHas());
 			pstmt.setString(8, studentFee.getTermPiad());
 			pstmt.setString(9, studentFee.getYearPaid());
-			pstmt.setTimestamp(10, new Timestamp(studentFee.getDatePaid().getTime()));
+			pstmt.setString(10, studentFee.getTransactingStaffId()); 
+			pstmt.setTimestamp(11, new Timestamp(studentFee.getDatePaid().getTime()));
 			pstmt.executeUpdate();
 
 
@@ -166,7 +168,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		try (  Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentFee SET amountPaid = ? WHERE accountId = ? "
-						+ "AND studentId =? AND uuid =?;");
+						+ "AND studentId =? AND uuid =? AND transactingStaffId =?;");
 				) {           			 	            
 
 
@@ -174,6 +176,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 			pstmt.setString(2, studentFee.getAccountId());
 			pstmt.setString(3, studentFee.getStudentId());
 			pstmt.setString(4, studentFee.getUuid());
+			pstmt.setString(5, studentFee.getTransactingStaffId());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

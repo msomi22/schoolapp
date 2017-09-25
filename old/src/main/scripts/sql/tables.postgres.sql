@@ -700,10 +700,11 @@ CREATE TABLE  StudentFee (
     paidHas text,
     termPiad text,    
     yearPaid text,
+    transactingStaffId text, 
     datePaid timestamp with time zone DEFAULT now()
    
 );
-\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas,termPiad,yearPaid) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas,termPiad,yearPaid,transactingStaffId) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentFee OWNER TO school;
 
 
