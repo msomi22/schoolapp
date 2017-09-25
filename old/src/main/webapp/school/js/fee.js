@@ -93,7 +93,11 @@ function regVerify() {
 }
 
 function feePayment() {
+	
+	
+console.log("Form data");
 
+console.log($('#feePaymentForm').serializeJSON());
 	var myform = $("#feePaymentForm")[0];
 	if (!myform.checkValidity()) {
 		if (myform.reportValidity) {

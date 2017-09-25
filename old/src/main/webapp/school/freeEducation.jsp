@@ -148,6 +148,14 @@
 
 
 												</div>
+												<div class="col-md-1">
+
+															<button type="button" class="btn btn-primary my_btn" id="cat1" onclick="processTotalAmount(this.id)"
+																style="border-radius: 90%">
+																<span class="fa fa-pencil-square-o "></span>
+															</button>
+
+														</div>
 
 
 

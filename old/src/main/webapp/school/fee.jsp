@@ -75,8 +75,7 @@
 							
 							 <input type="hidden" name="year"
 							id="year" value="<%=currentYear%>"> <input type="hidden"
-							name="term" id="term" value="<%=currentTerm%>"> <input
-							type="hidden" name="studentId" id="studentId" value="">
+							name="term" id="term" value="<%=currentTerm%>"> 
 
 
 						<div class="row ">
