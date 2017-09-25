@@ -523,7 +523,7 @@ public class FinanceRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
 	} )
 	@GET
-	@Path("/fee/other/{accountId}/{term}/{year}")    
+	@Path("/fee/gokusage/{accountId}/{term}/{year}")    
 	public Object getGokMoneyUsage(@PathParam("accountId") String accountId, @PathParam("term") String term,
 			@PathParam("year") String year, @HeaderParam("authorization") String auth) {
 
