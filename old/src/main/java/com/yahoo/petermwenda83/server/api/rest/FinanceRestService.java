@@ -6,16 +6,20 @@ package com.yahoo.petermwenda83.server.api.rest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
 import com.yahoo.petermwenda83.persistence.money.GokeMoneyUsageDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.server.api.rest.bean.GokeMoneyUsageCheck;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 
@@ -31,6 +35,8 @@ public class FinanceRestService {
 	private static OtherFeeDAO otherFeeDAO;
 	private static AccountDAO accountDAO;
 	private static GokeMoneyUsageDAO gokeMoneyUsageDAO;
+	private static SysConfigDAO sysConfigDAO;
+	private static StudentDAO studentDAO;
 
 	static {
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
@@ -39,6 +45,8 @@ public class FinanceRestService {
 		otherFeeDAO = OtherFeeDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		gokeMoneyUsageDAO = GokeMoneyUsageDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
+		studentDAO = StudentDAO.getInstance();
 	}
 
 
@@ -184,6 +192,15 @@ public class FinanceRestService {
 			response.setMessage("error");
 			response.setDescription("GoKe Fee breakdown not found!");
 		}else {
+
+			/*TODO
+			 * 
+			 * feeBreakdownDescDAO.getFeeBreakdownDescList(accountId, feeBreakdownId).parallelStream().forEach(breakdown ->{
+
+				FeeConstants.formatFee(breakdown.getAmount());
+
+
+			});*/
 
 			return feeBreakdownDescDAO.getFeeBreakdownDescList(accountId, feeBreakdownId);
 
@@ -723,6 +740,71 @@ public class FinanceRestService {
 		}
 	}
 
+	//TODO
+	/**
+	 * 
+	 * @param accountId
+	 * @param amount
+	 * @return
+	 */
+	public Object canCommitGokMoney(String accountId, int amount) {
+
+		Response response = new Response();
+		
+		if(sysConfigDAO.getSysConfig(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Term/Year not set!");
+			return response;
+
+		}else if(accountDAO.getAccountById(accountId)== null) {
+			response.setMessage("error");
+			response.setDescription("Invalid accountId!");
+			return response;
+
+		}
+
+		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+
+		if(feeBreakdownDAO.getFeeBreakdown(accountId, 
+				FeeConstants.GVMT_MONEY_CODE,
+				sysConfig.getTerm(),
+				sysConfig.getYear(), 
+				FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){
+
+			FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+					sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
+
+			int amountToEachStudent = (int)FeeConstants.getGoKeFee(accountId, feeBreakdown.getUuid());
+
+			double totalAmount = feeBreakdown.getAmount();
+			int no_of_students = studentDAO.activeCount(accountId, "1"); 
+			double expected_amount_per_head = 0;
+			double balance = 0;
+
+			if(no_of_students > 0 && totalAmount > 0) {
+				expected_amount_per_head = totalAmount / no_of_students;
+			}
+			
+			balance = totalAmount - (amountToEachStudent * no_of_students);
+
+			GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
+			gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
+			gokeMoneyUsageCheck.setExpectedAmountPerStudent((int)expected_amount_per_head);   
+			gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
+			gokeMoneyUsageCheck.setTotalAmount((int)totalAmount);
+			gokeMoneyUsageCheck.setBalance((int)balance);
+			gokeMoneyUsageCheck.setTerm(sysConfig.getTerm());
+			gokeMoneyUsageCheck.setYear(sysConfig.getYear());
+			return gokeMoneyUsageCheck;
+
+		}else {
+			response.setMessage("error");
+			response.setDescription("No record found!");
+			return response;
+			
+		}
+
+	}
 
 
 

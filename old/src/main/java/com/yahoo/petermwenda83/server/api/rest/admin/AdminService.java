@@ -277,7 +277,7 @@ public class AdminService {
 			acessLevel.setUuid(accessIds[count]); 
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
-			acessLevelDAO.putPosition(acessLevel);
+			acessLevelDAO.putAcessLevel(acessLevel); 
 			astr = " AcessLevel(s) added,";
 		}
 

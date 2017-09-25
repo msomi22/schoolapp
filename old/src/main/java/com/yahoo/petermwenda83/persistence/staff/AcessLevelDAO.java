@@ -51,8 +51,11 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
     
 	
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#getAcessLevel(java.lang.String)
+	 */
 	@Override
-	public AcessLevel get(String uuid) {
+	public AcessLevel getAcessLevel(String uuid) {
 		AcessLevel acessLevel = new AcessLevel();
         ResultSet rset = null;
      try(
@@ -80,29 +83,63 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 	
 	
 	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#getAcessLevel(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public AcessLevel getAcessLevel(String accountId, String uuid) {
+		AcessLevel acessLevel = new AcessLevel();
+        ResultSet rset = null;
+     try(
+     		      Connection conn = dbutils.getConnection();
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE accountId =? AND uuid =?;");       
+     		
+     		){
+     	     pstmt.setString(1, accountId);
+     	     pstmt.setString(2, uuid);
+	         rset = pstmt.executeQuery();
+	        while(rset.next()){
+	
+	        	acessLevel  = beanProcessor.toBean(rset,AcessLevel.class);
+	   }
+     	
+     	
+     	
+     }catch(SQLException e){
+     	  logger.error("SQL Exception when getting AcessLevel with uuid: " + uuid);
+          logger.error(ExceptionUtils.getStackTrace(e));
+          System.out.println(ExceptionUtils.getStackTrace(e));
+     }
+     
+		return acessLevel; 
+	}
+
+
+	
+	
+	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#getPositionList(java.lang.String)
 	 */
 	@Override
-	public List<AcessLevel> getPositionList() {
+	public List<AcessLevel> getAcessLevelList(String accountId) {
 		List<AcessLevel> list = null;
-		 try(   
-	  		Connection conn = dbutils.getConnection();
-	  		PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AcessLevel;");   
-			) {
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE accountId =? ;");   
+				) {
+
+			pstmt.setString(1,accountId);
 			
-			 try(ResultSet rset = pstmt.executeQuery();){
-					
-				 list = beanProcessor.toBeanList(rset, AcessLevel.class);
-				}
-	        
+			try(ResultSet rset = pstmt.executeQuery();){
 
-	  } catch(SQLException e){
-	  	 logger.error("SQL Exception when getting all Positions for school ");
-	     logger.error(ExceptionUtils.getStackTrace(e));
-	     System.out.println(ExceptionUtils.getStackTrace(e)); 
-	  }
+				list = beanProcessor.toBeanList(rset, AcessLevel.class);
+			}
 
-		
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all AcessLevels for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
 		return list;
 	}
 
@@ -110,7 +147,7 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#putPosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
 	 */
 	@Override
-	public boolean putPosition(AcessLevel acessLevel) {
+	public boolean putAcessLevel(AcessLevel acessLevel) {
 		
 		boolean success = true;
 
@@ -138,7 +175,7 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolAcessLevelDAO#updatePosition(com.yahoo.petermwenda83.bean.staff.AcessLevel)
 	 */
 	@Override
-	public boolean updatePosition(AcessLevel acessLevel) {
+	public boolean updateAcessLevel(AcessLevel acessLevel) {
 		boolean success = true;
 
 		try (  Connection conn = dbutils.getConnection();
@@ -161,10 +198,10 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 	}
 
 	@Override
-	public boolean deletePosition(String uuid) {
+	public boolean deleteAcessLevel(String uuid) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-
+	
 }

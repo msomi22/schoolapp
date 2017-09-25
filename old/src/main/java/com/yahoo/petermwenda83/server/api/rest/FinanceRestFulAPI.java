@@ -19,6 +19,7 @@ import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.bean.money.GokeMoneyUsage;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
+import com.yahoo.petermwenda83.server.api.rest.bean.GokeMoneyUsageCheck;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 
 import io.swagger.annotations.Api;
@@ -536,6 +537,29 @@ public class FinanceRestFulAPI {
 		}
 
 		return financeRestService.getGokMoneyUsage(accountId, term, year);
+	}
+	
+	
+	@ApiOperation(value = "Get Government Money Usage Check.", 
+			notes = "Returns whether the Government amount specified can be sub-divided to all students.", 
+			response = GokeMoneyUsageCheck.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
+	} )
+	@GET
+	@Path("/fee/gokcheck/{accountId}/{amount}")     
+	public Object canCommitGokMoney(@PathParam("accountId") String accountId, @PathParam("amount")  int amount,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.canCommitGokMoney(accountId, amount);
 	}
 	
 	

@@ -182,6 +182,41 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 
 		return staff; 
 	}
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaff(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Staff getStaff(String accountId, String uuid, String isActive) {
+		Staff StaffDetail = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Staff WHERE accountId = ? AND uuid =? AND isActive =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, uuid);
+			pstmt.setString(3, isActive);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				StaffDetail  = beanProcessor.toBean(rset,Staff.class);
+			}  	
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Staff with uuid " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return StaffDetail; 
+	}
+
+	
+	
 
 
 	/**
@@ -436,7 +471,5 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 		return staffList;
 	}
 
-	
-	
 
 }

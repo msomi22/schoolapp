@@ -20,6 +20,8 @@ public interface SchoolStaffDAO {
 	 */
 	public Staff getStaff(String accountId, String uuid);
 	
+	public Staff getStaff(String accountId, String uuid, String isActive);
+	
 	/**
 	 * 
 	 * @param accountId

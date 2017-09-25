@@ -13,14 +13,17 @@ import com.yahoo.petermwenda83.bean.staff.AcessLevel;
  */
 public interface SchoolAcessLevelDAO {
 	
-	public AcessLevel get(String uuid);
 	
-	public boolean putPosition(AcessLevel acessLevel);
+	public AcessLevel getAcessLevel(String uuid);
 	
-	public boolean updatePosition(AcessLevel acessLevel);
+	public AcessLevel getAcessLevel(String accountId, String uuid);
 	
-	public boolean deletePosition(String uuid);
+	public boolean putAcessLevel(AcessLevel acessLevel);
 	
-	public List<AcessLevel> getPositionList();
+	public boolean updateAcessLevel(AcessLevel acessLevel);
+	
+	public boolean deleteAcessLevel(String uuid);
+	
+	public List<AcessLevel> getAcessLevelList(String accountId);
 
 }

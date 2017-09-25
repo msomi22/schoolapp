@@ -3,9 +3,11 @@
  */
 package com.yahoo.petermwenda83.server.servlet.finance;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
@@ -43,6 +45,20 @@ public class FeeConstants {
 		}
 		return gokeTotal;
 	}
+	
+	/**
+	 * 
+	 * @param amount
+	 * @return
+	 */
+	public static String formatFee(int amount) {
+		Locale locale = new Locale("en","KE"); 
+		NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+		String formated = nf.format(amount); 
+		return formated;
+	}
+	
+	
 
 
 
