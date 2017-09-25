@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
+import com.yahoo.petermwenda83.bean.money.GokeMoneyUsage;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
@@ -472,6 +473,69 @@ public class FinanceRestFulAPI {
 		}
 
 		return financeRestService.updateOtherFee(otherFee);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param year
+	 * @param auth
+	 * @return
+	 */
+	
+	@ApiOperation(value = "Get Government Money Usage.", 
+			notes = "Returns List of Government Money Usage for the given year.", 
+			response = GokeMoneyUsage.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
+	} )
+	@GET
+	@Path("/fee/gokusage/{accountId}/{year}")    
+	public Object getGokMoneyUsage(@PathParam("accountId") String accountId,
+			@PathParam("year") String year, @HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.getGokMoneyUsage(accountId, year);
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param term
+	 * @param year
+	 * @param auth
+	 * @return
+	 */
+	
+	@ApiOperation(value = "Get Government Money Usage.", 
+			notes = "Returns List of Government Money Usage for the given term and year.", 
+			response = GokeMoneyUsage.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Id(s) not found.")  
+	} )
+	@GET
+	@Path("/fee/other/{accountId}/{term}/{year}")    
+	public Object getGokMoneyUsage(@PathParam("accountId") String accountId, @PathParam("term") String term,
+			@PathParam("year") String year, @HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.getGokMoneyUsage(accountId, term, year);
 	}
 	
 	

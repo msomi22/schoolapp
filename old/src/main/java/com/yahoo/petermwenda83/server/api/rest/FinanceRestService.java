@@ -12,6 +12,7 @@ import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
+import com.yahoo.petermwenda83.persistence.money.GokeMoneyUsageDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.OtherFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -29,6 +30,7 @@ public class FinanceRestService {
 	private static TermFeeDAO termFeeDAO;
 	private static OtherFeeDAO otherFeeDAO;
 	private static AccountDAO accountDAO;
+	private static GokeMoneyUsageDAO gokeMoneyUsageDAO;
 
 	static {
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
@@ -36,6 +38,7 @@ public class FinanceRestService {
 		termFeeDAO = TermFeeDAO.getInstance();
 		otherFeeDAO = OtherFeeDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
+		gokeMoneyUsageDAO = GokeMoneyUsageDAO.getInstance();
 	}
 
 
@@ -69,36 +72,36 @@ public class FinanceRestService {
 	public Object addFeeBreakdown(FeeBreakdown feeBreakdown) {
 
 		Response response = new Response();
-		
+
 		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) != null) { 
 			response.setMessage("error");
 			response.setDescription("GoKe Fee already added!");
 			return response;
-			
+
 		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
-			
+
 		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
-			
+
 		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
-			
+
 		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
 			response.setMessage("error");
 			response.setDescription("Invalid status!");
 			return response;
-			
+
 		}else {
-			
+
 			feeBreakdown.setUuid(new FeeBreakdown().getUuid()); 
-			
+
 			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)){
 				response.setMessage("success");
 				response.setDescription("Info added successfully.!"); 
@@ -109,7 +112,7 @@ public class FinanceRestService {
 				response.setDescription("Contact Admin please!");
 				return response;
 			}
-			
+
 		}
 
 	}
@@ -121,35 +124,35 @@ public class FinanceRestService {
 	public Object updateFeeBreakdown(FeeBreakdown feeBreakdown) {
 
 		Response response = new Response();
-		
+
 		if(feeBreakdownDAO.getFeeBreakdown(feeBreakdown.getAccountId(), feeBreakdown.getFeeCategory()) == null) { 
 			response.setMessage("error");
 			response.setDescription("GoKe Fee not found!");
 			return response;
-			
+
 		}else if(!FeeConstants.validTerm(feeBreakdown.getTerm())){
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
-			
+
 		}else if(!FeeConstants.validYear(feeBreakdown.getYear())){
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
-			
+
 		}else if(!FeeConstants.validGoKeFee(feeBreakdown.getAmount())){
 			response.setMessage("error");
 			response.setDescription("Invalid Amount!");
 			return response;
-			
+
 		}else if(!FeeConstants.validStatus(feeBreakdown.getStatus())){
 			response.setMessage("error");
 			response.setDescription("Invalid status!");
 			return response;
-			
+
 		}else {
-			
-			
+
+
 			if(feeBreakdownDAO.updateFeeBreakdown(feeBreakdown)){ 
 				response.setMessage("success");
 				response.setDescription("Info updated successfully.!"); 
@@ -160,8 +163,8 @@ public class FinanceRestService {
 				response.setDescription("Contact Admin please!");
 				return response;
 			}
-			
-			
+
+
 		}
 
 	}
@@ -672,6 +675,79 @@ public class FinanceRestService {
 		}
 	}
 
+
+
+
+	/**  TODO
+	 * 
+	 * @param accountId
+	 * @param term
+	 * @param year
+	 * @return
+	 */
+
+	public Object getGokMoneyUsage(String accountId, String  term, String  year) {
+
+		Response response = new Response();
+
+		if(gokeMoneyUsageDAO.getGokeMoneyUsage(accountId, term, year) == null) {
+			response.setMessage("error");
+			response.setDescription("No record found!");
+			return response;
+
+		}else {
+
+			return gokeMoneyUsageDAO.getGokeMoneyUsage(accountId, term, year);
+		}
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param year
+	 * @return
+	 */
+	public Object getGokMoneyUsage(String accountId, String  year) {
+
+		Response response = new Response();
+
+		if(gokeMoneyUsageDAO.getGokeMoneyUsageList(accountId, year) == null) {
+			response.setMessage("error");
+			response.setDescription("No record found!");
+			return response;
+
+		}else {
+
+			return gokeMoneyUsageDAO.getGokeMoneyUsageList(accountId, year);
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * 
 	 * @param otherFee
@@ -731,6 +807,8 @@ public class FinanceRestService {
 
 		return hasduplicate;
 	}
+
+
 
 	/**
 	 * 

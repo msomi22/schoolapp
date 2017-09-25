@@ -3,6 +3,7 @@ package com.yahoo.petermwenda83.server.quartz;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.quartz.Job;
@@ -11,9 +12,11 @@ import org.quartz.JobExecutionException;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
+import com.yahoo.petermwenda83.bean.money.GokeMoneyUsage;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
+import com.yahoo.petermwenda83.persistence.money.GokeMoneyUsageDAO;
 import com.yahoo.petermwenda83.persistence.money.StudentFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
@@ -26,6 +29,7 @@ public class QuartzJob implements Job{
 	private static AccountDAO accountDAO;
 	private static FeeBreakdownDAO feeBreakdownDAO;
 	private static StudentFeeDAO studentFeeDAO;
+	private static GokeMoneyUsageDAO gokeMoneyUsageDAO;
 
 	private static SysConfigDAO sysConfigDAO;
 	
@@ -36,6 +40,7 @@ public class QuartzJob implements Job{
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
+		gokeMoneyUsageDAO = GokeMoneyUsageDAO.getInstance();
 	}
 
 	public QuartzJob() {
@@ -98,6 +103,7 @@ public class QuartzJob implements Job{
 								double totalAmount = feeBreakdown.getAmount();
 								int no_of_students = studentDAO.activeCount(account.getUuid(), "1"); 
 								double expected_amount_per_head = 0;
+								double balance = 0;
 								
 								if(no_of_students > 0 && totalAmount > 0) {
 									expected_amount_per_head = totalAmount / no_of_students;
@@ -108,6 +114,23 @@ public class QuartzJob implements Job{
 									
 								}else {
 									//good
+									
+									balance = totalAmount - (amountToEachStudent * no_of_students);
+									
+									if(gokeMoneyUsageDAO.getGokeMoneyUsage(account.getUuid(), sysConfig.getTerm(), sysConfig.getYear()) == null) {
+										GokeMoneyUsage gokeMoneyUsage = new GokeMoneyUsage();
+										gokeMoneyUsage.setAccountId(account.getUuid());
+										gokeMoneyUsage.setNumberOfStudents(no_of_students);
+										gokeMoneyUsage.setAmountPerStudent(amountToEachStudent);
+										gokeMoneyUsage.setTotalAmount((int)totalAmount);
+										gokeMoneyUsage.setBalance((int)balance);
+										gokeMoneyUsage.setTerm(sysConfig.getTerm());
+										gokeMoneyUsage.setYear(sysConfig.getYear());
+										
+										gokeMoneyUsageDAO.putGokeMoneyUsage(gokeMoneyUsage);
+									
+										
+									} 
 									
 									
 									StudentFee studentFee = new StudentFee(); 

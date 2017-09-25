@@ -606,6 +606,25 @@ CREATE TABLE  FeeBreakdown (
 \COPY FeeBreakdown(uuid,accountId,feeCategory,term,year,status,amount) FROM '/tmp/FeeBreakdown.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE FeeBreakdown OWNER TO school;
 
+-- -------------------
+-- Table  GokeMoneyUsage  
+-- -------------------
+CREATE TABLE  GokeMoneyUsage (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    numberOfStudents integer,
+    amountPerStudent integer,
+    totalAmount integer, 
+    balance integer,  
+    term text,
+    year text,
+    dateAllocated timestamp with time zone DEFAULT now()
+  
+);
+ALTER TABLE GokeMoneyUsage OWNER TO school;
+
+
 
 -- -------------------
 -- Table  FeeBreakdownDesc 
