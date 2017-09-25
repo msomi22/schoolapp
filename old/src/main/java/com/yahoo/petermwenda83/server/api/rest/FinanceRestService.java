@@ -778,18 +778,13 @@ public class FinanceRestService {
 
 			double totalAmount = feeBreakdown.getAmount();
 			int no_of_students = studentDAO.activeCount(accountId, "1"); 
-			double expected_amount_per_head = 0;
 			double balance = 0;
-
-			if(no_of_students > 0 && totalAmount > 0) {
-				expected_amount_per_head = totalAmount / no_of_students;
-			}
 			
 			balance = totalAmount - (amountToEachStudent * no_of_students);
 
 			GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
 			gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
-			gokeMoneyUsageCheck.setExpectedAmountPerStudent((int)expected_amount_per_head);   
+			gokeMoneyUsageCheck.setExpectedAmount((int) no_of_students * amountToEachStudent);    
 			gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
 			gokeMoneyUsageCheck.setTotalAmount((int)totalAmount);
 			gokeMoneyUsageCheck.setBalance((int)balance);

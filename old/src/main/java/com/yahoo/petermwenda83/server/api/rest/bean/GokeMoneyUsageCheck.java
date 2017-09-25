@@ -11,7 +11,7 @@ public class GokeMoneyUsageCheck{
 	
 	private int numberOfStudents;
 	private int totalAmount;
-	private int expectedAmountPerStudent;
+	private int expectedAmount;
 	private int amountPerStudent;
 	private int balance;
 	private String  term;
@@ -20,7 +20,7 @@ public class GokeMoneyUsageCheck{
 	public GokeMoneyUsageCheck() {
 		numberOfStudents = 0;
 		totalAmount = 0;
-		expectedAmountPerStudent = 0;
+		expectedAmount = 0;
 		amountPerStudent = 0;
 		balance = 0;
 		term = "";
@@ -43,12 +43,12 @@ public class GokeMoneyUsageCheck{
 		this.totalAmount = totalAmount;
 	}
 
-	public int getExpectedAmountPerStudent() {
-		return expectedAmountPerStudent;
+	public int getExpectedAmount() {
+		return expectedAmount;
 	}
 
-	public void setExpectedAmountPerStudent(int expectedAmountPerStudent) {
-		this.expectedAmountPerStudent = expectedAmountPerStudent;
+	public void setExpectedAmount(int expectedAmount) {
+		this.expectedAmount = expectedAmount;
 	}
 
 	public int getAmountPerStudent() {
@@ -86,9 +86,9 @@ public class GokeMoneyUsageCheck{
 	@Override
 	public String toString() {
 		return "GokeMoneyUsageCheck [numberOfStudents=" + numberOfStudents + ", totalAmount=" + totalAmount
-				+ ", expectedAmountPerStudent=" + expectedAmountPerStudent + ", amountPerStudent=" + amountPerStudent
-				+ ", balance=" + balance + ", term=" + term + ", year=" + year + "]";
+				+ ", expectedAmount=" + expectedAmount + ", amountPerStudent=" + amountPerStudent + ", balance="
+				+ balance + ", term=" + term + ", year=" + year + "]";
 	}
-	
+
 
 }
