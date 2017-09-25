@@ -152,7 +152,7 @@
 
 															<button type="button" class="btn btn-primary my_btn" id="cat1" onclick="processTotalAmount(this.id)"
 																style="border-radius: 90%">
-																<span class="fa fa-pencil-square-o "></span>
+																<span class="fa fa-floppy-o"></span>
 															</button>
 
 														</div>
