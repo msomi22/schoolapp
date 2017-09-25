@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class StudentFeeAPI{
 	
 	private String regNo;
+	private String studentId;
 	private String firstname;
 	private String middlename;
 	private String lastname;
@@ -29,6 +30,7 @@ public class StudentFeeAPI{
 	
 	public StudentFeeAPI(){
 		regNo = "";
+		studentId = "";
 		firstname = "";
 		middlename = "";
 		lastname = "";
@@ -46,6 +48,14 @@ public class StudentFeeAPI{
 
 	public void setRegNo(String regNo) {
 		this.regNo = regNo;
+	}
+
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getFirstname() {
@@ -122,10 +132,10 @@ public class StudentFeeAPI{
 
 	@Override
 	public String toString() {
-		return "StudentFeeAPI [regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename
-				+ ", lastname=" + lastname + ", stream=" + stream + ", isBoarding=" + isBoarding + ", balance="
-				+ balance + ", feeHistory=" + feeHistory + ", otherfeeHistory=" + otherfeeHistory + ", revertedFeeList="
-				+ revertedFeeList + "]";
+		return "StudentFeeAPI [regNo=" + regNo + ", studentId=" + studentId + ", firstname=" + firstname
+				+ ", middlename=" + middlename + ", lastname=" + lastname + ", stream=" + stream + ", isBoarding="
+				+ isBoarding + ", balance=" + balance + ", feeHistory=" + feeHistory + ", otherfeeHistory="
+				+ otherfeeHistory + ", revertedFeeList=" + revertedFeeList + "]";
 	}
 
 	
