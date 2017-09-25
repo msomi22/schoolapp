@@ -69,45 +69,38 @@ function fetchBasicInfo() {
 
 	// var m_data= apiCall();
 
-	/*setTimeout(function() {
-
-		// console.log(returnData);
-
-	}, 2000);*/
+	/*
+	 * setTimeout(function() {
+	 *  // console.log(returnData);
+	 *  }, 2000);
+	 */
 
 }
 
+function fetchSubjects() {
 
-function fetchSubjects(){
-	
-	
 	url = "subject/" + $('#passedParam').val();
-	
-	
-	apiCall(function (data){
-		
+
+	apiCall(function(data) {
+
 		console.log("Subjects loadded");
-		
-		
-		
-		for(var i=0; i < data.length; i++){
-			
+
+		for (var i = 0; i < data.length; i++) {
+
 			console.log(data[i]);
-			
-			$('#subjectList').append('<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'+data[i]['subjectId']+'" type="checkbox" class="form-control  chk" checked /><label for="math">'+ data[i]['subjectId']+'</label> </div>');	
-			
+
+			$('#subjectList')
+					.append(
+							'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
+									+ data[i]['subjectId']
+									+ '" type="checkbox" class="form-control  chk" checked /><label for="math">'
+									+ data[i]['subjectId'] + '</label> </div>');
+
 		}
-		
+
 	});
-	
-	
-	
-	
-	
-	
+
 }
-
-
 
 function apiCall(handleData) {
 
@@ -131,8 +124,8 @@ function apiCall(handleData) {
 
 		handleData(data);
 
-		//returnData = callBack(data);
-		//return returnData;
+		// returnData = callBack(data);
+		// return returnData;
 
 	}).fail(function(jqXHR, textStatus) {
 
@@ -147,16 +140,14 @@ function apiCall(handleData) {
 }
 
 /*
- * Just joking around with Async calls
- * function callBack(data) {
-
-	returnData = data;
-
-	// console.log(returnData);
-
-	return returnData;
-
-}*/
+ * Just joking around with Async calls function callBack(data) {
+ * 
+ * returnData = data;
+ *  // console.log(returnData);
+ * 
+ * return returnData;
+ *  }
+ */
 
 /*
  * In case i see a need to alter the search box, please reference this guide

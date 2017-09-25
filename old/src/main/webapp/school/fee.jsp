@@ -25,6 +25,10 @@
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	
+	String staffId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+	
+	
 
 	SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
 
@@ -64,7 +68,12 @@
 							Test API call</button> -->
 
 						<input type="hidden" name="accountId" id="accountId"
-							value="<%=accountId%>"> <input type="hidden" name="year"
+							value="<%=accountId%>">
+							
+							<input type="hidden" name="staffId" id="staffId"
+							value="<%=staffId%>">
+							
+							 <input type="hidden" name="year"
 							id="year" value="<%=currentYear%>"> <input type="hidden"
 							name="term" id="term" value="<%=currentTerm%>"> <input
 							type="hidden" name="studentId" id="studentId" value="">

@@ -328,6 +328,17 @@ function fetchFeeDetails(state) {
 
 								$('#amount').prop('disabled', false);
 								var fee = "";
+								
+								
+								$('#studentId').val(data['studentFeeAPI']['studentId']);
+								
+								$('#p_staffId').val($('#staffId').val());
+								
+								$('#p_accountId').val($('#accountId').val());
+								
+								console.log('Staff ID: '+$('#p_staffId').val());
+								
+								
 
 								if (data['studentFeeAPI']['isBoarding'] == '1') {
 

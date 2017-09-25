@@ -7,7 +7,7 @@
 		<div class="modal-content alert alert-info">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="examTiltle">Make Fee Payment</h4>
+				<h4 class="modal-title" id="feeTiltle">Make Fee Payment</h4>
 			</div>
 
 			<form method="post" action="#" id="feePaymentForm">
@@ -68,8 +68,7 @@
 												placeholder="Reg No" pattern="[0-9]{3,4}"
 												onkeyup="regVerify()"
 												title="Reg No,Registration number, should contain numerics only and should be 3 or 4 numbers only"
-												maxlength="4" required> <input type="hidden"
-												name="staffId" id="staffId" value=""> <input
+												maxlength="4" required>  <input
 												type="hidden" name="term" id="term" value=""> <input
 												type="hidden" name="year" id="year" value=""> <input
 												type="hidden" name="feeBalance" id="feeBalance" value="">
@@ -78,6 +77,12 @@
 									</div>
 
 								</div>
+								
+								<input type="hidden" name="accountId" id="p_accountId">
+							
+							<input type="hidden" name="staffId" id="p_staffId">
+							
+							<input type="hidden" name="studentId" id="studentId">
 
 
 								<div class="col-md-8 col-md-offset-2">
