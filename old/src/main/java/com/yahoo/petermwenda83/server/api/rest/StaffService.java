@@ -237,24 +237,6 @@ public class StaffService {
 
 
 
-	/**
-	 * 
-	 * @param gender
-	 * @return
-	 */
-	private boolean validGender(String gender) {
-		String[] allowed = {"M","F","m","f"};
-		List<String> allowedList = new ArrayList<>();
-		allowedList = Arrays.asList(allowed);
-		if(allowedList.contains(gender)) {
-			return true;
-		}else {
-			return false;
-		}
-	}
-
-
-
 
 	/**
 	 * @param ApiStaffFull
@@ -269,6 +251,9 @@ public class StaffService {
 		apiStaffFull.getLogedUserAccessId();
 		apiStaffFull.getLogedUserId();
 		boolean allowed = false;
+		
+		
+		System.out.println(apiStaffFull); 
 
 
 
@@ -357,10 +342,9 @@ public class StaffService {
 				apiResponse.setDescription("Username duplicated not allowed!");
 				return apiResponse;
 
-			}else if (StringUtils.isBlank(apiStaffFull.getPassword())) { 
-
+			}else if (apiStaffFull.getPassword().length() < 4) { 
 				apiResponse = new ApiResponse("error");
-				apiResponse.setDescription("Password Can't be Empty!"); 
+				apiResponse.setDescription("Password invalid!"); 
 
 			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
 
@@ -370,6 +354,10 @@ public class StaffService {
 			}else{
 
 				Staff staff = staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid());
+				
+				String password = SecurityUtil.getMD5Hash(apiStaffFull.getPassword());
+				
+				
 				staff.setAccountId(apiStaffFull.getAccountId());
 				staff.setAcessLevelId(apiStaffFull.getAcessLevelId());
 				staff.setEmail(apiStaffFull.getEmail());
@@ -380,7 +368,7 @@ public class StaffService {
 				staff.setLastupdated(new Date().toString());
 				staff.setMiddlename(apiStaffFull.getMiddlename());
 				staff.setMobile(apiStaffFull.getMobile());
-				staff.setPassword(apiStaffFull.getPassword());
+				staff.setPassword(password);
 				staff.setStaffNo(apiStaffFull.getStaffNo());
 				staff.setUsername(apiStaffFull.getUsername());
 
@@ -818,6 +806,24 @@ public class StaffService {
 
 
 
+
+
+
+	/**
+	 * 
+	 * @param gender
+	 * @return
+	 */
+	private boolean validGender(String gender) {
+		String[] allowed = {"M","F","m","f"};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(gender)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 
