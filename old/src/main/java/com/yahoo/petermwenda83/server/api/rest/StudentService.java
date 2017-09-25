@@ -3,7 +3,9 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -14,7 +16,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -139,10 +144,12 @@ public class StudentService {
 
 			try {
 
-
-
+                 
+				
+                //TODO
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
-
+				apiStudent.setPassport(getB64Image(studentDAO.getStudentById(accountId, studentId).getPassport()));
+				
 				APIParentPrimary apiParentPrimary = new APIParentPrimary();
 
 				//primary
@@ -211,7 +218,8 @@ public class StudentService {
 			apiStudent.setBcertNo(student.getBcertNo());
 			apiStudent.setDob(student.getDob());
 			apiStudent.setRegTerm(student.getRegTerm());
-			apiStudent.setPassport(student.getPassport());
+			//TODO
+			apiStudent.setPassport(getB64Image(student.getPassport()));
 			apiStudent.setLastUpdated(student.getLastUpdated()); 
 			apiStudent.setFinalTerm(student.getFinalTerm());
 			apiStudent.setFinalYear(student.getFinalYear());
@@ -317,7 +325,7 @@ public class StudentService {
 		return response;
 	}
 	
-	//TODO
+	
 	/**
 	 * 
 	 * @param updateFeeObj
@@ -861,6 +869,7 @@ public class StudentService {
 			newstudent.setRegTerm(sysConfig.getTerm());
 			newstudent.setFinalYear(year + 3); 
 			newstudent.setFinalTerm(3); 
+			//TODO
 			newstudent.setPassport(renameImage(student.getPassport(),student.getRegNo()));
 			newstudent.setLastUpdated(new Date().toString());  
 
@@ -1097,6 +1106,7 @@ public class StudentService {
 			newstudent.setRegTerm(sysConfig.getTerm());
 			newstudent.setFinalYear(student.getFinalYear()); 
 			newstudent.setFinalTerm(student.getFinalTerm()); 
+			//TODO
 			newstudent.setPassport(renameImage(student.getPassport(),student.getRegNo()));
 			newstudent.setLastUpdated(new Date().toString());  
 
@@ -1415,6 +1425,8 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student); 
+					//TODO
+					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
@@ -1431,6 +1443,8 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student); 
+					//TODO
+					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
@@ -1446,6 +1460,8 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student); 
+					//TODO
+					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
@@ -1462,6 +1478,8 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student); 
+					//TODO
+					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
@@ -1586,6 +1604,48 @@ public class StudentService {
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @param path image path 
+	 * @return
+	 */
+	public static String getB64Image(String path){ 
+		String b64 = "";
+		int width = 963;    //width of the image
+		int height = 640;   //height of the image
+		BufferedImage image = null;
+		File f = null;
+		String dir = DATA_DIRECTORY;
+		String fullpath = dir+path; 
+		//read image
+		try{
+			f = new File(fullpath); //image file path
+			
+			if(f.exists()) {
+				image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+				image = ImageIO.read(f);
+				
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    ImageIO.write(image, "png", baos);
+			    baos.flush();
+			    byte[] imageInByteArray = baos.toByteArray();
+			    baos.close();
+			    b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
+				
+				return b64;
+			}else {
+				return b64;
+			}
+			
+		}catch(IOException e){
+			return null;
+		}
+	}
+	
+	
+	
+	
 
 
 }
