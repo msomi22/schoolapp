@@ -245,8 +245,6 @@ public class StudentService {
 
 		Response response = new Response();
 		
-		System.out.println(studentPayFee); 
-
 		//validation
 		if(StringUtils.isEmpty(studentPayFee.getAccountId())) {
 
@@ -305,37 +303,45 @@ public class StudentService {
 			
 			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
 			staff.getAcessLevelId();
-			//C3915245-00EE-4EF4-9898-ACE59683DD60,Principal
-			//0DE968C9-7309-C481-58F7-AB6CDB1011EF,Bursar
 			
-			
-
-			StudentFee studentFee = new StudentFee(); 
-			studentFee.setAccountId(studentPayFee.getAccountId());
-			studentFee.setStudentId(student.getUuid());
-			studentFee.setAmountPaid(Integer.valueOf(studentPayFee.getAmount()));
-			studentFee.setPayMode(studentPayFee.getPaymentMode());
-			studentFee.setTransactionId(studentPayFee.getTransactionId());
-			studentFee.setPaidHas(student.getIsBoarding()); 
-			studentFee.setTermPiad(sysConfig.getTerm());
-			studentFee.setYearPaid(sysConfig.getYear());
-			studentFee.setTransactingStaffId(staff.getUuid());  
-
-			if(studentFeeDAO.putStudentFee(studentFee)) {
-				response.setMessage("success");
-				response.setDescription("Fee paid successsfully."); 
-
-			}else {
+			if(!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
 				response.setMessage("error");
-				response.setDescription("Something went wrong, contact Admin!");
+				response.setDescription("Staff not allowed to alter with fee!");
+				
+			}else {
+				
+				StudentFee studentFee = new StudentFee(); 
+				studentFee.setAccountId(studentPayFee.getAccountId());
+				studentFee.setStudentId(student.getUuid());
+				studentFee.setAmountPaid(Integer.valueOf(studentPayFee.getAmount()));
+				studentFee.setPayMode(studentPayFee.getPaymentMode());
+				studentFee.setTransactionId(studentPayFee.getTransactionId());
+				studentFee.setPaidHas(student.getIsBoarding()); 
+				studentFee.setTermPiad(sysConfig.getTerm());
+				studentFee.setYearPaid(sysConfig.getYear());
+				studentFee.setTransactingStaffId(staff.getUuid());  
 
+				if(studentFeeDAO.putStudentFee(studentFee)) {
+					response.setMessage("success");
+					response.setDescription("Fee paid successsfully."); 
+
+				}else {
+					response.setMessage("error");
+					response.setDescription("Something went wrong, contact Admin!");
+
+				}
+				
+				
 			}
+			
+			
 
 		}
 
 
 		return response;
 	}
+	
 	
 	
 	/**
@@ -385,22 +391,33 @@ public class StudentService {
 			}else {
 				
 				studentFee.setAmountPaid(updateFeeObj.getCorrectAmount()); 
+				Staff staff = staffDAO.getStaff(updateFeeObj.getAccountId(), updateFeeObj.getTransactingStaffId()); 
 				
-				if(studentFeeDAO.updateStudentFee(studentFee)) {
-					response.setMessage("success");
-					response.setDescription("Amount updated sucessfully!");
+				if(!staffAllowedToAlterFee(updateFeeObj.getTransactingStaffId(), staff.getAcessLevelId())) {
+					response.setMessage("error");
+					response.setDescription("Staff not allowed to alter with fee!");
 					return response;
 					
 				}else {
-					response.setMessage("error");
-					response.setDescription("Something went wrong, conatct Admin.");
-					return response;
+					
+					
+					if(studentFeeDAO.updateStudentFee(studentFee)) {
+						response.setMessage("success");
+						response.setDescription("Amount updated sucessfully!");
+						return response;
+						
+					}else {
+						response.setMessage("error");
+						response.setDescription("Something went wrong, conatct Admin.");
+						return response;
+						
+					}
+					
+					
 					
 				}
 				
 			}
-			
-			
 		}
 		
 	}
@@ -638,6 +655,7 @@ public class StudentService {
 			StudentFeeAPI studentFeeAPI = new StudentFeeAPI();
 
 			studentFeeAPI.setRegNo(student.getRegNo());
+			studentFeeAPI.setStudentId(student.getUuid()); 
 			studentFeeAPI.setFirstname(student.getFirstname());
 			studentFeeAPI.setMiddlename(student.getMiddlename());
 			studentFeeAPI.setLastname(student.getLastname());
@@ -1632,6 +1650,27 @@ public class StudentService {
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param uuid
+	 * @param acessLevelId
+	 * @return
+	 */
+	private boolean staffAllowedToAlterFee(String uuid, String acessLevelId) {
+		//Principal_Bursar
+		String[] allowed = {"C3915245-00EE-4EF4-9898-ACE59683DD60","0DE968C9-7309-C481-58F7-AB6CDB1011EF"};
+		List<String> allowedList = new ArrayList<>();
+		allowedList = Arrays.asList(allowed);
+		if(allowedList.contains(acessLevelId)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+
 	
 	
 	/**
