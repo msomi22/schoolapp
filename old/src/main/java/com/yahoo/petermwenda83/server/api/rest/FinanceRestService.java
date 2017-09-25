@@ -3,6 +3,7 @@
  */
 package com.yahoo.petermwenda83.server.api.rest;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
@@ -198,12 +199,12 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		if(feeBreakdownDesc.getFeeCode().length() < 2) {
+		/*if(feeBreakdownDesc.getFeeCode().length() < 2) {
 			response.setMessage("error");
 			response.setDescription("Invalid code!");
 			return response;
 
-		}else if(feeBreakdownDesc.getFeeDescription().length() < 3) {
+		}else */if(feeBreakdownDesc.getFeeDescription().length() < 3) {
 			response.setMessage("error");
 			response.setDescription("Invalid description!");
 			return response;
@@ -228,6 +229,7 @@ public class FinanceRestService {
 		}else {
 
 			feeBreakdownDesc.setUuid(new FeeBreakdownDesc().getUuid()); 
+			feeBreakdownDesc.setFeeCode(RandomStringUtils.random(4)); 
 
 			if(feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc)) {
 				response.setMessage("success");
@@ -260,12 +262,12 @@ public class FinanceRestService {
 			response.setDescription("Fee not found!");
 			return response;
 
-		}else if(feeBreakdownDesc.getFeeCode().length() < 2) {
+		}/*else if(feeBreakdownDesc.getFeeCode().length() < 2) {
 			response.setMessage("error");
 			response.setDescription("Invalid code!");
 			return response;
 
-		}else if(feeBreakdownDesc.getFeeDescription().length() < 3) {
+		}*/else if(feeBreakdownDesc.getFeeDescription().length() < 3) {
 			response.setMessage("error");
 			response.setDescription("Invalid description!");
 			return response;
