@@ -776,17 +776,17 @@ public class FinanceRestService {
 
 			int amountToEachStudent = (int)FeeConstants.getGoKeFee(accountId, feeBreakdown.getUuid());
 
-			double totalAmount = feeBreakdown.getAmount();
+			double totalAmount = amount;
 			int no_of_students = studentDAO.activeCount(accountId, "1"); 
 			double balance = 0;
 			
 			balance = totalAmount - (amountToEachStudent * no_of_students);
 
 			GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
-			gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
-			gokeMoneyUsageCheck.setExpectedAmount((int) no_of_students * amountToEachStudent);    
-			gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
 			gokeMoneyUsageCheck.setTotalAmount((int)totalAmount);
+			gokeMoneyUsageCheck.setExpectedAmount((int) no_of_students * amountToEachStudent);   
+			gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
+			gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
 			gokeMoneyUsageCheck.setBalance((int)balance);
 			gokeMoneyUsageCheck.setTerm(sysConfig.getTerm());
 			gokeMoneyUsageCheck.setYear(sysConfig.getYear());
