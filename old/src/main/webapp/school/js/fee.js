@@ -336,7 +336,7 @@ function fetchFeeDetails(state) {
 								
 								$('#p_accountId').val($('#accountId').val());
 								
-								console.log('Staff ID: '+$('#p_staffId').val());
+								console.log('Student ID: '+$('#studentId').val());
 								
 								
 
