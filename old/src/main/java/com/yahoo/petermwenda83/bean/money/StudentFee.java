@@ -21,6 +21,7 @@ public class StudentFee extends StorableBean{
 	private String paidHas;//boarders = 1, day = 0
 	private String termPiad;
 	private String yearPaid;
+	private String transactingStaffId;
 	private Timestamp datePaid;
 
 
@@ -32,168 +33,109 @@ public class StudentFee extends StorableBean{
 		paidHas = "";
 		termPiad = "";
 		yearPaid = "";
+		transactingStaffId = "";
 		datePaid = new Timestamp(new Date().getTime());
 
 	}
 
 
-
-	/**
-	 * @return the studentId
-	 */
 	public String getStudentId() {
 		return studentId;
 	}
 
 
-
-	/**
-	 * @param studentId the studentId to set
-	 */
 	public void setStudentId(String studentId) {
 		this.studentId = studentId;
 	}
 
 
-
-	/**
-	 * @return the amountPaid
-	 */
 	public int getAmountPaid() {
 		return amountPaid;
 	}
 
 
-
-	/**
-	 * @param amountPaid the amountPaid to set
-	 */
 	public void setAmountPaid(int amountPaid) {
 		this.amountPaid = amountPaid;
 	}
 
 
-
-	/**
-	 * @return the payMode
-	 */
 	public String getPayMode() {
 		return payMode;
 	}
 
 
-
-	/**
-	 * @param payMode the payMode to set
-	 */
 	public void setPayMode(String payMode) {
 		this.payMode = payMode;
 	}
 
 
-
-	/**
-	 * @return the transactionId
-	 */
 	public String getTransactionId() {
 		return transactionId;
 	}
 
 
-
-	/**
-	 * @param transactionId the transactionId to set
-	 */
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
 
 
-
-	/**
-	 * @return the paidHas
-	 */
 	public String getPaidHas() {
 		return paidHas;
 	}
 
 
-
-	/**
-	 * @param paidHas the paidHas to set
-	 */
 	public void setPaidHas(String paidHas) {
 		this.paidHas = paidHas;
 	}
 
 
-
-	/**
-	 * @return the termPiad
-	 */
 	public String getTermPiad() {
 		return termPiad;
 	}
 
 
-
-	/**
-	 * @param termPiad the termPiad to set
-	 */
 	public void setTermPiad(String termPiad) {
 		this.termPiad = termPiad;
 	}
 
 
-
-	/**
-	 * @return the yearPaid
-	 */
 	public String getYearPaid() {
 		return yearPaid;
 	}
 
 
-
-	/**
-	 * @param yearPaid the yearPaid to set
-	 */
 	public void setYearPaid(String yearPaid) {
 		this.yearPaid = yearPaid;
 	}
 
 
+	public String getTransactingStaffId() {
+		return transactingStaffId;
+	}
 
-	/**
-	 * @return the datePaid
-	 */
+
+	public void setTransactingStaffId(String transactingStaffId) {
+		this.transactingStaffId = transactingStaffId;
+	}
+
+
 	public Timestamp getDatePaid() {
 		return datePaid;
 	}
 
 
-
-	/**
-	 * @param datePaid the datePaid to set
-	 */
 	public void setDatePaid(Timestamp datePaid) {
 		this.datePaid = datePaid;
 	}
 
 
-
-	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "StudentFee [studentId=" + studentId + ", amountPaid=" + amountPaid + ", payMode=" + payMode
 				+ ", transactionId=" + transactionId + ", paidHas=" + paidHas + ", termPiad=" + termPiad + ", yearPaid="
-				+ yearPaid + ", datePaid=" + datePaid +  ", getUuid()="
+				+ yearPaid + ", transactingStaffId=" + transactingStaffId + ", datePaid=" + datePaid + ", getUuid()="
 				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
-
 
 
 	/** 

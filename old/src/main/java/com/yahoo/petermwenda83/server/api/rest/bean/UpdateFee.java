@@ -12,6 +12,8 @@ public class UpdateFee {
 	private String accountId;
 	private String studentId;
 	private String paymentId;
+	private String transactingStaffId;
+	private String schoolSecret;
 	private int previousAmount;
 	private int correctAmount;
 
@@ -22,6 +24,8 @@ public class UpdateFee {
 		accountId = "";
 		studentId = "";
 		paymentId = "";
+		transactingStaffId = "";
+		schoolSecret = "";
 		previousAmount = 0;
 		correctAmount = 0;
 	}
@@ -50,6 +54,22 @@ public class UpdateFee {
 		this.paymentId = paymentId;
 	}
 
+	public String getTransactingStaffId() {
+		return transactingStaffId;
+	}
+
+	public void setTransactingStaffId(String transactingStaffId) {
+		this.transactingStaffId = transactingStaffId;
+	}
+
+	public String getSchoolSecret() {
+		return schoolSecret;
+	}
+
+	public void setSchoolSecret(String schoolSecret) {
+		this.schoolSecret = schoolSecret;
+	}
+
 	public int getPreviousAmount() {
 		return previousAmount;
 	}
@@ -69,8 +89,11 @@ public class UpdateFee {
 	@Override
 	public String toString() {
 		return "UpdateFee [accountId=" + accountId + ", studentId=" + studentId + ", paymentId=" + paymentId
-				+ ", previousAmount=" + previousAmount + ", correctAmount=" + correctAmount + "]";
+				+ ", transactingStaffId=" + transactingStaffId + ", schoolSecret=" + schoolSecret + ", previousAmount="
+				+ previousAmount + ", correctAmount=" + correctAmount + "]";
 	}
+
+	
 
 	
 }
