@@ -12,70 +12,150 @@
 
 			<form method="post" action="#" id="feePaymentForm">
 				<div class="modal-body">
-				
-				
+
+
 
 					<div class="box-body">
 
 						<div class="row">
-							<div class="col-md-8 col-md-offset-2">
-								<label for="p_regNo">Reg No_:</label>
 
-								<input type="text" id="p_regNo" class="form-control formelement"
-									name="regNo"  placeholder="Reg No" pattern="[0-9]{3,4}"
-									title="Reg No,Registration number, should contain numerics only and should be 3 or 4 numbers only"
-									maxlength="4"
-									required>
-									
-									<input type="hidden" name="staffId" id="staffId" value="">
-									<input type="hidden" name="term" id="term" value="">
-									<input type="hidden" name="year" id="year" value="">
-									<input type="hidden" name="feeBalance" id="feeBalance" value="">
-									
-							</div>
-							
 
-							<div class="col-md-8 col-md-offset-2">
-								<label for="p_mode">Payment Mode:</label>
-								<select class="form-control formelement" name="paymentMode" id="p_mode">
-								<option value="BANK">BANK Receipt</option>
-								
-								<option value="MPESA">MPESA</option>
-								
-								<option value="CASH">CASH</option>
-								
-								</select>
+
+
+
+
+
+
+							<div class="row" style="display: none" id="PreSubmitInfo">
+
+								<div 
+									class="col-md-7 col-md-offset-3 alert alert-warning">
+									<h3>Are you sure you want to make payment's as described below?</h3>
+									<h5 id="preRegno">####</h5>
+
+									<h5 id="prePaymentMode">####</h5>
+									<h5 id="preTransId">####</h5>
+									<h5 id="preAmount">####</h5>
+
+								</div>
+
 							</div>
 
+							<div id="paymentSpace">
+								<div class="row">
+
+									<div id="PreRegNoInfo"
+										class="col-md-7 col-md-offset-3 alert alert-warning">
+										<h5 id="regNoVerSms">Enter a student's registration to
+											first check student's information. (Verification module)</h5>
+									</div>
+
+								</div>
 
 
-							<div class="col-md-8 col-md-offset-2">
-								<label for="transactionId">Transaction ID:</label>
-								<input type="text" id="transactionId" class="form-control formelement"
-									name="transactionId" placeholder="Transaction ID" pattern="[A-Za-z0-9]{6,20}"
-									maxlength="20"
-									title="Transaction ID,enter a valid number ">
-								
+
+								<div class="col-md-8 col-md-offset-2">
+
+
+									<div class="row">
+										<div class="col-md-3">
+											<label for="p_regNo">Reg No_:</label>
+
+										</div>
+										<div class="col-md-9">
+											<input type="text" id="p_regNo"
+												class="form-control formelement" name="regNo"
+												placeholder="Reg No" pattern="[0-9]{3,4}"
+												onkeyup="regVerify()"
+												title="Reg No,Registration number, should contain numerics only and should be 3 or 4 numbers only"
+												maxlength="4" required> <input type="hidden"
+												name="staffId" id="staffId" value=""> <input
+												type="hidden" name="term" id="term" value=""> <input
+												type="hidden" name="year" id="year" value=""> <input
+												type="hidden" name="feeBalance" id="feeBalance" value="">
+
+										</div>
+									</div>
+
+								</div>
+
+
+								<div class="col-md-8 col-md-offset-2">
+
+									<br>
+
+									<div class="row">
+										<div class="col-md-3">
+											<label for="p_mode">Payment Mode:</label>
+										</div>
+
+										<div class="col-md-9">
+
+											<select class="form-control formelement" name="paymentMode"
+												id="p_mode" disabled>
+												<option value="BANK">BANK Receipt</option>
+
+												<option value="MPESA">MPESA</option>
+
+												<option value="CASH">CASH</option>
+
+											</select>
+										</div>
+
+									</div>
+								</div>
+
+
+
+								<div class="col-md-8 col-md-offset-2">
+									<br>
+
+									<div class="row">
+										<div class="col-md-3">
+											<label for="transactionId">Transaction ID:</label>
+										</div>
+										<div class="col-md-9">
+											<input type="text" id="transactionId"
+												class="form-control formelement" name="transactionId"
+												placeholder="Transaction ID" pattern="[A-Za-z0-9]{6,20}"
+												maxlength="20" title="Transaction ID,enter a valid number "
+												disabled>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-8 col-md-offset-2">
+
+									<br>
+
+									<div class="row">
+										<div class="col-md-3">
+											<label for="amount">Amount:</label>
+										</div>
+										<div class="col-md-9">
+
+											<input type="text" id="amount"
+												class="form-control formelement" name="amount"
+												placeholder="Amount" pattern="[0-9]{2,5}" maxlength="5"
+												title="Amount,enter a valid amount e.g 100, 1000, 1500 e.t.c"
+												disabled>
+										</div>
+
+									</div>
+
+								</div>
+
 							</div>
-							
-							
-							<div class="col-md-8 col-md-offset-2">
-								<label for="amount">Amount:</label>
-								<input type="text" id="amount" class="form-control formelement"
-									name="amount" placeholder="Amount" pattern="[0-9]{2,5}"
-									maxlength="5"
-									title="Amount,enter a valid amount e.g 100, 1000, 1500 e.t.c">
-								
-							</div>
-							
-							
-							
-							
-							
-							
-							
 
-							
+
+
+
+
+
+
+
+
 
 
 						</div>
@@ -92,11 +172,15 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary pull-right" id="btn_feePayment" onclick="feePayment()">
-						Submit  <i class="fa fa-save"></i>
+					<button type="button" class="btn btn-primary pull-right"
+						id="btn_feePayment" onclick="preSubmitVerify('init')">
+						Submit <i class="fa fa-save"></i>
 					</button>
 					<button type="button" class="btn btn-default pull-left"
-						data-dismiss="modal">Close</button>
+						data-dismiss="modal" id="btn_closepayment">Close</button>
+					<button style="display: none" type="button"
+						class="btn btn-default pull-left" id="btn_revertPaymentInfo"
+						onclick="preSubmitVerify('back')">Cancel</button>
 				</div>
 
 			</form>
