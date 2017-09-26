@@ -92,7 +92,7 @@
 
 								<!-- Current avatar -->
 								<div class="avatar-view" title="Change the avatar" id="crop-avatarState">
-									<img src="images/user.png" alt="Avatar">
+									<img src="images/user.png" alt="Avatar" id="student_profile_pic">
 									<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
@@ -321,6 +321,8 @@
 														<input type="hidden" name="hasPrimary" id="hasPrimary" value="false"
 														>
 														<input type="hidden" name="regStream" id="regStream"
+														>
+														<input type="hidden" name="isAlumni" id="isAlumni" value="0"
 														>
 														
 

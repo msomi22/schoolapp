@@ -47,6 +47,14 @@ function fetchBasicInfo() {
 		$.each(data, function(key, value) {
 			$("#updateStudentInfo").find("input[name='" + key + "']")
 					.val(value);
+			
+			if(data["passport"]){
+				$('#student_profile_pic').attr("src",'data:image/jpg;base64,'+data["passport"]);
+				
+				$('#profile_url').val(data["regNo"]+'.png');
+				
+			}
+				
 
 			if (key === "apiParentPrimary") {
 
@@ -164,7 +172,7 @@ function updateStudent(){
 	
 	
 	
-	/*if(checkFormValidation($('#updateStudentInfo'))){
+	//if(!checkFormValidation($('#updateStudentInfo'))){
 		
 		request_type = 'PUT';
 		
@@ -181,11 +189,18 @@ function updateStudent(){
 			console.log('Smart Code');
 			
 			console.log(data);
+			
+			parseData(data)
 
 		});
 		
 		
-	}*/
+//	}
+	
+	
+	/*data_passed= $('#updateStudentInfo').serializeJSON();
+	
+	console.log(JSON.stringify(data_passed));
 	
 	$
 	.ajax(
@@ -212,7 +227,7 @@ function updateStudent(){
 			
 			}
 			);
-	
+	*/
 	
 	
 	
@@ -247,13 +262,16 @@ function deactivateStudent(){
 	//avatar-view
 	//$('#crop-avatarState').removeClass('avatar-view');
 	//$('#crop-avatar').removeClass('profile_img');
-	$('#not_possible').html('<b>Not Possible to change the profile pic</b>');
+	$('#avata_show').html('<b>Not Possible to change the profile pic</b>');
 	
 }
 
 function activateEditing(){
 	
 	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate').attr('disabled', false);
+	
+	$('#avata_show').show();
+	$('#not_possible').hide();
 	
 	
 }
@@ -273,6 +291,44 @@ function checkFormValidation(form) {
 		return true;
 	}
 }
+
+function parseData(data){
+	if (data.description.includes("success")) {
+
+		$('#success').modal('show');
+
+		$('#successTitle').text(data.description);
+		$('#successSms').text(data.description);
+
+		$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar').attr('disabled', true);
+		$('#not_possible').show();
+		$('#not_possible').html('<b>Click on the edit button to be able to edit the avatar</b>');
+		$('#avata_show').hide();
+		
+		
+
+
+		setTimeout(function() {
+
+			$('#success').modal('hide');
+		}, 2500);
+
+	} else if (data.message.includes("error")) {
+
+		$('#error').modal('show');
+
+		$('#errorTitle').text(data.description);
+
+		$('#errorSms').text(data.description);
+
+		setTimeout(function() {
+
+			$('#error').modal('hide');
+		}, 3500);
+
+	}
+}
+
 
 
 

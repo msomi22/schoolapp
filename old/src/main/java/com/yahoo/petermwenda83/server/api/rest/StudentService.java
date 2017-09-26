@@ -1651,7 +1651,7 @@ public class StudentService {
 	 * @return
 	 */
 	private boolean validStatus(String isBoarding) {
-		String[] allowed = {"1","2"};
+		String[] allowed = {"1","0"};
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
 		if(allowedList.contains(isBoarding)) {
