@@ -1221,13 +1221,15 @@ public class StudentService {
 
 		}else {
 
-			ApiSubject apiSubject = new ApiSubject();
+			
 			List<ApiSubject> apiSubjectList = new ArrayList<>();
+			
 			subjectDAO.getSubjects(accountId).forEach(subject ->{
-
+				ApiSubject apiSubject = new ApiSubject();
 				apiSubject.setAccountId(accountId);
 				apiSubject.setDescription(subject.getDescription());
 				apiSubject.setSubjectId(subject.getUuid());
+				
 				apiSubjectList.add(apiSubject);
 			});
 
