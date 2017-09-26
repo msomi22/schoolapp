@@ -314,6 +314,15 @@
 														
 														<input type="hidden" name="isActive" id="isActive"
 														>
+														
+														
+														<input type="hidden" name="hasParent" id="hasParent" value="false"
+														>
+														<input type="hidden" name="hasPrimary" id="hasPrimary" value="false"
+														>
+														<input type="hidden" name="regStream" id="regStream"
+														>
+														
 
 
 												</div>
@@ -396,7 +405,7 @@
 
 														<h4>Class</h4>
 
-														<select class="form-control formelement" name="classroom"
+														<select class="form-control formelement" 
 															id="classroom">
 															<%
 																if (classroomList != null) {
@@ -545,7 +554,7 @@
 														<h4>School's Name</h4>
 														<input type="text" id="schoolName"
 															class="form-control formelement" name="schoolName"
-															placeholder="School name" pattern="[A-Za-z]{3,30}"
+															placeholder="School name" pattern="[A-Za-z\s]{3,30}"
 															title="School Name,Only characters are allowed and should be less than 20 characters">
 
 													</div>

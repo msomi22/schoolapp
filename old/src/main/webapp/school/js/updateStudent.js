@@ -24,10 +24,16 @@ $(document).ready(function() {
 
 	console.log($('#passedParam').val());
 	url = "one/" + $('#passedParam').val();
+	
+	
+	
 
 	fetchBasicInfo();
 
 	fetchSubjects();
+	
+	
+	
 
 });
 
@@ -53,10 +59,15 @@ function fetchBasicInfo() {
 
 			if (key === "currentStream") {
 				$('#currentStream').val(value.trim());
+				
+				$('#')
 
 				console.log(key + " value:" + value.trim());
 
 			}
+			
+			if(key === "regStream")
+				$('#regStream').val(value);
 
 			if (key === "gender")
 				$('#gender').val(value.trim());
@@ -113,7 +124,7 @@ function apiCall(handleData) {
 				url : base_url + url,
 				type : request_type,
 				dataType : 'json',
-				data : data_passed,
+				data : JSON.stringify(data_passed),
 				contentType : 'application/json',
 				accept : 'application/json',
 				beforeSend : function(xhr) {
@@ -153,7 +164,7 @@ function updateStudent(){
 	
 	
 	
-	if(checkFormValidation($('#updateStudentInfo'))){
+	/*if(checkFormValidation($('#updateStudentInfo'))){
 		
 		request_type = 'PUT';
 		
@@ -174,7 +185,33 @@ function updateStudent(){
 		});
 		
 		
-	}
+	}*/
+	
+	$
+	.ajax(
+			{
+				url : location.protocol + "//"
+						+ window.location.host
+						+ "/school/webapi/student/"
+						+ $('#accountId').val(),
+				type : 'PUT',
+				dataType : 'json',
+				data : JSON.stringify($('#updateStudentInfo')
+						.serializeJSON()),
+				contentType : 'application/json',
+				accept : 'application/json',
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader('Authorization',
+							'Basic ZGVtbzoxMjM0NTY3OA==');
+				}
+			}).done(function(data) {
+				
+				
+				console.log(data);
+				
+			
+			}
+			);
 	
 	
 	
@@ -270,3 +307,81 @@ function checkFormValidation(form) {
  * dataTable.search(this.value).draw(); });
  * 
  */
+
+
+
+/*
+"accountId"
+:
+"E3CDC578-37BA-4CDB-B150-DAB0409270CD",
+"bcertNo"
+:
+"96563",
+"classroom"
+:
+"C143978A-E021-4015-BC67-5A00D6C910D1",
+"county"
+:
+"Narok",
+"currentStream"
+:
+"37D3223A-547E-4BA9-BD0C-28F6187BB5D4",
+"dob"
+:
+"2018-07-03",
+"firstname"
+:
+"Dominic",
+"gender"
+:
+"M",
+"hasParent"
+:
+"false",
+"hasPrimary"
+:
+"false",
+"index"
+:
+"030830597",
+"isActive"
+:
+"1",
+"isBoarding"
+:
+"1",
+"kcpemark"
+:
+"342",
+"kcpeyear"
+:
+"2008",
+"lastname"
+:
+"Gabriel",
+"middlename"
+:
+"Keefe",
+"parentEmail"
+:
+"",
+"parentMobile"
+:
+"",
+"parentName"
+:
+"",
+"passport"
+:
+"",
+"regNo"
+:
+"0998",
+"schoolName"
+:
+"Kathitun",
+"uuid"
+:
+"CC6D62A0-5AA0-46CA-A0AA-C0A651021BDA"*/
+
+
