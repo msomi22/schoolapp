@@ -31,12 +31,12 @@ public class StudentInfo {
 	private int finalYear;
 	private int finalTerm;
 	private String passport;
-	
+	//@JsonProperty
 	private boolean hasParent;
 	private String parentName;
 	private String parentMobile;
 	private String parentEmail;
-	
+	//@JsonProperty
 	private boolean hasPrimary;
 	private String schoolName;
 	private String index;
@@ -231,7 +231,7 @@ public class StudentInfo {
 		this.passport = passport;
 	}
 
-	public boolean hasParent() {
+	public boolean getHasParent() {
 		return hasParent;
 	}
 
@@ -263,7 +263,7 @@ public class StudentInfo {
 		this.parentEmail = parentEmail;
 	}
 
-	public boolean hasPrimary() {
+	public boolean getHasPrimary() {
 		return hasPrimary;
 	}
 

@@ -113,6 +113,38 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		return feeBreakdown; 
 	}
 
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolFeeBreakdownDAO#getFeeBreakdown(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory, String term, String year) {
+		FeeBreakdown feeBreakdown = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM FeeBreakdown WHERE accountId = ?"
+						+ " AND feeCategory =? AND term =? AND year =?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, feeCategory);
+			pstmt.setString(3, term);
+			pstmt.setString(4, year);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				feeBreakdown  = beanProcessor.toBean(rset, FeeBreakdown.class);
+			}
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting FeeBreakdown for accountId  " + accountId +" and feeCategory " + feeCategory +
+					" and  term " + term + " and year " + year );
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return feeBreakdown; 
+	}
+
 
 	
 	/**
@@ -254,4 +286,6 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 		return list;
 	}
 
+
+	
 }
