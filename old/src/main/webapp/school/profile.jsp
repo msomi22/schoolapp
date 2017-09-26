@@ -85,29 +85,32 @@
 				<div class="x_panel">
 					<div class="x_content">
 
-						
 
-							<div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-								<div class="profile_img" id="crop-avatar">
-								
+
+						<div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+							<div class="profile_img" id="crop-avatar">
+
 								<!-- Current avatar -->
-											<div class="avatar-view" title="Change the avatar">
-												<img src="images/user.png" alt="Avatar">
-												<!-- Since i can't get the dist dir need to create a preview here simiar 
+								<div class="avatar-view" title="Change the avatar" id="crop-avatarState">
+									<img src="images/user.png" alt="Avatar">
+									<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
 												 -->
 
 
-											</div>
-											<!-- Cropper Modal -->
-											<jsp:include page="modals/cropper.html" />
-
-											<!-- Loading state -->
-											<div class="loading" aria-label="Loading" role="img"
-												tabindex="-1"></div>
+								</div>
+								<!-- Cropper Modal -->
 								
-									<%-- <div class="col-md-2 col-sm-2" >
+								<jsp:include page="modals/cropper.html" />
+								
+								
+
+								<!-- Loading state -->
+								<div class="loading" aria-label="Loading" role="img"
+									tabindex="-1"></div>
+
+								<%-- <div class="col-md-2 col-sm-2" >
 
 											<!-- Current avatar -->
 											<div class="avatar-view" title="Change the avatar">
@@ -126,60 +129,54 @@
 											<div class="loading" aria-label="Loading" role="img"
 												tabindex="-1"></div>
 										</div> --%>
-								</div>
-								<h3>
-									Student's Name
-									<%=uuid%></h3>
-
-								<input type="hidden" id="passedParam" name="regno"
-									value="<%=accountId%>/<%=uuid%>">
-
-
-								<ul class="list-unstyled user_data">
-									<li><i class="fa fa-map-marker user-profile-icon"></i>
-										School Name</li>
-
-									<li>
-										<!--  <i class="fa fa-briefcase user-profile-icon"></i>  --> <input
-										name="" class="form-control" type="text" value="FORM 4 N"
-										disabled>
-
-									</li>
-
-									<li class="m-top-xs">
-										<!--  <i class="fa fa-external-link user-profile-icon"></i> -->
-
-										<button class="form-control btn btn-primary">
-											<i class="fa fa-remove"></i> Deactivate
-										</button>
-
-									</li>
-								</ul>
-
-								<a class=" form-control btn btn-success"><i
-									class="fa fa-edit m-right-xs"></i> Edit Details</a> <br />
-
-								<!-- start skills -->
-								<!--  <h4>More</h4> -->
-								<ul class="list-unstyled user_data">
-									<li>
-										<p>Ranking</p>
-										<div class="progress progress_sm">
-											<div class="form-control progress-bar bg-green"
-												role="progressbar" data-transitiongoal="50"></div>
-										</div>
-									</li>
-								</ul>
-								<!-- end of skills -->
 							</div>
+							<h3>
+								Student's Name
+								<%=uuid%></h3>
+
+							<input type="hidden" id="passedParam" name="regno"
+								value="<%=accountId%>/<%=uuid%>">
 
 
-							<div class="col-md-9 col-sm-9 col-xs-12">
-							
+							<ul class="list-unstyled user_data">
+								<li><i class="fa fa-map-marker user-profile-icon"></i>
+									School Name</li>
+
+								
+
+								<li class="m-top-xs">
+									<!--  <i class="fa fa-external-link user-profile-icon"></i> -->
+
+									<button class="form-control btn btn-primary" type="button" id="btn_deactivate" onclick="deactivateModal()">
+										<i class="fa fa-remove" ></i> Deactivate
+									</button>
+
+								</li>
+							</ul>
+
+							<button class=" form-control btn btn-success" onclick= "activateEditing()" id="btn_editState"><i
+								class="fa fa-edit m-right-xs"></i> Edit Details</button> <br />
+
+							<!-- start skills -->
+							<!--  <h4>More</h4> -->
+							<ul class="list-unstyled user_data">
+								<li>
+									<p>Ranking</p>
+									<div class="progress progress_sm">
+										<div class="form-control progress-bar bg-green"
+											role="progressbar" data-transitiongoal="50"></div>
+									</div>
+								</li>
+							</ul>
+							<!-- end of skills -->
+						</div>
+
+
+						<div class="col-md-9 col-sm-9 col-xs-12">
+
 							<form action="#" method="POST" id="updateStudentInfo">
-							
-							<input type="hidden" name="profile_url" id="profile_url"
-												value="">
+
+								<input type="hidden" name="passport" id="profile_url">
 
 								<div class="" role="tabpanel" data-example-id="togglable-tabs">
 									<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -309,14 +306,20 @@
 														</select>
 													</div>
 
-
+													<input type="hidden" name="uuid" id="uuid"
+														value="<%=uuid%>">
+														
+														<input type="hidden" name="accountId" id="accountId"
+														value="<%=uuid%>">
+														
+														<input type="hidden" name="isActive" id="isActive"
+														>
 
 
 												</div>
 
 
-												<br>
-
+												<br> 
 
 
 
@@ -462,7 +465,7 @@
 													<div class="col-md-3 col-md-offset-5">
 
 														<button type="button" id="submit_gen"
-															class="btn btn-primary form-control" disabled>Apply
+															class="btn btn-primary form-control" onclick="updateStudent()">Apply
 															Changes</button>
 
 													</div>
@@ -496,15 +499,15 @@
 											<!-- start subjects -->
 
 											<br>
-											
-										
+
+
 
 											<div class="row">
 
 												<div class="col-md-6 col-md-offset-3 alert alert-info">
 													Checked represents subjects assigned to the student</div>
 
-												
+
 
 											</div>
 
@@ -603,7 +606,7 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control" disabled>Apply
+														class="btn btn-primary form-control" onclick="updateStudent()">Apply
 														Changes</button>
 
 												</div>
@@ -696,7 +699,7 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control" disabled>Apply
+														class="btn btn-primary form-control" onclick="updateStudent()">Apply
 														Changes</button>
 
 												</div>
@@ -718,14 +721,14 @@
 
 									</div>
 								</div>
-								
-								</form>
-							</div>
+
+							</form>
+						</div>
 
 
 
 
-					
+
 					</div>
 				</div>
 			</div>
@@ -733,6 +736,10 @@
 	</div>
 </div>
 <!-- /page content -->
+
+
+<!-- State Modal -->
+<jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />

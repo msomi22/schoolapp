@@ -17,6 +17,8 @@ var base_url = location.protocol + "//" + window.location.host
 
 $(document).ready(function() {
 	// init update :)
+	
+	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar').attr('disabled', true);
 
 	console.log($('#passedParam').val());
 	url = "one/" + $('#passedParam').val();
@@ -94,7 +96,7 @@ function fetchSubjects() {
 							'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
 									+ data[i]['subjectId']
 									+ '" type="checkbox" class="form-control  chk" checked /><label for="math">'
-									+ data[i]['subjectId'] + '</label> </div>');
+									+ data[i]['description'] + '</label> </div>');
 
 		}
 
@@ -138,6 +140,57 @@ function apiCall(handleData) {
 
 	return returnData;
 }
+
+
+
+
+function updateStudent(){
+	
+	console.log($('#updateStudentInfo').serializeJSON());
+	
+	
+}
+
+
+function deactivateModal(){
+	
+	$('#warning').modal('show');
+	
+	$('#warningTitle').html('<b>Deactivate the Student</b>');
+	
+	$('#warningSms').html('<b>Are you sure you want to deactivate the student?</b>');
+	
+	
+	
+	
+	
+	$('#btn_warningState').attr('onclick','deactivateStudent()');
+}
+
+function deactivateStudent(){
+	
+	$('#isActive').val('0');
+	console.log($('#updateStudentInfo').serializeJSON());
+	
+	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_editState,#btn_deactivate').attr('disabled', true);
+	//$('#crop-avatar').attr('id','tempID');
+	//avatar-view
+	//$('#crop-avatarState').removeClass('avatar-view');
+	//$('#crop-avatar').removeClass('profile_img');
+	$('#not_possible').html('<b>Not Possible to change the profile pic</b>');
+	
+}
+
+function activateEditing(){
+	
+	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate').attr('disabled', false);
+	
+	
+}
+
+
+
+
 
 /*
  * Just joking around with Async calls function callBack(data) {
