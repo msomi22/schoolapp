@@ -35,7 +35,7 @@ public class SysConfig extends StorableBean{
 		examId = "";
 		term = "";
 		year = "";
-		cansendSMS = "";
+		cansendSMS = "0";
 	}
 
 	

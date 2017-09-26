@@ -15,6 +15,8 @@ public interface SchoolSysConfigDAO {
 	
 	public SysConfig getSysConfig(String accountId);
 	
+	public SysConfig getSysConfig(String accountId, String term, String year);
+	
 	public boolean  putSysConfig(SysConfig sysConfig);
 	
 	public boolean  updateSysConfig(SysConfig sysConfig);

@@ -80,6 +80,39 @@ public class SysConfigDAO extends GenericDAO implements SchoolSysConfigDAO {
 
 		return sysConfig; 
 	}
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolSysConfigDAO#getSysConfig(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public SysConfig getSysConfig(String accountId, String term, String year) {
+		SysConfig sysConfig = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SysConfig"
+						+ " WHERE accountId = ? AND term =? AND year =?;");       
+
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, term); 
+			pstmt.setString(3, year); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				sysConfig  = beanProcessor.toBean(rset,SysConfig.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting SysConfig: " + sysConfig + " and term : " + term + " and year " + year);
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+		}
+
+		return sysConfig; 
+	}
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolSysConfigDAO#putExamConfig(com.yahoo.petermwenda83.bean.exam.SysConfig)
@@ -118,7 +151,7 @@ public class SysConfigDAO extends GenericDAO implements SchoolSysConfigDAO {
 		boolean success = true;
 		try (  Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE SysConfig SET examId=?,"
-						+ "term=?,year =?, cansendSMS=? WHERE accountId = ?;");
+						+ "term=?, year =?, cansendSMS=? WHERE accountId = ?;");
 				) { 
 
 			pstmt.setString(1, sysConfig.getExamId());
@@ -163,4 +196,5 @@ public class SysConfigDAO extends GenericDAO implements SchoolSysConfigDAO {
 		return list;
 	}
 
+	
 }
