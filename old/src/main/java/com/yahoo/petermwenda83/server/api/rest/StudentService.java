@@ -146,12 +146,12 @@ public class StudentService {
 
 			try {
 
-                 
-				
-                //TODO
+
+
+				//TODO
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
 				apiStudent.setPassport(getB64Image(studentDAO.getStudentById(accountId, studentId).getPassport()));
-				
+
 				APIParentPrimary apiParentPrimary = new APIParentPrimary();
 
 				//primary
@@ -244,7 +244,7 @@ public class StudentService {
 	public Object payFee(StudentPayFee studentPayFee) {
 
 		Response response = new Response();
-		
+
 		//validation
 		if(StringUtils.isEmpty(studentPayFee.getAccountId())) {
 
@@ -300,16 +300,16 @@ public class StudentService {
 
 			Student student = studentDAO.getStudentByregNo(studentPayFee.getAccountId(), studentPayFee.getRegNo());
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId()); 
-			
+
 			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
 			staff.getAcessLevelId();
-			
+
 			if(!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
 				response.setMessage("error");
 				response.setDescription("Staff not allowed to alter with fee!");
-				
+
 			}else {
-				
+
 				StudentFee studentFee = new StudentFee(); 
 				studentFee.setAccountId(studentPayFee.getAccountId());
 				studentFee.setStudentId(student.getUuid());
@@ -330,96 +330,96 @@ public class StudentService {
 					response.setDescription("Something went wrong, contact Admin!");
 
 				}
-				
-				
+
+
 			}
-			
-			
+
+
 
 		}
 
 
 		return response;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param updateFeeObj
 	 * @return
 	 */
 	public Object updateFeeInfo(UpdateFee updateFeeObj) {
-		
+
 		Response response = new Response();
-		
+
 		if(studentFeeDAO.getStudentFee(updateFeeObj.getAccountId(), updateFeeObj.getStudentId(), updateFeeObj.getPaymentId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Payment record not found!"); 
 			return response;
-			
+
 		}else {
-			
+
 			StudentFee studentFee = studentFeeDAO.getStudentFee(updateFeeObj.getAccountId(), updateFeeObj.getStudentId(), updateFeeObj.getPaymentId());
-			
+
 			if(studentFee.getAmountPaid() != updateFeeObj.getPreviousAmount()) {
 				response.setMessage("error");
 				response.setDescription("Previous amount incorrect!");  
 				return response;
-				
+
 			}else if(!FeeConstants.validFee(updateFeeObj.getCorrectAmount())) {  
 				response.setMessage("error");
 				response.setDescription("Amount is invalid!");
 				return response;
-				
+
 			}else if(staffDAO.getStaff(updateFeeObj.getAccountId(), updateFeeObj.getTransactingStaffId()) != null) {
 				response.setMessage("error");
 				response.setDescription("Staff is invalid!");
 				return response;
-             
+
 			}else if(accountDAO.getAccountById(updateFeeObj.getAccountId()) == null){
 				response.setMessage("error");
 				response.setDescription("SchoolId is invalid!");
 				return response;
-				
+
 			}else if(!StringUtils.equals(accountDAO.getAccountById(updateFeeObj.getAccountId()).getPassword(), 
 					SecurityUtil.getMD5Hash(updateFeeObj.getSchoolSecret()))){
 				response.setMessage("error");
 				response.setDescription("SchoolSecret is invalid!");
 				return response;
-				
+
 			}else {
-				
+
 				studentFee.setAmountPaid(updateFeeObj.getCorrectAmount()); 
 				Staff staff = staffDAO.getStaff(updateFeeObj.getAccountId(), updateFeeObj.getTransactingStaffId()); 
-				
+
 				if(!staffAllowedToAlterFee(updateFeeObj.getTransactingStaffId(), staff.getAcessLevelId())) {
 					response.setMessage("error");
 					response.setDescription("Staff not allowed to alter with fee!");
 					return response;
-					
+
 				}else {
-					
-					
+
+
 					if(studentFeeDAO.updateStudentFee(studentFee)) {
 						response.setMessage("success");
 						response.setDescription("Amount updated sucessfully!");
 						return response;
-						
+
 					}else {
 						response.setMessage("error");
 						response.setDescription("Something went wrong, conatct Admin.");
 						return response;
-						
+
 					}
-					
-					
-					
+
+
+
 				}
-				
+
 			}
 		}
-		
+
 	}
 	/**
 	 * 
@@ -427,38 +427,38 @@ public class StudentService {
 	 * @return
 	 */
 	public Object assignOtherFee(APIOtherFee apiOtherFee) {
-		
+
 		Response response = new Response();
-		
+
 		if(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getOtherFeeId(), apiOtherFee.getOtherFeeId()) != null) {
 			response.setMessage("error");
 			response.setDescription("Amount already assigned!"); 
 			return response;
-			
+
 		}else {
-			
+
 			StudentOtherFee studentOtherFee = new StudentOtherFee();
 			studentOtherFee.setAccountId(apiOtherFee.getAccountId());
 			studentOtherFee.setStudentId(apiOtherFee.getStudentId());
 			studentOtherFee.setOtherFeeId(apiOtherFee.getOtherFeeId());
 			studentOtherFee.setTerm(apiOtherFee.getTerm());
-			
+
 			if(studentOtherFeeDAO.putStudentOtherFee(studentOtherFee)) {
 				response.setMessage("success");
 				response.setDescription("Amount assigned sucessfully!");
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, try again later.");
 				return response;
-				
+
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -467,51 +467,51 @@ public class StudentService {
 	 * @return
 	 */
 	public Object revertOtheFee(APIOtherFee apiOtherFee) {
-		
+
 		Response response = new Response();
-		
+
 		if(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Nothing to delete!");
 			return response;
-			
+
 		}else {
-			
+
 			if(studentOtherFeeDAO.revertStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId())) {
-				
+
 				RevertedMoney revertedMoney = new RevertedMoney();
 				revertedMoney.setAccountId(apiOtherFee.getAccountId()); 
 				revertedMoney.setStudentId( apiOtherFee.getStudentId());
 				revertedMoney.setOtherFeeId(apiOtherFee.getOtherFeeId());
-				
+
 				if(revertedMoneyDAO.putRevertedMoney(revertedMoney)) {
 					response.setMessage("success");
 					response.setDescription("Fee reverted sucessfully!");
 					return response;
-					
+
 				}else {
-					
+
 					studentOtherFeeDAO.putStudentOtherFee(studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(), apiOtherFee.getOtherFeeId()));
-					
+
 					response.setMessage("error");
 					response.setDescription("Something went wrong, try again later.");
 					return response;
-					
-					
-					
+
+
+
 				}
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, try again later.");
 				return response;
-				
+
 			}
-			
+
 		}
 	}
-	
-	
+
+
 
 	/**
 	 * 
@@ -583,7 +583,7 @@ public class StudentService {
 
 	}
 
-	
+
 	/**
 	 * 
 	 * @param accountId
@@ -591,41 +591,41 @@ public class StudentService {
 	 * @return
 	 */
 	public Object revertGoKeMoney(APIRevertGoKeFee revertGoKeFee) {
-		
+
 		Response response = new Response();
-		
+
 		if(sysConfigDAO.getSysConfig(revertGoKeFee.getAccountId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Term-Year not set!"); 
 			return response;
 		}
-		
+
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(revertGoKeFee.getAccountId()); 
-		
+
 		if(studentFeeDAO.getStudentFee(revertGoKeFee.getAccountId(), revertGoKeFee.getStudentId(), FeeConstants.GVMT_MONEY_CODE,
 				sysConfig.getTerm(), sysConfig.getYear()) == null) {
-			
+
 			response.setMessage("error");
 			response.setDescription("Nothing to delete!");
 			return response;
-			
+
 		}else {
-			
+
 			if(studentFeeDAO.revertStudentGokeFee(revertGoKeFee.getAccountId(), revertGoKeFee.getStudentId(), 
-					   revertGoKeFee.getTermPiad(), revertGoKeFee.getYearPaid(), FeeConstants.GVMT_MONEY_CODE)){
+					revertGoKeFee.getTermPiad(), revertGoKeFee.getYearPaid(), FeeConstants.GVMT_MONEY_CODE)){
 				response.setMessage("success");
 				response.setDescription("GoKe Money reverted successfully.");
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Please contact Admin!");
 				return response;
-				
+
 			}
-			
+
 		}
-	
+
 	}
 
 
@@ -786,7 +786,7 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegNo()) && !validaLength(student.getRegNo()) ) {
+		}else if(!validaLength(student.getRegNo()) ) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("RegNo is invalid.");
 
@@ -798,13 +798,13 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
+		}else if(streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getCurrentStream()) && streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
+		}else if(streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
@@ -814,13 +814,13 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getFirstname()) && !validaLength(student.getFirstname())) {
+		}else if(!validaLength(student.getFirstname())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Firstname is invalid.");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getMiddlename()) && !validaLength(student.getMiddlename())) {
+		}else if(!validaLength(student.getMiddlename())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Middlename is invalid."); 
 
@@ -840,20 +840,19 @@ public class StudentService {
 
 		}else if(student.getHasParent()) { 
 
-			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
+			if(!validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent name is invalid."); 
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getParentEmail()) && !emailValidator.isValid(student.getParentEmail())) {  
+			}else if(!emailValidator.isValid(student.getParentEmail())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent email is invalid."); 
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getParentMobile()) && !StringUtils.isNumeric(student.getParentMobile()) &&
-					student.getParentMobile().length() > 9) {  
+			}else if(student.getParentMobile().length() != 9) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
 
@@ -862,10 +861,10 @@ public class StudentService {
 			}
 
 
- 
+
 		}else if(student.getHasPrimary()) {  
 
-			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
+			if(!validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school name is invalid."); 
 
@@ -877,14 +876,13 @@ public class StudentService {
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getKcpeyear()) && student.getKcpemark().length() !=4 ) { 
+			}else if(student.getKcpemark().length() !=4 ) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E year is invalid."); 
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getKcpemark()) && !StringUtils.isNumeric(student.getKcpemark()) && 
-					Integer.valueOf(student.getKcpemark()) < 100 && Integer.valueOf(student.getKcpemark()) > 500) { 
+			}else if(!validKcpeMark(student.getKcpemark())) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E makrs invalid."); 
 
@@ -993,8 +991,6 @@ public class StudentService {
 
 		Response apiResponse = new Response();
 
-
-
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("System Config not set!");
@@ -1007,13 +1003,13 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getUuid()) && studentDAO.getStudentById(accountId, student.getUuid()) == null) {
+		}else if(studentDAO.getStudentById(accountId, student.getUuid()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Student Id is invalid.");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegNo()) && !validaLength(student.getRegNo()) ) {
+		}else if(!validaLength(student.getRegNo()) ) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("RegNo is invalid.");
 
@@ -1024,13 +1020,13 @@ public class StudentService {
 			apiResponse.setDescription("Student RegNo duplicated not allowed!");
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getRegStream()) && streamDAO.getStream(accountId, student.getRegStream()) == null) { 
+		}else if(streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getCurrentStream()) && streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
+		}else if(streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
 
@@ -1052,13 +1048,13 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getFirstname()) && !validaLength(student.getFirstname())) {
+		}else if(!validaLength(student.getFirstname())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Firstname is invalid.");
 
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(student.getMiddlename()) && !validaLength(student.getMiddlename())) {
+		}else if(!validaLength(student.getMiddlename())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Middlename is invalid."); 
 
@@ -1078,20 +1074,19 @@ public class StudentService {
 
 		}else if(student.getHasParent()) { 
 
-			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
+			if(!validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent name is invalid."); 
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getParentEmail()) && !emailValidator.isValid(student.getParentEmail())) {  
+			}else if(!emailValidator.isValid(student.getParentEmail())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent email is invalid."); 
 
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getParentMobile()) && !StringUtils.isNumeric(student.getParentMobile()) &&
-					student.getParentMobile().length() > 9) {  
+			}else if(student.getParentMobile().length() != 9) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
 
@@ -1103,7 +1098,7 @@ public class StudentService {
 
 		}else if(student.getHasPrimary()) {  
 
-			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
+			if(!validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school name is invalid."); 
 
@@ -1112,17 +1107,14 @@ public class StudentService {
 			}else if(StringUtils.isBlank(student.getIndex()) ) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school index is invalid."); 
-
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getKcpeyear()) && student.getKcpemark().length() !=4 ) { 
+			}else if(student.getKcpemark().length() !=4 ) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E year is invalid."); 
-
 				return apiResponse;
 
-			}else if(StringUtils.isBlank(student.getKcpemark()) && !StringUtils.isNumeric(student.getKcpemark()) && 
-					Integer.valueOf(student.getKcpemark()) < 100 && Integer.valueOf(student.getKcpemark()) > 500) { 
+			}else if(!validKcpeMark(student.getKcpemark())) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E makrs invalid."); 
 
@@ -1216,6 +1208,24 @@ public class StudentService {
 
 
 
+
+	/*
+	 * 
+	 */
+	private boolean validKcpeMark(String kcpemark) {
+		
+		boolean valid = true;
+
+		if(!StringUtils.isNumeric(kcpemark)){
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) < 100) {
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) > 500) {
+			valid = false;
+		}
+
+		return valid;
+	}
 
 
 	/** 
@@ -1633,7 +1643,7 @@ public class StudentService {
 	}
 
 
-	
+
 
 	/**
 	 * 
@@ -1650,8 +1660,8 @@ public class StudentService {
 			return false;
 		}
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @param uuid
@@ -1671,8 +1681,8 @@ public class StudentService {
 	}
 
 
-	
-	
+
+
 	/**
 	 * @param path image path 
 	 * @return
@@ -1688,31 +1698,31 @@ public class StudentService {
 		//read image
 		try{
 			f = new File(fullpath); //image file path
-			
+
 			if(f.exists()) {
 				image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 				image = ImageIO.read(f);
-				
+
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    ImageIO.write(image, "png", baos);
-			    baos.flush();
-			    byte[] imageInByteArray = baos.toByteArray();
-			    baos.close();
-			    b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
-				
+				ImageIO.write(image, "png", baos);
+				baos.flush();
+				byte[] imageInByteArray = baos.toByteArray();
+				baos.close();
+				b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray);
+
 				return b64;
 			}else {
 				return b64;
 			}
-			
+
 		}catch(IOException e){
 			return null;
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 
 
 }
