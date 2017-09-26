@@ -1186,7 +1186,7 @@ public class StudentService {
 
 		if(studentSubjectDAO.getSubjectById(accountId, uuid) == null) {
 			apiResponse.setMessage("error"); 
-			apiResponse.setDescription("invalid id.");
+			apiResponse.setDescription("invalid id." + uuid);
 			return apiResponse;
 
 		}else {

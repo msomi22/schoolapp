@@ -524,8 +524,8 @@ public class StudentRestFulAPI{
 	} )
 	
 	@DELETE
-	@Path("/subject")   
-	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, String id) {
+	@Path("/subject/{accountId}/{uuid}")   
+	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, @PathParam("uuid") String id) {
 		
 		ApiResponse response = new ApiResponse(); 
 		response.setMessage("error");

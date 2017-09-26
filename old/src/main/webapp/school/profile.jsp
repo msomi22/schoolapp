@@ -91,8 +91,10 @@
 							<div class="profile_img" id="crop-avatar">
 
 								<!-- Current avatar -->
-								<div class="avatar-view" title="Change the avatar" id="crop-avatarState">
-									<img src="images/user.png" alt="Avatar" id="student_profile_pic">
+								<div class="avatar-view" title="Change the avatar"
+									id="crop-avatarState">
+									<img src="images/user.png" alt="Avatar"
+										id="student_profile_pic">
 									<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
@@ -101,10 +103,10 @@
 
 								</div>
 								<!-- Cropper Modal -->
-								
+
 								<jsp:include page="modals/cropper.html" />
-								
-								
+
+
 
 								<!-- Loading state -->
 								<div class="loading" aria-label="Loading" role="img"
@@ -142,20 +144,24 @@
 								<li><i class="fa fa-map-marker user-profile-icon"></i>
 									School Name</li>
 
-								
+
 
 								<li class="m-top-xs">
 									<!--  <i class="fa fa-external-link user-profile-icon"></i> -->
 
-									<button class="form-control btn btn-primary" type="button" id="btn_deactivate" onclick="deactivateModal()">
-										<i class="fa fa-remove" ></i> Deactivate
+									<button class="form-control btn btn-primary" type="button"
+										id="btn_deactivate" onclick="deactivateModal()">
+										<i class="fa fa-remove"></i> Deactivate
 									</button>
 
 								</li>
 							</ul>
 
-							<button class=" form-control btn btn-success" onclick= "activateEditing()" id="btn_editState"><i
-								class="fa fa-edit m-right-xs"></i> Edit Details</button> <br />
+							<button class=" form-control btn btn-success"
+								onclick="activateEditing()" id="btn_editState">
+								<i class="fa fa-edit m-right-xs"></i> Edit Details
+							</button>
+							<br />
 
 							<!-- start skills -->
 							<!--  <h4>More</h4> -->
@@ -307,30 +313,25 @@
 													</div>
 
 													<input type="hidden" name="uuid" id="uuid"
-														value="<%=uuid%>">
-														
-														<input type="hidden" name="accountId" id="accountId"
-														value="<%=accountId%>">
-														
-														<input type="hidden" name="isActive" id="isActive"
-														>
-														
-														
-														<input type="hidden" name="hasParent" id="hasParent" value="false"
-														>
-														<input type="hidden" name="hasPrimary" id="hasPrimary" value="false"
-														>
-														<input type="hidden" name="regStream" id="regStream"
-														>
-														<input type="hidden" name="isAlumni" id="isAlumni" value="0"
-														>
-														
+														value="<%=uuid%>"> <input type="hidden"
+														name="accountId" id="accountId" value="<%=accountId%>">
+
+													<input type="hidden" name="isActive" id="isActive">
+
+
+													<input type="hidden" name="hasParent" id="hasParent"
+														value="false"> <input type="hidden"
+														name="hasPrimary" id="hasPrimary" value="false">
+													<input type="hidden" name="regStream" id="regStream">
+													<input type="hidden" name="isAlumni" id="isAlumni"
+														value="0">
+
 
 
 												</div>
 
 
-												<br> 
+												<br>
 
 
 
@@ -407,8 +408,7 @@
 
 														<h4>Class</h4>
 
-														<select class="form-control formelement" 
-															id="classroom">
+														<select class="form-control formelement" id="classroom">
 															<%
 																if (classroomList != null) {
 																	for (ClassRoom classroom : classroomList) {
@@ -476,8 +476,8 @@
 													<div class="col-md-3 col-md-offset-5">
 
 														<button type="button" id="submit_gen"
-															class="btn btn-primary form-control" onclick="updateStudent()">Apply
-															Changes</button>
+															class="btn btn-primary form-control"
+															onclick="updateStudent()">Apply Changes</button>
 
 													</div>
 
@@ -617,8 +617,8 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control" onclick="updateStudent()">Apply
-														Changes</button>
+														class="btn btn-primary form-control"
+														onclick="updateStudent()">Apply Changes</button>
 
 												</div>
 
@@ -710,8 +710,8 @@
 												<div class="col-md-3 col-md-offset-5">
 
 													<button type="button" id="submit_pri"
-														class="btn btn-primary form-control" onclick="updateStudent()">Apply
-														Changes</button>
+														class="btn btn-primary form-control"
+														onclick="updateStudent()">Apply Changes</button>
 
 												</div>
 
@@ -732,6 +732,13 @@
 
 									</div>
 								</div>
+
+							</form>
+							<form action="#" method="post" id="alterSujectForm">
+								<input type="hidden" name="accountId" id="sub_accountId">
+								<input type="hidden" name="uuid" id="subUuid">
+								<input type="hidden" name="studentId" id="sub_studentId">
+								<input type="hidden" name="description" id="sub_description">
 
 							</form>
 						</div>

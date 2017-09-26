@@ -96,90 +96,88 @@ function fetchBasicInfo() {
 
 }
 
-var students_subjects={};
+var students_subjects = {};
 
 function fetchSubjects() {
 
 	var all_subjects = {};
-	
 
 	url = "subject/" + $('#passedParam').val();
 
 	apiCall(function(data) {
 
 		console.log("Subjects loadded");
-		
-		students_subjects= data;
 
-		for (var i = 0; i < data.length; i++) {
-
-			console.log(data[i]);
-
-			$('#subjectList')
-					.append(
-							'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
-									+ data[i]['subjectId']
-									+ '" type="checkbox" class="form-control  chk" checked /><label for="math">'
-									+ data[i]['description']
-									+ '</label> </div>');
-
-		}
+		students_subjects = data;
 
 	});
-	
-	
+
 	url = "subjects/" + $('#accountId').val();
-	
+
 	console.log(url);
-	setTimeout(function(){
-		apiCall(function(data) {
+	setTimeout(
+			function() {
+				apiCall(function(data) {
 
-			console.log(" All Subjects loadded");
-			
-			console.log(data);
-			
-			console.log(students_subjects);
+					console.log(" All Subjects loadded");
 
-			for (var i = 0; i < data.length; i++) {
+					console.log(data);
 
-				//console.log(data[i]);
-				
-				
-				
-				for(var j=0;j< students_subjects.length ; j++){
-					
-					//if(JSON.stringify(data[i])=== JSON.stringify(students_subjects[j])){
-					
-					console.log(data[i]['subjectId']);
-					
-					console.log(students_subjects[j]['subjectId']);
-					
-					if(data[i]['subjectId']=== students_subjects[j]['subjectId']){
-						
-						
-						console.log("Matches found");
-						
-						console.log(data[i]);
+					for (var i = 0; i < data.length; i++) {
+
+						if (searchSubject(data[i]['subjectId'],
+								students_subjects)) {
+
+							$('#subjectList')
+									.append(
+											'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
+													+ data[i]['subjectId']
+													+ '" type="checkbox" class="form-control  chk" value="'
+													+ data[i]['description']
+													+ '" onchange="alterSubject(this.id)" checked /><label for="'
+													+ data[i]['subjectId']
+													+ '">'
+													+ data[i]['description']
+													+ '</label> </div>');
+
+						} else {
+
+							// console.log(data[i]);
+							$('#subjectList')
+									.append(
+											'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
+													+ data[i]['subjectId']
+													+ '" type="checkbox" class="form-control  chk" value="'
+													+ data[i]['description']
+													+ '" onchange="alterSubject(this.id)" /><label for="'
+													+ data[i]['subjectId']
+													+ '">'
+													+ data[i]['description']
+													+ '</label> </div>');
+
+						}
+
 					}
-						
-						
-					
-				}
-				
 
-			}
+				});
 
-		});
-		
-	},2000)
-	
-	
-	
-	
+			}, 2000);
 
 }
 
+function searchSubject(subjectID, subjects) {
 
+	// console.log(subjectID);
+
+	for (var i = 0; i < subjects.length; i++) {
+
+		if (subjectID === subjects[i]['subjectId'])
+			return true;
+		// console.log(subjects[i]);
+
+	}
+
+}
 
 function apiCall(handleData) {
 
@@ -247,8 +245,8 @@ function updateStudent() {
 	/*
 	 * data_passed= $('#updateStudentInfo').serializeJSON();
 	 * 
-	 * console.log(JSON.stringify(data_passed));
-	 *  $ .ajax( { url : location.protocol + "//" + window.location.host +
+	 * console.log(JSON.stringify(data_passed)); $ .ajax( { url :
+	 * location.protocol + "//" + window.location.host +
 	 * "/school/webapi/student/" + $('#accountId').val(), type : 'PUT', dataType :
 	 * 'json', data : JSON.stringify($('#updateStudentInfo') .serializeJSON()),
 	 * contentType : 'application/json', accept : 'application/json', beforeSend :
@@ -256,10 +254,53 @@ function updateStudent() {
 	 * ZGVtbzoxMjM0NTY3OA=='); } }).done(function(data) {
 	 * 
 	 * 
-	 * console.log(data);
-	 * 
-	 *  } );
+	 * console.log(data); } );
 	 */
+
+}
+
+function alterSubject(id) {
+
+	console.log(id);
+
+	if ($('#'+id).is(':checked')) {
+
+		request_type = 'POST';
+
+		url = 'subject';
+
+		$('#sub_description').val($('#'+id).val());
+
+		$('#sub_studentId').val($('#uuid').val());
+
+		$('#sub_accountId').val($('#accountId').val());
+
+		data_passed = $('#alterSujectForm').serializeJSON();
+
+		
+		/* * data_passed = '{ "uuid": "","accountId": '+$("#accountId").val()
+		 * +',"studentId": $('#uuid').val(),"subjectId": id,"description":
+		 * description}';
+*/		 
+	} else {
+		
+		request_type = 'DELETE';
+
+		url = 'subject/'+$('#accountId').val()+'/'+id;
+
+	}
+
+	console.log(JSON.stringify(data_passed));
+
+	apiCall(function(data) {
+
+		console.log('Smart Code for subject altering');
+
+		console.log(data);
+
+		parseData(data)
+
+	});
 
 }
 
