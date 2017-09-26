@@ -9,6 +9,8 @@ var currentAccId = "";
 
 var returnData = {};
 
+var data_passed={};
+
 var url = "";
 var request_type = 'GET';
 
@@ -110,6 +112,8 @@ function apiCall(handleData) {
 			{
 				url : base_url + url,
 				type : request_type,
+				dataType : 'json',
+				data : data_passed,
 				contentType : 'application/json',
 				accept : 'application/json',
 				beforeSend : function(xhr) {
@@ -146,7 +150,36 @@ function apiCall(handleData) {
 
 function updateStudent(){
 	
-	console.log($('#updateStudentInfo').serializeJSON());
+	
+	
+	
+	if(checkFormValidation($('#updateStudentInfo'))){
+		
+		request_type = 'PUT';
+		
+		url=$('#accountId').val();
+		
+		data_passed= $('#updateStudentInfo').serializeJSON();
+		
+		console.log(data_passed);
+		
+		
+		apiCall(function(data) {
+			
+			
+			console.log('Smart Code');
+			
+			console.log(data);
+
+		});
+		
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 }
@@ -186,6 +219,22 @@ function activateEditing(){
 	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate').attr('disabled', false);
 	
 	
+}
+
+function checkFormValidation(form) {
+
+	var myform = $(form)[0];
+	if (!myform.checkValidity()) {
+		if (myform.reportValidity) {
+			myform.reportValidity();
+			return false;
+		} else {
+			// warn IE users somehow :)
+		}
+	} else {
+
+		return true;
+	}
 }
 
 
