@@ -840,7 +840,7 @@ public class StudentService {
 				apiResponse.setDescription("Parent email is invalid."); 
 				return apiResponse;
 
-			}else if(student.getParentMobile().length() != 9) {  
+			}else if(!validMobile(student.getParentMobile())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
 				return apiResponse;
@@ -1056,7 +1056,7 @@ public class StudentService {
 				apiResponse.setDescription("Parent email is invalid."); 
 				return apiResponse;
 
-			}else if(student.getParentMobile().length() != 9) {  
+			}else if(!validMobile(student.getParentMobile())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
 				return apiResponse;
@@ -1171,27 +1171,6 @@ public class StudentService {
 
 
 		return apiResponse;
-	}
-
-
-
-
-	/*
-	 * 
-	 */
-	private boolean validKcpeMark(String kcpemark) {
-		
-		boolean valid = true;
-
-		if(!StringUtils.isNumeric(kcpemark)){
-			valid = false;
-		}else if(Integer.valueOf(kcpemark) < 100) {
-			valid = false;
-		}else if(Integer.valueOf(kcpemark) > 500) {
-			valid = false;
-		}
-
-		return valid;
 	}
 
 
@@ -1610,6 +1589,24 @@ public class StudentService {
 	}
 
 
+	/**
+	 * 
+	 * @param mobile
+	 * @return
+	 */
+	private boolean validMobile(String mobile) {
+		boolean valid = false;
+
+		if(mobile.length() == 9 && StringUtils.isNumeric(mobile)){
+			valid = true;
+		}
+
+		return valid;
+	}
+
+
+
+
 
 
 	/**
@@ -1618,7 +1615,7 @@ public class StudentService {
 	 * @return
 	 */
 	private boolean validStatus(String isBoarding) {
-		String[] allowed = {"1","2"};
+		String[] allowed = {"1","0"};
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
 		if(allowedList.contains(isBoarding)) {
@@ -1685,6 +1682,30 @@ public class StudentService {
 		}catch(IOException e){
 			return null;
 		}
+	}
+
+
+
+
+
+	/**
+	 * 
+	 * @param kcpemark
+	 * @return
+	 */
+	private boolean validKcpeMark(String kcpemark) {
+
+		boolean valid = true;
+
+		if(!StringUtils.isNumeric(kcpemark)){
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) < 100) {
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) > 500) {
+			valid = false;
+		}
+
+		return valid;
 	}
 
 
