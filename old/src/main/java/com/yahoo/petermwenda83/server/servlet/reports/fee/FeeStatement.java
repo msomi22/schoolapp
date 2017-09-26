@@ -117,56 +117,59 @@ public class FeeStatement {
 			System.out.println("**************************************************************"); 
 			System.out.println("currentTerm: " + currentTerm + ", currentYear: " + currentYear); 
 			System.out.println("**************************************************************"); 
-			
+
 
 			if(studentDAO.getStudentById(school.getUuid(), studentId) != null) {
 
 				Student student = studentDAO.getStudentById(school.getUuid(), studentId); 
-			    ////boarders = 1, day = 0
+				////boarders = 1, day = 0
 				String status = StringUtils.equals(student.getIsBoarding(), "1") ? "Boarder" : "Day";  
 				System.out.println("Student status:" + status);  
 
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeInMillis(student.getAdmissionDate().getTime()); 
 				String year = String.valueOf(cal.get(Calendar.YEAR));
-				
+
 				while(Integer.valueOf(year) <= Integer.valueOf(currentYear)) {
-					
+
 					for(int termi =1; termi <=3; termi++) {
-						
+
 						//do the computations here
 						if(termFeeDAO.getFee(school.getUuid(), String.valueOf(termi), year) != null) {
 							StatementObject statementObject = analyzeFeeByTerm(school, student, String.valueOf(termi), year);
-							System.out.println(statementObject);   
-							
-						 }
+							List<StatementFee> statementFeeList = statementObject.getStatementFeeList();
+							List<StatementOtherFee> statementOtherFeeList = statementObject.getStatementOtherFeeList();
+							System.out.println(statementFeeList);   
+							System.out.println(statementOtherFeeList);   
+
+						}
 						//end the computation now
-						
+
 						boolean maxTerm = StringUtils.equals(currentTerm, String.valueOf(termi));
 						boolean maxYear = StringUtils.equals(year, currentYear);
-						
+
 						if(maxTerm && maxYear) { 
-							 break;
+							break;
 						}
 					}
-					
+
 					//year increment 
 					year = String.valueOf(Integer.valueOf(year) + 1); 
 					if(Integer.valueOf(year) == Integer.valueOf(currentYear)) {
 						year = currentYear; 
 					}
-					
-					
-					
+
+
+
 				}
-				
+
 				if(revertedMoneyDAO.getRevertedMoneyList(school.getUuid(), student.getUuid()) != null) {
 					List<RevertedMoney> revertedOtherFeeList = revertedMoneyDAO.getRevertedMoneyList(school.getUuid(), student.getUuid());
 					System.out.println("**************************************************************"); 
 					System.out.println("Reverted Other Fee List"); 
 					System.out.println(revertedOtherFeeList.size()); 
 				}
-				
+
 			}
 
 
@@ -184,15 +187,15 @@ public class FeeStatement {
 	 * @param yearLong
 	 */
 	private static StatementObject analyzeFeeByTerm(Account school, Student student, String term, String year) {
-		
+
 		long yearLong = Integer.valueOf(year); 
-		
+
 		StatementObject statementObject = new StatementObject();
 		List<StatementOtherFee> statementOtherFeeList = new ArrayList<>();
 		List<StatementFee> statementFeeList =  new ArrayList<>();
-		
+
 		TermFee termFee = termFeeDAO.getFee(school.getUuid(), term, year);
-		
+
 		if(studentFeeDAO.getStudentFeeList(school.getUuid(), student.getUuid(), term, year) != null) {
 			List<StudentFee> studentFeeList = studentFeeDAO.getStudentFeeList(school.getUuid(), student.getUuid(), term, year);
 			studentFeeList.forEach(studentFee -> {
@@ -205,12 +208,12 @@ public class FeeStatement {
 				statementFee.setPaidHas(studentFee.getPaidHas());
 				statementFee.setDatePaid(studentFee.getDatePaid());
 				statementFeeList.add(statementFee); 
-				
+
 			});
 
 		}
 
-		
+
 		if(studentOtherFeeDAO.getStudentOFeeList(school.getUuid(), student.getUuid(), term, yearLong) != null) {
 			List<StudentOtherFee> studentOtherFeeList = studentOtherFeeDAO.getStudentOFeeList(school.getUuid(), student.getUuid(), term, yearLong);
 			studentOtherFeeList.forEach(studentOtherFee -> {
@@ -222,15 +225,15 @@ public class FeeStatement {
 				statementOtherFee.setOtherAmountDescription(otherfee.getDescription());
 				statementOtherFee.setOtherAmountDateAllocated(studentOtherFee.getDateAllocated());
 				statementOtherFeeList.add(statementOtherFee);
-				
+
 			});
 		}
-		
+
 		statementObject.setStatementFeeList(statementFeeList);
 		statementObject.setStatementOtherFeeList(statementOtherFeeList);  
-		
+
 		return statementObject; 
 	}
-	
+
 
 }

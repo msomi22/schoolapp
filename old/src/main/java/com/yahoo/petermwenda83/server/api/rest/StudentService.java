@@ -1225,6 +1225,7 @@ public class StudentService {
 			List<ApiSubject> apiSubjectList = new ArrayList<>();
 			
 			subjectDAO.getSubjects(accountId).forEach(subject ->{
+				
 				ApiSubject apiSubject = new ApiSubject();
 				apiSubject.setAccountId(accountId);
 				apiSubject.setDescription(subject.getDescription());
@@ -1287,10 +1288,11 @@ public class StudentService {
 		if(studentSubjectDAO.getStudentSubjects(studentId) != null) {
 			subjectlist = studentSubjectDAO.getStudentSubjects(studentId); 
 		}
-		ApiSubject apiSubject = new ApiSubject();
+		
 		List<ApiSubject>  apiSubjectList = new ArrayList<>();
 
 		subjectlist.forEach(sub -> {
+			ApiSubject apiSubject = new ApiSubject();
 			apiSubject.setAccountId(sub.getAccountId());
 			apiSubject.setStudentId(sub.getStudentId());
 			apiSubject.setSubjectId(subjectDAO.getSubjectById(accountId, sub.getSubjectId()).getUuid());
