@@ -32,6 +32,9 @@ public interface SchoolFeeBreakdownDAO {
 	 */
 	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory, String term, String year, String status); 
 	
+	
+	public FeeBreakdown getFeeBreakdown(String accountId, String feeCategory, String term, String year); 
+	
 	/**
 	 * 
 	 * @param accountId

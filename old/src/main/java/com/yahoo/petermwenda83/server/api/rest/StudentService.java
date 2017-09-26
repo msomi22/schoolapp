@@ -838,7 +838,7 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(student.hasParent()) { 
+		}else if(student.getHasParent()) { 
 
 			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
@@ -862,8 +862,8 @@ public class StudentService {
 			}
 
 
-
-		}else if(student.hasPrimary()) {  
+ 
+		}else if(student.getHasPrimary()) {  
 
 			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
@@ -927,7 +927,7 @@ public class StudentService {
 				response = "Student basic info saved successfully.";
 
 				//parent
-				if(student.hasParent()) {
+				if(student.getHasParent()) {
 					StudentParent studentParent= new StudentParent();
 					studentParent.setAccountId(accountId);
 					studentParent.setStudentId(student.getUuid());
@@ -947,7 +947,7 @@ public class StudentService {
 				}
 
 				//primary
-				if(student.hasPrimary()) {
+				if(student.getHasPrimary()) {
 					StudentPrimary studentPrimary= new StudentPrimary();
 					studentPrimary.setAccountId(accountId);
 					studentPrimary.setStudentId(student.getUuid());
@@ -1076,7 +1076,7 @@ public class StudentService {
 
 			return apiResponse;
 
-		}else if(student.hasParent()) { 
+		}else if(student.getHasParent()) { 
 
 			if(StringUtils.isBlank(student.getParentName()) && !validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
@@ -1101,7 +1101,7 @@ public class StudentService {
 
 
 
-		}else if(student.hasPrimary()) {  
+		}else if(student.getHasPrimary()) {  
 
 			if(StringUtils.isBlank(student.getSchoolName()) && !validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
@@ -1164,7 +1164,7 @@ public class StudentService {
 				response = "Student basic info updated successfully.";
 
 				//parent
-				if(student.hasParent()) {
+				if(student.getHasParent()) {
 					StudentParent studentParent = parentsDAO.getParent(accountId, student.getUuid()); 
 					studentParent.setName(student.getParentName());
 					studentParent.setMobile(student.getParentMobile());
@@ -1182,7 +1182,7 @@ public class StudentService {
 				}
 
 				//primary
-				if(student.hasPrimary()) {
+				if(student.getHasPrimary()) {
 					StudentPrimary studentPrimary = primaryDAO.getStudentPrimary(accountId, student.getUuid()); 
 					studentPrimary.setSchoolName(student.getSchoolName());
 					studentPrimary.setIndex(student.getIndex());
