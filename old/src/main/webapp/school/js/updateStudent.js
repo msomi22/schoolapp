@@ -9,7 +9,7 @@ var currentAccId = "";
 
 var returnData = {};
 
-var data_passed={};
+var data_passed = {};
 
 var url = "";
 var request_type = 'GET';
@@ -17,25 +17,23 @@ var request_type = 'GET';
 var base_url = location.protocol + "//" + window.location.host
 		+ "/school/webapi/student/";
 
-$(document).ready(function() {
-	// init update :)
-	
-	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar').attr('disabled', true);
+$(document)
+		.ready(
+				function() {
+					// init update :)
 
-	console.log($('#passedParam').val());
-	url = "one/" + $('#passedParam').val();
-	
-	
-	
+					$(
+							'#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar')
+							.attr('disabled', true);
 
-	fetchBasicInfo();
+					console.log($('#passedParam').val());
+					url = "one/" + $('#passedParam').val();
 
-	fetchSubjects();
-	
-	
-	
+					fetchBasicInfo();
 
-});
+					fetchSubjects();
+
+				});
 
 function fetchBasicInfo() {
 
@@ -47,14 +45,14 @@ function fetchBasicInfo() {
 		$.each(data, function(key, value) {
 			$("#updateStudentInfo").find("input[name='" + key + "']")
 					.val(value);
-			
-			if(data["passport"]){
-				$('#student_profile_pic').attr("src",'data:image/jpg;base64,'+data["passport"]);
-				
-				$('#profile_url').val(data["regNo"]+'.png');
-				
+
+			if (data["passport"]) {
+				$('#student_profile_pic').attr("src",
+						'data:image/jpg;base64,' + data["passport"]);
+
+				$('#profile_url').val(data["regNo"] + '.png');
+
 			}
-				
 
 			if (key === "apiParentPrimary") {
 
@@ -67,14 +65,14 @@ function fetchBasicInfo() {
 
 			if (key === "currentStream") {
 				$('#currentStream').val(value.trim());
-				
+
 				$('#')
 
 				console.log(key + " value:" + value.trim());
 
 			}
-			
-			if(key === "regStream")
+
+			if (key === "regStream")
 				$('#regStream').val(value);
 
 			if (key === "gender")
@@ -93,20 +91,25 @@ function fetchBasicInfo() {
 	// var m_data= apiCall();
 
 	/*
-	 * setTimeout(function() {
-	 *  // console.log(returnData);
-	 *  }, 2000);
+	 * setTimeout(function() { // console.log(returnData); }, 2000);
 	 */
 
 }
 
+var students_subjects={};
+
 function fetchSubjects() {
+
+	var all_subjects = {};
+	
 
 	url = "subject/" + $('#passedParam').val();
 
 	apiCall(function(data) {
 
 		console.log("Subjects loadded");
+		
+		students_subjects= data;
 
 		for (var i = 0; i < data.length; i++) {
 
@@ -117,13 +120,66 @@ function fetchSubjects() {
 							'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
 									+ data[i]['subjectId']
 									+ '" type="checkbox" class="form-control  chk" checked /><label for="math">'
-									+ data[i]['description'] + '</label> </div>');
+									+ data[i]['description']
+									+ '</label> </div>');
 
 		}
 
 	});
+	
+	
+	url = "subjects/" + $('#accountId').val();
+	
+	console.log(url);
+	setTimeout(function(){
+		apiCall(function(data) {
+
+			console.log(" All Subjects loadded");
+			
+			console.log(data);
+			
+			console.log(students_subjects);
+
+			for (var i = 0; i < data.length; i++) {
+
+				//console.log(data[i]);
+				
+				
+				
+				for(var j=0;j< students_subjects.length ; j++){
+					
+					//if(JSON.stringify(data[i])=== JSON.stringify(students_subjects[j])){
+					
+					console.log(data[i]['subjectId']);
+					
+					console.log(students_subjects[j]['subjectId']);
+					
+					if(data[i]['subjectId']=== students_subjects[j]['subjectId']){
+						
+						
+						console.log("Matches found");
+						
+						console.log(data[i]);
+					}
+						
+						
+					
+				}
+				
+
+			}
+
+		});
+		
+	},2000)
+	
+	
+	
+	
 
 }
+
+
 
 function apiCall(handleData) {
 
@@ -164,116 +220,86 @@ function apiCall(handleData) {
 	return returnData;
 }
 
+function updateStudent() {
 
+	// if(!checkFormValidation($('#updateStudentInfo'))){
 
+	request_type = 'PUT';
 
-function updateStudent(){
-	
-	
-	
-	
-	//if(!checkFormValidation($('#updateStudentInfo'))){
-		
-		request_type = 'PUT';
-		
-		url=$('#accountId').val();
-		
-		data_passed= $('#updateStudentInfo').serializeJSON();
-		
-		console.log(data_passed);
-		
-		
-		apiCall(function(data) {
-			
-			
-			console.log('Smart Code');
-			
-			console.log(data);
-			
-			parseData(data)
+	url = $('#accountId').val();
 
-		});
-		
-		
-//	}
-	
-	
-	/*data_passed= $('#updateStudentInfo').serializeJSON();
-	
-	console.log(JSON.stringify(data_passed));
-	
-	$
-	.ajax(
-			{
-				url : location.protocol + "//"
-						+ window.location.host
-						+ "/school/webapi/student/"
-						+ $('#accountId').val(),
-				type : 'PUT',
-				dataType : 'json',
-				data : JSON.stringify($('#updateStudentInfo')
-						.serializeJSON()),
-				contentType : 'application/json',
-				accept : 'application/json',
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader('Authorization',
-							'Basic ZGVtbzoxMjM0NTY3OA==');
-				}
-			}).done(function(data) {
-				
-				
-				console.log(data);
-				
-			
-			}
-			);
-	*/
-	
-	
-	
-	
-	
-	
+	data_passed = $('#updateStudentInfo').serializeJSON();
+
+	console.log(data_passed);
+
+	apiCall(function(data) {
+
+		console.log('Smart Code');
+
+		console.log(data);
+
+		parseData(data)
+
+	});
+
+	// }
+
+	/*
+	 * data_passed= $('#updateStudentInfo').serializeJSON();
+	 * 
+	 * console.log(JSON.stringify(data_passed));
+	 *  $ .ajax( { url : location.protocol + "//" + window.location.host +
+	 * "/school/webapi/student/" + $('#accountId').val(), type : 'PUT', dataType :
+	 * 'json', data : JSON.stringify($('#updateStudentInfo') .serializeJSON()),
+	 * contentType : 'application/json', accept : 'application/json', beforeSend :
+	 * function(xhr) { xhr.setRequestHeader('Authorization', 'Basic
+	 * ZGVtbzoxMjM0NTY3OA=='); } }).done(function(data) {
+	 * 
+	 * 
+	 * console.log(data);
+	 * 
+	 *  } );
+	 */
+
 }
 
+function deactivateModal() {
 
-function deactivateModal(){
-	
 	$('#warning').modal('show');
-	
+
 	$('#warningTitle').html('<b>Deactivate the Student</b>');
-	
-	$('#warningSms').html('<b>Are you sure you want to deactivate the student?</b>');
-	
-	
-	
-	
-	
-	$('#btn_warningState').attr('onclick','deactivateStudent()');
+
+	$('#warningSms').html(
+			'<b>Are you sure you want to deactivate the student?</b>');
+
+	$('#btn_warningState').attr('onclick', 'deactivateStudent()');
 }
 
-function deactivateStudent(){
-	
+function deactivateStudent() {
+
 	$('#isActive').val('0');
 	console.log($('#updateStudentInfo').serializeJSON());
-	
-	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_editState,#btn_deactivate').attr('disabled', true);
-	//$('#crop-avatar').attr('id','tempID');
-	//avatar-view
-	//$('#crop-avatarState').removeClass('avatar-view');
-	//$('#crop-avatar').removeClass('profile_img');
+
+	$(
+			'#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_editState,#btn_deactivate')
+			.attr('disabled', true);
+	// $('#crop-avatar').attr('id','tempID');
+	// avatar-view
+	// $('#crop-avatarState').removeClass('avatar-view');
+	// $('#crop-avatar').removeClass('profile_img');
 	$('#avata_show').html('<b>Not Possible to change the profile pic</b>');
-	
+
 }
 
-function activateEditing(){
-	
-	$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate').attr('disabled', false);
-	
+function activateEditing() {
+
+	$(
+			'#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate')
+			.attr('disabled', false);
+
 	$('#avata_show').show();
 	$('#not_possible').hide();
-	
-	
+
 }
 
 function checkFormValidation(form) {
@@ -292,7 +318,7 @@ function checkFormValidation(form) {
 	}
 }
 
-function parseData(data){
+function parseData(data) {
 	if (data.description.includes("success")) {
 
 		$('#success').modal('show');
@@ -300,13 +326,14 @@ function parseData(data){
 		$('#successTitle').text(data.description);
 		$('#successSms').text(data.description);
 
-		$('#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar').attr('disabled', true);
+		$(
+				'#updateStudentInfo input,#updateStudentInfo select,#updateStudentInfo button,#btn_deactivate,#crop-avatar')
+				.attr('disabled', true);
 		$('#not_possible').show();
-		$('#not_possible').html('<b>Click on the edit button to be able to edit the avatar</b>');
+		$('#not_possible')
+				.html(
+						'<b>Click on the edit button to be able to edit the avatar</b>');
 		$('#avata_show').hide();
-		
-		
-
 
 		setTimeout(function() {
 
@@ -329,19 +356,12 @@ function parseData(data){
 	}
 }
 
-
-
-
-
-
 /*
  * Just joking around with Async calls function callBack(data) {
  * 
- * returnData = data;
- *  // console.log(returnData);
+ * returnData = data; // console.log(returnData);
  * 
- * return returnData;
- *  }
+ * return returnData; }
  */
 
 /*
@@ -364,80 +384,15 @@ function parseData(data){
  * 
  */
 
-
-
 /*
-"accountId"
-:
-"E3CDC578-37BA-4CDB-B150-DAB0409270CD",
-"bcertNo"
-:
-"96563",
-"classroom"
-:
-"C143978A-E021-4015-BC67-5A00D6C910D1",
-"county"
-:
-"Narok",
-"currentStream"
-:
-"37D3223A-547E-4BA9-BD0C-28F6187BB5D4",
-"dob"
-:
-"2018-07-03",
-"firstname"
-:
-"Dominic",
-"gender"
-:
-"M",
-"hasParent"
-:
-"false",
-"hasPrimary"
-:
-"false",
-"index"
-:
-"030830597",
-"isActive"
-:
-"1",
-"isBoarding"
-:
-"1",
-"kcpemark"
-:
-"342",
-"kcpeyear"
-:
-"2008",
-"lastname"
-:
-"Gabriel",
-"middlename"
-:
-"Keefe",
-"parentEmail"
-:
-"",
-"parentMobile"
-:
-"",
-"parentName"
-:
-"",
-"passport"
-:
-"",
-"regNo"
-:
-"0998",
-"schoolName"
-:
-"Kathitun",
-"uuid"
-:
-"CC6D62A0-5AA0-46CA-A0AA-C0A651021BDA"*/
-
+ * "accountId" : "E3CDC578-37BA-4CDB-B150-DAB0409270CD", "bcertNo" : "96563",
+ * "classroom" : "C143978A-E021-4015-BC67-5A00D6C910D1", "county" : "Narok",
+ * "currentStream" : "37D3223A-547E-4BA9-BD0C-28F6187BB5D4", "dob" :
+ * "2018-07-03", "firstname" : "Dominic", "gender" : "M", "hasParent" : "false",
+ * "hasPrimary" : "false", "index" : "030830597", "isActive" : "1", "isBoarding" :
+ * "1", "kcpemark" : "342", "kcpeyear" : "2008", "lastname" : "Gabriel",
+ * "middlename" : "Keefe", "parentEmail" : "", "parentMobile" : "", "parentName" :
+ * "", "passport" : "", "regNo" : "0998", "schoolName" : "Kathitun", "uuid" :
+ * "CC6D62A0-5AA0-46CA-A0AA-C0A651021BDA"
+ */
 

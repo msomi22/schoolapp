@@ -310,7 +310,7 @@
 														value="<%=uuid%>">
 														
 														<input type="hidden" name="accountId" id="accountId"
-														value="<%=uuid%>">
+														value="<%=accountId%>">
 														
 														<input type="hidden" name="isActive" id="isActive"
 														>
