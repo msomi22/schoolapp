@@ -772,70 +772,60 @@ public class StudentService {
 
 		Response apiResponse = new Response();
 
-
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("System Config not set!");
-
 			return apiResponse;
 
 		}
-		else if(StringUtils.isBlank(accountId)) {
+		else if(accountDAO.getAccountById(accountId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Account Id is invalid.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getRegNo()) ) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("RegNo is invalid.");
-
 			return apiResponse;
 
 		}else if(studentDAO.getStudentByregNo(accountId, student.getRegNo()) != null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("RegNo exist!");
-
 			return apiResponse;
 
 		}else if(streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
-
 			return apiResponse;
 
 		}else if(streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
+			return apiResponse;
 
 		}else if(!validStatus(student.getIsBoarding())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("IsBoarding not set.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getFirstname())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Firstname is invalid.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getMiddlename())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Middlename is invalid."); 
-
 			return apiResponse;
 
 		}else if(!validGender(student.getGender())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
-
 			return apiResponse;
 
 		}else if(StringUtils.isBlank(student.getDob())) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("DOB is invalid."); 
-
 			return apiResponse;
 
 		}else if(student.getHasParent()) { 
@@ -843,19 +833,16 @@ public class StudentService {
 			if(!validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent name is invalid."); 
-
 				return apiResponse;
 
 			}else if(!emailValidator.isValid(student.getParentEmail())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent email is invalid."); 
-
 				return apiResponse;
 
-			}else if(student.getParentMobile().length() != 9) {  
+			}else if(!validMobile(student.getParentMobile())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
-
 				return apiResponse;
 
 			}
@@ -867,25 +854,21 @@ public class StudentService {
 			if(!validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school name is invalid."); 
-
 				return apiResponse;
 
 			}else if(StringUtils.isBlank(student.getIndex()) ) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school index is invalid."); 
-
 				return apiResponse;
 
 			}else if(student.getKcpemark().length() !=4 ) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E year is invalid."); 
-
 				return apiResponse;
 
 			}else if(!validKcpeMark(student.getKcpemark())) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E makrs invalid."); 
-
 				return apiResponse;
 
 			}
@@ -994,25 +977,21 @@ public class StudentService {
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("System Config not set!");
-
 			return apiResponse;
 
-		}else if(StringUtils.isBlank(accountId)) {
+		}else if(accountDAO.getAccountById(accountId) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Account Id is invalid.");
-
 			return apiResponse;
 
 		}else if(studentDAO.getStudentById(accountId, student.getUuid()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Student Id is invalid.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getRegNo()) ) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("RegNo is invalid.");
-
 			return apiResponse;
 
 		}else if(hasDuplicate(student.getRegNo(),accountId)) {
@@ -1023,53 +1002,46 @@ public class StudentService {
 		}else if(streamDAO.getStream(accountId, student.getRegStream()) == null) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Registration stream is invalid.");
-
 			return apiResponse;
 
 		}else if(streamDAO.getStream(accountId, student.getCurrentStream()) == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Current stream is invalid.");
+			return apiResponse;
 
 		}else if(!validStatus(student.getIsBoarding())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("IsBoarding not set.");
-
 			return apiResponse;
 
 		}else if(!validStatus(student.getIsActive())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("IsActive not set.");
-
 			return apiResponse;
 
 		}else if(!validStatus(student.getIsAlumni())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("IsAlumni not set.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getFirstname())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Firstname is invalid.");
-
 			return apiResponse;
 
 		}else if(!validaLength(student.getMiddlename())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Middlename is invalid."); 
-
 			return apiResponse;
 
 		}else if(!validGender(student.getGender())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Gender is invalid."); 
-
 			return apiResponse;
 
 		}else if(StringUtils.isBlank(student.getDob())) { 
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("DOB is invalid."); 
-
 			return apiResponse;
 
 		}else if(student.getHasParent()) { 
@@ -1077,19 +1049,16 @@ public class StudentService {
 			if(!validaLength(student.getMiddlename())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent name is invalid."); 
-
 				return apiResponse;
 
 			}else if(!emailValidator.isValid(student.getParentEmail())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent email is invalid."); 
-
 				return apiResponse;
 
-			}else if(student.getParentMobile().length() != 9) {  
+			}else if(!validMobile(student.getParentMobile())) {  
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Parent mobile is invalid."); 
-
 				return apiResponse;
 
 			}
@@ -1101,7 +1070,6 @@ public class StudentService {
 			if(!validaLength(student.getSchoolName())) {
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("Primary school name is invalid."); 
-
 				return apiResponse;
 
 			}else if(StringUtils.isBlank(student.getIndex()) ) { 
@@ -1117,7 +1085,6 @@ public class StudentService {
 			}else if(!validKcpeMark(student.getKcpemark())) { 
 				apiResponse.setMessage("error");
 				apiResponse.setDescription("K.C.P.E makrs invalid."); 
-
 				return apiResponse;
 
 			}
@@ -1204,27 +1171,6 @@ public class StudentService {
 
 
 		return apiResponse;
-	}
-
-
-
-
-	/*
-	 * 
-	 */
-	private boolean validKcpeMark(String kcpemark) {
-		
-		boolean valid = true;
-
-		if(!StringUtils.isNumeric(kcpemark)){
-			valid = false;
-		}else if(Integer.valueOf(kcpemark) < 100) {
-			valid = false;
-		}else if(Integer.valueOf(kcpemark) > 500) {
-			valid = false;
-		}
-
-		return valid;
 	}
 
 
@@ -1643,6 +1589,24 @@ public class StudentService {
 	}
 
 
+	/**
+	 * 
+	 * @param mobile
+	 * @return
+	 */
+	private boolean validMobile(String mobile) {
+		boolean valid = false;
+
+		if(mobile.length() == 9 && StringUtils.isNumeric(mobile)){
+			valid = true;
+		}
+
+		return valid;
+	}
+
+
+
+
 
 
 	/**
@@ -1718,6 +1682,30 @@ public class StudentService {
 		}catch(IOException e){
 			return null;
 		}
+	}
+
+
+
+
+
+	/**
+	 * 
+	 * @param kcpemark
+	 * @return
+	 */
+	private boolean validKcpeMark(String kcpemark) {
+
+		boolean valid = true;
+
+		if(!StringUtils.isNumeric(kcpemark)){
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) < 100) {
+			valid = false;
+		}else if(Integer.valueOf(kcpemark) > 500) {
+			valid = false;
+		}
+
+		return valid;
 	}
 
 
