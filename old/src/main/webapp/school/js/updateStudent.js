@@ -96,10 +96,19 @@ function fetchBasicInfo() {
 var students_subjects = {};
 
 function fetchSubjects() {
+	
+	
 
+	
+	request_type = 'GET';
 	var all_subjects = {};
+	data_passed={};
 
 	url = "subject/" + $('#passedParam').val();
+	
+	console.log(url);
+	
+	
 
 	apiCall(function(data) {
 
@@ -119,6 +128,8 @@ function fetchSubjects() {
 					console.log(" All Subjects loadded");
 
 					console.log(data);
+					
+					$('#subjectList').html('');
 
 					for (var i = 0; i < data.length; i++) {
 
@@ -286,6 +297,8 @@ function alterSubject(id) {
 		request_type = 'DELETE';
 
 		url = 'subject/'+$('#accountId').val()+'/'+id;
+		
+		data_passed={};
 
 	}
 
@@ -301,12 +314,11 @@ function alterSubject(id) {
 			
 			console.log(checked_state);
 			
-			if(checked_state){
-				$('#'+id).attr('checked',false);
-			}else{
+			
+			
 				
-				$('#'+id).attr('checked',true);
-			}
+				fetchSubjects();
+			
 		}
 
 	});
