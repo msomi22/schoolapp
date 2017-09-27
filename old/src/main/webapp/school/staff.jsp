@@ -28,14 +28,14 @@
 	
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 	
-	StaffDAO staffDAO= StaffDAO.getInstance();
+	/* StaffDAO staffDAO= StaffDAO.getInstance();
 	
 	 List<Staff> staffList = new ArrayList<>();
      if(staffDAO.getStaff(accountId) != null){
     	 staffList = staffDAO.getStaff(accountId);
      }
      
-     int staffCount = 0;
+     int staffCount = 0; */
 %>
 <jsp:include page="header.jsp" />
 
@@ -98,18 +98,21 @@
 								<thead>
 									<tr class="headings secondary-assent">
 
-										<th class="column-title">#</th>
-										<th class="column-title">Staff No</th>
-										<th class="column-title">First name</th>
-										<th class="column-title hidden">Middle name</th>
+										<th class="column-title hidden">logedUserId</th>
+										<th class="column-title hidden">logedUserAcessId</th>
+										<th class="column-title hidden">acessLevelId</th>
+										<th class="column-title">staffNo</th>
+										<th class="column-title hidden">isActive</th>
+										<th class="column-title">firstname</th>
+										<th class="column-title hidden">middlename</th>
 										<th class="column-title">Last name</th>
 										<th class="column-title">Gender</th>
-										<th class="column-title">Mobile</th>
+										<th class="column-title hidden">Mobile</th>
 										<th class="column-title">Email</th>
 										<th class="column-title">User name</th>
-										
+										<th class="column-title hidden">password</th>
 										<th class="column-title hidden">uuid</th>
-										
+										<th class="column-title hidden">accountId</th>		
 										<th class="column-title">Modify</th>
 
 									</tr>
@@ -117,7 +120,7 @@
 
 								<tbody class='tablebody'>
 
-								 <%
+								<%--  <%
 								 String name;
                   for(Staff staff : staffList){  
                 	  
@@ -150,7 +153,7 @@
 									
 							  <%      
                     staffCount++;
-                  }%>	
+                  }%>	 --%>
                   </tbody>
 
 
@@ -196,6 +199,18 @@
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+<!-- Staff js -->
+<script src="js/staff.js"></script>
+
+
+
+<!-- js api calls -->
+
+<script src="js/apiCalls/staffApi.js"></script>
+
+
+
 
 
 

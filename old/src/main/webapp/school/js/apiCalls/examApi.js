@@ -112,14 +112,12 @@ function fetchExams() {
 										var data = table.row(
 												$(this).parents('tr')).data();
 
-										
-										$("#cname").val(
-												data['code']);
+										$("#cname").val(data['code']);
 
 										$("#uuid").val(data['uuid']);
 
 										$("#dname").val(data['description']);
-										
+
 										$("#score").val(data['outOf']);
 
 										console.log(data['uuid']);

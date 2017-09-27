@@ -1,8 +1,5 @@
 var table;
 
-var uName = "demo";
-var passwrd = "12345678";
-
 var currentClassId = "";
 
 var currentAccId = "";
@@ -190,8 +187,7 @@ function apiCall(handleData) {
 				contentType : 'application/json',
 				accept : 'application/json',
 				beforeSend : function(xhr) {
-					xhr.setRequestHeader('Authorization', 'Basic '
-							+ btoa(uName + ":" + passwrd));
+					xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA==');
 				}
 			}).done(function(data) {
 
@@ -199,12 +195,9 @@ function apiCall(handleData) {
 
 		returnData = data;
 
-		// console.log(returnData);
-
+		
 		handleData(data);
 
-		// returnData = callBack(data);
-		// return returnData;
 
 	}).fail(function(jqXHR, textStatus) {
 
@@ -260,10 +253,14 @@ function updateStudent() {
 }
 
 function alterSubject(id) {
+	
+	var checked_state= false;
 
 	console.log(id);
 
 	if ($('#'+id).is(':checked')) {
+		
+		checked_state=true;
 
 		request_type = 'POST';
 
@@ -284,6 +281,8 @@ function alterSubject(id) {
 */		 
 	} else {
 		
+		checked_state= false;
+		
 		request_type = 'DELETE';
 
 		url = 'subject/'+$('#accountId').val()+'/'+id;
@@ -298,7 +297,17 @@ function alterSubject(id) {
 
 		console.log(data);
 
-		parseData(data)
+		if(!parseData(data)){
+			
+			console.log(checked_state);
+			
+			if(checked_state){
+				$('#'+id).attr('checked',false);
+			}else{
+				
+				$('#'+id).attr('checked',true);
+			}
+		}
 
 	});
 
@@ -380,6 +389,9 @@ function parseData(data) {
 
 			$('#success').modal('hide');
 		}, 2500);
+		
+		
+		return true;
 
 	} else if (data.message.includes("error")) {
 
@@ -393,6 +405,9 @@ function parseData(data) {
 
 			$('#error').modal('hide');
 		}, 3500);
+		
+		
+		return false;
 
 	}
 }

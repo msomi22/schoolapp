@@ -1,4 +1,4 @@
- $("#staffs").DataTable({
+/* $("#staffs").DataTable({
 	 
 	 "scrollY":        "550px",
      "scrollCollapse": true,
@@ -6,7 +6,7 @@
 		 
      
      
-	 });
+	 });*/
 
 	 
 	 
