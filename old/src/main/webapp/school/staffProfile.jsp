@@ -281,6 +281,71 @@
 
 											</div>
 
+											<div class="row ">
+
+												<div class="col-md-4 pull-right">
+													<h3 class="pull-right">
+														Assign new Subject
+														<button class="btn btn-primary" style="border-radius: 90%"
+															id="add" onclick="staffSuject()">
+															<i class="fa fa-plus-circle fa-2x"></i>
+														</button>
+
+													</h3>
+
+												</div>
+
+											</div>
+
+
+
+											<div class="col-md-8 col-md-offset-2 table-responsive">
+												<table class="table table-striped jambo_table bulk_action"
+													id="streams">
+													<thead>
+														<tr class="headings secondary-assent">
+
+															<th class="column-title">UUID</th>
+															<th class="column-title">Class ID</th>
+															<th class="column-title">Account ID</th>
+															<th class="column-title">subjectID</th>
+															<th class="column-title">Modify</th>
+
+														</tr>
+													</thead>
+
+													<tbody class='tablebody'>
+
+
+
+														<!-- <tr class="tabledit" style='color: black;'>
+
+										<td width="5%">1</td>
+										<td class="center hidden">### ###</td>
+										<td class="center">Form 1N</td>
+										<td>
+
+											<button class="btn btn-warning editStream" id="edit"
+												onclick="streamModal(this.id)">
+												Edit <span class="fa fa-edit"></span>
+											</button>
+											<button class="btn btn-danger" id="Form 1N"
+												onclick="delStream(this.id)">
+												Delete <span class="fa fa-trash"></span>
+											</button>
+										</td>
+
+									</tr> -->
+
+
+													</tbody>
+
+
+												</table>
+
+											</div>
+
+
 											<br> <br> <br>
 
 											<div class="row">
@@ -300,7 +365,7 @@
 											<br> <br> <br>
 
 										</div>
-								
+
 
 
 
@@ -324,6 +389,9 @@
 </div>
 <!-- /page content -->
 
+
+<!-- Staff Modal -->
+<jsp:include page="modals/staffModals.jsp" />
 
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />

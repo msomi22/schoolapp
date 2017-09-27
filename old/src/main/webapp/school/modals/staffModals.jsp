@@ -146,3 +146,133 @@
 
 	</div>
 </div>
+
+
+
+
+<div id="staffSujectModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="streamTiltle">Assign A new Subject to a staff</h4>
+			</div>
+
+			<form method="post" action="#" id="editStreamForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Class/Form:</label> <select
+									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
+
+									<option value="">Form 1</option>
+
+									<option value="">Form 2</option>
+									<option value="">Form 3</option>
+
+									<option value="">Form 4</option>
+
+
+								</select>
+							</div>
+							
+							
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Stream:</label> <select
+									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
+
+									<option value="">Form 1 N</option>
+
+									<option value="">Form 2 S</option>
+									<option value="">Form 3 S</option>
+
+									<option value="">Form 4 N</option>
+
+
+								</select>
+							</div>
+
+
+
+							
+							
+							
+								<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Subject:</label> <select
+									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
+
+									<option value="">Mathematics</option>
+
+									<option value="">English</option>
+									<option value="">Kiswahili</option>
+
+									<option value="">Physics</option>
+
+
+								</select>
+							</div>
+							
+							
+							
+							<input type="hidden" name="uuid" id="uuid"
+								value="n0t_set">
+								
+								<input type="hidden" name="accountId" id="accountId"
+								value="n0t_set">
+
+
+
+
+
+
+
+
+
+						</div>
+
+						<input type="hidden" name="" id="" value="not_set"> <input
+							type="hidden" name="" id="" value="not_set">
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+				<!-- 	<button type="submit" style="display:none" onclick="addNewStream()" class="btn btn-info pull-right" id="stream_btn_add">
+						Submit <i class="fa fa-save"></i>
+					</button> -->
+					
+					
+					
+					
+					<button type="button" onclick="alterStaffSubject()" class="btn btn-info pull-right" id="stream_btn_update">
+						Submit <i class="fa fa-save"></i>
+					</button>
+					
+					
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
+
+
+
