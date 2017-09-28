@@ -13,8 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "APITeacherSubject")  //only needed if we also want to generate XML 
 public class APITeacherSubject{
 	
-	
-	private ApiResponse response;
 	private APISubjectClasss apiSubjectClasss;
 	
 	public APITeacherSubject(){
@@ -25,25 +23,10 @@ public class APITeacherSubject{
 	 * 
 	 */
 	public APITeacherSubject(ApiResponse response,APISubjectClasss apiSubjectClasss) {
-		
-		this.response = response;
 		this.apiSubjectClasss = apiSubjectClasss;
 	
 	}
 
-	/**
-	 * @return the response
-	 */
-	public ApiResponse getResponse() {
-		return response;
-	}
-
-	/**
-	 * @param response the response to set
-	 */
-	public void setResponse(ApiResponse response) {
-		this.response = response;
-	}
 
 	/**
 	 * @return the apiSubjectClasss
@@ -59,14 +42,12 @@ public class APITeacherSubject{
 		this.apiSubjectClasss = apiSubjectClasss;
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "APITeacherSubject [response=" + response + ", apiSubjectClasss=" + apiSubjectClasss + "]";
+		return "APITeacherSubject [apiSubjectClasss=" + apiSubjectClasss + "]";
 	}
 
+	
 	
 
 }

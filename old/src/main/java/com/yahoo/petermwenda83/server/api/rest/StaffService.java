@@ -588,11 +588,6 @@ public class StaffService {
 				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
 				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
 
-				ApiResponse response = new ApiResponse();
-				response.setMessage("success");
-				response.setDescription("OK");
-
-
 				APISubjectClasss apiSC = new APISubjectClasss();
 
 				apiSC.setAccountId(tsc.getAccountId()); 
@@ -602,13 +597,9 @@ public class StaffService {
 				apiSC.setTeacherId(tsc.getTeacherId());
 				apiSC.setUuid(tsc.getUuid());
 
-				APITeacherSubject apiTSC = new APITeacherSubject(response, apiSC); 
+				APITeacherSubject apiTSC = new APITeacherSubject(); 
 				apiTSC.setApiSubjectClasss(apiSC);
-				apiTSC.setResponse(response);
-
-
-
-
+				
 				tsList.add(apiTSC);
 
 			});

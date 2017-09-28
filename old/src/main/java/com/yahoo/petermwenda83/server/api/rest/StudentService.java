@@ -1184,21 +1184,20 @@ public class StudentService {
 
 		ApiResponse apiResponse = new ApiResponse();
 
-		if(studentSubjectDAO.getSubjectById(accountId, uuid) == null) {
+		if(studentSubjectDAO.getstudentSubject(accountId, uuid) == null) {
 			apiResponse.setMessage("error"); 
-			apiResponse.setDescription("invalid id." + uuid);
+			apiResponse.setDescription("Nothing to delete!");
 			return apiResponse;
 
 		}else {
 
 			if(studentSubjectDAO.deleteSubject(accountId, uuid)) {
 				apiResponse.setMessage("success"); 
-				apiResponse.setDescription("Subject was removed successfully.");
+				apiResponse.setDescription("Subject was deleted successfully.");
 
 			}else {
-
 				apiResponse.setMessage("error"); 
-				apiResponse.setDescription("Subject not removed!");
+				apiResponse.setDescription("Something went horribly wrong, contact admin.");
 			}
 
 		}
@@ -1221,16 +1220,16 @@ public class StudentService {
 
 		}else {
 
-			
+
 			List<ApiSubject> apiSubjectList = new ArrayList<>();
-			
+
 			subjectDAO.getSubjects(accountId).forEach(subject ->{
-				
+
 				ApiSubject apiSubject = new ApiSubject();
 				apiSubject.setAccountId(accountId);
 				apiSubject.setDescription(subject.getDescription());
 				apiSubject.setSubjectId(subject.getUuid());
-				
+
 				apiSubjectList.add(apiSubject);
 			});
 
@@ -1254,6 +1253,11 @@ public class StudentService {
 			apiResponse.setDescription("Subject already assigned!");
 			return apiResponse;
 
+
+		}else if(subjectDAO.getSubjectById(apiSubject.getAccountId(), apiSubject.getSubjectId()) == null){
+			apiResponse.setMessage("error"); 
+		    apiResponse.setDescription("SubjectId not found!");
+		    return apiResponse;
 
 		}else {
 			StudentSubject studentsub = new StudentSubject();
@@ -1288,7 +1292,7 @@ public class StudentService {
 		if(studentSubjectDAO.getStudentSubjects(studentId) != null) {
 			subjectlist = studentSubjectDAO.getStudentSubjects(studentId); 
 		}
-		
+
 		List<ApiSubject>  apiSubjectList = new ArrayList<>();
 
 		subjectlist.forEach(sub -> {
