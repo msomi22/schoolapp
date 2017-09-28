@@ -1,8 +1,5 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,9 +11,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
-import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
+import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
 import io.swagger.annotations.*;
@@ -113,25 +109,14 @@ public class SubClassRestFulAPI {
 	
 	@GET
 	@Path("/{accountId}") 
-	public List<APITeacherSubject> getSubClassList(@PathParam("accountId") String accountId, @PathParam("staffId") String staffId ,
+	public Object getSubClassList(@PathParam("accountId") String accountId, @PathParam("staffId") String staffId ,
 			@HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			
-			List<APITeacherSubject> response = new ArrayList<>();
-
-			ApiResponse respo = new ApiResponse();
-			respo.setMessage("error");
-			respo.setDescription("User not authenticated");
-			
-			APISubjectClasss apiR = new APISubjectClasss();
-			
-			APITeacherSubject error = new APITeacherSubject(respo,apiR);
-			error.setResponse(respo); 
-			
-			
-			response.add(error);
-			
+		
+			Response response = new Response();
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
 			return response; 
 
 		}

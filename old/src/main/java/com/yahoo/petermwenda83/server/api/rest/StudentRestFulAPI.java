@@ -525,7 +525,7 @@ public class StudentRestFulAPI{
 	
 	@DELETE
 	@Path("/subject/{accountId}/{uuid}")   
-	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, @PathParam("uuid") String id) {
+	public Object deleteSubject(@HeaderParam("authorization") String auth, @PathParam("accountId") String accountId, @PathParam("uuid") String uuid) {
 		
 		ApiResponse response = new ApiResponse(); 
 		response.setMessage("error");
@@ -536,7 +536,7 @@ public class StudentRestFulAPI{
 			return response; 
 		}
 		
-		return studentService.deleteSubject(accountId,id);
+		return studentService.deleteSubject(accountId,uuid);
 	}
 	
 	/**
