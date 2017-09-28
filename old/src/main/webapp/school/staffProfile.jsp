@@ -83,7 +83,7 @@
 					<div class="x_content">
 						<div class="col-md-9 col-sm-9 col-xs-12">
 
-							<form action="#" method="POST" id="updateStudentInfo">
+							
 
 								<input type="hidden" name="passport" id="profile_url">
 
@@ -99,6 +99,8 @@
 									<div id="myTabContent" class="tab-content">
 										<div role="tabpanel" class="tab-pane fade active in"
 											id="tab_content1" aria-labelledby="home-tab">
+											
+											<form action="#" method="POST" id="updateStaffRolesForm">
 
 											<!-- start general info-->
 											<div class="messages">
@@ -236,7 +238,7 @@
 
 														<button type="button" id="submit_gen"
 															class="btn btn-primary form-control"
-															onclick="updateStaff()">Apply Changes</button>
+															onclick="updateStaffDetails()">Apply Changes</button>
 
 													</div>
 
@@ -261,6 +263,9 @@
 
 											</div>
 											<!-- end general info -->
+											
+											
+							</form>
 
 										</div>
 										<div role="tabpanel" class="tab-pane fade" id="tab_content2"
@@ -287,7 +292,7 @@
 													<h3 class="pull-right">
 														Assign new Subject
 														<button class="btn btn-primary" style="border-radius: 90%"
-															id="add" onclick="staffSuject()">
+															id="btn_addStaffRoles" onclick="staffSuject(this.id)">
 															<i class="fa fa-plus-circle fa-2x"></i>
 														</button>
 
@@ -299,16 +304,20 @@
 
 
 
-											<div class="col-md-8 col-md-offset-2 table-responsive">
+											<div class="col-md-10 col-md-offset-1 ">
+											
+											<div class="table-responsive">
 												<table class="table table-striped jambo_table bulk_action"
-													id="streams">
+													id="staffRoles">
 													<thead>
 														<tr class="headings secondary-assent">
 
-															<th class="column-title">UUID</th>
-															<th class="column-title">Class ID</th>
-															<th class="column-title">Account ID</th>
-															<th class="column-title">subjectID</th>
+															<th class="column-title">teacherId</th>
+															<th class="column-title">subjectId</th>
+															<th class="column-title">streamId</th>
+															<th class="column-title">uuid</th>
+															<th class="column-title">accountId</th>
+															<th class="column-title">allocationDate</th>
 															<th class="column-title">Modify</th>
 
 														</tr>
@@ -342,6 +351,7 @@
 
 
 												</table>
+												</div>
 
 											</div>
 
@@ -373,7 +383,6 @@
 									</div>
 								</div>
 
-							</form>
 
 						</div>
 
@@ -403,5 +412,7 @@
 
 
 <script src="js/staff.js"></script>
+
+<script src="js/updateStaff.js"></script>
 
 

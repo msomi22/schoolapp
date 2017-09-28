@@ -157,10 +157,10 @@
 		<div class="modal-content alert alert-info">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="streamTiltle">Assign A new Subject to a staff</h4>
+				<h4 class="modal-title" id="staffSCTiltle">Assign A new Subject to a staff</h4>
 			</div>
 
-			<form method="post" action="#" id="editStreamForm">
+			<form method="post" action="#" id="editStaffRolesForm">
 				<div class="modal-body">
 
 					<div class="box-body">
@@ -259,7 +259,7 @@
 					
 					
 					
-					<button type="button" onclick="alterStaffSubject()" class="btn btn-info pull-right" id="stream_btn_update">
+					<button type="submit" id="btn_editStaffRoles" onclick="alterStaffRoles()" class="btn btn-primary pull-right" >
 						Submit <i class="fa fa-save"></i>
 					</button>
 					

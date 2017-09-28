@@ -43,8 +43,18 @@ function disableStaff(staff) {
 }
 
 
-function staffSuject(){
+function staffSuject(id){
 	
+	
+	if(id==="btn_addStaffRoles"){
+		
+		$('#editStaffRolesForm').get(0).reset();
+		
+		$('#staffSCTiltle').html("<b>Assign A new Subject to a staff </b>");
+
+		$('#btn_editStaffRoles').text("Submit");
+		$('#btn_editStaffRoles').attr('onclick','addStaffRoles()');
+	}
 	
 	$('#staffSujectModal').modal('show');
 }

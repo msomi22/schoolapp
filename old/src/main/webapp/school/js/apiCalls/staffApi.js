@@ -110,14 +110,20 @@ $(document)
 
 											console.log(data['uuid']);
 
-											window
+											/*window
 													.open(
 															location.protocol
 																	+ "//"
 																	+ window.location.host
 																	+ "/school/school/staffProfile.jsp?uuid="
 																	+ data['uuid'],
-															"_blank");
+															"_blank");*/
+											
+											window.location= location.protocol
+											+ "//"
+											+ window.location.host
+											+ "/school/school/staffProfile.jsp?uuid="
+											+ data['uuid'];
 
 										});
 
@@ -156,39 +162,3 @@ function StaffApiCall() {
 
 }
 
-function updateStaffApiCall(state) {
-
-	// alert ("Swapp worked");
-
-	if (state == 'disable') {
-
-	} else if (state == 'update') {
-
-		$("#staffForm").submit(function(e) {
-			e.preventDefault();
-
-			if (rootCheckFormValidation($('#staffForm'))) {
-
-				// alert(JSON.stringify($('#staffForm').serializeJSON()));
-
-				varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
-
-				global_data_passed = $('#staffForm').serializeJSON();
-
-				global_request_type = 'PUT';
-
-				globalApiCall(function(data) {
-
-					console.log('Genius Code for staff altering');
-
-					console.log(data);
-
-					rootParseApiResponseData(data)
-
-				});
-
-			}
-
-		});
-	}
-}
