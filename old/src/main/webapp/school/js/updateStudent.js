@@ -136,17 +136,7 @@ function fetchSubjects() {
 						if (searchSubject(data[i]['subjectId'],
 								students_subjects)) {
 
-							$('#subjectList')
-									.append(
-											'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
-													+ data[i]['subjectId']
-													+ '" type="checkbox" class="form-control  chk" value="'
-													+ data[i]['description']
-													+ '" onchange="alterSubject(this.id)" checked /><label for="'
-													+ data[i]['subjectId']
-													+ '">'
-													+ data[i]['description']
-													+ '</label> </div>');
+							
 
 						} else {
 
@@ -179,8 +169,26 @@ function searchSubject(subjectID, subjects) {
 
 	for (var i = 0; i < subjects.length; i++) {
 
-		if (subjectID === subjects[i]['subjectId'])
+		if (subjectID === subjects[i]['subjectId']){
+			
+			
+			
+			$('#subjectList')
+			.append(
+					'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
+							+ subjects[i]['uuid']
+							+ '" type="checkbox" class="form-control  chk" value="'
+							+ subjects[i]['uuid']
+							+ '" onchange="alterSubject(this.id)" checked /><label for="'
+							+ subjects[i]['uuid']
+							+ '">'
+							+ subjects[i]['description']
+							+ '</label> </div>');
+			
+			
 			return true;
+		}
+			
 		// console.log(subjects[i]);
 
 	}
@@ -280,6 +288,7 @@ function alterSubject(id) {
 		$('#sub_description').val($('#'+id).val());
 
 		$('#sub_studentId').val($('#uuid').val());
+		$('#sub_subjectId').val(id);
 
 		$('#sub_accountId').val($('#accountId').val());
 
@@ -297,6 +306,9 @@ function alterSubject(id) {
 		request_type = 'DELETE';
 
 		url = 'subject/'+$('#accountId').val()+'/'+id;
+		
+		
+		console.log(url);
 		
 		data_passed={};
 
@@ -319,7 +331,11 @@ function alterSubject(id) {
 				
 				fetchSubjects();
 			
+		}else{
+			fetchSubjects();
+			
 		}
+		
 
 	});
 

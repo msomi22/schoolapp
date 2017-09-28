@@ -738,6 +738,7 @@
 								<input type="hidden" name="accountId" id="sub_accountId">
 								<input type="hidden" name="uuid" id="subUuid">
 								<input type="hidden" name="studentId" id="sub_studentId">
+								<input type="hidden" name="subjectId" id="sub_subjectId">
 								<input type="hidden" name="description" id="sub_description">
 
 							</form>
