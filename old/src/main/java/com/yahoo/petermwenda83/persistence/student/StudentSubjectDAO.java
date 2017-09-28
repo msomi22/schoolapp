@@ -204,7 +204,7 @@ public class StudentSubjectDAO extends GenericDAO implements SchoolStudentSubjec
 	      try(
 	      		  Connection conn = dbutils.getConnection();
 	         	  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM StudentSubject"
-	         	      		+ " WHERE accountId = ? AND subjectId =?;");       
+	         	      		+ " WHERE accountId = ? AND uuid =?;");       
 	      		
 	      		){
 	      	
