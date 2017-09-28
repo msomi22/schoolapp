@@ -1184,7 +1184,7 @@ public class StudentService {
 
 		ApiResponse apiResponse = new ApiResponse();
 
-		if(studentSubjectDAO.getstudentSubject(accountId, uuid) == null) {
+		if(studentSubjectDAO.getSubjectById(accountId, uuid) == null) {
 			apiResponse.setMessage("error"); 
 			apiResponse.setDescription("Nothing to delete!");
 			return apiResponse;
