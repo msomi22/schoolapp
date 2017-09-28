@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
@@ -102,7 +103,7 @@ public class SubClassRestFulAPI {
 	
 	@ApiOperation(value = "Get lists of 'subject and class' for the given staff.",  
 		    notes = "Returns a list of 'class and subject' for the given staff.", 
-		    response = SubClass.class)
+		    response = APISubjectClasss.class)
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stff with such Id doesn't exists or account Id not found.") 
 	} )
