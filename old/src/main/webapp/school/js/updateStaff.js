@@ -131,7 +131,7 @@ function fetchStaffRoles() {
 
 		var cols = [];
 
-		var getCol = data[0]['apiSubjectClasss'];
+		var getCol = data[0];
 
 		var keys = Object.keys(getCol);
 
