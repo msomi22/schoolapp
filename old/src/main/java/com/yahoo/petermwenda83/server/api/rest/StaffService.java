@@ -575,9 +575,9 @@ public class StaffService {
 	 * @param staffId
 	 * @return
 	 */
-	public List<APITeacherSubject> getSubjectClassList(String staffId) {
+	public Object getSubjectClassList(String staffId) {
 
-		List<APITeacherSubject> tsList = new ArrayList<APITeacherSubject>();
+		List<APISubjectClasss> tsList = new ArrayList<APISubjectClasss>();
 
 		if(teacherSubjectDAO.getTeacherSubjects(staffId) != null){
 
@@ -597,10 +597,7 @@ public class StaffService {
 				apiSC.setTeacherId(tsc.getTeacherId());
 				apiSC.setUuid(tsc.getUuid());
 
-				APITeacherSubject apiTSC = new APITeacherSubject(); 
-				apiTSC.setApiSubjectClasss(apiSC);
-				
-				tsList.add(apiTSC);
+				tsList.add(apiSC);
 
 			});
 
