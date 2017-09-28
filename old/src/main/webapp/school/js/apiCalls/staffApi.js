@@ -1,120 +1,158 @@
-function StaffApiCall() {
+var table;
 
-	$("#staffForm")
-			.submit(
-					function(e) {
-						e.preventDefault();
+$(document)
+		.ready(
+				function() {
 
-						var dataTxt = ' {  "acessLevelId":"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","staffNo":"3060","firstname":"Peter","middlename":"Mwenda","lastname":"Njeru","gender":"M","mobile":"718953974","email":"peter.mwenda@adcea.com","username":"msomi22","password":"12345667890" } ';
+					varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
 
-						var dataObj = JSON.parse(dataTxt);
-						var uName = "demo";
-						var passwrd = "12345678";
+					global_data_passed = {};
 
-						// alert(JSON.stringify($('#staffForm').serializeJSON()));
+					global_request_type = 'GET';
 
-						$
-								.ajax(
+					globalApiCall(function(data) {
+
+						console.log('Genius Code for staff altering');
+
+						console.log(data);
+
+						var cols = [];
+
+						var getCol = data[0];
+
+						var keys = Object.keys(getCol);
+
+						keys.forEach(function(k) {
+
+							cols.push({
+								title : k,
+								data : k
+							// optionally do some type detection here for render
+							// function
+
+							});
+
+						});
+
+						if (table)
+							table.clear();
+
+						table = $('#staffs')
+								.DataTable(
 										{
-											url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
-											type : 'POST',
-											dataType : 'json',
-											data : JSON.stringify($(
-													'#staffForm')
-													.serializeJSON()),
-											contentType : 'application/json',
-											accept : 'application/json',
-											beforeSend : function(xhr) {
-												xhr
-														.setRequestHeader(
-																'Authorization',
-																'Basic '
-																		+ btoa(uName
-																				+ ":"
-																				+ passwrd));
-											}
-										})
-								.done(
-										function(data) {
 
-											// alert(data.description);
+											destroy : true,
+											columns : cols,
+											"columnDefs" : [
+													{
+														"targets" : [ 0 ],
+														"visible" : false,
+														"searchable" : false
+													},
+													{
+														"targets" : [ 1 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 2 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 3 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 4 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 6 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 9 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 12 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 13 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 14 ],
+														"visible" : false
+													},
+													{
+														"targets" : [ 15 ],
+														"data" : null,
+														"defaultContent" : '<button class="btn btn-info ">'
+																+ 'Profile   <span class="fa fa-info"></span></button>'
+													} ],
 
-											if (data.description
-													.includes("successfully")) {
+											"order" : [ [ 0, "desc" ] ],
+										/* "iDisplayLength": 100 */
 
-												$('#success').modal('show');
+										});
 
-												$('#successTitle').text(
-														data.description);
+						table.rows.add(data).draw();
 
-												setTimeout(function() {
+						$('#staffs tbody')
+								.on(
+										'click',
+										'button',
+										function() {
+											var data = table.row(
+													$(this).parents('tr'))
+													.data();
 
-													$('#staffForm').get(0)
-															.reset();
-													$('#staff').modal('hide');
-												}, 2500);
+											console.log(data['uuid']);
 
-												setTimeout(
-														function() {
+											window
+													.open(
+															location.protocol
+																	+ "//"
+																	+ window.location.host
+																	+ "/school/school/staffProfile.jsp?uuid="
+																	+ data['uuid'],
+															"_blank");
 
-															$('#success')
-																	.modal(
-																			'hide');
-														}, 3000);
-
-											} else if (data.description
-													.includes("exist")) {
-
-												$('#error').modal('show');
-
-												$('#errorTitle').text(
-														"Staff Exists");
-
-												$('#errorSms').text(
-														data.description);
-
-												setTimeout(function() {
-
-													$('#error').modal('hide');
-												}, 2500);
-
-											} else {
-
-												$('#warning').modal('show');
-
-												$('#warningTitle').text(
-														"Details Input Error");
-
-												$('#warningSms').text(
-														data.description);
-
-												setTimeout(
-														function() {
-
-															$('#warning')
-																	.modal(
-																			'hide');
-														}, 2500);
-
-											}
-
-										}).fail(function(jqXHR, textStatus) {
-
-									// alert("Error: " + textStatus);
-
-									$('#error').modal('show');
-
-									$('errorTitle').text("Fatal Error");
-
-									$('errorSms').text(textStatus);
-
-									setTimeout(function() {
-
-										$('#error').modal('hide');
-									}, 2500);
-								})
+										});
 
 					});
+
+				});
+
+function StaffApiCall() {
+
+	$("#staffForm").submit(function(e) {
+		e.preventDefault();
+
+		if (rootCheckFormValidation($('#staffForm'))) {
+
+			// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+			varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+
+			global_data_passed = $('#staffForm').serializeJSON();
+
+			global_request_type = 'POST';
+
+			globalApiCall(function(data) {
+
+				console.log('Genius Code for staff altering');
+
+				console.log(data);
+
+				rootParseApiResponseData(data)
+
+			});
+
+		}
+
+	});
 
 }
 
@@ -126,122 +164,31 @@ function updateStaffApiCall(state) {
 
 	} else if (state == 'update') {
 
-		$("#staffForm")
-				.submit(
-						function(e) {
-							e.preventDefault();
+		$("#staffForm").submit(function(e) {
+			e.preventDefault();
 
-							var dataTxt = ' {  "acessLevelId":"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","staffNo":"3060","firstname":"Peter","middlename":"Mwenda","lastname":"Njeru","gender":"M","mobile":"718953974","email":"peter.mwenda@adcea.com","username":"msomi22","password":"12345667890" } ';
+			if (rootCheckFormValidation($('#staffForm'))) {
 
-							var dataObj = JSON.parse(dataTxt);
-							var uName = "demo";
-							var passwrd = "12345678";
+				// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-							// alert(JSON.stringify($('#staffForm').serializeJSON()));
+				varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
 
-							$
-									.ajax(
-											{
-												url : "http://localhost:8080/school/webapi/staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
-												type : 'PUT',
-												dataType : 'json',
-												data : JSON.stringify($(
-														'#staffForm')
-														.serializeJSON()),
-												contentType : 'application/json',
-												accept : 'application/json',
-												beforeSend : function(xhr) {
-													xhr
-															.setRequestHeader(
-																	'Authorization',
-																	'Basic '
-																			+ btoa(uName
-																					+ ":"
-																					+ passwrd));
-												}
-											})
-									.done(
-											function(data) {
+				global_data_passed = $('#staffForm').serializeJSON();
 
-												// alert(data.description);
+				global_request_type = 'PUT';
 
-												if (data.description
-														.includes("successfully")) {
+				globalApiCall(function(data) {
 
-													$('#success').modal('show');
+					console.log('Genius Code for staff altering');
 
-													$('#successTitle').text(
-															data.description);
+					console.log(data);
 
-													setTimeout(function() {
+					rootParseApiResponseData(data)
 
-														$('#staffForm').get(0)
-																.reset();
-														$('#staff').modal(
-																'hide');
-													}, 2500);
+				});
 
-													setTimeout(function() {
+			}
 
-														$('#success').modal(
-																'hide');
-													}, 3000);
-
-												} else if (data.description
-														.includes("wrong")) {
-
-													$('#error').modal('show');
-
-													$('#errorTitle').text(
-															"Fatal Error");
-
-													$('#errorSms').text(
-															data.description);
-
-													setTimeout(function() {
-
-														$('#error').modal(
-																'hide');
-													}, 2500);
-
-												} else {
-
-													$('#warning').modal('show');
-
-													$('#warningTitle')
-															.text(
-																	"Details Input Error");
-
-													$('#warningSms').text(
-															data.description);
-
-													setTimeout(function() {
-
-														$('#warning').modal(
-																'hide');
-													}, 2500);
-
-												}
-
-											}).fail(
-											function(jqXHR, textStatus) {
-
-												// alert("Error: " +
-												// textStatus);
-
-												$('#error').modal('show');
-
-												$('errorTitle').text(
-														"Fatal Error");
-
-												$('errorSms').text(textStatus);
-
-												setTimeout(function() {
-
-													$('#error').modal('hide');
-												}, 2500);
-											})
-
-						});
+		});
 	}
 }

@@ -228,7 +228,7 @@
                   <td class="center"><%=student.getLastname() %></td>
                   <td class="center"><%=student.getGender() %></td>
                   <td class="center"><%="" %></td>
-                  <td class="center"> <a href="profile.jsp?uuid=<%=student.getUuid() %>" > Profile</a> </td>                 
+                  <td class="center"> <a class="btn btn-info" href="profile.jsp?uuid=<%=student.getUuid() %>" > Profile <i class="fa fa-info"></i></a> </td>                 
 
                 </tr>
 

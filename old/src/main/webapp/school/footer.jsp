@@ -192,10 +192,16 @@
 <script src="js/customReportJs.js"></script>
 
 
+<!-- RootApiCall js -->
+<script src="js/apiCalls/rootApiCall.js"></script>
 
-<!-- js api calls -->
 
-<script src="js/apiCalls/staffApi.js"></script>
+<!-- RootForm validator js -->
+<script src="js/rootFormValidator.js"></script>
+
+
+
+
 
 
 
@@ -237,40 +243,10 @@
 	
 	 */
 
-	var global_url = location.protocol + "//" + window.location.host
-			+ "/school/webapi/";
-
-	var global_request_type = 'GET';
-
-	function globalApiCall(handleData) {
-
-		$.ajax(
-				{
-					url : global_url,
-					type : global_request_type,
-					contentType : 'application/json',
-					accept : 'application/json',
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA==');
-					}
-				}).done(function(data) {
-
-			console.log(data);
-			handleData(data);
-
-		}).fail(function(jqXHR, textStatus) {
-
-			
-			console.log(textStatus);
-
-			
-
-		});
-	}
+	
 </script>
 
-<!-- Staff js -->
-<script src="js/staff.js"></script>
+
 
 <!-- exam js -->
 <script src="js/exam.js"></script>
