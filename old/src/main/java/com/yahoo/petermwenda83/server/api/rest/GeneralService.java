@@ -28,6 +28,7 @@ import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
+import com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.ApiConstants;
@@ -57,6 +58,8 @@ public class GeneralService {
 	private static MiscellanousDAO miscellanousDAO;
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
+	private static AcessLevelDAO acessLevelDAO;
+
 
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
@@ -71,6 +74,7 @@ public class GeneralService {
 		miscellanousDAO = MiscellanousDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
+		acessLevelDAO = AcessLevelDAO.getInstance();
 
 		classDAO = ClassDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
@@ -543,7 +547,7 @@ public class GeneralService {
 	public Object updateConfig(ApiSysConfig apiSysConfig) {
 
 		ApiResponse apiResponse = new ApiResponse();
-		
+
 		if(!validStatus(apiSysConfig.getCansendSMS())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid sms code!");
@@ -766,7 +770,25 @@ public class GeneralService {
 	}
 
 
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public Object getAccessLevels(String accountId) {
 
+		Response response = new Response();
+
+		if(acessLevelDAO.getAcessLevelList(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("AccountId not found!");
+			return response;
+
+		}else {
+           return acessLevelDAO.getAcessLevelList(accountId);
+		}
+
+	}
 
 
 
@@ -1067,7 +1089,7 @@ public class GeneralService {
 		return hasduplicate;
 	}
 
-	
+
 	/** 
 	 * @param isBoarding
 	 * @return

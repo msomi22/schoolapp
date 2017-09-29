@@ -29,7 +29,6 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.servlet.util.sms.SmsObject;
 import com.yahoo.petermwenda83.server.servlet.util.sms.SmsUtil;
@@ -450,23 +449,39 @@ public class StaffService {
 	 * @param subClass
 	 * @return
 	 */
-	public ApiResponse addSubject(SubClass subClass) {
+	public ApiResponse addSubject(APISubjectClasss subClass, String staffId) {
 
-		TeacherSubject teacherSubject = new TeacherSubject();
-		teacherSubject.setAccountId(subClass.getAccountId());
-		teacherSubject.setTeacherId(subClass.getTeacherId());
-		teacherSubject.setSubjectId(subClass.getSubjectId());
-		teacherSubject.setStreamId(subClass.getStreamId());
-
+		
 		ApiResponse apiResponse = new ApiResponse(); 
-
-		if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
-
+		
+		if(!StringUtils.equals(staffId, subClass.getTeacherId())) {
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("StaffId mismatch!"); 
+			return apiResponse; 
+			
+		}else if(accountDAO.getAccountById(subClass.getAccountId()) == null) { 
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Account not found!"); 
+			return apiResponse; 
+			
+		}else if(staffDAO.getStaff(subClass.getAccountId(), staffId) == null) { 
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Staff not found!"); 
+			return apiResponse; 
+			
+		}else if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
 			//The subject is already assigned to another teacher 
 			apiResponse = new ApiResponse("error");
 			apiResponse.setDescription("The subject is already assigned to another teacher."); 
+			return apiResponse; 
 
 		}else{
+			
+			TeacherSubject teacherSubject = new TeacherSubject();
+			teacherSubject.setAccountId(subClass.getAccountId());
+			teacherSubject.setTeacherId(subClass.getTeacherId());
+			teacherSubject.setSubjectId(subClass.getSubjectId());
+			teacherSubject.setStreamId(subClass.getStreamId());
 
 			if(teacherSubjectDAO.putTeacherSubject(teacherSubject)){
 
@@ -495,7 +510,7 @@ public class StaffService {
 	 * @param subClass
 	 * @return
 	 */
-	public ApiResponse updateSubjectClass(String subClassId, SubClass subClass) {
+	public ApiResponse updateSubjectClass(String subClassId, APISubjectClasss subClass) {
 
 		TeacherSubject teacherSubject = teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClassId); 
 		teacherSubject.setStreamId(subClass.getStreamId());
@@ -503,10 +518,26 @@ public class StaffService {
 
 		ApiResponse apiResponse = new ApiResponse(); 
 
-		if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
+		/*if(!StringUtils.equals(staffId, subClass.getTeacherId())) {
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("StaffId mismatch!"); 
+			return apiResponse; 
+			
+		}else */if(accountDAO.getAccountById(subClass.getAccountId()) == null) { 
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Account not found!"); 
+			return apiResponse; 
+			
+		}else if(staffDAO.getStaff(subClass.getAccountId(), subClass.getTeacherId()) == null) { 
+			apiResponse = new ApiResponse("error");
+			apiResponse.setDescription("Staff not found!"); 
+			return apiResponse; 
+			
+		}else if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
 
 			apiResponse = new ApiResponse("error");
 			apiResponse.setDescription("Nothing to update / Update not allowed !"); 
+			return apiResponse; 
 
 		}else{
 
@@ -585,7 +616,7 @@ public class StaffService {
 
 				TeacherSubject tsc = teacherSubjectDAO.getTeacherSubject(ts.getAccountId(), ts.getUuid()); 
 
-				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
+				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getUuid());
 				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
 
 				APISubjectClasss apiSC = new APISubjectClasss();
@@ -596,6 +627,7 @@ public class StaffService {
 				apiSC.setSubjectId(tsc.getSubjectId());
 				apiSC.setTeacherId(tsc.getTeacherId());
 				apiSC.setUuid(tsc.getUuid());
+				apiSC.setSubjectDesc(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
 
 				tsList.add(apiSC);
 

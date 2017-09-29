@@ -13,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
@@ -237,6 +238,32 @@ public class ConfigRestFulAPI {
 		return AccountBalance.getBalance(accountId);
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get AcessLevels.", 
+			notes = "Returns List of AcessLevel.", 
+			response = AcessLevel.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@Path("/accsslevel/{accountId}")  
+	@GET
+	public Object getAccessLevels(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+		
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+	
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response;  
+		}
+		
+		return null;
+	}
 
 
 }

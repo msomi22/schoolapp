@@ -13,7 +13,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
-import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 import com.yahoo.petermwenda83.server.api.safaricom.bean.*;
 
 /**
@@ -303,7 +302,7 @@ public class SafaricomService {
 	 * @param password
 	 * @return
 	 */
-	public static String schoolTest(String url,String username,String password) {
+	public static String schoolTest(String url,String username,String password) {/*
 
 		String authEncoded = getAuthBase64(username,password);
 
@@ -336,7 +335,8 @@ public class SafaricomService {
 		String output = response.getEntity(String.class);
 
 		return output;
-	}
+	*/
+		return null;}
 
 
 
