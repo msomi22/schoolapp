@@ -38,9 +38,9 @@ public class SubClassRestFulAPI {
 	
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found!.") 
 	} )
-	
+	//TODO, validate staffId
 	@POST
-	public ApiResponse addSubject(SubClass subClass, @HeaderParam("authorization") String auth){
+	public ApiResponse addSubject(@PathParam("staffId") String staffId, SubClass subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
 
@@ -49,7 +49,7 @@ public class SubClassRestFulAPI {
 
 		}
 		
-		return staffService.addSubject(subClass);
+		return staffService.addSubject(subClass,staffId);
 	}
 	
 
@@ -63,7 +63,7 @@ public class SubClassRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists") 
 	} )
 	
-	public ApiResponse updateComment(@PathParam("subClassId") String subClassId, SubClass subClass, @HeaderParam("authorization") String auth){
+	public ApiResponse updateSubject(@PathParam("subClassId") String subClassId, SubClass subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
 
@@ -86,7 +86,7 @@ public class SubClassRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists or account Id not found.") 
 	} )
 	
-	public ApiResponse deleteComment(@PathParam("accountId") String accountId, @PathParam("subClassId") String subClassId,
+	public ApiResponse deleteSubject(@PathParam("accountId") String accountId, @PathParam("subClassId") String subClassId,
 			@HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
