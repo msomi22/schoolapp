@@ -616,7 +616,7 @@ public class StaffService {
 
 				TeacherSubject tsc = teacherSubjectDAO.getTeacherSubject(ts.getAccountId(), ts.getUuid()); 
 
-				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
+				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getUuid());
 				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
 
 				APISubjectClasss apiSC = new APISubjectClasss();
@@ -627,6 +627,7 @@ public class StaffService {
 				apiSC.setSubjectId(tsc.getSubjectId());
 				apiSC.setTeacherId(tsc.getTeacherId());
 				apiSC.setUuid(tsc.getUuid());
+				apiSC.setSubjectDesc(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getDescription());
 
 				tsList.add(apiSC);
 
