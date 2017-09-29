@@ -1,4 +1,4 @@
-/* $("#staffs").DataTable({
+ $("#staffRoles").DataTable({
 	 
 	 "scrollY":        "550px",
      "scrollCollapse": true,
@@ -6,7 +6,7 @@
 		 
      
      
-	 });*/
+	 });
 
 function StaffModal(id) {
 

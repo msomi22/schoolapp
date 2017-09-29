@@ -24,18 +24,21 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-	
-	
+
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
-	
+
+	String loggedUserId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+
+	String loggedUserAccessId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
+
 	/* StaffDAO staffDAO= StaffDAO.getInstance();
 	
 	 List<Staff> staffList = new ArrayList<>();
-     if(staffDAO.getStaff(accountId) != null){
-    	 staffList = staffDAO.getStaff(accountId);
-     }
-     
-     int staffCount = 0; */
+	 if(staffDAO.getStaff(accountId) != null){
+		 staffList = staffDAO.getStaff(accountId);
+	 }
+	 
+	 int staffCount = 0; */
 %>
 <jsp:include page="header.jsp" />
 
@@ -76,8 +79,8 @@
 							<div class="col-md-4 pull-right">
 								<h3 class="pull-right">
 									Add a new Staff
-									<button class="btn btn-primary" style="border-radius: 90%" id="add"
-										onclick="StaffModal(this.id)">
+									<button class="btn btn-primary" style="border-radius: 90%"
+										id="add" onclick="StaffModal(this.id)">
 										<i class="fa fa-user-plus fa-2x"></i>
 									</button>
 
@@ -112,7 +115,7 @@
 										<th class="column-title">User name</th>
 										<th class="column-title hidden">password</th>
 										<th class="column-title hidden">uuid</th>
-										<th class="column-title hidden">accountId</th>		
+										<th class="column-title hidden">accountId</th>
 										<th class="column-title">Modify</th>
 
 									</tr>
@@ -120,7 +123,7 @@
 
 								<tbody class='tablebody'>
 
-								<%--  <%
+									<%--  <%
 								 String name;
                   for(Staff staff : staffList){  
                 	  
@@ -154,7 +157,7 @@
 							  <%      
                     staffCount++;
                   }%>	 --%>
-                  </tbody>
+								</tbody>
 
 
 							</table>

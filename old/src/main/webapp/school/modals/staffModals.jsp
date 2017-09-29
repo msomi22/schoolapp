@@ -107,15 +107,9 @@
 
 
 
-							<%
-								String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
-							%>
 							
-							<input type="hidden" name="uuid" id="uuid"
-								value="n0t_set">
-
-							<input type="hidden" name="accountId" id="accountId"
-								value="<%=accountId%>">
+							<input type="hidden" name="acessLevelId" id="new_acessLevelId"
+								value="">
 
 
 
@@ -133,7 +127,7 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="submit" onclick="StaffApiCall()"
+					<button type="button" onclick="addStaffApiCall()"
 						class="btn btn-info pull-right" id="staff_btn">
 						Submit <i class="fa fa-save"></i>
 					</button>
@@ -171,14 +165,7 @@
 
 							<div class="col-md-8 col-md-offset-2" id="classDiv">
 								<br> <label for="classId">Class/Form:</label> <select
-									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
-
-									<option value="">Form 1</option>
-
-									<option value="">Form 2</option>
-									<option value="">Form 3</option>
-
-									<option value="">Form 4</option>
+									class="form-control formelement populateOptions classId"  id="classList" onchange="fetchStreams(this.value)">
 
 
 								</select>
@@ -187,15 +174,7 @@
 							
 							<div class="col-md-8 col-md-offset-2" id="classDiv">
 								<br> <label for="classId">Stream:</label> <select
-									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
-
-									<option value="">Form 1 N</option>
-
-									<option value="">Form 2 S</option>
-									<option value="">Form 3 S</option>
-
-									<option value="">Form 4 N</option>
-
+									class="form-control formelement populateStreamOptions"  name="streamId" id="streamId">
 
 								</select>
 							</div>
@@ -207,14 +186,7 @@
 							
 								<div class="col-md-8 col-md-offset-2" id="classDiv">
 								<br> <label for="classId">Subject:</label> <select
-									class="form-control formelement populateOptions classId"  name="classRoomId" id="classId_edit">
-
-									<option value="">Mathematics</option>
-
-									<option value="">English</option>
-									<option value="">Kiswahili</option>
-
-									<option value="">Physics</option>
+									class="form-control formelement populateSubjectOptions classId"  name="subjectId" id="subjectId">
 
 
 								</select>
@@ -222,11 +194,15 @@
 							
 							
 							
-							<input type="hidden" name="uuid" id="uuid"
-								value="n0t_set">
+							<input type="hidden" name="teacherId" id="teacherId"
+								value="">
 								
-								<input type="hidden" name="accountId" id="accountId"
-								value="n0t_set">
+								<input type="hidden" name="accountId" id="alterStaffRole_accountId"
+								value="">
+								
+									
+								<input type="hidden" name="uuid" id="alterSR_uuid"
+								value="">
 
 
 
@@ -238,8 +214,7 @@
 
 						</div>
 
-						<input type="hidden" name="" id="" value="not_set"> <input
-							type="hidden" name="" id="" value="not_set">
+				
 
 
 
@@ -259,7 +234,7 @@
 					
 					
 					
-					<button type="submit" id="btn_editStaffRoles" onclick="alterStaffRoles()" class="btn btn-primary pull-right" >
+					<button type="button" id="btn_editStaffRoles" onclick="alterStaffRoles()" class="btn btn-primary pull-right" >
 						Submit <i class="fa fa-save"></i>
 					</button>
 					

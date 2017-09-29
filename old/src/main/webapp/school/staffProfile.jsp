@@ -39,6 +39,10 @@
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	
+	String loggedUserId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+	
+	String loggedUserAccessId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
 
 	//get student's details
 	//int reg= Integer.parseInt( request.getParameter("uuid"));
@@ -46,18 +50,7 @@
 	String uuid = request.getParameter("uuid");
 
 	//get class list
-	ClassDAO classDAO = ClassDAO.getInstance();
-
-	List<ClassRoom> classroomList = new ArrayList<>();
-
-	classroomList = classDAO.getClassRooms(accountId);
-
-	//get stream list
-	StreamDAO streamDAO = StreamDAO.getInstance();
-
-	List<Stream> streamList = new ArrayList<>();
-
-	streamList = streamDAO.getStreamList(accountId);
+	
 %>
 <jsp:include page="header.jsp" />
 
@@ -71,7 +64,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Staff's Profile</h3>
+				<h3>Staff's Profile <%=loggedUserId %> </h3>
 			</div>
 		</div>
 
@@ -85,7 +78,8 @@
 
 							
 
-								<input type="hidden" name="passport" id="profile_url">
+								<input type="hidden" name="passedLogId" id="passedLogId" value="<%=loggedUserId %>">
+								<input type="hidden" name="passedLogAcessId" id="passedLogAcessId" value="<%=loggedUserAccessId %>">
 
 								<div class="" role="tabpanel" data-example-id="togglable-tabs">
 									<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -176,10 +170,24 @@
 
 
 													<input type="hidden" name="uuid" id="uuid"
-														value="<%=uuid%>"> <input type="hidden"
+														value="<%=uuid%>">
+														
+														<input type="hidden" name="logedUserId" id="logedUserId"
+														value="<%=loggedUserId %>">
+														
+															<input type="hidden" name="logedUserAccessId" id="logedUserAccessId"
+														value="<%=loggedUserAccessId %>">
+														
+														<input type="hidden" name="acessLevelId" id="acessLevelId"
+														value="">
+														
+														 <input type="hidden"
 														name="accountId" id="accountId" value="<%=accountId%>">
 
 													<input type="hidden" name="isActive" id="isActive">
+													
+													
+													<input type="hidden" name="staffNo" id="staffNo">
 
 
 
@@ -304,7 +312,7 @@
 
 
 
-											<div class="col-md-10 col-md-offset-1 ">
+											<div class="row">
 											
 											<div class="table-responsive">
 												<table class="table table-striped jambo_table bulk_action"
