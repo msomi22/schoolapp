@@ -237,6 +237,26 @@ public class ConfigRestFulAPI {
 		return AccountBalance.getBalance(accountId);
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@Path("/accsslevel/{accountId}")  
+	@GET
+	public Object getAccessLevels(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+		
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+	
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response;  
+		}
+		
+		return null;
+	}
 
 
 }
