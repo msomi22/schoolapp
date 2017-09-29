@@ -9,7 +9,6 @@ import org.javalite.http.Http;
 import org.javalite.http.Post;
 
 import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
-import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
 /**
  * @author peter
@@ -28,7 +27,7 @@ public class JavaLite {
 	 * @param args
 	 * @throws UnsupportedEncodingException 
 	 */
-	public static void main(String[] args) throws UnsupportedEncodingException { 
+	public static void main(String[] args) throws UnsupportedEncodingException {/* 
 		
 		String username = "demo";
 		String password = "12345678";
@@ -41,7 +40,7 @@ public class JavaLite {
 		subclass.setSubjectId("F1972BF2-C788-4F41-94FE-FBA1869C92BC");
 		subclass.setTeacherId("5498156A-FE83-43F4-9592-737HDHJ877S"); 
 		
-		String query = JsonFromObj.getJsonStringFromObject(subclass); 
+	//	String query = JsonFromObj.getJsonStringFromObject(subclass); 
 		
 		byte[] content = query.getBytes("UTF-8"); 
 		
@@ -54,6 +53,6 @@ public class JavaLite {
 		
 		System.out.println(post.text());
 		
-	}
+	*/}
 
 }

@@ -29,7 +29,6 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.servlet.util.sms.SmsObject;
 import com.yahoo.petermwenda83.server.servlet.util.sms.SmsUtil;
@@ -450,7 +449,7 @@ public class StaffService {
 	 * @param subClass
 	 * @return
 	 */
-	public ApiResponse addSubject(SubClass subClass, String staffId) {
+	public ApiResponse addSubject(APISubjectClasss subClass, String staffId) {
 
 		
 		ApiResponse apiResponse = new ApiResponse(); 
@@ -511,7 +510,7 @@ public class StaffService {
 	 * @param subClass
 	 * @return
 	 */
-	public ApiResponse updateSubjectClass(String subClassId, SubClass subClass) {
+	public ApiResponse updateSubjectClass(String subClassId, APISubjectClasss subClass) {
 
 		TeacherSubject teacherSubject = teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClassId); 
 		teacherSubject.setStreamId(subClass.getStreamId());

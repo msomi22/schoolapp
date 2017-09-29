@@ -24,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;

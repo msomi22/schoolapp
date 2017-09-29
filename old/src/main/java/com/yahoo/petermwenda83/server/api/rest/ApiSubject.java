@@ -1,11 +1,7 @@
-/**
- * 
- */
-package com.yahoo.petermwenda83.server.api.rest.bean;
+
+package com.yahoo.petermwenda83.server.api.rest;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author peter

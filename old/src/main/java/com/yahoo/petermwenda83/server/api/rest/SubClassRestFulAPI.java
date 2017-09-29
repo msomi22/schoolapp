@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
-import com.yahoo.petermwenda83.server.api.rest.bean.SubClass;
 
 import io.swagger.annotations.*;
 
@@ -40,7 +39,7 @@ public class SubClassRestFulAPI {
 	} )
 	//TODO, validate staffId
 	@POST
-	public ApiResponse addSubject(@PathParam("staffId") String staffId, SubClass subClass, @HeaderParam("authorization") String auth){
+	public ApiResponse addSubject(@PathParam("staffId") String staffId, APISubjectClasss subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
 
@@ -63,7 +62,7 @@ public class SubClassRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Subject_Stream with such Id doesn't exists") 
 	} )
 	
-	public ApiResponse updateSubject(@PathParam("subClassId") String subClassId, SubClass subClass, @HeaderParam("authorization") String auth){
+	public ApiResponse updateSubject(@PathParam("subClassId") String subClassId, APISubjectClasss subClass, @HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, subClass.getAccountId())){
 

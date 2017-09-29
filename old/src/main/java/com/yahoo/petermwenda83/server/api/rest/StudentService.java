@@ -55,7 +55,6 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudentFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudentOtherFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ChangeClass;
 import com.yahoo.petermwenda83.server.api.rest.bean.GoKeMoney;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
