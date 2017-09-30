@@ -75,24 +75,15 @@ public class StaffService {
 
 		Response response = new Response(); 
 
-		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
-
 
 		if(accountDAO.getAccountById(staff.getAccountId()) == null){
 			response.setMessage("error");
 			response.setDescription("Invalid accounId"); 
 			return response;
 
-		}if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), principal) != null ){
+		}if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), staff.getAcessLevelId()) != null ){
 			response.setMessage("error");
-			response.setDescription("Principal can not be added twice"); 
-			return response;
-			
-
-		}else if(staffDAO.getStaffByAccessLevel(staff.getAccountId(), deputy_Principal) != null ){
-			response.setMessage("error");
-			response.setDescription("Deputy Principal can not be added twice"); 
+			response.setDescription("Principal/Deputy Principal can not be added twice"); 
 			return response;
 			
 
@@ -127,7 +118,7 @@ public class StaffService {
 
 		}else if(!validMobileNo(staff.getMobile())){
 			response.setMessage("error");
-			response.setDescription("Phone Number Not Valid!"); 
+			response.setDescription("Phone Number Invalid!"); 
 			return response;
 			
 
@@ -138,7 +129,7 @@ public class StaffService {
 			
 		}else if (!emailValidator.isValid(staff.getEmail())) {
 			response.setMessage("error");
-			response.setDescription("Email Address Not Valid!"); 
+			response.setDescription("Email Address Invalid!"); 
 			return response;
 			
 
@@ -148,9 +139,9 @@ public class StaffService {
 			return response;
 			
 
-		}else if (StringUtils.isBlank(staff.getUsername())) { 
+		}else if (staff.getUsername().length() < 3) { 
 			response.setMessage("error");
-			response.setDescription("Username Can't be Empty!"); 
+			response.setDescription("Username Invalid!"); 
 			return response;
 			
 		}else if (staffDAO.getStaffByKeys(staff.getAccountId(), staff.getUsername()) != null) { 
@@ -159,9 +150,9 @@ public class StaffService {
 			return response;
 			
 
-		}else if (StringUtils.isBlank(staff.getPassword())) { 
+		}else if (staff.getPassword().length() < 4) { 
 			response.setMessage("error");
-			response.setDescription("Password Can't be Empty!"); 
+			response.setDescription("Password Invalid!"); 
 			return response;
 			
 
