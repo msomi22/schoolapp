@@ -96,6 +96,8 @@ $(document)
 										/* "iDisplayLength": 100 */
 
 										});
+						
+						fetchAccessLevels();
 
 						table.rows.add(data).draw();
 
@@ -133,6 +135,9 @@ $(document)
 				});
 
 function addStaffApiCall() {
+	
+	
+	
 
 	if (rootCheckFormValidation($('#staffForm'))) {
 
@@ -141,6 +146,8 @@ function addStaffApiCall() {
 		varying_url = "staff/"+$('#accountId').val();
 
 		global_data_passed = $('#staffForm').serializeJSON();
+		
+		console.log(varying_url);
 
 		console.log(JSON.stringify(global_data_passed));
 
@@ -161,6 +168,40 @@ function addStaffApiCall() {
 		});
 
 	}
+
+}
+
+
+function fetchAccessLevels() {
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "/config/accsslevel/" + $('#accountId').val();
+
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Genius Code for fetching access levels');
+
+		console.log(data);
+
+		var accessSelect = $('.accessLevels');
+		accessSelect.empty();
+		// classSelect.options[classSelect.options.length]
+		// = new Option('Form 1', 'Value1');
+
+		for (var i = 0; i < data.length; i++) {
+			accessSelect.append('<option id=' + data[i].uuid + ' value='
+					+ data[i].uuid + '>' + data[i].description
+					+ '</option>');
+			// classSelect.options[classSelect.options.length]
+			// = new Option(data[i].description,
+			// data[i].uuid);
+		}
+
+	});
 
 }
 

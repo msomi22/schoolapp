@@ -78,6 +78,12 @@
 									title="Phone,enter a valid number e.g 712345678">
 
 							</div>
+							
+							
+							
+							
+							
+							
 
 
 
@@ -102,14 +108,24 @@
 									title="Password, Alpha numeric characters are allowed and should be more than six characters"
 									required>
 							</div>
+							
+							<div class="col-md-8 col-md-offset-2">
+								<label for="acessLevelId">Staff Type:</label> <select id="acessLevelId"
+									name="acessLevelId" class="form-control formelement accessLevels">
+									
+								</select>
+							</div>
 
 
 
 
 
 							
-							<input type="hidden" name="acessLevelId" id="acessLevelId"
-								value="BDF7F33D-1936-43F3-B14B-8FC3EA3A1265">
+							
+								
+								
+								
+								
 
 
 
