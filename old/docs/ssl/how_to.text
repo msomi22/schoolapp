@@ -10,3 +10,7 @@ https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platf
 
 
 keytool -genkey -alias jboss -keyalg RSA -keystore server.keystore -storepass password --dname "CN=10.28.0.105,OU=Engineering,O=adc.co.ke,L=Nairobi,S=Westlands,C=KE"
+
+
+
+http://reallifejava.com/configuring-ssl-in-wildfly-8/
