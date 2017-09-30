@@ -262,7 +262,7 @@ public class ConfigRestFulAPI {
 			return response;  
 		}
 		
-		return null;
+		return generalService.getAccessLevels(accountId);
 	}
 
 
