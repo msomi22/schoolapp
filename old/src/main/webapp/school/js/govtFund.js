@@ -295,3 +295,74 @@ function delGovtCat() {
 	})
 
 }
+
+
+function processTotalAmount(){
+	
+	
+	var amounReg= /[0-9]{4,7}/;
+	
+	var value= $('#totalAmount').val();
+	
+	
+	
+	if(!value.match(amounReg)){
+		
+		console.log("Passsed value:"+value);
+		
+		$('#warningTitle').html('<b> Total Amount Error</b>');
+		
+		$('#warningSms').html('<b> Invalid input for total amount, the amount should onlt be digits and more than 3 digits e.g 10000, 90000</b>');
+		
+		
+		
+		
+		$('#warning').modal('show');
+		
+		setTimeout(function(){
+			
+			$('#warning').modal('hide');
+		}, 2000);
+		
+		
+		
+		
+		
+	}else{
+	
+	
+	$('#totalAmount').attr('disabled', true);
+	
+	varying_url = "finance/fee/gokcheck/" +accountId+"/"+value;
+
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Genius Code for checking govt amount Distri');
+
+		console.log(data);
+		
+		$('#govtCheckResponse').append('<br> Number of Students : '+data['numberOfStudents']
+		+'<br> Total Amount : '+data['totalAmount']
+		+'<br> Expected Amount :'+data['expectedAmount']
+		+'<br> Amount per Student :'+data['amountPerStudent']
+		+'<br> Balance : '+data['balance']);
+		
+		$('#amountPerStudent').html("The Amount to be allocate to each student is, "+data['amountPerStudent']);
+
+		
+		
+
+		
+	});
+	
+	}
+}
+
+
+
+
+
+

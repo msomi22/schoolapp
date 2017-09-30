@@ -176,7 +176,7 @@ function fetchAccessLevels() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "/config/accsslevel/" + $('#accountId').val();
+	varying_url = "config/accsslevel/" + $('#accountId').val();
 
 	global_data_passed = {};
 	global_request_type = 'GET';

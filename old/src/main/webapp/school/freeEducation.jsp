@@ -86,15 +86,18 @@
 										<div class="clearfix"></div>
 									</div>
 									<div class="x_content">
-										
+
 
 										<div class="row ">
+										
+										<div class="col-md-1 pull-right"></div>
 
-											<div class="col-md-4 pull-right">
+											<div class="col-md-3 pull-right">
 												<h3 class="pull-right">
 													Add a new Category
-													<button type="button" class="btn btn-primary" style="border-radius: 90%"
-														id="add" onclick="govtCategoryModal()">
+													<button type="button" class="btn btn-primary"
+														style="border-radius: 90%" id="add"
+														onclick="govtCategoryModal()">
 														<i class="fa fa-plus-circle fa-2x"></i>
 													</button>
 
@@ -105,8 +108,7 @@
 										</div>
 
 
-										<form action="#" id="generateGokeAllocation"
-											 method="post">
+										<form action="#" id="generateGokeAllocation" method="post">
 
 
 
@@ -114,8 +116,9 @@
 
 
 											<!-- Choose time span -->
-											
-											<input type="hidden" name="loggedId" id="loggedId" value="<%=accountId%>">
+
+											<input type="hidden" name="loggedId" id="loggedId"
+												value="<%=accountId%>">
 
 
 
@@ -124,33 +127,37 @@
 
 
 											<div class="row">
-												
 
-												<div class="col-md-8 col-md-offset-2" >
-												
-												
-												
-											<div class="row">
 
-												<div class="col-md-4 col-md-offset-2">
-
-													<!-- Exam element -->
+												<div class="col-md-7 col-md-offset-2">
 
 
 
-													<h4 class="centerMe">
-														<b>Total Amount</b>
-													</h4>
+													<div class="row">
 
-													<input type="text" class="form-control formelement"
-														name="totalAmount" id="totalAmount"
-														placeholder="Enter Total Amount"> <br>
+														<div class="col-md-4 col-md-offset-2">
+
+															<!-- Exam element -->
 
 
-												</div>
-												<div class="col-md-1">
 
-															<button type="button" class="btn btn-primary my_btn" id="cat1" onclick="processTotalAmount(this.id)"
+															<h4 class="centerMe">
+																<b>Total Amount</b>
+															</h4>
+
+															<input type="text" class="form-control formelement"
+																name="totalAmount" id="totalAmount"
+																placeholder="Enter Total Amount"> <br>
+
+
+														</div>
+														<div class="col-md-1">
+															<br>
+															<br>
+
+															<button type="button" class="btn btn-primary my_btn"
+																id="p_totalAmount"
+																onclick="processTotalAmount()"
 																style="border-radius: 90%">
 																<span class="fa fa-floppy-o"></span>
 															</button>
@@ -161,99 +168,120 @@
 
 
 
-											</div>
-											
-											<div id="govtCatList">
-
-													<div class="row">
-
-
-														
-
-														<div class="col-md-2">
-
-															<input type="text" 
-																placeholder="Enter Category Name"
-																class="form-control formelement cat1" name="catName" value="R.M.I"
-																readonly="readonly">
-														</div>
-														
-														<input type="hidden" name="catuuid" class="cat1" value="memeUUID">
-
-														<div class="col-md-4">
-															<input type="text" 
-																placeholder="Enter Category Amount"
-																class="form-control formelement cat1" name="catAmount" value="7777"
-																readonly="readonly">
-														</div>
-														
-														<div class="col-md-1">
-
-															<button type="button" class="btn btn-primary my_btn" id="cat1" onclick="editGovtCat(this.id)"
-																style="border-radius: 90%">
-																<span class="fa fa-pencil-square-o "></span>
-															</button>
-
-														</div>
-														<div class="col-md-1">
-
-															<button type="button" class="btn btn-primary my_btn"
-																style="border-radius: 90%">
-																<span class="fa fa-trash"></span>
-															</button>
-
-														</div>
-
 													</div>
-													
-													
-													<div class="row">
+
+													<div id="govtCatList">
+
+														<div class="row">
 
 
-														
 
-														<div class="col-md-2">
 
-															<input type="text" id="catId"
-																placeholder="Enter Category Name"
-																class="form-control formelement cat2" name="catName" value="Another"
-																readonly="readonly">
+															<div class="col-md-2">
+
+																<input type="text" placeholder="Enter Category Name"
+																	class="form-control formelement cat1" name="catName"
+																	value="R.M.I" readonly="readonly">
+															</div>
+
+															<input type="hidden" name="catuuid" class="cat1"
+																value="memeUUID">
+
+															<div class="col-md-4">
+																<input type="text" placeholder="Enter Category Amount"
+																	class="form-control formelement cat1" name="catAmount"
+																	value="7777" readonly="readonly">
+															</div>
+
+															<div class="col-md-1">
+
+																<button type="button" class="btn btn-primary my_btn"
+																	id="cat1" onclick="editGovtCat(this.id)"
+																	style="border-radius: 90%">
+																	<span class="fa fa-pencil-square-o "></span>
+																</button>
+
+															</div>
+															<div class="col-md-1">
+
+																<button type="button" class="btn btn-primary my_btn"
+																	style="border-radius: 90%">
+																	<span class="fa fa-trash"></span>
+																</button>
+
+															</div>
+
 														</div>
-														
-														<input type="hidden" name="catuuid" class="cat2" value="memeUUID111">
 
-														<div class="col-md-4">
-															<input type="text" id="catAmount"
-																placeholder="Enter R.M.I Amount"
-																class="form-control formelement cat2" name="catAmount" value="111"
-																readonly="readonly">
+
+														<div class="row">
+
+
+
+
+															<div class="col-md-2">
+
+																<input type="text" id="catId"
+																	placeholder="Enter Category Name"
+																	class="form-control formelement cat2" name="catName"
+																	value="Another" readonly="readonly">
+															</div>
+
+															<input type="hidden" name="catuuid" class="cat2"
+																value="memeUUID111">
+
+															<div class="col-md-4">
+																<input type="text" id="catAmount"
+																	placeholder="Enter R.M.I Amount"
+																	class="form-control formelement cat2" name="catAmount"
+																	value="111" readonly="readonly">
+															</div>
+
+															<div class="col-md-1">
+
+																<button type="button" class="btn btn-primary my_btn"
+																	id="cat2" onclick="editGovtCat(this.id)"
+																	style="border-radius: 90%">
+																	<span class="fa fa-pencil-square-o "></span>
+																</button>
+
+															</div>
+															<div class="col-md-1">
+
+																<button type="button" class="btn btn-primary my_btn"
+																	style="border-radius: 90%">
+																	<span class="fa fa-trash"></span>
+																</button>
+
+															</div>
+
 														</div>
-														
-														<div class="col-md-1">
-
-															<button type="button" class="btn btn-primary my_btn" id="cat2" onclick="editGovtCat(this.id)"
-																style="border-radius: 90%">
-																<span class="fa fa-pencil-square-o "></span>
-															</button>
-
-														</div>
-														<div class="col-md-1">
-
-															<button type="button" class="btn btn-primary my_btn"
-																style="border-radius: 90%">
-																<span class="fa fa-trash"></span>
-															</button>
-
-														</div>
-
 													</div>
 												</div>
-												</div>
 
-											
 
+												<div class="col-md-2 ">
+												<br>
 												
+												<br>
+												<br>
+												
+												
+												
+												<h5 class="alert alert-info" id="govtCheckResponse">Display the amount check here</h5>
+												
+												
+												
+												</div>
 
+
+
+											</div>
+
+
+
+
+											<div class="row">
 
 												<div class="col-md-8 col-md-offset-2">
 
@@ -265,7 +293,7 @@
 
 
 														<div class="col-md-4 col-md-offset-2 alert alert-info">
-															<h4>The Amount to be allocate to each student is
+															<h4 id="amountPerStudent">The Amount to be allocate to each student is
 																####</h4>
 														</div>
 
@@ -273,11 +301,12 @@
 
 
 													<div class="row">
-													<br> <br>
+														<br> <br>
 
 														<div class="col-md-4 col-md-offset-2">
-															
-															<button type="button" class="btn btn-primary form-control">Allocate</button>
+
+															<button type="button"
+																class="btn btn-primary form-control">Allocate</button>
 														</div>
 
 													</div>
