@@ -30,7 +30,7 @@ public class APIApplication extends Application{
 	public APIApplication(){
 		BeanConfig beanConfig = new BeanConfig();
 		beanConfig.setVersion("1.0.2");
-		beanConfig.setSchemes(new String[]{"http,https"});
+		beanConfig.setSchemes(new String[]{"https,http"});
 		beanConfig.setHost("41.203.216.222:8080/school");
 		beanConfig.setBasePath("/webapi");
 		beanConfig.setFilterClass("com.yahoo.petermwenda83.server.api.ApiAuthorizationFilterImpl");
