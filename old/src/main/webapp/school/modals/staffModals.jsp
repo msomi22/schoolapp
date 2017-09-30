@@ -104,7 +104,7 @@
 							<div class="col-md-8 col-md-offset-2">
 								<label for="password">Password</label> <input type="password"
 									id="password" class="form-control formelement" name="password"
-									placeholder="Username" pattern="[A-Za-z0-9]{6,20}"
+									placeholder="Password" pattern="[A-Za-z0-9]{6,20}"
 									title="Password, Alpha numeric characters are allowed and should be more than six characters"
 									required>
 							</div>

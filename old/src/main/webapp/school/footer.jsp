@@ -229,8 +229,9 @@
 
 	$('#studentsList').DataTable({
 
-		"bPaginate" : false,
-		"bLengthChange" : false
+		"bPaginate" : true,
+		"bLengthChange" : true,
+		searching : false
 
 	});
 

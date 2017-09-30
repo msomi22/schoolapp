@@ -191,23 +191,66 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
+                  
+                  <input type="hidden" id="accountId" value="<%=accountId%>">
 
                 <div class="x_content">
+                
+                <div class="row">
+                
+                <div class="col-md-4 pull-right">
+                
+                <input type="text" id="query" name="query"
+													class="form-control formelement cards"
+													placeholder="Search for students" 
+													maxlength="10" onkeyup="delayInput()"
+												
+													required> <span
+													class="glyphicon glyphicon-search form-control-feedback"></span>
+                </div>
+                
+                
+                
+                </div>
 
                   <div class="table-responsive">
                     <table class="table table-striped jambo_table bulk_action" id="studentsList">
                         <thead>
                           <tr class="headings secondary-assent">
 
-                            <th class="column-title"># </th>
-                            <th class="column-title">RegNo </th>
-                            <th class="column-title">First name </th>
-                            <th class="column-title">Middle name </th>
-                            <th class="column-title">Last name </th>
-                            <th class="column-title">Gender </th>
-                            <th class="column-title">Class </th>
-                            <th class="column-title no-link last"> 
-                              <span class="nobr"> Profile </span> 
+                           <th class="column-title hidden">uuid</th>
+                           <th class="column-title hidden">accountId</th>
+                           <th class="column-title hidden">regStream</th>
+                           <th class="column-title hidden">currentStream</th>
+                           <th class="column-title hidden">isActive</th>
+                           <th class="column-title hidden">isAlumni</th>
+                           <th class="column-title hidden">isBoarding</th>
+                           
+                            <th class="column-title">regNo</th>
+                            <th class="column-title">firstname</th>
+                            <th class="column-title">middlename</th>
+                            <th class="column-title">lastname</th>
+                            <th class="column-title">gender</th>
+                            <th class="column-title hidden">dob</th>
+                            <th class="column-title hidden">bcertNo</th>
+                            <th class="column-title hidden">county</th>
+                            <th class="column-title hidden">regTerm</th>
+                            <th class="column-title hidden">finalYear</th>
+                            <th class="column-title hidden">finalTerm</th>
+                            <th class="column-title hidden">passport</th>
+                            
+                            <th class="column-title hidden">hasParent</th>
+                            <th class="column-title hidden">parentName</th>
+                            <th class="column-title hidden">parentMobile</th>
+                            <th class="column-title hidden">parentEmail</th>
+                            <th class="column-title hidden">hasPrimary</th>
+                            <th class="column-title hidden">schoolName</th>
+                            <th class="column-title hidden">index</th>
+                            <th class="column-title hidden">kcpeyear</th>
+                            <th class="column-title hidden">kcpemark</th>
+                           
+                            <th class="column-title"> 
+                               Profile
                             </th>
                             
                           </tr>
@@ -215,19 +258,18 @@
 
               <tbody class='tablebody'>
 
-                <%
+               <%--   <%
                   for(Student student : studentList){                   
                     %>
 
                 <tr class="tabledit" style='color: black;'>
 
-                  <td width="5%"><%=studentCount%>. </td>
+                 
                   <td class="center"><%=student.getRegNo() %></td>
                   <td class="center"><%=student.getFirstname() %></td>
                   <td class="center"><%=student.getMiddlename() %></td>
                   <td class="center"><%=student.getLastname() %></td>
                   <td class="center"><%=student.getGender() %></td>
-                  <td class="center"><%="" %></td>
                   <td class="center"> <a class="btn btn-info" href="profile.jsp?uuid=<%=student.getUuid() %>" > Profile <i class="fa fa-info"></i></a> </td>                 
 
                 </tr>
@@ -236,7 +278,7 @@
                     studentCount++;
                   }
                   
-                  %>
+                  %>  --%>
 
                         </tbody>
                       </table>
@@ -280,6 +322,9 @@
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+<script src="js/student.js"></script>
 
 
 
