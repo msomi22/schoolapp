@@ -3,3 +3,10 @@
 
 
 keytool -genkey -alias domain_name -keyalg RSA -keystore keystore.jks -keysize 4096
+
+
+
+https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6/html/Administration_and_Configuration_Guide/Generate_a_SSL_Encryption_Key_and_Certificate.html
+
+
+keytool -genkey -alias jboss -keyalg RSA -keystore server.keystore -storepass password --dname "CN=10.28.0.105,OU=Engineering,O=adc.co.ke,L=Nairobi,S=Westlands,C=KE"
