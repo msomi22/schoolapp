@@ -296,6 +296,15 @@ function delGovtCat() {
 
 }
 
+function modalTimeout(modal){
+	
+	
+	setTimeout(function(){
+		
+		$('#'+modal).modal('hide');
+	}, 2000);
+}
+
 
 function processTotalAmount(){
 	
@@ -319,10 +328,9 @@ function processTotalAmount(){
 		
 		$('#warning').modal('show');
 		
-		setTimeout(function(){
-			
-			$('#warning').modal('hide');
-		}, 2000);
+		modalTimeout('warning');
+		
+		
 		
 		
 		
@@ -350,7 +358,29 @@ function processTotalAmount(){
 		+'<br> Amount per Student :'+data['amountPerStudent']
 		+'<br> Balance : '+data['balance']);
 		
-		$('#amountPerStudent').html("The Amount to be allocate to each student is, "+data['amountPerStudent']);
+		$('#amountPerStudent').html("The Amount to be allocated to each student is, "+data['amountPerStudent']);
+		
+		
+		if(parseInt(data['balance'])<0){
+			
+			$('#errorTitle').html('<b> Amount Insufficient </b>');
+			$('#errorSms').html('<b> Total Amount supplied is insufficient </b>');
+			$('#error').modal('show');
+			
+			modalTimeout('error');
+		}else{
+			
+			$('#success').modal('show');
+			
+			$('#successTitle').html('<b> Amount well equated </b>');
+			$('#successSms').html('<b> Total Amount supplied is okay, Proceed to allocation </b>');
+			
+			
+			modalTimeout('success');
+			
+			$('#allocateGovtMoney').attr('disabled',false);
+			
+		}
 
 		
 		

@@ -293,7 +293,7 @@
 
 
 														<div class="col-md-4 col-md-offset-2 alert alert-info">
-															<h4 id="amountPerStudent">The Amount to be allocate to each student is
+															<h4 id="amountPerStudent">The Amount to be allocated to each student is
 																####</h4>
 														</div>
 
@@ -306,7 +306,7 @@
 														<div class="col-md-4 col-md-offset-2">
 
 															<button type="button"
-																class="btn btn-primary form-control">Allocate</button>
+																class="btn btn-primary form-control" id="allocateGovtMoney" onclick="allocateGovtCash()" disabled>Allocate</button>
 														</div>
 
 													</div>
