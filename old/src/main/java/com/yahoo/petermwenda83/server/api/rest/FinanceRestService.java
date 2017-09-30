@@ -756,7 +756,6 @@ public class FinanceRestService {
 			response.setDescription("Invalid accountId!");
 			return response;
 			
-
 		}else if(accountDAO.getAccountById(accountId)== null) {
 			response.setMessage("error");
 			response.setDescription("Term/Year not set!");
@@ -765,21 +764,15 @@ public class FinanceRestService {
 		}else {
 			
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
-			
-			System.out.println(" *************************************: " + feeBreakdownDAO.getFeeBreakdown(accountId, 
-					FeeConstants.GVMT_MONEY_CODE,
-					sysConfig.getTerm(),
-					sysConfig.getYear()
-					)); 
-
+		
 			if(feeBreakdownDAO.getFeeBreakdown(accountId, 
 					FeeConstants.GVMT_MONEY_CODE,
 					sysConfig.getTerm(),
 					sysConfig.getYear()
-					) != null){//FeeConstants.GVMT_MONEY_STATUS_ACTIVE
+					) != null){
 
 				FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
-						sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
+						sysConfig.getYear());
 
 				int amountToEachStudent = (int)FeeConstants.getGoKeFee(accountId, feeBreakdown.getUuid());
 
