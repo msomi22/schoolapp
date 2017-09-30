@@ -99,7 +99,7 @@ public class StaffRestFulAPI {
 
 	@POST
 	@Path("/{accountId}")
-	public ApiResponse putStatff(@PathParam("accountId") String accountId, 
+	public Object putStatff(@PathParam("accountId") String accountId, 
 			@HeaderParam("authorization") String auth , APIStaff apiStaff){
 
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
@@ -122,7 +122,7 @@ public class StaffRestFulAPI {
 			staff.setUsername(apiStaff.getUsername());
 			staff.setPassword(apiStaff.getPassword());
 
-			ApiResponse put = staffService.putStaff(staff);
+			Response put = staffService.putStaff(staff);
 			return put; 
 
 		}
