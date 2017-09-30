@@ -1,4 +1,4 @@
- $("#staffRoles").DataTable({
+ /*$("#staffRoles").DataTable({
 	 
 	 "scrollY":        "550px",
      "scrollCollapse": true,
@@ -6,7 +6,7 @@
 		 
      
      
-	 });
+	 });*/
 
 function StaffModal(id) {
 
@@ -23,7 +23,7 @@ function StaffModal(id) {
 
 		$('#staffTiltle').text("Add a new Staff");
 		$('#staff_btn').text("Submit");
-		$("#staff_btn").attr("onclick", "StaffApiCall()");
+		$("#staff_btn").attr("onclick", "addStaffApiCall()");
 
 		$('#staffForm').get(0).reset();
 

@@ -52,11 +52,13 @@ function addStaffRoles() {
 
 	$('#alterStaffRole_accountId').val($('#accountId').val());
 
+	// $('#passed_log_id').val()
+
 	if (rootCheckFormValidation($('#editStaffRolesForm'))) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "staff/" + $('#logedUserId').val() + "/subjects";
+		varying_url = "staff/" + $('#uuid').val() + "/subjects";
 
 		global_data_passed = $('#editStaffRolesForm').serializeJSON();
 
@@ -70,7 +72,13 @@ function addStaffRoles() {
 
 			console.log(data);
 
-			rootParseApiResponseData(data)
+			if (rootParseApiResponseData(data)) {
+
+				$('#staffSujectModal').modal('hide');
+
+				fetchStaffRoles();
+
+			}
 
 		});
 
@@ -88,9 +96,14 @@ function alterStaffRoles() {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+		varying_url = "staff/" + $('#uuid').val() + "/subjects/"
+				+ $('#alterSR_uuid').val();
 
-		global_data_passed = $('#updateStaffRolesForm').serializeJSON();
+		console.log(varying_url)
+
+		global_data_passed = $('#editStaffRolesForm').serializeJSON();
+
+		console.log(global_data_passed)
 
 		global_request_type = 'PUT';
 
@@ -100,7 +113,13 @@ function alterStaffRoles() {
 
 			console.log(data);
 
-			rootParseApiResponseData(data)
+			if (rootParseApiResponseData(data)) {
+
+				$('#staffSujectModal').modal('hide');
+
+				fetchStaffRoles();
+
+			}
 
 		});
 
@@ -177,6 +196,10 @@ function fetchStaffRoles() {
 						{
 
 							destroy : true,
+							"paging" : false,
+							searching : false,
+							"bPaginate" : false,
+							"bLengthChange" : false,
 							columns : cols,
 							"columnDefs" : [
 									{
@@ -186,7 +209,7 @@ function fetchStaffRoles() {
 									},
 
 									{
-										"targets" : [ 3 ],
+										"targets" : [ 1 ],
 										"visible" : false
 									},
 									{
@@ -200,6 +223,10 @@ function fetchStaffRoles() {
 									},
 									{
 										"targets" : [ 6 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 7 ],
 										"data" : null,
 										"defaultContent" : '<button class="btn btn-warning ">'
 												+ 'Edit  <span class="fa fa-edit"></span></button>'
@@ -230,30 +257,59 @@ function fetchStaffRoles() {
 			$('#btn_editStaffRoles').attr('onclick', 'alterStaffRoles()');
 
 		});
-		
-		$('#staffRoles tbody').on('click', 'a', function() {
-			var data = table.row($(this).parents('tr')).data();
 
-			console.log(data['uuid']);
+		$('#staffRoles tbody')
+				.on(
+						'click',
+						'a',
+						function() {
+							var data = table.row($(this).parents('tr')).data();
 
-			del_StaffRole=data['uuid'];
-			
+							console.log(data['uuid']);
 
-			
+							del_StaffRole = data['uuid'];
 
-		});
+							$('#disableTitle').html(
+									"<b> Delete Staff's Subject Asigned");
+							$('#disableSms')
+									.html(
+											"<b>Are you sure you want to delete the staff's subject? </b>");
+							$('#Dis_modal').modal('show');
+
+						});
 
 	});
 
 }
 
-function delStaffRole(){
-	
-	
-	
-	
-}
+function delStaffRole() {
 
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "staff/" + $('#uuid').val() + "/subjects/" + del_StaffRole
+			+ "/" + $('#accountId').val();
+
+	global_data_passed = {};
+
+	global_request_type = 'DELETE';
+
+	globalApiCall(function(data) {
+
+		console.log('Genius Code for staff roles delete');
+
+		console.log(data);
+
+		if (rootParseApiResponseData(data)) {
+
+			$('#Dis_modal').modal('hide');
+
+			fetchStaffRoles();
+
+		}
+
+	});
+
+}
 
 function fetchSubjects() {
 

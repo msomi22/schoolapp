@@ -64,7 +64,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Staff's Profile <%=loggedUserId %> </h3>
+				<h3>Staff's Profile  </h3>
 			</div>
 		</div>
 
@@ -75,6 +75,8 @@
 				<div class="x_panel">
 					<div class="x_content">
 						<div class="col-md-9 col-sm-9 col-xs-12">
+						
+						<input type="hidden" id="passed_log_id" value="<%=loggedUserId %>">
 
 							
 
@@ -88,7 +90,7 @@
 											data-toggle="tab" aria-expanded="true">General Info</a></li>
 										<li role="presentation" class=""><a href="#tab_content2"
 											role="tab" id="profile-tab" data-toggle="tab"
-											aria-expanded="false">Subjects and Classes</a></li>
+											aria-expanded="false"  onclick="fetchStaffRoles()">Subjects and Classes</a></li>
 									</ul>
 									<div id="myTabContent" class="tab-content">
 										<div role="tabpanel" class="tab-pane fade active in"
@@ -278,7 +280,7 @@
 										</div>
 										<div role="tabpanel" class="tab-pane fade" id="tab_content2"
 											aria-labelledby="profile-tab">
-
+ 
 											<!-- start subjects -->
 
 											<br>
@@ -295,6 +297,7 @@
 											</div>
 
 											<div class="row ">
+											<div class="col-md-3 pull-right"></div>
 
 												<div class="col-md-4 pull-right">
 													<h3 class="pull-right">
@@ -314,7 +317,7 @@
 
 											<div class="row">
 											
-											<div class="table-responsive">
+											<div class="table-responsive col-md-6 col-md-offset-3">
 												<table class="table table-striped jambo_table bulk_action"
 													id="staffRoles">
 													<thead>
@@ -322,6 +325,7 @@
 
 															<th class="column-title">teacherId</th>
 															<th class="column-title">subjectId</th>
+															<th class="column-title">subjectDesc</th>
 															<th class="column-title">streamId</th>
 															<th class="column-title">uuid</th>
 															<th class="column-title">accountId</th>
