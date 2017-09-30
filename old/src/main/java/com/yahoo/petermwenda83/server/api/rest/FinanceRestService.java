@@ -753,49 +753,58 @@ public class FinanceRestService {
 		
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			response.setMessage("error");
-			response.setDescription("Term/Year not set!");
+			response.setDescription("Invalid accountId!");
 			return response;
+			
 
 		}else if(accountDAO.getAccountById(accountId)== null) {
 			response.setMessage("error");
-			response.setDescription("Invalid accountId!");
+			response.setDescription("Term/Year not set!");
 			return response;
-
-		}
-
-		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
-
-		if(feeBreakdownDAO.getFeeBreakdown(accountId, 
-				FeeConstants.GVMT_MONEY_CODE,
-				sysConfig.getTerm(),
-				sysConfig.getYear(), 
-				FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){
-
-			FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
-					sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
-
-			int amountToEachStudent = (int)FeeConstants.getGoKeFee(accountId, feeBreakdown.getUuid());
-
-			double totalAmount = amount;
-			int no_of_students = studentDAO.activeCount(accountId, "1"); 
-			double balance = 0;
-			
-			balance = totalAmount - (amountToEachStudent * no_of_students);
-
-			GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
-			gokeMoneyUsageCheck.setTotalAmount((int)totalAmount);
-			gokeMoneyUsageCheck.setExpectedAmount((int) no_of_students * amountToEachStudent);   
-			gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
-			gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
-			gokeMoneyUsageCheck.setBalance((int)balance);
-			gokeMoneyUsageCheck.setTerm(sysConfig.getTerm());
-			gokeMoneyUsageCheck.setYear(sysConfig.getYear());
-			return gokeMoneyUsageCheck;
 
 		}else {
-			response.setMessage("error");
-			response.setDescription("No record found!");
-			return response;
+			
+			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			
+			System.out.println(" *************************************: " + feeBreakdownDAO.getFeeBreakdown(accountId, 
+					FeeConstants.GVMT_MONEY_CODE,
+					sysConfig.getTerm(),
+					sysConfig.getYear()
+					)); 
+
+			if(feeBreakdownDAO.getFeeBreakdown(accountId, 
+					FeeConstants.GVMT_MONEY_CODE,
+					sysConfig.getTerm(),
+					sysConfig.getYear()
+					) != null){//FeeConstants.GVMT_MONEY_STATUS_ACTIVE
+
+				FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
+						sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
+
+				int amountToEachStudent = (int)FeeConstants.getGoKeFee(accountId, feeBreakdown.getUuid());
+
+				double totalAmount = amount;
+				int no_of_students = studentDAO.activeCount(accountId, "1"); 
+				double balance = 0;
+				
+				balance = totalAmount - (amountToEachStudent * no_of_students);
+
+				GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
+				gokeMoneyUsageCheck.setTotalAmount((int)totalAmount);
+				gokeMoneyUsageCheck.setExpectedAmount((int) no_of_students * amountToEachStudent);   
+				gokeMoneyUsageCheck.setNumberOfStudents(no_of_students);
+				gokeMoneyUsageCheck.setAmountPerStudent(amountToEachStudent);
+				gokeMoneyUsageCheck.setBalance((int)balance);
+				gokeMoneyUsageCheck.setTerm(sysConfig.getTerm());
+				gokeMoneyUsageCheck.setYear(sysConfig.getYear());
+				return gokeMoneyUsageCheck;
+
+			}else {
+				response.setMessage("error");
+				response.setDescription("No record found!");
+				return response;
+				
+			}
 			
 		}
 
