@@ -39,6 +39,10 @@
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	
+	String loggedUserId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+	
+	String loggedUserAccessId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
 
 	//get student's details
 	//int reg= Integer.parseInt( request.getParameter("uuid"));
@@ -46,18 +50,7 @@
 	String uuid = request.getParameter("uuid");
 
 	//get class list
-	ClassDAO classDAO = ClassDAO.getInstance();
-
-	List<ClassRoom> classroomList = new ArrayList<>();
-
-	classroomList = classDAO.getClassRooms(accountId);
-
-	//get stream list
-	StreamDAO streamDAO = StreamDAO.getInstance();
-
-	List<Stream> streamList = new ArrayList<>();
-
-	streamList = streamDAO.getStreamList(accountId);
+	
 %>
 <jsp:include page="header.jsp" />
 
@@ -71,7 +64,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Staff's Profile</h3>
+				<h3>Staff's Profile  </h3>
 			</div>
 		</div>
 
@@ -82,10 +75,13 @@
 				<div class="x_panel">
 					<div class="x_content">
 						<div class="col-md-9 col-sm-9 col-xs-12">
+						
+						<input type="hidden" id="passed_log_id" value="<%=loggedUserId %>">
 
 							
 
-								<input type="hidden" name="passport" id="profile_url">
+								<input type="hidden" name="passedLogId" id="passedLogId" value="<%=loggedUserId %>">
+								<input type="hidden" name="passedLogAcessId" id="passedLogAcessId" value="<%=loggedUserAccessId %>">
 
 								<div class="" role="tabpanel" data-example-id="togglable-tabs">
 									<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -94,7 +90,7 @@
 											data-toggle="tab" aria-expanded="true">General Info</a></li>
 										<li role="presentation" class=""><a href="#tab_content2"
 											role="tab" id="profile-tab" data-toggle="tab"
-											aria-expanded="false">Subjects and Classes</a></li>
+											aria-expanded="false"  onclick="fetchStaffRoles()">Subjects and Classes</a></li>
 									</ul>
 									<div id="myTabContent" class="tab-content">
 										<div role="tabpanel" class="tab-pane fade active in"
@@ -176,10 +172,24 @@
 
 
 													<input type="hidden" name="uuid" id="uuid"
-														value="<%=uuid%>"> <input type="hidden"
+														value="<%=uuid%>">
+														
+														<input type="hidden" name="logedUserId" id="logedUserId"
+														value="<%=loggedUserId %>">
+														
+															<input type="hidden" name="logedUserAccessId" id="logedUserAccessId"
+														value="<%=loggedUserAccessId %>">
+														
+														<input type="hidden" name="acessLevelId" id="acessLevelId"
+														value="">
+														
+														 <input type="hidden"
 														name="accountId" id="accountId" value="<%=accountId%>">
 
 													<input type="hidden" name="isActive" id="isActive">
+													
+													
+													<input type="hidden" name="staffNo" id="staffNo">
 
 
 
@@ -270,7 +280,7 @@
 										</div>
 										<div role="tabpanel" class="tab-pane fade" id="tab_content2"
 											aria-labelledby="profile-tab">
-
+ 
 											<!-- start subjects -->
 
 											<br>
@@ -287,6 +297,7 @@
 											</div>
 
 											<div class="row ">
+											<div class="col-md-3 pull-right"></div>
 
 												<div class="col-md-4 pull-right">
 													<h3 class="pull-right">
@@ -304,9 +315,9 @@
 
 
 
-											<div class="col-md-10 col-md-offset-1 ">
+											<div class="row">
 											
-											<div class="table-responsive">
+											<div class="table-responsive col-md-6 col-md-offset-3">
 												<table class="table table-striped jambo_table bulk_action"
 													id="staffRoles">
 													<thead>
@@ -314,6 +325,7 @@
 
 															<th class="column-title">teacherId</th>
 															<th class="column-title">subjectId</th>
+															<th class="column-title">subjectDesc</th>
 															<th class="column-title">streamId</th>
 															<th class="column-title">uuid</th>
 															<th class="column-title">accountId</th>

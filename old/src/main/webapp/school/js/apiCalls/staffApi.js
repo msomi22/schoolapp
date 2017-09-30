@@ -110,55 +110,63 @@ $(document)
 
 											console.log(data['uuid']);
 
-											/*window
-													.open(
-															location.protocol
-																	+ "//"
-																	+ window.location.host
-																	+ "/school/school/staffProfile.jsp?uuid="
-																	+ data['uuid'],
-															"_blank");*/
-											
-											window.location= location.protocol
-											+ "//"
-											+ window.location.host
-											+ "/school/school/staffProfile.jsp?uuid="
-											+ data['uuid'];
+											/*
+											 * window .open( location.protocol +
+											 * "//" + window.location.host +
+											 * "/school/school/staffProfile.jsp?uuid=" +
+											 * data['uuid'], "_blank");
+											 */
+
+											window.location = location.protocol
+													+ "//"
+													+ window.location.host
+													+ "/school/school/staffProfile.jsp?uuid="
+													+ data['uuid'];
 
 										});
 
 					});
+					
+					
+					
 
 				});
 
-function StaffApiCall() {
+function addStaffApiCall() {
 
-	$("#staffForm").submit(function(e) {
-		e.preventDefault();
+	if (rootCheckFormValidation($('#staffForm'))) {
 
-		if (rootCheckFormValidation($('#staffForm'))) {
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-			// alert(JSON.stringify($('#staffForm').serializeJSON()));
+		varying_url = "staff/"+$('#accountId').val();
 
-			varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+		global_data_passed = $('#staffForm').serializeJSON();
 
-			global_data_passed = $('#staffForm').serializeJSON();
+		console.log(JSON.stringify(global_data_passed));
 
-			global_request_type = 'POST';
+		global_request_type = 'POST';
 
-			globalApiCall(function(data) {
+		globalApiCall(function(data) {
 
-				console.log('Genius Code for staff altering');
+			console.log('Genius Code for staff adding');
 
-				console.log(data);
+			console.log(data);
 
-				rootParseApiResponseData(data)
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#staff').modal('hide');
+			}
 
-			});
+		});
 
-		}
-
-	});
+	}
 
 }
+
+
+
+
+
+
 
