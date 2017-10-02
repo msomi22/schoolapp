@@ -670,6 +670,10 @@ public class ClassRankingList extends HttpServlet{
 		String pos = "";
 		int count = 1;
 		for(Performance2 performance2 : performanceList){
+			
+			String avg_points_grade = "0";
+			String avgPoints = "0";
+			int avg_points = 0;
 
 
 			int mainPoint = performance2.getTotalPoint();
@@ -714,6 +718,61 @@ public class ClassRankingList extends HttpServlet{
 			Map<String,Integer> exam1 = performance2.getExam1();
 			Map<String,Integer> exam2 = performance2.getExam2();
 			Map<String,Integer> exam3 = performance2.getExam3(); 
+			
+			
+			//TODO
+			if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+
+				//int avgPoints = 0;
+				for(Subject subject : subjects) {
+					//subjects.forEach(subject -> {
+
+					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+
+					if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+						exam1Score = "";
+					}
+					if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+						exam2Score = "";
+					}
+					if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+						exam3Score = "";
+					}
+
+					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
+					String pnts = String.valueOf(ReportUtil.getPoints(examAverage, "subjectId",accountId,subjectDAO, gradingSystemDAO));
+
+					avg_points += Integer.valueOf(pnts);
+
+
+
+					//});
+				}
+
+				//ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId, gradingSystemDAO);
+				
+				if(grade7subjects && !grade11subjects){
+					
+					avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+					avgPoints = String.valueOf(avg_points); 
+					
+				}else {
+					
+					double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
+					avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+					avgPoints = String.valueOf((int)avg); 
+					
+					
+				}
+
+
+			}
+			
+			
+			
+			
 
 
 			StudentPrimary primary = new StudentPrimary();
@@ -754,7 +813,7 @@ public class ClassRankingList extends HttpServlet{
 					exam3Score = "";
 				}
 
-				String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
+				String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 
 
@@ -805,10 +864,22 @@ public class ClassRankingList extends HttpServlet{
 
 			poinst_str = String.valueOf((int) Math.round(pointsAvg)); 
 			mean_str = ReportUtil.df2.format(avgMean);
+			
+			//avgPoints,avg_points_grade  TODO
 
 			if(rankWithPoints && !rankWithTotalMarks){
-				//show grade on points
-				poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
+				
+				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+					
+					poinst_str = avgPoints + " " + avg_points_grade;
+					
+				}else {
+					
+					//show grade on points
+					poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
+					
+				}
+			
 
 			}
 
@@ -900,6 +971,8 @@ public class ClassRankingList extends HttpServlet{
 			String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 			dev = StringUtils.equals(dev, "0") ? "" : dev;
 
+			//TODO 
+			
 			rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
 			rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
@@ -1109,12 +1182,23 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 
-				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
-				totalPoint = totalPoint / 3;
+				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+					//TODO
+					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
+					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 
-				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
-				totalMeans = totalMeans / 3;
 
+
+				}else {
+					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
+					totalPoint = totalPoint / 3;
+
+					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
+					totalMeans = totalMeans / 3;
+
+
+
+				}
 
 			}
 

@@ -929,7 +929,7 @@ public class GeneralService {
 						exam3Score = "";
 					}
 
-					String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, examIds.length);
+					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, examIds.length,examType);
 
 					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
 					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
