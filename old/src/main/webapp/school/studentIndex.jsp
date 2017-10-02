@@ -20,7 +20,7 @@
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 
 
-
+ 
 <%@page import="java.util.*"%>
 
 <%@page import="java.net.URLEncoder"%>
@@ -284,28 +284,20 @@
                       </table>
 
             <div id="pagination">
-              <form name="pageForm" method="post" action="studentIndex.jsp">
-                <%                                            
-                        if (!studentpage.isFirstPage()) {
-                    %>
-                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page"
-                  value="First" /> <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit"
-                  name="page" value="Previous" />
-                <%
-                        }
-                    %>
+              <form name="pageForm" method="post" action="#">
+               
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="button" onclick="pagination(this.id)" name="page"
+                  id="F" value="First" style="display:none" /> <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="button" onclick="pagination(this.id)"
+                  name="page" id="P" value="Previous"  style="display:none"/>
+               
                 <span class="pageInfo">Page <span
-                  class="pagePosition currentPage"><%= studentpage.getPageNum()%></span>
-                  of <span class="pagePosition"><%= studentpage.getTotalPage()%></span>
+                  class="pagePosition currentPage">##</span>
+                  of <span class="pagePosition">##</span>
                 </span>
-                <%
-                        if (!studentpage.isLastPage()) {                        
-                    %>
-                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page" value="Next">
-                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="submit" name="page" value="Last">
-                <%
-                       }
-                    %>
+                
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="button" name="page" onclick="pagination(this.id)" id="N" value="Next">
+                <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="button" name="page" onclick="pagination(this.id)" id="L" value="Last">
+              
               </form>
           </div>
             </div>              

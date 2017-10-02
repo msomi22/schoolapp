@@ -349,7 +349,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudent(java.lang.String, int, int)
 	 */
-	public List<Student> getAllStudent(String accountId, int startIndex , int endIndex){
+	public List<Student> getAllStudent(String accountId, int startIndex , int size){
 		List<Student> studentList = null;
 
 		try(
@@ -358,7 +358,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 						+ "accountId = ? ORDER BY regNo DESC LIMIT ? OFFSET ? ;");
 				) {
 			psmt.setString(1, accountId);
-			psmt.setInt(2, endIndex - startIndex);
+			psmt.setInt(2, size);
 			psmt.setInt(3, startIndex);
 
 			try(ResultSet rset = psmt.executeQuery();){

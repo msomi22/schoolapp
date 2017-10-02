@@ -1429,7 +1429,7 @@ public class StudentService {
 
 		if(filter.getStart() >= 0 && filter.getSize() > 0){ 
 
-			studentDAO.getAllStudent(accountId, filter.getStart(), filter.getSize()).forEach(student -> {
+			studentDAO.getAllStudent(accountId, filter.getStart(), filter.getSize() ).forEach(student -> {
 
 				StudentInfo studentInfo = new StudentInfo();
 
