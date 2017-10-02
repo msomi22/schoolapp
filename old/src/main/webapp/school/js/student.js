@@ -1,39 +1,66 @@
-var start=0;
+var start = 0;
 
-var size=15;
+var size = 15;
 
-$(document).ready(function (){
-	
-	
-	varying_url = "student/"+$('#accountId').val()+"?start="+start+"&size="+size;
-	
-	fetchStudents(false);
+function pagination(button) {
 
-	
-});
+	if (button === "N") {
 
-
-
-function delayInput(){
-	
-	console.log('call successful');
-	
-	setTimeout(function(){
-		varying_url = "student/"+$('#accountId').val()+"?query="+$('#query').val();
-		fetchStudents(true);
+		$('#F,#P').show(1000);
+		$('#N,#L').show(1000);
+		$('#F,#L').attr('disabled',false);
+		$('').attr('disabled',true);
+	} else if (button === "L") {
+		$('#F,#P').show(1000);
+		$('#N').hide(1000);
+		$('#L').attr('disabled',true);
+		$('#F').attr('disabled',false);
 		
-	},1000)
+		
+		
+
+	} else if (button === "F") {
+		$('#N,#L').show(1000);
+		$('#P').hide(1000);
+		$('#F').attr('disabled',true);
+		$('#L').attr('disabled',false);
+
+	} else if (button === "P") {
+		$('#F,#P,#N,#L').show(1000);
+		$('#F,#L').attr('disabled',false);
+		
+		
+
+	}
+
 }
 
+$(document).ready(
+		function() {
+
+			varying_url = "student/" + $('#accountId').val() + "?start="
+					+ start + "&size=" + size;
+
+			fetchStudents(false);
+
+		});
+
+function delayInput() {
+
+	console.log('call successful');
+
+	setTimeout(function() {
+		varying_url = "student/" + $('#accountId').val() + "?query="
+				+ $('#query').val();
+		fetchStudents(true);
+
+	}, 1000)
+}
 
 var table;
 
-function fetchStudents(paginate){
-	
-	
-	
-	
-	
+function fetchStudents(paginate) {
+
 	global_data_passed = {};
 
 	global_request_type = 'GET';
@@ -51,8 +78,8 @@ function fetchStudents(paginate){
 		var keys = Object.keys(getCol);
 
 		keys.some(function(k) {
-			
-			//return k=="dob";
+
+			// return k=="dob";
 
 			cols.push({
 				title : k,
@@ -139,7 +166,7 @@ function fetchStudents(paginate){
 										"visible" : false
 									},
 									{
-										"targets" : [ 20],
+										"targets" : [ 20 ],
 										"visible" : false
 									},
 									{
@@ -155,11 +182,11 @@ function fetchStudents(paginate){
 										"visible" : false
 									},
 									{
-										"targets" : [ 24],
+										"targets" : [ 24 ],
 										"visible" : false
 									},
 									{
-										"targets" : [ 25],
+										"targets" : [ 25 ],
 										"visible" : false
 									},
 									{
@@ -171,7 +198,7 @@ function fetchStudents(paginate){
 										"visible" : false
 									},
 									{
-										"targets" : [ 28],
+										"targets" : [ 28 ],
 										"data" : null,
 										"defaultContent" : '<button class="btn btn-info ">'
 												+ 'Profile   <span class="fa fa-info"></span></button>'
@@ -181,8 +208,8 @@ function fetchStudents(paginate){
 						/* "iDisplayLength": 100 */
 
 						});
-		
-		//fetchAccessLevels();
+
+		// fetchAccessLevels();
 
 		table.rows.add(data).draw();
 
@@ -191,21 +218,18 @@ function fetchStudents(paginate){
 						'click',
 						'button',
 						function() {
-							var data = table.row(
-									$(this).parents('tr'))
-									.data();
+							var data = table.row($(this).parents('tr')).data();
 
 							console.log(data['uuid']);
 
 							/*
-							 * window .open( location.protocol +
-							 * "//" + window.location.host +
+							 * window .open( location.protocol + "//" +
+							 * window.location.host +
 							 * "/school/school/staffProfile.jsp?uuid=" +
 							 * data['uuid'], "_blank");
 							 */
 
-							window.location = location.protocol
-									+ "//"
+							window.location = location.protocol + "//"
 									+ window.location.host
 									+ "/school/school/profile.jsp?uuid="
 									+ data['uuid'];
