@@ -5,7 +5,9 @@ var size=15;
 $(document).ready(function (){
 	
 	
-	//varying_url = "student/"+$('#accountId').val()+"?start="+start+"&size="+size;
+	varying_url = "student/"+$('#accountId').val()+"?start="+start+"&size="+size;
+	
+	fetchStudents(false);
 
 	
 });
@@ -18,7 +20,7 @@ function delayInput(){
 	
 	setTimeout(function(){
 		varying_url = "student/"+$('#accountId').val()+"?query="+$('#query').val();
-		fetchStudents();
+		fetchStudents(true);
 		
 	},1000)
 }
@@ -26,7 +28,7 @@ function delayInput(){
 
 var table;
 
-function fetchStudents(){
+function fetchStudents(paginate){
 	
 	
 	
@@ -70,8 +72,8 @@ function fetchStudents(){
 						{
 
 							destroy : true,
-							"bPaginate" : true,
-							"bLengthChange" : true,
+							"bPaginate" : paginate,
+							"bLengthChange" : paginate,
 							searching : false,
 							columns : cols,
 							"columnDefs" : [
