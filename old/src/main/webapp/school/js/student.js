@@ -3,35 +3,57 @@ var start = 0;
 var size = 15;
 
 function pagination(button) {
+	
+	
+	$('#pagination').show();
 
 	if (button === "N") {
 
 		$('#F,#P').show(1000);
 		$('#N,#L').show(1000);
-		$('#F,#L').attr('disabled',false);
-		$('').attr('disabled',true);
+		$('#F,#L,#P').attr('disabled', false);
+
+		if (start < 205)
+			start += size;
+		else{
+			$('#N').attr('disabled', true);
+			$('#L').hide(1000);
+		}
+			
 	} else if (button === "L") {
 		$('#F,#P').show(1000);
 		$('#N').hide(1000);
-		$('#L').attr('disabled',true);
-		$('#F').attr('disabled',false);
-		
-		
-		
+		$('#L').attr('disabled', true);
+		$('#F,#P').attr('disabled', false);
+
+		start = 205;
 
 	} else if (button === "F") {
 		$('#N,#L').show(1000);
 		$('#P').hide(1000);
-		$('#F').attr('disabled',true);
-		$('#L').attr('disabled',false);
+		$('#F').attr('disabled', true);
+		$('#L,#N').attr('disabled', false);
+		start = 0;
 
 	} else if (button === "P") {
 		$('#F,#P,#N,#L').show(1000);
-		$('#F,#L').attr('disabled',false);
-		
-		
+		$('#F,#L,#N,#P').attr('disabled', false);
+
+		if (start > 0)
+			start -= size;
+		else{
+			$('#P').attr('disabled', true);
+			$('#F').hide(1000);
+			
+		}
+			
 
 	}
+
+	varying_url = "student/" + $('#accountId').val() + "?start=" + start
+			+ "&size=" + size;
+
+	fetchStudents(false);
 
 }
 
@@ -48,10 +70,16 @@ $(document).ready(
 function delayInput() {
 
 	console.log('call successful');
+	
+	$('#pagination').hide(1000);
 
 	setTimeout(function() {
 		varying_url = "student/" + $('#accountId').val() + "?query="
 				+ $('#query').val();
+		
+		if($('#query').val().length <= 0)
+			$('#pagination').show(1000);
+			
 		fetchStudents(true);
 
 	}, 1000)
