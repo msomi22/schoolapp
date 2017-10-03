@@ -97,7 +97,7 @@ function fetchStudents(paginate) {
 
 		console.log('Genius Code for fetching students');
 
-		console.log(data);
+		console.log(varying_url);
 
 		var cols = [];
 
