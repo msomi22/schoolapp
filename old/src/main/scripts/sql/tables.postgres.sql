@@ -822,23 +822,3 @@ CREATE TABLE chat (
 );
 ALTER TABLE chat OWNER TO school;
 
-
---=========================
--- 10.  AccData management
--- =========================
--- -------------------
--- Table AccData
--- -------------------
-CREATE TABLE AccData (
-    id SERIAL PRIMARY KEY,
-    uuid text UNIQUE NOT NULL,
-    pitch text,
-    roll text,
-    yaw text,
-    addDate timestamp with time zone DEFAULT now()
-
-);
-ALTER TABLE AccData OWNER TO school;
-
-
-INSERT INTO AccData (uuid,pitch,roll,yaw) VALUES ('79B82D8A-34B1-4E18-B04D-010265997C1F','1','2','3');
