@@ -17,6 +17,7 @@ import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.money.FeeBreakdown;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
@@ -25,6 +26,7 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
+import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDAO;
 import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
@@ -40,6 +42,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStream;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSysConfig;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.servlet.finance.FeeConstants;
 import com.yahoo.petermwenda83.server.servlet.reports.PerStudentSMSResult;
 import com.yahoo.petermwenda83.server.servlet.reports.Performance2;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
@@ -59,6 +62,7 @@ public class GeneralService {
 	private static GradingSystemDAO gradingSystemDAO;
 	private static TermFeeDAO termFeeDAO;
 	private static AcessLevelDAO acessLevelDAO;
+	private static FeeBreakdownDAO feeBreakdownDAO;
 
 
 	private static SubjectDAO subjectDAO;
@@ -75,6 +79,7 @@ public class GeneralService {
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
+		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
 
 		classDAO = ClassDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
@@ -584,6 +589,22 @@ public class GeneralService {
 					termFee.setYear(apiSysConfig.getYear());
 					termFeeDAO.putFee(termFee, apiSysConfig.getAccountId(), apiSysConfig.getTerm(), apiSysConfig.getYear());
 
+				}
+				
+				if(feeBreakdownDAO.getFeeBreakdown(apiSysConfig.getAccountId(), FeeConstants.GVMT_MONEY_CODE) == null) { 
+					
+					FinanceRestService service = new FinanceRestService();
+					
+					FeeBreakdown feeBreakdown = new FeeBreakdown();
+					feeBreakdown.setAccountId(apiSysConfig.getAccountId());
+					feeBreakdown.setFeeCategory(FeeConstants.GVMT_MONEY_CODE);
+					feeBreakdown.setTerm(apiSysConfig.getTerm());
+					feeBreakdown.setYear(apiSysConfig.getYear());
+					feeBreakdown.setStatus("0");
+					feeBreakdown.setAmount(0);
+					service.addFeeBreakdown(feeBreakdown);
+					
+					
 				}
 
 			}else {
