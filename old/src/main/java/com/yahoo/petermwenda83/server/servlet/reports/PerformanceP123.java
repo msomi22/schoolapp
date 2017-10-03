@@ -11,6 +11,7 @@ public class PerformanceP123 {
 	
 	private int totalMean;
 	private int totalPoints;
+	private String studentId;
 
 	/**
 	 * 
@@ -18,6 +19,7 @@ public class PerformanceP123 {
 	public PerformanceP123() {
 		totalMean = 0;
 		totalPoints = 0;
+		studentId = "";
 	}
 
 	/**
@@ -50,12 +52,18 @@ public class PerformanceP123 {
 
 	
 	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
 	@Override
 	public String toString() {
-		return "PerformanceP123 [totalMean=" + totalMean + ", totalPoints=" + totalPoints + "]";
+		return "PerformanceP123 [totalMean=" + totalMean + ", totalPoints=" + totalPoints + ", studentId=" + studentId
+				+ "]";
 	}
 	
 	

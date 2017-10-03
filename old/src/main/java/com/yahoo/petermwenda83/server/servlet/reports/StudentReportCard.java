@@ -147,7 +147,7 @@ public class StudentReportCard extends HttpServlet{
 		classDAO = ClassDAO.getInstance();
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
-		
+
 		classMeanDAO = ClassMeanDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
@@ -388,6 +388,7 @@ public class StudentReportCard extends HttpServlet{
 		}
 
 
+
 		//avoid document has no page exception
 		if(!performanceList.isEmpty()){
 
@@ -421,11 +422,14 @@ public class StudentReportCard extends HttpServlet{
 			String pos = "";
 
 
+
 			for(Performance2 performance2 : performanceList){
 
+				String avg_points_grade = "0";
+				String avgPoints = "0";
+				int avg_points = 0;
 
 				int mainPoint = performance2.getTotalPoint();
-				int totalMean = performance2.getTotalMean();
 
 				int meanTotal = performance2.getTotalMean();
 
@@ -438,7 +442,7 @@ public class StudentReportCard extends HttpServlet{
 
 				if(!rankWithPoints && rankWithTotalMarks){
 
-					total = totalMean;
+					total = meanTotal;
 
 				}
 
@@ -454,6 +458,69 @@ public class StudentReportCard extends HttpServlet{
 					pos =  String.valueOf(position);
 
 				}
+
+				List<Subject> subjects = subjectDAO.getSubjects(accountId);
+
+				Map<String,Integer> exam1 = performance2.getExam1();
+				Map<String,Integer> exam2 = performance2.getExam2();
+				Map<String,Integer> exam3 = performance2.getExam3(); 
+
+
+
+
+				//TODO
+				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+
+					//int avgPoints = 0;
+					for(Subject subject : subjects) {
+						//subjects.forEach(subject -> {
+
+						String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+						String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+
+						if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+							exam1Score = "";
+						}
+						if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+							exam2Score = "";
+						}
+						if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+							exam3Score = "";
+						}
+
+						String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
+						String pnts = String.valueOf(ReportUtil.getPoints(examAverage, "subjectId",accountId,subjectDAO, gradingSystemDAO));
+
+						avg_points += Integer.valueOf(pnts);
+
+
+
+						//});
+					}
+
+					//ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId, gradingSystemDAO);
+					
+					if(grade7subjects && !grade11subjects){
+						
+						avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+						avgPoints = String.valueOf(avg_points); 
+						
+					}else {
+						
+						double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
+						avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+						avgPoints = String.valueOf((int)avg); 
+						
+						
+					}
+
+
+				}
+
+
+
+
 
 				PdfPTable headerTable = new PdfPTable(2);
 				headerTable.setWidthPercentage(100); 
@@ -573,9 +640,24 @@ public class StudentReportCard extends HttpServlet{
 					String studentScore = "";
 
 					if(rankWithPoints && !rankWithTotalMarks){
+						
+						
+						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+							//TODO
+							
+							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
+							
+						}else {
+							
+							studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, 
+									accountId, gradingSystemDAO) + ")";
+							
+						}
 
-						studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, 
-								accountId, gradingSystemDAO) + ")";
+						
+						
+						
+						
 
 						YearlyMean yearlyMean = new YearlyMean();
 						yearlyMean.setAccountId(accountId);
@@ -661,8 +743,17 @@ public class StudentReportCard extends HttpServlet{
 
 					if(rankWithPoints && !rankWithTotalMarks){
 
-						studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), 
-								accountId, gradingSystemDAO) + ")";
+						//TODO
+						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+
+							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
+
+						}else {
+							studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), 
+									accountId, gradingSystemDAO) + ")";
+
+
+						}
 
 					}
 
@@ -838,19 +929,14 @@ public class StudentReportCard extends HttpServlet{
 				examTable.addCell(remarksCell);
 				examTable.addCell(initialsCell);
 
-				Map<String,Integer> exam1 = performance2.getExam1();
-				Map<String,Integer> exam2 = performance2.getExam2();
-				Map<String,Integer> exam3 = performance2.getExam3(); 
 
-				List<Subject> subjects = subjectDAO.getSubjects(accountId);
-				
 				List<FailedSubject> failedSubjects = new ArrayList<>();
-				
+
 
 				subjects.forEach(subject -> {
 
 					FailedSubject failedSubject = new FailedSubject();
-					
+
 					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
 					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
@@ -865,16 +951,17 @@ public class StudentReportCard extends HttpServlet{
 						exam3Score = "";
 					}
 
-					String examAverage = ReportUtil.findExamAverage(exam1Score,exam2Score,exam3Score, exams.length);
-					
+					//TODO 
+					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
+
 					if(Integer.valueOf(examAverage) > 0){
 						failedSubject.setScore(Integer.valueOf(examAverage));
 						failedSubject.setStudentId(student.getUuid());
 						failedSubject.setSubjectCode(subject.getCode());
-						
+
 						failedSubjects.add(failedSubject);
 					}
-					
+
 
 
 					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
@@ -980,8 +1067,8 @@ public class StudentReportCard extends HttpServlet{
 				for(String header : headers){
 
 					examTable.addCell(new Paragraph(header,timesRomanNarmal8));
-					
-					
+
+
 
 					String exm1 = "0";
 					String exm2 = "0";
@@ -1045,9 +1132,21 @@ public class StudentReportCard extends HttpServlet{
 						examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
 
 
+						
+						//studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						if(grade7subjects && !grade11subjects){
-							mainScore = (int)Math.round(mainPoint) + "";
+							
+							if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
+								mainScore = avgPoints;
+								
+							}else {
+								mainScore = (int)Math.round(mainPoint) + "";
+								
+							}
+							
+							
+							
 						}
 
 						if(!grade7subjects && grade11subjects){
@@ -1055,6 +1154,7 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 
+						//TODO
 						examTable.addCell(new Paragraph(meanStr + " , " + mainScore ,timesRomanNarmal6)); 
 
 
@@ -1075,7 +1175,16 @@ public class StudentReportCard extends HttpServlet{
 
 							if(rankWithPoints && !rankWithTotalMarks){
 
-								mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO);
+								
+								//TODO
+								if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
+									
+									mainExam = avg_points_grade;
+									
+								}else {
+									mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO);
+									
+								}
 							}
 
 							if(!rankWithPoints && rankWithTotalMarks){
@@ -1140,7 +1249,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 
-				// show comments here TODO
+
 				Chunk underline = new Chunk("GENERAL COMMENTS. ", timesRomanNarmal8);
 				underline.setUnderline(0.1f, -2f); // 0.1 thick, -2
 
@@ -1152,12 +1261,12 @@ public class StudentReportCard extends HttpServlet{
 								miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") : "";
 
 								String headteacherRemarks = "Thanks " + student.getFirstname().toUpperCase() + " ";
-								 headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
+								headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
 										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
 
-										
+
 										String classTeacherRemarks = ReportUtil.getclassTeacherComment(accountId,total,failedSubjects);
-										
+
 										Phrase teacherremarkphrase = new Phrase();
 										teacherremarkphrase.add(new Chunk("CLASS TEACHER'S REMARKS:",  timesRomanNarmal8));
 										teacherremarkphrase.add(new Chunk("  " + classTeacherRemarks,  timesRomanNarmal6));
@@ -1400,11 +1509,24 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 
-				totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
-				totalPoint = totalPoint / 3;
+				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+					//TODO
+					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
+					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 
-				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
-				totalMeans = totalMeans / 3;
+
+
+				}else {
+					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
+					totalPoint = totalPoint / 3;
+
+					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
+					totalMeans = totalMeans / 3;
+
+
+
+				}
+
 
 			}
 
@@ -1483,6 +1605,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 			if(totalMeans > 0 || totalPoint > 0){
+
 
 				Performance2 performance2 = new Performance2();
 				performance2.setExam1(totalExam1.getPerfomanceMap());

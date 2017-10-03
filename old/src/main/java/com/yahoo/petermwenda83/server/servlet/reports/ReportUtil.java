@@ -71,6 +71,15 @@ public class ReportUtil {
 	public static final String CAT_TECH = "Technicals";
 	public static final String CAT_MATH = "Mathematics";
 	
+	private static SubCategoryDAO subCategoryDAO2;
+	private static CategoryDAO categoryDAO2;
+	
+	
+	static {
+		subCategoryDAO2 = SubCategoryDAO.getInstance();
+		categoryDAO2 = CategoryDAO.getInstance();
+	}
+	
 	
 
 	/**
@@ -223,8 +232,8 @@ public class ReportUtil {
 
 			}else{
 
-				PerformanceP123 performanceP123 = new PerformanceP123();
-				performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
+				//PerformanceP123 performanceP123 = new PerformanceP123();
+				PerformanceP123 performanceP123 = ReportUtil.computeP123(finalPerfomanceList, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
 				performance3.setTotalMean(performanceP123.getTotalMean());
 				performance3.setTotalPoints(performanceP123.getTotalPoints());
@@ -243,7 +252,7 @@ public class ReportUtil {
 
 
 
-	/**
+	/** TODO
 	 * 
 	 * @param finalPerfomanceList
 	 * @param subjectDAO
@@ -256,6 +265,7 @@ public class ReportUtil {
 	public static PerformanceP123 computeP123(List<Perfomance> finalPerfomanceList, SubjectDAO subjectDAO, 
 			SubCategoryDAO subCategoryDAO, CategoryDAO categoryDAO , ExamDAO examDAO, GradingSystemDAO gradingSystemDAO, String accountId){ 
 
+		PerformanceP123 performanceP123 = new PerformanceP123();
 		double total = 0;
 		double grandTotal = 0;
 		int grandPoints = 0;
@@ -274,8 +284,9 @@ public class ReportUtil {
 
 
 		for(Perfomance perfomance : finalPerfomanceList){
-
-
+			
+			performanceP123.setStudentId(perfomance.getStudentId()); 
+			
 			Subject subject = subjectMap.get(perfomance.getSubjectId());
 			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
 			Category cat = categoryDAO.getCategoryById(accountId, catId);
@@ -295,14 +306,22 @@ public class ReportUtil {
 
 
 				sum = scoreP1 + scoreP2 + scoreP3;
+				
 
 				total = sum / 2;
 				grandTotal += total;
 
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
-
-				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
+				/*System.out.println("*****************************************"); 
+				System.out.println("point:"  +point+" ("+(int)Math.round(total) + "), grandPoints:" + grandPoints + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
+				
+				/*System.out.println("*****************************************"); 
+				System.out.println("sub:"+subject.getCode()+",total:" + total + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
+			
+				//total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
 			}
@@ -318,16 +337,23 @@ public class ReportUtil {
 				}
 
 				sum = scoreP1 + scoreP2;
-
-				total = (double)sum / 2;
-				total += scoreP3;
+				
+				
+				total = ((double)sum / 2) + scoreP3;
+				//total += scoreP3;
 
 				grandTotal += total;
 
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
-
-				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
+				/*System.out.println("*****************************************"); 
+				System.out.println("point:"  +point+" ("+(int)Math.round(total) + "), grandPoints:" + grandPoints + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
+				/*System.out.println("*****************************************"); 
+				System.out.println("sub:"+subject.getCode()+",total:" + total + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
+				
+				//total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
 			}
@@ -357,7 +383,7 @@ public class ReportUtil {
 					int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 					grandPoints += point;
 
-					total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
+					//total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
 
@@ -379,7 +405,7 @@ public class ReportUtil {
 					int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 					grandPoints += point;
 
-					total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
+					//total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
 
 
 				}
@@ -387,15 +413,16 @@ public class ReportUtil {
 			}
 
 
-			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
+			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || 
+					StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
 				//check the exam
 				if(StringUtils.equalsIgnoreCase(exam.getDescription(), "Paper 1")){
 					scoreP1 = perfomance.getScore();
 				}else if(StringUtils.equalsIgnoreCase(exam.getDescription(), "Paper 2")){
 					scoreP2 = perfomance.getScore();
 				}
-
-
+				
+				
 				sum = scoreP1 + scoreP2;
 				total = (double)sum / 2;
 
@@ -403,19 +430,31 @@ public class ReportUtil {
 
 				int point = getPoints(String.valueOf((int)Math.round(total)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 				grandPoints += point;
-
-				total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
-
+				
+				
+				//total = 0; scoreP1 = 0; scoreP2 = 0; scoreP3 = 0;
+				/*System.out.println("*****************************************"); 
+				System.out.println("point:"  +point+" ("+(int)Math.round(total) + "), grandPoints:" + grandPoints + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
+				/*System.out.println("*****************************************"); 
+				System.out.println("sub:"+subject.getCode()+",total:" + total + ",id:" + perfomance.getStudentId());
+				System.out.println("*****************************************");*/
 
 			}
+			
 
 		}
-
-		PerformanceP123 performanceP123 = new PerformanceP123();
+		
+		
+		
 		performanceP123.setTotalMean((int)Math.round(grandTotal));
 		performanceP123.setTotalPoints(grandPoints); 
-
-
+		
+		/*System.out.println("*****************************************"); 
+		System.out.println(" ----------------- " + performanceP123);
+		System.out.println("*****************************************");*/
+		
+		
 		return performanceP123;
 
 	}
@@ -674,7 +713,10 @@ public class ReportUtil {
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
-		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
+		if(gradingSystemDAO.getGradingSystemList(accountId, categoryId) != null) {
+			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
+		}
+		
 
 		if(gradingSystemList.isEmpty()){
 			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
@@ -737,7 +779,7 @@ public class ReportUtil {
 
 
 
-	/**
+	/** TODO
 	 * 
 	 * @param exam1Score
 	 * @param exam2Score
@@ -745,7 +787,7 @@ public class ReportUtil {
 	 * @return
 	 */
 
-	public static String findExamAverage(String exam1Score, String exam2Score, String exam3Score, int arrsize) {
+	public static String findExamAverage(Subject subject,String exam1Score, String exam2Score, String exam3Score, int arrsize, String examType) {
 
 		if(exam1Score.length() == 0){
 			exam1Score = "0";
@@ -761,26 +803,83 @@ public class ReportUtil {
 
 		double sum = 0;
 		double mean = 0;
+		
+		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
+			
+			String catId = subCategoryDAO2.getSubCategory(subject.getAccountId(), subject.getUuid()).getCategoryId();
+			Category cat = categoryDAO2.getCategoryById(subject.getAccountId(), catId);
+			
+			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
+				//
+				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
+				mean = Math.round(sum/2); 
 
-		if(arrsize == 3){
+			}
 
-			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
-			mean = Math.round(sum/3);
+			if(StringUtils.equals(cat.getDescription(), "Sciences")){
+				//
+				sum = ((Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score))/2) + Integer.parseInt(exam3Score); 
+				mean = Math.round(sum); 
 
+			}
+
+
+			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Technicals")){
+
+
+				if(StringUtils.equalsIgnoreCase(subject.getCode(), "AGR") || 
+						StringUtils.containsIgnoreCase(subject.getDescription(), "AGR")){
+
+					//
+					sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+					mean = Math.round(sum/2); 
+
+				}else{
+	               //
+					sum = ((Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score))/2) + Integer.parseInt(exam3Score); 
+					mean = Math.round(sum); 
+
+					
+
+				}
+
+			}
+
+
+			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || 
+					StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
+				
+	            //
+				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+				mean = Math.round(sum/2); 
+				
+			}
+			
+			return String.valueOf((int)mean); 
+			
+		}else {
+			
+			
+			if(arrsize == 3){
+
+				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
+				mean = Math.round(sum/3);
+
+			}
+			if(arrsize == 2){
+
+				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+				mean = Math.round(sum/2);
+
+			}
+			if(arrsize == 1){
+				sum = Integer.parseInt(exam1Score); 
+				mean = Math.round(sum); 
+			}
+			
+			return String.valueOf((int)mean); 
 		}
-		if(arrsize == 2){
-
-			sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
-			mean = Math.round(sum/2);
-
-		}
-		if(arrsize == 1){
-			sum = Integer.parseInt(exam1Score); 
-			mean = Math.round(sum); 
-		}
-
-
-		return String.valueOf((int)mean); 
+		
 	}
 
 
@@ -1317,6 +1416,8 @@ public class ReportUtil {
 		
 		return message; 
 	}
+
+
 
 
 }
