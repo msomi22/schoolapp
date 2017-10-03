@@ -348,7 +348,7 @@ public class AdminService {
 			Category category = new Category();
 			category.setUuid(categoryIds[count]);
 			category.setAccountId(accountId);
-			category.setMaxNo(String.valueOf(maxNo[count]));
+			category.setMaxNo(maxNo[count]); 
 			category.setDescription(categorys[count]);
 			categoryDAO.putCategory(category);
 			astr =" Category(ies) added,"; 
@@ -422,18 +422,7 @@ public class AdminService {
 				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4","0e5dc1c6-f62f-4a36-a1ec-064173332694",
 				"e1729cc2-524a-4069-b4a4-be5aec8473fe","b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
 
-		for(int count=0;count<uuids.length;count++) {
-
-			SubCategory subCategory = new SubCategory();
-			subCategory.setUuid(uuids[count]);
-			subCategory.setAccountId(accountId);
-			subCategory.setCategoryId(catIds[count]);
-			subCategory.setSubjectId(subIds[count]);
-			subCategoryDAO.putSubCategory(subCategory);
-			astr =" Subject Category(s) added,";
-		}
-		resposne += astr; 
-		astr = "";
+		
 
 		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
 				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
@@ -464,6 +453,21 @@ public class AdminService {
 			astr =" Subject(s) added."; 
 		}
 
+		resposne += astr; 
+		astr = "";
+		
+		
+		
+		for(int count=0;count<uuids.length;count++) {
+
+			SubCategory subCategory = new SubCategory();
+			subCategory.setUuid(uuids[count]);
+			subCategory.setAccountId(accountId);
+			subCategory.setCategoryId(catIds[count]);
+			subCategory.setSubjectId(subIds[count]);
+			subCategoryDAO.putSubCategory(subCategory);
+			astr =" Subject Category(s) added,";
+		}
 		resposne += astr; 
 		astr = "";
 

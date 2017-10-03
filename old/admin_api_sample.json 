@@ -1,0 +1,36 @@
+
+
+
+{
+  "uuid": "string",
+  "isActive": "1",
+  "name": "Mangu Boys High School",
+  "motto": "Strive the for best",
+  "website": "www.mangub.ac.ke",
+  "logo": "logo.png",
+  "signature": "sig.png",
+  "username": "mangu",
+  "password": "mangu*#@",
+  "mobile": "719654123",
+  "email": "mangub@info.ak.ke",
+  "address": "66",
+  "town": "Thika",
+  "isBoarding": "1",
+  "isMixed": "0",
+  "lastUpdated": "string",
+  "creationDate": "string"
+}
+
+
+{
+  "acessLevelId": "C3915245-00EE-4EF4-9898-ACE59683DD60",
+  "staffNo": "100",
+  "firstname": "Hibrahim",
+  "middlename": "Mutua",
+  "lastname": "Kironzo",
+  "gender": "M",
+  "mobile": "715634836",
+  "email": "mutuak@mangub.ac.ke",
+  "username": "kmutua",
+  "password": "mtutak"
+}
