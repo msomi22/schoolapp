@@ -24,7 +24,7 @@ function fetchExams() {
 			.ajax(
 					{
 						url : base_url
-								+ "exam/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+								+ "exam/"+$('#accountId').val()+"/",
 						type : 'GET',
 						dataType : 'json',
 						contentType : 'application/json',
@@ -167,7 +167,7 @@ function addExam(form) {
 		$.ajax(
 				{
 					url : base_url
-							+ "exam/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+							+ "exam/"+$('#accountId').val()+'?',
 					type : 'POST',
 					dataType : 'json',
 					data : JSON.stringify($('#examForm').serializeJSON()),
@@ -277,7 +277,7 @@ function updateExam(form) {
 								.ajax(
 										{
 											url : base_url
-													+ "exam/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+													+ "exam/"+$('#accountId').val()+"/",
 											type : 'PUT',
 											dataType : 'json',
 											data : JSON.stringify($(

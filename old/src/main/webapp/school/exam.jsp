@@ -19,6 +19,7 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 %>
 <jsp:include page="header.jsp" />
 
@@ -38,6 +39,8 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
+					
+					<input type="hidden" name="accountId" id="accountId" value="<%=accountId%>">
 
 
 

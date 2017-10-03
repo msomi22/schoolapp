@@ -18,7 +18,7 @@ $(document)
 							.ajax(
 									{
 										url : base_url
-												+ "class/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+												+ "class/" + $('#accountId').val()+"/",
 										type : 'GET',
 										contentType : 'application/json',
 										accept : 'application/json',
@@ -76,7 +76,7 @@ function fetchStreams(classID) {
 			.ajax(
 					{
 						url : base_url
-								+ "streams/E3CDC578-37BA-4CDB-B150-DAB0409270CD/"
+								+ "streams/"+ $('#accountId').val()+"/"
 								+ classID + "/",
 						type : 'GET',
 						dataType : 'json',
@@ -238,7 +238,7 @@ function addNewStream() {
 		$.ajax(
 				{
 					url : base_url
-							+ "stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+							+ "stream/"+ $('#accountId').val()+"/",
 					type : 'POST',
 					dataType : 'json',
 					data : JSON.stringify($('#addStreamForm').serializeJSON()),
@@ -351,7 +351,7 @@ function updateStreamApiCall() {
 								$.ajax(
 										{
 											url : base_url
-													+ "stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
+													+ "stream/"+ $('#accountId').val()+"/",
 											type : 'PUT',
 											dataType : 'json',
 											data : JSON.stringify($(
@@ -476,7 +476,7 @@ function delStreamApiCall() {
 	$.ajax(
 			{
 				url : base_url
-						+ "stream/delete/E3CDC578-37BA-4CDB-B150-DAB0409270CD/"
+						+ "stream/delete/"+ $('#accountId').val()+"/"
 						+ uuid + "/",
 				type : 'DELETE',
 				dataType : 'json',

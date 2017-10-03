@@ -303,7 +303,7 @@ function fetchFeeDetails(state) {
 						global_url = preserveUrl;
 
 						var fetchfeeURL = global_url
-								+ 'student/fee/E3CDC578-37BA-4CDB-B150-DAB0409270CD/'
+								+ 'student/fee/'+$('#accountId').val()+'/'
 								+ $('#p_regNo').val();
 						global_url = fetchfeeURL;
 
@@ -424,7 +424,7 @@ function fetchFeeDetails(state) {
 function makeFetchCall() {
 
 	var fetchfeeURL = global_url
-			+ 'student/fee/E3CDC578-37BA-4CDB-B150-DAB0409270CD/'
+			+ 'student/fee/'+$('#accountId').val()+'/'
 			+ $('#regno').val();
 	global_url = fetchfeeURL;
 

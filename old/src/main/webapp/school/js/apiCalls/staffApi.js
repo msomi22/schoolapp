@@ -4,7 +4,7 @@ $(document)
 		.ready(
 				function() {
 
-					varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+					varying_url = "staff/"+ $('#accountId').val()+"/";
 
 					global_data_passed = {};
 
