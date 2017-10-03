@@ -151,7 +151,7 @@ public class CategoryDAO extends GenericDAO implements SchoolCategoryDAO {
 			pstmt.setString(1, category.getUuid());
 			pstmt.setString(2, category.getAccountId());
 			pstmt.setString(3, category.getDescription());
-			pstmt.setString(4, category.getMaxNo());
+			pstmt.setInt(4, category.getMaxNo());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -177,7 +177,7 @@ public class CategoryDAO extends GenericDAO implements SchoolCategoryDAO {
 						+ "WHERE uuid = ? AND accountId = ?;");
 				) {           			 	            
 			pstmt.setString(1, category.getDescription());
-			pstmt.setString(2, category.getMaxNo());
+			pstmt.setInt(2, category.getMaxNo());
 			pstmt.setString(3, category.getUuid());
 			pstmt.setString(4, category.getAccountId());
 			pstmt.executeUpdate();

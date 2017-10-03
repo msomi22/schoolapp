@@ -812,6 +812,8 @@ public class ClassRankingList extends HttpServlet{
 				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 					exam3Score = "";
 				}
+				
+				//TODO
 
 				String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 

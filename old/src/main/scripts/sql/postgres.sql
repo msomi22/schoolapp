@@ -75,20 +75,38 @@ CREATE TABLE  outGoingSMS (
 --\COPY outGoingSMS(uuid,accountId,status,mobile,message,smsCost) FROM '/tmp/outGoingSMS.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE outGoingSMS OWNER TO school;
 
+
+
 -- -------------------
--- Table smsApi
+-- Table incomingSMS
 -- -------------------
 
-CREATE TABLE  smsApi (
+CREATE TABLE  incomingSMS (
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
+    mobile text,
+    message text,
+    receiveDate timestamp with time zone DEFAULT now()
+);
+--\COPY incomingSMS(uuid,accountId,mobile,message) FROM '/tmp/incomingSMS.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE incomingSMS OWNER TO school;
+
+-- -------------------
+-- Table ApiCredential 
+-- -------------------
+
+CREATE TABLE  ApiCredential (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    apiType text,
     apiKey text,
-    apiPassword text
+    apisecret text
  
 );
---\COPY smsApi(uuid,accountId,apiKey,apiPassword) FROM '/tmp/smsApi.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE smsApi OWNER TO school;
+--\COPY ApiCredential(uuid,accountId,apiType,apiKey,apisecret) FROM '/tmp/ApiCredential.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE ApiCredential OWNER TO school;
 
 
 -- =========================
@@ -202,7 +220,7 @@ CREATE TABLE Student(
     isActive text,
     isAlumni text,
     isBoarding text,
-    regNo text,
+    regNo text UNIQUE NOT NULL ,
     firstname text ,
     middlename text ,
     lastname text ,
@@ -307,15 +325,15 @@ CREATE TABLE Staff (
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     acessLevelId text REFERENCES AcessLevel(uuid),
-    staffNo text,
+    staffNo text UNIQUE NOT NULL,
     isActive text,
     firstname text,
     middlename text,
     lastname text,
     gender text, 
-    mobile text,
-    email text,
-    username text,
+    mobile text UNIQUE NOT NULL,
+    email text UNIQUE NOT NULL,
+    username text UNIQUE NOT NULL,
     password text,
     lastUpdated text,
     regDate timestamp with time zone DEFAULT now()
@@ -570,6 +588,62 @@ CREATE TABLE  OtherFee (
 ALTER TABLE OtherFee OWNER TO school;
 
 
+-- -------------------
+-- Table  FeeBreakdown 
+-- -------------------
+
+CREATE TABLE  FeeBreakdown (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    feeCategory text,
+    term text,
+    year text,
+    status text,
+    amount integer NOT NULL CHECK (amount>=0)
+  
+);
+--\COPY FeeBreakdown(uuid,accountId,feeCategory,term,year,status,amount) FROM '/tmp/FeeBreakdown.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE FeeBreakdown OWNER TO school;
+
+-- -------------------
+-- Table  GokeMoneyUsage  
+-- -------------------
+CREATE TABLE  GokeMoneyUsage (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    numberOfStudents integer,
+    amountPerStudent integer,
+    totalAmount integer, 
+    balance integer,  
+    term text,
+    year text,
+    dateAllocated timestamp with time zone DEFAULT now()
+  
+);
+ALTER TABLE GokeMoneyUsage OWNER TO school;
+
+
+
+-- -------------------
+-- Table  FeeBreakdownDesc 
+-- -------------------
+
+CREATE TABLE  FeeBreakdownDesc (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    feeBreakdownId text REFERENCES FeeBreakdown(uuid),
+    feeCode text,
+    feeDescription text,
+    amount integer NOT NULL CHECK (amount>=0)
+  
+);
+--\COPY FeeBreakdownDesc(uuid,accountId,feeBreakdownId,feeCode,feeDescription,amount) FROM '/tmp/FeeBreakdownList.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE FeeBreakdownDesc OWNER TO school;
+
+
 
 -- -------------------
 -- Table  StudentOtherFee
@@ -581,15 +655,12 @@ CREATE TABLE  StudentOtherFee (
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES student(uuid),
     otherFeeId text REFERENCES OtherFee(uuid),
-    amountPiad integer NOT NULL CHECK (amountPiad>=0),
-    payMode text,
-    termPiad text,
-    yearPaid text,
-    datePaid timestamp with time zone DEFAULT now()
+    term text,
+    dateAllocated timestamp with time zone DEFAULT now()
   
   
 );
---\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,amountPiad,payMode,termPiad,yearPaid) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
+--\COPY StudentOtherFee(uuid,accountId,studentId,otherFeeId,term) FROM '/tmp/StudentOtherFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentOtherFee OWNER TO school;
 
 
@@ -629,10 +700,11 @@ CREATE TABLE  StudentFee (
     paidHas text,
     termPiad text,    
     yearPaid text,
+    transactingStaffId text, 
     datePaid timestamp with time zone DEFAULT now()
    
 );
---\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas,termPiad,yearPaid) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
+--\COPY StudentFee(uuid,accountId,studentId,amountPaid,payMode,transactionId,paidHas,termPiad,yearPaid,transactingStaffId) FROM '/tmp/StudentFee.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentFee OWNER TO school;
 
 
@@ -749,8 +821,4 @@ CREATE TABLE chat (
 
 );
 ALTER TABLE chat OWNER TO school;
-
---SystemConfig
---Stream
---Exam
 

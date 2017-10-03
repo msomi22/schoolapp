@@ -13,14 +13,14 @@ public class Category  extends StorableBean{
 
 
 	private String description;
-	private String maxNo;
+	private int maxNo;
 
 	/**
 	 * 
 	 */
 	public Category() {
 		description = "";
-		maxNo = "";
+		maxNo = 0;
 	}
 
 	/**
@@ -40,14 +40,14 @@ public class Category  extends StorableBean{
 	/**
 	 * @return the maxNo
 	 */
-	public String getMaxNo() {
+	public int getMaxNo() {
 		return maxNo;
 	}
 
 	/**
 	 * @param maxNo the maxNo to set
 	 */
-	public void setMaxNo(String maxNo) {
+	public void setMaxNo(int maxNo) {
 		this.maxNo = maxNo;
 	}
 

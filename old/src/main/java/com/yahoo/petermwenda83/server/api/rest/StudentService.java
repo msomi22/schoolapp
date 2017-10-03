@@ -906,6 +906,17 @@ public class StudentService {
 			if(studentDAO.putStudent(newstudent)) {
 
 				response = "Student basic info saved successfully.";
+				//TODO
+				
+				subjectDAO.getSubjects(accountId).forEach(subject -> {
+					ApiSubject apiSubject = new ApiSubject();
+					apiSubject.setAccountId(accountId);
+					apiSubject.setStudentId(student.getUuid()); 
+					apiSubject.setSubjectId(subject.getUuid());
+					assignSubject(apiSubject);
+					
+				});
+				
 
 				//parent
 				if(student.getHasParent()) {
@@ -1414,6 +1425,23 @@ public class StudentService {
 		}
 
 		return response;
+	}
+	
+	
+	
+	/** TODO
+	 *  count = (PageNum - 1) * Pagesize  + 1;
+	 * 
+	 * @param accountId
+	 * @param pageNum
+	 * @param totalPage
+	 * @param pagesize
+	 * @return
+	 */
+	
+	public Object studentPagination(String accountId, int pageNum, int totalPage, int pagesize) {
+		
+		return null;
 	}
 
 	/** 

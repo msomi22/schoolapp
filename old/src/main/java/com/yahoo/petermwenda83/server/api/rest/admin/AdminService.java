@@ -11,17 +11,20 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.google.gson.Gson;
 import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.account.ApiCredential;
 import com.yahoo.petermwenda83.bean.account.Miscellanous;
 import com.yahoo.petermwenda83.bean.classroom.ClassRoom;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
+import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.staff.AcessLevel;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.SubCategory;
@@ -31,7 +34,9 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
+import com.yahoo.petermwenda83.persistence.money.TermFeeDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
+import com.yahoo.petermwenda83.persistence.schoolaccount.ApiCredentialDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
@@ -60,6 +65,8 @@ public class AdminService {
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
 	private static SysConfigDAO sysConfigDAO;
+	private static ApiCredentialDAO apiCredentialDAO;
+	private static TermFeeDAO termFeeDAO;
 
 	static {
 		accountDAO = AccountDAO.getInstance();
@@ -76,6 +83,8 @@ public class AdminService {
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance();
+		apiCredentialDAO = ApiCredentialDAO.getInstance();
+		termFeeDAO = TermFeeDAO.getInstance();
 	}
 
 	/**
@@ -339,7 +348,7 @@ public class AdminService {
 			Category category = new Category();
 			category.setUuid(categoryIds[count]);
 			category.setAccountId(accountId);
-			category.setMaxNo(String.valueOf(maxNo[count]));
+			category.setMaxNo(maxNo[count]); 
 			category.setDescription(categorys[count]);
 			categoryDAO.putCategory(category);
 			astr =" Category(ies) added,"; 
@@ -413,18 +422,7 @@ public class AdminService {
 				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4","0e5dc1c6-f62f-4a36-a1ec-064173332694",
 				"e1729cc2-524a-4069-b4a4-be5aec8473fe","b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
 
-		for(int count=0;count<uuids.length;count++) {
-
-			SubCategory subCategory = new SubCategory();
-			subCategory.setUuid(uuids[count]);
-			subCategory.setAccountId(accountId);
-			subCategory.setCategoryId(catIds[count]);
-			subCategory.setSubjectId(subIds[count]);
-			subCategoryDAO.putSubCategory(subCategory);
-			astr =" Subject Category(s) added,";
-		}
-		resposne += astr; 
-		astr = "";
+		
 
 		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
 				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
@@ -455,6 +453,21 @@ public class AdminService {
 			astr =" Subject(s) added."; 
 		}
 
+		resposne += astr; 
+		astr = "";
+		
+		
+		
+		for(int count=0;count<uuids.length;count++) {
+
+			SubCategory subCategory = new SubCategory();
+			subCategory.setUuid(uuids[count]);
+			subCategory.setAccountId(accountId);
+			subCategory.setCategoryId(catIds[count]);
+			subCategory.setSubjectId(subIds[count]);
+			subCategoryDAO.putSubCategory(subCategory);
+			astr =" Subject Category(s) added,";
+		}
 		resposne += astr; 
 		astr = "";
 
@@ -496,6 +509,42 @@ public class AdminService {
 
 		resposne += astr; 
 		astr = "";
+		
+		SysConfig config = sysConfigDAO.getSysConfig(accountId);
+		
+		
+		if(termFeeDAO.getFee(accountId, config.getTerm(), config.getYear()) == null) {
+			TermFee termFee = new TermFee();
+			termFee.setAccountId(accountId);
+			termFee.setBoaderAmount(12000);
+			termFee.setDayAmount(8000);
+			termFee.setTerm(config.getTerm());
+			termFee.setYear(config.getYear());
+			termFeeDAO.putFee(termFee, accountId, config.getTerm(), config.getYear());
+
+		}
+		
+		
+		
+		//TODO add termly fee
+		String[] apiIds = {"796E21DD-92E2-4A99-9CEA-1414EBCCE1C7","796E21DD-92E2-4A99-9CEA-1414EBCCE1C8","796E21DD-92E2-4A99-9CEA-1414EBCCE1C9"};
+		String[] apiCats = {"SMS_API","SYSTEM_API","MPESA_API"};
+		
+		for(int count=0;count<apiIds.length;count++) {
+			ApiCredential apiCredential = new ApiCredential();
+			apiCredential.setUuid(apiIds[count]);
+			apiCredential.setAccountId(accountId);
+			apiCredential.setApiType(apiCats[count]); 
+			apiCredential.setApiKey(RandomStringUtils.randomAlphabetic(20)); 
+			apiCredential.setApisecret(RandomStringUtils.randomAlphabetic(20)); 
+			apiCredentialDAO.putApiCredential(apiCredential); 
+		}
+		
+		
+		
+		
+		
+		
 
 		apiResponse.setDescription(resposne);
 

@@ -471,9 +471,7 @@ public class StudentReportCard extends HttpServlet{
 				//TODO
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
-					//int avgPoints = 0;
 					for(Subject subject : subjects) {
-						//subjects.forEach(subject -> {
 
 						String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
 						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
@@ -494,25 +492,24 @@ public class StudentReportCard extends HttpServlet{
 
 						avg_points += Integer.valueOf(pnts);
 
-
-
-						//});
 					}
 
-					//ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId, gradingSystemDAO);
-					
-					if(grade7subjects && !grade11subjects){
-						
-						avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
-						avgPoints = String.valueOf(avg_points); 
-						
-					}else {
-						
-						double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
-						avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
-						avgPoints = String.valueOf((int)avg); 
-						
-						
+					if(rankWithPoints && !rankWithTotalMarks){
+
+
+						if(grade7subjects && !grade11subjects){
+
+							avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+							avgPoints = String.valueOf(avg_points); 
+
+						}else if(!grade7subjects && grade11subjects){
+
+							double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
+							avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+							avgPoints = String.valueOf((int)avg); 
+
+
+						}
 					}
 
 
@@ -640,24 +637,24 @@ public class StudentReportCard extends HttpServlet{
 					String studentScore = "";
 
 					if(rankWithPoints && !rankWithTotalMarks){
-						
-						
+
+
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 							//TODO
-							
+
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
-							
+
 						}else {
-							
+
 							studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, 
 									accountId, gradingSystemDAO) + ")";
-							
+
 						}
 
-						
-						
-						
-						
+
+
+
+
 
 						YearlyMean yearlyMean = new YearlyMean();
 						yearlyMean.setAccountId(accountId);
@@ -1132,21 +1129,21 @@ public class StudentReportCard extends HttpServlet{
 						examTable.addCell(new Paragraph(" "+exm3 ,timesRomanNarmal6));
 
 
-						
+
 						//studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						if(grade7subjects && !grade11subjects){
-							
+
 							if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
 								mainScore = avgPoints;
-								
+
 							}else {
 								mainScore = (int)Math.round(mainPoint) + "";
-								
+
 							}
-							
-							
-							
+
+
+
 						}
 
 						if(!grade7subjects && grade11subjects){
@@ -1175,15 +1172,15 @@ public class StudentReportCard extends HttpServlet{
 
 							if(rankWithPoints && !rankWithTotalMarks){
 
-								
+
 								//TODO
 								if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
-									
+
 									mainExam = avg_points_grade;
-									
+
 								}else {
 									mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO);
-									
+
 								}
 							}
 
