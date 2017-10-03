@@ -37,7 +37,7 @@ public class FinanceRestService {
 	private static GokeMoneyUsageDAO gokeMoneyUsageDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static StudentDAO studentDAO;
-
+	
 	static {
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
@@ -59,14 +59,21 @@ public class FinanceRestService {
 	public Object getFeeBreakDown(String accountId) {
 
 		Response response = new Response();
-
-		if(feeBreakdownDAO.getFeeBreakdown(accountId) == null) {
+		
+		if(sysConfigDAO.getSysConfig(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Term/Year not set!");
+			
+		}else if(feeBreakdownDAO.getFeeBreakdown(accountId) == null) {
 			//error
 			response.setMessage("error");
 			response.setDescription("Fee breakdown List not found!");
 		}else {
+			
+			String term = sysConfigDAO.getSysConfig(accountId).getTerm();
+			String year = sysConfigDAO.getSysConfig(accountId).getYear();
 
-			return feeBreakdownDAO.getFeeBreakdown(accountId);
+			return feeBreakdownDAO.getFeeBreakdown(accountId, FeeConstants.GVMT_MONEY_CODE, term, year);
 
 		}
 
