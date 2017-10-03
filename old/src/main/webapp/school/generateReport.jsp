@@ -180,7 +180,7 @@
 													<h4>Exam</h4>
 
 													<select id="exam" name="exam"
-														onblur="validateExamSelected()"
+														onblur="validateExamSelected()" onchange="hideSubjects()"
 														class="form-control formelement SlectBox"
 														required="required" multiple>
 
@@ -504,6 +504,8 @@
 
 
 											<!-- Number of subject element -->
+											
+											<div id="no_subjects_show">
 
 											<h4>No_ of Subjects:</h4>
 
@@ -526,6 +528,8 @@
 											</div>
 
 											<br> <br>
+											
+											</div>
 
 											<!-- Type of report element -->
 											<h4>Type of Report:</h4>

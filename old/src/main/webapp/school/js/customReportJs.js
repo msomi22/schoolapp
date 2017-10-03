@@ -94,6 +94,7 @@ function validateExamSelected(){
 					&& selectedExams.includes('Paper 3')){
 				
 				$('#examType').val('P123');
+				$('#no_subjects_show').hide(1000);
 			}
 			else{
 				
@@ -108,6 +109,37 @@ function validateExamSelected(){
 
 	}
 
+	
+	
+}
+
+function hideSubjects(){
+	if ($("#exam option:selected").length >0) {
+
+		var selectedExams = $('#exam option:selected').text();
+		
+		console.log(JSON.stringify($('#generateReport').serializeJSON()));
+		
+		if(selectedExams.includes('Paper 1')
+				&& selectedExams.includes('Paper 2') 
+				&& selectedExams.includes('Paper 3')){
+			
+		//	$('#examType').val('P123');
+			$('#no_subjects_show').hide(1000);
+		}else{
+			
+			
+			$('#no_subjects_show').show(1000);
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+	}
 	
 	
 }
