@@ -45,6 +45,7 @@
 
 	String uuid = request.getParameter("uuid");
 
+	String name = request.getParameter("name");
 	//get class list
 	ClassDAO classDAO = ClassDAO.getInstance();
 
@@ -134,7 +135,7 @@
 							</div>
 							<h3>
 								Student's Name
-								<%=uuid%></h3>
+								<%=name%></h3>
 
 							<input type="hidden" id="passedParam" name="regno"
 								value="<%=accountId%>/<%=uuid%>">
@@ -320,8 +321,8 @@
 
 
 													<input type="hidden" name="hasParent" id="hasParent"
-														value="false"> <input type="hidden"
-														name="hasPrimary" id="hasPrimary" value="false">
+														value=false> <input type="hidden"
+														name="hasPrimary" id="hasPrimary" value=false>
 													<input type="hidden" name="regStream" id="regStream">
 													<input type="hidden" name="isAlumni" id="isAlumni"
 														value="0">

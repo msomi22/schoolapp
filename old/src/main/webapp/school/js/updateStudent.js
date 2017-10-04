@@ -233,6 +233,23 @@ function apiCall(handleData) {
 function updateStudent() {
 
 	// if(!checkFormValidation($('#updateStudentInfo'))){
+	
+	if($('#schoolName').val() !="" || $('#index').val() !="" || $('#kcpeyear').val() !="" || $('#kcpemark').val() !=""){
+		
+		$('#hasPrimary').val("true");
+		
+	}else{
+		$('#hasPrimary').val("false");
+	}
+	
+	
+		
+	
+	if($('#parentMobile').val() !="" || $('#parentName').val() !="" || $('#parentEmail').val() !="" )
+		$('#hasParent').val("true")
+		
+		else
+			$('#hasParent').val("false");
 
 	request_type = 'PUT';
 

@@ -260,7 +260,7 @@ function fetchStudents(paginate) {
 							window.location = location.protocol + "//"
 									+ window.location.host
 									+ "/school/school/profile.jsp?uuid="
-									+ data['uuid'];
+									+ data['uuid']+"&name="+data['firstname']+' '+data['lastname'];
 
 						});
 
