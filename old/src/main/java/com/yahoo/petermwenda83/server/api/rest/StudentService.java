@@ -1040,7 +1040,7 @@ public class StudentService {
 				apiResponse.setDescription("Parent mobile is invalid.");
 				return apiResponse;
 
-			}else {
+			} else {
 				apiResponse.setMessage("success");
 				apiResponse.setDescription(saveStudentData(student, accountId));
 				return apiResponse;
@@ -1084,7 +1084,7 @@ public class StudentService {
 
 		}
 
-	//	return apiResponse;
+		// return apiResponse;
 	}
 
 	private String saveStudentData(StudentInfo student, String accountId) {
@@ -1123,7 +1123,8 @@ public class StudentService {
 			// parent
 			if (checkHasStatus(student.getHasParent())) {
 				StudentParent studentParent = parentsDAO.getParent(accountId, student.getUuid());
-				if(studentParent == null) {
+				if (studentParent == null) {
+					studentParent = new StudentParent();
 					studentParent.setAccountId(accountId);
 					studentParent.setStudentId(student.getUuid());
 					studentParent.setName(student.getParentName());
@@ -1138,30 +1139,30 @@ public class StudentService {
 						response += "Student parent info NOT added.\n";
 
 					}
-					
-					
-				}
-				studentParent.setName(student.getParentName());
-				studentParent.setMobile(student.getParentMobile());
-				studentParent.setEmail(student.getParentEmail());
-
-				if (parentsDAO.updateParent(studentParent)) {
-
-					response += "Student parent info updated successfully.\n";
 
 				} else {
+					studentParent.setName(student.getParentName());
+					studentParent.setMobile(student.getParentMobile());
+					studentParent.setEmail(student.getParentEmail());
 
-					response += "Student parent info NOT updated.\n";
+					if (parentsDAO.updateParent(studentParent)) {
 
+						response += "Student parent info updated successfully.\n";
+
+					} else {
+
+						response += "Student parent info NOT updated.\n";
+
+					}
 				}
 			}
 
 			// primary
 			if (checkHasStatus(student.getHasPrimary())) {
 				StudentPrimary studentPrimary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
-				
-				if(studentPrimary == null) {
-					studentPrimary= new StudentPrimary();
+
+				if (studentPrimary == null) {
+					studentPrimary = new StudentPrimary();
 					studentPrimary.setAccountId(accountId);
 					studentPrimary.setStudentId(student.getUuid());
 					studentPrimary.setSchoolName(student.getSchoolName());
@@ -1177,22 +1178,22 @@ public class StudentService {
 						response += "Student primary info NOT added.\n";
 
 					}
-					
-					
-				}
-				studentPrimary.setSchoolName(student.getSchoolName());
-				studentPrimary.setIndex(student.getIndex());
-				studentPrimary.setKcpemark(student.getKcpemark());
-				studentPrimary.setKcpeyear(student.getKcpeyear());
-
-				if (primaryDAO.updateStudentPrimary(studentPrimary)) {
-
-					response += "Student primary info updated successfully.";
 
 				} else {
+					studentPrimary.setSchoolName(student.getSchoolName());
+					studentPrimary.setIndex(student.getIndex());
+					studentPrimary.setKcpemark(student.getKcpemark());
+					studentPrimary.setKcpeyear(student.getKcpeyear());
 
-					response += "Student primary info NOT updated.";
+					if (primaryDAO.updateStudentPrimary(studentPrimary)) {
 
+						response += "Student primary info updated successfully.";
+
+					} else {
+
+						response += "Student primary info NOT updated.";
+
+					}
 				}
 			}
 
