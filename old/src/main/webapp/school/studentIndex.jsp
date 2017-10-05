@@ -53,6 +53,8 @@
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
     //return;
+    
+    	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 
 
     CacheManager mgr = CacheManager.getInstance();
@@ -67,7 +69,7 @@
         school = (Account) element.getObjectValue();
     }
 
-     String accountId = school.getUuid();
+   
      String schoolname = school.getName();
      
      StudentDAO studentDAO = StudentDAO.getInstance();

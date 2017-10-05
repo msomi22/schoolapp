@@ -208,17 +208,17 @@
 												</div>
 
 
-												<br> <br>
+											
 
 
 
-												<!-- dob and bcertno -->
+												
 
 												<div class="row">
 
 													<div class="col-md-5 col-md-offset-1">
 
-														<label for="username">User name</label> <input type="text"
+														<label for="username">User name</label> <input type="hidden"
 															id="username" class="form-control formelement"
 															name="username" placeholder="Username"
 															pattern="[A-Za-z0-9]{3,20}"
@@ -231,7 +231,7 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<label for="password">Password</label> <input
-															type="password" id="password"
+															type="hidden" id="password"
 															class="form-control formelement" name="password"
 															placeholder="Username" pattern="[A-Za-z0-9]{6,20}"
 															title="Password, Alpha numeric characters are allowed and should be more than six characters"
