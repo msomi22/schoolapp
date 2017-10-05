@@ -118,38 +118,47 @@ public class ExamAjax extends HttpServlet{
 		if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
 
 			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(studentId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no studentId.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(subjectId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no subjectId.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(examId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no examId.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(streamId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no streamId.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(accountId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no accountId.");
+			return jsonObject;
 
 		}else if(StringUtils.isBlank(score)){
 
 			jsonObject.addProperty("responseMessage", "Blank score not allowed " + score + "." );
+			return jsonObject;
 
 		}else if(!StringUtils.isNumeric(score)){  
 
 			jsonObject.addProperty("responseMessage", "Score not valid, numerics only " + score + "." );
+			return jsonObject;
 
 		}else if(Integer.valueOf(score) < 0 || Integer.valueOf(score) > 100){  
 
 			jsonObject.addProperty("responseMessage", "Score not valid, scores should be between 0 and 100 " + score + "." );
+			return jsonObject;
 
 		}else{
 
@@ -177,14 +186,17 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.LANG_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Language: score can't be greater than '" + ReportUtil.LANG_P1_OUTOF + "'";
+						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.LANG_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Language: score can't be greater than '" + ReportUtil.LANG_P2_OUTOF + "'";
+						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.LANG_P3_OUTOF){
 
 						message = "Score not valid, Paper 3, Language: score can't be greater than '" + ReportUtil.LANG_P3_OUTOF + "'";
+						return jsonObject;
 
 					}else{
 						scoreDouble = scoreInt;
@@ -197,14 +209,17 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
 						message = "Score not valid, Paper 3, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+						return jsonObject;
 
 					}else{
 						scoreDouble = scoreInt;
@@ -216,15 +231,18 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P3")){
 
 						message = "This subject has no paper 3";
+						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
-
+						return jsonObject;
+						
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
-
+						return jsonObject;
+						
 					}else{
 						scoreDouble = scoreInt;
 						scoreValid = true;
@@ -232,19 +250,27 @@ public class ExamAjax extends HttpServlet{
 
 				}else if(StringUtils.equals(subDesc, ReportUtil.CAT_TECH)){ 
 
-					if(StringUtils.equals(subject.getCode(), "AGR") || StringUtils.equals(subject.getDescription(), "Agriculture")){
+					if(StringUtils.equals(subject.getCode(), "AGR") || 
+							StringUtils.equals(subject.getDescription(), "Agriculture") ||
+							StringUtils.equals(subject.getCode(), "HSC") || 
+							StringUtils.equals(subject.getDescription(), "Home Science") ||
+							StringUtils.equals(subject.getCode(), "COM") || 
+							StringUtils.equals(subject.getDescription(), "Computer Studies")){
 
 						if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
 
 							message = "Score not valid, Paper 1, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
 							message = "Score not valid, Paper 2, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
 							message = "Score not valid, Paper 3 Agriculture, score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+							return jsonObject;
 
 						}else{
 							scoreDouble = scoreInt;
@@ -256,15 +282,18 @@ public class ExamAjax extends HttpServlet{
 						if(StringUtils.equals(exam.getCode(), "P3")){
 
 							message = "This subject has no paper 3";
+							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
 
 							message = "Score not valid, Paper 1, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
-
+							return jsonObject;
+							
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 							message = "Score not valid, Paper 2, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
-
+							return jsonObject;
+							
 						}else{
 							scoreDouble = scoreInt;
 							scoreValid = true;
@@ -279,6 +308,7 @@ public class ExamAjax extends HttpServlet{
 				if(Integer.valueOf(score) > examDAO.getExam(accountId, examId).getOutOf()){  
 
 					jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
+					return jsonObject;
 
 				}else{
 
@@ -291,12 +321,35 @@ public class ExamAjax extends HttpServlet{
 
 			}
 
-
+			
 			Perfomance perfomance = new Perfomance();
 			perfomance.setAccountId(accountId);
 			perfomance.setClassRoomId(stream.getClassRoomId()); 
 			perfomance.setExamId(examId); 
-			perfomance.setScore((int)scoreDouble);
+			
+			String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
+			String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
+			String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
+			//PAPER_1_2_3_ID
+
+			
+			//TODO
+			if(StringUtils.equals(examId, p1)) {
+				perfomance.setPaper1((int)scoreDouble);
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				
+			}else if(StringUtils.equals(examId, p2)) {
+				perfomance.setPaper2((int)scoreDouble);
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				
+			}else if(StringUtils.equals(examId, p3)) {
+				perfomance.setPaper3((int)scoreDouble);
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				
+			}else {
+				perfomance.setScore((int)scoreDouble);
+			}
+			
 			perfomance.setStreamId(streamId);
 			perfomance.setStudentId(studentId);
 			perfomance.setSubjectId(subjectId);
@@ -312,10 +365,12 @@ public class ExamAjax extends HttpServlet{
 					message = "OK";
 
 					jsonObject.addProperty("responseMessage", message + " -- " + stored);
+					return jsonObject;
 
 				}else{
 
 					jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please.");
+					return jsonObject;
 
 				}
 
@@ -327,12 +382,12 @@ public class ExamAjax extends HttpServlet{
 				message = message.length() == 0 ? "Unexpected error has occured, contact admin please." : message;
 
 				jsonObject.addProperty("responseMessage", message);
+				return jsonObject;
 
 			}
 
 		}
 
-		return jsonObject;
 	}
 
 	@Override

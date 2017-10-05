@@ -25,6 +25,9 @@ public class Perfomance extends StorableBean{
 	private String classRoomId;
 	private String examId;
 	private int score;
+	private int paper1; 
+	private int paper2;
+	private int paper3; 
 	private String term;
 	private String year;//
 
@@ -39,133 +42,108 @@ public class Perfomance extends StorableBean{
         classRoomId = "";
         examId = "";
         score = 0;
+        paper1 = 0;
+        paper2 = 0;
+        paper3 = 0;
         term = "";
         year = "";
 	}
 	
-	/**
-	 * @return the studentId
-	 */
 	public String getStudentId() {
 		return studentId;
 	}
 
-	/**
-	 * @param studentId the studentId to set
-	 */
 	public void setStudentId(String studentId) {
 		this.studentId = studentId;
 	}
 
-	/**
-	 * @return the subjectId
-	 */
 	public String getSubjectId() {
 		return subjectId;
 	}
 
-	/**
-	 * @param subjectId the subjectId to set
-	 */
 	public void setSubjectId(String subjectId) {
 		this.subjectId = subjectId;
 	}
 
-	/**
-	 * @return the streamId
-	 */
 	public String getStreamId() {
 		return streamId;
 	}
 
-	/**
-	 * @param streamId the streamId to set
-	 */
 	public void setStreamId(String streamId) {
 		this.streamId = streamId;
 	}
 
-	/**
-	 * @return the classRoomId
-	 */
 	public String getClassRoomId() {
 		return classRoomId;
 	}
 
-	/**
-	 * @param classRoomId the classRoomId to set
-	 */
 	public void setClassRoomId(String classRoomId) {
 		this.classRoomId = classRoomId;
 	}
 
-	/**
-	 * @return the examId
-	 */
 	public String getExamId() {
 		return examId;
 	}
 
-	/**
-	 * @param examId the examId to set
-	 */
 	public void setExamId(String examId) {
 		this.examId = examId;
 	}
 
-	/**
-	 * @return the score
-	 */
 	public int getScore() {
 		return score;
 	}
 
-	/**
-	 * @param score the score to set
-	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
 
-	/**
-	 * @return the term
-	 */
+	public int getPaper1() {
+		return paper1;
+	}
+
+	public void setPaper1(int paper1) {
+		this.paper1 = paper1;
+	}
+
+	public int getPaper2() {
+		return paper2;
+	}
+
+	public void setPaper2(int paper2) {
+		this.paper2 = paper2;
+	}
+
+	public int getPaper3() {
+		return paper3;
+	}
+
+	public void setPaper3(int paper3) {
+		this.paper3 = paper3;
+	}
+
 	public String getTerm() {
 		return term;
 	}
 
-	/**
-	 * @param term the term to set
-	 */
 	public void setTerm(String term) {
 		this.term = term;
 	}
 
-	/**
-	 * @return the year
-	 */
 	public String getYear() {
 		return year;
 	}
 
-	/**
-	 * @param year the year to set
-	 */
 	public void setYear(String year) {
 		this.year = year;
 	}
-	
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "Perfomance [studentId=" + studentId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", classRoomId=" + classRoomId + ", examId=" + examId + ", score=" + score + ", term=" + term
-				+ ", year=" + year + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", classRoomId=" + classRoomId + ", examId=" + examId + ", score=" + score + ", paper1=" + paper1
+				+ ", paper2=" + paper2 + ", paper3=" + paper3 + ", term=" + term + ", year=" + year + ", getUuid()="
+				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
-
 
 	/**
 	 * 

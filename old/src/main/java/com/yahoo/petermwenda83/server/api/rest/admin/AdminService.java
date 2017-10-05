@@ -473,16 +473,13 @@ public class AdminService {
 
 
 
-
-
-
-
 		String[] examIds = {"AE24F15B-5038-4A15-8607-1DB2A7A0B7DE","4531A31D-1F8A-40D7-BFE6-D3CB3D91951A",
 				"69A569CA-1D4F-458E-99DD-FB2BE705BF5C","D50E6399-B913-42F2-A5B6-F0D4BAAF9571",
-				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1"};
-		String[] examCodes = {"P1","P2","P3","C1","C2","ET"};
-		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term"};
-		int[] examOutof = {60,80,40,30,30,70}; 
+				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1",
+				"C3915245-00EE-4EF4-9898-ACE59683DD60"};
+		String[] examCodes = {"P1","P2","P3","C1","C2","ET","P123"};
+		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term","P123"};
+		int[] examOutof = {60,80,40,30,30,70,0}; 
 
 		for(int count=0;count<examIds.length;count++) {
 			Exam exam = new Exam();
