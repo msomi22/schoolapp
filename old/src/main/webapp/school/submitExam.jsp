@@ -366,7 +366,7 @@
                     <td ><%=student.getLastname() %> </td>
                      <td > <%=score+"" %> </td>
 
-                    <td id="editscore<%=studentCount %>" contenteditable='true' > </td>
+                    <td id="editscore<%=studentCount %>" class="examelement form-control"  contenteditable='true' > </td>
 
                    
                  
