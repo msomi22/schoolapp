@@ -94,17 +94,22 @@ function validateExamSelected(){
 					&& selectedExams.includes('Paper 3')){
 				
 				$('#examType').val('P123');
+				$('#paper123Id').val('C3915245-00EE-4EF4-9898-ACE59683DD60');
 				$('#no_subjects_show').hide(1000);
 			}
 			else{
 				
 				$('#examType').val('others');
+				$('#paper123Id').val('');
+				$('#no_subjects_show').show(1000);
 			}
 
 		}
 		else{
 			
 			$('#examType').val('others');
+			$('#paper123Id').val('');
+			$('#no_subjects_show').show(1000);
 		}
 
 	}
