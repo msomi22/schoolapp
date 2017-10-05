@@ -822,6 +822,11 @@ public class StudentService {
 				apiResponse.setDescription("Parent mobile is invalid.");
 				return apiResponse;
 
+			}else {
+				apiResponse.setMessage("success");
+				apiResponse.setDescription(newStudentData(student, accountId));
+				//return apiResponse;
+				
 			}
 
 		} else if (checkHasStatus(student.getHasPrimary())) {
@@ -846,95 +851,18 @@ public class StudentService {
 				apiResponse.setDescription("K.C.P.E makrs invalid.");
 				return apiResponse;
 
+			}else {
+				apiResponse.setMessage("success");
+				apiResponse.setDescription(newStudentData(student, accountId));
+				//return apiResponse;
 			}
 		} else {
 
-			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
-			int year = Calendar.getInstance().get(Calendar.YEAR);
+			
 
-			// basic
-			Student newstudent = new Student();
-			newstudent.setRegStream(student.getRegStream());
-			newstudent.setCurrentStream(student.getCurrentStream());
-			newstudent.setIsActive("1");
-			newstudent.setIsAlumni("0");
-			newstudent.setIsBoarding(student.getIsBoarding());
-			newstudent.setRegNo(student.getRegNo());
-			newstudent.setFirstname(student.getFirstname());
-			newstudent.setMiddlename(student.getMiddlename());
-			newstudent.setLastname(student.getLastname());
-			newstudent.setGender(student.getGender().toUpperCase());
-			newstudent.setDob(student.getDob());
-			newstudent.setBcertNo(student.getBcertNo());
-			newstudent.setCounty(student.getCounty());
-			newstudent.setRegTerm(sysConfig.getTerm());
-			newstudent.setFinalYear(year + 3);
-			newstudent.setFinalTerm(3);
-			// TODO
-			newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
-			newstudent.setLastUpdated(new Date().toString());
-
-			String response = "";
-
-			if (studentDAO.putStudent(newstudent)) {
-
-				response = "Student basic info saved successfully.";
-				// TODO
-
-				subjectDAO.getSubjects(accountId).forEach(subject -> {
-					ApiSubject apiSubject = new ApiSubject();
-					apiSubject.setAccountId(accountId);
-					apiSubject.setStudentId(student.getUuid());
-					apiSubject.setSubjectId(subject.getUuid());
-					assignSubject(apiSubject);
-
-				});
-
-				// parent
-				if (checkHasStatus(student.getHasParent())) {
-					StudentParent studentParent = new StudentParent();
-					studentParent.setAccountId(accountId);
-					studentParent.setStudentId(student.getUuid());
-					studentParent.setName(student.getParentName());
-					studentParent.setMobile(student.getParentMobile());
-					studentParent.setEmail(student.getParentEmail());
-
-					if (parentsDAO.putParent(studentParent)) {
-
-						response += "Student parent info saved successfully.";
-
-					} else {
-
-						response += "Student parent info NOT saved.";
-
-					}
-				}
-
-				// primary
-				if (checkHasStatus(student.getHasPrimary())) {
-					StudentPrimary studentPrimary = new StudentPrimary();
-					studentPrimary.setAccountId(accountId);
-					studentPrimary.setStudentId(student.getUuid());
-					studentPrimary.setSchoolName(student.getSchoolName());
-					studentPrimary.setIndex(student.getIndex());
-					studentPrimary.setKcpemark(student.getKcpemark());
-					studentPrimary.setKcpeyear(student.getKcpeyear());
-
-					if (primaryDAO.putStudentPrimary(studentPrimary)) {
-
-						response += "Student primary info saved successfully.";
-
-					} else {
-
-						response += "Student primary info NOT saved.";
-
-					}
-				}
-
-			}
-
-			apiResponse.setMessage("success");
-			apiResponse.setDescription(response);
+			
+			apiResponse.setMessage("success this one");
+			apiResponse.setDescription(newStudentData(student, accountId));
 
 			return apiResponse;
 
@@ -1042,7 +970,7 @@ public class StudentService {
 
 			} else {
 				apiResponse.setMessage("success");
-				apiResponse.setDescription(saveStudentData(student, accountId));
+				apiResponse.setDescription(updateStudentData(student, accountId));
 				return apiResponse;
 			}
 
@@ -1070,7 +998,7 @@ public class StudentService {
 
 			} else {
 				apiResponse.setMessage("success");
-				apiResponse.setDescription(saveStudentData(student, accountId));
+				apiResponse.setDescription(updateStudentData(student, accountId));
 				return apiResponse;
 
 			}
@@ -1078,7 +1006,7 @@ public class StudentService {
 		} else {
 
 			apiResponse.setMessage("success");
-			apiResponse.setDescription(saveStudentData(student, accountId));
+			apiResponse.setDescription(updateStudentData(student, accountId));
 
 			return apiResponse;
 
@@ -1087,13 +1015,12 @@ public class StudentService {
 		// return apiResponse;
 	}
 
-	private String saveStudentData(StudentInfo student, String accountId) {
+	private String updateStudentData(StudentInfo student, String accountId) {
 
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
 
 		// basic
 		Student newstudent = studentDAO.getStudentById(accountId, student.getUuid());
-
 		newstudent.setRegStream(student.getRegStream());
 		newstudent.setCurrentStream(student.getCurrentStream());
 		newstudent.setIsActive(student.getIsActive());
@@ -1169,7 +1096,7 @@ public class StudentService {
 					studentPrimary.setIndex(student.getIndex());
 					studentPrimary.setKcpemark(student.getKcpemark());
 					studentPrimary.setKcpeyear(student.getKcpeyear());
-					if (primaryDAO.updateStudentPrimary(studentPrimary)) {
+					if (primaryDAO.putStudentPrimary(studentPrimary)) {
 
 						response += "Student primary info added successfully.\n";
 
@@ -1200,6 +1127,110 @@ public class StudentService {
 		}
 
 		return response;
+
+	}
+	
+	/**
+	 * 
+	 * @param student
+	 * @param accountId
+	 * @return
+	 */
+	
+	
+	private String newStudentData(StudentInfo student, String accountId) {
+
+		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+
+		// basic
+		Student newstudent = new Student();
+		newstudent.setAccountId(accountId);
+		newstudent.setRegStream(student.getRegStream());
+		newstudent.setCurrentStream(student.getCurrentStream());
+		newstudent.setIsActive("1");
+		newstudent.setIsAlumni("0");
+		newstudent.setIsBoarding(student.getIsBoarding());
+		newstudent.setRegNo(student.getRegNo());
+		newstudent.setFirstname(student.getFirstname());
+		newstudent.setMiddlename(student.getMiddlename());
+		newstudent.setLastname(student.getLastname());
+		newstudent.setGender(student.getGender().toUpperCase());
+		newstudent.setDob(student.getDob());
+		newstudent.setBcertNo(student.getBcertNo());
+		newstudent.setCounty(student.getCounty());
+		newstudent.setRegTerm(sysConfig.getTerm());
+		newstudent.setFinalYear(year + 3);
+		newstudent.setFinalTerm(3);
+		// TODO
+		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
+		newstudent.setLastUpdated(new Date().toString());
+
+		
+		String response = "";
+
+		if (studentDAO.putStudent(newstudent)) {
+
+			response = "Student basic info saved successfully.\n";
+			// TODO
+
+			subjectDAO.getSubjects(accountId).forEach(subject -> {
+				ApiSubject apiSubject = new ApiSubject();
+				apiSubject.setAccountId(accountId);
+				apiSubject.setStudentId(newstudent.getUuid());
+				apiSubject.setSubjectId(subject.getUuid());
+				assignSubject(apiSubject);
+
+			});
+
+			// parent
+			if (checkHasStatus(student.getHasParent())) {
+				StudentParent studentParent = new StudentParent();
+				studentParent.setAccountId(accountId);
+				studentParent.setStudentId(newstudent.getUuid());
+				studentParent.setName(student.getParentName());
+				studentParent.setMobile(student.getParentMobile());
+				studentParent.setEmail(student.getParentEmail());
+
+				if (parentsDAO.putParent(studentParent)) {
+
+					response += "Student parent info saved successfully.\n";
+
+				} else {
+
+					response += "Student parent info NOT saved.\n";
+
+				}
+			}
+
+			// primary
+			if (checkHasStatus(student.getHasPrimary())) {
+				StudentPrimary studentPrimary = new StudentPrimary();
+				studentPrimary.setAccountId(accountId);
+				studentPrimary.setStudentId(newstudent.getUuid());
+				studentPrimary.setSchoolName(student.getSchoolName());
+				studentPrimary.setIndex(student.getIndex());
+				studentPrimary.setKcpemark(student.getKcpemark());
+				studentPrimary.setKcpeyear(student.getKcpeyear());
+
+				if (primaryDAO.putStudentPrimary(studentPrimary)) {
+
+					response += "Student primary info saved successfully.\n";
+
+				} else {
+
+					response += "Student primary info NOT saved.\n";
+
+				}
+			}
+
+		}
+
+		
+
+		return response;
+
+	
 
 	}
 

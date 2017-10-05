@@ -74,6 +74,15 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
+					
+					<div class="col-md-1 col-sm-1 col-xs-1">
+					<a class="btn btn-success round secondary-assent cards"
+								href="staff.jsp" >
+								<i class="fa fa-arrow-left m-right-xs"></i> &laquo;
+							</a> 
+					
+					
+					</div>
 						<div class="col-md-9 col-sm-9 col-xs-12">
 						
 						<input type="hidden" id="passed_log_id" value="<%=loggedUserId %>">
@@ -199,17 +208,17 @@
 												</div>
 
 
-												<br> <br>
+											
 
 
 
-												<!-- dob and bcertno -->
+												
 
 												<div class="row">
 
 													<div class="col-md-5 col-md-offset-1">
 
-														<label for="username">User name</label> <input type="text"
+														<label for="username">User name</label> <input type="hidden"
 															id="username" class="form-control formelement"
 															name="username" placeholder="Username"
 															pattern="[A-Za-z0-9]{3,20}"
@@ -222,7 +231,7 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<label for="password">Password</label> <input
-															type="password" id="password"
+															type="hidden" id="password"
 															class="form-control formelement" name="password"
 															placeholder="Username" pattern="[A-Za-z0-9]{6,20}"
 															title="Password, Alpha numeric characters are allowed and should be more than six characters"
@@ -289,7 +298,7 @@
 
 											<div class="row">
 
-												<div class="col-md-6 col-md-offset-3 alert alert-info">
+												<div class="col-md-6 col-md-offset-3 alert alert-info secondary-assent">
 													Alter Staff's subjects and classes</div>
 
 

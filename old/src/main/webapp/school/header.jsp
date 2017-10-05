@@ -150,8 +150,10 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="registerStudent.jsp">Students</a></li> 
+                      <li><a href="studentIndex.jsp">Students List</a></li> 
+                        <li><a href="registerStudent.jsp">New Student</a></li> 
                     </ul>
+           
                   </li>
                   
                   <li><a><i class="fa fa-book"></i> Academics <span class="fa fa-chevron-down"></span></a>

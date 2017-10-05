@@ -92,7 +92,7 @@ $(document)
 																+ 'Profile   <span class="fa fa-info"></span></button>'
 													} ],
 
-											"order" : [ [ 0, "desc" ] ],
+											"order" : [ [ 5, "desc" ] ],
 										/* "iDisplayLength": 100 */
 
 										});
