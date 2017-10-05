@@ -100,6 +100,17 @@ function fetchStudents(paginate) {
 		console.log(varying_url);
 
 		var cols = [];
+		
+		if(data.length <= 0){
+			
+			table.clear();
+			
+			$('#studentsList').DataTable({
+				destroy : true,
+				searching : false,
+				"bLengthChange" : false,
+			});
+		}else{
 
 		var getCol = data[0];
 
@@ -236,6 +247,7 @@ function fetchStudents(paginate) {
 						/* "iDisplayLength": 100 */
 
 						});
+		}
 
 		// fetchAccessLevels();
 

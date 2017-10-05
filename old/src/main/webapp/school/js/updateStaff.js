@@ -8,7 +8,7 @@ function updateStaffDetails() {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "staff/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+		varying_url = "staff/" + $('#accountId').val();
 
 		global_data_passed = $('#updateStaffRolesForm').serializeJSON();
 
@@ -200,6 +200,9 @@ function fetchStaffRoles() {
 							searching : false,
 							"bPaginate" : false,
 							"bLengthChange" : false,
+							"scrollY" : "400px",
+							"scrollCollapse" : true,
+
 							columns : cols,
 							"columnDefs" : [
 									{
@@ -234,7 +237,7 @@ function fetchStaffRoles() {
 												+ 'Delete  <span class="fa fa-trash"></span></a>'
 									} ],
 
-							"order" : [ [ 0, "desc" ] ]
+							"order" : [ [ 5, "desc" ] ]
 						/* "iDisplayLength": 100 */
 
 						});
@@ -350,8 +353,7 @@ function fetchStreams(classIdVal) {
 
 	console.log(classIdVal);
 
-	varying_url = "general/streams/E3CDC578-37BA-4CDB-B150-DAB0409270CD/"
-			+ classIdVal + "/";
+	varying_url = "general/streams/" + $('#accountId').val() + classIdVal + "/";
 
 	global_data_passed = {};
 	global_request_type = 'GET';
@@ -383,7 +385,7 @@ function fetchClasses() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "general/class/E3CDC578-37BA-4CDB-B150-DAB0409270CD/";
+	varying_url = "general/class/" + $('#accountId').val();
 
 	global_data_passed = {};
 

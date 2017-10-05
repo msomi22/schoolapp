@@ -63,6 +63,19 @@
 	color: #fff;
 }
 
+.back {
+    background-color: #1ABB9C;
+    color: white;
+}
+.round {
+    border-radius: 90%;
+}
+
+.back:hover{
+	 background-color: #ddd;
+    color: black;
+}
+
 .my_btn{
 	
 	background-color:#1ABB9C !important;
