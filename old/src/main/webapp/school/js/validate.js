@@ -108,6 +108,20 @@ function validateScore(id) {
 
 						// $('#edit'+id).append('<span class="glyphicon
 						// glyphicon-ok"></span>');
+					}else{
+						$('#edit' + id).addClass('glyphicon glyphicon-remove error');
+						Cells[6].innerText = "";
+						
+						
+						$('#errorTitle').text('Score Error');
+						$('#errorSms').text(data.responseMessage);
+						$('#error').modal('show');
+						
+						setTimeout(function() {
+							$('#error').modal('hide');
+						}, 2000);
+						
+						
 					}
 
 					console.log(data);
