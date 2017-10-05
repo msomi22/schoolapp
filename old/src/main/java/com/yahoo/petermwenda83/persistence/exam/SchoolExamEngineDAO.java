@@ -11,6 +11,8 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
  */
 public interface SchoolExamEngineDAO {
 	
+	public Perfomance getPerformance(String accountId,String examId,String studentId,String streamId,String term,String year,String subjectId); 
+	
     /**
      * 
      * @param accountId

@@ -24,7 +24,7 @@ public interface SchoolPerfomanceDAO {
 	
 	
 	public Perfomance getPerformance(String accountId,String examId,String studentId,String streamId,String term,String year,String subjectId); 
- 
+	
 	
     //student	
 	public List<Perfomance> getStreamPerformance(String accountId,String examId,String studentId,String streamId,String term,String year); 

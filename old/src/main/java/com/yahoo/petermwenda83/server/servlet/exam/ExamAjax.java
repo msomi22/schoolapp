@@ -114,7 +114,7 @@ public class ExamAjax extends HttpServlet{
 		String message = "";
 		ApiCredentials apiKey = new ApiCredentials();
 
-		
+
 		if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
 
 			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
@@ -237,12 +237,12 @@ public class ExamAjax extends HttpServlet{
 
 						message = "Score not valid, Paper 1, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
 						return jsonObject;
-						
+
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
 						return jsonObject;
-						
+
 					}else{
 						scoreDouble = scoreInt;
 						scoreValid = true;
@@ -288,12 +288,12 @@ public class ExamAjax extends HttpServlet{
 
 							message = "Score not valid, Paper 1, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
 							return jsonObject;
-							
+
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 							message = "Score not valid, Paper 2, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
 							return jsonObject;
-							
+
 						}else{
 							scoreDouble = scoreInt;
 							scoreValid = true;
@@ -321,35 +321,53 @@ public class ExamAjax extends HttpServlet{
 
 			}
 
+
 			
+
 			Perfomance perfomance = new Perfomance();
 			perfomance.setAccountId(accountId);
 			perfomance.setClassRoomId(stream.getClassRoomId()); 
-			perfomance.setExamId(examId); 
-			
+
+
 			String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
 			String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
 			String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
 			//PAPER_1_2_3_ID
-
 			
 			//TODO
 			if(StringUtils.equals(examId, p1)) {
+				
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+				}
 				perfomance.setPaper1((int)scoreDouble);
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-				
+
 			}else if(StringUtils.equals(examId, p2)) {
+				
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+				}
 				perfomance.setPaper2((int)scoreDouble);
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-				
+
 			}else if(StringUtils.equals(examId, p3)) {
-				perfomance.setPaper3((int)scoreDouble);
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 				
+				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+				}
+				perfomance.setPaper3((int)scoreDouble);
+
 			}else {
+				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+				}
 				perfomance.setScore((int)scoreDouble);
 			}
 			
+			
+			perfomance.setExamId(examId); 
 			perfomance.setStreamId(streamId);
 			perfomance.setStudentId(studentId);
 			perfomance.setSubjectId(subjectId);
