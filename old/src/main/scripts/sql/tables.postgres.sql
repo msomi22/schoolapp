@@ -410,9 +410,9 @@ ALTER TABLE Exam OWNER TO school;
 
 
 -- -------------------
--- Table Perfomance
+-- Table Performance
 -- -------------------
- CREATE TABLE  Perfomance (
+ CREATE TABLE  Performance (
     id SERIAL PRIMARY KEY,
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES Student(uuid),
@@ -420,15 +420,18 @@ ALTER TABLE Exam OWNER TO school;
     streamId text REFERENCES Stream(uuid),  
     classRoomId text REFERENCES classRoom(uuid),   
     examId text REFERENCES Exam(uuid),   
-    score integer,                                                    
+    score integer,  
+    paper1 integer,  
+    paper2 integer,  
+    paper3 integer,                                                        
     term text,
     year text
  
 );
 
 -- import data from the CSV file for the Accounts table
-\COPY Perfomance(accountId,studentId,subjectId,streamId,classRoomId,examId,score,term,year) FROM '/tmp/Perfomance.csv' WITH DELIMITER AS '|' CSV HEADER
-ALTER TABLE Perfomance OWNER TO school;
+\COPY Performance(accountId,studentId,subjectId,streamId,classRoomId,examId,score,paper1,paper2,paper3,term,year) FROM '/tmp/Perfomance.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE Performance OWNER TO school;
 
 
 

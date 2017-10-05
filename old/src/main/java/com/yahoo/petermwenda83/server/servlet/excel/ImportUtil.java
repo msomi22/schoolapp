@@ -25,6 +25,10 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
+import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.api.rest.StudentService;
+import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
 
 /**
  * @author peter
@@ -36,6 +40,12 @@ public class ImportUtil {
 	private List<String> genderList;
 	private String[] categoryArray;
 	private List<String> categoryList;
+	
+	private static SubjectDAO subjectDAO;
+	
+	static {
+		subjectDAO = SubjectDAO.getInstance();
+	}
 
 	public ImportUtil(){
 		genderArray = new String[] {"M", "F", "m", "f"};
@@ -295,7 +305,17 @@ public class ImportUtil {
 						
 						student.setLastUpdated(new Date().toString()); 
 						
-						studentDAO.putStudent(student);
+						if(studentDAO.putStudent(student)) {
+							StudentService studentService = new StudentService();
+							subjectDAO.getSubjects(accountId).forEach(subject -> {
+								ApiSubject apiSubject = new ApiSubject();
+								apiSubject.setAccountId(accountId);
+								apiSubject.setStudentId(student.getUuid()); 
+								apiSubject.setSubjectId(subject.getUuid());
+								studentService.assignSubject(apiSubject);
+								
+							});
+						}
 						
 					}
 					

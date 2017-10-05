@@ -741,6 +741,7 @@ public class ClassRankingList extends HttpServlet{
 						exam3Score = "";
 					}
 
+					//TODO TODO
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 					String pnts = String.valueOf(ReportUtil.getPoints(examAverage, "subjectId",accountId,subjectDAO, gradingSystemDAO));
 
@@ -758,7 +759,7 @@ public class ClassRankingList extends HttpServlet{
 					avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
 					avgPoints = String.valueOf(avg_points); 
 					
-				}else {
+				}else if(!grade7subjects && grade11subjects){
 					
 					double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
 					avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
@@ -1197,10 +1198,17 @@ public class ClassRankingList extends HttpServlet{
 
 					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 					totalMeans = totalMeans / 3;
-
-
-
+					
 				}
+				
+
+				/*System.out.println("*****************************************"); 
+				System.out.println(" student: " + student.getRegNo());
+				System.out.println(" totalExam1: " + totalExam1.getTotalMean());
+				System.out.println(" totalExam12: " + totalExam2.getTotalMean());
+				System.out.println(" totalExam3: " + totalExam3.getTotalMean());
+				System.out.println("*****************************************");*/
+
 
 			}
 

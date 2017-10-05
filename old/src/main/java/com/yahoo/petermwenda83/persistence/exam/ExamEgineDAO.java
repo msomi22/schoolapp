@@ -127,7 +127,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		try(   Connection conn = dbutils.getConnection();
 				
 				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Perfomance"
-						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, term, year) VALUES (?,?,?,?,?,?,?,?,?);");
+						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 				
 				){
 
@@ -138,8 +138,11 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 				pstmtCatOne.setString(5, perfomance.getClassRoomId());
 				pstmtCatOne.setString(6, perfomance.getExamId());
 				pstmtCatOne.setInt(7, perfomance.getScore()); 
-				pstmtCatOne.setString(8, term);
-				pstmtCatOne.setString(9, year);
+				pstmtCatOne.setInt(8, perfomance.getPaper1()); 
+				pstmtCatOne.setInt(9, perfomance.getPaper2()); 
+				pstmtCatOne.setInt(10, perfomance.getPaper3()); 
+				pstmtCatOne.setString(11, term);
+				pstmtCatOne.setString(12, year);
 				pstmtCatOne.executeUpdate();
 			
 
@@ -154,20 +157,23 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 			
 			      try(
 					Connection conn = dbutils.getConnection();
-					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Perfomance SET score =? " 
+					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Perfomance SET score =? , paper1 =? , paper2 =? , paper3 =? ," 
 							+"WHERE accountId =? AND studentId =? AND subjectId =? AND streamId = ? "
 							+ "AND examId = ? AND term =? AND year = ?;");	
 			    	
 					) {
 					
 					pstmtCatOne.setDouble(1, perfomance.getScore());
-					pstmtCatOne.setString(2, accountId);
-					pstmtCatOne.setString(3, studentId);
-					pstmtCatOne.setString(4, subjectId);
-					pstmtCatOne.setString(5, perfomance.getStreamId());
-					pstmtCatOne.setString(6, examId);
-					pstmtCatOne.setString(7, term);
-					pstmtCatOne.setString(8, year);
+					pstmtCatOne.setDouble(2, perfomance.getPaper1());
+					pstmtCatOne.setDouble(3, perfomance.getPaper2());
+					pstmtCatOne.setDouble(4, perfomance.getPaper3());
+					pstmtCatOne.setString(5, accountId);
+					pstmtCatOne.setString(6, studentId);
+					pstmtCatOne.setString(7, subjectId);
+					pstmtCatOne.setString(8, perfomance.getStreamId());
+					pstmtCatOne.setString(9, examId);
+					pstmtCatOne.setString(10, term);
+					pstmtCatOne.setString(11, year);
 					pstmtCatOne.executeUpdate();
 				
 										
