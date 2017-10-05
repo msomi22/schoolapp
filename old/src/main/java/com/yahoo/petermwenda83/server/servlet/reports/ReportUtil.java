@@ -139,7 +139,7 @@ public class ReportUtil {
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
 
 			for (Perfomance perfomance : filteredExam) {
-				
+				//TODO
 				if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 					PerformanceP123 performanceP123 = computePaper123(subjectDAO,subCategoryDAO, categoryDAO , accountId, perfomance, gradingSystemDAO);
 					perfomance.setScore(performanceP123.getTotalMean()); 
