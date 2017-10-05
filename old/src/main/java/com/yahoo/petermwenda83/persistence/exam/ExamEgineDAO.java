@@ -67,7 +67,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 		ResultSet rset = null;
 		try(    Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT accountId, studentId, subjectId, examId, term, year, streamId FROM Perfomance "
+				PreparedStatement pstmt = conn.prepareStatement("SELECT accountId, studentId, subjectId, examId, term, year, streamId FROM Performance "
 						+ "WHERE accountId = ? AND studentId = ? AND subjectId = ?  AND examId = ? AND term = ? AND year = ? AND streamId = ?;");
 				){
 
@@ -126,7 +126,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year,streamId)) {
 		try(   Connection conn = dbutils.getConnection();
 				
-				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Perfomance"
+				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Performance"
 						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 				
 				){
@@ -157,7 +157,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 			
 			      try(
 					Connection conn = dbutils.getConnection();
-					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Perfomance SET score =? , paper1 =? , paper2 =? , paper3 =? ," 
+					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Performance SET score =? , paper1 =? , paper2 =? , paper3 =? ," 
 							+"WHERE accountId =? AND studentId =? AND subjectId =? AND streamId = ? "
 							+ "AND examId = ? AND term =? AND year = ?;");	
 			    	

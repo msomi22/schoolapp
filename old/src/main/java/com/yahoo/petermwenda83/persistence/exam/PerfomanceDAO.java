@@ -63,7 +63,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
      	         		+ " examId=? AND studentId = ? AND streamId =? AND term = ? AND year = ? ORDER BY examId;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);      
@@ -94,7 +94,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
      	         		+ " examId=? AND studentId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);   
@@ -123,7 +123,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		boolean success = true;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Perfomance"
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Performance"
 						+ " WHERE accountId = ? AND  examId=? AND  studentId = ? AND term = ? AND year =?;");       
 
 				){
@@ -155,7 +155,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
      	         		+ " examId=? AND  subjectId = ? AND streamId =? AND term = ? AND year = ?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);  
@@ -186,7 +186,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 
         try (
         		 Connection conn = dbutils.getConnection();
-     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance WHERE accountId = ? AND"
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
      	         		+ " examId=? AND subjectId = ? AND classRoomId =? AND term = ? AND year = ?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);  
@@ -217,7 +217,7 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Perfomance"
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance"
 						+ " WHERE accountId =? AND examId = ? AND studentId = ? AND streamId = ? AND term = ? AND year = ? AND subjectId =?;");       
 				){
 
