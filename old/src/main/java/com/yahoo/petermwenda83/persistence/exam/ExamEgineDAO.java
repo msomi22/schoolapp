@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
@@ -25,6 +26,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 	private static ExamEgineDAO examEgineDAO;
 	private Logger logger = Logger.getLogger(this.getClass());
+	private BeanProcessor beanProcessor = new BeanProcessor();
 	
 	public static ExamEgineDAO getInstance(){
 
@@ -67,7 +69,8 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 		ResultSet rset = null;
 		try(    Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT accountId, studentId, subjectId, examId, term, year, streamId FROM Performance "
+				PreparedStatement pstmt = conn.prepareStatement("SELECT accountId, studentId, subjectId, examId, term, year, streamId "
+						+ "FROM Performance "
 						+ "WHERE accountId = ? AND studentId = ? AND subjectId = ?  AND examId = ? AND term = ? AND year = ? AND streamId = ?;");
 				){
 
@@ -127,7 +130,8 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		try(   Connection conn = dbutils.getConnection();
 				
 				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Performance"
-						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) "
+						+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 				
 				){
 
@@ -157,7 +161,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 			
 			      try(
 					Connection conn = dbutils.getConnection();
-					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Performance SET score =? , paper1 =? , paper2 =? , paper3 =? ," 
+					PreparedStatement pstmtCatOne = conn.prepareStatement("UPDATE Performance SET score =? , paper1 =? , paper2 =? , paper3 =? " 
 							+"WHERE accountId =? AND studentId =? AND subjectId =? AND streamId = ? "
 							+ "AND examId = ? AND term =? AND year = ?;");	
 			    	
@@ -188,6 +192,47 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		return success;
 
 	}
+	
+	
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerformance(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Perfomance getPerformance(String accountId, String examId, String studentId, String streamId, String term,
+			String year, String subjectId) {
+		Perfomance perfomance = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance"
+						+ " WHERE accountId =? AND examId = ? AND studentId = ? AND streamId = ? AND term = ? AND year = ? AND subjectId =?;");       
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, examId); 
+			pstmt.setString(3, studentId); 
+			pstmt.setString(4, streamId); 
+			pstmt.setString(5, term); 
+			pstmt.setString(6, year); 
+			pstmt.setString(7, subjectId); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				perfomance  = beanProcessor.toBean(rset,Perfomance.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting Perfomance " + perfomance);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+
+		}
+
+		return perfomance; 
+	}
+
+
 
 
 

@@ -344,17 +344,67 @@
               <tbody class='tablebody'>
               
                  <%
+
+
+                 String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
+                 String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
+                 String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
+
+                 String p123 = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+
+                 if(StringUtils.equals(examId, p1)) {
+                     examId = p123;
+
+                  }else if(StringUtils.equals(examId, p2)) {
+                      examId = p123;
+
+                  }else if(StringUtils.equals(examId, p3)) {
+                      examId = p123;
+
+                  }
+
+                 // out.println("examId: " + examId);
+
+
+
                   int studentCount = 1;
                   if(studentsList != null){
                   for(Student student : studentsList){
                 	 
                 	  Perfomance perfomance = new Perfomance();
-                	  int score = 0;
+                	  String score = "";
                 	  if(perfomanceDAO.getPerformance(accountId, examId, student.getUuid(), streamId, sysConfig.getTerm(), sysConfig.getYear(),subjectId) != null){
                 		  perfomance =  perfomanceDAO.getPerformance(accountId, examId, student.getUuid(), streamId, sysConfig.getTerm(), sysConfig.getYear(),subjectId);
                 	  }
                 	 
-                	  score = perfomance.getScore();
+
+                     if(StringUtils.equals(examId, p123)) {
+                    	 
+                    	 String paper1 = "";
+                    	 String paper2 = "";
+                    	 String paper3 = "";
+                    	 if(perfomance.getPaper1() > 0){
+                    		 paper1 = "P1: " + perfomance.getPaper1();
+                    	 }
+                    	 
+                    	 if(perfomance.getPaper2() > 0){
+                    		 paper2 = ", P1: " + perfomance.getPaper2();
+                    	 }
+                    	 
+                    	 if(perfomance.getPaper3() > 0){
+                    		 paper3 = ", P1: " + perfomance.getPaper3();
+                    	 }
+                    	 
+                         score = paper1 + paper2 + paper3;
+               
+                         
+                      }else{
+                    	 
+                    	  score = perfomance.getScore() + "";
+                      }
+ 
+                	    
+
                 	  %>
                  
                  <tr id="score<%=studentCount %>" onkeyup="validateScore(this.id)" onkeypress="return event.keyCode != 13;">

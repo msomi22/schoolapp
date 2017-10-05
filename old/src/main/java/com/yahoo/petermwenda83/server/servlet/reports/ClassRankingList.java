@@ -175,6 +175,7 @@ public class ClassRankingList extends HttpServlet{
 		String term;
 		String year;
 		String classroomId;
+		String paper123Id = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 
 		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 
@@ -184,6 +185,7 @@ public class ClassRankingList extends HttpServlet{
 		String rank = request.getParameter("rank");
 
 		String noOfSub = request.getParameter("subjects");
+		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 
 		//check for hide points
 		hidePoints = hidePts ? true : false;
