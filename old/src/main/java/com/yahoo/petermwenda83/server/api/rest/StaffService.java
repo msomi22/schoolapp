@@ -462,13 +462,8 @@ public class StaffService {
 		teacherSubject.setSubjectId(subClass.getSubjectId()); 
 
 		ApiResponse apiResponse = new ApiResponse(); 
-
-		/*if(!StringUtils.equals(staffId, subClass.getTeacherId())) {
-			apiResponse = new ApiResponse("error");
-			apiResponse.setDescription("StaffId mismatch!"); 
-			return apiResponse; 
-
-		}else */if(accountDAO.getAccountById(subClass.getAccountId()) == null) { 
+       
+		if(accountDAO.getAccountById(subClass.getAccountId()) == null) { 
 			apiResponse = new ApiResponse("error");
 			apiResponse.setDescription("Account not found!"); 
 			return apiResponse; 
@@ -478,7 +473,8 @@ public class StaffService {
 			apiResponse.setDescription("Staff not found!"); 
 			return apiResponse; 
 
-		}else if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
+		}
+		else if(teacherSubjectDAO.getTeacherSubject(subClass.getAccountId(), subClass.getStreamId(), subClass.getSubjectId()) != null){
 
 			apiResponse = new ApiResponse("error");
 			apiResponse.setDescription("Nothing to update / Update not allowed !"); 
@@ -562,13 +558,14 @@ public class StaffService {
 				TeacherSubject tsc = teacherSubjectDAO.getTeacherSubject(ts.getAccountId(), ts.getUuid()); 
 
 				tsc.setSubjectId(subjectDAO.getSubjectById(ts.getAccountId(), ts.getSubjectId()).getUuid());
-				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
+				tsc.setStreamId(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getUuid()); 
 
 				APISubjectClasss apiSC = new APISubjectClasss();
 
 				apiSC.setAccountId(tsc.getAccountId()); 
 				apiSC.setAllocationDate(tsc.getAllocationDate());
 				apiSC.setStreamId(tsc.getStreamId());
+				apiSC.setStreamDesc(streamDAO.getStream(ts.getAccountId(), ts.getStreamId()).getDescription()); 
 				apiSC.setSubjectId(tsc.getSubjectId());
 				apiSC.setTeacherId(tsc.getTeacherId());
 				apiSC.setUuid(tsc.getUuid());
