@@ -207,8 +207,13 @@ public class StaffRestFulAPI {
 
 
 	@Path("/{staffId}/subjects")
-	public SubClassRestFulAPI getSubjectService(){
+	public SubClassRestFulAPI getSubjectServiceResource(){
 		return new SubClassRestFulAPI(); 
+	}
+	
+	@Path("/{staffId}/stream")
+	public ClassTeacherRestFulAPI getClassTeacherResource(){
+		return new ClassTeacherRestFulAPI();  
 	}
 
 

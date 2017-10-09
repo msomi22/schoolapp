@@ -104,7 +104,7 @@ public class SubClassRestFulAPI {
 		    notes = "Returns a list of 'class and subject' for the given staff.", 
 		    response = APISubjectClasss.class)
 	
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stff with such Id doesn't exists or account Id not found.") 
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Satff with such Id doesn't exists or account Id not found.") 
 	} )
 	
 	@GET
