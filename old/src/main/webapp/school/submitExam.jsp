@@ -389,11 +389,11 @@
                     	 }
                     	 
                     	 if(perfomance.getPaper2() > 0){
-                    		 paper2 = ", P1: " + perfomance.getPaper2();
+                    		 paper2 = ", P2: " + perfomance.getPaper2();
                     	 }
                     	 
                     	 if(perfomance.getPaper3() > 0){
-                    		 paper3 = ", P1: " + perfomance.getPaper3();
+                    		 paper3 = ", P3: " + perfomance.getPaper3();
                     	 }
                     	 
                          score = paper1 + paper2 + paper3;

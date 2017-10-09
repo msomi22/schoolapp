@@ -384,9 +384,9 @@ public class PerStudentSMSResult {
 				performance2.setStudentId(student.getUuid());
 				performance2.setTotalMean(totalMeans); 
 				performance2.setTotalPoint(totalPoint);
-				performance2.setExam1Total(totalExam1.getTotalPoints());
-				performance2.setExam2Total(totalExam2.getTotalPoints());
-				performance2.setExam3Total(totalExam3.getTotalPoints());
+				performance2.setExam1TotalPoints(totalExam1.getTotalPoints());
+				performance2.setExam2TotalPoints(totalExam2.getTotalPoints());
+				performance2.setExam3TotalPoints(totalExam3.getTotalPoints());
 				performance2.setStreamId(student.getCurrentStream()); 
 
 				performance2List.add(performance2);

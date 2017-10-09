@@ -29,6 +29,7 @@ public class GetBackupScript  extends HttpServlet{
 		
 		WriteToFile.createScript();
 		
+		
 		try {
 			
 			Thread.sleep(2);
