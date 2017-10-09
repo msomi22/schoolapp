@@ -216,20 +216,24 @@ function fetchStaffRoles() {
 										"visible" : false
 									},
 									{
-										"targets" : [ 4 ],
+										"targets" : [ 3],
+										"visible" : false
+									},
+									{
+										"targets" : [ 5],
 										"visible" : false
 									},
 
-									{
-										"targets" : [ 5 ],
-										"visible" : false
-									},
 									{
 										"targets" : [ 6 ],
 										"visible" : false
 									},
 									{
 										"targets" : [ 7 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 8 ],
 										"data" : null,
 										"defaultContent" : '<button class="btn btn-warning ">'
 												+ 'Edit  <span class="fa fa-edit"></span></button>'
@@ -353,7 +357,7 @@ function fetchStreams(classIdVal) {
 
 	console.log(classIdVal);
 
-	varying_url = "general/streams/" + $('#accountId').val() + classIdVal + "/";
+	varying_url = "general/streams/" + $('#accountId').val() +"/"+ classIdVal + "/";
 
 	global_data_passed = {};
 	global_request_type = 'GET';
