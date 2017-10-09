@@ -336,6 +336,7 @@
 															<th class="column-title">subjectId</th>
 															<th class="column-title">subjectDesc</th>
 															<th class="column-title">streamId</th>
+															<th class="column-title">streamDesc</th>
 															<th class="column-title">uuid</th>
 															<th class="column-title">accountId</th>
 															<th class="column-title">allocationDate</th>

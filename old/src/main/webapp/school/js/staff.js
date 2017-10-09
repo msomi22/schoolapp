@@ -46,7 +46,7 @@ function disableStaff(staff) {
 function staffSuject(id){
 	
 	
-	if(id==="btn_addStaffRoles"){
+	if(id=="btn_addStaffRoles"){
 		
 		$('#editStaffRolesForm').get(0).reset();
 		
