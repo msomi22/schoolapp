@@ -211,7 +211,7 @@ public class StaffRestFulAPI {
 		return new SubClassRestFulAPI(); 
 	}
 	
-	@Path("/{staffId}/stream")
+	@Path("/classteacher") 
 	public ClassTeacherRestFulAPI getClassTeacherResource(){
 		return new ClassTeacherRestFulAPI();  
 	}

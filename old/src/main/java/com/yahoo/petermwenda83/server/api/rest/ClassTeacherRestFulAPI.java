@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiClassTeacher;
-import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
 
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +48,7 @@ public class ClassTeacherRestFulAPI {
 
 	
 	@GET
-	@Path("/{accountId}") 
+	@Path("/{accountId}/{staffId}")  
 	public Object getClassTeacher(@PathParam("accountId") String accountId, @PathParam("staffId") String staffId ,
 			@HeaderParam("authorization") String auth){
 		
@@ -62,17 +61,16 @@ public class ClassTeacherRestFulAPI {
 
 		}
 		
-		return null;
+		return classTeacherService.getClassTeacher(accountId, staffId);
 	}
 	
 	/**
 	 * 
 	 * @param accountId
-	 * @param staffId
 	 * @param auth
 	 * @return
 	 */
-
+	 
 	@ApiOperation(value = "Get lists of class teachers.",  
 		    notes = "Returns a list of class teachers.",  
 		    response = ApiClassTeacher.class)
@@ -82,7 +80,7 @@ public class ClassTeacherRestFulAPI {
 	
 	@GET
 	@Path("/{accountId}") 
-	public Object getClassTeachers(@PathParam("accountId") String accountId, @PathParam("staffId") String staffId ,
+	public Object getClassTeachers(@PathParam("accountId") String accountId,
 			@HeaderParam("authorization") String auth){
 		
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
@@ -94,61 +92,66 @@ public class ClassTeacherRestFulAPI {
 
 		}
 		
-		return null;
+		return classTeacherService.getClassTeachers(accountId);
 	}
 
 	/**
 	 * 
-	 * @param staffId
 	 * @param obj
 	 * @param auth
 	 * @return
 	 */
-	
+	 
 	
 	@ApiOperation(value = "Assign staff a class.", 
 		    notes = "Returns the class was assigned or not.", 
 		    response = Response.class)
 	
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "StaffId not found!.") 
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found!.") 
 	} )
 	@POST
-	public ApiResponse addClassTeacher(@PathParam("staffId") String staffId, ApiClassTeacher obj, @HeaderParam("authorization") String auth){
+	public Object addClassTeacher(ApiClassTeacher obj, @HeaderParam("authorization") String auth){
 		
-		if(!RestAUth.isUserAuthenticated(auth, obj.getAccountId())){
 
-			ApiResponse error = new ApiResponse("error");
-			return error; 
+		if(!RestAUth.isUserAuthenticated(auth, obj.getAccountId())){
+		
+			Response response = new Response();
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
 
 		}
 		
-		return null;
+		return classTeacherService.addClassTeacher(obj);
 	}
 	
 	/**
 	 * 
-	 * @param staffId
 	 * @param obj
 	 * @param auth
 	 * @return
 	 */
+	 
 	@ApiOperation(value = "Update staff_class.", 
 		    notes = "Returns the object was updated or not.", 
 		    response = Response.class)
 	
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "StaffId not found!.") 
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found!.") 
 	} )
 	@PUT
-	public ApiResponse updateClassTeacher(@PathParam("staffId") String staffId, ApiClassTeacher obj, @HeaderParam("authorization") String auth){
+	public Object updateClassTeacher(ApiClassTeacher obj, @HeaderParam("authorization") String auth){
 		
-		if(!RestAUth.isUserAuthenticated(auth, obj.getAccountId())){
 
-			ApiResponse error = new ApiResponse("error");
-			return error; 
+		if(!RestAUth.isUserAuthenticated(auth, obj.getAccountId())){
+		
+			Response response = new Response();
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
 
 		}
 		
-		return null;
+		return classTeacherService.updateClassTeacher(obj); 
 	}
 	
 	/**
@@ -158,7 +161,7 @@ public class ClassTeacherRestFulAPI {
 	 * @param auth
 	 * @return
 	 */
-	
+	 
 	@DELETE
 	@Path("/{accountId}/{uuid}")
 	@ApiOperation(value = "Delete class teacher.",  
@@ -168,17 +171,20 @@ public class ClassTeacherRestFulAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "AccountId not found.") 
 	} )
 	
-	public ApiResponse deleteClassTeacher(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid,
+	public Object deleteClassTeacher(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid,
 			@HeaderParam("authorization") String auth){
 		
-		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 
-			ApiResponse error = new ApiResponse("error");
-			return error; 
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+		
+			Response response = new Response();
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
 
 		}
 		
-		return null; 
+		return classTeacherService.deleteClassTeacher(accountId, uuid);
 	}
 
 

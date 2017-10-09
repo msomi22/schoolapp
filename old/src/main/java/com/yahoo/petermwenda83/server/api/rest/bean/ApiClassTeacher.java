@@ -13,6 +13,7 @@ public class ApiClassTeacher {
 	private String staffId;
 	private String staffName;
 	private String staffNo;
+	private String uuid;
 	
 	private String streamId;
 	private String streamDesc;
@@ -26,6 +27,7 @@ public class ApiClassTeacher {
 		staffId = "";
 		staffName = "";
 		staffNo = "";
+		uuid = "";
 		streamId = "";
 		streamDesc = "";
 	}
@@ -96,6 +98,22 @@ public class ApiClassTeacher {
 
 
 	/**
+	 * @return the uuid
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+
+
+	/**
+	 * @param uuid the uuid to set
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+
+	/**
 	 * @return the streamId
 	 */
 	public String getStreamId() {
@@ -133,9 +151,8 @@ public class ApiClassTeacher {
 	@Override
 	public String toString() {
 		return "ApiClassTeacher [accountId=" + accountId + ", staffId=" + staffId + ", staffName=" + staffName
-				+ ", staffNo=" + staffNo + ", streamId=" + streamId + ", streamDesc=" + streamDesc + "]";
+				+ ", staffNo=" + staffNo + ", uuid=" + uuid + ", streamId=" + streamId + ", streamDesc=" + streamDesc
+				+ "]";
 	}
-	
-	
 
 }
