@@ -146,6 +146,16 @@
 	src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script
 	src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+	
+	<script
+	src="../vendors/datatables.net-scroller/js/dataTables.scrollResize.js"></script>
+	
+	
+	<script
+	src="../vendors/datatables.net-scroller/js/jquery.scrollTo.min.js"></script>
+	
+	
+
 
 
 <script src="../vendors/sumoselect/jquery.sumoselect.js"></script>
