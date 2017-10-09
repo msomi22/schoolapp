@@ -39,9 +39,9 @@
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
 
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
-	
+
 	String loggedUserId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-	
+
 	String loggedUserAccessId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
 
 	//get student's details
@@ -50,7 +50,6 @@
 	String uuid = request.getParameter("uuid");
 
 	//get class list
-	
 %>
 <jsp:include page="header.jsp" />
 
@@ -64,7 +63,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Staff's Profile  </h3>
+				<h3>Staff's Profile</h3>
 			</div>
 		</div>
 
@@ -74,38 +73,38 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-					
-					<div class="col-md-1 col-sm-1 col-xs-1">
-					<a class="btn btn-success round secondary-assent cards"
-								href="staff.jsp" >
-								<i class="fa fa-arrow-left m-right-xs"></i> &laquo;
-							</a> 
-					
-					
-					</div>
+
+						<div class="col-md-1 col-sm-1 col-xs-1">
+							<a class="btn btn-success round secondary-assent cards"
+								href="staff.jsp"> <i class="fa fa-arrow-left m-right-xs"></i>
+								&laquo;
+							</a>
+
+
+						</div>
 						<div class="col-md-9 col-sm-9 col-xs-12">
-						
-						<input type="hidden" id="passed_log_id" value="<%=loggedUserId %>">
 
-							
+							<input type="hidden" id="passed_log_id"
+								value="<%=loggedUserId%>"> <input type="hidden"
+								name="passedLogId" id="passedLogId" value="<%=loggedUserId%>">
+							<input type="hidden" name="passedLogAcessId"
+								id="passedLogAcessId" value="<%=loggedUserAccessId%>">
 
-								<input type="hidden" name="passedLogId" id="passedLogId" value="<%=loggedUserId %>">
-								<input type="hidden" name="passedLogAcessId" id="passedLogAcessId" value="<%=loggedUserAccessId %>">
+							<div class="" role="tabpanel" data-example-id="togglable-tabs">
+								<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+									<li role="presentation" class="active"><a
+										href="#tab_content1" id="home-tab" role="tab"
+										data-toggle="tab" aria-expanded="true">General Info</a></li>
+									<li role="presentation" class=""><a href="#tab_content2"
+										role="tab" id="profile-tab" data-toggle="tab"
+										aria-expanded="false" onclick="fetchStaffRoles()">Subjects
+											and Classes</a></li>
+								</ul>
+								<div id="myTabContent" class="tab-content">
+									<div role="tabpanel" class="tab-pane fade active in"
+										id="tab_content1" aria-labelledby="home-tab">
 
-								<div class="" role="tabpanel" data-example-id="togglable-tabs">
-									<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-										<li role="presentation" class="active"><a
-											href="#tab_content1" id="home-tab" role="tab"
-											data-toggle="tab" aria-expanded="true">General Info</a></li>
-										<li role="presentation" class=""><a href="#tab_content2"
-											role="tab" id="profile-tab" data-toggle="tab"
-											aria-expanded="false"  onclick="fetchStaffRoles()">Subjects and Classes</a></li>
-									</ul>
-									<div id="myTabContent" class="tab-content">
-										<div role="tabpanel" class="tab-pane fade active in"
-											id="tab_content1" aria-labelledby="home-tab">
-											
-											<form action="#" method="POST" id="updateStaffRolesForm">
+										<form action="#" method="POST" id="updateStaffRolesForm">
 
 											<!-- start general info-->
 											<div class="messages">
@@ -170,10 +169,18 @@
 
 													<div
 														class="col-md-3 col-md-offset-1 col-sm-10 col-sm-offset-2">
-														<label for="phone">Phone Number</label> <input type="text"
-															id="phone" class="form-control formelement" name="mobile"
-															placeholder="Phone number" pattern="[0-9]{9}"
-															title="Phone,enter a valid number e.g 712345678">
+														<label for="phone">Phone Number</label>
+
+														<div class="input-group">
+															<span class="input-group-addon">+254</span> <input
+																type="text" id="phone" class="form-control formelement"
+																name="mobile" placeholder="Phone number"
+																pattern="[0-9]{9}"
+																title="Phone,enter a valid number e.g 712345678">
+														</div>
+
+
+
 													</div>
 
 
@@ -181,24 +188,16 @@
 
 
 													<input type="hidden" name="uuid" id="uuid"
-														value="<%=uuid%>">
-														
-														<input type="hidden" name="logedUserId" id="logedUserId"
-														value="<%=loggedUserId %>">
-														
-															<input type="hidden" name="logedUserAccessId" id="logedUserAccessId"
-														value="<%=loggedUserAccessId %>">
-														
-														<input type="hidden" name="acessLevelId" id="acessLevelId"
-														value="">
-														
-														 <input type="hidden"
-														name="accountId" id="accountId" value="<%=accountId%>">
-
-													<input type="hidden" name="isActive" id="isActive">
-													
-													
-													<input type="hidden" name="staffNo" id="staffNo">
+														value="<%=uuid%>"> <input type="hidden"
+														name="logedUserId" id="logedUserId"
+														value="<%=loggedUserId%>"> <input type="hidden"
+														name="logedUserAccessId" id="logedUserAccessId"
+														value="<%=loggedUserAccessId%>"> <input
+														type="hidden" name="acessLevelId" id="acessLevelId"
+														value=""> <input type="hidden" name="accountId"
+														id="accountId" value="<%=accountId%>"> <input
+														type="hidden" name="isActive" id="isActive"> <input
+														type="hidden" name="staffNo" id="staffNo">
 
 
 
@@ -208,20 +207,20 @@
 												</div>
 
 
-											
 
 
 
-												
+
+
 
 												<div class="row">
 
 													<div class="col-md-5 col-md-offset-1">
 
-														<label for="username">User name</label> <input type="hidden"
-															id="username" class="form-control formelement"
-															name="username" placeholder="Username"
-															pattern="[A-Za-z0-9]{3,20}"
+														<label for="username">User name</label> <input
+															type="hidden" id="username"
+															class="form-control formelement" name="username"
+															placeholder="Username" pattern="[A-Za-z0-9]{3,20}"
 															title="Username, Alpha numeric characters are allowed and should be more than two and less than 20 characters"
 															required>
 
@@ -282,50 +281,51 @@
 
 											</div>
 											<!-- end general info -->
-											
-											
-							</form>
+
+
+										</form>
+
+									</div>
+									<div role="tabpanel" class="tab-pane fade" id="tab_content2"
+										aria-labelledby="profile-tab">
+
+										<!-- start subjects -->
+
+										<br>
+
+
+
+										<div class="row">
+
+											<div
+												class="col-md-6 col-md-offset-3 alert alert-info secondary-assent">
+												Alter Staff's subjects and classes</div>
+
+
 
 										</div>
-										<div role="tabpanel" class="tab-pane fade" id="tab_content2"
-											aria-labelledby="profile-tab">
- 
-											<!-- start subjects -->
 
-											<br>
-
-
-
-											<div class="row">
-
-												<div class="col-md-6 col-md-offset-3 alert alert-info secondary-assent">
-													Alter Staff's subjects and classes</div>
-
-
-
-											</div>
-
-											<div class="row ">
+										<div class="row ">
 											<div class="col-md-3 pull-right"></div>
 
-												<div class="col-md-4 pull-right">
-													<h3 class="pull-right">
-														Assign new Subject
-														<button class="btn btn-primary" style="border-radius: 90%"
-															id="btn_addStaffRoles" onclick="staffSuject(this.id)">
-															<i class="fa fa-plus-circle fa-2x"></i>
-														</button>
+											<div class="col-md-4 pull-right">
+												<h3 class="pull-right">
+													Assign new Subject
+													<button class="btn btn-primary" style="border-radius: 90%"
+														id="btn_addStaffRoles" onclick="staffSuject(this.id)">
+														<i class="fa fa-plus-circle fa-2x"></i>
+													</button>
 
-													</h3>
-
-												</div>
+												</h3>
 
 											</div>
 
+										</div>
 
 
-											<div class="row">
-											
+
+										<div class="row">
+
 											<div class="table-responsive col-md-6 col-md-offset-3">
 												<table class="table table-striped jambo_table bulk_action"
 													id="staffRoles">
@@ -372,28 +372,17 @@
 
 
 												</table>
-												</div>
-
 											</div>
 
-
-											<br> <br> <br>
-
-											<div class="row">
+										</div>
 
 
-												<div id="subjectList"></div>
+										<br> <br> <br>
 
-											</div>
-
-
+										<div class="row">
 
 
-
-
-											<!-- end subjects -->
-
-											<br> <br> <br>
+											<div id="subjectList"></div>
 
 										</div>
 
@@ -401,8 +390,19 @@
 
 
 
+
+										<!-- end subjects -->
+
+										<br> <br> <br>
+
 									</div>
+
+
+
+
+
 								</div>
+							</div>
 
 
 						</div>
