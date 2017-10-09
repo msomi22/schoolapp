@@ -9,12 +9,11 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
  */
 public class ApiClassTeacher {
 	
+	private String uuid;
 	private String accountId;
 	private String staffId;
 	private String staffName;
 	private String staffNo;
-	private String uuid;
-	
 	private String streamId;
 	private String streamDesc;
 	

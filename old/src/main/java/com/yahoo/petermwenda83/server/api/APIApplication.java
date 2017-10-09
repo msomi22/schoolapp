@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.ws.rs.core.Application;
 
+import com.yahoo.petermwenda83.server.api.rest.ClassTeacherRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.ConfigRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.FinanceRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.GeneralRestFulAPI;
@@ -43,8 +44,10 @@ public class APIApplication extends Application{
 	    public Set<Class<?>> getClasses() {
 	        HashSet<Class<?>> set = new HashSet<Class<?>>();
 
-	        set.add(SubClassRestFulAPI.class);
 	        set.add(StaffRestFulAPI.class);
+	        set.add(SubClassRestFulAPI.class);
+	        set.add(ClassTeacherRestFulAPI.class);
+	        
 	        set.add(StudentRestFulAPI.class);
 	        set.add(SafaricomAPI.class);
 	        set.add(GeneralRestFulAPI.class);
