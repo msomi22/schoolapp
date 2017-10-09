@@ -89,12 +89,12 @@
 
 
 						<div class="col-md-3 col-sm-3 col-xs-12 profile_left">
-						<a class="btn btn-success round secondary-assent cards"
-								href="studentIndex.jsp" >
-								<i class="fa fa-arrow-left m-right-xs"></i> &laquo;
-							</a> 
-							
-							
+							<a class="btn btn-success round secondary-assent cards"
+								href="studentIndex.jsp"> <i
+								class="fa fa-arrow-left m-right-xs"></i> &laquo;
+							</a>
+
+
 							<div class="profile_img" id="crop-avatar">
 
 								<!-- Current avatar -->
@@ -181,18 +181,16 @@
 									</div>
 								</li>
 							</ul>
-							<br>
-							
-							<a class="btn btn-success round secondary-assent cards"
-								href="studentIndex.jsp" >
-								<i class="fa fa-arrow-left m-right-xs"></i> &laquo;
+							<br> <a class="btn btn-success round secondary-assent cards"
+								href="studentIndex.jsp"> <i
+								class="fa fa-arrow-left m-right-xs"></i> &laquo;
 							</a>
-							
-							
-							
-							
-							
-							
+
+
+
+
+
+
 							<!-- end of skills -->
 						</div>
 
@@ -232,9 +230,9 @@
 														<h4>First Name</h4>
 
 														<input type="text" id="fname"
-															class="form-control formelement" name="firstname"  maxlength="15"
-															onblur="talkToMe()" placeholder="First Name"
-															pattern="[A-Za-z]{3,20}"
+															class="form-control formelement" name="firstname"
+															maxlength="15" onblur="talkToMe()"
+															placeholder="First Name" pattern="[A-Za-z]{3,20}"
 															title="First Name,Only characters are allowed and should be more than two and less than 20 characters"
 															required>
 													</div>
@@ -242,8 +240,8 @@
 													<div
 														class="col-md-3 col-md-offset-1 col-sm-10 col-sm-offset-2">
 														<h4>Middle Name</h4>
-														<input type="text" id="mname" name="middlename"  maxlength="15"
-															class="form-control formelement"
+														<input type="text" id="mname" name="middlename"
+															maxlength="15" class="form-control formelement"
 															placeholder="Middle Name" pattern="[A-Za-z]{3,20}"
 															title="Middle Name,Only characters are allowed and should be less than 20 characters ">
 													</div>
@@ -252,9 +250,9 @@
 													<div
 														class="col-md-3 col-md-offset-1 col-sm-10 col-sm-offset-2">
 														<h4>Last Name</h4>
-														<input type="text" id="lname" name="lastname"  maxlength="15"
-															class="form-control formelement" placeholder="Last Name"
-															pattern="[A-Za-z]{3,20}"
+														<input type="text" id="lname" name="lastname"
+															maxlength="15" class="form-control formelement"
+															placeholder="Last Name" pattern="[A-Za-z]{3,20}"
 															title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"
 															required>
 													</div>
@@ -340,10 +338,9 @@
 
 													<input type="hidden" name="hasParent" id="hasParent"
 														value=false> <input type="hidden"
-														name="hasPrimary" id="hasPrimary" value=false>
-													<input type="hidden" name="regStream" id="regStream">
-													<input type="hidden" name="isAlumni" id="isAlumni"
-														value="0">
+														name="hasPrimary" id="hasPrimary" value=false> <input
+														type="hidden" name="regStream" id="regStream"> <input
+														type="hidden" name="isAlumni" id="isAlumni" value="0">
 
 
 
@@ -369,8 +366,8 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>Birth Cert N0_</h4>
-														<input type="text" id="bcertNo" name="bcertNo"  maxlength="10"
-															class="form-control formelement"
+														<input type="text" id="bcertNo" name="bcertNo"
+															maxlength="10" class="form-control formelement"
 															placeholder="Birth Cert No_" pattern="[0-9]{4,10}"
 															title="Birth cert no, should contain numerics only and should be 5 numbers only"
 															required>
@@ -408,7 +405,7 @@
 														<h4>Registration No_</h4>
 
 														<input type="text" id="regNo" name="regNo"
-															class="form-control formelement"  maxlength="15"
+															class="form-control formelement" maxlength="15"
 															placeholder="Registration number" pattern="[0-9]{2,10}"
 															title="Registration number, should contain numerics only and should be 4 numbers only"
 															required>
@@ -574,8 +571,9 @@
 													<div class="col-md-5 col-md-offset-1">
 														<h4>School's Name</h4>
 														<input type="text" id="schoolName"
-															class="form-control formelement" name="schoolName"  maxlength="30"
-															placeholder="School name" pattern="[A-Za-z\s]{3,30}"
+															class="form-control formelement" name="schoolName"
+															maxlength="30" placeholder="School name"
+															pattern="[A-Za-z\s]{3,30}"
 															title="School Name,Only characters are allowed and should be less than 20 characters">
 
 													</div>
@@ -584,7 +582,8 @@
 														<h4>Index Number</h4>
 														<input type="text" id="index"
 															class="form-control formelement" name="index"
-															placeholder="Index Number" pattern="[0-9]{6,12}"  maxlength="15"
+															placeholder="Index Number" pattern="[0-9]{6,12}"
+															maxlength="15"
 															title="Index Number,Only numbers are allowed and should be 9 numbers">
 
 													</div>
@@ -604,8 +603,8 @@
 													<div class="col-md-5 col-md-offset-1">
 														<h4>KCPE YEAR</h4>
 														<input type="text" id="kcpeyear"
-															class="form-control formelement" name="kcpeyear"  maxlength="4"
-															placeholder="KCPE year" pattern="[0-9]{4}"
+															class="form-control formelement" name="kcpeyear"
+															maxlength="4" placeholder="KCPE year" pattern="[0-9]{4}"
 															title="KCPE year,enter an year">
 
 													</div>
@@ -613,8 +612,9 @@
 													<div class="col-md-5 col-md-offset-1">
 														<h4>KCPE MARKS</h4>
 														<input type="text" id="kcpemark"
-															class="form-control formelement" name="kcpemark"  maxlength="3"
-															placeholder="KCPE marks" pattern="[0-9]{1,3}"
+															class="form-control formelement" name="kcpemark"
+															maxlength="3" placeholder="KCPE marks"
+															pattern="[0-9]{1,3}"
 															title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
 
 													</div>
@@ -669,8 +669,8 @@
 													<div class="col-md-8 col-md-offset-2">
 														<h4>Name</h4>
 														<input type="text" id="parentName"
-															class="form-control formelement" name="parentName"  maxlength="30"
-															placeholder="Parent's First name"
+															class="form-control formelement" name="parentName"
+															maxlength="30" placeholder="Parent's First name"
 															pattern="[A-Za-z]{3,20}"
 															title="First Name,Only characters are allowed and should be less than 20 characters">
 
@@ -699,16 +699,22 @@
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>Phone Number</h4>
-														<input type="text" id="parentMobile"
-															class="form-control formelement" name="parentMobile"  maxlength="9"
-															placeholder="Phone number" pattern="[0-9]{9}"
-															title="Phone,enter a valid number e.g 0712345678">
+
+														<div class="input-group">
+															<span class="input-group-addon">+254</span> <input
+																type="text" id="parentMobile"
+																class="form-control formelement" name="parentMobile"
+																maxlength="9" placeholder="Phone number"
+																pattern="[0-9]{9}"
+																title="Phone,enter a valid number e.g 712345678">
+														</div>
+
 
 													</div>
 
 													<div class="col-md-5 col-md-offset-1">
 														<h4>Email</h4>
-														<input type="email" id="parentEmail"  maxlength="30"
+														<input type="email" id="parentEmail" maxlength="30"
 															class="form-control formelement" name="parentEmail">
 
 													</div>
@@ -736,12 +742,12 @@
 
 
 											</div>
-											
-											
-											
-											
 
-											
+
+
+
+
+
 
 
 
@@ -761,10 +767,10 @@
 							</form>
 							<form action="#" method="post" id="alterSujectForm">
 								<input type="hidden" name="accountId" id="sub_accountId">
-								<input type="hidden" name="uuid" id="subUuid">
-								<input type="hidden" name="studentId" id="sub_studentId">
-								<input type="hidden" name="subjectId" id="sub_subjectId">
-								<input type="hidden" name="description" id="sub_description">
+								<input type="hidden" name="uuid" id="subUuid"> <input
+									type="hidden" name="studentId" id="sub_studentId"> <input
+									type="hidden" name="subjectId" id="sub_subjectId"> <input
+									type="hidden" name="description" id="sub_description">
 
 							</form>
 						</div>

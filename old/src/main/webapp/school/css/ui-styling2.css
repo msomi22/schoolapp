@@ -13,25 +13,25 @@
 }
 
 .examelement{
-	border: 20px solid #2A3F54;
+	border: 3px solid #1ABB9C;
 	 
-	  background-color: #fff;
+	  background-color: #f7f7f7;
 	  color:black;
-	  margin: 10px !important;
+	 
 }
 
 .examelement:hover{
-	border: 20px solid #1ABB9C;
+	border: 3px solid #1ABB9C;
 	
-	  background-color: white;
-	  margin: 10px !important;
+	  background-color: #fff;
+	 
 }
 
 .examelement:focus{
-	border: 20px solid #1ABB9C;
+	border: 3px solid #2A3F54;
 	 
-	  background-color: #f7f7f7;
-	  margin: 10px !important;
+	  background-color: #fff;
+	 
 } 
 
 

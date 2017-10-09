@@ -100,6 +100,8 @@ function validateScore(id) {
 				processData : false,
 				type : 'GET',
 				success : function(data) {
+					
+					console.log(data);
 
 					$('#edit' + id).removeClass('glyphicon glyphicon-ok secondary-assent');
 					$('#edit' + id).removeClass('glyphicon glyphicon-remove error');
