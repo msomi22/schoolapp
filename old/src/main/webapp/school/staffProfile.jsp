@@ -143,7 +143,7 @@
 												</div>
 
 
-												<br>
+												
 
 
 												<!-- sex and county  -->
@@ -152,7 +152,7 @@
 
 													<div
 														class="col-md-3 col-md-offset-1 col-sm-10 col-sm-offset-2">
-														<h4>Gender</h4>
+														<label for="gender">Gender</label>
 														<select name="gender" id="gender"
 															class="form-control formelement">
 															<option value="M">Male</option>
@@ -213,7 +213,7 @@
 
 
 
-												<div class="row">
+												 <div class="row" style="display:none" >
 
 													<div class="col-md-5 col-md-offset-1">
 
@@ -240,7 +240,7 @@
 
 
 
-												</div>
+												</div> 
 
 
 
