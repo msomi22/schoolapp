@@ -9,8 +9,32 @@ $(document).keypress(function(e) {
 	}
 });
 
+$(document).ready(function(){
+	
+	$('#submitExamScore').DataTable({
+		
+		searching : false,
+		"bPaginate" : false,
+		"bLengthChange" : false,
+		"scrollY" : "500px",
+		"scrollCollapse" : true
+	});
+})
+
 function trimVar(x) {
 	return x.replace(/^\s+|\s+$/gm, '');
+}
+
+
+function scroll(id){
+	
+	
+		var selection = $( "#submitExamScore #"+id );
+    console.log( selection );
+    $(".dataTables_scrollBody").scrollTo(selection);
+    $("tr[role='row']").removeClass("selectedRow");
+    selection.addClass("selectedRow");
+	
 }
 
 function validateScore(id) {

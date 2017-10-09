@@ -326,7 +326,7 @@
                 <div class="x_content">
                      
                 <div class="table-responsive">
-                    <table class="table table-striped jambo_table bulk_action">
+                    <table class="table table-striped jambo_table bulk_action" id="submitExamScore">
                         <thead>
                           <tr class="headings secondary-assent">
 
@@ -336,7 +336,8 @@
                             <th class="column-title">Middle name </th>
                             <th class="column-title">Last name </th>
                             <th class="column-title">Score </th>
-                            <th class="column-title">Score ( <%=currentExam %> ) </th>   
+                            <th class="column-title">Score ( <%=currentExam %> ) </th> 
+                            <td class="hidden" >uuid </td>  
                             
                           </tr>
                         </thead>
@@ -416,7 +417,7 @@
                     <td ><%=student.getLastname() %> </td>
                      <td > <%=score+"" %> </td>
 
-                    <td id="editscore<%=studentCount %>" class="examelement form-control"  contenteditable='true' > </td>
+                    <td id="editscore<%=studentCount %>" class="examelement" onfocus="scroll(this.id)"  contenteditable='true' > </td>
 
                    
                  
