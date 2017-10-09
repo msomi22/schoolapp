@@ -64,6 +64,18 @@ public class StudentBalance {
 		terms = new String [] {"1","2","3"};
 
 	}
+	
+	private String accountId;
+	private String studentId;
+	
+	public StudentBalance(String accountId, String studentId) {
+		this.accountId = accountId;
+		this.studentId = studentId;
+	}
+	
+	public double build() {
+		return findBalance(accountId,studentId);
+	}
 
 	/**
 	 * @param accountId
