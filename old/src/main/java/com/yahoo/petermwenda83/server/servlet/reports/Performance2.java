@@ -18,9 +18,9 @@ public class Performance2 {
 	private String studentId;
 	private int totalPoint;
 	private int totalMean;
-	private int exam1Total;
-	private int exam2Total;
-	private int exam3Total;
+	private int exam1TotalPoints;
+	private int exam2TotalPoints;
+	private int exam3TotalPoints;
 	private String streamId;
 	private String classroomId;
 
@@ -34,9 +34,9 @@ public class Performance2 {
 		studentId = "";
 		totalPoint = 0;
 		totalMean = 0;
-		exam1Total = 0;
-		exam2Total = 0;
-		exam3Total = 0;
+		exam1TotalPoints = 0;
+		exam2TotalPoints = 0;
+		exam3TotalPoints = 0;
 		streamId = "";
 		classroomId = "";
 	}
@@ -128,45 +128,45 @@ public class Performance2 {
 	}
 
 	/**
-	 * @return the exam1Total
+	 * @return the exam1TotalPoints
 	 */
-	public int getExam1Total() {
-		return exam1Total;
+	public int getExam1TotalPoints() {
+		return exam1TotalPoints;
 	}
 
 	/**
-	 * @param exam1Total the exam1Total to set
+	 * @param exam1TotalPoints the exam1TotalPoints to set
 	 */
-	public void setExam1Total(int exam1Total) {
-		this.exam1Total = exam1Total;
+	public void setExam1TotalPoints(int exam1TotalPoints) {
+		this.exam1TotalPoints = exam1TotalPoints;
 	}
 
 	/**
-	 * @return the exam2Total
+	 * @return the exam2TotalPoints
 	 */
-	public int getExam2Total() {
-		return exam2Total;
+	public int getExam2TotalPoints() {
+		return exam2TotalPoints;
 	}
 
 	/**
-	 * @param exam2Total the exam2Total to set
+	 * @param exam2TotalPoints the exam2TotalPoints to set
 	 */
-	public void setExam2Total(int exam2Total) {
-		this.exam2Total = exam2Total;
+	public void setExam2TotalPoints(int exam2TotalPoints) {
+		this.exam2TotalPoints = exam2TotalPoints;
 	}
 
 	/**
-	 * @return the exam3Total
+	 * @return the exam3TotalPoints
 	 */
-	public int getExam3Total() {
-		return exam3Total;
+	public int getExam3TotalPoints() {
+		return exam3TotalPoints;
 	}
 
 	/**
-	 * @param exam3Total the exam3Total to set
+	 * @param exam3TotalPoints the exam3TotalPoints to set
 	 */
-	public void setExam3Total(int exam3Total) {
-		this.exam3Total = exam3Total;
+	public void setExam3TotalPoints(int exam3TotalPoints) {
+		this.exam3TotalPoints = exam3TotalPoints;
 	}
 
 	/**
@@ -203,11 +203,12 @@ public class Performance2 {
 	@Override
 	public String toString() {
 		return "Performance2 [exam1=" + exam1 + ", exam2=" + exam2 + ", exam3=" + exam3 + ", studentId=" + studentId
-				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1Total=" + exam1Total
-				+ ", exam2Total=" + exam2Total + ", exam3Total=" + exam3Total + ", streamId=" + streamId
-				+ ", classroomId=" + classroomId + "]";
+				+ ", totalPoint=" + totalPoint + ", totalMean=" + totalMean + ", exam1TotalPoints=" + exam1TotalPoints
+				+ ", exam2TotalPoints=" + exam2TotalPoints + ", exam3TotalPoints=" + exam3TotalPoints + ", streamId="
+				+ streamId + ", classroomId=" + classroomId + "]";
 	}
 
+	
 	
 
 }

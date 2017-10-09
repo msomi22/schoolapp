@@ -188,7 +188,7 @@ public class StudentReportCard extends HttpServlet{
 		Boolean showfee = Boolean.parseBoolean(request.getParameter("fee"));
 
 		String noOfSub = request.getParameter("subjects");
-		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
+		//paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 
 		//check for hide points
 		hidePoints = hidePts ? true : false;
@@ -243,7 +243,7 @@ public class StudentReportCard extends HttpServlet{
 
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
 
-			populatePDFDocument(accountId,streamId,classroomId,term,year,examType);
+			populatePDFDocument(accountId,streamId,classroomId,term,year,examType,paper123Id);
 
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
@@ -263,20 +263,20 @@ public class StudentReportCard extends HttpServlet{
 	 * @param streamId 
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term, String year, String examType) {
-		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year, examType));
+	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term, String year, String examType, String paper123Id) {
+		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year, examType, paper123Id));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute(String accountId, String streamId, String classroomId , String term, String year, String examType) {
+	public  void compute(String accountId, String streamId, String classroomId , String term, String year, String examType, String paper123Id) {
 
 		try {
 
 			document.open();
 
-			generateReport(accountId, streamId, classroomId , term, year, examType);
+			generateReport(accountId, streamId, classroomId , term, year, examType, paper123Id);
 
 			document.close();
 
@@ -297,7 +297,7 @@ public class StudentReportCard extends HttpServlet{
 	 * @param baseColor
 	 * @throws DocumentException
 	 */
-	private void generateReport(String accountId, String streamId,  String classroomId ,String term, String year, String examType)
+	private void generateReport(String accountId, String streamId,  String classroomId ,String term, String year, String examType, String paper123Id)
 			throws DocumentException {
 
 
@@ -359,16 +359,24 @@ public class StudentReportCard extends HttpServlet{
 		}else{
 
 
-			if(classResult){//
-				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType, classResult);	
+			if(classResult){
+
+				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType, classResult, paper123Id);	
+
 
 
 			}else{
-				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult);
+
+				
+				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult, paper123Id);
 
 
 				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
-				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true); 
+				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true, paper123Id); 
+
+				
+
+
 
 				if(rankWithPoints && !rankWithTotalMarks){
 					Collections.sort(classperformanceList, new PointsComparator());
@@ -390,6 +398,7 @@ public class StudentReportCard extends HttpServlet{
 		}
 
 
+		
 
 		//avoid document has no page exception
 		if(!performanceList.isEmpty()){
@@ -426,13 +435,11 @@ public class StudentReportCard extends HttpServlet{
 
 
 			for(Performance2 performance2 : performanceList){
-
+				
 				String avg_points_grade = "0";
 				String avgPoints = "0";
-				int avg_points = 0;
-
+				
 				int mainPoint = performance2.getTotalPoint();
-
 				int meanTotal = performance2.getTotalMean();
 
 				if(rankWithPoints && !rankWithTotalMarks){
@@ -462,51 +469,29 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 				List<Subject> subjects = subjectDAO.getSubjects(accountId);
+				
+				
 
 				Map<String,Integer> exam1 = performance2.getExam1();
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
 
 
-
-
 				//TODO
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-
-					for(Subject subject : subjects) {
-
-						String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
-						String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
-						String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
-
-						if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
-							exam1Score = "";
-						}
-						if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
-							exam2Score = "";
-						}
-						if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
-							exam3Score = "";
-						}
-
-						String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
-						String pnts = String.valueOf(ReportUtil.getPoints(examAverage, "subjectId",accountId,subjectDAO, gradingSystemDAO));
-
-						avg_points += Integer.valueOf(pnts);
-
-					}
-
+                 
+					
 					if(rankWithPoints && !rankWithTotalMarks){
 
 
 						if(grade7subjects && !grade11subjects){
-
-							avg_points_grade = ReportUtil.getGrade(String.valueOf(avg_points),"subjectId", accountId, subjectDAO, gradingSystemDAO);
-							avgPoints = String.valueOf(avg_points); 
+							
+							avg_points_grade = ReportUtil.getGrade(String.valueOf(mainPoint),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+							avgPoints = String.valueOf(mainPoint); 
 
 						}else if(!grade7subjects && grade11subjects){
 
-							double avg = ((double)Double.valueOf(avgPoints) / 132) * 84; 
+							double avg = ((double)Double.valueOf(mainPoint) / 132) * 84; 
 							avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
 							avgPoints = String.valueOf((int)avg); 
 
@@ -643,7 +628,8 @@ public class StudentReportCard extends HttpServlet{
 
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 							//TODO
-
+							
+							
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						}else {
@@ -951,6 +937,7 @@ public class StudentReportCard extends HttpServlet{
 					}
 
 					//TODO 
+					
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 					if(Integer.valueOf(examAverage) > 0){
@@ -1073,9 +1060,9 @@ public class StudentReportCard extends HttpServlet{
 					String exm2 = "0";
 					String exm3 = "0";
 
-					exm1 = String.valueOf(performance2.getExam1Total());
-					exm2 = String.valueOf(performance2.getExam2Total());
-					exm3 = String.valueOf(performance2.getExam3Total());
+					exm1 = String.valueOf(performance2.getExam1TotalPoints());
+					exm2 = String.valueOf(performance2.getExam2TotalPoints());
+					exm3 = String.valueOf(performance2.getExam3TotalPoints());
 
 					////mean
 
@@ -1439,7 +1426,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 		}else{
-			document.add(new Paragraph(" Exam found for " + correctClass)); 
+			document.add(new Paragraph(" Exam not found for " + correctClass)); 
 
 		}
 
@@ -1457,9 +1444,10 @@ public class StudentReportCard extends HttpServlet{
 	 * @param studentsList
 	 */
 	private  List<Performance2> getStudentScore3(String accountId,String class_streamId, String term, String year,
-			List<Student> studentsList, String examType, boolean classResult) {
+			List<Student> studentsList, String examType, boolean classResult, String paper123Id) {
 
 		List<Performance2> performance2List = new ArrayList<>();
+		
 		List<Perfomance> exam1  = new ArrayList<>();
 		List<Perfomance> exam2 = new ArrayList<>();
 		List<Perfomance> exam3 = new ArrayList<>();
@@ -1478,40 +1466,89 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-					exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-					exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
-					exam3 = perfomanceDAO.getClassPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 
+					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+						
+						exam1 = perfomanceDAO.getClassPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
+						
+					}else {
+
+						exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+						exam2 = perfomanceDAO.getClassPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
+						exam3 = perfomanceDAO.getClassPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 
+
+					}
+
+
 
 
 				}else{
 
-					exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-					exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
-					exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 	
+					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
+						//TODO
+						exam1 = perfomanceDAO.getStreamPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
+
+					}else {
+
+						exam1 = perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
+						exam2 = perfomanceDAO.getStreamPerformance(accountId, exams[1], student.getUuid(), class_streamId, term, year);
+						exam3 = perfomanceDAO.getStreamPerformance(accountId, exams[2], student.getUuid(), class_streamId, term, year); 	
+
+
+					}
 
 				}
+
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+
+					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+
+						//if(!exam1.isEmpty()) {
+							totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						//}
+
+
+					}else {
+						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+
+
+					}
 
 				}
 
+				
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+
+					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+
+						if(!exam1.isEmpty()) {
+							totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						}
+
+
+					}else {
+
+						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+						totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+						totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+
+					}
+
 				}
 
 
-				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
+				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) || StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)){
 					//TODO
-					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();
-					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
+
+
+					totalPoint = totalExam1.getTotalPoints();
+					totalMeans = totalExam1.getTotalMean();
+
 
 
 
@@ -1604,32 +1641,47 @@ public class StudentReportCard extends HttpServlet{
 
 
 			if(totalMeans > 0 || totalPoint > 0){
-
-
+				
 				Performance2 performance2 = new Performance2();
-				performance2.setExam1(totalExam1.getPerfomanceMap());
-				performance2.setExam2(totalExam2.getPerfomanceMap());
-				performance2.setExam3(totalExam3.getPerfomanceMap()); 
-				performance2.setStudentId(student.getUuid());
-				performance2.setTotalMean(totalMeans); 
-				performance2.setTotalPoint(totalPoint);
-				performance2.setExam1Total(totalExam1.getTotalPoints());
-				performance2.setExam2Total(totalExam2.getTotalPoints());
-				performance2.setExam3Total(totalExam3.getTotalPoints());
-				performance2.setStreamId(student.getCurrentStream()); 
-
-				if(!classResult){
-					performance2.setClassroomId(class_streamId); 
+				
+				
+				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+					
+					performance2.setExam1(totalExam1.getPaper1Map());
+					performance2.setExam2(totalExam1.getPaper2Map());
+					performance2.setExam3(totalExam1.getPaper3Map()); 
+					
+					performance2.setExam1TotalPoints(totalExam1.getTotalPoints());
+					performance2.setExam2TotalPoints(totalExam1.getTotalPoints());
+					performance2.setExam3TotalPoints(totalExam1.getTotalPoints());
+					
+				}else {
+					
+					performance2.setExam1(totalExam1.getPerfomanceMap());
+					performance2.setExam2(totalExam2.getPerfomanceMap());
+					performance2.setExam3(totalExam3.getPerfomanceMap()); 
+					
+					performance2.setExam1TotalPoints(totalExam1.getTotalPoints());
+					performance2.setExam2TotalPoints(totalExam2.getTotalPoints());
+					performance2.setExam3TotalPoints(totalExam3.getTotalPoints());
+					
 				}
+	
+					performance2.setStudentId(student.getUuid());
+					performance2.setTotalMean(totalMeans); 
+					performance2.setTotalPoint(totalPoint);
+					performance2.setStreamId(student.getCurrentStream()); 
+					performance2.setClassroomId(class_streamId); 
+             
+					performance2List.add(performance2);
+				
 
-
-				performance2List.add(performance2);
 			}
-
-
+			
 		}
-
+		
 		return performance2List;
+
 	}
 
 
