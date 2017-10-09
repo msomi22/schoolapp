@@ -98,7 +98,7 @@ public class ClassTeacherService {
 			response.setDescription("Account not found!");
 			return response; 
 			
-		}else if(classTeacherDAO.getClassTeacherList(accountId) == null) {
+		}else if(classTeacherDAO.getClassTeacherList(accountId).isEmpty()) {
 			
 			response.setMessage("error");
 			response.setDescription("Class Teacher Info not found!");
