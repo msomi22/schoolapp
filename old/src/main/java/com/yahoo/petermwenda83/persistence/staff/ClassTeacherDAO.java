@@ -47,21 +47,23 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 	public ClassTeacherDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
-
-    
+	
+	
+	
 	/**
-	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacher(java.lang.String, java.lang.String)
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacherById(java.lang.String, java.lang.String)
 	 */
-	public ClassTeacher getClassTeacher(String accountId, String streamId) {
+	@Override
+	public ClassTeacher getClassTeacherById(String accountId, String uuid) {
 		ClassTeacher classTeacher =null;
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId = ? AND streamId =?;");       
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId = ? AND uuid =?;");       
 
 				){
 			pstmt.setString(1, accountId);
-			pstmt.setString(2, streamId);
+			pstmt.setString(2, uuid);
 			rset = pstmt.executeQuery();
 			while(rset.next()){
 
@@ -69,14 +71,46 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception when getting classTeacher with streamId " + streamId);
+			logger.error("SQL Exception when getting classTeacher with accountId " + accountId + " and uuid " + uuid);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
 
 		return classTeacher; 
 	}
+
+
     
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacher(java.lang.String, java.lang.String)
+	 */
+	public ClassTeacher getClassTeacher(String accountId, String id) {
+		ClassTeacher classTeacher =null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId = ? AND (teacherId = ? OR streamId =?);");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, id);
+			pstmt.setString(3, id);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				classTeacher  = beanProcessor.toBean(rset,ClassTeacher.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting classTeacher with accountId " + accountId + " and id " + id);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return classTeacher; 
+	}
+	
+	
 	
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#putClassTeacher(com.yahoo.petermwenda83.bean.staff.ClassTeacher)
@@ -100,6 +134,33 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 			System.out.println(ExceptionUtils.getStackTrace(e));
 			success = false;
 		}	
+
+		return success;
+	}
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#updateClassTeacher(com.yahoo.petermwenda83.bean.staff.ClassTeacher)
+	 */
+	@Override
+	public boolean updateClassTeacher(ClassTeacher teacher) {
+		boolean success = true;
+
+		try (  Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassTeacher SET streamId =? WHERE teacherId = ? AND accountId =?;");
+				) {           			 	            
+
+			pstmt.setString(1, teacher.getStreamId());
+			pstmt.setString(2, teacher.getTeacherId());
+			pstmt.setString(3, teacher.getAccountId());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error("SQL Exception when updating teacher " + teacher);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			success = false;
+		} 
 
 		return success;
 	}
@@ -157,4 +218,36 @@ public class ClassTeacherDAO extends GenericDAO implements SchoolClassTeacherDAO
 
 		return list;
 	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolClassTeacherDAO#getClassTeacherList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<ClassTeacher> getClassTeacherList(String accountId, String id) {
+		List<ClassTeacher> list = null;
+		try(   
+				Connection conn = dbutils.getConnection();
+				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM ClassTeacher WHERE accountId =? AND (teacherId = ? OR streamId =?) ;");   
+				) {
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, id);
+			pstmt.setString(3, id);
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, ClassTeacher.class);
+			}
+
+		} catch(SQLException e){
+			logger.error("SQL Exception when getting all ClassTeacher for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
+
+	
+	
+
 }
