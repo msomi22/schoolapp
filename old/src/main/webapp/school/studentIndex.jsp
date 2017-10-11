@@ -77,44 +77,7 @@
      SysConfig sysConfig = new SysConfig();
      sysConfig = sysConfigDAO.getSysConfig(accountId);
      
-     List<Student> studentList = new ArrayList<>();
-     if(studentDAO.getAllStudent(accountId, 0, 15) != null){
-       studentList = studentDAO.getAllStudent(accountId, 0, 15);
-     }
-     
     
-
-     int studentCount = 0;
-     StudentPaginator paginator = new StudentPaginator(accountId);
-     StudentPage studentpage;
-
-     studentpage = (StudentPage) session.getAttribute("currentPage");
-        String referrer = request.getHeader("referer");
-        String pageParam = (String) request.getParameter("page");
-
-        // We are to give the first page
-        if (studentpage == null
-                || !StringUtils.endsWith(referrer, "studentIndex.jsp")
-                || StringUtils.equalsIgnoreCase(pageParam, "first")) {
-              studentpage = paginator.getFirstPage();
-
-            //We are to give the last page
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "last")) {
-             studentpage = paginator.getLastPage();
-
-            // We are to give the previous page
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "previous")) {
-            studentpage = paginator.getPrevPage(studentpage);
-
-            // We are to give the next page 
-        } else if (StringUtils.equalsIgnoreCase(pageParam, "next"))  {
-           studentpage = paginator.getNextPage(studentpage);
-        }
-
-        session.setAttribute("currentPage", studentpage);
-        studentList = studentpage.getContents();
-        studentCount = (studentpage.getPageNum() - 1) * studentpage.getPagesize() + 1;
-      // }
 
 
  //date format

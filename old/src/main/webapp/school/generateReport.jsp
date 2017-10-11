@@ -56,19 +56,7 @@
 
 	examList = examDAO.getExamList(accountId);
 
-	//get class list
-	ClassDAO classDAO = ClassDAO.getInstance();
-
-	List<ClassRoom> classroomList = new ArrayList<>();
-
-	classroomList = classDAO.getClassRooms(accountId);
-
-	//get stream list
-	StreamDAO streamDAO = StreamDAO.getInstance();
-
-	List<Stream> streamList = new ArrayList<>();
-
-	streamList = streamDAO.getStreamList(accountId);
+	
 
 	//get the current year
 	/*  int current= 0;
@@ -112,6 +100,10 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
+					
+					
+					
+					<input type="hidden" name="accountId" id="accountId" value="<%= accountId %>">
 
 
 
@@ -334,26 +326,11 @@
 
 													<h4>Class</h4>
 
-													<select class="form-control formelement" name="classroom"
+													<select class="form-control formelement populateOptions classId" id="classList" onchange="fetchStreams(this.value)" name="classroom"
 														required>
 
 
-														<%
-															if (classroomList != null) {
-																for (ClassRoom classroom : classroomList) {
-														%>
-
-														<option value="<%=classroom.getUuid()%>">
-															<%=classroom.getDescription()%></option>
-
-														<%
-															}
-															} else {
-														%>
-														<option value="">...</option>
-														<%
-															}
-														%>
+														
 													</select>
 
 
@@ -369,33 +346,12 @@
 
 													<h4>Stream</h4>
 
-													<select class="form-control formelement" name="stream"
+													<select class="form-control formelement populateStreamOptions" name="stream"
 														required>
 
 
 
-														<%
-															int studentsCount = 0;
-															if (streamList != null) {
-																for (Stream stream : streamList) {
-
-																	studentsCount = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
-														%>
-
-														<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription() + " (" + studentsCount + ")"%></option>
-
-														<%
-															}
-															}
-
-															else {
-														%>
-														<option value="">...</option>
-
-														<%
-															}
-														%>
+													
 
 
 													</select>
@@ -611,5 +567,13 @@
 
 
 <jsp:include page="footer.jsp" />
+
+<script type="text/javascript">
+
+fetchClasses();
+<!--
+
+//-->
+</script>
 
 

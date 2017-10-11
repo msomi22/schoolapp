@@ -152,6 +152,8 @@
                     <ul class="nav child_menu">
                       <li><a href="studentIndex.jsp">Students List</a></li> 
                         <li><a href="registerStudent.jsp">New Student</a></li> 
+                        
+                         <li><a href="studentsClasses.jsp">Student and Class</a></li> 
                     </ul>
            
                   </li>
@@ -168,7 +170,7 @@
                   <li><a><i class="fa fa-users"></i> Staff <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="staff.jsp">Staff</a></li>
-                      <li><a href="#">Class Teachers</a></li>
+                      <li><a href="classTeachers.jsp">Class Teachers</a></li>
                     </ul>
                   </li>
                   

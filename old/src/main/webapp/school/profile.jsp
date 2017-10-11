@@ -46,19 +46,7 @@
 	String uuid = request.getParameter("uuid");
 
 	String name = request.getParameter("name");
-	//get class list
-	ClassDAO classDAO = ClassDAO.getInstance();
-
-	List<ClassRoom> classroomList = new ArrayList<>();
-
-	classroomList = classDAO.getClassRooms(accountId);
-
-	//get stream list
-	StreamDAO streamDAO = StreamDAO.getInstance();
-
-	List<Stream> streamList = new ArrayList<>();
-
-	streamList = streamDAO.getStreamList(accountId);
+	
 %>
 <jsp:include page="header.jsp" />
 
@@ -423,24 +411,11 @@
 
 
 														<h4>Class</h4>
+														
+													
 
-														<select class="form-control formelement" id="classroom">
-															<%
-																if (classroomList != null) {
-																	for (ClassRoom classroom : classroomList) {
-															%>
-
-															<option value="<%=classroom.getUuid()%>">
-															<%=classroom.getDescription()%></option>
-
-															<%
-																}
-																} else {
-															%>
-															<option value="">...</option>
-															<%
-																}
-															%>
+														<select class="form-control formelement populateOptions classId" id="classList" onchange="fetchStreams(this.value)" required="required">
+														
 														</select>
 
 
@@ -453,30 +428,11 @@
 													<div class="col-md-5 col-md-offset-1">
 
 														<h4>Stream</h4>
+														
+														
 
-														<select class="form-control formelement"
-															name="currentStream" id="currentStream">
-
-															<%
-																if (streamList != null) {
-																	for (Stream stream : streamList) {
-															%>
-
-															<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription()%></option>
-
-															<%
-																}
-																}
-
-																else {
-															%>
-															<option value="">...</option>
-
-															<%
-																}
-															%>
-
+														<select class="form-control formelement populateStreamOptions"
+															name="currentStream" id="currentStream" required="required">
 
 														</select>
 

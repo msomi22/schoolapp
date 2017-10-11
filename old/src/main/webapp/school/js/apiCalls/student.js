@@ -33,3 +33,7 @@ function newStudent() {
 	}
 
 }
+
+$(document).ready(function (){
+	fetchClasses();
+})

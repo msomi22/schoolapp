@@ -1,0 +1,103 @@
+<div id="ctModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="ctTitle">Add a new Class Teacher</h4>
+			</div>
+
+			<form method="post" action="#" id="editCTForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classList">Class/Form:</label> <select
+									class="form-control formelement populateOptions classId"
+									id="classList" onchange="fetchStreams(this.value)" required>
+
+
+								</select>
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="streamId">Stream:</label> <select
+									class="form-control formelement populateStreamOptions"
+									name="streamId" id="streamId" required>
+
+								</select>
+							</div>
+
+
+
+
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="staffId">Staff Name:</label> <select
+									class="form-control formelement populateStaffs " name="staffId"
+									id="staffId" required>
+
+
+								</select>
+							</div>
+
+
+
+
+
+							<input type="hidden" name="accountId" id="aaccountId" value="">
+							<input type="hidden" name="uuid" id="uuid" value="">
+
+
+
+
+
+
+
+
+
+						</div>
+
+
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<!-- 	<button type="submit" style="display:none" onclick="addNewStream()" class="btn btn-info pull-right" id="stream_btn_add">
+						Submit <i class="fa fa-save"></i>
+					</button> -->
+
+
+
+
+					<button type="button" id="btn_ct" onclick="alterCTAlloc()"
+						class="btn btn-primary pull-right">
+						Submit <i class="fa fa-save"></i>
+					</button>
+
+
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>

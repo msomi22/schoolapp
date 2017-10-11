@@ -215,6 +215,10 @@
 <script src="js/rootFormValidator.js"></script>
 
 
+<!-- Class Streams Populator -->
+<script src="js/apiCalls/classStreamsPopulator.js"></script>
+
+
 
 
 

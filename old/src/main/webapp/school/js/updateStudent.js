@@ -29,6 +29,8 @@ $(document)
 					fetchBasicInfo();
 
 					fetchSubjects();
+					
+					fetchClasses();
 
 				});
 

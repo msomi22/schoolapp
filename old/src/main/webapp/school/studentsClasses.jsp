@@ -80,7 +80,8 @@
 							<input type="hidden" name="passedLogId" id="passedLogId"
 								value="<%=loggedUserId%>"> <input type="hidden"
 								name="passedLogAcessId" id="passedLogAcessId"
-								value="<%=loggedUserAccessId%>">
+								value="<%=loggedUserAccessId%>"> <input type="hidden"
+								name="accountId" id="accountId" value="<%=accountId%>">
 
 							<div class="" role="tabpanel" data-example-id="togglable-tabs">
 								<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -111,47 +112,97 @@
 
 
 
-											<div class="col-md-4 col-md-offset-2" id="classDiv">
-												<br> <label for="classId">Class/Form:</label> <select
+											<div class="col-md-2" id="classDiv">
+												<label for="classId">Class/Form:</label> <select
 													class="form-control formelement populateOptions"
-													id="classList" onchange="fetchStudents(this.value)">
+													id="classList" onchange="fetchStreams(this.value)">
 
 
-												</select> <br>
+												</select>
+											</div>
+
+											<div class="col-md-2" id="classDiv">
+												<label for="classId">Stream:</label> <select
+													class="form-control formelement populateStreamOptions"
+													name="streamId" id="streamId" onchange="fetchStudents(this.value)" required>
+
+												</select>
+											</div>
+
+											<div class="col-md-1 pull-right">
+											<br>
+											
+												 <button
+													class="form-control btn btn-primary"
+													 id="btn_shift">Submit
+
+												</button>
+											</div>
+
+											<div class="col-md-2 pull-right" >
+												<label for="movestreamId">Stream:</label> <select
+													class="form-control formelement populateMoveStreamOptions"
+													name="streamId" id="movestreamId" required>
+
+												</select>
+											</div>
+
+											<div class="col-md-2 col-md-offset-1 pull-right"
+												>
+												<label for="classMoveList">Move to Class/Form:</label> <select
+													class="form-control formelement populateMoveOptions"
+													id="classMoveList" onchange="fetchMoveStreams(this.value)">
+
+
+												</select>
 											</div>
 
 
 
-											<div class="col-md-4 col-md-offset-2" id="classDiv">
-												<br> <label for="classId">Move to Class/Form:</label> <select
-													class="form-control formelement populateOptions"
-													id="classList" onchange="moveStudents(this.value)">
 
-
-												</select> <br>
-											</div>
 
 
 										</div>
 
-										<div class="table-responsive col-md-6 col-md-offset-3">
+										<br> <br>
+
+										<div class="table-responsive">
 											<table class="table table-striped jambo_table bulk_action"
 												id="studentsPerClass">
-												<thead>
-													<tr class="headings secondary-assent">
+												 <thead>
+                          <tr class="headings secondary-assent">
 
-
-														<th class="column-title"><input type="checkbox"
+                           <th class="column-title hidden">regStream</th>
+                           <th class="column-title hidden">currentStream</th>
+                           <th class="column-title hidden">isActive</th>
+                           <th class="column-title hidden">isAlumni</th>
+                           <th class="column-title hidden">isBoarding</th>
+                           
+                            <th class="column-title">regNo</th>
+                            <th class="column-title">firstname</th>
+                            <th class="column-title">middlename</th>
+                            <th class="column-title">lastname</th>
+                            <th class="column-title">gender</th>
+                            <th class="column-title hidden">dob</th>
+                            <th class="column-title hidden">bcertNo</th>
+                            <th class="column-title hidden">county</th>
+                            <th class="column-title hidden">regTerm</th>
+                            <th class="column-title hidden">finalYear</th>
+                            <th class="column-title hidden">finalTerm</th>
+                            <th class="column-title hidden">passport</th>
+                            <th class="column-title hidden">lastUpdated</th>
+                            <th class="column-title hidden">admissionDate</th>
+                            <th class="column-title hidden">apiParentPrimary</th>
+                            
+                            <th class="column-title hidden">uuid</th>
+                            <th class="column-title hidden">accountId</th>
+                           
+                           <th class="column-title"><input type="checkbox"
 															name="selectedStudents" id="selectedStudents"></th>
-														<th class="column-title">firstname</th>
-														<th class="column-title">lastname</th>
-														<th class="column-title">regno</th>
-														<th class="column-title">streamId</th>
-
-
-													</tr>
-												</thead>
-
+                            
+                          </tr>
+                        </thead>
+											
 												<tbody class='tablebody'>
 
 
@@ -181,6 +232,10 @@
 
 											</table>
 										</div>
+										
+										<br>
+										
+										<br>
 
 
 
@@ -211,20 +266,22 @@
 
 										<div class="row">
 
-											<div class="table-responsive col-md-6 col-md-offset-3">
+											<div class="table-responsive">
 												<table class="table table-striped jambo_table bulk_action"
-													id="staffRoles">
+													id="inactiveStudents">
 													<thead>
 														<tr class="headings secondary-assent">
 
-															<th class="column-title">teacherId</th>
-															<th class="column-title">subjectId</th>
-															<th class="column-title">subjectDesc</th>
-															<th class="column-title">streamId</th>
-															<th class="column-title">uuid</th>
-															<th class="column-title">accountId</th>
-															<th class="column-title">allocationDate</th>
-															<th class="column-title">Modify</th>
+
+
+															<th class="column-title">firstname</th>
+															<th class="column-title">lastname</th>
+															<th class="column-title">regno</th>
+															<th class="column-title">streamDesc</th>
+
+															<th class="column-title"><input type="checkbox"
+																name="selectedStudents" id="selectedInactiveStudents"></th>
+
 
 														</tr>
 													</thead>
@@ -305,14 +362,16 @@
 <!-- /page content -->
 
 
-<!-- Staff Modal -->
-<jsp:include page="modals/staffModals.jsp" />
+
 
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+<script src="js/studentClass.js"></script>
 
 
 

@@ -57,19 +57,7 @@
 
 	int currentTerm = Integer.parseInt(sysConfig.getTerm());
 
-	//get class list
-	ClassDAO classDAO = ClassDAO.getInstance();
-
-	List<ClassRoom> classroomList = new ArrayList<>();
-
-	classroomList = classDAO.getClassRooms(accountId);
-
-	//get stream list
-	StreamDAO streamDAO = StreamDAO.getInstance();
-
-	List<Stream> streamList = new ArrayList<>();
-
-	streamList = streamDAO.getStreamList(accountId);
+	
 %>
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
@@ -360,28 +348,18 @@
 
 
 											<div class="row">
+											
+											
+
+
+							
 												<div class="col-md-5 col-md-offset-1">
 
 
 													<h4>Class</h4>
 
-													<select class="form-control formelement" name="">
-														<%
-															if (classroomList != null) {
-																for (ClassRoom classroom : classroomList) {
-														%>
-
-														<option value="<%=classroom.getUuid()%>">
-															<%=classroom.getDescription()%></option>
-
-														<%
-															}
-															} else {
-														%>
-														<option value="">...</option>
-														<%
-															}
-														%>
+													<select class="form-control formelement populateOptions classId"  id="classList" onchange="fetchStreams(this.value)" required="required">
+													
 													</select>
 
 
@@ -395,28 +373,9 @@
 
 													<h4>Stream</h4>
 
-													<select class="form-control formelement" name="regStream"
-														id="regStream">
+													<select class="form-control formelement populateStreamOptions" name="regStream"
+														id="regStream" required="required">
 
-														<%
-															if (streamList != null) {
-																for (Stream stream : streamList) {
-														%>
-
-														<option value="<%=stream.getUuid()%>">
-															<%=stream.getDescription()%></option>
-
-														<%
-															}
-															}
-
-															else {
-														%>
-														<option value="">...</option>
-
-														<%
-															}
-														%>
 
 
 													</select>
