@@ -220,6 +220,7 @@ CREATE TABLE Student(
     isActive text,
     isAlumni text,
     isBoarding text,
+    isGoKFeeEligibe text,
     regNo text UNIQUE NOT NULL ,
     firstname text ,
     middlename text ,
@@ -237,7 +238,7 @@ CREATE TABLE Student(
    
 );
 
-\COPY Student(uuid,accountId,regStream,currentStream,isActive,isAlumni,isBoarding,regNo,firstname,middlename,lastname,gender,dob,bcertNo,county,regTerm,finalYear,finalTerm,passport,lastUpdated) FROM '/tmp/Student.csv' WITH DELIMITER AS '|' CSV HEADER
+\COPY Student(uuid,accountId,regStream,currentStream,isActive,isAlumni,isBoarding,isGoKFeeEligibe,regNo,firstname,middlename,lastname,gender,dob,bcertNo,county,regTerm,finalYear,finalTerm,passport,lastUpdated) FROM '/tmp/Student.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE Student OWNER TO school;
 
 

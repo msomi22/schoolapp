@@ -3,6 +3,9 @@
  */
 package com.yahoo.petermwenda83.server.api.safaricom;
 
+import com.yahoo.petermwenda83.server.api.rest.JsonFromObj;
+import com.yahoo.petermwenda83.server.api.safaricom.bean.VCResponse;
+
 /**
  * @author peter
  *
@@ -35,6 +38,8 @@ public class SafaricomServiceTest {
 		//System.out.println(Generic.getAccessToken(url, username, password));
 
 		//String staffId = "5498156A-FE83-43F4-9592-737HDHJ877S";
+		
+		//System.out.println(JsonFromObj.getJsonStringFromObject(new VCResponse())); 
 
 
 		/*String schoolUrl = "http://localhost:8080/school/webapi/staff/"+staffId+"/subjects";

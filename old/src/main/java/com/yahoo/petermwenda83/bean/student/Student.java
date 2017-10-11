@@ -14,8 +14,6 @@ package com.yahoo.petermwenda83.bean.student;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /** 
@@ -32,6 +30,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 		private String isActive;
 		private String isAlumni;
 		private String isBoarding;
+		private String isGoKFeeEligibe;
 		private String regNo;
 		private String firstname;
 		private String middlename;		
@@ -56,6 +55,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 		isActive = "1"; //active = 1, inactive = 0
 		isAlumni = "0";//alumni = 1, otherwise 0
 		isBoarding = "";//boarders = 1, day = 0
+		isGoKFeeEligibe = "0"; // 0 = not eligibale, 1 = eligibe 
 		regNo = "";
 		firstname = "";
 		middlename = "";
@@ -73,12 +73,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 	
 	}
 	
-	/**
+    
+    /**
 	 * @return the regStream
 	 */
 	public String getRegStream() {
 		return regStream;
 	}
+
 
 	/**
 	 * @param regStream the regStream to set
@@ -87,12 +89,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.regStream = regStream;
 	}
 
+
 	/**
 	 * @return the currentStream
 	 */
 	public String getCurrentStream() {
 		return currentStream;
 	}
+
 
 	/**
 	 * @param currentStream the currentStream to set
@@ -101,12 +105,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.currentStream = currentStream;
 	}
 
+
 	/**
 	 * @return the isActive
 	 */
 	public String getIsActive() {
 		return isActive;
 	}
+
 
 	/**
 	 * @param isActive the isActive to set
@@ -115,12 +121,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.isActive = isActive;
 	}
 
+
 	/**
 	 * @return the isAlumni
 	 */
 	public String getIsAlumni() {
 		return isAlumni;
 	}
+
 
 	/**
 	 * @param isAlumni the isAlumni to set
@@ -129,12 +137,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.isAlumni = isAlumni;
 	}
 
+
 	/**
 	 * @return the isBoarding
 	 */
 	public String getIsBoarding() {
 		return isBoarding;
 	}
+
 
 	/**
 	 * @param isBoarding the isBoarding to set
@@ -143,12 +153,30 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.isBoarding = isBoarding;
 	}
 
+
+	/**
+	 * @return the isGoKFeeEligibe
+	 */
+	public String getIsGoKFeeEligibe() {
+		return isGoKFeeEligibe;
+	}
+
+
+	/**
+	 * @param isGoKFeeEligibe the isGoKFeeEligibe to set
+	 */
+	public void setIsGoKFeeEligibe(String isGoKFeeEligibe) {
+		this.isGoKFeeEligibe = isGoKFeeEligibe;
+	}
+
+
 	/**
 	 * @return the regNo
 	 */
 	public String getRegNo() {
-		return regNo.substring(0, Math.min(regNo.length(), 4));
+		return regNo;
 	}
+
 
 	/**
 	 * @param regNo the regNo to set
@@ -157,12 +185,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.regNo = regNo;
 	}
 
+
 	/**
 	 * @return the firstname
 	 */
 	public String getFirstname() {
-		return StringUtils.capitalize(firstname.substring(0, Math.min(firstname.length(), 7)).toLowerCase()); 
+		return firstname;
 	}
+
 
 	/**
 	 * @param firstname the firstname to set
@@ -171,12 +201,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.firstname = firstname;
 	}
 
+
 	/**
 	 * @return the middlename
 	 */
 	public String getMiddlename() {
-		return StringUtils.capitalize(middlename.substring(0, Math.min(middlename.length(), 7)).toLowerCase());
+		return middlename;
 	}
+
 
 	/**
 	 * @param middlename the middlename to set
@@ -185,12 +217,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.middlename = middlename;
 	}
 
+
 	/**
 	 * @return the lastname
 	 */
 	public String getLastname() {
-		return StringUtils.capitalize(lastname.substring(0, Math.min(lastname.length(), 7)).toLowerCase());
+		return lastname;
 	}
+
 
 	/**
 	 * @param lastname the lastname to set
@@ -199,12 +233,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.lastname = lastname;
 	}
 
+
 	/**
 	 * @return the gender
 	 */
 	public String getGender() {
 		return gender;
 	}
+
 
 	/**
 	 * @param gender the gender to set
@@ -213,12 +249,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.gender = gender;
 	}
 
+
 	/**
 	 * @return the dob
 	 */
 	public String getDob() {
 		return dob;
 	}
+
 
 	/**
 	 * @param dob the dob to set
@@ -227,12 +265,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.dob = dob;
 	}
 
+
 	/**
 	 * @return the bcertNo
 	 */
 	public String getBcertNo() {
 		return bcertNo;
 	}
+
 
 	/**
 	 * @param bcertNo the bcertNo to set
@@ -241,12 +281,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.bcertNo = bcertNo;
 	}
 
+
 	/**
 	 * @return the county
 	 */
 	public String getCounty() {
 		return county;
 	}
+
 
 	/**
 	 * @param county the county to set
@@ -255,12 +297,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.county = county;
 	}
 
+
 	/**
 	 * @return the regTerm
 	 */
 	public String getRegTerm() {
 		return regTerm;
 	}
+
 
 	/**
 	 * @param regTerm the regTerm to set
@@ -269,12 +313,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.regTerm = regTerm;
 	}
 
+
 	/**
 	 * @return the finalYear
 	 */
 	public int getFinalYear() {
 		return finalYear;
 	}
+
 
 	/**
 	 * @param finalYear the finalYear to set
@@ -283,12 +329,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.finalYear = finalYear;
 	}
 
+
 	/**
 	 * @return the finalTerm
 	 */
 	public int getFinalTerm() {
 		return finalTerm;
 	}
+
 
 	/**
 	 * @param finalTerm the finalTerm to set
@@ -297,12 +345,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.finalTerm = finalTerm;
 	}
 
+
 	/**
 	 * @return the passport
 	 */
 	public String getPassport() {
 		return passport;
 	}
+
 
 	/**
 	 * @param passport the passport to set
@@ -311,12 +361,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.passport = passport;
 	}
 
+
 	/**
 	 * @return the lastUpdated
 	 */
 	public String getLastUpdated() {
 		return lastUpdated;
 	}
+
 
 	/**
 	 * @param lastUpdated the lastUpdated to set
@@ -325,6 +377,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 		this.lastUpdated = lastUpdated;
 	}
 
+
 	/**
 	 * @return the admissionDate
 	 */
@@ -332,14 +385,14 @@ public class Student extends StorableBean implements Comparable<Student> {
 		return admissionDate;
 	}
 
+
 	/**
 	 * @param admissionDate the admissionDate to set
 	 */
 	public void setAdmissionDate(Timestamp admissionDate) {
 		this.admissionDate = admissionDate;
 	}
-	
-	
+
 
 	/**
 	 * @see java.lang.Object#toString()
@@ -347,19 +400,19 @@ public class Student extends StorableBean implements Comparable<Student> {
 	@Override
 	public String toString() {
 		return "Student [regStream=" + regStream + ", currentStream=" + currentStream + ", isActive=" + isActive
-				+ ", isAlumni=" + isAlumni + ", isBoarding=" + isBoarding + ", regNo=" + regNo + ", firstname="
-				+ firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob="
-				+ dob + ", bcertNo=" + bcertNo + ", county=" + county + ", regTerm=" + regTerm + ", finalYear="
-				+ finalYear + ", finalTerm=" + finalTerm + ", passport=" + passport + ", lastUpdated=" + lastUpdated
-				+ ", admissionDate=" + admissionDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId()
-				+ "]";
+				+ ", isAlumni=" + isAlumni + ", isBoarding=" + isBoarding + ", isGoKFeeEligibe=" + isGoKFeeEligibe
+				+ ", regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename + ", lastname="
+				+ lastname + ", gender=" + gender + ", dob=" + dob + ", bcertNo=" + bcertNo + ", county=" + county
+				+ ", regTerm=" + regTerm + ", finalYear=" + finalYear + ", finalTerm=" + finalTerm + ", passport="
+				+ passport + ", lastUpdated=" + lastUpdated + ", admissionDate=" + admissionDate + ", getUuid()="
+				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
+
 
 	@Override
 	public int compareTo(Student ss) {
 		return getRegNo().compareTo(((Student) ss).getRegNo()); 
 	}
-
 
 
 	private static final long serialVersionUID = -7544635242162355411L;

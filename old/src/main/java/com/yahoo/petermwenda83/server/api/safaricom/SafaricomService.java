@@ -126,7 +126,7 @@ public class SafaricomService {
 		balance.setPartyA("600321");
 		balance.setIdentifierType("4");
 		balance.setRemarks("Cheking Balance");
-		String domain = "http://3782cd77.ngrok.io";
+		String domain = "http://41.203.216.222:8080"; 
 		balance.setQueueTimeOutURL(domain+"/school/webapi/account/timeout");
 		balance.setResultURL(domain+"/school/webapi/account/balance");
 		
@@ -149,6 +149,7 @@ public class SafaricomService {
 		}
 
 		String output = response.getEntity(String.class);
+		//System.out.println(output);
 
 		return output;
 	}
