@@ -122,7 +122,7 @@ function fetchExams() {
 
 										console.log(data['uuid']);
 
-										$("#accountId").val(data['accountId']);
+										$("#exam_accountId").val(data['accountId']);
 
 									});
 

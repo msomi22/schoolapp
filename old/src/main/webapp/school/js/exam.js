@@ -27,6 +27,9 @@
 			 $('#examForm').get(0).reset();
 			 
 			 
+			 $('#exam_accountId').val($('#accountId').val());
+			 
+			 
 		 }
 		 
 		 
