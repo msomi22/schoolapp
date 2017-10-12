@@ -17,8 +17,8 @@ public class RegisterURL{
 	public RegisterURL(){
 		ShortCode = "600321";
 		ResponseType = "Completed";
-		ConfirmationURL = "http://bc0ef872.ngrok.io/school/webapi/account/confirmation";
-		ValidationURL = "http://bc0ef872.ngrok.io/school/webapi/account/validation";
+		ConfirmationURL = "http://41.203.216.222:8080/school/webapi/account/confirmation";
+		ValidationURL = "http://41.203.216.222:8080/school/webapi/account/validation";
 	}
 
 	public String getShortCode() {

@@ -220,6 +220,7 @@ CREATE TABLE Student(
     isActive text,
     isAlumni text,
     isBoarding text,
+    isGoKFeeEligibe text,
     regNo text UNIQUE NOT NULL ,
     firstname text ,
     middlename text ,
