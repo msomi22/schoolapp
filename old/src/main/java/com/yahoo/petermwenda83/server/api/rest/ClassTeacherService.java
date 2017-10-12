@@ -176,7 +176,7 @@ public class ClassTeacherService {
 			classTeacher.setStreamId(obj.getStreamId());
 			
 			if(classTeacherDAO.putClassTeacher(classTeacher)) {
-				response.setMessage("sucess");
+				response.setMessage("success");
 				response.setDescription("Info saved successfully!"); 
 				return response;
 				

@@ -168,7 +168,7 @@
                 <input type="text" id="query" name="query"
 													class="form-control formelement cards"
 													placeholder="Search for students" 
-													maxlength="10" onkeyup="delayInput()"
+													maxlength="10" onkeyup="delayInput()" onpaste="return false;"
 												
 													required> <span
 													class="glyphicon glyphicon-search form-control-feedback"></span>

@@ -117,7 +117,7 @@
 												<input type="text" id="regno" name="regno"
 													class="form-control formelement cards"
 													placeholder="Enter Reg number" pattern="[0-9]{3,4}"
-													maxlength="4" onkeyup="delayInput()"
+													maxlength="4" onkeyup="delayInput()" autocomplete="off"
 													title="Registration number, should contain numerics only and should be 4 numbers only"
 													required> <span
 													class="glyphicon glyphicon-search form-control-feedback"></span>

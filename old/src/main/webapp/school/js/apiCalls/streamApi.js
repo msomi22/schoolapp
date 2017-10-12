@@ -17,8 +17,8 @@ $(document)
 					$
 							.ajax(
 									{
-										url : base_url
-												+ "class/" + $('#accountId').val()+"/",
+										url : base_url + "class/"
+												+ $('#accountId').val() + "/",
 										type : 'GET',
 										contentType : 'application/json',
 										accept : 'application/json',
@@ -75,9 +75,8 @@ function fetchStreams(classID) {
 	$
 			.ajax(
 					{
-						url : base_url
-								+ "streams/"+ $('#accountId').val()+"/"
-								+ classID + "/",
+						url : base_url + "streams/" + $('#accountId').val()
+								+ "/" + classID + "/",
 						type : 'GET',
 						dataType : 'json',
 						contentType : 'application/json',
@@ -178,9 +177,9 @@ function fetchStreams(classID) {
 										console.log(data);
 
 										// console.log($("#desc").val(data[3]));
-										
-										var desc= data['description'];
-										$("#desc").val(desc.substr(7,1));
+
+										var desc = data['description'];
+										$("#desc").val(desc.substr(7, 1));
 										console.log(data['description']);
 										console.log(data['accountId']);
 										$("#classId_edit").val(
@@ -229,16 +228,12 @@ function addNewStream() {
 	} else {
 
 		// console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
-		
-		
-		
 
 		console.log(currentClassId);
 
 		$.ajax(
 				{
-					url : base_url
-							+ "stream/"+ $('#accountId').val()+"/",
+					url : base_url + "stream/" + $('#accountId').val() + "/",
 					type : 'POST',
 					dataType : 'json',
 					data : JSON.stringify($('#addStreamForm').serializeJSON()),
@@ -250,20 +245,15 @@ function addNewStream() {
 					}
 				}).done(function(data) {
 
-		
+			// $('#addStreamForm').get(0).reset();
 
-		//	$('#addStreamForm').get(0).reset();
-
-		//	console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+			// console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
 
 			if (data.description.includes("successfully")) {
-				
-				
+
 				currentClassId = $('#classId_add').val();
-				
+
 				$("#classesList").val(currentClassId);
-				
-				
 
 				$('#success').modal('show');
 
@@ -336,11 +326,8 @@ function addNewStream() {
 function updateStreamApiCall() {
 
 	// alert ("Swapp worked");
-	
-	
 
-	
-			var myform = $("#editStreamForm")[0];
+	var myform = $("#editStreamForm")[0];
 	if (!myform.checkValidity()) {
 		if (myform.reportValidity) {
 			myform.reportValidity();
@@ -348,122 +335,95 @@ function updateStreamApiCall() {
 			// warn IE users somehow :)
 		}
 	} else {
-								$.ajax(
-										{
-											url : base_url
-													+ "stream/"+ $('#accountId').val()+"/",
-											type : 'PUT',
-											dataType : 'json',
-											data : JSON.stringify($(
-													'#editStreamForm')
-													.serializeJSON()),
-											contentType : 'application/json',
-											accept : 'application/json',
-											beforeSend : function(xhr) {
-												xhr
-														.setRequestHeader(
-																'Authorization',
-																'Basic '
-																		+ btoa(uName
-																				+ ":"
-																				+ passwrd));
-											}
-										})
-								.done(
-										function(data) {
+		$
+				.ajax(
+						{
+							url : base_url + "stream/" + $('#accountId').val()
+									+ "/",
+							type : 'PUT',
+							dataType : 'json',
+							data : JSON.stringify($('#editStreamForm')
+									.serializeJSON()),
+							contentType : 'application/json',
+							accept : 'application/json',
+							beforeSend : function(xhr) {
+								xhr.setRequestHeader('Authorization', 'Basic '
+										+ btoa(uName + ":" + passwrd));
+							}
+						}).done(function(data) {
 
-											// alert(data.description);
+					// alert(data.description);
 
-											if (data.description
-													.includes("successfully")) {
-												
-												
-												currentClassId = $('#classId_edit').val();
-												
-												$("#classesList").val(currentClassId);
-												
-												
-												
+					if (data.description.includes("successfully")) {
 
-												$('#success').modal('show');
+						currentClassId = $('#classId_edit').val();
 
-												$('#successTitle').text(
-														data.description);
+						$("#classesList").val(currentClassId);
 
-												$('#successSms').text(
-														data.description);
+						$('#success').modal('show');
 
-												setTimeout(function() {
+						$('#successTitle').text(data.description);
 
-													$('#editStreamForm').get(0)
-															.reset();
-													$('#updateStreamModal')
-															.modal('hide');
-												}, 2500);
+						$('#successSms').text(data.description);
 
-												setTimeout(
-														function() {
+						setTimeout(function() {
 
-															$('#success')
-																	.modal(
-																			'hide');
-														}, 3000);
+							$('#editStreamForm').get(0).reset();
+							$('#updateStreamModal').modal('hide');
+						}, 2500);
 
-												fetchStreams(currentClassId);
+						setTimeout(function() {
 
-											} else if (data.description
-													.includes("wrong")) {
+							$('#success').modal('hide');
+						}, 3000);
 
-												$('#error').modal('show');
+						fetchStreams(currentClassId);
 
-												$('#errorTitle').text(
-														"Fatal Error");
+					} else if (data.description.includes("wrong")) {
 
-												$('#errorSms').text(
-														data.description);
+						$('#error').modal('show');
 
-												setTimeout(function() {
+						$('#errorTitle').text("Fatal Error");
 
-													$('#error').modal('hide');
-												}, 2500);
+						$('#errorSms').text(data.description);
 
-											} else {
+						setTimeout(function() {
 
-												$('#warning').modal('show');
+							$('#error').modal('hide');
+						}, 2500);
 
-												$('#warningTitle').text(
-														"Details Input Error");
+					} else {
 
-												$('#warningSms').text(
-														data.description);
+						$('#warning').modal('show');
 
-												setTimeout(
-														function() {
+						$('#warningTitle').text("Details Input Error");
 
-															$('#warning')
-																	.modal(
-																			'hide');
-														}, 2500);
+						$('#warningSms').text(data.description);
 
-											}
+						setTimeout(function() {
 
-										}).fail(function(jqXHR, textStatus) {
+							$('#warning').modal('hide');
+						}, 2500);
 
-									// alert("Error: " +
-									// textStatus);
+					}
 
-									$('#error').modal('show');
+				}).fail(function(jqXHR, textStatus) {
 
-									$('#errorTitle').text("Fatal Error");
+					// alert("Error: " +
+					// textStatus);
 
-									$('#errorSms').text(textStatus);
+					$('#error').modal('show');
 
-									setTimeout(function() {
+					$('#errorTitle').text("Fatal Error");
 
-										$('#error').modal('hide');
-									}, 2500);
-								});
-	}					
+					$('#errorSms').text(textStatus);
+
+					setTimeout(function() {
+
+						$('#error').modal('hide');
+					}, 2500);
+				});
+	}
 
 }
 
@@ -475,8 +435,7 @@ function delStreamApiCall() {
 
 	$.ajax(
 			{
-				url : base_url
-						+ "stream/delete/"+ $('#accountId').val()+"/"
+				url : base_url + "stream/delete/" + $('#accountId').val() + "/"
 						+ uuid + "/",
 				type : 'DELETE',
 				dataType : 'json',
@@ -564,20 +523,18 @@ function delStreamApiCall() {
  * 
  * event.preventDefault();
  * 
- * //$('#stream_btn_add').prop("type", "button");
- *  // alert(JSON.stringify($('#staffForm').serializeJSON())); currentClassId=
+ * //$('#stream_btn_add').prop("type", "button"); //
+ * alert(JSON.stringify($('#staffForm').serializeJSON())); currentClassId=
  * $('#classId_add').val();
  * 
  * 
- * console.log(currentClassId);
- *  $ .ajax( { url :
+ * console.log(currentClassId); $ .ajax( { url :
  * "http://localhost:8080/school/webapi/general/stream/E3CDC578-37BA-4CDB-B150-DAB0409270CD/",
  * type : 'POST', dataType : 'json', data : JSON.stringify($( '#addStreamForm')
  * .serializeJSON()), contentType : 'application/json', accept :
  * 'application/json', beforeSend : function(xhr) { xhr .setRequestHeader(
  * 'Authorization', 'Basic ' + btoa(uName + ":" + passwrd)); } }) .done(
- * function(data) {
- *  // alert(data.description);
+ * function(data) { // alert(data.description);
  * 
  * $('#addStreamForm').get(0) .reset();
  * 
@@ -609,7 +566,6 @@ function delStreamApiCall() {
  * 
  * 
  * fetchStreams(currentClassId);
- * 
  *  } else if (data.description .includes("exist")) {
  * 
  * $('#error').modal('show');
@@ -620,8 +576,7 @@ function delStreamApiCall() {
  * 
  * setTimeout(function() {
  * 
- * $('#error').modal('hide'); }, 2500);
- *  } else {
+ * $('#error').modal('hide'); }, 2500); } else {
  * 
  * $('#warning').modal('show');
  * 
@@ -631,11 +586,9 @@ function delStreamApiCall() {
  * 
  * setTimeout( function() {
  * 
- * $('#warning') .modal( 'hide'); }, 2500);
- *  }
+ * $('#warning') .modal( 'hide'); }, 2500); }
  * 
- * }).fail(function(jqXHR, textStatus) {
- *  // alert("Error: " + textStatus);
+ * }).fail(function(jqXHR, textStatus) { // alert("Error: " + textStatus);
  * 
  * $('#error').modal('show');
  * 
@@ -646,6 +599,5 @@ function delStreamApiCall() {
  * setTimeout(function() {
  * 
  * $('#error').modal('hide'); }, 2500); })
- * 
  *  }
  */
