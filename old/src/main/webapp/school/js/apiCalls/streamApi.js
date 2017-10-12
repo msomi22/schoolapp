@@ -192,7 +192,12 @@ function fetchStreams(classID) {
 										console.log(data['uuid']);
 
 										currentClassId = data['classRoomId'];
-										$("#accountId").val(data['accountId']);
+										
+										$("#accountId_add").val(data['accountId']);
+										
+										$("#edit_accountId").val(data['accountId']);
+										
+										
 
 									});
 
