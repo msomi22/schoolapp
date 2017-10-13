@@ -1,5 +1,10 @@
 var preserveUrl = global_url;
 
+
+var regno;
+
+var search_state= false;
+
 $(document).ready(
 		function() {
 
@@ -23,6 +28,66 @@ $(document).ready(
 function initPayment() {
 
 	$('#feePayment').modal("show");
+
+	$('#feePaymentForm').get(0).reset();
+	
+	checkRegnoState();
+	
+	setTimeout(function(){
+		checkRegnoState();
+		
+	},2000)
+
+	
+
+}
+
+function isReg(regNo) {
+	var regxReg = /[0-9]{3,5}/;
+
+	if (regNo.Lenght < 2 | !regNo.match(regxReg)) {
+
+		return false;
+	} else {
+
+		return true;
+	}
+
+}
+
+function checkRegnoState(){
+	 regno = $('#regno').val();
+
+	if (isReg(regno) && search_state) {
+
+		$('#p_regNo').val(regno);
+
+		$('#regNoVerSms').html(
+				'<h4> ' + $('#p_regNo').html() + '</h4>'
+						+ '<h4>' + $('#name').html() + '</h4>'
+						+ '<h4>' + $('#stream').html() + '</h4>'
+						+ '<h4> ' + $('#termfee').html() + '</h4>');
+		$('#p_mode').prop('disabled', false);
+
+		$('#transactionId').prop('disabled', false);
+
+		$('#amount').prop('disabled', false);
+		$('#p_staffId').val($('#staffId').val());
+
+		$('#p_accountId').val($('#accountId').val());
+
+	}else{
+		
+		$('#regNoVerSms').html("Enter a student's registratio number to view school fees details.");
+		$('#p_mode').prop('disabled', true);
+
+		$('#transactionId').prop('disabled', true);
+
+		$('#amount').prop('disabled', true);
+		$('#p_staffId').val("");
+
+		$('#p_accountId').val("");
+	}
 }
 
 function checkFormValidation(form) {
@@ -44,10 +109,13 @@ function checkFormValidation(form) {
 function preSubmitVerify(state) {
 
 	if (checkFormValidation($("#feePaymentForm"))) {
+		regno=$('#p_regNo').val();
 
 		$('#preRegno').html('<b> Reg No_ : ' + $('#p_regNo').val() + '</b>');
-		$('#prePaymentMode').html('<b>Payment Mode : ' + $('#p_mode').val() + '</b>');
-		$('#preTransId').html('<b> Transaction ID : ' + $('#transactionId').val() + '</b>');
+		$('#prePaymentMode').html(
+				'<b>Payment Mode : ' + $('#p_mode').val() + '</b>');
+		$('#preTransId').html(
+				'<b> Transaction ID : ' + $('#transactionId').val() + '</b>');
 		$('#preAmount').html('<b>Amount : ' + $('#amount').val() + '</b>');
 
 		$('#paymentSpace').toggle(2000);
@@ -78,8 +146,6 @@ function regVerify() {
 	$('#transactionId').prop('disabled', true);
 
 	$('#amount').prop('disabled', true);
-	
-	
 
 	$('#transactionId').val("");
 
@@ -93,11 +159,10 @@ function regVerify() {
 }
 
 function feePayment() {
-	
-	
-console.log("Form data");
 
-console.log($('#feePaymentForm').serializeJSON());
+	console.log("Form data");
+
+	console.log($('#feePaymentForm').serializeJSON());
 	var myform = $("#feePaymentForm")[0];
 	if (!myform.checkValidity()) {
 		if (myform.reportValidity) {
@@ -151,6 +216,10 @@ console.log($('#feePaymentForm').serializeJSON());
 
 							$('#success').modal('hide');
 						}, 3000);
+						
+						$('#regno').val(regno);
+						
+						fetchFeeDetails('info');
 
 					} else if (data.message.includes("error")) {
 
@@ -261,18 +330,7 @@ function delayInput() {
 
 }
 
-function isReg(regNo) {
-	var regxReg = /[0-9]{3,4}/;
 
-	if (regNo.Lenght < 2 | !regNo.match(regxReg)) {
-
-		return false;
-	} else {
-
-		return true;
-	}
-
-}
 
 function fetchFeeDetails(state) {
 
@@ -302,8 +360,8 @@ function fetchFeeDetails(state) {
 					function() {
 						global_url = preserveUrl;
 
-						var fetchfeeURL = global_url
-								+ 'student/fee/'+$('#accountId').val()+'/'
+						var fetchfeeURL = global_url + 'student/fee/'
+								+ $('#accountId').val() + '/'
 								+ $('#p_regNo').val();
 						global_url = fetchfeeURL;
 
@@ -323,8 +381,12 @@ function fetchFeeDetails(state) {
 
 								$('#regNoVerSms').html(
 										'<b>' + data.description + '</b>');
+								
+								search_state= false;
 
 							} else {
+								
+								search_state= true;
 
 								$('#p_mode').prop('disabled', false);
 
@@ -332,17 +394,16 @@ function fetchFeeDetails(state) {
 
 								$('#amount').prop('disabled', false);
 								var fee = "";
-								
-								
-								$('#studentId').val(data['studentFeeAPI']['studentId']);
-								
+
+								$('#studentId').val(
+										data['studentFeeAPI']['studentId']);
+
 								$('#p_staffId').val($('#staffId').val());
-								
+
 								$('#p_accountId').val($('#accountId').val());
-								
-								console.log('Student ID: '+$('#studentId').val());
-								
-								
+
+								console.log('Student ID: '
+										+ $('#studentId').val());
 
 								if (data['studentFeeAPI']['isBoarding'] == '1') {
 
@@ -423,8 +484,7 @@ function fetchFeeDetails(state) {
 
 function makeFetchCall() {
 
-	var fetchfeeURL = global_url
-			+ 'student/fee/'+$('#accountId').val()+'/'
+	var fetchfeeURL = global_url + 'student/fee/' + $('#accountId').val() + '/'
 			+ $('#regno').val();
 	global_url = fetchfeeURL;
 
@@ -444,6 +504,7 @@ function makeFetchCall() {
 			// $("#regNoState").slideUp(300).delay(200).fadeIn(400);
 
 			// $('#regNoState').html("<b>" + + "</b>");
+			search_state= false;
 
 			$('#regNoError').addClass('alert-danger');
 			$('#regNoError').removeClass('alert-warning');
@@ -470,6 +531,8 @@ function makeFetchCall() {
 
 			$('#regNoErrorSms').html(
 					'<b>No data available for this registration number </b>');
+			
+			search_state= false;
 
 		}
 
@@ -482,6 +545,8 @@ function makeFetchCall() {
 			 * $('#regNoState') .html( "<b>Successfully retrieved student's
 			 * school fees info. </b>");
 			 */
+			
+			search_state= true;
 
 			$('#regNoInfo').addClass('alert-success');
 			$('#regNoInfo').removeClass('alert-info');
