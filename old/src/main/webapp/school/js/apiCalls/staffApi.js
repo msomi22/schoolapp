@@ -92,7 +92,7 @@ function fetchStaffs(){
 
 	globalApiCall(function(data) {
 
-		console.log('Genius Code for staff altering');
+		console.log('Code for staff altering');
 
 		console.log(data);
 

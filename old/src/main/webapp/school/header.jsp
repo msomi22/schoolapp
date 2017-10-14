@@ -110,6 +110,10 @@
 
     
     <link rel="icon" href="images/favicon.ico">
+    
+    <!-- Date and time picker -->
+
+<link rel="stylesheet" href="css/pikaday.css">
 
 
     
@@ -184,7 +188,8 @@
 
                   <li><a><i class="fa fa-money"></i> Finance <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="fee.jsp">Fee</a></li>
+                      <li><a href="fee.jsp">Fee Payment</a></li>
+                       <li><a href="termAndOthersFee.jsp">Term and Misc Fee</a></li>
                       <li><a href="freeEducation.jsp">Govt Fund</a></li>
                       <li><a href="#">Pocket Money</a></li> 
                     </ul>

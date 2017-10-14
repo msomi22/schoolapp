@@ -82,6 +82,28 @@
 		autoclose : true
 
 	});
+	
+	$("#inityear").datepicker({
+		format : "yyyy",
+		viewMode : "years",
+		startDate : '-48m',
+		endDate : 'dateToday',
+		minViewMode : "years",
+		clearBtn : true,
+		autoclose : true
+
+	});
+	
+	$("#termyear").datepicker({
+		format : "yyyy",
+		viewMode : "years",
+		startDate : '-48m',
+		endDate : 'dateToday',
+		minViewMode : "years",
+		clearBtn : true,
+		autoclose : true
+
+	});
 </script>
 
 <!-- Cropper -->

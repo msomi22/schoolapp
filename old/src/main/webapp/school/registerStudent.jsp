@@ -71,8 +71,8 @@
 
 
 <!-- Date and time picker -->
-
-<link rel="stylesheet" href="css/pikaday.css">
+<!-- 
+<link rel="stylesheet" href="css/pikaday.css"> -->
 
 
 

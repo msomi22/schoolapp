@@ -116,9 +116,9 @@
 											<div class="col-md-11">
 												<input type="text" id="regno" name="regno"
 													class="form-control formelement cards"
-													placeholder="Enter Reg number" pattern="[0-9]{3,4}"
-													maxlength="4" onkeyup="delayInput()" autocomplete="off"
-													title="Registration number, should contain numerics only and should be 4 numbers only"
+													placeholder="Enter Reg number" pattern="[0-9]{3,5}"
+													maxlength="5" onkeyup="delayInput()" autocomplete="off"
+													title="Registration number, should contain numbers only"
 													required> <span
 													class="glyphicon glyphicon-search form-control-feedback"></span>
 											</div>
