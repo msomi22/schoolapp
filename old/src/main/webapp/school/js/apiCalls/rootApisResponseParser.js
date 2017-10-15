@@ -30,5 +30,21 @@ function rootParseApiResponseData(data) {
 		
 		return false;
 
+	}else{
+		
+		$('#error').modal('show');
+
+		$('#errorTitle').text("Response not recognized");
+
+		$('#errorSms').text("Please check with system maintenace team");
+
+		setTimeout(function() {
+
+			$('#error').modal('hide');
+		}, 3500);
+		
+		return false;
+
+		
 	}
 }

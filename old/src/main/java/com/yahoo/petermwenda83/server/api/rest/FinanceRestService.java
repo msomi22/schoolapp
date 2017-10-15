@@ -447,22 +447,22 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		if(FeeConstants.validTerm(termFee.getTerm())) {
+		if(!FeeConstants.validTerm(termFee.getTerm())) {
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
 
-		}else if(FeeConstants.validYear(termFee.getYear())) {
+		}else if(!FeeConstants.validYear(termFee.getYear())) {
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
 
-		}else if(FeeConstants.validFee(termFee.getBoaderAmount())) {
+		}else if(!FeeConstants.validFee(termFee.getBoaderAmount())) {
 			response.setMessage("error");
 			response.setDescription("Invalid BoaderAmount!");
 			return response;
 
-		}else if(FeeConstants.validFee(termFee.getDayAmount())) {
+		}else if(!FeeConstants.validFee(termFee.getDayAmount())) {
 			response.setMessage("error");
 			response.setDescription("Invalid DayAmount!");
 			return response;
@@ -477,7 +477,7 @@ public class FinanceRestService {
 			termFee.setUuid(new TermFee().getUuid()); 
 
 			if(termFeeDAO.putFee(termFee, termFee.getAccountId(), termFee.getTerm(), termFee.getYear())) {
-				response.setMessage("sucess");
+				response.setMessage("success");
 				response.setDescription("Term Fee added successfully."); 
 				return response;
 
@@ -500,22 +500,22 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		if(FeeConstants.validTerm(termFee.getTerm())) {
+		if(!FeeConstants.validTerm(termFee.getTerm())) {
 			response.setMessage("error");
 			response.setDescription("Invalid term!");
 			return response;
 
-		}else if(FeeConstants.validYear(termFee.getYear())) {
+		}else if(!FeeConstants.validYear(termFee.getYear())) {
 			response.setMessage("error");
 			response.setDescription("Invalid year!");
 			return response;
 
-		}else if(FeeConstants.validFee(termFee.getBoaderAmount())) {
+		}else if(!FeeConstants.validFee(termFee.getBoaderAmount())) {
 			response.setMessage("error");
 			response.setDescription("Invalid BoaderAmount!");
 			return response;
 
-		}else if(FeeConstants.validFee(termFee.getDayAmount())) {
+		}else if(!FeeConstants.validFee(termFee.getDayAmount())) {
 			response.setMessage("error");
 			response.setDescription("Invalid DayAmount!");
 			return response;
@@ -533,7 +533,7 @@ public class FinanceRestService {
 
 			if(termFeeDAO.updateFee(termFee)) {
 
-				response.setMessage("sucess");
+				response.setMessage("success");
 				response.setDescription("Term Fee updated successfully."); 
 				return response;
 

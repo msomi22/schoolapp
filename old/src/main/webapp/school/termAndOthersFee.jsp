@@ -132,8 +132,8 @@
 														<h3 class="pull-right">
 															Add new Term Fee
 															<button class="btn btn-primary"
-																style="border-radius: 90%" id="btn_termFee"
-																onclick="termFee(this.id)">
+																style="border-radius: 90%" id="add"
+																onclick="termModal(this.id)">
 																<i class="fa fa-plus-circle fa-2x"></i>
 															</button>
 
@@ -156,7 +156,7 @@
 
 																<div class="input-group">
 																	<input type="text" id="inityear" name="inityear"
-																		class="form-control formelement cards c_year"
+																		class="form-control formelement cards c_year yearConfig"
 																		placeholder="Enter the Year" pattern="[0-9]{4}"
 																		maxlength="4" onchange=""
 																		title="Year, should contain numerics only and should be 4 numbers only"required="required">
@@ -317,7 +317,7 @@
 													</div>
 													<div class="col-md-3">
 														<input type="text" id="termyear" name="termyear"
-															class="form-control formelement cards c_year"
+															class="form-control formelement cards c_year yearConfig"
 															placeholder="Enter the Year" pattern="[0-9]{4}"
 															maxlength="4"
 															title="Year, should contain numerics only and should be 4 numbers only"

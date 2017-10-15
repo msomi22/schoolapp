@@ -83,7 +83,7 @@
 
 	});
 	
-	$("#inityear").datepicker({
+	/* $("#inityear").datepicker({
 		format : "yyyy",
 		viewMode : "years",
 		startDate : '-48m',
@@ -92,9 +92,9 @@
 		clearBtn : true,
 		autoclose : true
 
-	});
+	}); */
 	
-	$("#termyear").datepicker({
+	$(".yearConfig").datepicker({
 		format : "yyyy",
 		viewMode : "years",
 		startDate : '-48m',
