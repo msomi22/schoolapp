@@ -135,7 +135,7 @@
 
 								<button class="btn btn-primary pull-right cards"
 									onclick="initPayment()">
-									Make fee payment <i class="fa fa-money fa-2x"> </i>
+									Make fee payment <i class="fa fa-money"> </i>
 								</button>
 
 							</div>

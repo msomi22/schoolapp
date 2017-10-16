@@ -21,7 +21,8 @@ function fetCategories() {
 	
 	$('#accountId').val(accountId);
 
-	global_url = global_url + "finance/goke/" + accountId + '/' + feeCatId;
+	//global_url = global_url + 
+	varying_url="finance/goke/" + accountId + '/' + feeCatId;
 
 	globalApiCall(function(data) {
 
@@ -88,7 +89,7 @@ function fetCategories() {
 		 * "R.M.I" uuid : "19FF7382-77E0-4789-BBC2-3EE1261722C2"
 		 */
 
-		global_url = preserveUrl;
+	//	global_url = preserveUrl; heheh!
 	});
 }
 
@@ -345,10 +346,12 @@ function processTotalAmount(){
 
 	global_data_passed = {};
 	global_request_type = 'GET';
+	
+	$('#govtCheckResponse').html('');
 
 	globalApiCall(function(data) {
 
-		console.log('Genius Code for checking govt amount Distri');
+		console.log('Code for checking govt amount Distri');
 
 		console.log(data);
 		
@@ -367,6 +370,8 @@ function processTotalAmount(){
 			$('#errorSms').html('<b> Total Amount supplied is insufficient </b>');
 			$('#error').modal('show');
 			
+			$('#totalAmount').attr('disabled', false);
+			
 			modalTimeout('error');
 		}else{
 			
@@ -377,6 +382,8 @@ function processTotalAmount(){
 			
 			
 			modalTimeout('success');
+			
+			$('#totalAmount').attr('disabled', false);
 			
 			$('#allocateGovtMoney').attr('disabled',false);
 			
@@ -390,6 +397,38 @@ function processTotalAmount(){
 	
 	}
 }
+
+function monitorTotalAmount(){
+	
+	$('#allocateGovtMoney').attr('disabled',true);
+	
+	
+}
+
+function allocateGovtCash(){
+	
+	$('#allocating').modal({
+	    backdrop: 'static',
+	    keyboard: false
+	    
+	});
+	
+	
+	$('#allocating').modal('show');
+	
+	
+	
+	setTimeout(function(){
+		
+		$('#allocating').modal('hide');
+		
+	},7000);
+}
+
+$(document).ready(function(){
+	
+})
+
 
 
 

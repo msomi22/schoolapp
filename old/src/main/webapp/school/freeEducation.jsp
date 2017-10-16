@@ -146,7 +146,7 @@
 															</h4>
 
 															<input type="text" class="form-control formelement"
-																name="totalAmount" id="totalAmount"
+																name="totalAmount" id="totalAmount" onkeyup="monitorTotalAmount()"
 																placeholder="Enter Total Amount"> <br>
 
 
