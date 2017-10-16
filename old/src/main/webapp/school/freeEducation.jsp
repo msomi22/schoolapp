@@ -90,12 +90,25 @@
 
 										<div class="row ">
 										
+										<div class="col-md-3">
+												<h3 class="pull-right">
+												
+													<button type="button" class="btn btn-primary cards"
+														 id="govt_temp"
+														onclick="govtCategoryTemplateModal()">Use a Template
+														<i class="fa fa-file-o"></i>
+													</button>
+
+												</h3>
+
+											</div>
+										
 										<div class="col-md-1 pull-right"></div>
 
 											<div class="col-md-3 pull-right">
 												<h3 class="pull-right">
 													Add a new Category
-													<button type="button" class="btn btn-primary"
+													<button type="button" class="btn btn-primary cards"
 														style="border-radius: 90%" id="add"
 														onclick="govtCategoryModal()">
 														<i class="fa fa-plus-circle fa-2x"></i>
@@ -367,6 +380,10 @@
 <!-- Govt fund modal -->
 
 <jsp:include page="modals/govtCategoryModal.html" />
+
+<!-- Govt fund template modal -->
+
+<jsp:include page="modals/govtCategoryTemplateModal.html" />
 <!-- State Modal -->
 <jsp:include page="modals/statemodals.html" />
 

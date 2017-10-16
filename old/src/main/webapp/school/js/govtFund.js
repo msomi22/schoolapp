@@ -433,6 +433,15 @@ $(document).ready(function(){
 	
 })
 
+function govtCategoryTemplateModal(){
+	
+	$('#govtCategoryTemplateModal').modal('show');
+}
+
+function addGovtCategoryTemplate(form){
+	console.log('submit/ activate default template');
+}
+
 
 
 
