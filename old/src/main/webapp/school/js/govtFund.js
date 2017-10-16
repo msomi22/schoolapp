@@ -421,6 +421,10 @@ function allocateGovtCash(){
 	setTimeout(function(){
 		
 		$('#allocating').modal('hide');
+		$('#allocateGovtMoney').attr('disabled',true);
+		$('#totalAmount').val('');
+		$('#govtCheckResponse').html('Display the amount check here');
+		
 		
 	},7000);
 }
