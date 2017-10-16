@@ -11,7 +11,7 @@ function fetchStreams(classIdVal) {
 
 	globalApiCall(function(data) {
 
-		console.log('Genius Code for fetching streams');
+		console.log('Code for fetching streams');
 
 		console.log(data);
 
@@ -44,7 +44,7 @@ function fetchClasses() {
 
 	globalApiCall(function(data) {
 
-		console.log('Genius Code for fetching classes');
+		console.log('Code for fetching classes');
 
 		console.log(data);
 

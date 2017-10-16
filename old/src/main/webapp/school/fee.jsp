@@ -135,7 +135,7 @@
 
 								<button class="btn btn-primary pull-right cards"
 									onclick="initPayment()">
-									Make fee payment <i class="fa fa-plus-circle"></i>
+									Make fee payment <i class="fa fa-money fa-2x"> </i>
 								</button>
 
 							</div>
@@ -214,13 +214,23 @@
 										</div>
 
 										<div class="col-md-4">
-											<h4 class="pull-right" id="termfee">
+											<h4 class="pull-left" id="termfee">
 												<b>Term Fee: ######</b>
 
 
 
 											</h4>
 										</div>
+										
+										<div class="col-md-2">
+											<button class="btn btn-primary btn-block cards"  id="revert_payment_btn" onclick="OtherFeeModal(this.id)" disabled>Revert Payment <i class="fa fa-money"> </i></button>
+										</div>
+										
+										<div class="col-md-2">
+											<button class="btn btn-primary btn-block cards"  id="addOtherFee_btn" onclick="OtherFeeModal(this.id)" disabled>Pay Other Fee <i class="fa fa-money"> </i></button>
+										</div>
+										
+										
 
 									</div>
 
@@ -464,6 +474,11 @@
 
 <!-- fee payment Modal -->
 <jsp:include page="modals/feePaymentModal.html" />
+
+
+
+<!-- other fee payment Modal -->
+<jsp:include page="modals/otherAndRevertFeeModal.html" />
 
 
 

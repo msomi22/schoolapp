@@ -1,5 +1,5 @@
 function rootParseApiResponseData(data) {
-	if (data.description.includes("success")) {
+	if (data.description.includes("success") || data.message.includes("success")) {
 
 		$('#success').modal('show');
 

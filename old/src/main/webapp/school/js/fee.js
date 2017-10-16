@@ -7,8 +7,10 @@ var search_state= false;
 
 $(document).ready(
 		function() {
+			
+			$('.accountId').val($('#accountId').val());
 
-			global_url = global_url + "finance/termfee/"
+			varying_url = "finance/termfee/"
 					+ $('#accountId').val() + '/' + $('#term').val() + '/'
 					+ $('#year').val();
 
@@ -20,8 +22,11 @@ $(document).ready(
 				$('#boarder').val(data['boaderAmount']);
 				$('#day').val(data['dayAmount']);
 
-				global_url = preserveUrl;
+				
 			});
+			
+			
+			otherFeeTermFeeList();
 
 		});
 
@@ -40,6 +45,106 @@ function initPayment() {
 
 	
 
+}
+
+function OtherFeeModal(id){
+	
+	if(id == "revert_payment_btn"){
+		
+		$('#otherTermFeeTiltle').text("Revert Other Term Fee Details");
+
+		$('#othertermFee_btn').text("Revert");
+
+		$("#othertermFee_btn").attr("onclick", "revertOtherTermFee()");
+		
+		
+	}
+	
+	else if (id == "addOtherFee_btn"){
+		
+		$('#otherTermFeeTiltle').text("Add Other Term Fee Details");
+
+		$('#othertermFee_btn').text("Submit");
+
+		$("#othertermFee_btn").attr("onclick", "addOtherFee()");
+		
+	}
+	
+	$('#otherTermFeeModal').modal('show');
+	
+}
+
+
+function addOtherFee(){
+	
+
+	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "student/other/fee/"+$('#accountId').val();
+
+		global_data_passed = $('#otherTermFeeForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'POST';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for new other term fee adding for a specific student');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#otherTermFeeModal').modal('hide');
+				fetchFeeDetails('info');
+			}
+
+		});
+
+	}
+	
+	
+	
+}
+
+function revertOtherTermFee(){
+	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "student/other/fee/revert/"+$('#accountId').val();
+
+		global_data_passed = $('#otherTermFeeForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'PUT';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for reverting other term fee for a specific student');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#otherTermFeeModal').modal('hide');
+				fetchFeeDetails('info');
+			}
+
+		});
+
+	}
+	
 }
 
 function isReg(regNo) {
@@ -358,12 +463,13 @@ function fetchFeeDetails(state) {
 
 			setTimeout(
 					function() {
-						global_url = preserveUrl;
+						//global_url = preserveUrl;
 
-						var fetchfeeURL = global_url + 'student/fee/'
+						//var
+						varying_url = 'student/fee/'
 								+ $('#accountId').val() + '/'
 								+ $('#p_regNo').val();
-						global_url = fetchfeeURL;
+						//global_url = fetchfeeURL; Heheh!:)
 
 						globalApiCall(function(data) {
 
@@ -371,7 +477,7 @@ function fetchFeeDetails(state) {
 									.log('Async call of the global api before fee payment');
 							console.log(data);
 
-							global_url = preserveUrl;
+							// global_url = preserveUrl; heheeh! :)
 
 							if ((data.message)) {
 
@@ -394,6 +500,10 @@ function fetchFeeDetails(state) {
 
 								$('#amount').prop('disabled', false);
 								var fee = "";
+								
+								
+								$('#other_studentId').val(
+										data['studentFeeAPI']['studentId']);
 
 								$('#studentId').val(
 										data['studentFeeAPI']['studentId']);
@@ -474,7 +584,7 @@ function fetchFeeDetails(state) {
 
 			setTimeout(function() {
 
-				global_url = preserveUrl;
+				//global_url = preserveUrl; Hahahah!
 				makeFetchCall()
 			}, 1000);
 
@@ -484,20 +594,24 @@ function fetchFeeDetails(state) {
 
 function makeFetchCall() {
 
-	var fetchfeeURL = global_url + 'student/fee/' + $('#accountId').val() + '/'
+	varying_url ='student/fee/' + $('#accountId').val() + '/'
 			+ $('#regno').val();
-	global_url = fetchfeeURL;
+	//global_url = fetchfeeURL; one day i will laugh at this line of code like i am doing right now. Heheh! :)
+	
+	global_request_type = 'GET';
+	
+	global_data_passed = {};
 
-	console.log(global_url);
+	
 
 	globalApiCall(function(data) {
 
-		console.log('Async call of the global api');
+		console.log('Async call of the make fetchcall api');
 		console.log(data);
 
-		global_url = preserveUrl;
+		//global_url = preserveUrl;
 
-		console.log("Second" + global_url);
+		//console.log("Second" + global_url);
 
 		if ((data.message)) {
 
@@ -564,6 +678,10 @@ function makeFetchCall() {
 
 			$('#btn_otherHistory').prop('disabled', false);
 			$('#btn_history').prop('disabled', false);
+			$('#revert_payment_btn').prop('disabled', false);
+			$('#addOtherFee_btn').prop('disabled', false);
+			$('#other_studentId').val(
+					data['studentFeeAPI']['studentId']);
 
 			var name;
 
@@ -694,4 +812,48 @@ function makeFetchCall() {
 
 	});
 
+}
+
+
+
+function otherFeeTermFeeList() {
+
+	
+	
+
+		varying_url = "finance/fee/other/" + $('#accountId').val() + "/"
+				+ $('#term').val() + "/" + $('#year').val();
+
+		global_data_passed = {};
+
+		global_request_type = 'GET';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for fetching other fee list per term');
+
+			console.log(data);
+
+			console.log(data.length);
+
+			if (data["message"] != "error" && data.length > 0) {
+				
+				var otherFeeSelect = $('.otherFeeList');
+				otherFeeSelect.empty();
+				// classSelect.options[classSelect.options.length]
+				// = new Option('Form 1', 'Value1');
+
+				for (var i = 0; i < data.length; i++) {
+					otherFeeSelect.append('<option id=' + data[i].uuid + ' value='
+							+ data[i].uuid + '>' + data[i].description +' : '+  data[i].amount+ '</option>');
+					// classSelect.options[classSelect.options.length]
+					// = new Option(data[i].description,
+					// data[i].uuid);
+				}
+
+				
+			}
+
+		});
+	
 }
