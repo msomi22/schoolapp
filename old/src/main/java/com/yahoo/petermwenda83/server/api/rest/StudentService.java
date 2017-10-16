@@ -201,6 +201,7 @@ public class StudentService {
 			apiStudent.setIsActive(student.getIsActive());
 			apiStudent.setIsAlumni(student.getIsAlumni());
 			apiStudent.setIsBoarding(student.getIsBoarding());
+			apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 			apiStudent.setRegNo(student.getRegNo());
 			apiStudent.setFirstname(student.getFirstname());
 			apiStudent.setMiddlename(student.getMiddlename());
@@ -921,6 +922,11 @@ public class StudentService {
 			apiResponse.setDescription("IsBoarding not set.");
 			return apiResponse;
 
+		}else if (!validStatus(student.getIsGoKFeeEligibe())) {
+			apiResponse.setMessage("error");
+			apiResponse.setDescription("IsGoKFeeEligibe not set.");
+			return apiResponse;
+
 		} else if (!validStatus(student.getIsActive())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("IsActive not set.");
@@ -1026,6 +1032,7 @@ public class StudentService {
 		newstudent.setIsActive(student.getIsActive());
 		newstudent.setIsAlumni(student.getIsAlumni());
 		newstudent.setIsBoarding(student.getIsBoarding());
+		newstudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 		newstudent.setRegNo(student.getRegNo());
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());
@@ -1151,6 +1158,7 @@ public class StudentService {
 		newstudent.setIsActive("1");
 		newstudent.setIsAlumni("0");
 		newstudent.setIsBoarding(student.getIsBoarding());
+		newstudent.setIsGoKFeeEligibe("0"); 
 		newstudent.setRegNo(student.getRegNo());
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());

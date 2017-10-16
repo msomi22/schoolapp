@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.quartz.Job;
@@ -141,7 +142,8 @@ public class QuartzJob implements Job{
 								studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
 									
 									if(studentDAO.getActiveStudents(account.getUuid(), "1") != null) {
-										allocateGokMoney(account, sysConfig, student, amountToEachStudent);
+										boolean status = allocateGokMoney(account, sysConfig, student, amountToEachStudent);
+										//System.out.println("status : " + status);  
 									}
 									
 								});
@@ -172,7 +174,11 @@ public class QuartzJob implements Job{
 	 * @param student
 	 * @param amountToEachStudent
 	 */
-	private void allocateGokMoney(Account account, SysConfig sysConfig, Student student, int amountToEachStudent) {
+	private boolean allocateGokMoney(Account account, SysConfig sysConfig, Student student, int amountToEachStudent) {
+		
+		boolean success = false;
+		
+		
 		StudentFee studentFee = new StudentFee(); 
 		studentFee.setAccountId(account.getUuid());
 		studentFee.setStudentId(student.getUuid());
@@ -182,26 +188,40 @@ public class QuartzJob implements Job{
 		studentFee.setPaidHas(student.getIsBoarding()); 
 		studentFee.setTermPiad(sysConfig.getTerm());
 		studentFee.setYearPaid(sysConfig.getYear());
+		
+		
 
 		if(studentFeeDAO.getStudentFee(account.getUuid(), student.getUuid(), FeeConstants.GVMT_MONEY_CODE,
 				sysConfig.getTerm(), sysConfig.getYear()) != null) {
 			//log error, student has already been assigned GoKe money 
 			//System.out.println("error, student has already been assigned GoKe money"); 
-			
+			success = false;
+			return success;
 			
 
+		}else if(StringUtils.equals(student.getIsGoKFeeEligibe(), "0")) { 
+			//System.out.println("error, student not eligible!"); 
+			success = false;
+			return success;
+			
 		}else {
 			
 			if(studentFeeDAO.putStudentFee(studentFee)) {
 				//log success
 				//System.out.println("GoKe money add success"); 
+				success = true;
+				return success;
 
 			}else {
 				//log error, contact Admin_ 
 				//System.out.println("error, contact Admin"); 
+				success = false;
+				return success;
 
 			}
 		}
+		
+		//return success;
 	}
 
 
