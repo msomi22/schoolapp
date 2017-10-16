@@ -12,7 +12,7 @@ $(document).ready(function() {
 	},500);
 	
 	
-	$('#term_accountId').val($('#accountId').val());
+	$('.accountId').val($('#accountId').val());
 
 	
 
@@ -43,6 +43,32 @@ function termModal(id) {
 
 }
 
+
+function othertermModal(id) {
+
+	if (id == "edit_other") {
+
+		// alert(id);
+		$('#otherTermFeeTiltle').text("Edit Other Term Fee Details");
+
+		$('#othertermFee_btn').text("Save Changes");
+
+		$("#othertermFee_btn").attr("onclick", "updateOtherTermFee()");
+
+	} else if (id == "add_other") {
+
+		$('#otherTermFeeTiltle').text("Add a new Other Term Fee");
+		$('#othertermFee_btn').text("Submit");
+		$("#othertermFee_btn").attr("onclick", "addNewOtherTermFee()");
+
+		$('#otherTermFeeForm').get(0).reset();
+
+	}
+
+	$('#otherTermFeeModal').modal('show');
+
+}
+
 function addNewTermFee() {
 	
 	if (rootCheckFormValidation($('#TermFeeForm'))) {
@@ -70,6 +96,43 @@ function addNewTermFee() {
 				
 				$('#TermFeeModal').modal('hide');
 				feeTermFeeList();
+			}
+
+		});
+
+	}
+
+}
+
+
+
+function addNewOtherTermFee() {
+	
+	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "finance/fee/other/"+$('#accountId').val();
+
+		global_data_passed = $('#otherTermFeeForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'POST';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for new other term fee adding');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#otherTermFeeModal').modal('hide');
+				otherFeeTermFeeList();
 			}
 
 		});
@@ -113,6 +176,41 @@ function updateTermFee() {
 
 }
 
+function updateOtherTermFee() {
+	
+	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "finance/fee/other/"+$('#accountId').val();
+
+		global_data_passed = $('#otherTermFeeForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'PUT';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for other term fee updating');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#otherTermFeeModal').modal('hide');
+				otherFeeTermFeeList();
+			}
+
+		});
+
+	}
+
+}
+
 function delTermFee() {
 
 }
@@ -122,6 +220,7 @@ var table_term;
 var table_other;
 
 var del_uuid;
+var del_otheruuid;
 
 function feeTermFeeList() {
 
@@ -343,7 +442,7 @@ function otherFeeTermFeeList() {
 											{
 												"targets" : [ 6 ],
 												"data" : null,
-												"defaultContent" : '<button class="btn btn-warning" id="edit_termFee" onclick="streamModal(this.id)">Edit <span class="fa fa-edit"></span></button><button class="btn btn-danger" onclick="delTermFee()">Delete <span class="fa fa-trash"></span></button>'
+												"defaultContent" : '<button class="btn btn-warning" id="edit_other" onclick="othertermModal(this.id)">Edit <span class="fa fa-edit"></span></button><button class="btn btn-danger" onclick="delTermFee()">Delete <span class="fa fa-trash"></span></button>'
 											} ],
 									searching : false,
 									"bPaginate" : false,
@@ -362,19 +461,16 @@ function otherFeeTermFeeList() {
 
 					// console.log($("#desc").val(data[3]));
 
-					$("#classId_edit").val(data['classRoomId']);
+					$("#description").val(data['description']);
+					$("#amount").val(data['amount']);
 
-					$("#uuid").val(data['uuid']);
+					$("#edit_otherterm").val(data['term']);
+					$("#edit_otheryear").val(data['year']);
 
-					$("#del_uuid").val(data['uuid']);
+					$("#term_otheruuid").val(data['uuid']);
+					$("#term_otheraccountId").val(data['accountId']);
 
-					console.log(data['uuid']);
-
-					currentClassId = data['classRoomId'];
-
-					$("#accountId_add").val(data['accountId']);
-
-					$("#edit_accountId").val(data['accountId']);
+					del_otheruuid = (data['uuid']);
 
 				});
 

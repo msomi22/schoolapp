@@ -295,8 +295,8 @@
 												<h3 class="pull-right">
 													Add another Fee
 													<button class="btn btn-primary cards"
-														style="border-radius: 90%" id="btn_addOtherFee"
-														onclick="otherFee(this.id)">
+														style="border-radius: 90%" id="add_other"
+														onclick="othertermModal(this.id)">
 														<i class="fa fa-plus-circle fa-2x"></i>
 													</button>
 
