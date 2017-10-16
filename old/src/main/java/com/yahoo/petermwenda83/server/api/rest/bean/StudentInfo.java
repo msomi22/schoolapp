@@ -19,6 +19,7 @@ public class StudentInfo {
 	private String isActive;
 	private String isAlumni;
 	private String isBoarding;
+	private String isGoKFeeEligibe;
 	private String regNo;
 	private String firstname;
 	private String middlename;
@@ -54,6 +55,7 @@ public class StudentInfo {
 		isActive = "1"; //active = 1, inactive = 0
 		isAlumni = "0";//alumni = 1, otherwise 0
 		isBoarding = "";//boarders = 1, day = 0
+		isGoKFeeEligibe = "0"; // 0 = not eligibale, 1 = eligibe 
 		regNo = "";
 		firstname = "";
 		middlename = "";
@@ -133,6 +135,20 @@ public class StudentInfo {
 
 	public void setIsBoarding(String isBoarding) {
 		this.isBoarding = isBoarding;
+	}
+
+	/**
+	 * @return the isGoKFeeEligibe
+	 */
+	public String getIsGoKFeeEligibe() {
+		return isGoKFeeEligibe;
+	}
+
+	/**
+	 * @param isGoKFeeEligibe the isGoKFeeEligibe to set
+	 */
+	public void setIsGoKFeeEligibe(String isGoKFeeEligibe) {
+		this.isGoKFeeEligibe = isGoKFeeEligibe;
 	}
 
 	public String getRegNo() {
@@ -303,17 +319,20 @@ public class StudentInfo {
 		this.kcpemark = kcpemark;
 	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "StudentInfo [uuid=" + uuid + ", accountId=" + accountId + ", regStream=" + regStream
 				+ ", currentStream=" + currentStream + ", isActive=" + isActive + ", isAlumni=" + isAlumni
-				+ ", isBoarding=" + isBoarding + ", regNo=" + regNo + ", firstname=" + firstname + ", middlename="
-				+ middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob=" + dob + ", bcertNo=" + bcertNo
-				+ ", county=" + county + ", regTerm=" + regTerm + ", finalYear=" + finalYear + ", finalTerm="
-				+ finalTerm + ", passport=" + passport + ", hasParent=" + hasParent + ", parentName=" + parentName
-				+ ", parentMobile=" + parentMobile + ", parentEmail=" + parentEmail + ", hasPrimary=" + hasPrimary
-				+ ", schoolName=" + schoolName + ", index=" + index + ", kcpeyear=" + kcpeyear + ", kcpemark="
-				+ kcpemark + "]";
+				+ ", isBoarding=" + isBoarding + ", isGoKFeeEligibe=" + isGoKFeeEligibe + ", regNo=" + regNo
+				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
+				+ gender + ", dob=" + dob + ", bcertNo=" + bcertNo + ", county=" + county + ", regTerm=" + regTerm
+				+ ", finalYear=" + finalYear + ", finalTerm=" + finalTerm + ", passport=" + passport + ", hasParent="
+				+ hasParent + ", parentName=" + parentName + ", parentMobile=" + parentMobile + ", parentEmail="
+				+ parentEmail + ", hasPrimary=" + hasPrimary + ", schoolName=" + schoolName + ", index=" + index
+				+ ", kcpeyear=" + kcpeyear + ", kcpemark=" + kcpemark + "]";
 	}
 
 }
