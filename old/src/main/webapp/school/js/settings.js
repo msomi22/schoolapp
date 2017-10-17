@@ -97,6 +97,10 @@ function updateYearTerm() {
 				fetchConfig();
 				
 			//();
+			}else{
+				
+				fetchConfig();
+				
 			}
 
 		});
