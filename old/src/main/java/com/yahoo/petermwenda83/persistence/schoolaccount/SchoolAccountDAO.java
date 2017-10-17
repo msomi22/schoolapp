@@ -6,7 +6,6 @@ package com.yahoo.petermwenda83.persistence.schoolaccount;
 import java.util.List;
 
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.server.api.rest.admin.AccData;
 
 /**
  * @author peter
@@ -59,13 +58,6 @@ public interface SchoolAccountDAO {
      * @return List of all schools 
      */
     public List<Account> getAccounts();
-    
-    
-    public boolean putAccData(AccData accData);
-    
-    public List<AccData> getAccData();
-    
-    
-    
+   
 
 }

@@ -69,6 +69,38 @@ public class ConfigRestFulAPI {
 
 		return generalService.updateConfig(apiSysConfig); 
 	}
+	
+	
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param id
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get ApiSysConfig  object.", 
+			notes = "Returns ApiSysConfig object .", 
+			response = ApiSysConfig.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/config/{accountId}")  
+	public Object getApiSysConfig(@PathParam("accountId") String accountId,
+			@HeaderParam("authorization") String auth) {
+
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.getApiSysConfig(accountId); 
+	}
+
 
 
 

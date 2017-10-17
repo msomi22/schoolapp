@@ -4,10 +4,7 @@
 package com.yahoo.petermwenda83.server.api.rest.admin;
 
 
-import java.util.List;
-
 import javax.ws.rs.BeanParam;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -17,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import com.yahoo.petermwenda83.server.api.filter.AccountFilter;
 import com.yahoo.petermwenda83.server.api.rest.RestAUth;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
@@ -145,23 +143,6 @@ public class AdminRestFulAPI {
 		
 		return adminService.updateAccount(apiAccount);
 	}
-	
-	
-	@GET
-	@Path("/data")  
-	public List<ApiAccData> getAccData() { 
-		return adminService.getAccData();
-	}
-
-	
-	@POST
-	@Path("/data")  
-	public String getAccFromLopy(String data) {
-		System.out.println(data); 
-		adminService.putData(data);
-		return data;
-	}
-	
 	
 
 }

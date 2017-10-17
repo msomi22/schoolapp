@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
-import com.yahoo.petermwenda83.server.api.rest.admin.AccData;
 
 /**
  * @author peter
@@ -304,66 +303,5 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#putAccData(com.yahoo.petermwenda83.server.api.rest.admin.AccData)
-	 */
-	@Override
-	public boolean putAccData(AccData accData) {
-		boolean success = true; 
-
-		try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO AccData" 
-						+"(uuid,pitch,roll,yaw,addDate) VALUES (?,?,?,?,?);");
-				){
-
-			pstmt.setString(1, accData.getUuid());
-			pstmt.setString(2, accData.getPitch());
-			pstmt.setString(3, accData.getRoll());
-			pstmt.setString(4, accData.getYaw());
-			pstmt.setTimestamp(5, accData.getAddDate()); 
-			pstmt.executeUpdate();
-
-		}catch(SQLException e){
-			logger.error("SQL Exception trying to put accData " + accData);
-			logger.error(ExceptionUtils.getStackTrace(e)); 
-			System.out.println(ExceptionUtils.getStackTrace(e));
-			success = false;
-		}
-
-
-		return success;
-	}
-
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getAccData()
-	 */
-	@Override
-	public List<AccData> getAccData() {
-		List<AccData> list =new  ArrayList<>(); 
-		try(   
-				Connection conn = dbutils.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM AccData ORDER BY addDate DESC LIMIT 1;");   
-				ResultSet rset = pstmt.executeQuery();
-				) {
-
-			list = beanProcessor.toBeanList(rset, AccData.class);
-
-		} catch(SQLException e){
-			logger.error("SQL Exception when getting all AccData");
-			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e));
-		}
-
-		return list;
-	}
-
 
 }
