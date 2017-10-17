@@ -32,6 +32,7 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
+import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.ApiConstants;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiClass;
@@ -63,6 +64,7 @@ public class GeneralService {
 	private static TermFeeDAO termFeeDAO;
 	private static AcessLevelDAO acessLevelDAO;
 	private static FeeBreakdownDAO feeBreakdownDAO;
+	private static CategoryDAO categoryDAO;
 
 
 	private static SubjectDAO subjectDAO;
@@ -80,6 +82,7 @@ public class GeneralService {
 		termFeeDAO = TermFeeDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
+		categoryDAO = CategoryDAO.getInstance();
 
 		classDAO = ClassDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
@@ -590,11 +593,11 @@ public class GeneralService {
 					termFeeDAO.putFee(termFee, apiSysConfig.getAccountId(), apiSysConfig.getTerm(), apiSysConfig.getYear());
 
 				}
-				
+
 				if(feeBreakdownDAO.getFeeBreakdown(apiSysConfig.getAccountId(), FeeConstants.GVMT_MONEY_CODE) == null) { 
-					
+
 					FinanceRestService service = new FinanceRestService();
-					
+
 					FeeBreakdown feeBreakdown = new FeeBreakdown();
 					feeBreakdown.setAccountId(apiSysConfig.getAccountId());
 					feeBreakdown.setFeeCategory(FeeConstants.GVMT_MONEY_CODE);
@@ -603,8 +606,8 @@ public class GeneralService {
 					feeBreakdown.setStatus("0");
 					feeBreakdown.setAmount(0);
 					service.addFeeBreakdown(feeBreakdown);
-					
-					
+
+
 				}
 
 			}else {
@@ -806,7 +809,7 @@ public class GeneralService {
 			return response;
 
 		}else {
-           return acessLevelDAO.getAcessLevelList(accountId);
+			return acessLevelDAO.getAcessLevelList(accountId);
 		}
 
 	}
@@ -986,6 +989,41 @@ public class GeneralService {
 
 
 
+
+	/**
+	 * 
+	 * @param accountId TODO
+	 * @return
+	 */
+	public Object getCategories(String accountId) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null) {
+			
+			response.setMessage("error");
+			response.setDescription("Invalid AccountId!");
+			return response;
+			
+		}
+		if(categoryDAO.getCategoryList(accountId) == null) { 
+			
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+
+		}else {
+			
+            return categoryDAO.getCategoryList(accountId);
+            
+		}
+		
+	}
+
+
+
+
+
 	/**
 	 * 
 	 * @param term
@@ -1125,6 +1163,7 @@ public class GeneralService {
 			return false;
 		}
 	}
+
 
 
 
