@@ -173,7 +173,7 @@ function fetchStudents(paginate) {
 										"visible" : false
 									},
 									{
-										"targets" : [ 12 ],
+										"targets" : [ 7 ],
 										"visible" : false
 									},
 									{
@@ -221,7 +221,7 @@ function fetchStudents(paginate) {
 										"visible" : false
 									},
 									{
-										"targets" : [ 24 ],
+										"targets" : [ 24],
 										"visible" : false
 									},
 									{
@@ -229,7 +229,7 @@ function fetchStudents(paginate) {
 										"visible" : false
 									},
 									{
-										"targets" : [ 26 ],
+										"targets" : [ 26],
 										"visible" : false
 									},
 									{
@@ -238,6 +238,10 @@ function fetchStudents(paginate) {
 									},
 									{
 										"targets" : [ 28 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 29 ],
 										"data" : null,
 										"defaultContent" : '<button class="btn btn-info ">'
 												+ 'Profile   <span class="fa fa-info"></span></button>'

@@ -189,7 +189,10 @@
                            <th class="column-title hidden">currentStream</th>
                            <th class="column-title hidden">isActive</th>
                            <th class="column-title hidden">isAlumni</th>
+                           
                            <th class="column-title hidden">isBoarding</th>
+                           <th class="column-title hidden">isGoKFeeEligibe</th>
+                           
                            
                             <th class="column-title">regNo</th>
                             <th class="column-title">firstname</th>
