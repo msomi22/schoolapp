@@ -795,72 +795,7 @@ public class AdminService {
 
 	}
 
-	/**
-	 * 
-	 * @param data
-	 */
-	public Object putData(String data) {
-
-		ApiResponse apiResponse = new ApiResponse(); 
-
-		ApiAccData apiAccData = new ApiAccData();
-		Gson gson = new Gson();
-		apiAccData = gson.fromJson(data, ApiAccData.class);
-
-
-
-		AccData accData = new AccData();
-		accData.setAddDate(apiAccData.getAddDate());
-		accData.setPitch(apiAccData.getPitch());
-		accData.setRoll(apiAccData.getRoll());
-		accData.setYaw(apiAccData.getYaw());
-
-		//System.out.println(accData); 
-
-
-		if(accountDAO.putAccData(accData)) {
-			apiResponse.setMessage("success");
-			apiResponse.setDescription("Data saved successfully.");
-
-		}else {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Data NOT saved.");
-		}
-
-		return null;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public List<ApiAccData> getAccData(){
-		List<AccData> list = new  ArrayList<>(); 
-
-		if(accountDAO.getAccData() != null) {
-			list = accountDAO.getAccData();
-
-		}
-
-		List<ApiAccData> apiAccDataList =  new  ArrayList<>(); 
-
-		list.forEach(data -> {
-
-			ApiAccData apiAccData = new ApiAccData();
-			apiAccData.setUuid(data.getUuid());
-			apiAccData.setAddDate(data.getAddDate());
-			apiAccData.setPitch(data.getPitch());
-			apiAccData.setRoll(data.getRoll());
-			apiAccData.setYaw(data.getYaw());
-
-			apiAccDataList.add(apiAccData);
-
-
-		});
-
-		return apiAccDataList;
-	}
-
+	
 
 	/**
 	 * to detect duplicate value

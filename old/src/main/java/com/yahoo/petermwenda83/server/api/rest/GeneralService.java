@@ -1020,6 +1020,37 @@ public class GeneralService {
 		
 	}
 
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public Object getApiSysConfig(String accountId) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null) {
+			
+			response.setMessage("error");
+			response.setDescription("Invalid AccountId!");
+			return response;
+			
+		}else if(sysConfigDAO.getSysConfig(accountId) == null) { 
+			
+			response.setMessage("error");
+			response.setDescription("Config not found!");
+			return response;
+			
+		}else {
+			
+			return sysConfigDAO.getSysConfig(accountId);
+			
+		}
+		
+	}
+
+
+
 
 
 
@@ -1165,6 +1196,6 @@ public class GeneralService {
 	}
 
 
-
+	
 
 }
