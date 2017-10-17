@@ -612,6 +612,7 @@ public class StudentService {
 		}
 
 	}
+	
 
 	/**
 	 * 
@@ -714,9 +715,11 @@ public class StudentService {
 				List<RevertedMoney> revertedMoneyList = revertedMoneyDAO.getRevertedMoneyList(accountId,
 						student.getUuid());
 
-				APIRevertFee revertedFee = new APIRevertFee();
+				
 
 				for (RevertedMoney revertedMoney : revertedMoneyList) {
+					
+					APIRevertFee revertedFee = new APIRevertFee();
 
 					if (otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId()) != null) {
 
@@ -739,6 +742,59 @@ public class StudentService {
 		}
 
 		return studentResponse;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @return
+	 */
+	public Object getStudentOtherFeeLatsRecord(String accountId,String studentId,int size) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+			
+		}else if(studentDAO.getStudentById(accountId, studentId) == null) {
+			response.setMessage("error");
+			response.setDescription("Student not found!");
+			return response;
+			
+		}else if(studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size).isEmpty()){
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+		}
+		else {
+			
+			System.out.println(studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size)); 
+			
+			List<APIStudentOtherFee> list = new ArrayList<>();
+			
+			studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size).forEach(studentotherfee -> {
+				
+				OtherFee ofee = otherFeeDAO.getOtherFee(accountId, studentotherfee.getOtherFeeId());
+				
+				APIStudentOtherFee studentOtherFee = new APIStudentOtherFee();
+				studentOtherFee.setAmount(ofee.getAmount()+"");
+				studentOtherFee.setDateAllocated(studentotherfee.getDateAllocated().toString());
+				studentOtherFee.setDescription(ofee.getDescription());
+				studentOtherFee.setOtherFeeId(studentotherfee.getOtherFeeId());
+				studentOtherFee.setTermPiad(ofee.getTerm());
+				list.add(studentOtherFee);
+			});
+			
+			
+			return list;
+			 
+		}
+		
 	}
 
 	/**

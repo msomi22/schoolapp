@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.yahoo.petermwenda83.bean.staff.AcessLevel;
+import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiGradingScale;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiMisc;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
@@ -263,6 +264,38 @@ public class ConfigRestFulAPI {
 		}
 		
 		return generalService.getAccessLevels(accountId);
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param id
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get Categories List.", 
+			notes = "Returns List of categories.", 
+			response = Category.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/category/{accountId}")   
+	public Object getCategories(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.getCategories(accountId);  
 	}
 
 

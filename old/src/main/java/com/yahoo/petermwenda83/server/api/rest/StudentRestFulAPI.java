@@ -21,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.yahoo.petermwenda83.bean.otherfee.RevertedMoney;
 import com.yahoo.petermwenda83.server.api.filter.StudentFilter;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIStudent;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
@@ -146,6 +147,39 @@ public class StudentRestFulAPI{
 		return studentService.getStudentFee(accountId,regNo);  
 	}
 
+	
+	
+
+	/**
+	 * 
+	 * @param accountId
+	 * @param regNo
+	 * @param auth
+	 * @return
+	 */
+
+	@ApiOperation(value = "Get student RevertedMoney Info.", 
+			notes = "Return Student RevertedMoney Info object.", 
+			response = RevertedMoney.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId/studentId not found.") 
+	} )
+	@GET 
+	@Path("/fee/{accountId}/{studentId}/{size}")   
+	public Object getStudentOtherFeeLastRecord(@PathParam("accountId") String accountId, 
+			@PathParam("studentId") String studentId, @PathParam("size")int size , @HeaderParam("authorization") String auth) { 
+
+		
+		Response response = new Response(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.getStudentOtherFeeLatsRecord(accountId, studentId, size);
+	}
 
 	/**
 	 * 
