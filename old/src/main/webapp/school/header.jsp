@@ -178,13 +178,7 @@
                     </ul>
                   </li>
                   
-                  <li><a><i class="fa fa-cog"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="exam.jsp">Exam</a></li>
-                       <li><a href="streams.jsp">Stream</a></li>
-                      <li><a href="settings.jsp">Settings</a></li> 
-                    </ul>
-                  </li>
+                
 
                   <li><a><i class="fa fa-money"></i> Finance <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -192,6 +186,14 @@
                        <li><a href="termAndOthersFee.jsp">Term and Misc Fee</a></li>
                       <li><a href="freeEducation.jsp">Govt Fund</a></li>
                       <li><a href="#">Pocket Money</a></li> 
+                    </ul>
+                  </li>
+                  
+                    <li><a><i class="fa fa-cog"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="exam.jsp">Exam</a></li>
+                       <li><a href="streams.jsp">Stream</a></li>
+                      <li><a href="settings.jsp">Settings</a></li> 
                     </ul>
                   </li>
                   

@@ -36,8 +36,128 @@ function fetchCategories() {
 		}
 		
 		fetchGradingScale($('#category').val());
+		
+		$('#categoryId').val($('#category').val());
 
 	});
+
+}
+
+
+function updateYearTerm() {
+	
+	if (rootCheckFormValidation($('#yearTerm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "config/"+$('#accountId').val();
+
+		global_data_passed = $('#yearTerm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'PUT';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for year and term upodating');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				
+			//();
+			}
+
+		});
+
+	}
+
+}
+
+function addNewGradeScale() {
+	
+	
+	
+	global_request_type = 'POST';
+	alterGradeScale();
+	
+}
+
+function updateGradeScale() {
+	
+	global_request_type = 'PUT';
+	alterGradeScale();
+	
+}
+
+function alterGradeScale(){
+	
+	if (rootCheckFormValidation($('#gradingScaleForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "config/scale/"+$('#accountId').val();
+
+		global_data_passed = $('#gradingScaleForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		
+
+		globalApiCall(function(data) {
+
+			console.log('Code for year altering grade scale edit/add');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#gradingScaleModal').modal('hide');
+				fetchGradingScale($('#category').val());
+				
+				
+			//();
+			}
+
+		});
+
+	}
+
+}
+
+function gradingModal(id) {
+
+	if (id == "edit") {
+
+		// alert(id);
+		$('#gradingScaleTiltle').text("Edit Grade Scale Details");
+
+		$('#gradeScale_btn').text("Save Changes");
+
+		$("#gradeScale_btn").attr("onclick", "updateGradeScale()");
+
+	} else if (id == "add") {
+		
+		
+
+		$('#gradingScaleTiltle').text("Add a  Grade Scale");
+		$('#gradeScale_btn').text("Submit");
+		$("#gradeScale_btn").attr("onclick", "addNewGradeScale()");
+		$('#gradingScaleForm').get(0).reset();
+		
+		$('#categoryId').val($('#category').val());
+
+	}
+
+	$('#gradingScaleModal').modal('show');
 
 }
 
@@ -95,11 +215,14 @@ if (data["message"] != "error" && data.length > 0) {
 
 						destroy : true,
 						columns : cols,
+						"scrollY" : "400px",
+						"scrollCollapse" : true,
 						"columnDefs" : [
 								{
 									"targets" : [ 0 ],
 									"visible" : false,
 									"searchable" : false
+									
 								},
 								{
 									"targets" : [ 1 ],
@@ -108,7 +231,7 @@ if (data["message"] != "error" && data.length > 0) {
 								{
 									"targets" : [ 6 ],
 									"data" : null,
-									"defaultContent" : '<button class="btn btn-warning" id="edit_grade" onclick="gradingModal(this.id)">Edit <span class="fa fa-edit"></span></button>'
+									"defaultContent" : '<button class="btn btn-warning" id="edit" onclick="gradingModal(this.id)">Edit <span class="fa fa-edit"></span></button>'
 								} ],
 						searching : false,
 						"bPaginate" : false,
@@ -128,15 +251,15 @@ if (data["message"] != "error" && data.length > 0) {
 		// console.log($("#desc").val(data[3]));
 
 		$("#description").val(data['description']);
-		$("#amount").val(data['amount']);
+		$("#lowerLimit").val(data['lowerLimit']);
 
-		$("#edit_otherterm").val(data['term']);
-		$("#edit_otheryear").val(data['year']);
+		$("#upperLimit").val(data['upperLimit']);
+		$("#points").val(data['points']);
 
-		$("#term_otheruuid").val(data['uuid']);
-		$("#term_otheraccountId").val(data['accountId']);
+		$("#cat_uuid").val(data['uuid']);
+		$("#categoryId").val(data['categoryId']);
 
-		del_otheruuid = (data['uuid']);
+		//del_otheruuid = (data['uuid']);
 
 	});
 
