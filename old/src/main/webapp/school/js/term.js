@@ -286,7 +286,7 @@ function feeTermFeeList() {
 					
 
 					// destroy datatable
-					table_term.destroy();
+				//	table_term.destroy();
 					}
 
 				table_term = $('#yearlyTermFeeList')
@@ -347,7 +347,7 @@ function feeTermFeeList() {
 					 table_term.clear().draw();
 
 						// destroy datatable
-						table.destroy();
+					//	table.destroy();
 				}
 
 				$('#yearlyFee').removeClass('alert-info secondary-assent ');
@@ -420,7 +420,7 @@ function otherFeeTermFeeList() {
 					table_other.clear().draw();
 
 					// destroy datatable
-					table_other.destroy();
+				//	table_other.destroy();
 				}
 
 				table_other = $('#otherFeeList')
@@ -482,7 +482,7 @@ function otherFeeTermFeeList() {
 					table_other.clear().draw();
 
 					// destroy datatable
-					table_other.destroy();
+				//	table_other.destroy();
 				}
 
 				$('#otherFeeSms').removeClass('alert-info secondary-assent ');

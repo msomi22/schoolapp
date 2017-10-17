@@ -20,6 +20,8 @@
 
     session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+    
+    String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
    
 %>
 <jsp:include page="header.jsp" />
@@ -40,6 +42,8 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_content">
+                  
+                  	<input type="hidden" id="accountId" value="<%=accountId%>">
                   
                   
                   
@@ -118,7 +122,7 @@
 								  <div class="col-md-4">
 								 
 								 <select
-									class="form-control formelement cards" id="category" name="category" required>
+									class="form-control formelement cards" id="category" name="category" onchange="fetchGradingScale(this.value)" required>
 									<option>General</option>
 									<option>...</option>
 									<option>...</option>
@@ -134,10 +138,34 @@
                   
                   
                   <div class="row" >
+                  <br>
                   
-                  <div class="col-md-8 col-md-offset-2" id="gradingSystem">
-                  <h4>Display the grading system</h4>
-                  
+                  <div class="col-md-8 col-md-offset-2" id="">
+                 <div class="table-responsive">
+							<table class="table table-striped jambo_table bulk_action"
+								id="gradingSystem">
+								<thead>
+									<tr class="headings secondary-assent">
+
+										<th class="column-title hidden">uuid</th>
+										<th class="column-title hidden">categoryId</th>
+										<th class="column-title ">lowerLimit</th>
+										<th class="column-title">upperLimit</th>
+										<th class="column-title">description</th>
+										<th class="column-title">points</th>
+										<th class="column-title">Modify</th>
+
+									</tr>
+								</thead>
+
+								<tbody class='tablebody'>
+
+								</tbody>
+
+
+							</table>
+
+						</div>
                   </div>
                   
                   
@@ -173,4 +201,7 @@
 
         <!-- footer -->
 <jsp:include page="footer.jsp" />
+
+
+<script src="js/settings.js"></script>
         
