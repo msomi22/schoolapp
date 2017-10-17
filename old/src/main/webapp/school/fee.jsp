@@ -227,7 +227,7 @@
 										</div>
 										
 										<div class="col-md-2">
-											<button class="btn btn-primary btn-block cards"  id="addOtherFee_btn" onclick="OtherFeeModal(this.id)" disabled>Pay Other Fee <i class="fa fa-money"> </i></button>
+											<button class="btn btn-primary btn-block cards"  id="addOtherFee_btn" onclick="OtherFeeModal(this.id)" disabled>Assign Other Fee <i class="fa fa-plus-circle"> </i></button>
 										</div>
 										
 										
