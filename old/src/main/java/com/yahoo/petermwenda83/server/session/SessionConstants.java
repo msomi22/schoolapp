@@ -18,7 +18,7 @@ package com.yahoo.petermwenda83.server.session;
 public class SessionConstants {
 
 	//session management
-	final public static int SESSION_TIMEOUT = 500; 
+	final public static int SESSION_TIMEOUT = 1800; 
 	public static final String SIGN_ON_STATUS = "Online";
 
 	//Account Management

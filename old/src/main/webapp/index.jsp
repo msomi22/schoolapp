@@ -47,6 +47,8 @@
 
         if (session != null) {
           loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
+          
+          session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, null);
         }
 
         if (StringUtils.isNotEmpty(loginErrStr)) {
