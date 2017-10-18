@@ -424,8 +424,6 @@
 <!-- Staff Modal -->
 <jsp:include page="modals/staffModals.jsp" />
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />

@@ -454,9 +454,7 @@
         <!-- /page content -->
         
         
-        <!-- state modal -->
-        
-        <jsp:include page="modals/statemodals.html" />
+      
 
         <!-- footer -->
         

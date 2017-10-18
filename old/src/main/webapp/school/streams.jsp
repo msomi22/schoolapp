@@ -172,9 +172,6 @@
 <!-- stream Modal -->
 <jsp:include page="modals/streamModals.html" />
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
-
 
 
 

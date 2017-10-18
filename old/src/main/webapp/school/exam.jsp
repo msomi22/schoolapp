@@ -157,9 +157,6 @@
 
 
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
-
 
 
 <!-- footer -->

@@ -38,3 +38,54 @@ function updatePassword() {
 	}
 
 }
+
+
+function forgotPassword(){
+	
+	$('#forgotPassword').show(2000);
+	
+	$('#register').hide();
+	$('.login_form').hide(2000);
+	
+	
+	
+}
+
+function requestPassword(){
+	
+	if (rootCheckFormValidation($('#forgotPasswordForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "staff/reset/password/"+$('#account_name').val()+"/"+$('#query').val();
+
+		global_data_passed ={};
+		
+		console.log(varying_url);
+
+		console.log($('#account_name').val()+"/"+$('#query').val());
+
+		global_request_type = 'GET';
+
+		globalApiCall(function(data) {
+
+			console.log('Code for password password reset');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+			
+			//	$('#changePasswordModal').modal('hide');
+			//();
+			}
+
+		});
+
+	}
+	
+}
+
+
+
+

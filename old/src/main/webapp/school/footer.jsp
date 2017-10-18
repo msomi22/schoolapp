@@ -327,3 +327,7 @@
 
 <!-- password Modal -->
 <jsp:include page="modals/changePasswordModal.html" />
+
+
+<!-- State Modal -->
+<jsp:include page="modals/statemodals.html" />

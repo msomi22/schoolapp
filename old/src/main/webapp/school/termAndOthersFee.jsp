@@ -452,8 +452,6 @@
 <!-- term fee Modal -->
 <jsp:include page="modals/termFeeModals.html" />
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
 
 <!-- footer -->
 <jsp:include page="footer.jsp" />

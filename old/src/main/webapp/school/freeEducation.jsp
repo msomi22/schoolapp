@@ -384,8 +384,7 @@
 <!-- Govt fund template modal -->
 
 <jsp:include page="modals/govtCategoryTemplateModal.html" />
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
+
 
 <!-- footer -->
 

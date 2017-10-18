@@ -683,9 +683,6 @@
 <jsp:include page="modals/importStudents.html" />
 
 
-<!-- State Modal -->
-<jsp:include page="modals/statemodals.html" />
-
 <script src="js/apiCalls/student.js"></script>
 
 
