@@ -620,6 +620,34 @@ public class GeneralService {
 	/**
 	 * 
 	 * @param accountId
+	 * @return
+	 */
+	public Object getMisc(String accountId) {
+
+		Response response = new Response();
+
+		if(accountDAO.getAccountById(accountId) == null) { 
+			response.setMessage("error");
+			response.setDescription("Account not found!"); 
+			return response;
+
+		}else if(miscellanousDAO.getMiscellanousList(accountId).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+
+			return miscellanousDAO.getMiscellanousList(accountId);
+
+		}
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
 	 * @param misc
 	 * @return
 	 */
