@@ -97,7 +97,7 @@
           <!-- top tiles -->
           <div class="row tile_count">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Active Students</span>
+              <span class="count_top"><i class="fa fa-user"></i> Active Students <%=username +"hhhh" %></span>
               <div class="count"><%=studentDAO.activeCount(accountId, "1") %></div> 
               <span class="count_bottom"><i class="green"><%=studentDAO.activeCount(accountId, "0") %> </i> Inactive</span>
             </div>

@@ -45,12 +45,23 @@
 				<section class="login_content">
 					<%
 						String loginErrStr = "";
-						session = request.getSession(false);
+					
+				
 
-						if (session != null) {
+						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null) {
 							loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
 
-							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, null);
+							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, "");
+							  session.invalidate();
+							 // session.invalidate(); 
+
+						     //   response.sendRedirect("index.jsp");
+							
+							%>
+							
+							hhhhhh
+							
+							<% 
 						}
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {
