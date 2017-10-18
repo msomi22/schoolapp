@@ -21,6 +21,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIStaff;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.api.rest.bean.StaffProfile;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -156,6 +157,34 @@ public class StaffRestFulAPI {
 
 	}
 
+	
+	
+	@ApiOperation(value = "Update a staff Password.", 
+			notes = "Returns whether staff Password was updated successfully or not.", 
+			response = ApiResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+
+	@PUT
+	@Path("/profile/update/{accountId}")
+	public Object updateStatffProfile(@PathParam("accountId") String accountId, 
+			@HeaderParam("authorization") String auth , StaffProfile staffProfile){
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+
+			ApiResponse error = new ApiResponse("error");
+			return error; 
+
+		}else{
+
+			return staffService.updateStaffProfile(staffProfile); 
+		}
+
+	}
+
+	
+	
 
 	@ApiOperation(value = "Update a staff (change status).", 
 			notes = "Pass account and student id, return whether staff was updated.", 

@@ -29,6 +29,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APISubjectClasss;
 import com.yahoo.petermwenda83.server.api.rest.bean.APITeacherSubject;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiStaffFull;
 import com.yahoo.petermwenda83.server.api.rest.bean.Response;
+import com.yahoo.petermwenda83.server.api.rest.bean.StaffProfile;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.servlet.util.sms.SmsObject;
@@ -386,6 +387,62 @@ public class StaffService {
 	}
 
 
+	/**
+	 * 
+	 * @param staffProfile
+	 * @return
+	 */
+	public Object updateStaffProfile(StaffProfile staffProfile){
+		Response response = new Response(); 
+		
+		if(accountDAO.getAccountById(staffProfile.getAccountId()) == null) {
+			response .setMessage("error");
+			response.setDescription("Account not found!"); 
+			return response;
+			
+		}else if(staffDAO.getStaff(staffProfile.getAccountId(), staffProfile.getStaffId()) == null) {  
+			response .setMessage("error");
+			response.setDescription("Staff not found!"); 
+			return response;
+			
+		}else {
+			
+			Staff staff = staffDAO.getStaff(staffProfile.getAccountId(), staffProfile.getStaffId());
+			
+			if(!StringUtils.equals(staff.getPassword(), SecurityUtil.getMD5Hash(staffProfile.getOldpassword()))) { 
+				response .setMessage("error");
+				response.setDescription("Incorrect old password!");  
+				return response;
+				
+			}else if(!StringUtils.equals(staffProfile.getNewpassword(), staffProfile.getCnewpassword())) { 
+				response .setMessage("error");
+				response.setDescription("New password mismatch!");  
+				return response;
+				
+			}else {
+				
+				staff.setPassword(SecurityUtil.getMD5Hash(staffProfile.getNewpassword())); 
+				
+				if(staffDAO.updateStaff(staff)) {
+					response .setMessage("success");
+					response.setDescription("Profile updated successfully!"); 
+					return response;
+					
+				}else {
+					response .setMessage("error");
+					response.setDescription("Please contact admin!");   
+					return response;
+					
+				}
+				
+				
+			}
+			
+			
+		}
+		
+		
+	}
 
 
 
