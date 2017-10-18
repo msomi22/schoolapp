@@ -240,6 +240,8 @@
 <!-- Class Streams Populator -->
 <script src="js/apiCalls/classStreamsPopulator.js"></script>
 
+<!-- password js -->
+<script src="js/passwordUpdate.js"></script>
 
 
 
@@ -321,3 +323,7 @@
 
 </body>
 </html>
+
+
+<!-- password Modal -->
+<jsp:include page="modals/changePasswordModal.html" />

@@ -1523,11 +1523,11 @@ ul.msg_list li a .message {
     border-top-right-radius: 0
 }
 .dropdown-menu>li>a {
-    color: #5A738E
+    color: #fff;
 }
 .navbar-nav .open .dropdown-menu {
     position: absolute;
-    background: #fff;
+    background: #2A3F54;
     margin-top: 0;
     border: 1px solid #D9DEE4;
     -webkit-box-shadow: none;
