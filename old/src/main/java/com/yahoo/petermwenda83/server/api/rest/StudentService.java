@@ -1591,7 +1591,7 @@ public class StudentService {
 	public Object studentPagination(String accountId, int currentPage , int pageSize , String whatPage) {
 		String isActive = "1";
 		Response response = new Response();
-		pageSize = 4;
+		pageSize = 15;
 
 		if(accountDAO.getAccountById(accountId) == null) {
 			response.setMessage("error");
