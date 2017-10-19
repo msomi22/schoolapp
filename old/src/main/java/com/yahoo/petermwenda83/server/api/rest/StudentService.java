@@ -63,6 +63,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.APIRevertGoKeFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.APIRevertFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentPage;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
@@ -612,7 +613,7 @@ public class StudentService {
 		}
 
 	}
-	
+
 
 	/**
 	 * 
@@ -715,10 +716,10 @@ public class StudentService {
 				List<RevertedMoney> revertedMoneyList = revertedMoneyDAO.getRevertedMoneyList(accountId,
 						student.getUuid());
 
-				
+
 
 				for (RevertedMoney revertedMoney : revertedMoneyList) {
-					
+
 					APIRevertFee revertedFee = new APIRevertFee();
 
 					if (otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId()) != null) {
@@ -743,9 +744,9 @@ public class StudentService {
 
 		return studentResponse;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -753,34 +754,34 @@ public class StudentService {
 	 * @return
 	 */
 	public Object getStudentOtherFeeLatsRecord(String accountId,String studentId,int size) {
-		
+
 		Response response = new Response();
-		
+
 		if(accountDAO.getAccountById(accountId) == null) {
 			response.setMessage("error");
 			response.setDescription("Account not found!");
 			return response;
-			
+
 		}else if(studentDAO.getStudentById(accountId, studentId) == null) {
 			response.setMessage("error");
 			response.setDescription("Student not found!");
 			return response;
-			
+
 		}else if(studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size).isEmpty()){
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
 			return response;
 		}
 		else {
-			
+
 			System.out.println(studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size)); 
-			
+
 			List<APIStudentOtherFee> list = new ArrayList<>();
-			
+
 			studentOtherFeeDAO.getStudentOtherFeeList(accountId, studentId, 0, size).forEach(studentotherfee -> {
-				
+
 				OtherFee ofee = otherFeeDAO.getOtherFee(accountId, studentotherfee.getOtherFeeId());
-				
+
 				APIStudentOtherFee studentOtherFee = new APIStudentOtherFee();
 				studentOtherFee.setAmount(ofee.getAmount()+"");
 				studentOtherFee.setDateAllocated(studentotherfee.getDateAllocated().toString());
@@ -789,12 +790,12 @@ public class StudentService {
 				studentOtherFee.setTermPiad(ofee.getTerm());
 				list.add(studentOtherFee);
 			});
-			
-			
+
+
 			return list;
-			 
+
 		}
-		
+
 	}
 
 	/**
@@ -883,7 +884,7 @@ public class StudentService {
 				apiResponse.setMessage("success");
 				apiResponse.setDescription(newStudentData(student, accountId));
 				//return apiResponse;
-				
+
 			}
 
 		} else if (checkHasStatus(student.getHasPrimary())) {
@@ -915,9 +916,9 @@ public class StudentService {
 			}
 		} else {
 
-			
 
-			
+
+
 			apiResponse.setMessage("success this one");
 			apiResponse.setDescription(newStudentData(student, accountId));
 
@@ -1192,15 +1193,15 @@ public class StudentService {
 		return response;
 
 	}
-	
+
 	/**
 	 * 
 	 * @param student
 	 * @param accountId
 	 * @return
 	 */
-	
-	
+
+
 	private String newStudentData(StudentInfo student, String accountId) {
 
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
@@ -1230,7 +1231,7 @@ public class StudentService {
 		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
 		newstudent.setLastUpdated(new Date().toString());
 
-		
+
 		String response = "";
 
 		if (studentDAO.putStudent(newstudent)) {
@@ -1290,11 +1291,11 @@ public class StudentService {
 
 		}
 
-		
+
 
 		return response;
 
-	
+
 
 	}
 
@@ -1532,19 +1533,252 @@ public class StudentService {
 		return response;
 	}
 
+
 	/**
-	 * TODO count = (PageNum - 1) * Pagesize + 1;
 	 * 
 	 * @param accountId
-	 * @param pageNum
-	 * @param totalPage
-	 * @param pagesize
+	 * @param status
+	 * @return
+	 */
+	public Object getActiveStudents(String accountId, String status) {
+
+		Response response = new Response();
+
+		if(accountDAO.getAccountById(accountId) == null) {
+			//AccountId not found
+			response.setMessage("error");
+			response.setDescription("AccountId not found!"); 
+			return response;
+
+		}else if(studentDAO.activeCount(accountId, status) <= 0) {
+			//No students
+			response.setMessage("error");
+			response.setDescription("No students found!"); 
+			return response;
+
+		}else if(!validStatus(status)) {
+			//No students
+			response.setMessage("error");
+			response.setDescription("Status invalid!"); 
+			return response;
+
+		}else {
+			int totalActive = studentDAO.activeCount(accountId, status); 
+			String msg = "";
+			if(StringUtils.equals(status, "1")) {
+				msg = "Active";
+			}else {
+				msg = "Inactive"; 
+			}
+			response.setMessage("sucess");
+			response.setDescription("Total " + msg + " student(s)  | " + totalActive);  
+			return response;
+
+		}
+	}
+
+
+	/** TODO
+	 * 
+	 * @param accountId
+	 * @param currentPage
+	 * @param pageSize
+	 * @param whatPage
 	 * @return
 	 */
 
-	public Object studentPagination(String accountId, int pageNum, int totalPage, int pagesize) {
 
-		return null;
+	public Object studentPagination(String accountId, int currentPage , int pageSize , String whatPage) {
+		String isActive = "1";
+		Response response = new Response();
+		pageSize = 4;
+
+		if(accountDAO.getAccountById(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("AccountId not found!"); 
+			return response;
+
+		} else if(studentDAO.activeCount(accountId, isActive) <= 0){
+			response.setMessage("error");
+			response.setDescription("No student to diplay!"); 
+			return response;
+		}
+
+		else {
+
+			StudentPage studentPage = new StudentPage();
+			List<StudentInfo> studentInfoList = new ArrayList<>();
+
+			int total = studentDAO.activeCount(accountId, isActive);
+			int pages = total / pageSize ;
+			int rem = total % pageSize;
+			if(rem >= 1) {
+				pages = pages + 1;
+			}
+
+			switch (whatPage) {
+
+			case "first":
+
+				currentPage = 1;
+
+				//StudentPage studentPage = new StudentPage();
+				studentPage.setCurrentPage(currentPage);
+				studentPage.setPages(pages);
+				studentPage.setPageSize(pageSize);
+				studentPage.setTotal(total);
+
+				if(!studentDAO.getAllStudent(accountId, isActive, pageSize, 0).isEmpty()) {
+					studentDAO.getAllStudent(accountId, isActive, pageSize, 0).
+					parallelStream().
+					forEach(student -> {
+
+						StudentInfo studentInfo = new StudentInfo();
+						try {
+							BeanUtils.copyProperties(studentInfo, student);
+							studentInfoList.add(studentInfo);
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						}
+
+					});
+
+					studentPage.setContents(studentInfoList); 
+				}
+
+				return studentPage;
+
+			case "next":
+
+				int nextPage = currentPage + 1;
+				int nextIndex = (nextPage * pageSize) - pageSize;
+
+				studentPage.setCurrentPage(currentPage);
+				studentPage.setPages(pages);
+				studentPage.setPageSize(pageSize);
+				studentPage.setTotal(total);
+
+
+				if(!studentDAO.getAllStudent(accountId, isActive,  pageSize, nextIndex).isEmpty()) {
+					studentDAO.getAllStudent(accountId, isActive,  pageSize, nextIndex)
+					.parallelStream()
+					.forEach(student -> {
+
+						StudentInfo studentInfo = new StudentInfo();
+						try {
+							BeanUtils.copyProperties(studentInfo, student);
+							studentInfoList.add(studentInfo);
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						}
+
+					});
+
+					studentPage.setContents(studentInfoList); 
+				}
+
+				return studentPage;
+
+			case "prev":
+
+				int prevPage = currentPage - 1;
+				int prevIndex = (prevPage * pageSize) - pageSize;
+
+				studentPage.setCurrentPage(currentPage);
+				studentPage.setPages(pages);
+				studentPage.setPageSize(pageSize);
+				studentPage.setTotal(total);
+
+				if(!studentDAO.getAllStudent(accountId, isActive,  pageSize, prevIndex).isEmpty()) {
+					studentDAO.getAllStudent(accountId, isActive,  pageSize, prevIndex).
+					parallelStream().
+					forEach(student -> {
+
+						StudentInfo studentInfo = new StudentInfo();
+						try {
+							BeanUtils.copyProperties(studentInfo, student);
+							studentInfoList.add(studentInfo);
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						}
+
+					});
+
+					studentPage.setContents(studentInfoList); 
+				}
+
+				return studentPage;
+
+			case "last":
+
+				studentPage.setCurrentPage(currentPage);
+				studentPage.setPages(pages);
+				studentPage.setPageSize(pageSize);
+				studentPage.setTotal(total);
+
+				if(!studentDAO.getAllStudent(accountId, isActive,  pageSize, total-pageSize).isEmpty()) {
+					studentDAO.getAllStudent(accountId, isActive,  pageSize, total-pageSize).
+					parallelStream()
+					.forEach(student -> {
+
+						StudentInfo studentInfo = new StudentInfo();
+						try {
+							BeanUtils.copyProperties(studentInfo, student);
+							studentInfoList.add(studentInfo);
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						}
+
+					});
+
+					studentPage.setContents(studentInfoList); 
+				}
+
+				return studentPage;
+
+			default:
+				currentPage = 1;
+
+				//StudentPage studentPage = new StudentPage();
+				studentPage.setCurrentPage(currentPage);
+				studentPage.setPages(pages);
+				studentPage.setPageSize(pageSize);
+				studentPage.setTotal(total);
+
+				if(!studentDAO.getAllStudent(accountId, isActive, pageSize, 0).isEmpty()) {
+					studentDAO.getAllStudent(accountId, isActive, pageSize, 0).
+					parallelStream().
+					forEach(student -> {
+
+						StudentInfo studentInfo = new StudentInfo();
+						try {
+							BeanUtils.copyProperties(studentInfo, student);
+							studentInfoList.add(studentInfo);
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							e.printStackTrace();
+						}
+
+					});
+
+					studentPage.setContents(studentInfoList); 
+				}
+
+				return studentPage;
+
+			}
+
+		}
+
 	}
 
 	/**

@@ -44,9 +44,13 @@ public interface SchoolStudentDAO {
 
 	public List<Student> getStudentByStream(String accountId,String currentStream); 
 
-	public List<Student> getAllStudent(String accountId, int startIndex , int endIndex);
+	public List<Student> getAllStudent(String accountId, int limit , int offset); 
+	
+	public List<Student> getAllStudent(String accountId, String isActive, int limit , int offset); 
 	
 	public List<Student> getActiveStudents(String accountId, String isActive);  
+	
+	public List<Student> getStudents(String accountId);  
 	
 	public int classStudentCount(String accountId,String currentStream, String isActive);
 

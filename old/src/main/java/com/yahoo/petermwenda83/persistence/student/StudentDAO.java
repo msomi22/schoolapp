@@ -349,7 +349,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudent(java.lang.String, int, int)
 	 */
-	public List<Student> getAllStudent(String accountId, int startIndex , int size){
+	public List<Student> getAllStudent(String accountId, int limit , int offset){
 		List<Student> studentList = null;
 
 		try(
@@ -358,8 +358,8 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 						+ "accountId = ? ORDER BY regNo DESC LIMIT ? OFFSET ? ;");
 				) {
 			psmt.setString(1, accountId);
-			psmt.setInt(2, size);
-			psmt.setInt(3, startIndex);
+			psmt.setInt(2, limit);
+			psmt.setInt(3, offset);
 
 			try(ResultSet rset = psmt.executeQuery();){
 
@@ -373,6 +373,40 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		return studentList;		
 	}
+	
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudent(java.lang.String, java.lang.String, int, int)
+	 */
+	@Override
+	public List<Student> getAllStudent(String accountId, String isActive, int limit, int offset) {
+		List<Student> studentList = null;
+
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
+						+ "accountId = ? AND isActive = ? LIMIT ? OFFSET ? ;");//ORDER BY regNo DESC 
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, isActive);
+			psmt.setInt(3, limit);
+			psmt.setInt(4, offset);
+
+			try(ResultSet rset = psmt.executeQuery();){
+
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;	
+	}
+
+
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#activeCount(java.lang.String, java.lang.String)
@@ -565,7 +599,31 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		return studentList;		
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudents(java.lang.String)
+	 */
+	@Override
+	public List<Student> getStudents(String accountId) {
+		List<Student> studentList = null;
 
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE accountId = ?;");
+				) {
+			psmt.setString(1, accountId);
+			try(ResultSet rset = psmt.executeQuery();){
 
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;		
+	}
+
+	
 
 }

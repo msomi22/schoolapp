@@ -35,6 +35,7 @@ import com.yahoo.petermwenda83.server.api.rest.bean.StudentFeeAPI;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentStatus;
 import com.yahoo.petermwenda83.server.api.rest.bean.UpdateFee;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentInfo;
+import com.yahoo.petermwenda83.server.api.rest.bean.StudentPage;
 import com.yahoo.petermwenda83.server.api.rest.bean.StudentPayFee;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -391,6 +392,38 @@ public class StudentRestFulAPI{
 		return studentService.getStudentFilter(accountId,filter);  
 	}
 	
+	/**
+	 * 
+	 * @param accountId
+	 * @param currentPage
+	 * @param pageSize
+	 * @param whatPage
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get student basic information - Paginationed.", 
+			notes = "Returns student object paginated based on query parameters .", 
+			response = StudentPage.class)
+	
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found!") 
+	} )
+	@GET 
+	@Path("/pagination/{accountId}/{currentPage}/{pageSize}/{whatPage}")   
+	public Object studentPagination(@PathParam("accountId") String accountId, @PathParam("currentPage") int currentPage,
+			@PathParam("pageSize") int pageSize, @PathParam("whatPage") String whatPage,
+			@HeaderParam("authorization") String auth) { 
+
+		Response response = new Response(); 
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+		
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+		
+		return studentService.studentPagination(accountId, currentPage , pageSize , whatPage);  
+	}
+	
 	
 	
 	/**
@@ -634,10 +667,6 @@ public class StudentRestFulAPI{
 		
 		return studentService.changeClass(accountId, changeClass); 
 	}
-	
-	
-	//TODO
-	//update student parent
 	
 	
 
