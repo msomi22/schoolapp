@@ -1792,7 +1792,7 @@ public class StudentService {
 
 		List<StudentInfo> studentInfoList = new ArrayList<>();
 
-		if (filter.getLimit() >= 0 && filter.getOffset() > 0) {
+		if (filter.getLimit() >= 0 && filter.getOffset() >= 0) {
 
 			studentDAO.getAllStudent(accountId, filter.getLimit(), filter.getOffset()).forEach(student -> {
 
