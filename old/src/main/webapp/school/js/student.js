@@ -2,16 +2,15 @@ var start = 0;
 
 var size = 15;
 
-var total_size;
+var total_size=0;
+
+ var page_size=0;
+ 
+ var current_page=1;
 
 var count = 0;
 
-$(document).ready(function() {
-	total_size = $('#total_students').val();
 
-	console.log(total_size);
-	total_size = total_size - 15;
-})
 function pagination(button) {
 
 	$('#pagination').show();
@@ -23,11 +22,15 @@ function pagination(button) {
 		$('#F,#L,#P').attr('disabled', false);
 
 		if (start < total_size)
+			{
 			start += size;
+		current_page+= 1;
+			}
 		
 		else if (start >= total_size){
 			start=total_size;
 			count=total_size;
+			current_page= page_size;
 			$('#N').attr('disabled', true);
 			$('#L').attr('disabled', true);
 			
@@ -45,7 +48,9 @@ function pagination(button) {
 
 		start = total_size;
 		count= total_size;
+		current_page= page_size;
 
+		
 	} else if (button === "F") {
 		$('#N,#L').show(1000);
 		$('#P').hide(1000);
@@ -53,18 +58,21 @@ function pagination(button) {
 		$('#L,#N').attr('disabled', false);
 		start = 0;
 		count= 0;
+		current_page= 1;
 
 	} else if (button === "P") {
 		$('#F,#P,#N,#L').show(1000);
 		$('#F,#L,#N,#P').attr('disabled', false);
 		
 		count-=(size*2);
+		current_page -=1;
 
 		if (start > 0)
 			start -= size;
 		else if(start <=0){
 			start=0;
 			count=0;
+			current_page= 0;
 			$('#P').attr('disabled', true);
 			$('#F').attr('disabled', true);
 		}
@@ -93,6 +101,20 @@ function pagination(button) {
 
 $(document).ready(
 		function() {
+			
+			
+			
+			total_size = parseInt($('#total_students').val());
+			
+			page_size= Math.ceil(total_size/size);
+			
+			$('#pageSize').html(page_size);
+			$('.currentPage').html(current_page);
+
+			console.log(total_size + "page Size:"+page_size +"total :"+total_size);
+			total_size = total_size - 15;
+			
+			
 			varying_url = "student/" + $('#accountId').val() + "?limit=" + size
 					+ "&offset=" + start;
 
@@ -121,13 +143,21 @@ function delayInput() {
 var table;
 
 function fetchStudents(paginate) {
+	
+	//console.log(page_size);
 	if(start >= total_size){
 		start=total_size;
 		count=total_size;
+		current_page=page_size;
 	}else if(start <=0){
 		start=0;
 		count=0;
+		current_page=1;
 	}
+	
+	$('#pageSize').html(page_size);
+	$('.currentPage').html(current_page);
+	console.log(current_page + "of "+page_size);
 
 	global_data_passed = {};
 
@@ -201,6 +231,7 @@ function fetchStudents(paginate) {
 								"bPaginate" : paginate,
 								"bLengthChange" : paginate,
 								searching : false,
+								"bInfo" : false,
 								columns : cols,
 								"scrollY" : "400px",
 								"scrollCollapse" : true,
