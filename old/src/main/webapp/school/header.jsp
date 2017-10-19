@@ -258,10 +258,10 @@
 							</li>
 
 							<li class="pull-left">
-								<h2 class="year"></h2>
+								<h2 class="year sec_text "></h2>
 							</li>
 							<li class="pull-left">
-								<h2 class="term"></h2>
+								<h2 class="term sec_text "></h2>
 							</li>
 
 
