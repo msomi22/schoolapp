@@ -6,7 +6,7 @@ var varying_url="";
 var global_request_type = 'GET';
 
 var global_data_passed = {};
-
+var global_auth= "ZGVtbzoxMjM0NTY3OA==";
 function globalApiCall(handleData) {
 
 	$.ajax(
@@ -19,7 +19,7 @@ function globalApiCall(handleData) {
 				accept : 'application/json',
 				beforeSend : function(xhr) {
 					xhr.setRequestHeader('Authorization',
-							'Basic ZGVtbzoxMjM0NTY3OA==');
+							'Basic '+global_auth);
 				}
 			}).done(function(data) {
 

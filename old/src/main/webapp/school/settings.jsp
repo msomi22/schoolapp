@@ -90,8 +90,8 @@
 
 										<div class="col-md-2">
 
-											<input type="hidden" name="uuid"> <input
-												type="hidden" name="examId"> <input type="hidden"
+											<input type="hidden" name="uuid" id="uuid"> <input
+												type="hidden" name="examId" value="D50E6399-B913-42F2-A5B6-F0D4BAAF9571"> <input type="hidden"
 												name="cansendSMS" value="0"> <input type="hidden"
 												name="accountId" value="<%=accountId%>"> <input
 												type="button" name="set_btn" id="set_btn"

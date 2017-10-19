@@ -77,7 +77,7 @@
 		autoclose : true
 
 	});
-	
+
 	/* $("#inityear").datepicker({
 		format : "yyyy",
 		viewMode : "years",
@@ -88,7 +88,7 @@
 		autoclose : true
 
 	}); */
-	
+
 	$(".yearConfig").datepicker({
 		format : "yyyy",
 		viewMode : "years",
@@ -163,15 +163,15 @@
 	src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script
 	src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-	
-	<script
+
+<script
 	src="../vendors/datatables.net-scroller/js/dataTables.scrollResize.js"></script>
-	
-	
-	<script
+
+
+<script
 	src="../vendors/datatables.net-scroller/js/jquery.scrollTo.min.js"></script>
-	
-	
+
+
 
 
 
@@ -235,6 +235,9 @@
 <!-- Class Streams Populator -->
 <script src="js/apiCalls/classStreamsPopulator.js"></script>
 
+<!-- year term config -->
+<script src="js/apiCalls/configYearTerm.js"></script>
+
 <!-- password js -->
 <script src="js/passwordUpdate.js"></script>
 
@@ -282,7 +285,18 @@
 	
 	 */
 
-	
+	$(document).ready(function() {
+		console.log('Heheheh');
+		// sessionStorage.clear();
+
+		disableBackButton();
+
+	})
+
+	function disableBackButton() {
+		window.history.forward();
+	}
+	setTimeout("disableBackButton()", 0);
 </script>
 
 

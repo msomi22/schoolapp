@@ -32,7 +32,7 @@
 <link rel="icon" href="resources/favicon.ico">
 </head>
 
-<body class="login">
+<body class="login" onload="disableBackButton()">
 	<div>
 		<a class="hiddenanchor" id="signup"></a> <a class="hiddenanchor"
 			id="signin"></a>
@@ -45,12 +45,20 @@
 				<section class="login_content">
 					<%
 						String loginErrStr = "";
-						session = request.getSession(false);
+					
+				
 
-						if (session != null) {
+						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null | session !=null) {
 							loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
 
-							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, null);
+							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, "");
+							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID, "");
+							//  session.invalidate();
+							 // session.invalidate(); 
+
+						     //   response.sendRedirect("index.jsp");
+							
+						
 						}
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {
@@ -256,8 +264,25 @@
 	<script src="school/js/passwordUpdate.js"></script>
 	
 	
+	<script  type="text/javascript">
+	$(document).ready(function() {
+		console.log('Heheheh');
+		// sessionStorage.clear();
+
+		disableBackButton();
+
+	})
+
+	function disableBackButton() {
+		window.history.forward();
+	}
+	setTimeout("disableBackButton()", 0);
+	
+	</script>
+	
+	
 <!-- State Modal -->
-<jsp:include page="school/modals/statemodals.html" />
+<jsp:include page="school/modals/initModals.html" />
 	
 </body>
 </html>

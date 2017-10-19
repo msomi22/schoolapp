@@ -355,7 +355,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
-						+ "accountId = ? ORDER BY regNo DESC LIMIT ? OFFSET ? ;");
+						+ "accountId = ?  LIMIT ? OFFSET ? ;");
 				) {
 			psmt.setString(1, accountId);
 			psmt.setInt(2, limit);
