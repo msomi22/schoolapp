@@ -44,8 +44,22 @@ public interface SchoolStudentDAO {
 
 	public List<Student> getStudentByStream(String accountId,String currentStream); 
 
+	/**
+	 * 
+	 * @param accountId account id 
+	 * @param limit SQL LIMIT, if limit is 5, display only the first 5 records
+	 * @param offset SQL OFFSET, if offset is 5, skip the first 5 records,
+	 * @return list of {@link Student} 
+	 */
 	public List<Student> getAllStudent(String accountId, int limit , int offset); 
-	
+	/**
+	 * 
+	 * @param accountId account id 
+	 * @param isActive status 
+	 * @param limit SQL LIMIT, if limit is 5, display only the first 5 records
+	 * @param offset  SQL OFFSET, if offset is 5, skip the first 5 records,
+	 * @return list of {@link Student} 
+	 */
 	public List<Student> getAllStudent(String accountId, String isActive, int limit , int offset); 
 	
 	public List<Student> getActiveStudents(String accountId, String isActive);  
