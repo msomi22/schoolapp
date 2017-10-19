@@ -1795,10 +1795,15 @@ public class StudentService {
 	 */
 
 	public Object getStudentFilter(String accountId, StudentFilter filter) {
+		
+		/*System.out.println(" filter : " + filter.getCurrentStream());
+		System.out.println(" filter : " + filter.getLimit());
+		System.out.println(" filter : " + filter.getOffset());
+		System.out.println(" filter : " + filter.getQuery());*/
 
 		List<StudentInfo> studentInfoList = new ArrayList<>();
 
-		if (filter.getLimit() >= 0 && filter.getOffset() >= 0) {
+		if (filter.getLimit() > 0 && filter.getOffset() >= 0) {
 
 			studentDAO.getAllStudent(accountId, filter.getLimit(), filter.getOffset()).forEach(student -> {
 
