@@ -132,7 +132,7 @@
 
 </head>
 
-<body class="nav-md footer_fixed">
+<body class="nav-md footer_fixed" onload="disableBackButton()">
 	<div class="container body">
 		<div class="main_container">
 			<div class="col-md-3 left_col menu_fixed">

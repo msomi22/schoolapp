@@ -32,7 +32,7 @@
 <link rel="icon" href="resources/favicon.ico">
 </head>
 
-<body class="login">
+<body class="login" onload="disableBackButton()">
 	<div>
 		<a class="hiddenanchor" id="signup"></a> <a class="hiddenanchor"
 			id="signin"></a>
@@ -265,6 +265,23 @@
 
 
 	<script src="school/js/passwordUpdate.js"></script>
+	
+	
+	<script  type="text/javascript">
+	$(document).ready(function() {
+		console.log('Heheheh');
+		// sessionStorage.clear();
+
+		disableBackButton();
+
+	})
+
+	function disableBackButton() {
+		window.history.forward();
+	}
+	setTimeout("disableBackButton()", 0);
+	
+	</script>
 	
 	
 <!-- State Modal -->
