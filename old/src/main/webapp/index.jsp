@@ -282,7 +282,7 @@
 	
 	
 <!-- State Modal -->
-<jsp:include page="school/modals/statemodals.html" />
+<jsp:include page="school/modals/initModals.html" />
 	
 </body>
 </html>
