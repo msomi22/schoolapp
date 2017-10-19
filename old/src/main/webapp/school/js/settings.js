@@ -64,6 +64,7 @@ function fetchSettingsConfig() {
 		
 		$('#year').val(data['year']);
 		$('#term').val(data['term']);
+		$('#uuid').val(data['uuid']);
 
 	});
 
