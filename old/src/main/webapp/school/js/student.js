@@ -134,6 +134,8 @@ function delayInput() {
 
 		if ($('#query').val().length <= 0)
 			$('#pagination').show(1000);
+		
+		count=0;
 
 		fetchStudents(true);
 
@@ -192,6 +194,12 @@ function fetchStudents(paginate) {
 
 				}
 			});*/
+			
+			console.log(count);
+			
+			if(count <0)
+				count=0;
+			
 
 			for (var i = 0; i < data.length; i++) {
 
