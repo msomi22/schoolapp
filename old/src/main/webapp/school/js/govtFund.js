@@ -8,6 +8,7 @@ var uuid="";
 $(document).ready(function() {
 
 	fetCategories();
+	fetchConfig();
 
 });
 

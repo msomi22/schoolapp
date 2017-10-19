@@ -4,7 +4,7 @@ function fetchConfig() {
 
 	
 
-	varying_url = "config/config/" + $('#accountId').val();
+	varying_url = "config/config/" + $('#globalAccountId').val();
 
 	global_data_passed = {};
 	global_request_type = 'GET';

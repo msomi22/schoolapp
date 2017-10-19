@@ -5,6 +5,7 @@ $(document).keypress(function(e) {
 		// alert("dd")
 		var index = $('.ui-dform-text').index(document.activeElement) + 1;
 		$('.ui-dform-text').eq(index).focus();
+		fetchConfig();
 
 	}
 });

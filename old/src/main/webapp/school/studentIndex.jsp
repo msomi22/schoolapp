@@ -193,6 +193,7 @@
                            
                            <th class="column-title hidden">isBoarding</th>
                            <th class="column-title hidden">isGoKFeeEligibe</th>
+                            <th class="column-title">studentCount</th>
                            
                            
                             <th class="column-title">regNo</th>

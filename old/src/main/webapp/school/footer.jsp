@@ -203,6 +203,11 @@
 </script>
 
 <script src="../build/js/custom.js"></script>
+
+<!-- year term config -->
+<script src="js/apiCalls/configYearTerm.js"></script>
+
+
 <!-- validate js -->
 
 <script type="text/javascript" src="js/validate.js"></script>
@@ -235,8 +240,7 @@
 <!-- Class Streams Populator -->
 <script src="js/apiCalls/classStreamsPopulator.js"></script>
 
-<!-- year term config -->
-<script src="js/apiCalls/configYearTerm.js"></script>
+
 
 <!-- password js -->
 <script src="js/passwordUpdate.js"></script>
