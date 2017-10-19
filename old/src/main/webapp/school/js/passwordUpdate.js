@@ -1,5 +1,10 @@
 function changePasswordModal(){
 	
+	
+	$('#staffId').val($('#userId').val());
+	$('#accountId_profile').val($('#globalAccountId').val());
+	$('#username').val($('#user').val());
+	
 	$('#changePasswordModal').modal('show');
 }
 
@@ -10,7 +15,7 @@ function updatePassword() {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "config/"+$('#accountId').val();
+		varying_url = "staff/profile/update/"+$('#globalAccountId').val();
 
 		global_data_passed = $('#changePasswordForm').serializeJSON();
 		
@@ -30,6 +35,11 @@ function updatePassword() {
 				
 			
 				$('#changePasswordModal').modal('hide');
+				
+				setTimeout(function(){
+					
+					window.location=location.protocol + "//" + window.location.host+'/school';
+				},2000)
 			//();
 			}
 

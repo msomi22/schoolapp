@@ -57,11 +57,7 @@
 
 						     //   response.sendRedirect("index.jsp");
 							
-							%>
-							
-							hhhhhh
-							
-							<% 
+						
 						}
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {

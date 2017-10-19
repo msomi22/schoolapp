@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
+<%@page
+	import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
 
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
@@ -22,7 +23,13 @@
 		//return;
 	}
 
-   String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	String user_name = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(user_name)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
+
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 	if (StringUtils.isEmpty(accountId)) {
 		response.sendRedirect("../index.jsp");
 		//return;
@@ -30,16 +37,16 @@
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-	
-    String username = "";
-    
-    AccountDAO accountDAO = AccountDAO.getInstance();
+
+	String username = "";
+
+	AccountDAO accountDAO = AccountDAO.getInstance();
 	accountDAO.getAccountById(accountId);
 
-    Account account = new Account();
-	
+	Account account = new Account();
+
 	account = accountDAO.getAccountById(accountId);
-	
+
 	username = account.getUsername();
 
 	String user = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
@@ -177,7 +184,7 @@
 									<ul class="nav child_menu">
 										<li><a href="generateReport.jsp">Exam Reports</a></li>
 										<li><a href="submitExam.jsp">Submit Exam</a></li>
-										<li><a href="#">Subjects</a></li>
+
 
 									</ul></li>
 
@@ -249,25 +256,28 @@
 							<li class="pull-left">
 								<h2><%=account.getName()%></h2>
 							</li>
-							
+
 							<li class="pull-left">
 								<h2 class="year"></h2>
 							</li>
 							<li class="pull-left">
 								<h2 class="term"></h2>
 							</li>
-							
-							
-							
+
+
+
 							<li class=""><a href="javascript:;"
 								class="user-profile dropdown-toggle" data-toggle="dropdown"
 								aria-expanded="false"> <img src="images/user.png" alt=""><%=user%>
 									<span class=" fa fa-angle-down"></span>
 							</a>
 								<ul class="dropdown-menu dropdown-usermenu pull-right">
-									<li><a href="#" onclick="changePasswordModal()"> Profile</a>
+									<li><a href="#" onclick="changePasswordModal()">
+											Profile</a> <input type="hidden" id="user" value="<%=user%>">
+											<input type="hidden" id="globalAccountId" value="<%=accountId%>">
+										<input type="hidden" id="userId" value="<%=userId%>">
 
-										</li>
+									</li>
 									<li><a href="settings.jsp"> <span
 											class="badge bg-red pull-right">New</span> <span>Settings</span>
 									</a></li>
