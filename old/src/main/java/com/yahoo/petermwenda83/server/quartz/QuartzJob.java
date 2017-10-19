@@ -150,7 +150,7 @@ public class QuartzJob implements Job{
 								
 								
 								feeBreakdown.setStatus("0"); 
-								feeBreakdownDAO.updateFeeBreakdown(feeBreakdown);
+								feeBreakdownDAO.putFeeBreakdown(feeBreakdown);
 								
 								
 								

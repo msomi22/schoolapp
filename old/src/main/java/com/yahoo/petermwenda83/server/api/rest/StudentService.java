@@ -280,6 +280,12 @@ public class StudentService {
 			response.setDescription("Student RegNo-Id mismatch!");
 			return response;
 
+		} else if (studentPayFee.getAmount().length() < 1) {
+
+			response.setMessage("error");
+			response.setDescription("Amount is invalid!");
+			return response;
+
 		} else if (!FeeConstants.validFee(Integer.valueOf(studentPayFee.getAmount()))) {
 
 			response.setMessage("error");
@@ -414,7 +420,7 @@ public class StudentService {
 
 		Response response = new Response();
 
-		if (studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getOtherFeeId(),
+		if (studentOtherFeeDAO.getStudentOtherFee(apiOtherFee.getAccountId(), apiOtherFee.getStudentId(),
 				apiOtherFee.getOtherFeeId()) != null) {
 			response.setMessage("error");
 			response.setDescription("Amount already assigned!");

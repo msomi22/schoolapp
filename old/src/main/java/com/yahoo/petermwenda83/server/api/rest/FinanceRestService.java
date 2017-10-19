@@ -116,6 +116,7 @@ public class FinanceRestService {
 		}else {
 
 			feeBreakdown.setUuid(new FeeBreakdown().getUuid()); 
+			feeBreakdown.setFeeCategory("GO_KE");
 
 			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)){
 				response.setMessage("success");
@@ -168,6 +169,7 @@ public class FinanceRestService {
 		}else {
 
 
+			feeBreakdown.setFeeCategory("GO_KE");
 			if(feeBreakdownDAO.updateFeeBreakdown(feeBreakdown)){ 
 				response.setMessage("success");
 				response.setDescription("Info updated successfully.!"); 
@@ -226,12 +228,7 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		/*if(feeBreakdownDesc.getFeeCode().length() < 2) {
-			response.setMessage("error");
-			response.setDescription("Invalid code!");
-			return response;
-
-		}else */if(feeBreakdownDesc.getFeeDescription().length() < 3) {
+		if(feeBreakdownDesc.getFeeDescription().length() < 3) {
 			response.setMessage("error");
 			response.setDescription("Invalid description!");
 			return response;
@@ -257,6 +254,7 @@ public class FinanceRestService {
 
 			feeBreakdownDesc.setUuid(new FeeBreakdownDesc().getUuid()); 
 			feeBreakdownDesc.setFeeCode(RandomStringUtils.random(4)); 
+			
 
 			if(feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc)) {
 				response.setMessage("success");
@@ -273,6 +271,90 @@ public class FinanceRestService {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Object useTemplate(String accountId) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+			
+		}else if(sysConfigDAO.getSysConfig(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Term/Year not found!");
+			return response;
+			
+		}else if(feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", sysConfigDAO.getSysConfig(accountId).getTerm(), 
+				 sysConfigDAO.getSysConfig(accountId).getYear()) != null) {
+			response.setMessage("error");
+			response.setDescription("Looks like you have alredy used the template!");
+			return response;
+			
+		}else {
+			
+			String feeBreakdownId = "";
+			
+			int[] feeCode = {100,101,102,103,104,105,106};
+			String[] feeDescription = {"R.M.I","E.W. & C","Administration costs","L.T. & T.","P.E.", "Activity ","Others(Specify)"};
+			int[] amount = {90,130,130,90,830,130,100};
+			
+			SysConfig config = sysConfigDAO.getSysConfig(accountId);
+			
+			FeeBreakdown feeBreakdown;
+			if(feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", config.getTerm(), config.getYear()) == null) {
+				feeBreakdown = new FeeBreakdown();
+				feeBreakdownId = feeBreakdown.getUuid();
+				feeBreakdown.setUuid(feeBreakdownId); 
+				feeBreakdown.setAccountId(accountId);
+				feeBreakdown.setFeeCategory("GO_KE");
+				feeBreakdown.setTerm(config.getTerm());
+				feeBreakdown.setYear(config.getYear());
+				feeBreakdown.setStatus("0");
+				feeBreakdown.setAmount(0);
+			}else {
+				feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", config.getTerm(), config.getYear());
+				feeBreakdownId = feeBreakdown.getUuid();
+				
+			}
+			
+			
+			boolean success = false;
+			
+			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)) {
+				
+				for(int count=0;count<feeCode.length;count++) {
+					FeeBreakdownDesc feeBreakdownDesc = new FeeBreakdownDesc();
+					feeBreakdownDesc.setAccountId(accountId);
+					feeBreakdownDesc.setFeeBreakdownId(feeBreakdownId);
+					feeBreakdownDesc.setFeeCode(String.valueOf(feeCode[count])); 
+					feeBreakdownDesc.setFeeDescription(feeDescription[count]);
+					feeBreakdownDesc.setAmount(amount[count]); 
+					 success = feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc);
+				}
+				
+			}
+			
+			if(success) {
+				response.setMessage("success");
+				response.setDescription("Template used successfully!");
+				return response;
+				
+			}else {
+				response.setMessage("error");
+				response.setDescription("Please contact Admin!"); 
+				return response;
+			}
+			
+		}
+		
+	}
+
 
 	/**
 	 * 
@@ -925,7 +1007,7 @@ public class FinanceRestService {
 
 		return hasduplicate;
 	}
-
+	
 
 
 }

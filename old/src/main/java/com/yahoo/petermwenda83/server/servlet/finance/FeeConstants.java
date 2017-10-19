@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.yahoo.petermwenda83.bean.money.FeeBreakdownDesc;
 import com.yahoo.petermwenda83.persistence.money.FeeBreakdownDescDAO;
 
@@ -77,6 +79,7 @@ public class FeeConstants {
 		if(amount > 100000) { 
 			valid = false;
 		}
+		
 
 		return valid;
 	}

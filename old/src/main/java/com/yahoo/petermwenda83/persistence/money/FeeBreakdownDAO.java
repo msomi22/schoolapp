@@ -191,8 +191,8 @@ public class FeeBreakdownDAO extends GenericDAO implements SchoolFeeBreakdownDAO
 			pstmt.setString(3, feeBreakdown.getFeeCategory());
 			pstmt.setString(4, feeBreakdown.getTerm());
 			pstmt.setString(5, feeBreakdown.getYear());
-			pstmt.setString(7, feeBreakdown.getStatus());
-			pstmt.setInt(8, feeBreakdown.getAmount());
+			pstmt.setString(6, feeBreakdown.getStatus());
+			pstmt.setInt(7, feeBreakdown.getAmount());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){

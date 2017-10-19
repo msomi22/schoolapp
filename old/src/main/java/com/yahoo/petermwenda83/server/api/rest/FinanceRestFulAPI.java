@@ -89,32 +89,6 @@ public class FinanceRestFulAPI {
 		return financeRestService.addFeeBreakdown(feeBreakdown);
 	}
 	
-	@ApiOperation(value = "Update Fee Breakdown.", 
-			notes = "Returns whether Breakdown was updated.", 
-			response = Response.class)
-
-	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
-	} )
-	@PUT
-	@Path("/fee/category/{accountId}/")  
-	public Object updateFeeBreakdown(@PathParam("accountId") String accountId, FeeBreakdown feeBreakdown,
-			@HeaderParam("authorization") String auth) {
-
-		Response response = new Response();
-		response.setMessage("error");
-		response.setDescription("User not authenticated");
-
-		if(!RestAUth.isUserAuthenticated(auth, accountId)){
-			return response; 
-		}
-
-		return financeRestService.updateFeeBreakdown(feeBreakdown); 
-	}
-	
-	
-	
-	
-	
 	
 	
 	
@@ -177,6 +151,39 @@ public class FinanceRestFulAPI {
 
 		return financeRestService.putGoKeMoney(feeBreakdownDesc);
 	}
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Use Gok Fee Template.", 
+			notes = "Returns whether Government template was used.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/goke/template/{accountId}")   
+	public Object useGoKTemplate(@PathParam("accountId") String accountId,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.useTemplate(accountId);
+	}
+	
+	
+	
+	
 	/**
 	 * 
 	 * @param accountId
