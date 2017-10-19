@@ -6,6 +6,9 @@ var total_size;
 
 $(document).ready(function(){
 	total_size= $('#total_students').val();
+	
+	console.log(total_size);
+	total_size=total_size-15;
 })
 function pagination(button) {
 	
@@ -31,7 +34,7 @@ function pagination(button) {
 		$('#L').attr('disabled', true);
 		$('#F,#P').attr('disabled', false);
 
-		start = total_size-15;
+		start = total_size;
 
 	} else if (button === "F") {
 		$('#N,#L').show(1000);
