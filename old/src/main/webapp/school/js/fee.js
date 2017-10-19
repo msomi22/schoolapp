@@ -315,7 +315,7 @@ function feePayment() {
 						setTimeout(function() {
 
 							$('#feePayment').modal('hide');
-						}, 2000);
+						}, 500);
 
 						setTimeout(function() {
 
@@ -323,7 +323,8 @@ function feePayment() {
 						}, 3000);
 						
 						$('#regno').val(regno);
-						
+						$('#paymentSpace').toggle(2000);
+						$('#PreSubmitInfo').toggle(1000);
 						fetchFeeDetails('info');
 
 					} else if (data.message.includes("error")) {
