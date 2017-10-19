@@ -2,7 +2,7 @@ $(document).ready(function (){
 	
 	fetchCategories();
 	
-	fetchConfig();
+	fetchSettingsConfig();
 	
 })
 
@@ -45,7 +45,7 @@ function fetchCategories() {
 
 }
 
-function fetchConfig() {
+function fetchSettingsConfig() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
@@ -95,11 +95,13 @@ function updateYearTerm() {
 			if(rootParseApiResponseData(data)){
 				
 				fetchConfig();
+				fetchSettingsConfig();
 				
 			//();
 			}else{
 				
 				fetchConfig();
+				fetchSettingsConfig();
 				
 			}
 

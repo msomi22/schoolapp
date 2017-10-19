@@ -240,6 +240,9 @@
 <!-- Class Streams Populator -->
 <script src="js/apiCalls/classStreamsPopulator.js"></script>
 
+<!-- year term config -->
+<script src="js/apiCalls/configYearTerm.js"></script>
+
 <!-- password js -->
 <script src="js/passwordUpdate.js"></script>
 

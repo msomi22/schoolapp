@@ -147,7 +147,7 @@
 					<!-- menu profile quick info -->
 					<div class="profile clearfix">
 						<div class="profile_pic">
-							<img src="images/peter.jpg" alt="..."
+							<img src="images/user.png" alt="..."
 								class="img-circle profile_img">
 						</div>
 						<div class="profile_info">
@@ -252,9 +252,19 @@
 							<li class="pull-left">
 								<h2><%=account.getName()%></h2>
 							</li>
+							
+							<li class="pull-left">
+								<h2 class="year"></h2>
+							</li>
+							<li class="pull-left">
+								<h2 class="term"></h2>
+							</li>
+							
+							
+							
 							<li class=""><a href="javascript:;"
 								class="user-profile dropdown-toggle" data-toggle="dropdown"
-								aria-expanded="false"> <img src="images/peter.jpg" alt=""><%=user%>
+								aria-expanded="false"> <img src="images/user.png" alt=""><%=user%>
 									<span class=" fa fa-angle-down"></span>
 							</a>
 								<ul class="dropdown-menu dropdown-usermenu pull-right">
