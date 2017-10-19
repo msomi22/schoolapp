@@ -464,7 +464,7 @@ ALTER TABLE GradingSystem OWNER TO school;
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
-    examId text REFERENCES Exam(uuid), 
+    examId text, 
     term text,
     year text,
     cansendSMS text

@@ -1,27 +1,22 @@
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
+
+
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 
 <%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
 
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
-
 <%@ page import="java.util.Calendar"%>
 
 <%
-	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-
-	CacheManager mgr = CacheManager.getInstance();
-	Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-	Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+   
+	AccountDAO accountDAO = AccountDAO.getInstance();
+	
 	Account account = new Account();
-	Element element;
-
-	if ((element = accountsCache.get(username)) != null) {
-		account = (Account) element.getObjectValue();
-	}
+	
+	account = accountDAO.getAccountById(accountId);
+	
 %>
 
 

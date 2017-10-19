@@ -104,6 +104,29 @@ public class ConfigRestFulAPI {
 
 
 
+	@ApiOperation(value = "Get ApiMisc List.", 
+			notes = "Return ApiMisc objects List.", 
+			response = ApiMisc.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/misc/{accountId}")    
+	public Object getMisc(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return generalService.getMisc(accountId);
+	}
+	
+	
+
 	@ApiOperation(value = "ApiMisc object to update.", 
 			notes = "Pass ApiMisc object to be updated.", 
 			response = ApiResponse.class)
@@ -112,9 +135,9 @@ public class ConfigRestFulAPI {
 	} )
 	@PUT
 	@Path("/misc/{accountId}")    
-	public Object updateMusc(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiMisc misc) {
+	public Object updateMisc(@PathParam("accountId") String accountId, @HeaderParam("authorization") String auth, ApiMisc misc) {
 
-		ApiResponse response = new ApiResponse();
+		Response response = new Response();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 
@@ -143,7 +166,7 @@ public class ConfigRestFulAPI {
 	public Object getGradingScaleById(@PathParam("accountId") String accountId, @PathParam("uuid") String uuid, 
 			@HeaderParam("authorization") String auth) {
 
-		ApiResponse response = new ApiResponse();
+		Response response = new Response();
 		response.setMessage("error");
 		response.setDescription("User not authenticated");
 

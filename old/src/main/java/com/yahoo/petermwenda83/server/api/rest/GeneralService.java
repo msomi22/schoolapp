@@ -560,10 +560,6 @@ public class GeneralService {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid sms code!");
 
-		}else if(examDAO.getExam(apiSysConfig.getAccountId(), apiSysConfig.getExamId()) == null) {
-			apiResponse.setMessage("error");
-			apiResponse.setDescription("Invalid exam id!");
-
 		}else if(!validTerm(apiSysConfig.getTerm())) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("Invalid term!");
@@ -621,6 +617,34 @@ public class GeneralService {
 	}
 
 
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public Object getMisc(String accountId) {
+
+		Response response = new Response();
+
+		if(accountDAO.getAccountById(accountId) == null) { 
+			response.setMessage("error");
+			response.setDescription("Account not found!"); 
+			return response;
+
+		}else if(miscellanousDAO.getMiscellanousList(accountId).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+
+			return miscellanousDAO.getMiscellanousList(accountId);
+
+		}
+	}
+	
+	
+	
 	/**
 	 * 
 	 * @param accountId
@@ -733,6 +757,7 @@ public class GeneralService {
 	public Object addGradingScale(String accountId, ApiGradingScale scale) {
 
 		ApiResponse apiResponse = new ApiResponse();
+		boolean addded = false;
 
 		GradingSystem gradingSystem = new GradingSystem();
 		gradingSystem.setAccountId(accountId);
@@ -742,7 +767,9 @@ public class GeneralService {
 		gradingSystem.setUpperLimit(scale.getUpperLimit());
 		gradingSystem.setPoints(scale.getPoints());
 
-		if(gradingSystemDAO.putGradingSystem(gradingSystem)) {
+		if(addded) {
+			
+			//gradingSystemDAO.putGradingSystem(gradingSystem)
 			apiResponse.setMessage("success");
 			apiResponse.setDescription("Grading scale added sucessfully!");
 			return apiResponse;
@@ -775,8 +802,8 @@ public class GeneralService {
 			GradingSystem gradingSystem = gradingSystemDAO.getGradingSystem(accountId, scale.getUuid());
 			gradingSystem.setLowerLimit(scale.getLowerLimit());
 			gradingSystem.setUpperLimit(scale.getUpperLimit());
-			gradingSystem.setDescription(scale.getDescription());
-			gradingSystem.setPoints(scale.getPoints()); 
+			//gradingSystem.setDescription(scale.getDescription());
+			//gradingSystem.setPoints(scale.getPoints()); 
 
 			if(gradingSystemDAO.updateGradingSystem(gradingSystem)) {
 				apiResponse.setMessage("success");

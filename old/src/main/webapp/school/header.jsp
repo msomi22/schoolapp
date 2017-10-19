@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
+
 <%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
@@ -11,10 +13,6 @@
 
 <%@page import="java.util.*"%>
 
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -24,26 +22,25 @@
 		//return;
 	}
 
-	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
-	if (StringUtils.isEmpty(username)) {
+   String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+	if (StringUtils.isEmpty(accountId)) {
 		response.sendRedirect("../index.jsp");
 		//return;
 	}
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
 	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
-	//return;
+	
+    String username = "";
+    
+    AccountDAO accountDAO = AccountDAO.getInstance();
+	accountDAO.getAccountById(accountId);
 
-	CacheManager mgr = CacheManager.getInstance();
-	Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-	Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-
-	Account account = new Account();
-	Element element;
-
-	if ((element = accountsCache.get(username)) != null) {
-		account = (Account) element.getObjectValue();
-	}
+    Account account = new Account();
+	
+	account = accountDAO.getAccountById(accountId);
+	
+	username = account.getUsername();
 
 	String user = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
 	String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
