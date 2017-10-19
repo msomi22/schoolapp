@@ -24,6 +24,8 @@ function updatePassword() {
 		console.log(JSON.stringify(global_data_passed));
 
 		global_request_type = 'PUT';
+		
+		
 
 		globalApiCall(function(data) {
 
@@ -76,6 +78,8 @@ function requestPassword(){
 		console.log($('#account_name').val()+"/"+$('#query').val());
 
 		global_request_type = 'GET';
+		
+		global_auth= "Y29tUGxleDpyZVN0KkAhQXBp";
 
 		globalApiCall(function(data) {
 

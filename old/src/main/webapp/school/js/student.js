@@ -2,6 +2,11 @@ var start = 0;
 
 var size = 15;
 
+var total_size;
+
+$(document).ready(function(){
+	total_size= $('#total_students').val();
+})
 function pagination(button) {
 	
 	
@@ -13,7 +18,7 @@ function pagination(button) {
 		$('#N,#L').show(1000);
 		$('#F,#L,#P').attr('disabled', false);
 
-		if (start < 205)
+		if (start < total_size)
 			start += size;
 		else{
 			$('#N').attr('disabled', true);
@@ -26,7 +31,7 @@ function pagination(button) {
 		$('#L').attr('disabled', true);
 		$('#F,#P').attr('disabled', false);
 
-		start = 205;
+		start = total_size-15;
 
 	} else if (button === "F") {
 		$('#N,#L').show(1000);
@@ -247,7 +252,7 @@ function fetchStudents(paginate) {
 												+ 'Profile   <span class="fa fa-info"></span></button>'
 									} ],
 
-							"order" : [ [ 0, "desc" ] ],
+							"order" : [ [ 8, "asc" ] ],
 						/* "iDisplayLength": 100 */
 
 						});
