@@ -262,7 +262,7 @@
                
                 <span class="pageInfo">Page <span
                   class="pagePosition currentPage">##</span>
-                  of <span class="pagePosition">##</span>
+                  of <span class="pagePosition " id="pageSize">##</span>
                 </span>
                 
                 <input class="toolbarBtn btn btn-default secondary-assent whiteme" type="button" name="page" onclick="pagination(this.id)" id="N" value="Next">
