@@ -22,7 +22,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import com.yahoo.petermwenda83.bean.exam.Exam;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
@@ -152,7 +151,7 @@ public class ReportUtil {
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
 
 			for (Perfomance perfomance : filteredExam) {
-				//TODO
+			
 				if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 					PerformanceP123 performanceP123 = computePaper123(subjectDAO,subCategoryDAO, categoryDAO , accountId, perfomance, gradingSystemDAO);
 					perfomance.setScore(performanceP123.getTotalMean()); 
@@ -397,7 +396,7 @@ public class ReportUtil {
 
 	
 	/**
-	 * TODO
+	 * 
 	 * @param finalPerfomanceList
 	 * @param subjectDAO
 	 * @param subCategoryDAO
@@ -628,7 +627,6 @@ public class ReportUtil {
 
 		}
 
-		//TODO
 		Performance3 performance3 = new Performance3();
 		performance3.setPerfomanceMap(perfomanceMap); 
 		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
@@ -728,7 +726,6 @@ public class ReportUtil {
 	public static int getTotalsByTotalPerExam(List<Perfomance> perfomanceList){
 		
 		int totals = 0;
-   //mm
 		for( Perfomance perfomance : perfomanceList ){
 			totals += perfomance.getScore();
 			
@@ -738,8 +735,10 @@ public class ReportUtil {
 			}else {
 				code = perfomance.getSubjectId();
 			}
-			
+			logger.info(code); 
 		}
+		
+		
 
 		return totals;
 	}
@@ -896,7 +895,7 @@ public class ReportUtil {
 
 
 
-	/** TODO
+	/** 
 	 * 
 	 * @param exam1Score
 	 * @param exam2Score
