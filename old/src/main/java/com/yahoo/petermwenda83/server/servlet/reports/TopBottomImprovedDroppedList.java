@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +46,13 @@ import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
+import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanComparator;
+import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanDeviationComparator;
 
 /**
+ *    school/tbidList?accountId=xx&uuid=xx&reportFlag=1&threshold=10&decisionFlag=xx
+ * 
  * @author peter
  *
  */
@@ -109,6 +115,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
 		String uuid = StringUtils.trim(request.getParameter("uuid"));//class or stream
 		String reportFlag = StringUtils.trim(request.getParameter("reportFlag"));
@@ -170,6 +177,8 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 		SysConfig config = sysConfigDAO.getSysConfig(accountId);
+		
+		int threshold_ = Integer.valueOf(threshold);
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
 
@@ -182,73 +191,144 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 						.filter(student -> "1".equals(student.getIsActive()))
 						.collect(Collectors.toList());
 				//copy 'activeStudents' list into  'students' list
+				Collections.copy(students, activeStudents);  
 
 			});
 
 
 
+			List<TBIDBean> tbidBeanList = new ArrayList<>();
 			for(Student student : students) {
 
-				student.getRegNo();
-				student.getFirstname();
-				student.getMiddlename();
-				student.getLastname();
+				if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()) != null) {
+					
+					YearlyMean yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()); 
+					double mean = 0;
+					double prevMean = 0; 
+					double deviation = 0; 
+
+					if(StringUtils.equals(config.getTerm(), "1")) {
+						mean = yearlyMean.getMeanOne();
+						//get current year , decrement to get previous year 
+						int year = Integer.valueOf(config.getYear());
+						//since this is term 1, in the previous year we get mean for term 3
+						prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+
+
+					}else if(StringUtils.equals(config.getTerm(), "2")) {
+						mean = yearlyMean.getMeanTwo();
+						prevMean  = yearlyMean.getMeanOne();
+
+					}else if(StringUtils.equals(config.getTerm(), "3")) {
+						mean = yearlyMean.getMeanThree();
+						prevMean  = yearlyMean.getMeanTwo();
+					}
+
+
+					deviation = mean - prevMean;
+					
+					TBIDBean tbidBean = new TBIDBean();
+					tbidBean.setStudent(student);
+					tbidBean.setMean(prevMean);
+					tbidBean.setPrevMean(prevMean);
+					tbidBean.setDeviation(deviation);
 				
-				//String studentId = "";
-				YearlyMean yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()); 
-				double mean = 0;
-				double prevMean = 0; 
-				double deviation = 0; 
+					tbidBeanList.add(tbidBean);
 
-				if(StringUtils.equals(config.getTerm(), "1")) {
-					mean = yearlyMean.getMeanOne();
-					//get current year , decrement to get previous year 
-					int year = Integer.valueOf(config.getYear());
-					//since this is term 1, in the previous year we get mean for term 3
-					prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+					
+				}
+				
 
+			}
+			
+			
+			if(StringUtils.equals(reportFlag, "TOP")) {
 
-				}else if(StringUtils.equals(config.getTerm(), "2")) {
-					mean = yearlyMean.getMeanTwo();
-					prevMean  = yearlyMean.getMeanOne();
-
-				}else if(StringUtils.equals(config.getTerm(), "3")) {
-					mean = yearlyMean.getMeanThree();
-					prevMean  = yearlyMean.getMeanTwo();
+				Collections.sort(tbidBeanList, new TBIDBeanComparator());
+				Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
 				}
 
 
-				deviation = mean - prevMean;
+			}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
 
-				logger.info("mean : " + mean); 
-				logger.info("prevMean : " + prevMean); 
-				logger.info("deviation : " + deviation); 
-
-
-				if(StringUtils.equals(reportFlag, "TOP")) {
-
-					//threshold;
-
-
-				}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
-
-					//threshold;
-
-
-				}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
-
-					//threshold;
-
-
-				}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
-
-					//threshold;
+				Collections.sort(tbidBeanList, new TBIDBeanComparator());
+				//Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
+				}
 
 
+			}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
+
+				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+				Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
+				}
+
+
+			}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
+
+				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+				//Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
 				}
 
 
 			}
+
+
 
 
 			
@@ -262,70 +342,149 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 					.filter(student -> "1".equals(student.getIsActive()))
 					.collect(Collectors.toList());
 
-
+			List<TBIDBean> tbidBeanList = new ArrayList<>();
 
 			for(Student student : activeStudents) {
 
-				student.getRegNo();
-				student.getFirstname();
-				student.getMiddlename();
-				student.getLastname();
+				if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()) != null) {
+					
+					
+					YearlyMean yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()); 
+					double mean = 0;
+					double prevMean = 0; 
+					double deviation = 0; 
+
+					if(StringUtils.equals(config.getTerm(), "1")) {
+						mean = yearlyMean.getMeanOne();
+						//get current year , decrement to get previous year 
+						int year = Integer.valueOf(config.getYear());
+						//since this is term 1, in the previous year we get mean for term 3
+						prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+
+
+					}else if(StringUtils.equals(config.getTerm(), "2")) {
+						mean = yearlyMean.getMeanTwo();
+						prevMean  = yearlyMean.getMeanOne();
+
+					}else if(StringUtils.equals(config.getTerm(), "3")) {
+						mean = yearlyMean.getMeanThree();
+						prevMean  = yearlyMean.getMeanTwo();
+					}
+
+
+					deviation = mean - prevMean;
+					
+					TBIDBean tbidBean = new TBIDBean();
+					tbidBean.setStudent(student);
+					tbidBean.setMean(prevMean);
+					tbidBean.setPrevMean(prevMean);
+					tbidBean.setDeviation(deviation);
+					
+					tbidBeanList.add(tbidBean);
+
+					logger.info("mean : " + mean); 
+					logger.info("prevMean : " + prevMean); 
+					logger.info("deviation : " + deviation); 
+					
+				}
 				
-				//String studentId = "";
-				YearlyMean yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), config.getYear()); 
-				double mean = 0;
-				double prevMean = 0; 
-				double deviation = 0; 
-
-				if(StringUtils.equals(config.getTerm(), "1")) {
-					mean = yearlyMean.getMeanOne();
-					//get current year , decrement to get previous year 
-					int year = Integer.valueOf(config.getYear());
-					//since this is term 1, in the previous year we get mean for term 3
-					prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
 
 
-				}else if(StringUtils.equals(config.getTerm(), "2")) {
-					mean = yearlyMean.getMeanTwo();
-					prevMean  = yearlyMean.getMeanOne();
 
-				}else if(StringUtils.equals(config.getTerm(), "3")) {
-					mean = yearlyMean.getMeanThree();
-					prevMean  = yearlyMean.getMeanTwo();
+			}
+			
+			
+
+			if(StringUtils.equals(reportFlag, "TOP")) {
+
+				Collections.sort(tbidBeanList, new TBIDBeanComparator());
+				Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
+				}
+
+			}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
+
+				Collections.sort(tbidBeanList, new TBIDBeanComparator());
+				//Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
 				}
 
 
-				deviation = mean - prevMean;
+			}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
 
-				logger.info("mean : " + mean); 
-				logger.info("prevMean : " + prevMean); 
-				logger.info("deviation : " + deviation); 
-
-
-				if(StringUtils.equals(reportFlag, "TOP")) {
-
-					//threshold;
-
-
-				}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
-
-					//threshold;
-
-
-				}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
-
-					//threshold;
+				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+				Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
+				}
 
 
-				}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
+			}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
 
-					//threshold;
-
-
+				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+				//Collections.reverse(tbidBeanList);
+				
+				int count = 1;
+				for(TBIDBean tbidbean : tbidBeanList) {
+					
+					// business logic here
+					System.out.println("tbidbean : " + tbidbean);
+					
+					
+					if(threshold_ >= count) {
+						break;
+					}
+				
+				    count++;
 				}
 
 
 			}
+
+			
+			
+			
+			
+			
+			
+			
 
 		}
 

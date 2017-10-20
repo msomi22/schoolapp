@@ -177,12 +177,34 @@
   </servlet-mapping>
   
   
+   <servlet>
+    <servlet-name>TopBottomImprovedDroppedList</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.TopBottomImprovedDroppedList</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>TopBottomImprovedDroppedList</servlet-name>
+    <url-pattern>/school/tbidList</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>StudentPerStream</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.student.StudentPerStream</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>StudentPerStream</servlet-name>
+    <url-pattern>/school/studentPerStream</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
    <listener>
     <listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
     </listener>
-  
-  
-  
+    
+    
   
   
   <error-page>

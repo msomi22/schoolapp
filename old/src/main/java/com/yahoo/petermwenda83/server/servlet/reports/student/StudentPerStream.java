@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,10 @@ import com.yahoo.petermwenda83.server.servlet.reports.PdfUtil;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 
 /**
+ * 
+ *  school/studentPerStream?accountId=xx&uuid=xx&decisionFlag=xx
+ * 
+ * 
  * @author peter
  *
  */
@@ -103,7 +108,6 @@ public class StudentPerStream extends HttpServlet{
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
 		String uuid = StringUtils.trim(request.getParameter("uuid"));//class or stream
 		String decisionFlag = StringUtils.trim(request.getParameter("decisionFlag"));
-
 		
 		
 		String fileName = "file.pdf"; 
@@ -175,6 +179,7 @@ public class StudentPerStream extends HttpServlet{
 						.filter(student -> "1".equals(student.getIsActive()))
 						.collect(Collectors.toList());
 				     //copy 'activeStudents' list into  'students' list
+				Collections.copy(students, activeStudents);  
 				
 			});
 			
