@@ -189,6 +189,10 @@ public class StudentReportCard extends HttpServlet{
 
 		String noOfSub = request.getParameter("subjects");
 		//paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
+		//System.out.println("paper123Id : " + paper123Id);
+		//System.out.println("noOfSub : " + noOfSub);//seven
+		paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
+		//System.out.println("paper123Id : " + paper123Id);
 
 		//check for hide points
 		hidePoints = hidePts ? true : false;

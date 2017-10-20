@@ -528,9 +528,6 @@
 
 
 
-
-
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
