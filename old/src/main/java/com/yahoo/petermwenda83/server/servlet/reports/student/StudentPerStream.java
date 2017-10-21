@@ -179,7 +179,8 @@ public class StudentPerStream extends HttpServlet{
 						.filter(student -> "1".equals(student.getIsActive()))
 						.collect(Collectors.toList());
 				     //copy 'activeStudents' list into  'students' list
-				Collections.copy(students, activeStudents);  
+				//Collections.copy(students, activeStudents);  
+				students.addAll(activeStudents);
 				
 			});
 			

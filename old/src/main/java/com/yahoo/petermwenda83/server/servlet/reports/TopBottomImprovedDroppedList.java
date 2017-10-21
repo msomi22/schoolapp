@@ -208,7 +208,11 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 						.filter(student -> "1".equals(student.getIsActive()))
 						.collect(Collectors.toList());
 				//copy 'activeStudents' list into  'students' list
-				Collections.copy(students, activeStudents);  
+				if(!activeStudents.isEmpty()) {
+					//Collections.copy(students, activeStudents); 
+					students.addAll(activeStudents);
+				}
+				 
 
 			});
 
