@@ -33,6 +33,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -45,22 +46,22 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 
 /**
  * 
- *  http://localhost:8080/school/school/studentPerStream?accountId=xx&uuid=xx&decisionFlag=xx
+ *  http://localhost:8080/school/school/studentPerStream?accountId=b83e9b89-0d52-4191-a6bf-acf501267e2e1&uuid=4DA86139-6A72-4089-8858-6A3A613FDFE6&decisionFlag=0
  * 
  * 
  * @author peter
  *
  */
 public class StudentPerStream extends HttpServlet{
-	
+
 	private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNormal10= new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanNormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
-	
+
 	private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
-	
+
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
 
@@ -83,7 +84,7 @@ public class StudentPerStream extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		
+
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
@@ -92,7 +93,7 @@ public class StudentPerStream extends HttpServlet{
 		logger = Logger.getLogger(this.getClass());
 
 	}
-	
+
 
 	/**
 	 *
@@ -108,8 +109,8 @@ public class StudentPerStream extends HttpServlet{
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
 		String uuid = StringUtils.trim(request.getParameter("uuid"));//class or stream
 		String decisionFlag = StringUtils.trim(request.getParameter("decisionFlag"));
-		
-		
+
+
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
@@ -130,17 +131,17 @@ public class StudentPerStream extends HttpServlet{
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
-		
-		
+
+
 	}
-	
-	
+
+
 	private void populatePDFDocument(String accountId, String uuid, String decisionFlag) {
 
 		Timeit.code(() -> compute(accountId,uuid,decisionFlag));
 
 	}
-	
+
 	private void compute(String accountId, String uuid, String decisionFlag) {
 		try {
 
@@ -155,48 +156,49 @@ public class StudentPerStream extends HttpServlet{
 			logger.error(ExceptionUtils.getStackTrace(e));
 		} 
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	private void generateReport(String accountId, String uuid, String decisionFlag) throws DocumentException{
-		
-		
-		
-
 
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
-			
+
 			List<Student>  students = new ArrayList<>();//copy students from each stream into this list
-			
+
 			streamDAO.getStreamList(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).forEach(stm -> {
-				
+
 				List<Student> activeStudents = studentDAO.getStudentByStream(accountId, stm.getUuid())
 						.parallelStream()
 						.filter(student -> "1".equals(student.getIsActive()))
 						.collect(Collectors.toList());
-				     //copy 'activeStudents' list into  'students' list
+				//copy 'activeStudents' list into  'students' list
 				//Collections.copy(students, activeStudents);  
 				students.addAll(activeStudents);
-				
+
 			});
-			
-			
-
-			for(Student student : students) {
-
-				student.getRegNo();
-				student.getFirstname();
-				student.getMiddlename();
-				student.getLastname();
 
 
+
+			if(!students.isEmpty()) {
+
+				for(Student student : students) {
+
+					String stu =  " RegNo " +student.getRegNo() + " Name: " + student.getFirstname() + " "  + student.getMiddlename() + " "+  student.getLastname();
+
+					document.add(new Paragraph(" "  + stu,timesRomanNormal8)); 
+
+
+				}
+			}else {
+				document.add(new Paragraph("No students to display " ,timesRomanNormal8)); 
 			}
-			
-			
+
+
+
 
 		}else if(StringUtils.equals(decisionFlag, "0")){//stream 
 
@@ -205,38 +207,46 @@ public class StudentPerStream extends HttpServlet{
 					.filter(student -> "1".equals(student.getIsActive()))
 					.collect(Collectors.toList());
 
+			if(!activeStudents.isEmpty()) {
+
+				for(Student student : activeStudents) {
+
+					String stu =  " RegNo " +student.getRegNo() + " Name: " + student.getFirstname() + " "  + student.getMiddlename() + " "+  student.getLastname();
+
+					document.add(new Paragraph(" "  + stu,timesRomanNormal8)); 
 
 
-			for(Student student : activeStudents) {
-
-				student.getRegNo();
-				student.getFirstname();
-				student.getMiddlename();
-				student.getLastname();
-
-
+				}
+			}else {
+				document.add(new Paragraph("No students to display " ,timesRomanNormal8)); 
 			}
 
+
+
+		}else {
+			
+			document.add(new Paragraph("Invalid decisionFlag" ,timesRomanNormal8)); 
+			
 		}
 
 
-	
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	/**
 	 * @param realPath
 	 * @return
@@ -309,7 +319,7 @@ public class StudentPerStream extends HttpServlet{
 	}
 
 
-	
+
 	/**
 	 * 
 	 */
