@@ -684,7 +684,7 @@ public class ClassRankingList extends HttpServlet{
 
 				String avg_points_grade = "0";
 				String avgPoints = "0";
-				int avg_points = 0;
+				//int avg_points = 0;
 
 
 				int mainPoint = performance2.getTotalPoint();
@@ -701,7 +701,7 @@ public class ClassRankingList extends HttpServlet{
 					total = totalMean;
 
 				}
-
+				
 
 
 				if(total == prevtotal){
@@ -725,7 +725,6 @@ public class ClassRankingList extends HttpServlet{
 				stream = StringUtils.remove(stream, "FORM"); 
 
 
-				//TODO
 				Map<String,Integer> exam1 = performance2.getExam1();
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
@@ -733,8 +732,7 @@ public class ClassRankingList extends HttpServlet{
 				/*System.out.println(" exam1: " + exam1);
 				System.out.println(" exam2: " + exam2);
 				System.out.println(" exam3: " + exam3);*/
-
-
+				
 
 				
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
@@ -863,13 +861,75 @@ public class ClassRankingList extends HttpServlet{
 					if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 						poinst_str = avgPoints + " " + avg_points_grade;
+						
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
+						yearlyMean.setAccountId(accountId);
+						yearlyMean.setStudentId(student.getUuid());
+						yearlyMean.setYear(year);
+
+						if(StringUtils.equals(term, "1")){
+
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(avgPoints))); 
+
+						}
+						if(StringUtils.equals(term, "2")){
+
+							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+
+						}
+						if(StringUtils.equals(term, "3")){
+
+							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+
+						}
+
+		                 //TODO
+						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 					}else {
 
 						//show grade on points
 						poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
+						
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
+						yearlyMean.setAccountId(accountId);
+						yearlyMean.setStudentId(student.getUuid());
+						yearlyMean.setYear(year);
+
+						if(StringUtils.equals(term, "1")){
+
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(pointsAvg))); 
+
+						}
+						if(StringUtils.equals(term, "2")){
+
+							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(pointsAvg)));
+
+						}
+						if(StringUtils.equals(term, "3")){
+
+							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(pointsAvg)));
+
+						}
+
+		                 //TODO
+						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 					}
+					
+					
 
 
 				}
@@ -877,6 +937,39 @@ public class ClassRankingList extends HttpServlet{
 				if(!rankWithPoints && rankWithTotalMarks){
 					//show grade on avg
 					mean_str = ReportUtil.df2.format(avgMean) + " " +  avgGradeByMean;
+					
+					
+					YearlyMean yearlyMean;
+					if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+						yearlyMean = new YearlyMean();
+					}else {
+						yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+					}
+					
+					yearlyMean.setAccountId(accountId);
+					yearlyMean.setStudentId(student.getUuid());
+					yearlyMean.setYear(year);
+
+					if(StringUtils.equals(term, "1")){
+
+						yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(avgMean))); 
+
+					}
+					if(StringUtils.equals(term, "2")){
+
+						yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(avgMean)));
+
+					}
+					if(StringUtils.equals(term, "3")){
+
+						yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(avgMean)));
+
+					}
+
+	                 //TODO
+					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+					
+					
 				}
 
 

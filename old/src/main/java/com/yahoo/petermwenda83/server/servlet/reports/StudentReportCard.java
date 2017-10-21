@@ -54,7 +54,6 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
-import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -95,7 +94,7 @@ public class StudentReportCard extends HttpServlet{
 	private static ClassDAO classDAO;
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static MiscellanousDAO miscellanousDAO;
-	private static ClassMeanDAO classMeanDAO;
+	//private static ClassMeanDAO classMeanDAO;
 
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -148,7 +147,7 @@ public class StudentReportCard extends HttpServlet{
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
 
-		classMeanDAO = ClassMeanDAO.getInstance();
+		//classMeanDAO = ClassMeanDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -481,7 +480,6 @@ public class StudentReportCard extends HttpServlet{
 				Map<String,Integer> exam3 = performance2.getExam3(); 
 
 
-				//TODO
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
                  
 					
@@ -631,8 +629,6 @@ public class StudentReportCard extends HttpServlet{
 
 
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-							//TODO
-							
 							
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
@@ -644,11 +640,13 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 
-
-
-
-
-						YearlyMean yearlyMean = new YearlyMean();
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
 						yearlyMean.setAccountId(accountId);
 						yearlyMean.setStudentId(student.getUuid());
 						yearlyMean.setYear(year);
@@ -669,7 +667,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-
+                        //TODO
 						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 					}
@@ -681,8 +679,13 @@ public class StudentReportCard extends HttpServlet{
 										accountId, gradingSystemDAO);
 
 
-
-						YearlyMean yearlyMean = new YearlyMean();
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
 						yearlyMean.setAccountId(accountId);
 						yearlyMean.setStudentId(student.getUuid());
 						yearlyMean.setYear(year);
@@ -703,7 +706,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-
+                         //TODO
 						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 
@@ -732,7 +735,6 @@ public class StudentReportCard extends HttpServlet{
 
 					if(rankWithPoints && !rankWithTotalMarks){
 
-						//TODO
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
@@ -939,8 +941,6 @@ public class StudentReportCard extends HttpServlet{
 					if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 						exam3Score = "";
 					}
-
-					//TODO 
 					
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
@@ -1143,8 +1143,6 @@ public class StudentReportCard extends HttpServlet{
 							mainScore = (int)Math.round(avg) + "";
 						}
 
-
-						//TODO
 						examTable.addCell(new Paragraph(meanStr + " , " + mainScore ,timesRomanNarmal6)); 
 
 
@@ -1165,8 +1163,6 @@ public class StudentReportCard extends HttpServlet{
 
 							if(rankWithPoints && !rankWithTotalMarks){
 
-
-								//TODO
 								if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
 
 									mainExam = avg_points_grade;
@@ -1489,7 +1485,6 @@ public class StudentReportCard extends HttpServlet{
 
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
-						//TODO
 						exam1 = perfomanceDAO.getStreamPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
 
 					}else {
@@ -1547,9 +1542,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) || StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)){
-					//TODO
-
-
+					
 					totalPoint = totalExam1.getTotalPoints();
 					totalMeans = totalExam1.getTotalMean();
 

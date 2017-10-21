@@ -45,7 +45,7 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 
 /**
  * 
- *  school/studentPerStream?accountId=xx&uuid=xx&decisionFlag=xx
+ *  http://localhost:8080/school/school/studentPerStream?accountId=xx&uuid=xx&decisionFlag=xx
  * 
  * 
  * @author peter

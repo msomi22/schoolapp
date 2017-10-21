@@ -33,6 +33,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
@@ -51,7 +52,9 @@ import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanDeviationComparator;
 
 /**
- *    school/tbidList?accountId=xx&uuid=xx&reportFlag=1&threshold=10&decisionFlag=xx
+ *    
+ *    http://localhost:8080/school/school/tbidList?accountId=b83e9b89-0d52-4191-a6bf-acf501267e2e1&uuid=4DA86139-6A72-4089-8858-6A3A613FDFE6&reportFlag=0&threshold=5&decisionFlag=0
+ *    
  * 
  * @author peter
  *
@@ -81,6 +84,11 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 	private static StreamDAO streamDAO;
 	private static ClassDAO classDAO;
+	
+	private static final String TOP = "0";
+	private static final String BOTTOM = "1";
+	private static final String MOST_IMPROVED = "2";
+	private static final String MOST_DROPPED = "3";
 
 
 	/**  
@@ -121,7 +129,12 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		String reportFlag = StringUtils.trim(request.getParameter("reportFlag"));
 		String threshold = StringUtils.trim(request.getParameter("threshold"));
 		String decisionFlag = StringUtils.trim(request.getParameter("decisionFlag"));
-
+		
+		System.out.println("accountId : " + accountId);
+		System.out.println("uuid : " + uuid);
+		System.out.println("reportFlag : " + reportFlag);
+		System.out.println("threshold : " + threshold);
+		System.out.println("decisionFlag : " + decisionFlag);
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -175,8 +188,12 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 	private void generateReport(String accountId, String uuid, String reportFlag,String threshold, String decisionFlag) throws DocumentException{
 
+		SysConfig config = new SysConfig(); 
+		if(sysConfigDAO.getSysConfig(accountId) != null) {
+			 config = sysConfigDAO.getSysConfig(accountId);
+		}
 
-		SysConfig config = sysConfigDAO.getSysConfig(accountId);
+		
 		
 		int threshold_ = Integer.valueOf(threshold);
 
@@ -212,7 +229,10 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 						//get current year , decrement to get previous year 
 						int year = Integer.valueOf(config.getYear());
 						//since this is term 1, in the previous year we get mean for term 3
-						prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)) != null) {
+							prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree(); 
+						}
+						 
 
 
 					}else if(StringUtils.equals(config.getTerm(), "2")) {
@@ -226,10 +246,11 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 					deviation = mean - prevMean;
+					deviation = deviation == mean ? 0 : deviation;
 					
 					TBIDBean tbidBean = new TBIDBean();
 					tbidBean.setStudent(student);
-					tbidBean.setMean(prevMean);
+					tbidBean.setMean(mean);
 					tbidBean.setPrevMean(prevMean);
 					tbidBean.setDeviation(deviation);
 				
@@ -241,91 +262,142 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 			}
 			
+			//TOP,BOTTOM,MOST_IMPROVED,MOST_DROPPED
 			
-			if(StringUtils.equals(reportFlag, "TOP")) {
+			if(StringUtils.equals(reportFlag, TOP)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanComparator());
 				Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
+					
+					if(tbidbean.getMean() > 0) {
+						document.add(new Paragraph("TOP M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() +
+								", D : " + tbidbean.getDeviation(),timesRomanNormal8)); 
+						
+						datafound = true;
+					}
 					
 					
 					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
 
+				if(!datafound) {
+					document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+				}
 
-			}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
+			}else if(StringUtils.equals(reportFlag, BOTTOM)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanComparator());
 				//Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
 					
+					if(tbidbean.getMean() > 0) {
+						
+						document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+								tbidbean.getDeviation(), timesRomanNormal8)); 
+						
+						datafound = true;
+					}
 					
-					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				if(!datafound) {
+					document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				}
 
 
-			}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
+			}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 				Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
 					
+					if(tbidbean.getDeviation() > 0) {
+						
+						document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+								tbidbean.getDeviation(), timesRomanNormal8)); 
+						
+						datafound = true;
+					}
 					
-					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				if(!datafound) {
+					document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+				}
 
 
-			}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
+			}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 				//Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
+					
+					if(tbidbean.getDeviation() > 0) {
+						
+						document.add(new Paragraph("MOST_DROPPED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+								tbidbean.getDeviation() , timesRomanNormal8)); 
+						
+						datafound = true;
+						
+					}
 					
 					
-					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				if(!datafound) {
+					document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+				}
 
 
+			}else {
+				
+				document.add(new Paragraph("reportFlag invalid" , timesRomanNormal8)); 
+				
 			}
 
 
@@ -343,6 +415,8 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 					.collect(Collectors.toList());
 
 			List<TBIDBean> tbidBeanList = new ArrayList<>();
+			
+			//System.out.println("activeStudents : " + activeStudents);
 
 			for(Student student : activeStudents) {
 
@@ -359,7 +433,10 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 						//get current year , decrement to get previous year 
 						int year = Integer.valueOf(config.getYear());
 						//since this is term 1, in the previous year we get mean for term 3
-						prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)) != null) {
+							prevMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), String.valueOf(year - 1)).getMeanThree();  
+						}
+						
 
 
 					}else if(StringUtils.equals(config.getTerm(), "2")) {
@@ -373,18 +450,19 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 					deviation = mean - prevMean;
+					deviation = deviation == mean ? 0 : deviation;
 					
 					TBIDBean tbidBean = new TBIDBean();
 					tbidBean.setStudent(student);
-					tbidBean.setMean(prevMean);
+					tbidBean.setMean(mean);
 					tbidBean.setPrevMean(prevMean);
 					tbidBean.setDeviation(deviation);
 					
 					tbidBeanList.add(tbidBean);
 
-					logger.info("mean : " + mean); 
+					/*logger.info("mean : " + mean); 
 					logger.info("prevMean : " + prevMean); 
-					logger.info("deviation : " + deviation); 
+					logger.info("deviation : " + deviation); */
 					
 				}
 				
@@ -395,97 +473,151 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			
 			
 
-			if(StringUtils.equals(reportFlag, "TOP")) {
+			if(StringUtils.equals(reportFlag, TOP)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanComparator());
 				Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
+					
+					if(tbidbean.getMean() > 0) {
+						
+						document.add(new Paragraph("TOP M " +tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+								tbidbean.getDeviation() , timesRomanNormal8)); 
+								
+						datafound = true;
+					}
 					
 					
-					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				if(!datafound) {
+					document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+				}
+				
 
-			}else if(StringUtils.equals(reportFlag, "BOTTOM")) {
+			}else if(StringUtils.equals(reportFlag, BOTTOM)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanComparator());
 				//Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
+					
+					if(tbidbean.getMean() > 0) {
+						
+						document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+								tbidbean.getDeviation() , timesRomanNormal8)); 
+						
+						datafound = true;
+						
+					}
 					
 					
-					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				
+				if(!datafound) {
+					document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				}
 
 
-			}else if(StringUtils.equals(reportFlag, "MOST_IMPROVED")) {
+			}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 				Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);
+					
+					if(tbidbean.getDeviation() > 0) {
+						document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+								tbidbean.getDeviation() , timesRomanNormal8)); 
+						
+						datafound = true;
+					}
 					
 					
-					if(threshold_ >= count) {
+					
+					
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				if(!datafound) {
+					document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+				}
 
 
-			}else if(StringUtils.equals(reportFlag, "MOST_DROPPED")) {
+			}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
 
 				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 				//Collections.reverse(tbidBeanList);
 				
+				boolean datafound = false;
 				int count = 1;
 				for(TBIDBean tbidbean : tbidBeanList) {
 					
 					// business logic here
-					System.out.println("tbidbean : " + tbidbean);
+					//System.out.println("tbidbean : " + tbidbean);boolean datafound = false;
 					
+					if(tbidbean.getDeviation() > 0) {
+						document.add(new Paragraph("MOST_DROPPED  M : " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+								tbidbean.getDeviation() , timesRomanNormal8)); 
+						
+						datafound = true;
+					}
 					
-					if(threshold_ >= count) {
+					if(count >= threshold_) {
 						break;
 					}
 				
 				    count++;
 				}
+				
+				
+				if(!datafound) {
+					document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+				}
 
 
+			}else {
+				
+				document.add(new Paragraph("reportFlag invalid" , timesRomanNormal8)); 
+				
 			}
 
-			
-			
-			
-			
-			
-			
-			
 
+		}else {
+			
+			document.add(new Paragraph("decisionFlag invalid" , timesRomanNormal8)); 
+			
 		}
 
 	}
