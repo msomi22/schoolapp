@@ -125,9 +125,9 @@
 									<div class="x_content">
 										<br />
 
-										<div class="col-md-3 pull-right alert alert-info cards hand" onclick="showTBIDModal()">
-											<h4>Get Most Top, Bottom,Improved or Dropped per class
-											and/or stream</h4></div>
+										<div class="col-md-2 pull-right alert alert-info cards hand" onclick="showTBIDModal()">
+											<h4>Get Most Top, Bottom, <br>Improved or Dropped <br>per class
+											and/or stream <span><i class="fa fa-bar-chart fa-2x pull-right"></i></span></h4></div>
 
 
 										<form action="studentReportCard" id="generateReport"
