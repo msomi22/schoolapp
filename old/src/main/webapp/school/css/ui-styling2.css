@@ -128,6 +128,10 @@
 	background-color:#3B5976 !important;
 }
 
+.hand{
+	cursor: pointer !important;;
+}
+
 .bg_modal {
 	background-color: white;
 	color: black;

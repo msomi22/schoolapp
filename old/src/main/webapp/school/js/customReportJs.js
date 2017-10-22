@@ -16,6 +16,14 @@ function examWarningModal() {
 	
 }
 
+
+$(document).ready(function(){
+	$('#accountId_tbid').val($('#accountId').val());
+	
+	fetchClasses();
+})
+
+
 $("#exam")
 		.change(
 				function() {
@@ -175,3 +183,24 @@ function scopeSwap(scopeType) {
 
 	}
 }
+
+
+function scopeSwapTBID(scopeType) {
+
+	if (scopeType == "class_tbid") {
+		$('#class_option').show('2000');
+		$('#stream_option').hide('2000');
+
+	} else {
+		$('#class_option').hide('2000');
+		$('#stream_option').show('2000');
+
+	}
+}
+
+
+function showTBIDModal(){
+	$('#TBIDModal').modal('show');
+}
+
+
