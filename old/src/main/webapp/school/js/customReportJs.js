@@ -200,6 +200,13 @@ function scopeSwapTBID(scopeType) {
 
 
 function showTBIDModal(){
+	
+	
+	scopeSwapTBID('class_tbid');
+	scopeSwap('class');
+	
+	$('#generateReport').get(0).reset();
+	$('#TBIDForm').get(0).reset();
 	$('#TBIDModal').modal('show');
 }
 
