@@ -57,7 +57,7 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
  */
 public class StudentPerStream extends HttpServlet{
 
-	//private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+	private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNormal10= new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
@@ -110,7 +110,7 @@ public class StudentPerStream extends HttpServlet{
 			throws ServletException, IOException {
 
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
-		String uuid = StringUtils.trim(request.getParameter("uuid"));//class or stream
+		String streamId = StringUtils.trim(request.getParameter("uuid"));//class or stream
 		String decisionFlag = StringUtils.trim(request.getParameter("decisionFlag"));
 
 
@@ -127,7 +127,7 @@ public class StudentPerStream extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			populatePDFDocument(accountId,uuid,decisionFlag);  
+			populatePDFDocument(accountId,streamId,decisionFlag);  
 
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
@@ -139,18 +139,18 @@ public class StudentPerStream extends HttpServlet{
 	}
 
 
-	private void populatePDFDocument(String accountId, String uuid, String decisionFlag) {
+	private void populatePDFDocument(String accountId, String streamId, String decisionFlag) {
 
-		Timeit.code(() -> compute(accountId,uuid,decisionFlag));
+		Timeit.code(() -> compute(accountId,streamId,decisionFlag));
 
 	}
 
-	private void compute(String accountId, String uuid, String decisionFlag) {
+	private void compute(String accountId, String streamId, String decisionFlag) {
 		try {
 
 			document.open();
 
-			generateReport(accountId,uuid,decisionFlag);
+			generateReport(accountId,streamId,decisionFlag);
 
 			document.close();
 
@@ -165,7 +165,7 @@ public class StudentPerStream extends HttpServlet{
 
 
 
-	private void generateReport(String accountId, String uuid, String decisionFlag) throws DocumentException{
+	private void generateReport(String accountId, String streamId, String decisionFlag) throws DocumentException{
 
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
@@ -272,13 +272,13 @@ public class StudentPerStream extends HttpServlet{
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
 			
-			classname = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).getDescription();
+			classname = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, streamId).getClassRoomId()).getDescription();
 			//TODO
 			message = classname;
 			
 			List<Student>  students = new ArrayList<>();//copy students from each stream into this list
 
-			streamDAO.getStreamList(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).forEach(stm -> {
+			streamDAO.getStreamList(accountId, streamDAO.getStream(accountId, streamId).getClassRoomId()).forEach(stm -> {
 
 				List<Student> activeStudents = studentDAO.getStudentByStream(accountId, stm.getUuid())
 						.parallelStream()
@@ -330,12 +330,12 @@ public class StudentPerStream extends HttpServlet{
 
 		}else if(StringUtils.equals(decisionFlag, "0")){//stream 
 			
-			streamname = streamDAO.getStream(accountId, uuid).getDescription();
+			streamname = streamDAO.getStream(accountId, streamId).getDescription();
 			//String classnam = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).getDescription();
 			//TODO
 			message =  streamname;
 
-			List<Student> activeStudents = studentDAO.getStudentByStream(accountId, uuid).
+			List<Student> activeStudents = studentDAO.getStudentByStream(accountId, streamId).
 					parallelStream()
 					.filter(student -> "1".equals(student.getIsActive()))
 					.collect(Collectors.toList());
@@ -383,7 +383,7 @@ public class StudentPerStream extends HttpServlet{
 
 		document.add(headerTable);
 
-		document.add(new Paragraph("\n " + message + " Students List \n\n" ,timesRomanNormal8)); 
+		document.add(new Paragraph("\n " + message + " Students List \n\n" ,timesRomanBold12)); 
 		
 		document.add(studentTable); 
 

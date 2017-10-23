@@ -37,7 +37,7 @@ public class FinanceRestService {
 	private static GokeMoneyUsageDAO gokeMoneyUsageDAO;
 	private static SysConfigDAO sysConfigDAO;
 	private static StudentDAO studentDAO;
-	
+
 	static {
 		feeBreakdownDescDAO = FeeBreakdownDescDAO.getInstance();
 		feeBreakdownDAO = FeeBreakdownDAO.getInstance();
@@ -59,17 +59,17 @@ public class FinanceRestService {
 	public Object getFeeBreakDown(String accountId) {
 
 		Response response = new Response();
-		
+
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			response.setMessage("error");
 			response.setDescription("Term/Year not set!");
-			
+
 		}else if(feeBreakdownDAO.getFeeBreakdown(accountId) == null) {
 			//error
 			response.setMessage("error");
 			response.setDescription("Fee breakdown List not found!");
 		}else {
-			
+
 			String term = sysConfigDAO.getSysConfig(accountId).getTerm();
 			String year = sysConfigDAO.getSysConfig(accountId).getYear();
 
@@ -254,7 +254,7 @@ public class FinanceRestService {
 
 			feeBreakdownDesc.setUuid(new FeeBreakdownDesc().getUuid()); 
 			feeBreakdownDesc.setFeeCode(RandomStringUtils.random(4)); 
-			
+
 
 			if(feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc)) {
 				response.setMessage("success");
@@ -271,41 +271,41 @@ public class FinanceRestService {
 		}
 
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public Object useTemplate(String accountId) {
-		
+
 		Response response = new Response();
-		
+
 		if(accountDAO.getAccountById(accountId) == null) {
 			response.setMessage("error");
 			response.setDescription("Account not found!");
 			return response;
-			
+
 		}else if(sysConfigDAO.getSysConfig(accountId) == null) {
 			response.setMessage("error");
 			response.setDescription("Term/Year not found!");
 			return response;
-			
+
 		}else if(feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", sysConfigDAO.getSysConfig(accountId).getTerm(), 
-				 sysConfigDAO.getSysConfig(accountId).getYear()) != null) {
+				sysConfigDAO.getSysConfig(accountId).getYear()) != null) {
 			response.setMessage("error");
 			response.setDescription("Looks like you have alredy used the template!");
 			return response;
-			
+
 		}else {
-			
+
 			String feeBreakdownId = "";
-			
+
 			int[] feeCode = {100,101,102,103,104,105,106};
 			String[] feeDescription = {"R.M.I","E.W. & C","Administration costs","L.T. & T.","P.E.", "Activity ","Others(Specify)"};
 			int[] amount = {90,130,130,90,830,130,100};
-			
+
 			SysConfig config = sysConfigDAO.getSysConfig(accountId);
-			
+
 			FeeBreakdown feeBreakdown;
 			if(feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", config.getTerm(), config.getYear()) == null) {
 				feeBreakdown = new FeeBreakdown();
@@ -320,14 +320,14 @@ public class FinanceRestService {
 			}else {
 				feeBreakdown = feeBreakdownDAO.getFeeBreakdown(accountId, "GO_KE", config.getTerm(), config.getYear());
 				feeBreakdownId = feeBreakdown.getUuid();
-				
+
 			}
-			
-			
+
+
 			boolean success = false;
-			
+
 			if(feeBreakdownDAO.putFeeBreakdown(feeBreakdown)) {
-				
+
 				for(int count=0;count<feeCode.length;count++) {
 					FeeBreakdownDesc feeBreakdownDesc = new FeeBreakdownDesc();
 					feeBreakdownDesc.setAccountId(accountId);
@@ -335,24 +335,24 @@ public class FinanceRestService {
 					feeBreakdownDesc.setFeeCode(String.valueOf(feeCode[count])); 
 					feeBreakdownDesc.setFeeDescription(feeDescription[count]);
 					feeBreakdownDesc.setAmount(amount[count]); 
-					 success = feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc);
+					success = feeBreakdownDescDAO.putFeeBreakdownDesc(feeBreakdownDesc);
 				}
-				
+
 			}
-			
+
 			if(success) {
 				response.setMessage("success");
 				response.setDescription("Template used successfully!");
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Please contact Admin!"); 
 				return response;
 			}
-			
+
 		}
-		
+
 	}
 
 
@@ -529,14 +529,9 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		if(!FeeConstants.validTerm(termFee.getTerm())) {
+		if(sysConfigDAO.getSysConfig(termFee.getAccountId()) == null) {
 			response.setMessage("error");
-			response.setDescription("Invalid term!");
-			return response;
-
-		}else if(!FeeConstants.validYear(termFee.getYear())) {
-			response.setMessage("error");
-			response.setDescription("Invalid year!");
+			response.setDescription("Term/Year not set.");
 			return response;
 
 		}else if(!FeeConstants.validFee(termFee.getBoaderAmount())) {
@@ -555,7 +550,10 @@ public class FinanceRestService {
 			return response;
 
 		}else {
-
+			
+			SysConfig config = sysConfigDAO.getSysConfig(termFee.getAccountId());
+			termFee.setTerm(config.getTerm());
+			termFee.setYear(config.getYear()); 
 			termFee.setUuid(new TermFee().getUuid()); 
 
 			if(termFeeDAO.putFee(termFee, termFee.getAccountId(), termFee.getTerm(), termFee.getYear())) {
@@ -582,14 +580,9 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
-		if(!FeeConstants.validTerm(termFee.getTerm())) {
+		if(sysConfigDAO.getSysConfig(termFee.getAccountId()) == null) {
 			response.setMessage("error");
-			response.setDescription("Invalid term!");
-			return response;
-
-		}else if(!FeeConstants.validYear(termFee.getYear())) {
-			response.setMessage("error");
-			response.setDescription("Invalid year!");
+			response.setDescription("Term/Year not set.");
 			return response;
 
 		}else if(!FeeConstants.validFee(termFee.getBoaderAmount())) {
@@ -602,29 +595,34 @@ public class FinanceRestService {
 			response.setDescription("Invalid DayAmount!");
 			return response;
 
-		}else if(termFeeDAO.getFee(termFee.getAccountId(), termFee.getTerm(), termFee.getYear()) == null) {
-			response.setMessage("error");
-			response.setDescription("Invalid term/year!");
-			return response;
-
-		}/*else if(termfeehasDuplicate(termFee.getAccountId(), termFee.getTerm(), termFee.getYear(), termFee.getUuid())) {
-			response.setMessage("error");
-			response.setDescription("Term-Year fee exist!");
-			return response;
-		}*/else {
-
-			if(termFeeDAO.updateFee(termFee)) {
-
-				response.setMessage("success");
-				response.setDescription("Term Fee updated successfully."); 
+		}else {
+			
+			SysConfig config = sysConfigDAO.getSysConfig(termFee.getAccountId());
+			termFee.setTerm(config.getTerm());
+			termFee.setYear(config.getYear()); 
+			
+			 if(termFeeDAO.getFee(termFee.getAccountId(), termFee.getTerm(), termFee.getYear()) == null) {
+				response.setMessage("error");
+				response.setDescription("Invalid term/year!");
 				return response;
 
 			}else {
-				response.setMessage("error");
-				response.setDescription("Contact Admin please.");
-				return response;
+				
+				if(termFeeDAO.updateFee(termFee)) {
 
+					response.setMessage("success");
+					response.setDescription("Term Fee updated successfully."); 
+					return response;
+
+				}else {
+					response.setMessage("error");
+					response.setDescription("Contact Admin please.");
+					return response;
+
+				}
 			}
+
+			
 		}
 
 	}
@@ -639,14 +637,19 @@ public class FinanceRestService {
 	public Object getOtherFee(String accountId, String term, String year) {
 
 		Response response = new Response();
+		
+		if(sysConfigDAO.getSysConfig(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Term/Year not set.");
+			return response;
 
-		if(otherFeeDAO.getOtherFeeList(accountId, term, year) == null) {
+		}else if(otherFeeDAO.getOtherFeeList(accountId, sysConfigDAO.getSysConfig(accountId).getTerm(), sysConfigDAO.getSysConfig(accountId).getYear()).isEmpty()) {
 			response.setMessage("error");
 			response.setDescription("Fee not found!");
 			return response;
 		}else {
-			return otherFeeDAO.getOtherFeeList(accountId, term, year);
-
+			
+			return otherFeeDAO.getOtherFeeList(accountId, sysConfigDAO.getSysConfig(accountId).getTerm(), sysConfigDAO.getSysConfig(accountId).getYear()); 
 		}
 
 	}
@@ -660,6 +663,7 @@ public class FinanceRestService {
 
 		Response response = new Response();
 
+
 		if(otherFee.getDescription().length() < 3) { 
 			response.setMessage("error");
 			response.setDescription("Invalid Description.");
@@ -670,43 +674,52 @@ public class FinanceRestService {
 			response.setDescription("Invalid Amount.");
 			return response;
 
-		}else if(!FeeConstants.validTerm(otherFee.getTerm())) {
-			response.setMessage("error");
-			response.setDescription("Invalid Term.");
-			return response;
-
-		}else if(!FeeConstants.validYear(otherFee.getYear())) {
-			response.setMessage("error");
-			response.setDescription("Invalid Year.");
-			return response;
-
 		}else if(accountDAO.getAccountById(otherFee.getAccountId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Account not found!");
 			return response;
 
-		}else if(otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()) != null) {
+		}else if(sysConfigDAO.getSysConfig(otherFee.getAccountId()) == null) {
 			response.setMessage("error");
-			response.setDescription("Description exist!");
+			response.setDescription("Term/Year not set.");
 			return response;
 
 		}else {
 
 			otherFee.setUuid(new OtherFee().getUuid()); 
+			
+			SysConfig config = sysConfigDAO.getSysConfig(otherFee.getAccountId());
+			otherFee.setTerm(config.getTerm());
+			otherFee.setYear(config.getYear()); 
 
-			if(otherFeeDAO.putOtherFee(otherFee)) {
-
-				response.setMessage("sucess");
-				response.setDescription("Fee added successfully."); 
+			if(otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getDescription(), otherFee.getTerm(), otherFee.getYear()) != null) {
+				response.setMessage("error");
+				response.setDescription("Description exist!");
 				return response;
 
 			}else {
-				response.setMessage("error");
-				response.setDescription("Contact Admin please.");
-				return response;
+				
+				
+				if(otherFeeDAO.putOtherFee(otherFee)) {
 
+					response.setMessage("sucess");
+					response.setDescription("Fee added successfully."); 
+					return response;
+
+				}else {
+					response.setMessage("error");
+					response.setDescription("Contact Admin please.");
+					return response;
+
+				}
+
+				
+				
 			}
 
+
+
+			
 		}
 
 	}
@@ -729,34 +742,14 @@ public class FinanceRestService {
 			response.setDescription("Invalid Amount.");
 			return response;
 
-		}else if(!FeeConstants.validTerm(otherFee.getTerm())) {
-			response.setMessage("error");
-			response.setDescription("Invalid Term.");
-			return response;
-
-		}else if(!FeeConstants.validYear(otherFee.getYear())) {
-			response.setMessage("error");
-			response.setDescription("Invalid Year.");
-			return response;
-
 		}else if(accountDAO.getAccountById(otherFee.getAccountId()) == null) {
 			response.setMessage("error");
 			response.setDescription("Account not found!");
 			return response;
 
-		}else if(otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getTerm()) == null) {
+		}else if(sysConfigDAO.getSysConfig(otherFee.getAccountId()) == null) {
 			response.setMessage("error");
-			response.setDescription("Term not found!");
-			return response;
-
-		}else if(otherFeeDAO.queryOtherFee(otherFee.getAccountId(), otherFee.getYear()) == null) {
-			response.setMessage("error");
-			response.setDescription("Year not found!");
-			return response;
-
-		}else if(hasDuplicate(otherFee)) {
-			response.setMessage("error");
-			response.setDescription("No duplicates!");
+			response.setDescription("Term/Year not set.");
 			return response;
 
 		}else if(otherFeeDAO.getOtherFee(otherFee.getAccountId(), otherFee.getUuid()) == null) {
@@ -764,7 +757,16 @@ public class FinanceRestService {
 			response.setDescription("Fee not found!");
 			return response;
 
+		}else if(hasDuplicate(otherFee)) {
+			response.setMessage("error");
+			response.setDescription("No duplicates!");
+			return response;
+
 		}else {
+			
+			SysConfig config = sysConfigDAO.getSysConfig(otherFee.getAccountId());
+			otherFee.setTerm(config.getTerm());
+			otherFee.setYear(config.getYear()); 
 
 			if(otherFeeDAO.updateOtherFee(otherFee)) {
 				response.setMessage("sucess");
@@ -839,21 +841,21 @@ public class FinanceRestService {
 	public Object canCommitGokMoney(String accountId, int amount) {
 
 		Response response = new Response();
-		
+
 		if(sysConfigDAO.getSysConfig(accountId) == null) {
 			response.setMessage("error");
 			response.setDescription("Invalid accountId!");
 			return response;
-			
+
 		}else if(accountDAO.getAccountById(accountId)== null) {
 			response.setMessage("error");
 			response.setDescription("Term/Year not set!");
 			return response;
 
 		}else {
-			
+
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
-		
+
 			if(feeBreakdownDAO.getFeeBreakdown(accountId, 
 					FeeConstants.GVMT_MONEY_CODE,
 					sysConfig.getTerm(),
@@ -868,7 +870,7 @@ public class FinanceRestService {
 				double totalAmount = amount;
 				int no_of_students = studentDAO.activeCount(accountId, "1"); 
 				double balance = 0;
-				
+
 				balance = totalAmount - (amountToEachStudent * no_of_students);
 
 				GokeMoneyUsageCheck gokeMoneyUsageCheck = new GokeMoneyUsageCheck();
@@ -885,9 +887,9 @@ public class FinanceRestService {
 				response.setMessage("error");
 				response.setDescription("No record found!");
 				return response;
-				
+
 			}
-			
+
 		}
 
 	}
@@ -1007,7 +1009,7 @@ public class FinanceRestService {
 
 		return hasduplicate;
 	}
-	
+
 
 
 }
