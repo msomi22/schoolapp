@@ -6,13 +6,28 @@ var accoutId = "";
 var uuid = "";
 
 $(document).ready(function() {
-
-	$('#govtCatList').html('');
-
-	fetCategories();
-	fetchConfig();
+	initLoad();
+	
 
 });
+
+function initLoad(){
+	
+	$('#govtCatList').html('');
+	fetchConfig();
+	getFeeCatId();
+	
+	
+	setTimeout(function(){
+		fetCategories();
+	},1000)
+	
+	
+
+	
+	
+	
+}
 
 function fetCategories() {
 
@@ -23,9 +38,12 @@ function fetCategories() {
 	$('#feeBreakdownId').val(feeCatId);
 
 	$('#accountId').val(accountId);
+	
 
 	// global_url = global_url +
 	varying_url = "finance/goke/" + accountId + '/' + feeCatId;
+	
+	console.log(varying_url);
 
 	globalApiCall(function(data) {
 
@@ -35,6 +53,7 @@ function fetCategories() {
 		if (data["message"] != "error" && data.length > 0) {
 			
 			$('#govt_temp').attr('disabled',true);
+			$('#totalAmount, #p_totalAmount, #add_cat').attr('disabled',false);
 
 			for (var i = 0; i < data.length; i++) {
 
@@ -96,6 +115,8 @@ function fetCategories() {
 			
 			
 			$('#govt_temp').attr('disabled',false);
+			
+			$('#totalAmount, #p_totalAmount, #add_cat').attr('disabled',true);
 			
 			$('#govtCatList').html('No categories available, click on use template to access the default ones');
 			
@@ -439,8 +460,48 @@ function addGovtCategoryTemplate(form) {
 			
 			
 			$('#govtCategoryTemplateModal').modal('hide');
-			fetCategories();
+			initLoad();
 		}
+
+	});
+
+}
+
+
+function getFeeCatId() {
+	
+	
+
+	varying_url = "finance/fee/category/"+$('#loggedId').val();
+
+	global_data_passed = {};
+	
+
+
+	global_request_type = 'GET';
+	
+	console.log(global_request_type +" "+varying_url);
+
+	globalApiCall(function(data) {
+
+		console.log('Code fetching fee category Id');
+
+		console.log(data);
+		
+		if (!data["message"]) {
+			
+			
+		feeCatId= data['uuid'];	
+		
+		console.log("Id after fetch :"+feeCatId);
+		}else if(data["uuid"] != null ){
+			
+			feeCatId= data['uuid'];	
+			
+			console.log("Id after fetch :"+feeCatId);
+			
+		}
+		
 
 	});
 

@@ -109,7 +109,7 @@
 												<h3 class="pull-right">
 													Add a new Category
 													<button type="button" class="btn btn-primary cards"
-														style="border-radius: 90%" id="add"
+														style="border-radius: 90%" id="add_cat"
 														onclick="govtCategoryModal()">
 														<i class="fa fa-plus-circle fa-2x"></i>
 													</button>
