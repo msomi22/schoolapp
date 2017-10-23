@@ -488,21 +488,24 @@ function getFeeCatId() {
 
 		console.log(data);
 		
-		if (!data["message"]) {
+		if(data){
+		
+		if (!data['message']) {
+		
 			
 			
 		feeCatId= data['uuid'];	
 		
 		console.log("Id after fetch :"+feeCatId);
-		}else if(data["uuid"] != null ){
+		}/*else if(data["uuid"] != null ){
 			
 			feeCatId= data['uuid'];	
 			
 			console.log("Id after fetch :"+feeCatId);
 			
-		}
+		}*/
 		
-
+		}
 	});
 
 }
