@@ -149,6 +149,6 @@
 <jsp:include page="footer.jsp" />
 
 
-<script src="js/apiCalls/examApi.js"></script>
+<script src="js/apiCalls/miscApi.js"></script>
 
 

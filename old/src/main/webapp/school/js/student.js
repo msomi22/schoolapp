@@ -103,6 +103,8 @@ $(document).ready(
 		function() {
 			
 			
+			count = 0;
+			
 			
 			total_size = parseInt($('#total_students').val());
 			

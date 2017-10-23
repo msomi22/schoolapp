@@ -17,10 +17,10 @@
 
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2">
-								<label for="key">Key</label>
+								<label for="key">Key Name:</label>
 
 								<input type="text" id="key" class="form-control formelement cards"
-									name="key"  placeholder="Exam Code" pattern="[a-zA-Z0-9\s]{2,20}" maxlength="20"
+									name="key"  placeholder="Exam Code"  maxlength="20"
 									title="Key,Only alphanumeric characters are allowed and should be more than one and less than 20 characters"
 									required>
 							</div>
@@ -29,7 +29,7 @@
 								<label for="value">Description</label>
 								<input type="text" id="value" name="value"
 									class="form-control formelement cards" placeholder="Description" maxlength="100"
-									pattern="[a-zA-Z0-9\s]{3,100}"
+									
 									title="Description,Only characters are allowed and should be more than three and less than 100 characters "
 									required>
 							</div>
@@ -56,7 +56,7 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-info pull-right cards" id="misc_btn" onclick="editMisc()">
+					<button type="button" class="btn btn-info pull-right cards" id="misc_btn" onclick="updateMisc()">
 						Save Changes <i class="fa fa-save"></i>
 					</button>
 					<button type="button" class="btn btn-default pull-left"
