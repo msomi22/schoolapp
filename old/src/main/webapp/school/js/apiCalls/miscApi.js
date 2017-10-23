@@ -132,8 +132,35 @@ function fetchMisc(){
 
 							
 							$("#key").val(data['key']);
-							$("#value").val(data['value']);
+							
+							if(data["key"] == "HEAD_TEACHER_REMARKS"){
+								$('#value_holder').html('<div class="col-md-8 col-md-offset-2">'
+										+'<label for="value">Description</label>'
+										+'<textarea  id="value" name="value"'
+										+'	class="form-control formelement cards" placeholder="Description"'
+											+'required>'
+											+'</textarea>'
+									+'</div>');
+								
+								
+							
+								
+							}else{
+								$('#value_holder').html('<div class="col-md-8 col-md-offset-2">'
+										+'<label for="value">Description</label>'
+										+'<input type="text" id="value" name="value"'
+										+'	class="form-control formelement cards" placeholder="Description" maxlength="110"'
+											
+											+'title="Description,Only characters are allowed and should be more than three and less than 100 characters "'
+											+'required>'
+									+'</div>');
+								
 
+								
+								
+							}
+							
+							$("#value").val(data['value']);
 							$("#uuid").val(data['uuid']);
 							
 
