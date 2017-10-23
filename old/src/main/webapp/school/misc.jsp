@@ -65,6 +65,7 @@
 										<th class="column-title">accountId</th>
 										<th class="column-title">key</th>
 										<th class="column-title">value</th>
+										<th class="column-title">fullvalue</th>
 										
 										<th class="column-title">Modify</th>
 
