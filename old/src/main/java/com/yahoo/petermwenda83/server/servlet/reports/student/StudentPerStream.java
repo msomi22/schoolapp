@@ -57,7 +57,7 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
  */
 public class StudentPerStream extends HttpServlet{
 
-	//private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+	private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNormal10= new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
@@ -383,7 +383,7 @@ public class StudentPerStream extends HttpServlet{
 
 		document.add(headerTable);
 
-		document.add(new Paragraph("\n " + message + " Students List \n\n" ,timesRomanNormal8)); 
+		document.add(new Paragraph("\n " + message + " Students List \n\n" ,timesRomanBold12)); 
 		
 		document.add(studentTable); 
 

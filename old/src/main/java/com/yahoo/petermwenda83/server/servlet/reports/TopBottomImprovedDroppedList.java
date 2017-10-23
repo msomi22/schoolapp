@@ -40,7 +40,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
@@ -51,7 +50,6 @@ import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
-import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.TBIDBeanDeviationComparator;
 
@@ -71,7 +69,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanNormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
 
-	private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
+	//private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -89,12 +87,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 	private static StreamDAO streamDAO;
 	private static ClassDAO classDAO;
 
-	private static final String TOP = "0";
-	private static final String BOTTOM = "1";
-	private static final String MOST_IMPROVED = "2";
-	private static final String MOST_DROPPED = "3";
-
-
+	
 	/**  
 	 *
 	 * @param config
@@ -169,8 +162,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 	private void populatePDFDocument(String accountId, String uuid, String threshold, String decisionFlag) {
 
 		Timeit.code(() -> compute(accountId, uuid, threshold , decisionFlag));
-		//Timeit.code(() -> compute(accountId, uuid, reportFlag, threshold , decisionFlag));
-
+		
 	}
 
 
@@ -180,8 +172,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			document.open();
 
 			generateReport(accountId, uuid, threshold, decisionFlag);
-			//generateReport(accountId, uuid, reportFlag, threshold, decisionFlag);
-
+			
 			document.close();
 
 		}catch(DocumentException e) {
@@ -210,14 +201,17 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
 				+ " , Cell : " + account.getMobile() + "\n"
 				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
+		
+
+		String empty_message =  threshold + " Students - nothing to display";
+		String found_message =  threshold + " Students";
+
 
 
 		PdfPTable headerTable = new PdfPTable(2);
 		headerTable.setWidthPercentage(100); 
 		headerTable.setWidths(new int[]{70,30});
-		//headerTable.setHeaderRows(1); 
-		//headerTable.isSkipFirstHeader();
-
+		
 		PdfPCell logo = new PdfPCell();
 		logo.addElement(createImage(LOGO_PATH)); 
 		logo.setBorder(Rectangle.NO_BORDER); 
@@ -235,10 +229,9 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		PdfPTable studentTable = new PdfPTable(8);   
 		studentTable.setWidthPercentage(100); 
 		studentTable.setWidths(new int[]{6,10,12,12,12,13,13,13}); 
-		studentTable.setHeaderRows(1); 
-		studentTable.isSkipFirstHeader();
-		//#-regNo-firstname-middlename-lastname(5) - prevmean-mean-deviation
-
+		//studentTable.setHeaderRows(1); 
+		//studentTable.isSkipFirstHeader();
+		
 		PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold10));
 		countCell.setBackgroundColor(baseColor);
 		countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -300,7 +293,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 		document.add(headerTable);
 
-		document.add(new Paragraph("\n " + message + " Performance Analysis  \n\n" ,timesRomanNormal8)); 
+		document.add(new Paragraph("\n " + message + " Performance Analysis  \n\n" ,timesRomanBold12)); 
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
 
@@ -406,12 +399,13 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count0++;
 			}
-
+			
+			
 			if(!datafound0) {
-				document.add(new Paragraph("TOP " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + empty_message , timesRomanNormal8));
 			}else {
 
-				document.add(new Paragraph("TOP " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
@@ -447,13 +441,14 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count1++;
 			}
-
+			
+			
 			if(!datafound1) {
-				document.add(new Paragraph("BOTTOM " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + empty_message , timesRomanNormal8));
 				
 			}else {
 				
-				document.add(new Paragraph("BOTTOM " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 				
 			}
@@ -489,13 +484,14 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count2++;
 			}
-
+			
+			
 			if(!datafound2) {
-				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + empty_message , timesRomanNormal8));
 				
 			}else {
 
-				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
@@ -534,13 +530,14 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count3++;
 			}
+			
 
 			if(!datafound3) {
-				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + empty_message , timesRomanNormal8));
 				
 			}else {
 
-				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
@@ -648,10 +645,10 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound0) {
-				document.add(new Paragraph("TOP " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + empty_message , timesRomanNormal8));
 			}else {
 
-				document.add(new Paragraph("TOP " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + found_message, timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
@@ -690,13 +687,12 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 				count1++;
 			}
 
-
 			if(!datafound1) {
-				document.add(new Paragraph("BOTTOM " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + empty_message , timesRomanNormal8)); 
 				
 			}else {
 				
-				document.add(new Paragraph("BOTTOM " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 				
 			}
@@ -736,12 +732,12 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count2++;
 			}
-
+			
 			if(!datafound2) {
-				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + empty_message , timesRomanNormal8));
 			}else {
 
-				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
@@ -777,14 +773,14 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 				count3++;
 			}
-
+			
 
 			if(!datafound3) {
-				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + empty_message , timesRomanNormal8));
 				
 			}else {
 
-				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + found_message , timesRomanNormal8));
 				document.add(studentTable); 
 
 			}
