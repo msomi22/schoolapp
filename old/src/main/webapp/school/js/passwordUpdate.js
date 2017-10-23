@@ -92,6 +92,14 @@ function requestPassword(){
 			
 			//	$('#changePasswordModal').modal('hide');
 			//();
+				
+				$('#forgotPasswordForm').get(0).reset();
+				$('#forgotPassword').hide(2000);
+				
+				$('#register').show();
+				$('.login_form').show(2000);
+				
+				
 			}
 
 		});
