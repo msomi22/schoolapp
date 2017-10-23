@@ -16,7 +16,7 @@ public class PeterMid {
 	 * @param number3
 	 * @return
 	 */
-	public static double ComputeMiddle(double number1, double number2,double number3){
+	public static double computeMiddle(double number1, double number2,double number3){
 		double middle = 0;
 		
 		//number 1
@@ -51,7 +51,9 @@ public class PeterMid {
 	}
 	
 	
-	
+	public static double computeMax(double number1, double number2,double number3){
+		return Math.max(Math.max((int)number1, (int)number2), (int)number3);
+	}
 	
 	
 }

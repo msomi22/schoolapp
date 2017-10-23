@@ -190,7 +190,7 @@ public class StudentReportCard extends HttpServlet{
 		//paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 		//System.out.println("paper123Id : " + paper123Id);
 		//System.out.println("noOfSub : " + noOfSub);//seven
-		paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
+		//paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
 		//System.out.println("paper123Id : " + paper123Id);
 
 		//check for hide points
@@ -245,6 +245,7 @@ public class StudentReportCard extends HttpServlet{
 			writer.setPageEvent(event);
 
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
+			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType,paper123Id);
 
