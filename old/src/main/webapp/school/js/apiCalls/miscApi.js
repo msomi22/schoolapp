@@ -74,6 +74,21 @@ function fetchMisc(){
 		var keys = Object.keys(getCol);
 
 		keys.forEach(function(k) {
+			
+			if(k=="fullValue")
+				{
+				
+				cols.push({
+					title : "Value",
+					data : k
+				// optionally do some type detection here for render
+				// function
+
+				});
+				
+				}
+			else{
+			
 
 			cols.push({
 				title : k,
@@ -82,6 +97,7 @@ function fetchMisc(){
 			// function
 
 			});
+			}
 
 		});
 
@@ -104,11 +120,15 @@ function fetchMisc(){
 										"targets" : [ 1 ],
 										"visible" : false
 									},
+									{
+										"targets" : [ 3 ],
+										"visible" : false
+									},
 									
 									{
-										"targets" : [ 4 ],
+										"targets" : [ 5 ],
 										"data" : null,
-										"defaultContent" : '<button class="btn btn-warning btn-block " onclick="editMiscModal()">'
+										"defaultContent" : '<button class="btn btn-warning " onclick="editMiscModal()">'
 												+ 'Edit   <span class="fa fa-edit"></span></button>'
 									} ],
 
@@ -160,7 +180,7 @@ function fetchMisc(){
 								
 							}
 							
-							$("#value").val(data['value']);
+							$("#value").val(data['fullValue']);
 							$("#uuid").val(data['uuid']);
 							
 
