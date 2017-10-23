@@ -665,7 +665,7 @@ public class GeneralService {
 			Miscellanous miscellanous = miscellanousDAO.getMiscById(accountId, misc.getUuid());
 			miscellanous.setValue(misc.getValue()); 
 
-			if(miscellanousDAO.putMiscellanous(miscellanous)) {
+			if(miscellanousDAO.updateMiscellanous(miscellanous)) { 
 				apiResponse.setMessage("success");
 				apiResponse.setDescription("Value updated sucessfully!");
 				return apiResponse;
