@@ -888,7 +888,7 @@ public class FinanceRestService {
 						if(studentFeeDAO.getStudentFee(accountId, st.getUuid(), 
 								FeeConstants.GVMT_MONEY_CODE,
 								sysConfig.getTerm(),
-								sysConfig.getYear()) != null) {
+								sysConfig.getYear()) == null) {
 
 							scount.getAndIncrement();
 

@@ -3,6 +3,7 @@ package com.yahoo.petermwenda83.server.quartz;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -100,8 +101,31 @@ public class QuartzJob implements Job{
 
 							int amountToEachStudent = (int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdown.getUuid());
 							
+							AtomicInteger scount = new AtomicInteger();
+
+							if(!studentDAO.getActiveStudents(account.getUuid(), "1","1").isEmpty()) {
+
+								studentDAO.getActiveStudents(account.getUuid(), "1","1").parallelStream().forEach(st -> {
+
+									if(studentFeeDAO.getStudentFee(account.getUuid(), st.getUuid(), 
+											FeeConstants.GVMT_MONEY_CODE,
+											sysConfig.getTerm(),
+											sysConfig.getYear()) == null) {
+
+										scount.getAndIncrement();
+
+									}
+
+								});
+
+							}
+							
+							
+							
+							
 							double totalAmount = feeBreakdown.getAmount();
-							int no_of_students = studentDAO.activeCount(account.getUuid(), "1"); 
+							//int no_of_students = studentDAO.activeCount(account.getUuid(), "1"); 
+							int no_of_students = scount.get();
 							double expected_amount_per_head = 0;
 							double balance = 0;
 							
@@ -138,10 +162,10 @@ public class QuartzJob implements Job{
 								
 								//we might need to sleep here
 								
-								
-								studentDAO.getActiveStudents(account.getUuid(), "1").parallelStream().forEach(student -> {
+								//active and eligible
+								studentDAO.getActiveStudents(account.getUuid(), "1","1").parallelStream().forEach(student -> {
 									
-									if(studentDAO.getActiveStudents(account.getUuid(), "1") != null) {
+									if(studentDAO.getActiveStudents(account.getUuid(), "1","1") != null) {
 										boolean status = allocateGokMoney(account, sysConfig, student, amountToEachStudent);
 										//System.out.println("status : " + status);  
 									}
@@ -150,7 +174,7 @@ public class QuartzJob implements Job{
 								
 								
 								feeBreakdown.setStatus("0"); 
-								feeBreakdownDAO.putFeeBreakdown(feeBreakdown);
+								feeBreakdownDAO.updateFeeBreakdown(feeBreakdown);
 								
 								
 								
