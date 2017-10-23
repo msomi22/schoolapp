@@ -769,8 +769,6 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			int count3 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 				
-				System.out.println(" ***************** " + tbidbean);
-
 				if(tbidbean.getDeviation() < 0) {
 					
 					Student student =  tbidbean.getStudent();
