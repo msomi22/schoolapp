@@ -36,7 +36,7 @@ public class ClassRoom  extends StorableBean{
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return description.toUpperCase();
 	}
 
 
