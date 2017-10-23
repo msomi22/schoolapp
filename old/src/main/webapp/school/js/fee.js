@@ -31,6 +31,15 @@ $(document).ready(
 		});
 
 function initPayment() {
+	
+	$('#btn_revertPaymentInfo').hide();
+	$('#btn_closepayment').show();
+	
+	$('#paymentSpace').show();
+	$('#PreSubmitInfo').hide();
+	
+	$('#btn_feePayment').text('Submit');
+	$('#btn_feePayment').attr('onclick', "preSubmitVerify('init')");
 
 	$('#feePayment').modal("show");
 
@@ -432,7 +441,7 @@ function delayInput() {
 	setTimeout(function() {
 
 		fetchFeeDetails('info')
-	}, 3000)
+	}, 2000)
 
 }
 
@@ -548,7 +557,7 @@ function fetchFeeDetails(state) {
 							}
 
 						});
-					}, 2000);
+					}, 1000);
 
 		}
 
