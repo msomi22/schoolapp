@@ -215,8 +215,8 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		PdfPTable headerTable = new PdfPTable(2);
 		headerTable.setWidthPercentage(100); 
 		headerTable.setWidths(new int[]{70,30});
-		headerTable.setHeaderRows(1); 
-		headerTable.isSkipFirstHeader();
+		//headerTable.setHeaderRows(1); 
+		//headerTable.isSkipFirstHeader();
 
 		PdfPCell logo = new PdfPCell();
 		logo.addElement(createImage(LOGO_PATH)); 
@@ -232,11 +232,75 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		headerTable.addCell(schoolInfo); 
 		headerTable.addCell(logo);   
 
-		document.add(headerTable);
+		PdfPTable studentTable = new PdfPTable(8);   
+		studentTable.setWidthPercentage(100); 
+		studentTable.setWidths(new int[]{6,10,12,12,12,13,13,13}); 
+		studentTable.setHeaderRows(1); 
+		studentTable.isSkipFirstHeader();
+		//#-regNo-firstname-middlename-lastname(5) - prevmean-mean-deviation
 
+		PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold10));
+		countCell.setBackgroundColor(baseColor);
+		countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell regNoCell = new PdfPCell(new Paragraph("Reg-No",timesRomanBold10));
+		regNoCell.setBackgroundColor(baseColor);
+		regNoCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell fnameCell = new PdfPCell(new Paragraph("Firstname",timesRomanBold10));
+		fnameCell.setBackgroundColor(baseColor);
+		fnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell mnameCell = new PdfPCell(new Paragraph("Middlename",timesRomanBold10));
+		mnameCell.setBackgroundColor(baseColor);
+		mnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell lnameCell = new PdfPCell(new Paragraph("Lastname",timesRomanBold10));
+		lnameCell.setBackgroundColor(baseColor);
+		lnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell prevMeanCell = new PdfPCell(new Paragraph("Prev-Mean",timesRomanBold10));
+		prevMeanCell.setBackgroundColor(baseColor);
+		prevMeanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell meanCell = new PdfPCell(new Paragraph("Mean",timesRomanBold10));
+		meanCell.setBackgroundColor(baseColor);
+		meanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell deviationCell = new PdfPCell(new Paragraph("Deviation",timesRomanBold10));
+		deviationCell.setBackgroundColor(baseColor);
+		deviationCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		studentTable.addCell(countCell);
+		studentTable.addCell(regNoCell);
+		studentTable.addCell(fnameCell);
+		studentTable.addCell(mnameCell);
+		studentTable.addCell(lnameCell);
+		studentTable.addCell(prevMeanCell);
+		studentTable.addCell(meanCell);
+		studentTable.addCell(deviationCell);
 
 
 		int threshold_ = Integer.valueOf(threshold);
+
+		String classname = "";
+		String streamname = "";
+		String message = "";
+
+		if(StringUtils.equals(decisionFlag, "1")) {//class
+			classname = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).getDescription();
+			message = classname;
+
+		}else if(StringUtils.equals(decisionFlag, "0")){//stream 
+
+			streamname = streamDAO.getStream(accountId, uuid).getDescription();
+			message =  streamname;
+
+		}
+
+		document.add(headerTable);
+
+		document.add(new Paragraph("\n " + message + " Performance Analysis  \n\n" ,timesRomanNormal8)); 
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
 
@@ -307,23 +371,29 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 			}
 
-			//TOP,BOTTOM,MOST_IMPROVED,MOST_DROPPED
-
-			//if(StringUtils.equals(reportFlag, TOP)) {
 
 			Collections.sort(tbidBeanList, new TBIDBeanComparator());
 			Collections.reverse(tbidBeanList);
 
+			//TOP students TODO
 			boolean datafound0 = false;
 			int count0 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getMean() > 0) {
-					document.add(new Paragraph("TOP M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() +
-							", D : " + tbidbean.getDeviation(),timesRomanNormal8)); 
+
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound0 = true;
 				}
@@ -338,25 +408,35 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound0) {
-				document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + threshold_ + " Students " , timesRomanNormal8));
+			}else {
+
+				document.add(new Paragraph("TOP " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
 
-			//}else if(StringUtils.equals(reportFlag, BOTTOM)) {
-
 			Collections.sort(tbidBeanList, new TBIDBeanComparator());
-			//Collections.reverse(tbidBeanList);
 
+			//BOTTOM students TODO
 			boolean datafound1 = false;
 			int count1 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getMean() > 0) {
 
-					document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-							tbidbean.getDeviation(), timesRomanNormal8)); 
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound1 = true;
 				}
@@ -369,27 +449,37 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound1) {
-				document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + threshold_ + " Students " , timesRomanNormal8));
+				
+			}else {
+				
+				document.add(new Paragraph("BOTTOM " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+				
 			}
-
-
-			//}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
 			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 			Collections.reverse(tbidBeanList);
 
+			//MOST_IMPROVED students TODO
 			boolean datafound2 = false;
 			int count2 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getDeviation() > 0) {
 
-					document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-							tbidbean.getDeviation(), timesRomanNormal8)); 
+					Student student =  tbidbean.getStudent();
 
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 					datafound2 = true;
 				}
 
@@ -401,26 +491,37 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound2) {
-				document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students " , timesRomanNormal8));
+				
+			}else {
+
+				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
 
-
-			//}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
-
 			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-			//Collections.reverse(tbidBeanList);
-
+			
+			//MOST_DROPPED students TODO
 			boolean datafound3 = false;
 			int count3 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
+				
 				if(tbidbean.getDeviation() > 0) {
 
-					document.add(new Paragraph("MOST_DROPPED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-							tbidbean.getDeviation() , timesRomanNormal8)); 
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound3 = true;
 
@@ -435,21 +536,20 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound3) {
-				document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students " , timesRomanNormal8));
+				
+			}else {
+
+				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
 
 
-			/*}else {
 
-				document.add(new Paragraph("reportFlag invalid" , timesRomanNormal8)); 
-
-			}*/
-
-
-
-
-
-
+			
+			
+			
 
 
 		}else if(StringUtils.equals(decisionFlag, "0")){//stream 
@@ -460,8 +560,6 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 					.collect(Collectors.toList());
 
 			List<TBIDBean> tbidBeanList = new ArrayList<>();
-
-			//System.out.println("activeStudents : " + activeStudents);
 
 			for(Student student : activeStudents) {
 
@@ -505,9 +603,6 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 					tbidBeanList.add(tbidBean);
 
-					/*logger.info("mean : " + mean); 
-					logger.info("prevMean : " + prevMean); 
-					logger.info("deviation : " + deviation); */
 
 				}
 
@@ -518,22 +613,28 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 
-			//if(StringUtils.equals(reportFlag, TOP)) {
-
 			Collections.sort(tbidBeanList, new TBIDBeanComparator());
 			Collections.reverse(tbidBeanList);
 
+			//TOP students TODO
 			boolean datafound0 = false;
 			int count0 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getMean() > 0) {
 
-					document.add(new Paragraph("TOP M " +tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-							tbidbean.getDeviation() , timesRomanNormal8)); 
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound0 = true;
 				}
@@ -547,26 +648,35 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound0) {
-				document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("TOP " + threshold_ + " Students " , timesRomanNormal8));
+			}else {
+
+				document.add(new Paragraph("TOP " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
 
-
-			//}else if(StringUtils.equals(reportFlag, BOTTOM)) {
-
 			Collections.sort(tbidBeanList, new TBIDBeanComparator());
-			//Collections.reverse(tbidBeanList);
-
+			
+			//BOTTOM students TODO
 			boolean datafound1 = false;
 			int count1 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getMean() > 0) {
 
-					document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-							tbidbean.getDeviation() , timesRomanNormal8)); 
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound1 = true;
 
@@ -582,25 +692,37 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 			if(!datafound1) {
-				document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("BOTTOM " + threshold_ + " Students " , timesRomanNormal8));
+				
+			}else {
+				
+				document.add(new Paragraph("BOTTOM " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+				
 			}
-
-
-			//}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
 			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
 			Collections.reverse(tbidBeanList);
 
+			//MOST_IMPROVED students TODO
 			boolean datafound2 = false;
 			int count2 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);
-
 				if(tbidbean.getDeviation() > 0) {
-					document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-							tbidbean.getDeviation() , timesRomanNormal8)); 
+					
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound2 = true;
 				}
@@ -616,25 +738,35 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			}
 
 			if(!datafound2) {
-				document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students " , timesRomanNormal8));
+			}else {
+
+				document.add(new Paragraph("MOST IMPROVED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
 
-
-			//}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
-
 			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-			//Collections.reverse(tbidBeanList);
-
+			
+			//MOST_DROPPED students TODO
 			boolean datafound3 = false;
 			int count3 = 1;
 			for(TBIDBean tbidbean : tbidBeanList) {
 
-				// business logic here
-				//System.out.println("tbidbean : " + tbidbean);boolean datafound = false;
-
 				if(tbidbean.getDeviation() > 0) {
-					document.add(new Paragraph("MOST_DROPPED  M : " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-							tbidbean.getDeviation() , timesRomanNormal8)); 
+					
+					Student student =  tbidbean.getStudent();
+
+					studentTable.addCell(new Paragraph(" " + count0, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getPrevMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getMean()), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(ReportUtil.df2.format(tbidbean.getDeviation()), timesRomanNormal10));
 
 					datafound3 = true;
 				}
@@ -648,15 +780,14 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 
 			if(!datafound3) {
-				document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students " , timesRomanNormal8));
+				
+			}else {
+
+				document.add(new Paragraph("MOST DROPPED " + threshold_ + " Students - nothing to show " , timesRomanNormal8));
+				document.add(studentTable); 
+
 			}
-
-
-			/*}else {
-
-				document.add(new Paragraph("reportFlag invalid" , timesRomanNormal8)); 
-
-			}*/
 
 
 		}else {
@@ -664,6 +795,8 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 			document.add(new Paragraph("decisionFlag invalid" , timesRomanNormal8)); 
 
 		}
+
+
 
 	}
 
