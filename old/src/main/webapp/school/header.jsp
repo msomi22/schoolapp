@@ -170,7 +170,7 @@
 
 							<h3>General</h3>
 							<ul class="nav side-menu">
-								<li><a><i class="fa fa-home"></i> Home <span
+								<li><a><i class="fa fa-home"></i> Students <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="studentIndex.jsp">Students List</a></li>

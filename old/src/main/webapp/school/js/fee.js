@@ -1,18 +1,18 @@
 var preserveUrl = global_url;
 
-
 var regno;
 
-var search_state= false;
+var studentId;
+
+var search_state = false;
 
 $(document).ready(
 		function() {
-			
+
 			$('.accountId').val($('#accountId').val());
 
-			varying_url = "finance/termfee/"
-					+ $('#accountId').val() + '/' + $('#term').val() + '/'
-					+ $('#year').val();
+			varying_url = "finance/termfee/" + $('#accountId').val() + '/'
+					+ $('#term').val() + '/' + $('#year').val();
 
 			globalApiCall(function(data) {
 
@@ -22,79 +22,72 @@ $(document).ready(
 				$('#boarder').val(data['boaderAmount']);
 				$('#day').val(data['dayAmount']);
 
-				
 			});
-			
-			
+
 			otherFeeTermFeeList();
 
 		});
 
 function initPayment() {
-	
+
 	$('#btn_revertPaymentInfo').hide();
 	$('#btn_closepayment').show();
-	
+
 	$('#paymentSpace').show();
 	$('#PreSubmitInfo').hide();
-	
+
 	$('#btn_feePayment').text('Submit');
 	$('#btn_feePayment').attr('onclick', "preSubmitVerify('init')");
 
 	$('#feePayment').modal("show");
 
 	$('#feePaymentForm').get(0).reset();
-	
-	checkRegnoState();
-	
-	setTimeout(function(){
-		checkRegnoState();
-		
-	},2000)
 
-	
+	checkRegnoState();
+
+	setTimeout(function() {
+		checkRegnoState();
+
+	}, 2000)
 
 }
 
-function OtherFeeModal(id){
-	
-	if(id == "revert_payment_btn"){
-		
+function OtherFeeModal(id) {
+
+	if (id == "revert_payment_btn") {
+
 		$('#otherTermFeeTiltle').text("Revert Other Term Fee Details");
 
 		$('#othertermFee_btn').text("Revert");
 
 		$("#othertermFee_btn").attr("onclick", "revertOtherTermFee()");
-		
-		
+
 	}
-	
-	else if (id == "addOtherFee_btn"){
-		
+
+	else if (id == "addOtherFee_btn") {
+
 		$('#otherTermFeeTiltle').text("Add Other Term Fee Details");
 
 		$('#othertermFee_btn').text("Submit");
 
 		$("#othertermFee_btn").attr("onclick", "addOtherFee()");
-		
+
 	}
-	
+
 	$('#otherTermFeeModal').modal('show');
-	
+
 }
 
-
-function addOtherFee(){
-	
+function addOtherFee() {
 
 	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "student/other/fee/"+$('#accountId').val();
+		varying_url = "student/other/fee/" + $('#accountId').val();
 
 		global_data_passed = $('#otherTermFeeForm').serializeJSON();
-		
+
 		console.log(varying_url);
 
 		console.log(JSON.stringify(global_data_passed));
@@ -103,13 +96,13 @@ function addOtherFee(){
 
 		globalApiCall(function(data) {
 
-			console.log('Code for new other term fee adding for a specific student');
+			console
+					.log('Code for new other term fee adding for a specific student');
 
 			console.log(data);
 
-			if(rootParseApiResponseData(data)){
-				
-				
+			if (rootParseApiResponseData(data)) {
+
 				$('#otherTermFeeModal').modal('hide');
 				fetchFeeDetails('info');
 			}
@@ -117,20 +110,18 @@ function addOtherFee(){
 		});
 
 	}
-	
-	
-	
+
 }
 
-function revertOtherTermFee(){
+function revertOtherTermFee() {
 	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "student/other/fee/revert/"+$('#accountId').val();
+		varying_url = "student/other/fee/revert/" + $('#accountId').val();
 
 		global_data_passed = $('#otherTermFeeForm').serializeJSON();
-		
+
 		console.log(varying_url);
 
 		console.log(JSON.stringify(global_data_passed));
@@ -139,13 +130,13 @@ function revertOtherTermFee(){
 
 		globalApiCall(function(data) {
 
-			console.log('Code for reverting other term fee for a specific student');
+			console
+					.log('Code for reverting other term fee for a specific student');
 
 			console.log(data);
 
-			if(rootParseApiResponseData(data)){
-				
-				
+			if (rootParseApiResponseData(data)) {
+
 				$('#otherTermFeeModal').modal('hide');
 				fetchFeeDetails('info');
 			}
@@ -153,7 +144,7 @@ function revertOtherTermFee(){
 		});
 
 	}
-	
+
 }
 
 function isReg(regNo) {
@@ -169,18 +160,18 @@ function isReg(regNo) {
 
 }
 
-function checkRegnoState(){
-	 regno = $('#regno').val();
+function checkRegnoState() {
+	regno = $('#regno').val();
 
 	if (isReg(regno) && search_state) {
 
 		$('#p_regNo').val(regno);
 
 		$('#regNoVerSms').html(
-				'<h4> ' + $('#p_regNo').html() + '</h4>'
-						+ '<h4>' + $('#name').html() + '</h4>'
-						+ '<h4>' + $('#stream').html() + '</h4>'
-						+ '<h4> ' + $('#termfee').html() + '</h4>');
+				'<h4> ' + $('#p_regNo').html() + '</h4>' + '<h4>'
+						+ $('#name').html() + '</h4>' + '<h4>'
+						+ $('#stream').html() + '</h4>' + '<h4> '
+						+ $('#termfee').html() + '</h4>');
 		$('#p_mode').prop('disabled', false);
 
 		$('#transactionId').prop('disabled', false);
@@ -188,11 +179,15 @@ function checkRegnoState(){
 		$('#amount').prop('disabled', false);
 		$('#p_staffId').val($('#staffId').val());
 
+		$('#studentId').val(studentId);
+
 		$('#p_accountId').val($('#accountId').val());
 
-	}else{
-		
-		$('#regNoVerSms').html("Enter a student's registratio number to view school fees details.");
+	} else {
+
+		$('#regNoVerSms')
+				.html(
+						"Enter a student's registratio number to view school fees details.");
 		$('#p_mode').prop('disabled', true);
 
 		$('#transactionId').prop('disabled', true);
@@ -223,7 +218,7 @@ function checkFormValidation(form) {
 function preSubmitVerify(state) {
 
 	if (checkFormValidation($("#feePaymentForm"))) {
-		regno=$('#p_regNo').val();
+		regno = $('#p_regNo').val();
 
 		$('#preRegno').html('<b> Reg No_ : ' + $('#p_regNo').val() + '</b>');
 		$('#prePaymentMode').html(
@@ -330,7 +325,7 @@ function feePayment() {
 
 							$('#success').modal('hide');
 						}, 3000);
-						
+
 						$('#regno').val(regno);
 						$('#paymentSpace').toggle(2000);
 						$('#PreSubmitInfo').toggle(1000);
@@ -381,9 +376,9 @@ function showHistory(state) {
 
 	if (state === 'history') {
 
-		$('#history').toggle(1000);
+		$('#history').show(1000);
 
-		$('#showHistory').toggle(2000);
+		$('#showHistory').hide(2000);
 
 	} else if (state === 'other') {
 
@@ -394,14 +389,14 @@ function showHistory(state) {
 	}
 }
 
-$('#history').click(function() {
+/*$('#history').click(function() {
 
 	$('#history').toggle(1000);
 
 	$('#showHistory').toggle(2000);
 
 });
-
+*/
 $('#OtherHistory').click(function() {
 
 	$('#showOtherHistory').toggle(1000);
@@ -445,8 +440,6 @@ function delayInput() {
 
 }
 
-
-
 function fetchFeeDetails(state) {
 
 	if (state === "fee") {
@@ -473,13 +466,12 @@ function fetchFeeDetails(state) {
 
 			setTimeout(
 					function() {
-						//global_url = preserveUrl;
+						// global_url = preserveUrl;
 
-						//var
-						varying_url = 'student/fee/'
-								+ $('#accountId').val() + '/'
-								+ $('#p_regNo').val();
-						//global_url = fetchfeeURL; Heheh!:)
+						// var
+						varying_url = 'student/fee/' + $('#accountId').val()
+								+ '/' + $('#p_regNo').val();
+						// global_url = fetchfeeURL; Heheh!:)
 
 						globalApiCall(function(data) {
 
@@ -497,12 +489,12 @@ function fetchFeeDetails(state) {
 
 								$('#regNoVerSms').html(
 										'<b>' + data.description + '</b>');
-								
-								search_state= false;
+
+								search_state = false;
 
 							} else {
-								
-								search_state= true;
+
+								search_state = true;
 
 								$('#p_mode').prop('disabled', false);
 
@@ -510,13 +502,13 @@ function fetchFeeDetails(state) {
 
 								$('#amount').prop('disabled', false);
 								var fee = "";
-								
-								
+
 								$('#other_studentId').val(
 										data['studentFeeAPI']['studentId']);
 
 								$('#studentId').val(
 										data['studentFeeAPI']['studentId']);
+								studentId = data['studentFeeAPI']['studentId'];
 
 								$('#p_staffId').val($('#staffId').val());
 
@@ -594,7 +586,7 @@ function fetchFeeDetails(state) {
 
 			setTimeout(function() {
 
-				//global_url = preserveUrl; Hahahah!
+				// global_url = preserveUrl; Hahahah!
 				makeFetchCall()
 			}, 1000);
 
@@ -604,31 +596,30 @@ function fetchFeeDetails(state) {
 
 function makeFetchCall() {
 
-	varying_url ='student/fee/' + $('#accountId').val() + '/'
+	varying_url = 'student/fee/' + $('#accountId').val() + '/'
 			+ $('#regno').val();
-	//global_url = fetchfeeURL; one day i will laugh at this line of code like i am doing right now. Heheh! :)
-	
-	global_request_type = 'GET';
-	
-	global_data_passed = {};
+	// global_url = fetchfeeURL; one day i will laugh at this line of code like
+	// i am doing right now. Heheh! :)
 
-	
+	global_request_type = 'GET';
+
+	global_data_passed = {};
 
 	globalApiCall(function(data) {
 
 		console.log('Async call of the make fetchcall api');
 		console.log(data);
 
-		//global_url = preserveUrl;
+		// global_url = preserveUrl;
 
-		//console.log("Second" + global_url);
+		// console.log("Second" + global_url);
 
 		if ((data.message)) {
 
 			// $("#regNoState").slideUp(300).delay(200).fadeIn(400);
 
 			// $('#regNoState').html("<b>" + + "</b>");
-			search_state= false;
+			search_state = false;
 
 			$('#regNoError').addClass('alert-danger');
 			$('#regNoError').removeClass('alert-warning');
@@ -655,8 +646,8 @@ function makeFetchCall() {
 
 			$('#regNoErrorSms').html(
 					'<b>No data available for this registration number </b>');
-			
-			search_state= false;
+
+			search_state = false;
 
 		}
 
@@ -669,8 +660,8 @@ function makeFetchCall() {
 			 * $('#regNoState') .html( "<b>Successfully retrieved student's
 			 * school fees info. </b>");
 			 */
-			
-			search_state= true;
+
+			search_state = true;
 
 			$('#regNoInfo').addClass('alert-success');
 			$('#regNoInfo').removeClass('alert-info');
@@ -683,6 +674,7 @@ function makeFetchCall() {
 							"<b>Successfully retrieved student's school fees info. </b>");
 
 			var basicInfo = data['studentFeeAPI'];
+			studentId = data['studentFeeAPI']['studentId'];
 
 			$('#studentsInfo').show(3000);
 
@@ -690,8 +682,7 @@ function makeFetchCall() {
 			$('#btn_history').prop('disabled', false);
 			$('#revert_payment_btn').prop('disabled', false);
 			$('#addOtherFee_btn').prop('disabled', false);
-			$('#other_studentId').val(
-					data['studentFeeAPI']['studentId']);
+			$('#other_studentId').val(data['studentFeeAPI']['studentId']);
 
 			var name;
 
@@ -747,9 +738,10 @@ function makeFetchCall() {
 
 								if (key === 'feeHistory') {
 
-									$('#studentId')
-											.val(
-													basicInfo['feeHistory'][0]['studentId']);
+									/*
+									 * $('#studentId') .val(
+									 * basicInfo['feeHistory'][0]['studentId']);
+									 */
 									$('#genReceipt').removeClass('btn-info');
 									$('#genReceipt').addClass('btn-success');
 									$('#genReceipt').prop('disabled', false);
@@ -767,7 +759,9 @@ function makeFetchCall() {
 
 										$('#feeHistory')
 												.append(
-														'<div class="col-md-4 col-md-offset-1"> <h6>Amount Paid: '
+														'<div class="col-md-4 col-md-offset-1" id="receipt'
+																+ basicInfo['feeHistory'][i]['datePaid']
+																+ '"> <h6>Amount Paid: '
 																+ basicInfo['feeHistory'][i]['amountPaid']
 																+ '</h6><h6>Payment Mode: '
 																+ basicInfo['feeHistory'][i]['payMode']
@@ -779,6 +773,9 @@ function makeFetchCall() {
 																+ basicInfo['feeHistory'][i]['yearPaid']
 																+ '</h6> <h6>Date Paid: '
 																+ basicInfo['feeHistory'][i]['datePaid']
+																+ '<span class="btn btn-pull-right hand" id="'
+																+ basicInfo['feeHistory'][i]['datePaid']
+																+'" onclick="printReceipt(this.id)" > <i class="fa fa-print fa-2x print"></i></span>'
 																+ '</h6> <hr class="hr_list"></div>');
 
 										// });
@@ -824,46 +821,63 @@ function makeFetchCall() {
 
 }
 
-
-
 function otherFeeTermFeeList() {
 
-	
-	
+	varying_url = "finance/fee/other/" + $('#accountId').val() + "/"
+			+ $('#term').val() + "/" + $('#year').val();
 
-		varying_url = "finance/fee/other/" + $('#accountId').val() + "/"
-				+ $('#term').val() + "/" + $('#year').val();
+	global_data_passed = {};
 
-		global_data_passed = {};
+	global_request_type = 'GET';
 
-		global_request_type = 'GET';
+	globalApiCall(function(data) {
 
-		globalApiCall(function(data) {
+		console.log('Code for fetching other fee list per term');
 
-			console.log('Code for fetching other fee list per term');
+		console.log(data);
 
-			console.log(data);
+		console.log(data.length);
 
-			console.log(data.length);
+		if (data["message"] != "error" && data.length > 0) {
 
-			if (data["message"] != "error" && data.length > 0) {
-				
-				var otherFeeSelect = $('.otherFeeList');
-				otherFeeSelect.empty();
+			var otherFeeSelect = $('.otherFeeList');
+			otherFeeSelect.empty();
+			// classSelect.options[classSelect.options.length]
+			// = new Option('Form 1', 'Value1');
+
+			for (var i = 0; i < data.length; i++) {
+				otherFeeSelect.append('<option id=' + data[i].uuid + ' value='
+						+ data[i].uuid + '>' + data[i].description + ' : '
+						+ data[i].amount + '</option>');
 				// classSelect.options[classSelect.options.length]
-				// = new Option('Form 1', 'Value1');
-
-				for (var i = 0; i < data.length; i++) {
-					otherFeeSelect.append('<option id=' + data[i].uuid + ' value='
-							+ data[i].uuid + '>' + data[i].description +' : '+  data[i].amount+ '</option>');
-					// classSelect.options[classSelect.options.length]
-					// = new Option(data[i].description,
-					// data[i].uuid);
-				}
-
-				
+				// = new Option(data[i].description,
+				// data[i].uuid);
 			}
 
-		});
+		}
+
+	});
+
+}
+
+function printReceipt(id){
+	console.log('Print init'+id +'Heheheh');
+	var mywindow = window.open('', 'PRINT', 'height=800,width=1000');
+
+	mywindow.document
+			.write('<html><head><title>School Fees Receipt + </title>');
+	mywindow.document.write('</head><body >');
+	mywindow.document.write('<h1> Fees Receipt</h1>');
+	mywindow.document.write(document.getElementById('receipt'+id).innerHTML);
+	mywindow.document.write('</body></html>');
+
+	mywindow.document.close(); // necessary for IE >= 10
+	mywindow.focus(); // necessary for IE >= 10*/
+
+	mywindow.print();
+	mywindow.close();
+
+	return true;
 	
 }
+
