@@ -1,0 +1,201 @@
+<!-- generate TBID report-->
+
+<div id="TBIDModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="TBIDTiltle">Most Top, Bottom,
+					Improved or Dropped Report</h4>
+			</div>
+
+			<form method="get" action="tbidList" id="TBIDForm" target="_blank">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+							<!-- Scope element -->
+
+							<div class="row">
+
+								<div class="col-md-8 col-md-offset-2">
+									<h4>Scope:</h4>
+
+									<div class="row">
+
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="class_tbid" class="form-control"
+												name="decisionFlag" value="1"
+												onclick="scopeSwapTBID(this.id)" checked> <label
+												for="class_tbid">
+												<h6>Class</h6>
+
+											</label>
+										</div>
+
+										<div class="col-md-5 col-md-offset-1">
+											<input type="radio" id="stream_tbid" name="decisionFlag"
+												value="0" onclick="scopeSwapTBID(this.id)"> <label
+												for="stream_tbid">
+												<h6>Stream</h6>
+
+											</label>
+										</div>
+
+									</div>
+
+									<div class="row" id="stream_option" style="display: none">
+
+										<div class="col-md-5 col-md-offset-1" id="classDiv">
+											<br>
+											<h4>Class/Form:</h4>
+											<select
+												class="form-control formelement populateOptions cards"
+												id="classList" onchange="fetchStreams(this.value)">
+
+
+											</select>
+										</div>
+
+
+
+										<div class="col-md-5 col-md-offset-1">
+											<br>
+											<h4>Stream:</h4>
+											<select
+												class="form-control formelement populateStreamOptions cards"
+												id="streamId" name="uuid"
+												onchange="fetchStudents(this.value)" required>
+
+											</select>
+										</div>
+
+
+									</div>
+
+								</div>
+							</div>
+
+
+							<div class="row" id="class_option">
+
+								<div class="col-md-8 col-md-offset-2">
+									<br>
+									<h4>Class/Form:</h4>
+									<select class="form-control formelement cards" id="class_scope"
+										name="uuid">
+
+										<option value="">Form 1</option>
+
+										<option value="">Form 2</option>
+										<option value="">Form 3</option>
+
+										<option value="">Form 4</option>
+
+
+									</select>
+								</div>
+
+
+
+
+
+							</div>
+
+
+
+							<div class="row">
+							
+							<br>
+
+								<div class="col-md-8 col-md-offset-2">
+									<br>
+									<h4>Category:</h4>
+									<select class="form-control cards" name="reportFlag"
+										id="reportFlag">
+
+										<option value="0">Top</option>
+
+										<option value="1">Bottom</option>
+										<option value="2">Improved</option>
+
+										<option value="3">Dropped</option>
+
+
+									</select>
+								</div>
+
+							</div>
+							
+							
+							<div class="row">
+
+							<div class="col-md-8 col-md-offset-2">
+								<br>
+								<h4>Number Required:</h4>
+								<input type="text" id="threshold" name="threshold"
+									class="form-control formelement cards"
+									placeholder="Number of students" pattern="[0-9]{1,2}"
+									maxlength="2" title="Only digits are allowed e.9 1, 5, 10 etc"
+									required> <br>
+							</div>
+							</div>
+							
+							<div class="row">
+
+
+							<input type="hidden" name="accountId" id="accountId_tbid"
+								value="n0t_set">
+
+
+
+
+
+
+
+
+
+						</div>
+
+						<!-- 	<input type="hidden" name="" id="" value="not_set"> <input
+							type="hidden" name="" id="" value="not_set"> -->
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-info pull-right cards"
+						id="tbidList_btn_add">
+						Generate <i class="fa fa-file-o"></i>
+					</button>
+
+					<!-- 	
+					<button type="submit" onclick="updateStreamApiCall()" class="btn btn-info pull-right" id="stream_btn_update">
+						Save Changes <i class="fa fa-save"></i>
+					</button> -->
+
+
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
+
+

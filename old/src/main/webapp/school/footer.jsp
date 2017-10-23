@@ -221,7 +221,6 @@
 <script src="js/datepicker/pikaday.jquery.js"></script>
 
 
-<script src="js/customReportJs.js"></script>
 
 
 <!-- RootApiCall js -->

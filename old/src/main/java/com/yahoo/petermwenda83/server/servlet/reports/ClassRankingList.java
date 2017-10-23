@@ -53,7 +53,6 @@ import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
-import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -90,7 +89,7 @@ public class ClassRankingList extends HttpServlet{
 	private static StreamDAO streamDAO;
 	private static ExamDAO examDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
-	private static ClassMeanDAO classMeanDAO;
+	//private static ClassMeanDAO classMeanDAO;
 	private static ClassDAO classDAO;
 	private static PrimaryDAO primaryDAO;
 
@@ -145,7 +144,7 @@ public class ClassRankingList extends HttpServlet{
 		streamDAO = StreamDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
-		classMeanDAO = ClassMeanDAO.getInstance();
+		//classMeanDAO = ClassMeanDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 
@@ -187,7 +186,11 @@ public class ClassRankingList extends HttpServlet{
 		String noOfSub = request.getParameter("subjects");
 		//paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 
-		System.out.println("paper123Id : " + paper123Id);
+		//System.out.println("paper123Id : " + paper123Id);
+		//System.out.println("noOfSub : " + noOfSub);//seven
+		paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
+		//System.out.println("paper123Id : " + paper123Id);
+		
 
 		//check for hide points
 		hidePoints = hidePts ? true : false;
@@ -257,6 +260,8 @@ public class ClassRankingList extends HttpServlet{
 		try {
 
 			document.open();
+			
+			
 
 			generateReport(accountId, streamId, classroomId, term, year, examType, paper123Id);
 
@@ -469,7 +474,7 @@ public class ClassRankingList extends HttpServlet{
 			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 
-			//TODO save class mean 
+			 
 			ClassMean class_stream_Mean = new ClassMean();
 			class_stream_Mean.setAccountId(accountId);
 			class_stream_Mean.setClassId(classroomId);
@@ -679,7 +684,7 @@ public class ClassRankingList extends HttpServlet{
 
 				String avg_points_grade = "0";
 				String avgPoints = "0";
-				int avg_points = 0;
+				//int avg_points = 0;
 
 
 				int mainPoint = performance2.getTotalPoint();
@@ -696,7 +701,7 @@ public class ClassRankingList extends HttpServlet{
 					total = totalMean;
 
 				}
-
+				
 
 
 				if(total == prevtotal){
@@ -720,14 +725,16 @@ public class ClassRankingList extends HttpServlet{
 				stream = StringUtils.remove(stream, "FORM"); 
 
 
-
 				Map<String,Integer> exam1 = performance2.getExam1();
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
+				
+				/*System.out.println(" exam1: " + exam1);
+				System.out.println(" exam2: " + exam2);
+				System.out.println(" exam3: " + exam3);*/
+				
 
-
-
-				//TODO
+				
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 
@@ -795,8 +802,7 @@ public class ClassRankingList extends HttpServlet{
 						exam3Score = "";
 					}
 
-					//TODO
-
+				
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 
@@ -849,20 +855,81 @@ public class ClassRankingList extends HttpServlet{
 				poinst_str = String.valueOf((int) Math.round(pointsAvg)); 
 				mean_str = ReportUtil.df2.format(avgMean);
 
-				//avgPoints,avg_points_grade  TODO
-
+			
 				if(rankWithPoints && !rankWithTotalMarks){
 
 					if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 						poinst_str = avgPoints + " " + avg_points_grade;
+						
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
+						yearlyMean.setAccountId(accountId);
+						yearlyMean.setStudentId(student.getUuid());
+						yearlyMean.setYear(year);
+
+						if(StringUtils.equals(term, "1")){
+
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(avgPoints))); 
+
+						}
+						if(StringUtils.equals(term, "2")){
+
+							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+
+						}
+						if(StringUtils.equals(term, "3")){
+
+							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+
+						}
+
+		                 //TODO
+						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 					}else {
 
 						//show grade on points
 						poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
+						
+						YearlyMean yearlyMean;
+						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+							yearlyMean = new YearlyMean();
+						}else {
+							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+						}
+						
+						yearlyMean.setAccountId(accountId);
+						yearlyMean.setStudentId(student.getUuid());
+						yearlyMean.setYear(year);
+
+						if(StringUtils.equals(term, "1")){
+
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(pointsAvg))); 
+
+						}
+						if(StringUtils.equals(term, "2")){
+
+							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(pointsAvg)));
+
+						}
+						if(StringUtils.equals(term, "3")){
+
+							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(pointsAvg)));
+
+						}
+
+		                 //TODO
+						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 
 					}
+					
+					
 
 
 				}
@@ -870,6 +937,39 @@ public class ClassRankingList extends HttpServlet{
 				if(!rankWithPoints && rankWithTotalMarks){
 					//show grade on avg
 					mean_str = ReportUtil.df2.format(avgMean) + " " +  avgGradeByMean;
+					
+					
+					YearlyMean yearlyMean;
+					if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
+						yearlyMean = new YearlyMean();
+					}else {
+						yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
+					}
+					
+					yearlyMean.setAccountId(accountId);
+					yearlyMean.setStudentId(student.getUuid());
+					yearlyMean.setYear(year);
+
+					if(StringUtils.equals(term, "1")){
+
+						yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(avgMean))); 
+
+					}
+					if(StringUtils.equals(term, "2")){
+
+						yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(avgMean)));
+
+					}
+					if(StringUtils.equals(term, "3")){
+
+						yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(avgMean)));
+
+					}
+
+	                 //TODO
+					yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+					
+					
 				}
 
 
@@ -955,7 +1055,7 @@ public class ClassRankingList extends HttpServlet{
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
 
-				//TODO 
+				
 
 				rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
@@ -1146,7 +1246,6 @@ public class ClassRankingList extends HttpServlet{
 
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
-						//TODO
 						exam1 = perfomanceDAO.getClassPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
 
 					}else {
@@ -1162,7 +1261,6 @@ public class ClassRankingList extends HttpServlet{
 
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
-						//TODO
 						exam1 = perfomanceDAO.getStreamPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
 
 
@@ -1221,7 +1319,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) || StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)){
-					//TODO
+				
 					totalPoint = totalExam1.getTotalPoints();
 					totalMeans = totalExam1.getTotalMean();
 
@@ -1307,6 +1405,8 @@ public class ClassRankingList extends HttpServlet{
 				totalPoint = totalExam1.getTotalPoints();
 
 				totalMeans = totalExam1.getTotalMean();
+				
+				//System.out.println(" --totalExam1--- " + totalExam1);
 
 
 
@@ -1319,7 +1419,8 @@ public class ClassRankingList extends HttpServlet{
 
 				Performance2 performance2 = new Performance2();
 
-				//System.out.println(" --totalExam1--- " + totalExam1);
+				System.out.println(" --totalExam1--- " + totalExam1 + " , paper123Id : " + paper123Id);
+				
 
 
 				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
@@ -1513,8 +1614,8 @@ public class ClassRankingList extends HttpServlet{
 			//Business logic here
 			SubjectAnalysis subjectAnalysis = new SubjectAnalysis();
 			subjectAnalysis.setSubjectId(subject.getUuid()); 
-			subjectAnalysis.setTotal(total); 
-			subjectAnalysis.setAverage(totalAvg);    
+			subjectAnalysis.setTotal(Double.parseDouble(ReportUtil.df2.format(total))); 
+			subjectAnalysis.setAverage(Double.parseDouble(ReportUtil.df2.format(totalAvg)));
 			subjectAnalysis.setEntry(entry);
 
 			performance1List.add(subjectAnalysis);

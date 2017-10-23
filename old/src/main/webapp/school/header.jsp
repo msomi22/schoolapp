@@ -212,6 +212,7 @@
 										<li><a href="exam.jsp">Exam</a></li>
 										<li><a href="streams.jsp">Stream</a></li>
 										<li><a href="settings.jsp">Settings</a></li>
+										<li><a href="misc.jsp">Misc Settings</a></li>
 									</ul></li>
 
 

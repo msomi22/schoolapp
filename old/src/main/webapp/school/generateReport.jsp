@@ -56,8 +56,6 @@
 
 	examList = examDAO.getExamList(accountId);
 
-	
-
 	//get the current year
 	/*  int current= 0;
 	 
@@ -74,10 +72,8 @@
 %>
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
-<link rel="stylesheet"
-	href="css/normalize.min.css">
-<link rel='stylesheet prefetch'
-	href='css/roboto.css'>
+<link rel="stylesheet" href="css/normalize.min.css">
+<link rel='stylesheet prefetch' href='css/roboto.css'>
 <link rel='stylesheet prefetch'
 	href='../vendors/font-awesome/css/font-awesome.min.css'>
 <link rel="stylesheet" href="css/customReportStyle.css">
@@ -100,10 +96,11 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-					
-					
-					
-					<input type="hidden" name="accountId" id="accountId" value="<%= accountId %>">
+
+
+
+						<input type="hidden" name="accountId" id="accountId"
+							value="<%=accountId%>">
 
 
 
@@ -128,6 +125,10 @@
 									<div class="x_content">
 										<br />
 
+										<div class="col-md-2 pull-right alert alert-info cards hand" onclick="showTBIDModal()">
+											<h4>Get Most Top, Bottom, <br>Improved or Dropped <br>per class
+											and/or stream <span><i class="fa fa-bar-chart fa-2x pull-right"></i></span></h4></div>
+
 
 										<form action="studentReportCard" id="generateReport"
 											class="col-md-6 col-md-offset-3" method="post"
@@ -136,7 +137,7 @@
 
 											<div class="row">
 
-												<div class="col-md-6 col-md-offset-3">
+												<div class="col-md-3 col-md-offset-4">
 													<%--    <%=accountId %>
                     
                     <%=examList %>
@@ -167,13 +168,13 @@
 
 													<!-- Exam element -->
 
-												
+
 
 													<h4>Exam</h4>
 
 													<select id="exam" name="exam"
 														onblur="validateExamSelected()" onchange="hideSubjects()"
-														class="form-control formelement SlectBox"
+														class="formelement SlectBox form-control"
 														required="required" multiple>
 
 														<%
@@ -195,7 +196,7 @@
 															}
 														%>
 
-													</select>
+													</select> <br>
 
 												</div>
 
@@ -205,8 +206,8 @@
 
 
 											</div>
-											
-											
+
+
 											<input type="hidden" name="paper123Id" id="paper123Id">
 
 
@@ -214,7 +215,7 @@
 
 											<!-- Choose time span -->
 
-
+											<br>
 
 
 
@@ -326,11 +327,13 @@
 
 													<h4>Class</h4>
 
-													<select class="form-control formelement populateOptions classId" id="classList" onchange="fetchStreams(this.value)" name="classroom"
-														required>
+													<select
+														class="form-control formelement populateOptions classId"
+														id="classList" onchange="fetchStreams(this.value)"
+														name="classroom" required>
 
 
-														
+
 													</select>
 
 
@@ -346,12 +349,13 @@
 
 													<h4>Stream</h4>
 
-													<select class="form-control formelement populateStreamOptions" name="stream"
-														required>
+													<select
+														class="form-control formelement populateStreamOptions"
+														name="stream" required>
 
 
 
-													
+
 
 
 													</select>
@@ -463,31 +467,31 @@
 
 
 											<!-- Number of subject element -->
-											
+
 											<div id="no_subjects_show">
 
-											<h4>No_ of Subjects:</h4>
+												<h4>No_ of Subjects:</h4>
 
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="7sub" name="subjects" value="seven"
-														checked> <label for="7sub">
-														<h6>Grade 7 subjects</h6>
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="7sub" name="subjects"
+															value="seven" checked> <label for="7sub">
+															<h6>Grade 7 subjects</h6>
 
-													</label>
+														</label>
+													</div>
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="11sub" name="subjects"
+															value="eleven"> <label for="11sub">
+															<h6>Grade 11 subjects</h6>
+
+														</label>
+													</div>
+
 												</div>
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="11sub" name="subjects"
-														value="eleven"> <label for="11sub">
-														<h6>Grade 11 subjects</h6>
 
-													</label>
-												</div>
+												<br> <br>
 
-											</div>
-
-											<br> <br>
-											
 											</div>
 
 											<!-- Type of report element -->
@@ -561,18 +565,15 @@
 
 <!-- /page content -->
 
+<!-- TBID Modal -->
+<jsp:include page="modals/TopBottomImprovedDroppedModal.html" />
 
 <!-- footer -->
-
-
 <jsp:include page="footer.jsp" />
 
-<script type="text/javascript">
 
-fetchClasses();
-<!--
 
-//-->
-</script>
+<script src="js/customReportJs.js"></script>
+
 
 
