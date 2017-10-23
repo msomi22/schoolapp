@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -35,7 +36,10 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
@@ -139,7 +143,7 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
-		document = new Document(PageSize.A4, 46, 46, 64, 64);
+		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 
 
 		try {
@@ -195,6 +199,40 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 		if(sysConfigDAO.getSysConfig(accountId) != null) {
 			config = sysConfigDAO.getSysConfig(accountId);
 		}
+
+
+		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
+		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
+		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
+
+		Account account = accountDAO.getAccountById(accountId);
+
+		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
+				+ " , Cell : " + account.getMobile() + "\n"
+				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
+
+
+		PdfPTable headerTable = new PdfPTable(2);
+		headerTable.setWidthPercentage(100); 
+		headerTable.setWidths(new int[]{70,30});
+		headerTable.setHeaderRows(1); 
+		headerTable.isSkipFirstHeader();
+
+		PdfPCell logo = new PdfPCell();
+		logo.addElement(createImage(LOGO_PATH)); 
+		logo.setBorder(Rectangle.NO_BORDER); 
+		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
+
+		PdfPCell schoolInfo = new PdfPCell();
+		schoolInfo.setBorder(Rectangle.NO_BORDER); 
+		schoolInfo.setHorizontalAlignment(Element.ALIGN_LEFT);  
+		schoolInfo.addElement(new Chunk(account.getName().toUpperCase(),timesRomanBold10));
+		schoolInfo.addElement(new Chunk(school, timesRomanNormal10));
+
+		headerTable.addCell(schoolInfo); 
+		headerTable.addCell(logo);   
+
+		document.add(headerTable);
 
 
 
@@ -273,132 +311,132 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 			//if(StringUtils.equals(reportFlag, TOP)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanComparator());
-				Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanComparator());
+			Collections.reverse(tbidBeanList);
 
-				boolean datafound0 = false;
-				int count0 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound0 = false;
+			int count0 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getMean() > 0) {
-						document.add(new Paragraph("TOP M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() +
-								", D : " + tbidbean.getDeviation(),timesRomanNormal8)); 
+				if(tbidbean.getMean() > 0) {
+					document.add(new Paragraph("TOP M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() +
+							", D : " + tbidbean.getDeviation(),timesRomanNormal8)); 
 
-						datafound0 = true;
-					}
-
-
-
-					if(count0 >= threshold_) {
-						break;
-					}
-
-					count0++;
+					datafound0 = true;
 				}
 
-				if(!datafound0) {
-					document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+
+
+				if(count0 >= threshold_) {
+					break;
 				}
+
+				count0++;
+			}
+
+			if(!datafound0) {
+				document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+			}
 
 			//}else if(StringUtils.equals(reportFlag, BOTTOM)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanComparator());
-				//Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanComparator());
+			//Collections.reverse(tbidBeanList);
 
-				boolean datafound1 = false;
-				int count1 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound1 = false;
+			int count1 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getMean() > 0) {
+				if(tbidbean.getMean() > 0) {
 
-						document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-								tbidbean.getDeviation(), timesRomanNormal8)); 
+					document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+							tbidbean.getDeviation(), timesRomanNormal8)); 
 
-						datafound1 = true;
-					}
-
-					if(count1 >= threshold_) {
-						break;
-					}
-
-					count1++;
+					datafound1 = true;
 				}
 
-				if(!datafound1) {
-					document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				if(count1 >= threshold_) {
+					break;
 				}
+
+				count1++;
+			}
+
+			if(!datafound1) {
+				document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			//}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-				Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+			Collections.reverse(tbidBeanList);
 
-				boolean datafound2 = false;
-				int count2 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound2 = false;
+			int count2 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getDeviation() > 0) {
+				if(tbidbean.getDeviation() > 0) {
 
-						document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-								tbidbean.getDeviation(), timesRomanNormal8)); 
+					document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+							tbidbean.getDeviation(), timesRomanNormal8)); 
 
-						datafound2 = true;
-					}
-
-					if(count2 >= threshold_) {
-						break;
-					}
-
-					count2++;
+					datafound2 = true;
 				}
 
-				if(!datafound2) {
-					document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+				if(count2 >= threshold_) {
+					break;
 				}
+
+				count2++;
+			}
+
+			if(!datafound2) {
+				document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			//}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-				//Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+			//Collections.reverse(tbidBeanList);
 
-				boolean datafound3 = false;
-				int count3 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound3 = false;
+			int count3 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getDeviation() > 0) {
+				if(tbidbean.getDeviation() > 0) {
 
-						document.add(new Paragraph("MOST_DROPPED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-								tbidbean.getDeviation() , timesRomanNormal8)); 
+					document.add(new Paragraph("MOST_DROPPED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+							tbidbean.getDeviation() , timesRomanNormal8)); 
 
-						datafound3 = true;
+					datafound3 = true;
 
-					}
-
-
-					if(count3 >= threshold_) {
-						break;
-					}
-
-					count3++;
 				}
 
-				if(!datafound3) {
-					document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+
+				if(count3 >= threshold_) {
+					break;
 				}
+
+				count3++;
+			}
+
+			if(!datafound3) {
+				document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			/*}else {
@@ -482,136 +520,136 @@ public class TopBottomImprovedDroppedList extends HttpServlet{
 
 			//if(StringUtils.equals(reportFlag, TOP)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanComparator());
-				Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanComparator());
+			Collections.reverse(tbidBeanList);
 
-				boolean datafound0 = false;
-				int count0 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound0 = false;
+			int count0 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getMean() > 0) {
+				if(tbidbean.getMean() > 0) {
 
-						document.add(new Paragraph("TOP M " +tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
-								tbidbean.getDeviation() , timesRomanNormal8)); 
+					document.add(new Paragraph("TOP M " +tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " + 
+							tbidbean.getDeviation() , timesRomanNormal8)); 
 
-						datafound0 = true;
-					}
-
-
-					if(count0 >= threshold_) {
-						break;
-					}
-
-					count0++;
+					datafound0 = true;
 				}
 
-				if(!datafound0) {
-					document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+
+				if(count0 >= threshold_) {
+					break;
 				}
+
+				count0++;
+			}
+
+			if(!datafound0) {
+				document.add(new Paragraph("TOP M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			//}else if(StringUtils.equals(reportFlag, BOTTOM)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanComparator());
-				//Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanComparator());
+			//Collections.reverse(tbidBeanList);
 
-				boolean datafound1 = false;
-				int count1 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound1 = false;
+			int count1 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getMean() > 0) {
+				if(tbidbean.getMean() > 0) {
 
-						document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-								tbidbean.getDeviation() , timesRomanNormal8)); 
+					document.add(new Paragraph("BOTTOM M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+							tbidbean.getDeviation() , timesRomanNormal8)); 
 
-						datafound1 = true;
+					datafound1 = true;
 
-					}
-
-
-					if(count1 >= threshold_) {
-						break;
-					}
-
-					count1++;
 				}
 
 
-				if(!datafound1) {
-					document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+				if(count1 >= threshold_) {
+					break;
 				}
+
+				count1++;
+			}
+
+
+			if(!datafound1) {
+				document.add(new Paragraph("BOTTOM M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			//}else if(StringUtils.equals(reportFlag, MOST_IMPROVED)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-				Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+			Collections.reverse(tbidBeanList);
 
-				boolean datafound2 = false;
-				int count2 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound2 = false;
+			int count2 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);
 
-					if(tbidbean.getDeviation() > 0) {
-						document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-								tbidbean.getDeviation() , timesRomanNormal8)); 
+				if(tbidbean.getDeviation() > 0) {
+					document.add(new Paragraph("MOST_IMPROVED M " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+							tbidbean.getDeviation() , timesRomanNormal8)); 
 
-						datafound2 = true;
-					}
-
-
-
-
-					if(count2 >= threshold_) {
-						break;
-					}
-
-					count2++;
+					datafound2 = true;
 				}
 
-				if(!datafound2) {
-					document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+
+
+
+				if(count2 >= threshold_) {
+					break;
 				}
+
+				count2++;
+			}
+
+			if(!datafound2) {
+				document.add(new Paragraph("MOST_IMPROVED M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			//}else if(StringUtils.equals(reportFlag, MOST_DROPPED)) {
 
-				Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
-				//Collections.reverse(tbidBeanList);
+			Collections.sort(tbidBeanList, new TBIDBeanDeviationComparator());
+			//Collections.reverse(tbidBeanList);
 
-				boolean datafound3 = false;
-				int count3 = 1;
-				for(TBIDBean tbidbean : tbidBeanList) {
+			boolean datafound3 = false;
+			int count3 = 1;
+			for(TBIDBean tbidbean : tbidBeanList) {
 
-					// business logic here
-					//System.out.println("tbidbean : " + tbidbean);boolean datafound = false;
+				// business logic here
+				//System.out.println("tbidbean : " + tbidbean);boolean datafound = false;
 
-					if(tbidbean.getDeviation() > 0) {
-						document.add(new Paragraph("MOST_DROPPED  M : " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
-								tbidbean.getDeviation() , timesRomanNormal8)); 
+				if(tbidbean.getDeviation() > 0) {
+					document.add(new Paragraph("MOST_DROPPED  M : " + tbidbean.getMean() + ", P : " + tbidbean.getPrevMean() + ", D : " +
+							tbidbean.getDeviation() , timesRomanNormal8)); 
 
-						datafound3 = true;
-					}
-
-					if(count3 >= threshold_) {
-						break;
-					}
-
-					count3++;
+					datafound3 = true;
 				}
 
-
-				if(!datafound3) {
-					document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+				if(count3 >= threshold_) {
+					break;
 				}
+
+				count3++;
+			}
+
+
+			if(!datafound3) {
+				document.add(new Paragraph("MOST_DROPPED M - nothing to show " , timesRomanNormal8));
+			}
 
 
 			/*}else {

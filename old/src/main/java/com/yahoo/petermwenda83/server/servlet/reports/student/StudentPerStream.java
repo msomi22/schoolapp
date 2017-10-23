@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -35,7 +35,10 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
@@ -54,13 +57,13 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
  */
 public class StudentPerStream extends HttpServlet{
 
-	private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+	//private Font timesRomanBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNormal10= new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	//private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanNormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
 
-	private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
+	//private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -114,7 +117,7 @@ public class StudentPerStream extends HttpServlet{
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
-		document = new Document(PageSize.A4, 46, 46, 64, 64);
+		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
 
 
 		try {
@@ -164,9 +167,115 @@ public class StudentPerStream extends HttpServlet{
 
 	private void generateReport(String accountId, String uuid, String decisionFlag) throws DocumentException{
 
+		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
+		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
+		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
+		
+		Account account = accountDAO.getAccountById(accountId);
+		
+		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
+				+ " , Cell : " + account.getMobile() + "\n"
+				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
+		
+
+		PdfPTable headerTable = new PdfPTable(2);
+		headerTable.setWidthPercentage(100); 
+		headerTable.setWidths(new int[]{70,30});
+		//headerTable.setHeaderRows(1); 
+		//headerTable.isSkipFirstHeader();
+
+		PdfPCell logo = new PdfPCell();
+		logo.addElement(createImage(LOGO_PATH)); 
+		logo.setBorder(Rectangle.NO_BORDER); 
+		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
+
+		PdfPCell schoolInfo = new PdfPCell();
+		schoolInfo.setBorder(Rectangle.NO_BORDER); 
+		schoolInfo.setHorizontalAlignment(Element.ALIGN_LEFT);  
+		schoolInfo.addElement(new Chunk(account.getName().toUpperCase(),timesRomanBold10));
+		schoolInfo.addElement(new Chunk(school, timesRomanNormal10));
+
+		headerTable.addCell(schoolInfo); 
+		headerTable.addCell(logo);   
+
+		
+		
+		
+		PdfPTable studentTable = new PdfPTable(11);   
+		studentTable.setWidthPercentage(100); 
+		studentTable.setWidths(new int[]{6,10,12,12,12,10,6,8,8,8,8}); 
+		studentTable.setHeaderRows(1); 
+		studentTable.isSkipFirstHeader();
+        //#-regNo-firstname-middlename-lastname-admclass-currentclass-gender-----12
+		
+		PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold10));
+		countCell.setBackgroundColor(baseColor);
+		countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell regNoCell = new PdfPCell(new Paragraph("Reg-No",timesRomanBold10));
+		regNoCell.setBackgroundColor(baseColor);
+		regNoCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell fnameCell = new PdfPCell(new Paragraph("Firstname",timesRomanBold10));
+		fnameCell.setBackgroundColor(baseColor);
+		fnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell mnameCell = new PdfPCell(new Paragraph("Middlename",timesRomanBold10));
+		mnameCell.setBackgroundColor(baseColor);
+		mnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell lnameCell = new PdfPCell(new Paragraph("Lastname",timesRomanBold10));
+		lnameCell.setBackgroundColor(baseColor);
+		lnameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		PdfPCell reg_classCell = new PdfPCell(new Paragraph("Reg-Class",timesRomanBold10));
+		reg_classCell.setBackgroundColor(baseColor);
+		reg_classCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		
+		PdfPCell genderCell = new PdfPCell(new Paragraph("Gender",timesRomanBold10));
+		genderCell.setBackgroundColor(baseColor);
+		genderCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		PdfPCell box1Cell = new PdfPCell(new Paragraph(" ",timesRomanBold10));
+		box1Cell.setBackgroundColor(baseColor);
+		box1Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		PdfPCell box2Cell = new PdfPCell(new Paragraph(" ",timesRomanBold10));
+		box2Cell.setBackgroundColor(baseColor);
+		box2Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		PdfPCell box3Cell = new PdfPCell(new Paragraph(" ",timesRomanBold10));
+		box3Cell.setBackgroundColor(baseColor);
+		box3Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		
+		PdfPCell box4Cell = new PdfPCell(new Paragraph(" ",timesRomanBold10));
+		box4Cell.setBackgroundColor(baseColor);
+		box4Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		studentTable.addCell(countCell);
+		studentTable.addCell(regNoCell);
+		studentTable.addCell(fnameCell);
+		studentTable.addCell(mnameCell);
+		studentTable.addCell(lnameCell);
+		studentTable.addCell(reg_classCell);
+		studentTable.addCell(genderCell);
+		studentTable.addCell(box1Cell);
+		studentTable.addCell(box2Cell);
+		studentTable.addCell(box3Cell);
+		studentTable.addCell(box4Cell);
+
+
+		String classname = "";
+		String streamname = "";
+		String message = "";
 
 		if(StringUtils.equals(decisionFlag, "1")) {//class
-
+			
+			classname = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).getDescription();
+			//TODO
+			message = classname;
+			
 			List<Student>  students = new ArrayList<>();//copy students from each stream into this list
 
 			streamDAO.getStreamList(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).forEach(stm -> {
@@ -185,22 +294,46 @@ public class StudentPerStream extends HttpServlet{
 
 			if(!students.isEmpty()) {
 
+				int scount = 1;
 				for(Student student : students) {
+					
+					String reg_stream = streamDAO.getStream(accountId, student.getRegStream()).getDescription();
 
-					String stu =  " RegNo " +student.getRegNo() + " Name: " + student.getFirstname() + " "  + student.getMiddlename() + " "+  student.getLastname();
-
-					document.add(new Paragraph(" "  + stu,timesRomanNormal8)); 
-
+					studentTable.addCell(new Paragraph(" " + scount, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(reg_stream, timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(student.getGender().toUpperCase(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					
+					scount++;
 
 				}
+			
+				
 			}else {
 				document.add(new Paragraph("No students to display " ,timesRomanNormal8)); 
 			}
 
 
+			
 
 
 		}else if(StringUtils.equals(decisionFlag, "0")){//stream 
+			
+			streamname = streamDAO.getStream(accountId, uuid).getDescription();
+			//String classnam = classDAO.getClassRoom(accountId, streamDAO.getStream(accountId, uuid).getClassRoomId()).getDescription();
+			//TODO
+			message =  streamname;
 
 			List<Student> activeStudents = studentDAO.getStudentByStream(accountId, uuid).
 					parallelStream()
@@ -209,14 +342,33 @@ public class StudentPerStream extends HttpServlet{
 
 			if(!activeStudents.isEmpty()) {
 
+				int scount = 1;
 				for(Student student : activeStudents) {
+					
+					String reg_stream = streamDAO.getStream(accountId, student.getRegStream()).getDescription();
 
-					String stu =  " RegNo " +student.getRegNo() + " Name: " + student.getFirstname() + " "  + student.getMiddlename() + " "+  student.getLastname();
-
-					document.add(new Paragraph(" "  + stu,timesRomanNormal8)); 
-
+					studentTable.addCell(new Paragraph(" " + scount, timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getRegNo(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(student.getFirstname(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getMiddlename(), timesRomanNormal10));
+					studentTable.addCell(new Paragraph(student.getLastname(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(reg_stream, timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(student.getGender().toUpperCase(), timesRomanNormal10));
+					
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					studentTable.addCell(new Paragraph(" ", timesRomanNormal10));
+					
+					scount++;
 
 				}
+				
+				
+				
 			}else {
 				document.add(new Paragraph("No students to display " ,timesRomanNormal8)); 
 			}
@@ -224,13 +376,16 @@ public class StudentPerStream extends HttpServlet{
 
 
 		}else {
-			
+
 			document.add(new Paragraph("Invalid decisionFlag" ,timesRomanNormal8)); 
-			
+
 		}
 
+		document.add(headerTable);
 
-
+		document.add(new Paragraph("\n " + message + " Students List \n\n" ,timesRomanNormal8)); 
+		
+		document.add(studentTable); 
 
 
 

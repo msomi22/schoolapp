@@ -408,8 +408,6 @@ public class ClassRankingList extends HttpServlet{
 			headerTable.setWidthPercentage(100); 
 			headerTable.setWidths(new int[]{70,30});
 
-
-
 			PdfPCell logo = new PdfPCell();
 			logo.addElement(createImage(LOGO_PATH)); 
 			logo.setBorder(Rectangle.NO_BORDER); 

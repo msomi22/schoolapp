@@ -49,7 +49,11 @@ public class Miscellanous extends StorableBean{
 	 * @return the value
 	 */
 	public String getValue() {
-		return value.substring(0, Math.min(value.length(), 100)).toLowerCase(); 
+		return value.substring(0, Math.min(value.length(), 110)).toLowerCase(); 
+	}
+	
+	public String getFullValue() {
+		return value; 
 	}
 
 	/**

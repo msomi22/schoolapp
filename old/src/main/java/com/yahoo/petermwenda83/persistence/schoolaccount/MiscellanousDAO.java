@@ -148,7 +148,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 		 try(   Connection conn = dbutils.getConnection();
 	      PreparedStatement pstmt = conn.prepareStatement("UPDATE Miscellanous SET Value = ? WHERE accountId =? AND key =?;");
       		){
-	            pstmt.setString(1, misc.getValue());
+	            pstmt.setString(1, misc.getFullValue());
 	            pstmt.setString(2, misc.getAccountId()); 
 	            pstmt.setString(3, misc.getKey());
 	            pstmt.executeUpdate();
