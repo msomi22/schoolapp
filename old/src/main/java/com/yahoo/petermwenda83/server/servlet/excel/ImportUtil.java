@@ -279,6 +279,7 @@ public class ImportUtil {
 						student.setIsActive("1");
 						student.setIsAlumni("0");
 						student.setIsBoarding(status);
+						student.setIsGoKFeeEligibe("0");  
 						
 						student.setCurrentStream(streamDAO.getStreamByDesc(accountId, stream).getUuid());
 						student.setRegStream(streamDAO.getStreamByDesc(accountId, stream).getUuid()); 

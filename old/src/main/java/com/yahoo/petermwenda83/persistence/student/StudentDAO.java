@@ -407,6 +407,36 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 
 
+	/* (non-Javadoc)
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#activeAndGoKEligibleCount(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int activeAndGoKEligibleCount(String accountId, String isActive, String isGoKFeeEligibe) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Student WHERE accountId =? AND isActive =? AND isGoKFeeEligibe =?;");    		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, isActive);
+			pstmt.setString(3, isGoKFeeEligibe);
+			
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting active student count for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+
+	
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#activeCount(java.lang.String, java.lang.String)
@@ -570,6 +600,38 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		return studentList;
 	}
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getActiveStudents(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Student> getActiveStudents(String accountId, String isActive, String isGoKFeeEligibe) {
+		List<Student> studentList = null;
+
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
+						+ "accountId = ? AND isActive = ? AND isGoKFeeEligibe =?;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, isActive);
+			psmt.setString(3, isGoKFeeEligibe);
+			
+			try(ResultSet rset = psmt.executeQuery();){
+
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;		
+	}
+
+
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getActiveStudents(java.lang.String, java.lang.String)
@@ -623,7 +685,5 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		return studentList;		
 	}
-
-	
 
 }

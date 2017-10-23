@@ -547,6 +547,8 @@ public class FinanceRestFulAPI {
 	}
 	
 	
+	
+	//TODO
 	@ApiOperation(value = "Get Government Money Usage Check.", 
 			notes = "Returns whether the Government amount specified can be sub-divided to all students.", 
 			response = GokeMoneyUsageCheck.class)
@@ -567,6 +569,35 @@ public class FinanceRestFulAPI {
 		}
 
 		return financeRestService.canCommitGokMoney(accountId, amount);
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param amount
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Allocate Government Money to Students.", 
+			notes = "Returns whether Government money was Allocated.", 
+			response = Response.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.")  
+	} )
+	@PUT
+	@Path("/fee/allocate/{accountId}/{amount}")      
+	public Object commitGokMoney(@PathParam("accountId") String accountId, @PathParam("amount")  int amount,
+			@HeaderParam("authorization") String auth) {
+
+		Response response = new Response();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return financeRestService.commitGokMoney(accountId,amount);
 	}
 	
 	

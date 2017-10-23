@@ -247,6 +247,36 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		return list;
 	}
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.money.SchoolStudentFeeDAO#getStudentFeeList(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<StudentFee> getStudentGoKFeeList(String accountId,  String termPiad, String yearPaid,
+			String payMode) {
+		List<StudentFee> list = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentFee WHERE"
+						+ " accountId = ? AND termPiad =? AND yearPaid =? AND payMode = ?;");
+				) {
+			pstmt.setString(1, accountId);      
+			pstmt.setString(2, termPiad); 
+			pstmt.setString(3, yearPaid); 
+			pstmt.setString(4, payMode); 
+
+			try( ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, StudentFee.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when getting StudentFee List for accountId " + accountId); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
 
 
 	/**
@@ -280,6 +310,9 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 
 		return success;
 	}
+
+
+	
 
 
 }

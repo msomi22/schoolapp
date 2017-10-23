@@ -20,5 +20,7 @@ public interface SchoolStudentFeeDAO {
 
 	public List<StudentFee> getStudentFeeList(String accountId , String studentId, String termPiad, String yearPaid); 
 	
+	public List<StudentFee> getStudentGoKFeeList(String accountId , String termPiad, String yearPaid, String payMode); 
+	
 	
 }

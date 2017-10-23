@@ -62,13 +62,18 @@ public interface SchoolStudentDAO {
 	 */
 	public List<Student> getAllStudent(String accountId, String isActive, int limit , int offset); 
 	
-	public List<Student> getActiveStudents(String accountId, String isActive);  
+	public List<Student> getActiveStudents(String accountId, String isActive);
+	
+	public List<Student> getActiveStudents(String accountId, String isActive, String isGoKFeeEligibe);
 	
 	public List<Student> getStudents(String accountId);  
 	
 	public int classStudentCount(String accountId,String currentStream, String isActive);
 
 	public int activeCount(String accountId, String isActive);
+	
+	
+	public int activeAndGoKEligibleCount(String accountId, String isActive, String isGoKFeeEligibe);
 	
 	public int alumniCount(String accountId, String isAlumni);
 	
