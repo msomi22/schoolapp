@@ -66,13 +66,13 @@ function validateExamSelected(){
 		
 		//alert(selectedExams);
 
-		if (selectedExams.includes('Paper 1')
-				| selectedExams.includes('Paper 2')
-				| selectedExams.includes('Paper 3')) {
+		if (selectedExams.includes('PAPER 1')
+				| selectedExams.includes('PAPER 2')
+				| selectedExams.includes('PAPER 3')) {
 
-			if (!(selectedExams.includes('Paper 1')
-					&& selectedExams.includes('Paper 2') 
-					&& selectedExams.includes('Paper 3'))) 
+			if (!(selectedExams.includes('PAPER 1')
+					&& selectedExams.includes('PAPER 2') 
+					&& selectedExams.includes('PAPER 3'))) 
 			{
 
 				$('#titleWarning').text(
@@ -80,7 +80,7 @@ function validateExamSelected(){
 
 				$('#smsWarning')
 						.text(
-								'Exam Papers selected must be three i.e Paper 1, Paper 2 and Paper 3');
+								'Exam Papers selected must be three i.e PAPER 1, PAPER 2 and PAPER 3');
 				
 				
 				var obj = [];
@@ -97,9 +97,9 @@ function validateExamSelected(){
 				
 				
 
-			}else if(selectedExams.includes('Paper 1')
-					&& selectedExams.includes('Paper 2') 
-					&& selectedExams.includes('Paper 3')){
+			}else if(selectedExams.includes('PAPER 1')
+					&& selectedExams.includes('PAPER 2') 
+					&& selectedExams.includes('PAPER 3')){
 				
 				$('#examType').val('P123');
 				$('#paper123Id').val('C3915245-00EE-4EF4-9898-ACE59683DD60');
@@ -131,11 +131,11 @@ function hideSubjects(){
 
 		var selectedExams = $('#exam option:selected').text();
 		
-		console.log(JSON.stringify($('#generateReport').serializeJSON()));
 		
-		if(selectedExams.includes('Paper 1')
-				&& selectedExams.includes('Paper 2') 
-				&& selectedExams.includes('Paper 3')){
+		
+		if(selectedExams.includes('PAPER 1')
+				&& selectedExams.includes('PAPER 2') 
+				&& selectedExams.includes('PAPER 3')){
 			
 		//	$('#examType').val('P123');
 			$('#no_subjects_show').hide(1000);
@@ -209,5 +209,11 @@ function showTBIDModal(){
 	$('#TBIDForm').get(0).reset();
 	$('#TBIDModal').modal('show');
 }
+
+function trace(){
+	
+	console.log(JSON.stringify($('#generateReport').serializeJSON()));
+}
+
 
 
