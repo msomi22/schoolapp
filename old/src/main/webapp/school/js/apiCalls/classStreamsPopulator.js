@@ -1,8 +1,12 @@
+//var default_streamID;
+
 function fetchStreams(classIdVal) {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
 	console.log(classIdVal);
+	
+	$('.populateOptions').val(classIdVal);
 
 	varying_url = "general/streams/" + $('#accountId').val() +"/"+ classIdVal + "/";
 
@@ -27,6 +31,12 @@ function fetchStreams(classIdVal) {
 			// = new Option(data[i].description,
 			// data[i].uuid);
 		}
+		//default_streamID=classId.options[classId.selectedIndex].value;
+		
+		
+		//$('.DefaultStream').val(default_streamID);
+		
+		//console.log('Current stream: '+default_streamID);
 
 	});
 
@@ -65,6 +75,8 @@ function fetchClasses() {
 
 		var classId = document.getElementById('classList');
 		var classIdVal = classId.options[classId.selectedIndex].value;
+		
+		
 
 		// var classId= $('#classesList').val();
 		console.log(classIdVal);

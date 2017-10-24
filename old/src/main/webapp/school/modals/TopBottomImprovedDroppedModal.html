@@ -69,8 +69,7 @@
 											<h4>Stream:</h4>
 											<select
 												class="form-control formelement populateStreamOptions cards"
-												id="streamId" name="uuid"
-												onchange="fetchStudents(this.value)" required>
+												id="streamId" name="uuid" required>
 
 											</select>
 										</div>
@@ -87,15 +86,10 @@
 								<div class="col-md-8 col-md-offset-2">
 									<br>
 									<h4>Class/Form:</h4>
-									<select class="form-control formelement cards" id="class_scope"
-										name="uuid">
+									<select class="form-control formelement populateOptions cards" id="class_scope" onchange="fetchStreams(this.value)"
+										>
 
-										<option value="">Form 1</option>
-
-										<option value="">Form 2</option>
-										<option value="">Form 3</option>
-
-										<option value="">Form 4</option>
+										
 
 
 									</select>
