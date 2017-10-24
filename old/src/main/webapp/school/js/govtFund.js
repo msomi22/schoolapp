@@ -358,6 +358,8 @@ function processTotalAmount() {
 			console.log('Code for checking govt amount Distri');
 
 			console.log(data);
+			
+			if(!data['message']){
 
 			$('#govtCheckResponse').append(
 					'<br> Number of Students : ' + data['numberOfStudents']
@@ -379,6 +381,7 @@ function processTotalAmount() {
 				$('#error').modal('show');
 
 				$('#totalAmount').attr('disabled', false);
+				$('#allocateGovtMoney').attr('disabled', true);
 
 				modalTimeout('error');
 			} else {
@@ -392,10 +395,27 @@ function processTotalAmount() {
 
 				modalTimeout('success');
 
-				$('#totalAmount').attr('disabled', false);
+				//$('#totalAmount').attr('disabled', true);
 
 				$('#allocateGovtMoney').attr('disabled', false);
 
+			}
+			}else{
+				
+				$('#errorTitle').html(data.message);
+				$('#errorSms').html(data.description);
+				$('#error').modal('show');
+				
+				$('#govtCheckResponse').append(data.description);
+
+				$('#totalAmount').attr('disabled', false);
+				$('#allocateGovtMoney').attr('disabled', true);
+
+				modalTimeout('error');
+				
+				
+				
+				
 			}
 
 		});
