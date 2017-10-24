@@ -430,6 +430,11 @@ function monitorTotalAmount() {
 }
 
 function allocateGovtCash() {
+	
+	$('#allocateGovtMoney').attr('disabled', true);
+	
+	
+	
 
 	$('#allocating').modal({
 		backdrop : 'static',
@@ -438,15 +443,44 @@ function allocateGovtCash() {
 	});
 
 	$('#allocating').modal('show');
+	
+	comitAllocation();
 
 	setTimeout(function() {
 
 		$('#allocating').modal('hide');
 		$('#allocateGovtMoney').attr('disabled', true);
 		$('#totalAmount').val('');
-		$('#govtCheckResponse').html('Display the amount check here');
+		
 
 	}, 7000);
+	
+	
+	
+}
+
+function comitAllocation(){
+	
+	varying_url = "finance/fee/allocate/"+$('#accountId').val()+"/"+$('#totalAmount').val();
+
+	global_data_passed = {};
+	
+
+
+	global_request_type = 'PUT';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for allocating govt fund');
+
+		console.log(data);
+		if(rootParseApiResponseData(data))
+			$('#govtCheckResponse').html(data.description);
+
+		
+
+	});
+	
 }
 
 $(document).ready(function() {
