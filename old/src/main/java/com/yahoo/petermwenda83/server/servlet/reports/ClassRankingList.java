@@ -235,13 +235,17 @@ public class ClassRankingList extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 			
-			//System.out.println("examType ***  : " + examType);//P123
+			System.out.println("examType ***  : " + examType);//P123
 			//System.out.println("paper123Id *** : " + paper123Id);
 			
 			//examType = ReportUtil.EXAM_TYPE;
+			
+			
 
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";	
-			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
+		//	paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
+			paper123Id = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+			examType="P123";
 			
 			
 			//System.out.println("examType : " + examType);
