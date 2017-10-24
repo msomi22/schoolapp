@@ -38,7 +38,7 @@ public class Exam extends StorableBean{
 	 * @return the code
 	 */
 	public String getCode() {
-		return code;
+		return code.toUpperCase();
 	}
 
 
@@ -54,7 +54,7 @@ public class Exam extends StorableBean{
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return description.toUpperCase();
 	}
 
 

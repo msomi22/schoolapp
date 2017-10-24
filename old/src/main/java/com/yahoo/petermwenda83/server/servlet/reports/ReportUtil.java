@@ -655,17 +655,20 @@ public class ReportUtil {
 		
 		SubjectPerformance subjectPerformance = new SubjectPerformance();
 		
-		AtomicInteger entry = new AtomicInteger();
-		exam.parallelStream().forEach(performance -> {
-			if(performance.getPaper1() > 0 || performance.getPaper2() > 0 || performance.getPaper3() > 0 || performance.getScore() > 0) {
-				entry.getAndIncrement();
-			}
-		});
-		
-		subjectPerformance.setEntry(entry.get()); 
 		
 		
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
+			
+			AtomicInteger entry = new AtomicInteger();
+			exam.parallelStream().forEach(performance -> {
+				if(performance.getPaper1() > 0 || performance.getPaper2() > 0 || performance.getPaper3() > 0) {
+					entry.getAndIncrement();
+				}
+			});
+			
+			subjectPerformance.setEntry(entry.get()); 
+			
+			
 			
 			PerformanceP123 performanceP123 = new PerformanceP123();
 			performanceP123 = ReportUtil.computeP123(exam, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
@@ -679,6 +682,16 @@ public class ReportUtil {
 			
 
 		}else{
+			
+			AtomicInteger entry = new AtomicInteger();
+			exam.parallelStream().forEach(performance -> {
+				if(performance.getScore() > 0) {
+					entry.getAndIncrement();
+				}
+			});
+			
+			subjectPerformance.setEntry(entry.get()); 
+			
 
 			if(getTotalsByTotalPerExam(exam) > 0){
 				subjectPerformance.setAverage((double)getTotalsByTotalPerExam(exam) / (double)exam.size()); 

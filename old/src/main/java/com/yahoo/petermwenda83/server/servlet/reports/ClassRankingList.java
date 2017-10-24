@@ -63,6 +63,7 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
@@ -188,7 +189,7 @@ public class ClassRankingList extends HttpServlet{
 
 		//System.out.println("paper123Id : " + paper123Id);
 		//System.out.println("noOfSub : " + noOfSub);//seven
-		paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
+		//paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "eleven") ? "" : paper123Id;
 		//System.out.println("paper123Id : " + paper123Id);
 		
 
@@ -208,7 +209,7 @@ public class ClassRankingList extends HttpServlet{
 		year = StringUtils.trimToEmpty(request.getParameter("year"));
 		classroomId= StringUtils.trimToEmpty(request.getParameter("classroom"));
 		//if class checked the scope is true, otherwise false
-		scope= Boolean.parseBoolean((request.getParameter("scope")));
+		scope = Boolean.parseBoolean((request.getParameter("scope")));
 		classResult = scope ? true : false;
 		//get selected exams
 		String[] examsfeed= request.getParameterValues("exam");
@@ -233,8 +234,18 @@ public class ClassRankingList extends HttpServlet{
 
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
+			
+			//System.out.println("examType ***  : " + examType);//P123
+			//System.out.println("paper123Id *** : " + paper123Id);
+			
+			//examType = ReportUtil.EXAM_TYPE;
 
-			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";			
+			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";	
+			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
+			
+			
+			//System.out.println("examType : " + examType);
+			//System.out.println("paper123Id : " + paper123Id);
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType, paper123Id);
 
@@ -1548,7 +1559,8 @@ public class ClassRankingList extends HttpServlet{
 					totalAvg = totalExam1.getAverage();
 					totalAvg = totalAvg > 0 ? totalAvg : 0;
 
-					entry = (int) totalExam1.getEntry();  
+					//entry = (int) totalExam1.getEntry();  
+					entry = exam1.size();
 					total = totalExam1.getTotal(); 
 
 
@@ -1557,7 +1569,9 @@ public class ClassRankingList extends HttpServlet{
 					totalAvg = totalExam1.getAverage() + totalExam2.getAverage() + totalExam3.getAverage();
 					totalAvg = totalAvg > 0 ? totalAvg / 3 : 0;
 
-					entry = (int) (totalExam1.getEntry() + totalExam2.getEntry() + totalExam3.getEntry()) / 3; 
+					
+					//entry = (int) (totalExam1.getEntry() + totalExam2.getEntry() + totalExam3.getEntry()) / 3; 
+					entry = (int)PeterMid.computeMax(exam1.size(), exam2.size(), exam3.size()); 
 					total = (totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal()) / 3;
 
 
@@ -1586,7 +1600,8 @@ public class ClassRankingList extends HttpServlet{
 				totalAvg = totalExam1.getAverage() + totalExam2.getAverage();
 				totalAvg = totalAvg > 0 ? totalAvg / 2 : 0;
 
-				entry = (int) (totalExam1.getEntry() + totalExam2.getEntry()) / 2; 
+				//entry = (int) (totalExam1.getEntry() + totalExam2.getEntry()) / 2; 
+				entry = (int)PeterMid.computeMax(exam1.size(), exam2.size(), 0);
 				total = (totalExam1.getTotal() + totalExam2.getTotal()) / 2;
 
 			}
@@ -1603,7 +1618,8 @@ public class ClassRankingList extends HttpServlet{
 						examType);
 
 				totalAvg = totalExam1.getAverage() > 0 ? totalExam1.getAverage() : 0;
-				entry = totalExam1.getEntry();
+				//entry = totalExam1.getEntry();
+				entry = (int)PeterMid.computeMax(exam1.size(), 0, 0);
 				total = totalExam1.getTotal();
 
 			}

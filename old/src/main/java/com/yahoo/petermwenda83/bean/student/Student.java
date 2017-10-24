@@ -14,6 +14,8 @@ package com.yahoo.petermwenda83.bean.student;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /** 
@@ -190,7 +192,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 	 * @return the firstname
 	 */
 	public String getFirstname() {
-		return firstname;
+		return StringUtils.capitalize(firstname.toLowerCase());
 	}
 
 
@@ -206,7 +208,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 	 * @return the middlename
 	 */
 	public String getMiddlename() {
-		return middlename;
+		return StringUtils.capitalize(middlename.toLowerCase());
 	}
 
 
@@ -222,7 +224,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 	 * @return the lastname
 	 */
 	public String getLastname() {
-		return lastname;
+		return StringUtils.capitalize(lastname.toLowerCase()); 
 	}
 
 
@@ -238,7 +240,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 	 * @return the gender
 	 */
 	public String getGender() {
-		return gender;
+		return gender.toUpperCase();
 	}
 
 
