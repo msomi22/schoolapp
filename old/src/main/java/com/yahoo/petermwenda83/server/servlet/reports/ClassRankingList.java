@@ -235,8 +235,8 @@ public class ClassRankingList extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 			
-			//System.out.println("examType ***  : " + examType);//P123
-			//System.out.println("paper123Id *** : " + paper123Id);
+			System.out.println("examType ***  : " + examType);//P123
+			System.out.println("paper123Id *** : " + paper123Id);
 			
 			//examType = ReportUtil.EXAM_TYPE;
 
@@ -244,8 +244,8 @@ public class ClassRankingList extends HttpServlet{
 			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
 			
 			
-			//System.out.println("examType : " + examType);
-			//System.out.println("paper123Id : " + paper123Id);
+			System.out.println("examType : " + examType);
+			System.out.println("paper123Id : " + paper123Id);
 
 			populatePDFDocument(accountId,streamId,classroomId,term,year,examType, paper123Id);
 
