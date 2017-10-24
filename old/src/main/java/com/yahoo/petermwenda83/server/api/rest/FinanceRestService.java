@@ -992,7 +992,7 @@ public class FinanceRestService {
 				feeBreakdown.setStatus(status); 
 				
 				if(feeBreakdownDAO.updateFeeBreakdown(feeBreakdown)) {
-					response.setMessage("error");
+					response.setMessage("success");
 					response.setDescription("Government money allocated initiated!"); 
 					return response;
 					
