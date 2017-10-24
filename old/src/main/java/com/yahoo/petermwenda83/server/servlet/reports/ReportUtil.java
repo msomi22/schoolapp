@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -659,17 +658,7 @@ public class ReportUtil {
 		
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 			
-			AtomicInteger entry = new AtomicInteger();
-			exam.parallelStream().forEach(performance -> {
-				if(performance.getPaper1() > 0 || performance.getPaper2() > 0 || performance.getPaper3() > 0) {
-					entry.getAndIncrement();
-				}
-			});
-			
-			subjectPerformance.setEntry(entry.get()); 
-			
-			
-			
+		
 			PerformanceP123 performanceP123 = new PerformanceP123();
 			performanceP123 = ReportUtil.computeP123(exam, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
 
@@ -682,16 +671,7 @@ public class ReportUtil {
 			
 
 		}else{
-			
-			AtomicInteger entry = new AtomicInteger();
-			exam.parallelStream().forEach(performance -> {
-				if(performance.getScore() > 0) {
-					entry.getAndIncrement();
-				}
-			});
-			
-			subjectPerformance.setEntry(entry.get()); 
-			
+		
 
 			if(getTotalsByTotalPerExam(exam) > 0){
 				subjectPerformance.setAverage((double)getTotalsByTotalPerExam(exam) / (double)exam.size()); 
