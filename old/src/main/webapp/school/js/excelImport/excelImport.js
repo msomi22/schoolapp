@@ -77,6 +77,7 @@ function importBegin(form){
 				}, 2500);
 
 				// reset form to allow next entry
+				window.location=base_url+"school/studentIndex.jsp";
 
 			} else {
 				
