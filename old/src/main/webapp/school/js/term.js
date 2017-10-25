@@ -236,10 +236,10 @@ function feeTermFeeList() {
 
 	console.log('request called');
 
-	if (rootCheckFormValidation($('#yearFee'))) {
+	//if (rootCheckFormValidation($('#yearFee'))) {
 
 		varying_url = "finance/termfee/" + $('#accountId').val() + "/"
-				+ $('#inityear').val();
+				+ $('#currentYear').val();
 
 		global_data_passed = {};
 
@@ -254,6 +254,8 @@ function feeTermFeeList() {
 			console.log(data.length);
 
 			if (data["message"] != "error" && data.length > 0) {
+				
+				$('#add').attr('disabled',true);
 
 				$('#yearlyFee').addClass('alert-info secondary-assent');
 				$('#yearlyFee').removeClass('alert-danger');
@@ -330,8 +332,8 @@ function feeTermFeeList() {
 					$("#boarder").val(data['boaderAmount']);
 					$("#day").val(data['dayAmount']);
 
-					$("#edit_term").val(data['term']);
-					$("#edit_year").val(data['year']);
+				//	$("#edit_term").val(data['term']);
+				//	$("#edit_year").val(data['year']);
 
 					$("#term_uuid").val(data['uuid']);
 					$("#term_accountId").val(data['accountId']);
@@ -354,11 +356,11 @@ function feeTermFeeList() {
 				$('#yearlyFee').addClass('alert-danger');
 				$('#yearlyFee').html(
 						'<b> The yearly fee record is not available, for year :'
-								+ $('#inityear').val() + '</b>');
+								+ $('#currentYear').val() + '</b>');
 			}
 
 		});
-	}
+	//}
 }
 
 function otherFeeTermFeeList() {
@@ -373,10 +375,10 @@ function otherFeeTermFeeList() {
 
 	console.log('request called');
 
-	if (rootCheckFormValidation($('#otherFeeQuery'))) {
+	//if (rootCheckFormValidation($('#otherFeeQuery'))) {
 
 		varying_url = "finance/fee/other/" + $('#accountId').val() + "/"
-				+ $('#term').val() + "/" + $('#termyear').val();
+				+ $('#currentTerm').val() + "/" + $('#currentYear').val();
 
 		global_data_passed = {};
 
@@ -464,8 +466,8 @@ function otherFeeTermFeeList() {
 					$("#description").val(data['description']);
 					$("#amount").val(data['amount']);
 
-					$("#edit_otherterm").val(data['term']);
-					$("#edit_otheryear").val(data['year']);
+				//	$("#edit_otherterm").val(data['term']);
+				//	$("#edit_otheryear").val(data['year']);
 
 					$("#term_otheruuid").val(data['uuid']);
 					$("#term_otheraccountId").val(data['accountId']);
@@ -489,10 +491,10 @@ function otherFeeTermFeeList() {
 				$('#otherFeeSms').addClass('alert-danger');
 				$('#otherFeeSms').html(
 						'<b> The other fee records is not available, for year '
-								+ $('#termyear').val() + ' Term : '
-								+ $('#term').val() + '</b>');
+								+ $('#currentYear').val() + ' Term : '
+								+ $('#currentTerm').val() + '</b>');
 			}
 
 		});
-	}
+	//}
 }

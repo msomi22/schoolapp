@@ -118,7 +118,7 @@
 												<div class="row">
 
 													<div
-														class="col-md-6 col-md-offset-3 alert alert-info secondary-assent" id="yearlyFee">
+														class="col-md-6 col-md-offset-4 alert alert-info secondary-assent" id="yearlyFee">
 														Alter Term fee</div>
 
 
@@ -126,10 +126,10 @@
 												</div>
 
 												<div class="row ">
-													<div class="col-md-3 pull-right"></div>
+													
 
 													<div class="col-md-4 pull-right">
-														<h3 class="pull-right">
+														<h4 class="pull-right">
 															Add new Term Fee
 															<button class="btn btn-primary"
 																style="border-radius: 90%" id="add"
@@ -137,13 +137,16 @@
 																<i class="fa fa-plus-circle fa-2x"></i>
 															</button>
 
-														</h3>
+														</h4>
 
 													</div>
 
 												</div>
 												<div class="row ">
-													<div class="col-md-6 col-md-offset-3">
+													<div class="col-md-8 col-md-offset-2">
+													
+													
+													<!--  
 
 														<div class="row">
 														
@@ -173,6 +176,8 @@
 															
 															
 														</div>
+														
+														-->
 
 													</div>
 
@@ -182,7 +187,7 @@
 													<div class="row">
 														<br>
 
-														<div class="table-responsive col-md-6 col-md-offset-3">
+														<div class="table-responsive col-md-10 col-md-offset-2">
 															<table
 																class="table table-striped jambo_table bulk_action"
 																id="yearlyTermFeeList">
@@ -281,7 +286,7 @@
 										<div class="row">
 
 											<div id="otherFeeSms"
-												class="col-md-6 col-md-offset-3 alert alert-info secondary-assent">
+												class="col-md-6 col-md-offset-4 alert alert-info secondary-assent">
 												Alter Other fee</div>
 
 
@@ -289,10 +294,10 @@
 										</div>
 
 										<div class="row ">
-											<div class="col-md-3 pull-right"></div>
+										
 
 											<div class="col-md-4 pull-right">
-												<h3 class="pull-right">
+												<h4 class="pull-right">
 													Add another Fee
 													<button class="btn btn-primary cards"
 														style="border-radius: 90%" id="add_other"
@@ -300,12 +305,12 @@
 														<i class="fa fa-plus-circle fa-2x"></i>
 													</button>
 
-												</h3>
+												</h4>
 
 											</div>
 
 										</div>
-
+<!-- 
 										<div class="col-md-6 col-md-offset-3">
 
 											<form method="post" id="otherFeeQuery" action="#">
@@ -350,13 +355,15 @@
 
 											<br>
 										</div>
+										
+										 -->
 
 
 
 										<div class="row">
 											<br> <br>
 
-											<div class="table-responsive col-md-6 col-md-offset-3">
+											<div class="table-responsive col-md-10 col-md-offset-2">
 												<table class="table table-striped jambo_table bulk_action"
 													id="otherFeeList">
 													<thead>
@@ -408,13 +415,7 @@
 
 										<br> <br> <br>
 
-										<div class="row">
-
-
-											<div id="subjectList"></div>
-
-										</div>
-
+										
 
 
 
