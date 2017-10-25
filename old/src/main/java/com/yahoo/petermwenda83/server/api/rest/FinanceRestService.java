@@ -245,11 +245,11 @@ public class FinanceRestService {
 			response.setDescription("Invalid Amount!");
 			return response;
 
-		}else if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(), 
+		/*}else if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(), 
 				feeBreakdownDesc.getFeeCode()) != null) {
 			response.setMessage("error");
 			response.setDescription("Fee Code is in use!");
-			return response;
+			return response;*/
 
 		}else if(feeBreakdownDescDAO.getFeeBreakdownDesc(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(), 
 				feeBreakdownDesc.getFeeDescription()) != null) {
@@ -393,12 +393,12 @@ public class FinanceRestService {
 			response.setDescription("Invalid Amount!");
 			return response;
 
-		}else if(gokehasDuplicate(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(),
+		/*}else if(gokehasDuplicate(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(),
 				feeBreakdownDesc.getFeeCode(),feeBreakdownDesc.getUuid())) { 
 			response.setMessage("error");
 			response.setDescription("Code duplicate not allowed!");
 			return response;
-
+*/
 		}else if(gokehasDuplicate(feeBreakdownDesc.getAccountId(), feeBreakdownDesc.getFeeBreakdownId(),
 				feeBreakdownDesc.getFeeDescription(),feeBreakdownDesc.getUuid())) { 
 			response.setMessage("error");

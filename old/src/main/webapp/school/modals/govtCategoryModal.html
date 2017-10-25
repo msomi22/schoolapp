@@ -26,7 +26,7 @@
 							<div class="col-md-4">
 								<input type="text" id="catname" class="form-control formelement"
 									name="feeDescription" placeholder="Category Name"
-									pattern="[a-zA-Z\s]{3,30}"
+									maxlength="20"
 									title="Category name,Only characters are allowed and should be more than three and less than 30characters"
 									required>
 							</div>
@@ -45,7 +45,7 @@
 							<div class="col-md-4">
 								<input type="text" id="amount" name="amount"
 									class="form-control formelement" placeholder="Catergoty Amount"
-									pattern="[0-9]{3,5}"
+									pattern="[0-9]{3,5}" maxlength="5"
 									title="Amount,Only numbers are allowed and should be more than two and less than five digits e.g 500,2000 e.t.c "
 									required>
 							</div>
@@ -85,7 +85,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-info pull-right"
-						id="govtCatbtn" onclick="addGovtCategory(this.form)">
+						id="govtCatbtn" onclick="addGovtCategory()">
 						Submit <i class="fa fa-save"></i>
 					</button>
 					<button type="button" class="btn btn-default pull-left"

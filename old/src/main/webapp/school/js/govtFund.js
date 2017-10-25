@@ -42,6 +42,8 @@ function fetCategories() {
 
 	// global_url = global_url +
 	varying_url = "finance/goke/" + accountId + '/' + feeCatId;
+	global_request_type ='GET';
+	global_data_passed = {};
 	
 	console.log(varying_url);
 
@@ -135,6 +137,10 @@ function fetCategories() {
 function govtCategoryModal() {
 
 	$('#govtCatForm').get(0).reset();
+	$('#govtCatTiltle').html('<b> Add a new Govt Fund Category</b>');
+
+	$('#govtCatbtn').attr('onclick', 'addGovtCategory()');
+	$('#govtCatbtn').html('Submit');
 
 	$('#govtCategoryModal').modal('show');
 }
@@ -159,21 +165,22 @@ function editGovtCat(id) {
 
 	$('#govtCatTiltle').html('<b> Edit the Category Details</b>');
 
-	$('#govtCatbtn').attr('onclick', 'updatetGovtCat(this.form)');
+	$('#govtCatbtn').attr('onclick', 'updatetGovtCat()');
 
 	$('#').val();
+	$('#govtCatbtn').html('Save Changes');
 
 	$('#govtCategoryModal').modal('show');
 
 }
 
-function updatetGovtCat(form) {
+function updatetGovtCat() {
 
 	submitCatData('PUT');
 
 }
 
-function addGovtCategory(form) {
+function addGovtCategory() {
 
 	submitCatData('POST');
 
@@ -227,8 +234,41 @@ function parseData(data) {
 }
 
 function submitCatData(req_type) {
+	
+	if (rootCheckFormValidation($('#govtCatForm'))) {
 
-	var myform = $("#govtCatForm")[0];
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "finance/goke/" + accountId;
+
+		global_data_passed = $('#govtCatForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = req_type;
+		
+		console.log('Type :'+global_request_type+' Path: '+varying_url);
+
+		globalApiCall(function(data) {
+
+			console.log('Code for altering govt category');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#govtCategoryModal').modal('hide');
+				fetCategories();
+			}
+
+		});
+
+	}
+
+	/*var myform = $("#govtCatForm")[0];
 	if (!myform.checkValidity()) {
 		if (myform.reportValidity) {
 			myform.reportValidity();
@@ -270,7 +310,7 @@ function submitCatData(req_type) {
 			}, 2500);
 		})
 
-	}
+	}*/
 }
 
 function delGovtCat() {

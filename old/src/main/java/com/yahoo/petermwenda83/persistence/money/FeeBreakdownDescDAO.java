@@ -172,15 +172,15 @@ public class FeeBreakdownDescDAO  extends GenericDAO  implements SchoolFeeBreakd
 		boolean success = true;
 		try (  Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE FeeBreakdownDesc SET feeCode =?, feeDescription = ?,"
-						+ "amount =? WHERE accountId =? AND feeCategory =? AND uuid =?;");
+						+ "amount =? WHERE accountId =? AND feeBreakdownId =? AND uuid =?;");
 				) {           			 	            
 
 			pstmt.setString(1, feeBreakdownDesc.getFeeCode());
 			pstmt.setString(2, feeBreakdownDesc.getFeeDescription());
 			pstmt.setInt(3, feeBreakdownDesc.getAmount());	
-			pstmt.setString(4, feeBreakdownDesc.getUuid());
-			pstmt.setString(5, feeBreakdownDesc.getAccountId());
-			pstmt.setString(6, feeBreakdownDesc.getFeeBreakdownId());
+			pstmt.setString(6, feeBreakdownDesc.getUuid());
+			pstmt.setString(4, feeBreakdownDesc.getAccountId());
+			pstmt.setString(5, feeBreakdownDesc.getFeeBreakdownId());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
