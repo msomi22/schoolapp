@@ -25,7 +25,6 @@ import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
-import com.yahoo.petermwenda83.persistence.student.StudentSubjectDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.rest.StudentService;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiSubject;
