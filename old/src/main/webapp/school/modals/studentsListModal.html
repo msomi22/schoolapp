@@ -1,17 +1,16 @@
-<!-- generate TBID report-->
+<!-- generate students List -->
 
-<div id="TBIDModal" class="modal modal-info fade" role="dialog">
+<div id="studentsListModal" class="modal modal-info fade" role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
 		<div class="modal-content alert alert-info">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="TBIDTiltle">Most Top, Bottom,
-					Improved or Dropped Report</h4>
+				<h4 class="modal-title" id="studentsListTiltle">Export Students List per Class or Stream</h4>
 			</div>
 
-			<form method="post" action="tbidList" id="TBIDForm" target="_blank">
+			<form method="get" action="studentPerStream" id="studentsListForm" target="_blank">
 				<div class="modal-body">
 
 					<div class="box-body">
@@ -29,19 +28,19 @@
 									<div class="row">
 
 										<div class="col-md-5 col-md-offset-1">
-											<input type="radio" id="class_tbid" class="form-control"
+											<input type="radio" id="class_StudentsList" class="form-control"
 												name="decisionFlag" value="1"
-												onclick="scopeSwapTBID(this.id)" checked> <label
-												for="class_tbid">
+												onclick="scopeSwapStudentsList(this.id)" checked> <label
+												for="class_StudentsList">
 												<h6>Class</h6>
 
 											</label>
 										</div>
 
 										<div class="col-md-5 col-md-offset-1">
-											<input type="radio" id="stream_tbid" name="decisionFlag"
-												value="0" onclick="scopeSwapTBID(this.id)"> <label
-												for="stream_tbid">
+											<input type="radio" id="stream_StudentsList" name="decisionFlag"
+												value="0" onclick="scopeSwapStudentsList(this.id)"> <label
+												for="stream_StudentsList">
 												<h6>Stream</h6>
 
 											</label>
@@ -129,7 +128,7 @@
 							 -->	
 							
 							
-							<div class="row">
+							<!-- <div class="row">
 
 							<div class="col-md-8 col-md-offset-2">
 								<br>
@@ -142,10 +141,12 @@
 							</div>
 							</div>
 							
+							 -->
+							
 							<div class="row">
 
 
-							<input type="hidden" name="accountId" id="accountId_tbid"
+							<input type="hidden" name="accountId" id="accountId_StudentsList"
 								value="n0t_set">
 
 
@@ -174,7 +175,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-info pull-right cards"
-						id="tbidList_btn_add">
+						>
 						Generate <i class="fa fa-file-o"></i>
 					</button>
 

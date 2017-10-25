@@ -73,8 +73,8 @@ function fetchClasses() {
 
 		console.log(data);
 
-		var classId = document.getElementById('classList');
-		var classIdVal = classId.options[classId.selectedIndex].value;
+		//var classId = document.getElementById('classList');
+		var classIdVal = $('.populateOptions').val();//classId.options[classId.selectedIndex].value;
 		
 		
 

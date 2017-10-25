@@ -311,5 +311,26 @@ function fetchStudents(streamId) {
 	
 }
 
+function scopeSwapStudentsList(scopeType) {
+
+	if (scopeType == "class_StudentsList") {
+		$('#class_option').show('2000');
+		$('#stream_option').hide('2000');
+
+	} else {
+		$('#class_option').hide('2000');
+		$('#stream_option').show('2000');
+
+	}
+}
+
+function studentsListModa(){
+	
+	
+	$('#accountId_StudentsList').val($('#accountId').val());
+	
+	$('#studentsListModal').modal('show');
+}
+
 
 
