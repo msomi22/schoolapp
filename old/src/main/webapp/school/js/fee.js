@@ -143,7 +143,7 @@ function revertOtherTermFee() {
 
 			if (rootParseApiResponseData(data)) {
 
-				$('#revertOtherTermFeeForm').modal('hide');
+				$('#revertOtherTermFeeModal').modal('hide');
 				fetchFeeDetails('info');
 			}
 
@@ -798,13 +798,13 @@ function makeFetchCall() {
 										
 										
 										revertOtherFeeSelect.append('<option id=' + basicInfo['otherfeeHistory'][i]['otherFeeId'] + ' value='
-												+ basicInfo['otherfeeHistory'][i]['otherFeeId'] + '>' +basicInfo['otherfeeHistory'][i]['otherFeeId'] + ' : '
+												+ basicInfo['otherfeeHistory'][i]['otherFeeId'] + '>' +basicInfo['otherfeeHistory'][i]['description'] + ' : '
 												+ basicInfo['otherfeeHistory'][i]['amount'] + '</option>');
 
 										$('#otherfeeHistory')
 												.append(
 														'<div class="row"> <div class="col-md-11 col-md-offset-1"> <h6>Description: '
-																+ basicInfo['otherfeeHistory'][i]['otherFeeId']
+																+ basicInfo['otherfeeHistory'][i]['description']
 																+ '</h6><h6>Amount Paid: '
 																+ basicInfo['otherfeeHistory'][i]['amount']
 																+ '</h6> <h6>Term Paid: '
@@ -822,7 +822,7 @@ function makeFetchCall() {
 										$('#revertedFeeList')
 												.append(
 														'<div class="row"> <div class="col-md-11 col-md-offset-1"> <h6>Description: '
-																+ basicInfo['revertedFeeList'][i]['otherFeeId']
+																+ basicInfo['revertedFeeList'][i]['description']
 																+ '</h6><h6>Amount: '
 																+ basicInfo['revertedFeeList'][i]['amount']
 																+ '</h6> <h6>Date: '
