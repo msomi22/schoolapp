@@ -114,8 +114,8 @@
 
 											<div class="col-md-2" id="classDiv">
 												<label for="classId">Class/Form:</label> <select
-													class="form-control formelement populateOptions"
-													id="classList" onchange="fetchStreams(this.value)">
+													class="form-control formelement populateOptionsStudents"
+													id="populateOptionsStudents" onchange="fetchStreamsStudents(this.value)">
 
 
 												</select>
@@ -123,7 +123,7 @@
 
 											<div class="col-md-2" id="classDiv">
 												<label for="classId">Stream:</label> <select
-													class="form-control formelement populateStreamOptions"
+													class="form-control formelement populateStreamOptionsStudents"
 													name="streamId" id="streamId" onchange="fetchStudents(this.value)" required>
 
 												</select>
@@ -141,7 +141,7 @@
 
 											<div class="col-md-2 pull-right" >
 												<label for="movestreamId">Stream:</label> <select
-													class="form-control formelement populateMoveStreamOptions"
+													class="form-control formelement populateStreamOptions"
 													name="streamId" id="movestreamId" required>
 
 												</select>
@@ -150,8 +150,8 @@
 											<div class="col-md-2 col-md-offset-1 pull-right"
 												>
 												<label for="classMoveList">Move to Class/Form:</label> <select
-													class="form-control formelement populateMoveOptions"
-													id="classMoveList" onchange="fetchMoveStreams(this.value)">
+													class="form-control formelement populateOptions"
+													id="classList" onchange="fetchStreams(this.value)">
 
 
 												</select>

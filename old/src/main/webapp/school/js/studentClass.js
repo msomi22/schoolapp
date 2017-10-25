@@ -12,46 +12,38 @@ $(document).ready(
 				"scrollCollapse" : true
 			});
 
+			fetchClassesStudents();
 			fetchClasses();
-			fetchMoveClasses();
 
 			setTimeout(function (){
 				fetchStudents($('#streamId').val());
 			},500)
 			
 
-		})
-		
-		
+		});
 
-function shiftStudents(){
-	
-	$('.students').each(function(){
-		
-		console.log($(this).val())
-		
-	})
-}
 
-function fetchMoveStreams(classIdVal) {
+
+function fetchStreamsStudents(classIdVal) {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
 	console.log(classIdVal);
+	
+	$('.populateOptionsStudents').val(classIdVal);
 
-	varying_url = "general/streams/" + $('#accountId').val() + "/" + classIdVal
-			+ "/";
+	varying_url = "general/streams/" + $('#accountId').val() +"/"+ classIdVal + "/";
 
 	global_data_passed = {};
 	global_request_type = 'GET';
 
 	globalApiCall(function(data) {
 
-		console.log('Code for fetching move to streams');
+		console.log('Code for fetching streams');
 
 		console.log(data);
 
-		var stremSelect = $('.populateMoveStreamOptions');
+		var stremSelect = $('.populateStreamOptionsStudents');
 		stremSelect.empty();
 		// classSelect.options[classSelect.options.length]
 		// = new Option('Form 1', 'Value1');
@@ -63,16 +55,23 @@ function fetchMoveStreams(classIdVal) {
 			// = new Option(data[i].description,
 			// data[i].uuid);
 		}
+		//default_streamID=classId.options[classId.selectedIndex].value;
+		
+		
+		//$('.DefaultStream').val(default_streamID);
+		fetchStudents($('#streamId').val());
+		
+		//console.log('Current stream: '+default_streamID);
 
 	});
 
 }
 
-function fetchMoveClasses() {
+function fetchClassesStudents() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "general/class/" + $('#accountId').val();// url;
+	varying_url = "general/class/" + $('#accountId').val();//url;
 
 	global_data_passed = {};
 
@@ -80,11 +79,11 @@ function fetchMoveClasses() {
 
 	globalApiCall(function(data) {
 
-		console.log('Code for fetching  move to classes');
+		console.log('Code for fetching classes');
 
 		console.log(data);
 
-		var classSelect = $('.populateMoveOptions');
+		var classSelect =$('.populateOptionsStudents');
 		classSelect.empty();
 		// classSelect.options[classSelect.options.length]
 		// = new Option('Form 1', 'Value1');
@@ -99,17 +98,32 @@ function fetchMoveClasses() {
 
 		console.log(data);
 
-		var classId = document.getElementById('classMoveList');
-		var classIdVal = classId.options[classId.selectedIndex].value;
+		var classId = $('.populateOptionsStudents');
+		var classIdVal = $('.populateOptionsStudents').val();//classId.options[classId.selectedIndex].value;
+		
+		
 
 		// var classId= $('#classesList').val();
 		console.log(classIdVal);
 
-		fetchMoveStreams(classIdVal);
+		fetchStreamsStudents(classIdVal);
 
 	});
 
 }
+		
+		
+
+function shiftStudents(){
+	
+	$('.students').each(function(){
+		
+		console.log($(this).val())
+		
+	})
+}
+
+
 var table;
 
 
