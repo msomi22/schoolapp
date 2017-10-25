@@ -10,6 +10,7 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
 public class APIRevertFee {
 	
 	private String otherFeeId;
+	private String description;
 	private String amount;
 	private String dateReverted;
 
@@ -18,6 +19,7 @@ public class APIRevertFee {
 	 */
 	public APIRevertFee() {
 		otherFeeId = "";
+		description = "";
 		amount = "";
 		dateReverted = "";
 	}
@@ -28,6 +30,14 @@ public class APIRevertFee {
 
 	public void setOtherFeeId(String otherFeeId) {
 		this.otherFeeId = otherFeeId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getAmount() {
@@ -48,7 +58,10 @@ public class APIRevertFee {
 
 	@Override
 	public String toString() {
-		return "RevertedFee [otherFeeId=" + otherFeeId + ", amount=" + amount + ", dateReverted=" + dateReverted + "]";
+		return "APIRevertFee [otherFeeId=" + otherFeeId + ", description=" + description + ", amount=" + amount
+				+ ", dateReverted=" + dateReverted + "]";
 	}
+
+	
 
 }

@@ -707,7 +707,8 @@ public class StudentService {
 
 						studentOtherFee.setAmount(String.valueOf(otherFee.getAmount()));
 						studentOtherFee.setDateAllocated(otherfee.getDateAllocated().toString());
-						studentOtherFee.setOtherFeeId(otherFee.getDescription());
+						studentOtherFee.setOtherFeeId(otherFee.getUuid());
+						studentOtherFee.setDescription(otherFee.getDescription());
 						studentOtherFee.setTermPiad(otherfee.getTerm());
 
 						otherfeeHistory.add(studentOtherFee);
@@ -733,7 +734,9 @@ public class StudentService {
 						OtherFee otherFee = otherFeeDAO.getOtherFee(accountId, revertedMoney.getOtherFeeId());
 
 						revertedFee.setAmount(String.valueOf(otherFee.getAmount()));
-						revertedFee.setOtherFeeId(otherFee.getDescription());
+						revertedFee.setOtherFeeId(otherFee.getUuid());
+						revertedFee.setDescription(otherFee.getDescription());
+				
 						revertedFee.setDateReverted(revertedMoney.getDateReverted().toString());
 						revertedFeeList.add(revertedFee);
 					}
