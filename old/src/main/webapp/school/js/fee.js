@@ -56,25 +56,31 @@ function OtherFeeModal(id) {
 
 	if (id == "revert_payment_btn") {
 
-		$('#otherTermFeeTiltle').text("Revert Other Term Fee Details");
+		/*
+		 * $('#otherTermFeeTiltle').text("Revert Other Term Fee Details");
+		 * 
+		 * $('#othertermFee_btn').text("Revert");
+		 * 
+		 * $("#othertermFee_btn").attr("onclick", "revertOtherTermFee()");
+		 */
 
-		$('#othertermFee_btn').text("Revert");
-
-		$("#othertermFee_btn").attr("onclick", "revertOtherTermFee()");
+		$('#revertOtherTermFeeModal').modal('show');
 
 	}
 
 	else if (id == "addOtherFee_btn") {
 
-		$('#otherTermFeeTiltle').text("Add Other Term Fee Details");
+		/*
+		 * $('#otherTermFeeTiltle').text("Add Other Term Fee Details");
+		 * 
+		 * $('#othertermFee_btn').text("Submit");
+		 * 
+		 * $("#othertermFee_btn").attr("onclick", "addOtherFee()");
+		 */
 
-		$('#othertermFee_btn').text("Submit");
-
-		$("#othertermFee_btn").attr("onclick", "addOtherFee()");
+		$('#otherTermFeeModal').modal('show');
 
 	}
-
-	$('#otherTermFeeModal').modal('show');
 
 }
 
@@ -114,13 +120,13 @@ function addOtherFee() {
 }
 
 function revertOtherTermFee() {
-	if (rootCheckFormValidation($('#otherTermFeeForm'))) {
+	if (rootCheckFormValidation($('#revertOtherTermFeeForm'))) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
 		varying_url = "student/other/fee/revert/" + $('#accountId').val();
 
-		global_data_passed = $('#otherTermFeeForm').serializeJSON();
+		global_data_passed = $('#revertOtherTermFeeForm').serializeJSON();
 
 		console.log(varying_url);
 
@@ -137,7 +143,7 @@ function revertOtherTermFee() {
 
 			if (rootParseApiResponseData(data)) {
 
-				$('#otherTermFeeModal').modal('hide');
+				$('#revertOtherTermFeeForm').modal('hide');
 				fetchFeeDetails('info');
 			}
 
@@ -389,14 +395,15 @@ function showHistory(state) {
 	}
 }
 
-/*$('#history').click(function() {
-
-	$('#history').toggle(1000);
-
-	$('#showHistory').toggle(2000);
-
-});
-*/
+/*
+ * $('#history').click(function() {
+ * 
+ * $('#history').toggle(1000);
+ * 
+ * $('#showHistory').toggle(2000);
+ * 
+ * });
+ */
 $('#OtherHistory').click(function() {
 
 	$('#showOtherHistory').toggle(1000);
@@ -682,7 +689,8 @@ function makeFetchCall() {
 			$('#btn_history').prop('disabled', false);
 			$('#revert_payment_btn').prop('disabled', false);
 			$('#addOtherFee_btn').prop('disabled', false);
-			$('#other_studentId').val(data['studentFeeAPI']['studentId']);
+			$('#other_studentId, #revertOther_studentId').val(data['studentFeeAPI']['studentId']);
+			
 
 			var name;
 
@@ -775,7 +783,7 @@ function makeFetchCall() {
 																+ basicInfo['feeHistory'][i]['datePaid']
 																+ '<span class="btn btn-pull-right hand" id="'
 																+ basicInfo['feeHistory'][i]['datePaid']
-																+'" onclick="printReceipt(this.id)" > <i class="fa fa-print fa-2x print"></i></span>'
+																+ '" onclick="printReceipt(this.id)" > <i class="fa fa-print fa-2x print"></i></span>'
 																+ '</h6> <hr class="hr_list"></div>');
 
 										// });
@@ -783,8 +791,15 @@ function makeFetchCall() {
 								}
 
 								if (key === "otherfeeHistory") {
+									var revertOtherFeeSelect = $('.revertOtherFeeList');
+									revertOtherFeeSelect.empty();
 
-									for (var i = 0; i < basicInfo['otherfeeHistory'].length; i++)
+									for (var i = 0; i < basicInfo['otherfeeHistory'].length; i++) {
+										
+										
+										revertOtherFeeSelect.append('<option id=' + basicInfo['otherfeeHistory'][i]['otherFeeId'] + ' value='
+												+ basicInfo['otherfeeHistory'][i]['otherFeeId'] + '>' +basicInfo['otherfeeHistory'][i]['otherFeeId'] + ' : '
+												+ basicInfo['otherfeeHistory'][i]['amount'] + '</option>');
 
 										$('#otherfeeHistory')
 												.append(
@@ -797,6 +812,7 @@ function makeFetchCall() {
 																+ '</h6> <h6>Date Paid: '
 																+ basicInfo['otherfeeHistory'][i]['dateAllocated']
 																+ '</h6> <hr class="hr_list"></div> </div>');
+									}
 								}
 
 								if (key === "revertedFeeList") {
@@ -860,15 +876,15 @@ function otherFeeTermFeeList() {
 
 }
 
-function printReceipt(id){
-	console.log('Print init'+id +'Heheheh');
+function printReceipt(id) {
+	console.log('Print init' + id + 'Heheheh');
 	var mywindow = window.open('', 'PRINT', 'height=800,width=1000');
 
 	mywindow.document
 			.write('<html><head><title>School Fees Receipt + </title>');
 	mywindow.document.write('</head><body >');
 	mywindow.document.write('<h1> Fees Receipt</h1>');
-	mywindow.document.write(document.getElementById('receipt'+id).innerHTML);
+	mywindow.document.write(document.getElementById('receipt' + id).innerHTML);
 	mywindow.document.write('</body></html>');
 
 	mywindow.document.close(); // necessary for IE >= 10
@@ -878,6 +894,5 @@ function printReceipt(id){
 	mywindow.close();
 
 	return true;
-	
-}
 
+}
