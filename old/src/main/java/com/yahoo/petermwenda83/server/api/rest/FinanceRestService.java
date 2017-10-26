@@ -86,7 +86,7 @@ public class FinanceRestService {
 
 		return response;
 	}
-	/** TODO
+	/** 
 	 * 
 	 * @param feeBreakdown
 	 * @return
@@ -209,7 +209,7 @@ public class FinanceRestService {
 			response.setDescription("GoKe Fee breakdown not found!");
 		}else {
 
-			/*TODO
+			/*
 			 * 
 			 * feeBreakdownDescDAO.getFeeBreakdownDescList(accountId, feeBreakdownId).parallelStream().forEach(breakdown ->{
 
@@ -793,7 +793,7 @@ public class FinanceRestService {
 
 
 
-	/**  TODO
+	/**  
 	 * 
 	 * @param accountId
 	 * @param term
@@ -838,7 +838,7 @@ public class FinanceRestService {
 		}
 	}
 
-	//TODO
+
 	/**
 	 * 
 	 * @param accountId

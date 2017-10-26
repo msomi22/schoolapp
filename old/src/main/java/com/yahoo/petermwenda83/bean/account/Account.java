@@ -55,7 +55,7 @@ public class Account extends StorableBean{
 		address = "";
 		town = "";
 		isBoarding = "";//1 = boarding only, 0 = day only, 2 = day and boarding 
-		isMixed = "";// 1= yes , 0 = no
+		isMixed = "";// 1= yes , 0 = no (boys only) , 2 = no (girls only) 
 		lastUpdated = "";
 		creationDate = new Timestamp(new Date().getTime()); 
 	}

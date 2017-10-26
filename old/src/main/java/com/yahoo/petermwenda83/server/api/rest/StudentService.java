@@ -24,6 +24,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
@@ -144,7 +145,7 @@ public class StudentService {
 
 			try {
 
-				// TODO
+			
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
 				apiStudent.setPassport(getB64Image(studentDAO.getStudentById(accountId, studentId).getPassport()));
 
@@ -212,7 +213,7 @@ public class StudentService {
 			apiStudent.setBcertNo(student.getBcertNo());
 			apiStudent.setDob(student.getDob());
 			apiStudent.setRegTerm(student.getRegTerm());
-			// TODO
+			
 			apiStudent.setPassport(getB64Image(student.getPassport()));
 			apiStudent.setLastUpdated(student.getLastUpdated());
 			apiStudent.setFinalTerm(student.getFinalTerm());
@@ -298,7 +299,10 @@ public class StudentService {
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId());
 
 			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
-			staff.getAcessLevelId();
+			Account account = accountDAO.getAccountById(studentPayFee.getAccountId());
+			//TODO
+			account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
+			student.getIsBoarding();//boarders = 1, day = 0
 
 			if (!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
 				response.setMessage("error");
@@ -1110,7 +1114,7 @@ public class StudentService {
 		newstudent.setRegTerm(sysConfig.getTerm());
 		newstudent.setFinalYear(student.getFinalYear());
 		newstudent.setFinalTerm(student.getFinalTerm());
-		// TODO
+		
 		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
 		newstudent.setLastUpdated(new Date().toString());
 
@@ -1236,7 +1240,7 @@ public class StudentService {
 		newstudent.setRegTerm(sysConfig.getTerm());
 		newstudent.setFinalYear(year + 3);
 		newstudent.setFinalTerm(3);
-		// TODO
+		
 		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
 		newstudent.setLastUpdated(new Date().toString());
 
@@ -1246,7 +1250,7 @@ public class StudentService {
 		if (studentDAO.putStudent(newstudent)) {
 
 			response = "Student basic info saved successfully.\n";
-			// TODO
+			
 
 			subjectDAO.getSubjects(accountId).forEach(subject -> {
 				ApiSubject apiSubject = new ApiSubject();
@@ -1587,7 +1591,7 @@ public class StudentService {
 	}
 
 
-	/** TODO
+	/** 
 	 * 
 	 * @param accountId
 	 * @param currentPage
@@ -1814,7 +1818,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1832,7 +1836,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1849,7 +1853,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1866,7 +1870,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
