@@ -43,6 +43,15 @@ public interface SchoolStudentDAO {
 	public boolean deleteStudent(String accountId,String uuid);
 
 	public List<Student> getStudentByStream(String accountId,String currentStream); 
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param currentStream
+	 * @param isActive
+	 * @return
+	 */
+	public List<Student> getStudentByStream(String accountId,String currentStream, String isActive); 
 
 	/**
 	 * 

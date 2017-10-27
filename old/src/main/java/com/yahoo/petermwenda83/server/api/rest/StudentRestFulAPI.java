@@ -116,6 +116,31 @@ public class StudentRestFulAPI{
 	}
 	
 	
+	@ApiOperation(value = "Get students per stream for the given stream Id.", 
+			notes = "Returns List of students in the given sream.", 
+			response = APIStudent.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Stream Id or account Id not found.") 
+	} )
+
+	@GET
+	@Path("/{accountId}/{sreamId}/{status}") 
+	public Object getStudentPerStream_(@PathParam("accountId") String accountId, 
+			@PathParam("sreamId") String sreamId, @PathParam("status") String status , @HeaderParam("authorization") String auth) { 
+
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			return response; 
+		}
+
+		return studentService.getStudentPerStream(accountId, sreamId, status);
+	}
+	
+	
 	
 	/**
 	 * 

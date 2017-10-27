@@ -189,42 +189,126 @@ public class StudentService {
 	 * @param sreamId
 	 * @return
 	 */
-	public List<APIStudent> getStudentPerStream(String accountId, String sreamId) {
-
-		List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
-		List<APIStudent> streamStudents = new ArrayList<APIStudent>();
-		students.forEach(student -> {
-
-			APIStudent apiStudent = new APIStudent();
-			apiStudent.setUuid(student.getUuid());
-			apiStudent.setAccountId(student.getAccountId());
-			apiStudent.setCurrentStream(student.getCurrentStream());
-			apiStudent.setRegStream(student.getRegStream());
-			apiStudent.setIsActive(student.getIsActive());
-			apiStudent.setIsAlumni(student.getIsAlumni());
-			apiStudent.setIsBoarding(student.getIsBoarding());
-			apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
-			apiStudent.setRegNo(student.getRegNo());
-			apiStudent.setFirstname(student.getFirstname());
-			apiStudent.setMiddlename(student.getMiddlename());
-			apiStudent.setLastname(student.getLastname());
-			apiStudent.setGender(student.getGender());
-			apiStudent.setCounty(student.getCounty());
-			apiStudent.setBcertNo(student.getBcertNo());
-			apiStudent.setDob(student.getDob());
-			apiStudent.setRegTerm(student.getRegTerm());
+	public Object getStudentPerStream(String accountId, String sreamId) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null){
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
 			
-			apiStudent.setPassport(getB64Image(student.getPassport()));
-			apiStudent.setLastUpdated(student.getLastUpdated());
-			apiStudent.setFinalTerm(student.getFinalTerm());
-			apiStudent.setFinalYear(student.getFinalYear());
-			apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
+		}else if(studentDAO.getStudentByStream(accountId, sreamId).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+			
+			
+			List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
+			List<APIStudent> streamStudents = new ArrayList<APIStudent>();
+			students.forEach(student -> {
 
-			streamStudents.add(apiStudent);
+				APIStudent apiStudent = new APIStudent();
+				apiStudent.setUuid(student.getUuid());
+				apiStudent.setAccountId(student.getAccountId());
+				apiStudent.setCurrentStream(student.getCurrentStream());
+				apiStudent.setRegStream(student.getRegStream());
+				apiStudent.setIsActive(student.getIsActive());
+				apiStudent.setIsAlumni(student.getIsAlumni());
+				apiStudent.setIsBoarding(student.getIsBoarding());
+				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
+				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setFirstname(student.getFirstname());
+				apiStudent.setMiddlename(student.getMiddlename());
+				apiStudent.setLastname(student.getLastname());
+				apiStudent.setGender(student.getGender());
+				apiStudent.setCounty(student.getCounty());
+				apiStudent.setBcertNo(student.getBcertNo());
+				apiStudent.setDob(student.getDob());
+				apiStudent.setRegTerm(student.getRegTerm());
+				
+				apiStudent.setPassport(getB64Image(student.getPassport()));
+				apiStudent.setLastUpdated(student.getLastUpdated());
+				apiStudent.setFinalTerm(student.getFinalTerm());
+				apiStudent.setFinalYear(student.getFinalYear());
+				apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
 
-		});
+				streamStudents.add(apiStudent);
 
-		return streamStudents;
+			});
+
+			return streamStudents;
+			
+			
+		}
+
+		
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param currentStream
+	 * @param isActive
+	 * @return
+	 */
+	public Object getStudentPerStream(String accountId, String currentStream, String isActive) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null){
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+			
+		}else if(studentDAO.getStudentByStream(accountId, currentStream, isActive).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+			
+			List<Student> students = studentDAO.getStudentByStream(accountId, currentStream, isActive);
+			
+			List<APIStudent> streamStudents = new ArrayList<APIStudent>();
+			
+			students.forEach(student -> {
+
+				APIStudent apiStudent = new APIStudent();
+				apiStudent.setUuid(student.getUuid());
+				apiStudent.setAccountId(student.getAccountId());
+				apiStudent.setCurrentStream(student.getCurrentStream());
+				apiStudent.setRegStream(student.getRegStream());
+				apiStudent.setIsActive(student.getIsActive());
+				apiStudent.setIsAlumni(student.getIsAlumni());
+				apiStudent.setIsBoarding(student.getIsBoarding());
+				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
+				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setFirstname(student.getFirstname());
+				apiStudent.setMiddlename(student.getMiddlename());
+				apiStudent.setLastname(student.getLastname());
+				apiStudent.setGender(student.getGender());
+				apiStudent.setCounty(student.getCounty());
+				apiStudent.setBcertNo(student.getBcertNo());
+				apiStudent.setDob(student.getDob());
+				apiStudent.setRegTerm(student.getRegTerm());
+				
+				apiStudent.setPassport(getB64Image(student.getPassport()));
+				apiStudent.setLastUpdated(student.getLastUpdated());
+				apiStudent.setFinalTerm(student.getFinalTerm());
+				apiStudent.setFinalYear(student.getFinalYear());
+				apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
+
+				streamStudents.add(apiStudent);
+
+			});
+			
+			return streamStudents; 
+			
+		}
+		
 	}
 
 	/**
