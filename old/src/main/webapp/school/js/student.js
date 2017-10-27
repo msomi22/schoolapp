@@ -185,6 +185,7 @@ function fetchStudents(paginate) {
 				"bLengthChange" : false,
 			});
 		} else {
+			count=0;
 
 			/*$.each(data, function(key, value) {
 				if (key == "studentCount") {

@@ -55,7 +55,7 @@
 
 <!-- Styled checkbox -->
 
-<!-- <link href="css/customReportStyle.css" rel="stylesheet" /> -->
+ <link href="css/customReportStyle.css" rel="stylesheet" />
 
 
 <!-- page content -->
@@ -112,6 +112,16 @@
 
 											<div class="col-md-6 col-md-offset-1 alert alert-info">
 												Alter student's classes and state(Active or Inactive)</div>
+												
+												
+											<div class="col-md-2 col-md-offset-1">
+
+
+												<button class="btn btn-primary secondary-assent  cards"
+													onclick="studentsListModa()">
+													Deactivate <i class="fa fa-file-pdf-o"> </i>
+												</button>
+											</div>
 
 
 

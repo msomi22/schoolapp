@@ -481,6 +481,84 @@ function parseCurrentStreamToHolder() {
 	console.log(studentsHolder);
 }
 
+
+function inactivateStudents(){
+	if (studentsHolder.length <= 0) {
+		$('#warningTitle').html('Selected Students');
+		$('#warningSms').html(
+				'No students selected, please select at least one student');
+
+		$('#warning').modal('show');
+
+		setTimeout(function() {
+			$('#warning').modal('hide');
+		}, 2000);
+
+	}else{
+		
+		var uuids= parseStudentsUuuids();
+		console.log(uuids);
+		varying_url = "student/inactivate/" + $('#accountId').val();
+
+		global_data_passed = uuids;
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'PUT';
+
+		globalApiCall(function(data) {
+
+			console.log(' Code for student status change');
+
+			console.log(data);
+
+			if (rootParseApiResponseData(data)) {
+
+				studentsHolder = [];
+				// fetchClassesStudents();
+				fetchStudents($('#streamId').val());
+				fetchClasses();
+				$('#selectCurrentStream').prop('checked', false);
+
+				// fetchStudents($('#movestreamId').val());
+
+				/*
+				 * $('#populateOptionsStudents').val($('#classList').val());
+				 * fetchStreamsStudents($('#populateOptionsStudents').val());
+				 * 
+				 * setTimeout(function(){
+				 * $('#streamId').val($('#movestreamId').val()); },500);
+				 */
+
+			}
+
+		});
+		
+		
+		
+		
+	}
+	
+	
+	
+}
+
+
+function parseStudentsUuuids(){
+	var studentsUuids=[];
+	for(var i=o; i< studentsHolder.length;i++){
+		var studentUiid={
+				uuid:studentsHolder[i]["studentId"]
+		}
+		
+		studentsUuids.splice(0,0,studentUiid);
+		
+	}
+	
+	return studentsUuids;
+	
+}
+
 function studentsListModa() {
 
 	$('#accountId_StudentsList').val($('#accountId').val());
