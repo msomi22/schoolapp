@@ -40,7 +40,14 @@ public class StudentBalance {
 	private static AccountDAO accountDAO;
 	private static OtherFeeDAO otherFeeDAO;
 
+	/*final static String databaseName = "schooldb";
+	final static String Host = "localhost";
+	final static String databaseUsername = "school";
+	final static String databasePassword = "AllaManO1";
+	final static int databasePort = 5432;*/
+
 	static{
+
 		sysConfigDAO = SysConfigDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
 		studentFeeDAO = StudentFeeDAO.getInstance();
@@ -49,6 +56,14 @@ public class StudentBalance {
 		accountDAO = AccountDAO.getInstance();
 		otherFeeDAO = OtherFeeDAO.getInstance();
 
+		/*sysConfigDAO = new SysConfigDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		termFeeDAO = new TermFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		studentFeeDAO = new StudentFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		studentOtherMoniesDAO = new StudentOtherFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		studentDAO = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		accountDAO = new AccountDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+		otherFeeDAO = new OtherFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
+*/
 	}
 
 
@@ -64,15 +79,15 @@ public class StudentBalance {
 		terms = new String [] {"1","2","3"};
 
 	}
-	
+
 	private String accountId;
 	private String studentId;
-	
+
 	public StudentBalance(String accountId, String studentId) {
 		this.accountId = accountId;
 		this.studentId = studentId;
 	}
-	
+
 	public double build() {
 		return findBalance(accountId,studentId);
 	}
@@ -92,7 +107,7 @@ public class StudentBalance {
 
 		Student student = studentDAO.getStudentById(accountId, studentId);
 		int finalYear = Integer.valueOf(student.getFinalYear()); 
-		
+
 		double balance = 0;
 		double amountPaid = 0;
 		double otherPaid = 0;
@@ -128,48 +143,57 @@ public class StudentBalance {
 				if(studentFeeDAO.getStudentFeeList(accountId, studentId, term, year) != null) {
 					studentFeeList = studentFeeDAO.getStudentFeeList(accountId, studentId, term, year);
 				}
-				
-				
-				
+
+
+
 				if(studentOtherMoniesDAO.getStudentOFeeList(accountId, studentId, term, yearLong) != null) {
 					otherFeeList = studentOtherMoniesDAO.getStudentOFeeList(accountId, studentId, term, yearLong);
 				}
-				
+
 
 				TermFee admTermFee = new TermFee();
 				if(termFeeDAO.getFee(accountId,term, year) != null) {
 					admTermFee = termFeeDAO.getFee(accountId,term, year);
 				}
-				
+
+
+				if(!studentFeeList.isEmpty()) {
+					for(StudentFee studentFee :studentFeeList){
+						amountPaid +=studentFee.getAmountPaid();//amount paid per term
+						paidHas = studentFee.getPaidHas();//last payment type , boarders = 1, day = 0
+					}
+				}
+
+				if(!otherFeeList.isEmpty()) {
+					for(StudentOtherFee otherFee : otherFeeList){
+						double amount = 0;
+						if(otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()) != null) { 
+							amount = otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()).getAmount();
+							otherPaid += amount; 
+							amount = 0;
+						}
+					}
+				}
+
+
+				// boarders = 1, day = 0
+				double bal = 0;
+				if(StringUtils.equals(paidHas, "1")){
+
+					bal = (admTermFee.getBoaderAmount() + otherPaid) - amountPaid;
+
+				}else if(StringUtils.equals(paidHas, "0")) {
+
+					bal = (admTermFee.getDayAmount() + otherPaid) - amountPaid;
+
+				}
+
+				balance += bal;
 
 				amountPaid = 0;
 				otherPaid = 0;
+				bal = 0;
 
-				if(!studentFeeList.isEmpty()) {
-				for(StudentFee studentFee :studentFeeList){
-					amountPaid +=studentFee.getAmountPaid();//amount paid per term
-					paidHas = studentFee.getPaidHas();//last payment type , boarders = 1, day = 0
-				  }
-				}
-               
-				if(!otherFeeList.isEmpty()) {
-				for(StudentOtherFee otherFee : otherFeeList){
-					double amount = 0;
-					if(otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()) != null) { 
-						amount = otherFeeDAO.getOtherFee(accountId, otherFee.getOtherFeeId()).getAmount();
-						otherPaid += amount; 
-						amount = 0;
-					}
-				  }
-				}
-
-				if(StringUtils.equals(paidHas, "1")){
-					balance += (admTermFee.getBoaderAmount() + otherPaid) - amountPaid;
-	
-				}else if(StringUtils.equals(paidHas, "0")) {
-					balance += (admTermFee.getDayAmount() + otherPaid) - amountPaid;
-					
-				}
 
 				// clear our list at the end to ensure a clean start
 				studentFeeList.clear();
@@ -255,21 +279,21 @@ public class StudentBalance {
 		String boardingFee = nf.format(termFee.getBoaderAmount());
 		String dayFee = nf.format(termFee.getDayAmount()); 
 		String nextTermFee = "";
-		
+
 		Account account = accountDAO.getAccountById(accountId);
 		account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
 
 		if(StringUtils.equals(account.getIsBoarding(), "0")){
-			
+
 			nextTermFee = dayFee; 
 
 		}else if(StringUtils.equals(account.getIsBoarding(), "1")){
-			
+
 			nextTermFee = boardingFee;
 
 		}
 		else if(StringUtils.equals(account.getIsBoarding(), "2")){
-			
+
 			nextTermFee = "Boarding: " + boardingFee + " , Day: " + dayFee;
 
 		}

@@ -3,6 +3,8 @@
  */
 package com.yahoo.petermwenda83.persistence.exam;
 
+import java.util.List;
+
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 
 /**
@@ -25,7 +27,20 @@ public interface SchoolExamEngineDAO {
      * @return
      */
     
-	public boolean studentScoreExist(String accountId,String studentId, String subjectId, String examId,String term,String year, String streamId); 
+	public boolean studentScoreExist(String accountId,String studentId, String subjectId, String examId,String term,String year, String streamId);
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @param subjectId
+	 * @param examId
+	 * @param term
+	 * @param year
+	 * @param streamId
+	 * @return
+	 */
+	public List<Perfomance> scoreDuplicate(String accountId,String studentId, String subjectId, String examId,String term,String year, String streamId);
 	/**
 	 * 
 	 * @param perfomance

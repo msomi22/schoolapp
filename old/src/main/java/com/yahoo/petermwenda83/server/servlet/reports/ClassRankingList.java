@@ -1551,8 +1551,16 @@ public class ClassRankingList extends HttpServlet{
 					totalAvg = totalExam1.getAverage();
 					totalAvg = totalAvg > 0 ? totalAvg : 0;
 
-					//entry = (int) totalExam1.getEntry();  
-					entry = exam1.size();
+					AtomicInteger count = new  AtomicInteger();
+					exam1.parallelStream().forEach(ex -> {
+			
+						if(ex.getPaper1() > 0 || ex.getPaper2() > 0 || ex.getPaper3() > 0) {
+							count.getAndIncrement();
+						}
+					});
+					
+					entry = count.get();
+					
 					total = totalExam1.getTotal(); 
 
 
@@ -1561,9 +1569,30 @@ public class ClassRankingList extends HttpServlet{
 					totalAvg = totalExam1.getAverage() + totalExam2.getAverage() + totalExam3.getAverage();
 					totalAvg = totalAvg > 0 ? totalAvg / 3 : 0;
 
+					AtomicInteger count1 = new  AtomicInteger();
+					exam1.parallelStream().forEach(ex -> {
+						if(ex.getScore() > 0) {
+							count1.getAndIncrement();
+						}
+						
+					});
+					AtomicInteger count2 = new  AtomicInteger();
+					exam2.parallelStream().forEach(ex -> {
+						if(ex.getScore() > 0) {
+							count2.getAndIncrement();
+						}
+						
+					});
+					AtomicInteger count3 = new  AtomicInteger();
+					exam3.parallelStream().forEach(ex -> {
+						if(ex.getScore() > 0) {
+							count3.getAndIncrement();
+						}
+						
+					});
 					
-					//entry = (int) (totalExam1.getEntry() + totalExam2.getEntry() + totalExam3.getEntry()) / 3; 
-					entry = (int)PeterMid.computeMax(exam1.size(), exam2.size(), exam3.size()); 
+					entry = (int)PeterMid.computeMax(count1.get(), count2.get(), count3.get());
+					
 					total = (totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal()) / 3;
 
 
@@ -1592,8 +1621,24 @@ public class ClassRankingList extends HttpServlet{
 				totalAvg = totalExam1.getAverage() + totalExam2.getAverage();
 				totalAvg = totalAvg > 0 ? totalAvg / 2 : 0;
 
-				//entry = (int) (totalExam1.getEntry() + totalExam2.getEntry()) / 2; 
-				entry = (int)PeterMid.computeMax(exam1.size(), exam2.size(), 0);
+				AtomicInteger count1 = new  AtomicInteger();
+				exam1.parallelStream().forEach(ex -> {
+					if(ex.getScore() > 0) {
+						count1.getAndIncrement();
+					}
+					
+				});
+				AtomicInteger count2 = new  AtomicInteger();
+				exam2.parallelStream().forEach(ex -> {
+					if(ex.getScore() > 0) {
+						count2.getAndIncrement();
+					}
+					
+				});
+				
+				entry = (int)PeterMid.computeMax(count1.get(), count2.get(), 0);
+				
+				
 				total = (totalExam1.getTotal() + totalExam2.getTotal()) / 2;
 
 			}
@@ -1610,8 +1655,16 @@ public class ClassRankingList extends HttpServlet{
 						examType);
 
 				totalAvg = totalExam1.getAverage() > 0 ? totalExam1.getAverage() : 0;
-				//entry = totalExam1.getEntry();
-				entry = (int)PeterMid.computeMax(exam1.size(), 0, 0);
+				
+				AtomicInteger count1 = new  AtomicInteger();
+				exam1.parallelStream().forEach(ex -> {
+					if(ex.getScore() > 0) {
+						count1.getAndIncrement();
+					}
+					
+				});
+				
+				entry = (int)PeterMid.computeMax(count1.get(), 0, 0);
 				total = totalExam1.getTotal();
 
 			}

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -42,6 +43,45 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 	public ExamEgineDAO() {
 		super();
 	}
+	
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolExamEngineDAO#scoreDuplicate(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Perfomance> scoreDuplicate(String accountId, String studentId, String subjectId, String examId,
+			String term, String year, String streamId) {
+		List<Perfomance> list = null;
+
+        try (
+        		 Connection conn = dbutils.getConnection();
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
+     	         		+ " studentId=? AND subjectId = ? AND examId =? AND term = ? AND year = ? AND streamId;");    		   
+     	   ) {
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, studentId); 
+         	   pstmt.setString(3, subjectId);  
+         	   pstmt.setString(4, examId); 
+         	   pstmt.setString(5, term); 
+       	       pstmt.setString(6, year); 
+       	       pstmt.setString(7, streamId); 
+       	       
+         	   try( ResultSet rset = pstmt.executeQuery();){
+     	       
+     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
+         	   }
+        } catch (SQLException e) {
+            logger.error("SQLException when getting Stream Perfomance List"); 
+            logger.error(ExceptionUtils.getStackTrace(e));
+            System.out.println(ExceptionUtils.getStackTrace(e));
+        }
+        return list;
+	}
+
+
+
+
+
 
 	/**
 	 * 
@@ -126,7 +166,8 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 
 		boolean success = true;
-		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year,streamId)) {
+		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year, streamId) && 
+				scoreDuplicate(accountId, studentId ,subjectId ,examId ,term ,year, streamId).size() == 0) {
 		try(   Connection conn = dbutils.getConnection();
 				
 				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Performance"
@@ -232,8 +273,5 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		return perfomance; 
 	}
 
-
-
-
-
+	
 }

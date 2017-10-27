@@ -142,13 +142,13 @@ public class FeeReceipt extends HttpServlet{
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
 		String studentId = StringUtils.trim(request.getParameter("studentId"));
 
-		if(StringUtils.isBlank(accountId)) {
+		/*if(StringUtils.isBlank(accountId)) {
 			accountId = "E3CDC578-37BA-4CDB-B150-DAB0409270CD";
 		}
 
 		if(StringUtils.isBlank(studentId)) {
 			studentId = "D961EF8B-1F5E-40BD-8F6B-3FD878C61691"; 
-		}
+		}*/
 
 		String fileName = "file.pdf"; 
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
@@ -250,7 +250,7 @@ public class FeeReceipt extends HttpServlet{
 		titleTable.setWidthPercentage(100);  
 		titleTable.setWidths(new int[]{60,40}); 
 
-		String title = "FREE EDUCATION & BASIC SCHOOL FUNDS\nOPERATIONS ACCOUNT (OFFICIAL RECEIPT)";
+		String title = "FREE EDUCATION & BASIC SCHOOL FUNDS\nOPERATIONS ACCOUNT (OFFICIAL RECEIPT)\nTERM: " + sysConfig.getTerm() +" YEAR: " + sysConfig.getYear();
 
 		PdfPCell titleCell = new PdfPCell(new Phrase(title, timesRomanNormal10)); 
 		titleCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 

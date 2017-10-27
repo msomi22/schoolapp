@@ -24,6 +24,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.otherfee.OtherFee;
@@ -144,7 +145,7 @@ public class StudentService {
 
 			try {
 
-				// TODO
+			
 				BeanUtils.copyProperties(apiStudent, studentDAO.getStudentById(accountId, studentId));
 				apiStudent.setPassport(getB64Image(studentDAO.getStudentById(accountId, studentId).getPassport()));
 
@@ -188,42 +189,126 @@ public class StudentService {
 	 * @param sreamId
 	 * @return
 	 */
-	public List<APIStudent> getStudentPerStream(String accountId, String sreamId) {
+	public Object getStudentPerStream(String accountId, String sreamId) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null){
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+			
+		}else if(studentDAO.getStudentByStream(accountId, sreamId).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+			
+			
+			List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
+			List<APIStudent> streamStudents = new ArrayList<APIStudent>();
+			students.forEach(student -> {
 
-		List<Student> students = studentDAO.getStudentByStream(accountId, sreamId);
-		List<APIStudent> streamStudents = new ArrayList<APIStudent>();
-		students.forEach(student -> {
+				APIStudent apiStudent = new APIStudent();
+				apiStudent.setUuid(student.getUuid());
+				apiStudent.setAccountId(student.getAccountId());
+				apiStudent.setCurrentStream(student.getCurrentStream());
+				apiStudent.setRegStream(student.getRegStream());
+				apiStudent.setIsActive(student.getIsActive());
+				apiStudent.setIsAlumni(student.getIsAlumni());
+				apiStudent.setIsBoarding(student.getIsBoarding());
+				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
+				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setFirstname(student.getFirstname());
+				apiStudent.setMiddlename(student.getMiddlename());
+				apiStudent.setLastname(student.getLastname());
+				apiStudent.setGender(student.getGender());
+				apiStudent.setCounty(student.getCounty());
+				apiStudent.setBcertNo(student.getBcertNo());
+				apiStudent.setDob(student.getDob());
+				apiStudent.setRegTerm(student.getRegTerm());
+				
+				apiStudent.setPassport(getB64Image(student.getPassport()));
+				apiStudent.setLastUpdated(student.getLastUpdated());
+				apiStudent.setFinalTerm(student.getFinalTerm());
+				apiStudent.setFinalYear(student.getFinalYear());
+				apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
 
-			APIStudent apiStudent = new APIStudent();
-			apiStudent.setUuid(student.getUuid());
-			apiStudent.setAccountId(student.getAccountId());
-			apiStudent.setCurrentStream(student.getCurrentStream());
-			apiStudent.setRegStream(student.getRegStream());
-			apiStudent.setIsActive(student.getIsActive());
-			apiStudent.setIsAlumni(student.getIsAlumni());
-			apiStudent.setIsBoarding(student.getIsBoarding());
-			apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
-			apiStudent.setRegNo(student.getRegNo());
-			apiStudent.setFirstname(student.getFirstname());
-			apiStudent.setMiddlename(student.getMiddlename());
-			apiStudent.setLastname(student.getLastname());
-			apiStudent.setGender(student.getGender());
-			apiStudent.setCounty(student.getCounty());
-			apiStudent.setBcertNo(student.getBcertNo());
-			apiStudent.setDob(student.getDob());
-			apiStudent.setRegTerm(student.getRegTerm());
-			// TODO
-			apiStudent.setPassport(getB64Image(student.getPassport()));
-			apiStudent.setLastUpdated(student.getLastUpdated());
-			apiStudent.setFinalTerm(student.getFinalTerm());
-			apiStudent.setFinalYear(student.getFinalYear());
-			apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
+				streamStudents.add(apiStudent);
 
-			streamStudents.add(apiStudent);
+			});
 
-		});
+			return streamStudents;
+			
+			
+		}
 
-		return streamStudents;
+		
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param currentStream
+	 * @param isActive
+	 * @return
+	 */
+	public Object getStudentPerStream(String accountId, String currentStream, String isActive) {
+		
+		Response response = new Response();
+		
+		if(accountDAO.getAccountById(accountId) == null){
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+			
+		}else if(studentDAO.getStudentByStream(accountId, currentStream, isActive).isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("Nothing to display!");
+			return response;
+			
+		}else {
+			
+			List<Student> students = studentDAO.getStudentByStream(accountId, currentStream, isActive);
+			
+			List<APIStudent> streamStudents = new ArrayList<APIStudent>();
+			
+			students.forEach(student -> {
+
+				APIStudent apiStudent = new APIStudent();
+				apiStudent.setUuid(student.getUuid());
+				apiStudent.setAccountId(student.getAccountId());
+				apiStudent.setCurrentStream(student.getCurrentStream());
+				apiStudent.setRegStream(student.getRegStream());
+				apiStudent.setIsActive(student.getIsActive());
+				apiStudent.setIsAlumni(student.getIsAlumni());
+				apiStudent.setIsBoarding(student.getIsBoarding());
+				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
+				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setFirstname(student.getFirstname());
+				apiStudent.setMiddlename(student.getMiddlename());
+				apiStudent.setLastname(student.getLastname());
+				apiStudent.setGender(student.getGender());
+				apiStudent.setCounty(student.getCounty());
+				apiStudent.setBcertNo(student.getBcertNo());
+				apiStudent.setDob(student.getDob());
+				apiStudent.setRegTerm(student.getRegTerm());
+				
+				apiStudent.setPassport(getB64Image(student.getPassport()));
+				apiStudent.setLastUpdated(student.getLastUpdated());
+				apiStudent.setFinalTerm(student.getFinalTerm());
+				apiStudent.setFinalYear(student.getFinalYear());
+				apiStudent.setAdmissionDate(student.getAdmissionDate().toString());
+
+				streamStudents.add(apiStudent);
+
+			});
+			
+			return streamStudents; 
+			
+		}
+		
 	}
 
 	/**
@@ -298,7 +383,10 @@ public class StudentService {
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(studentPayFee.getAccountId());
 
 			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
-			staff.getAcessLevelId();
+			Account account = accountDAO.getAccountById(studentPayFee.getAccountId());
+			//TODO
+			account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
+			student.getIsBoarding();//boarders = 1, day = 0
 
 			if (!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
 				response.setMessage("error");
@@ -1110,7 +1198,7 @@ public class StudentService {
 		newstudent.setRegTerm(sysConfig.getTerm());
 		newstudent.setFinalYear(student.getFinalYear());
 		newstudent.setFinalTerm(student.getFinalTerm());
-		// TODO
+		
 		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
 		newstudent.setLastUpdated(new Date().toString());
 
@@ -1236,7 +1324,7 @@ public class StudentService {
 		newstudent.setRegTerm(sysConfig.getTerm());
 		newstudent.setFinalYear(year + 3);
 		newstudent.setFinalTerm(3);
-		// TODO
+		
 		newstudent.setPassport(renameImage(student.getPassport(), student.getRegNo()));
 		newstudent.setLastUpdated(new Date().toString());
 
@@ -1246,7 +1334,7 @@ public class StudentService {
 		if (studentDAO.putStudent(newstudent)) {
 
 			response = "Student basic info saved successfully.\n";
-			// TODO
+			
 
 			subjectDAO.getSubjects(accountId).forEach(subject -> {
 				ApiSubject apiSubject = new ApiSubject();
@@ -1587,7 +1675,7 @@ public class StudentService {
 	}
 
 
-	/** TODO
+	/** 
 	 * 
 	 * @param accountId
 	 * @param currentPage
@@ -1814,7 +1902,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1832,7 +1920,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1849,7 +1937,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -1866,7 +1954,7 @@ public class StudentService {
 
 				try {
 					BeanUtils.copyProperties(studentInfo, student);
-					// TODO
+					
 					studentInfo.setPassport(getB64Image(student.getPassport()));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
