@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 	fetchClassesStudents();
 	fetchClasses();
-	
+
 	clickTable();
 
 	/* setTimeout(function (){ fetchStudents($('#streamId').val()); },500) */
@@ -55,7 +55,7 @@ function fetchStreamsStudents(classIdVal) {
 		// default_streamID=classId.options[classId.selectedIndex].value;
 
 		// $('.DefaultStream').val(default_streamID);
-		studentsHolder=[];
+		studentsHolder = [];
 		console.log(studentsHolder);
 		fetchStudents($('#streamId').val());
 
@@ -121,8 +121,10 @@ var table;
 
 var studentsHolder = [];
 
-function clickTable(){
-	
+var studnetsInCurrentStream = [];
+
+function clickTable() {
+
 	$('#studentsPerClass tbody').on('click', 'input', function() {
 		var data = table.row($(this).parents('tr')).data();
 
@@ -155,8 +157,7 @@ function clickTable(){
 
 		/*
 		 * window .open( location.protocol + "//" + window.location.host +
-		 * "/school/school/staffProfile.jsp?uuid=" + data['uuid'],
-		 * "_blank");
+		 * "/school/school/staffProfile.jsp?uuid=" + data['uuid'], "_blank");
 		 */
 
 	});
@@ -186,8 +187,10 @@ function fetchStudents(streamId) {
 		var cols = [];
 
 		if (data.length > 0) {
-			
+
 			console.log(studentsHolder);
+
+			studnetsInCurrentStream = data;
 
 			// table.clear();
 
@@ -315,7 +318,6 @@ function fetchStudents(streamId) {
 
 			table.rows.add(data).draw();
 
-		
 		} else {
 
 			table.clear().draw();
@@ -398,6 +400,7 @@ function initShift() {
 					// fetchClassesStudents();
 					fetchStudents($('#streamId').val());
 					fetchClasses();
+					$('#selectCurrentStream').prop('checked', false);
 
 					// fetchStudents($('#movestreamId').val());
 
@@ -439,6 +442,43 @@ function scopeSwapStudentsList(scopeType) {
 		$('#stream_option').show('2000');
 
 	}
+}
+
+function selectCurrentStream() {
+
+	console.log($('#selectCurrentStream').is(':checked'));
+
+	if ($('#selectCurrentStream').is(':checked'))
+		$('.students').each(function() {
+			$(this).prop('checked', true);
+			parseCurrentStreamToHolder();
+		})
+	else
+		$('.students').each(function() {
+			$(this).prop('checked', false);
+			studentsHolder=[];
+		})
+
+}
+
+function parseCurrentStreamToHolder() {
+	studentsHolder=[];
+	for (var i = 0; i < studnetsInCurrentStream.length; i++) {
+		var single_student = {
+			studentId : studnetsInCurrentStream[i]['uuid'],
+			oldClassId : studnetsInCurrentStream[i]['currentStream'],
+			newClassId : $('#movestreamId').val()
+		};
+
+		console.log(single_student);
+
+		// $.inArray(single_student, studentsHolder) == -1
+		// if(studentsHolder.length >0){
+		studentsHolder.splice(0, 0, single_student);
+
+	}
+	
+	console.log(studentsHolder);
 }
 
 function studentsListModa() {

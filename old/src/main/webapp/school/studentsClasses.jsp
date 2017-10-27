@@ -217,7 +217,7 @@
 															<th class="column-title hidden">uuid</th>
 															<th class="column-title hidden">accountId</th>
 
-															<th class="column-title"></th>
+															<th class="column-title"> <input type="checkbox" id="selectCurrentStream" onclick="selectCurrentStream()"></th>
 
 														</tr>
 													</thead>
