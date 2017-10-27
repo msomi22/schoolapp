@@ -26,7 +26,7 @@ function fetchStreamsStudents(classIdVal) {
 
 	console.log(classIdVal);
 
-	$('.populateOptionsStudents').val(classIdVal);
+	$('#populateOptionsStudents').val(classIdVal);
 
 	varying_url = "general/streams/" + $('#accountId').val() + "/" + classIdVal
 			+ "/";
@@ -103,6 +103,52 @@ function fetchClassesStudents() {
 		console.log(classIdVal);
 
 		fetchStreamsStudents(classIdVal);
+		fetchStreamsStudentsInactive(classIdVal);
+
+	});
+
+}
+
+function fetchStreamsStudentsInactive(classIdVal) {
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	console.log(classIdVal);
+
+	$('#populateOptionsStudentsInative').val(classIdVal);
+
+	varying_url = "general/streams/" + $('#accountId').val() + "/" + classIdVal
+			+ "/";
+
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for fetching streams');
+
+		console.log(data);
+
+		var stremSelect = $('.populateStreamOptionsStudentsInactive');
+		stremSelect.empty();
+		// classSelect.options[classSelect.options.length]
+		// = new Option('Form 1', 'Value1');
+
+		for (var i = 0; i < data.length; i++) {
+			stremSelect.append('<option id=' + data[i].uuid + ' value='
+					+ data[i].uuid + '>' + data[i].description + '</option>');
+			// classSelect.options[classSelect.options.length]
+			// = new Option(data[i].description,
+			// data[i].uuid);
+		}
+		// default_streamID=classId.options[classId.selectedIndex].value;
+
+		// $('.DefaultStream').val(default_streamID);
+		studentsHolder = [];
+		console.log(studentsHolder);
+		fetchStudentsInactive($('#streamIdInactive').val());
+
+		// console.log('Current stream: '+default_streamID);
 
 	});
 
@@ -117,16 +163,56 @@ function shiftStudents() {
 	})
 }
 
-var table;
+var table_active;
+var table_inactive;
 
 var studentsHolder = [];
 
-var studnetsInCurrentStream = [];
+var studnetsInCurrentStreamActive = [];
+var studnetsInCurrentStreamInactive = [];
+
 
 function clickTable() {
 
+	$('#studentsPerClassInactive tbody').on('click', 'input', function() {
+		var data = table_inactive.row($(this).parents('tr')).data();
+
+		console.log(data);
+
+		var single_student = {
+			studentId : data['uuid'],
+			oldClassId : data['currentStream'],
+			newClassId : $('#movestreamId').val()
+		};
+
+		console.log(single_student);
+
+		// $.inArray(single_student, studentsHolder) == -1
+		// if(studentsHolder.length >0){
+
+		var index = checkHolder(studentsHolder, single_student);
+		console.log(index);
+
+		if (index == -1)
+			studentsHolder.splice(0, 0, single_student);
+		else
+			studentsHolder.splice(index, 1);
+
+		console.log(studentsHolder);
+
+		// }else{
+		// studentsHolder.push(single_student);
+		// }
+
+		/*
+		 * window .open( location.protocol + "//" + window.location.host +
+		 * "/school/school/staffProfile.jsp?uuid=" + data['uuid'], "_blank");
+		 */
+
+	});
+
 	$('#studentsPerClass tbody').on('click', 'input', function() {
-		var data = table.row($(this).parents('tr')).data();
+		var data = table_active.row($(this).parents('tr')).data();
 
 		console.log(data);
 
@@ -165,7 +251,7 @@ function clickTable() {
 
 function fetchStudents(streamId) {
 
-	varying_url = "student/" + $('#accountId').val() + "/" + streamId;
+	varying_url = "student/" + $('#accountId').val() + "/" + streamId + "/1";
 
 	/*
 	 * table = $('#studentsPerClass').DataTable({ destroy : true, "bPaginate" :
@@ -190,7 +276,7 @@ function fetchStudents(streamId) {
 
 			console.log(studentsHolder);
 
-			studnetsInCurrentStream = data;
+			studnetsInCurrentStreamActive = data;
 
 			// table.clear();
 
@@ -217,12 +303,12 @@ function fetchStudents(streamId) {
 
 			});
 
-			if (table)
-				table.clear().draw();
+			if (table_active)
+				table_active.clear().draw();
 
 			studentsHolder = [];
 
-			table = $('#studentsPerClass')
+			table_active = $('#studentsPerClass')
 					.DataTable(
 							{
 
@@ -316,11 +402,177 @@ function fetchStudents(streamId) {
 
 							});
 
-			table.rows.add(data).draw();
+			table_active.rows.add(data).draw();
 
 		} else {
+			if (table_active)
+				table_active.clear().draw();
 
-			table.clear().draw();
+			studentsHolder = [];
+		}
+
+	});
+
+}
+
+function fetchStudentsInactive(streamId) {
+
+	varying_url = "student/" + $('#accountId').val() + "/" + streamId + "/0";
+
+	/*
+	 * table = $('#studentsPerClass').DataTable({ destroy : true, "bPaginate" :
+	 * false, "scrollY" : "400px", "scrollCollapse" : true });
+	 */
+
+	global_data_passed = {};
+
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for fetching  inactive students');
+
+		console.log("Fetch students url :" + varying_url);
+
+		console.log(data);
+
+		var cols = [];
+
+		if (data.length > 0) {
+
+			console.log(studentsHolder);
+
+			studnetsInCurrentStreamInactive = data;
+
+			// table.clear();
+
+			/*
+			 * $('#studentsPerClass').DataTable({ destroy : true, "bPaginate" :
+			 * false, "scrollY" : "400px", "scrollCollapse" : true });
+			 */
+
+			var getCol = data[0];
+
+			var keys = Object.keys(getCol);
+
+			keys.some(function(k) {
+
+				// return k=="dob";
+
+				cols.push({
+					title : k,
+					data : k
+				// optionally do some type detection here for render
+				// function
+
+				});
+
+			});
+
+			if (table_inactive)
+				table_inactive.clear().draw();
+
+			studentsHolder = [];
+
+			table_inactive = $('#studentsPerClassInactive')
+					.DataTable(
+							{
+
+								destroy : true,
+								"bPaginate" : false,
+								"scrollY" : "400px",
+
+								columns : cols,
+								"columnDefs" : [
+										{
+											"targets" : [ 0 ],
+											"visible" : false,
+											"searchable" : false
+										},
+										{
+											"targets" : [ 1 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 2 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 3 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 4 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 5 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 11 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 12 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 13 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 14 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 15 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 16 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 17 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 18 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 19 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 20 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 21 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 22 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 23 ],
+											"data" : null,
+											"defaultContent" : '<input type="checkbox" class="studentsInactive">'
+										} ]
+
+							/* "order" : [ [ 0, "desc" ] ], */
+							/* "iDisplayLength": 100 */
+
+							});
+
+			table_inactive.rows.add(data).draw();
+
+		} else {
+			if (table_inactive)
+				table_inactive.clear().draw();
 
 			studentsHolder = [];
 		}
@@ -444,6 +696,25 @@ function scopeSwapStudentsList(scopeType) {
 	}
 }
 
+
+
+function selectCurrentStreamInactive() {
+
+	console.log($('#selectCurrentStreamInactive').is(':checked'));
+
+	if ($('#selectCurrentStreamInactive').is(':checked'))
+		$('.studentsInactive').each(function() {
+			$(this).prop('checked', true);
+			parseCurrentStreamToHolder(studnetsInCurrentStreamInactive);
+		})
+	else
+		$('.studentsInactive').each(function() {
+			$(this).prop('checked', false);
+			studentsHolder = [];
+		})
+
+}
+
 function selectCurrentStream() {
 
 	console.log($('#selectCurrentStream').is(':checked'));
@@ -451,22 +722,22 @@ function selectCurrentStream() {
 	if ($('#selectCurrentStream').is(':checked'))
 		$('.students').each(function() {
 			$(this).prop('checked', true);
-			parseCurrentStreamToHolder();
+			parseCurrentStreamToHolder(studnetsInCurrentStreamActive);
 		})
 	else
 		$('.students').each(function() {
 			$(this).prop('checked', false);
-			studentsHolder=[];
+			studentsHolder = [];
 		})
 
 }
 
-function parseCurrentStreamToHolder() {
-	studentsHolder=[];
-	for (var i = 0; i < studnetsInCurrentStream.length; i++) {
+function parseCurrentStreamToHolder(currentStream) {
+	studentsHolder = [];
+	for (var i = 0; i < currentStream.length; i++) {
 		var single_student = {
-			studentId : studnetsInCurrentStream[i]['uuid'],
-			oldClassId : studnetsInCurrentStream[i]['currentStream'],
+			studentId : currentStream[i]['uuid'],
+			oldClassId : currentStream[i]['currentStream'],
 			newClassId : $('#movestreamId').val()
 		};
 
@@ -477,12 +748,13 @@ function parseCurrentStreamToHolder() {
 		studentsHolder.splice(0, 0, single_student);
 
 	}
-	
+
 	console.log(studentsHolder);
 }
 
 
-function inactivateStudents(){
+
+function studentStatus(action) {
 	if (studentsHolder.length <= 0) {
 		$('#warningTitle').html('Selected Students');
 		$('#warningSms').html(
@@ -494,11 +766,11 @@ function inactivateStudents(){
 			$('#warning').modal('hide');
 		}, 2000);
 
-	}else{
-		
-		var uuids= parseStudentsUuuids();
+	} else {
+
+		var uuids = parseStudentsUuuids();
 		console.log(uuids);
-		varying_url = "student/inactivate/" + $('#accountId').val();
+		varying_url = "student/"+action+"/"+ $('#accountId').val();
 
 		global_data_passed = uuids;
 
@@ -517,8 +789,10 @@ function inactivateStudents(){
 				studentsHolder = [];
 				// fetchClassesStudents();
 				fetchStudents($('#streamId').val());
+				fetchStudentsInactive($('#streamIdInactive').val());
 				fetchClasses();
-				$('#selectCurrentStream').prop('checked', false);
+				$('#selectCurrentStream, #selectCurrentStreamInactive').prop('checked', false);
+				
 
 				// fetchStudents($('#movestreamId').val());
 
@@ -533,30 +807,24 @@ function inactivateStudents(){
 			}
 
 		});
-		
-		
-		
-		
+
 	}
-	
-	
-	
+
 }
 
-
-function parseStudentsUuuids(){
-	var studentsUuids=[];
-	for(var i=o; i< studentsHolder.length;i++){
-		var studentUiid={
-				uuid:studentsHolder[i]["studentId"]
+function parseStudentsUuuids() {
+	var studentsUuids = [];
+	for (var i = 0; i < studentsHolder.length; i++) {
+		var studentUiid = {
+			uuid : studentsHolder[i]["studentId"]
 		}
-		
-		studentsUuids.splice(0,0,studentUiid);
-		
+
+		studentsUuids.splice(0, 0, studentUiid);
+
 	}
-	
+
 	return studentsUuids;
-	
+
 }
 
 function studentsListModa() {

@@ -118,7 +118,7 @@
 
 
 												<button class="btn btn-primary secondary-assent  cards"
-													onclick="studentsListModa()">
+													onclick="studentStatus('inactivate')">
 													Deactivate <i class="fa fa-file-pdf-o"> </i>
 												</button>
 											</div>
@@ -284,10 +284,51 @@
 
 											<div class="col-md-6 col-md-offset-3 alert alert-info">
 												Alter student's state(Active or Inactive)</div>
+												
+												<div class="col-md-2 col-md-offset-1">
+
+
+												<button class="btn btn-primary secondary-assent  cards"
+													onclick="studentStatus('activate')">
+													Activate <i class="fa fa-file-pdf-o"> </i>
+												</button>
+											</div>
 
 
 
 										</div>
+										
+											<div class="row">
+
+											<form action="#" method="post" id="deactivateForm">
+
+
+
+												<div class="col-md-2">
+													<h6 >Class/Form:</h6>
+													<select
+														class="form-control formelement populateOptionsStudents"
+														id="populateOptionsStudentsInative"
+														onchange="fetchStreamsStudentsInactive(this.value)"
+														required="required">
+
+
+													</select>
+												</div>
+
+												<div class="col-md-2" >
+													<h6>Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptionsStudentsInactive"
+														name="streamId" id="streamIdInactive"
+														onchange="fetchStreamsStudentsInactive(this.value)" required>
+
+													</select>
+												</div>
+												
+												</form>
+												<br>
+												</div>
 
 
 
@@ -297,19 +338,37 @@
 
 											<div class="table-responsive">
 												<table class="table table-striped jambo_table bulk_action"
-													id="inactiveStudents">
+													id="studentsPerClassInactive">
 													<thead>
 														<tr class="headings secondary-assent">
 
+															<th class="column-title hidden">regStream</th>
+															<th class="column-title hidden">currentStream</th>
+															<th class="column-title hidden">isActive</th>
+															<th class="column-title hidden">isAlumni</th>
+															<th class="column-title hidden">isBoarding</th>
+															<th class="column-title hidden">isGoKFeeEligibe</th>
 
-
+															<th class="column-title">regNo</th>
 															<th class="column-title">firstname</th>
+															<th class="column-title">middlename</th>
 															<th class="column-title">lastname</th>
-															<th class="column-title">regno</th>
-															<th class="column-title">streamDesc</th>
+															<th class="column-title">gender</th>
+															<th class="column-title hidden">dob</th>
+															<th class="column-title hidden">bcertNo</th>
+															<th class="column-title hidden">county</th>
+															<th class="column-title hidden">regTerm</th>
+															<th class="column-title hidden">finalYear</th>
+															<th class="column-title hidden">finalTerm</th>
+															<th class="column-title hidden">passport</th>
+															<th class="column-title hidden">lastUpdated</th>
+															<th class="column-title hidden">admissionDate</th>
+															<th class="column-title hidden">apiParentPrimary</th>
 
-															<th class="column-title"></th>
+															<th class="column-title hidden">uuid</th>
+															<th class="column-title hidden">accountId</th>
 
+															<th class="column-title"> <input type="checkbox" id="selectCurrentStreamInactive" onclick="selectCurrentStreamInactive()"></th>
 
 														</tr>
 													</thead>
