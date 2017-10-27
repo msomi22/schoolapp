@@ -120,63 +120,64 @@
 
 										<div class="row">
 
-
-
-											<div class="col-md-2" id="classDiv">
-												<h6 for="classId">Class/Form:</h6>
-												<select
-													class="form-control formelement populateOptionsStudents"
-													id="populateOptionsStudents"
-													onchange="fetchStreamsStudents(this.value)">
-
-
-												</select>
-											</div>
-
-											<div class="col-md-2" id="classDiv">
-												<h6 for="classId">Stream:</h6>
-												<select
-													class="form-control formelement populateStreamOptionsStudents"
-													name="streamId" id="streamId"
-													onchange="fetchStudents(this.value)" required>
-
-												</select>
-											</div>
-
-											<div class="col-md-1 pull-right">
-												<br>
-
-												<button class="form-control btn btn-primary" id="btn_shift">Submit
-
-												</button>
-											</div>
-
-											<div class="col-md-2 pull-right">
-												<h6 for="movestreamId">Stream:</h6>
-												<select
-													class="form-control formelement populateStreamOptions"
-													name="streamId" id="movestreamId" required>
-
-												</select>
-											</div>
-
-											<div class="col-md-2 col-md-offset-1 pull-right">
-												<h6 for="classMoveList">Move to Class/Form:</h6>
-												<select class="form-control formelement populateOptions"
-													id="classList" onchange="fetchStreams(this.value)">
-
-
-												</select>
-											</div>
+											<form action="#" method="post" id="shiftForm">
 
 
 
+												<div class="col-md-2" id="classDiv">
+													<h6 for="classId">Class/Form:</h6>
+													<select
+														class="form-control formelement populateOptionsStudents"
+														id="populateOptionsStudents"
+														onchange="fetchStreamsStudents(this.value)" required="required">
 
 
+													</select>
+												</div>
+
+												<div class="col-md-2" id="classDiv">
+													<h6 for="classId">Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptionsStudents"
+														name="streamId" id="streamId"
+														onchange="fetchStudents(this.value)" required>
+
+													</select>
+												</div>
+
+												<div class="col-md-1 pull-right">
+													<br>
+
+													<button class="form-control btn btn-primary" type="button" id="btn_shift"
+														onclick="initShift()">Submit</button>
+												</div>
+
+												<div class="col-md-2 pull-right">
+													<h6 for="movestreamId">Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptions"
+														name="streamId" id="movestreamId" required>
+
+													</select>
+												</div>
+
+												<div class="col-md-2 col-md-offset-1 pull-right">
+													<h6 for="classMoveList">Move to Class/Form:</h6>
+													<select class="form-control formelement populateOptions"
+														id="classList" onchange="fetchStreams(this.value)" required="required">
+
+
+													</select>
+												</div>
+
+
+
+
+											</form>
 
 										</div>
 
-										
+
 
 										<br>
 
