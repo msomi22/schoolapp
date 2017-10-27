@@ -315,6 +315,7 @@ function fetchStudents(streamId) {
 								destroy : true,
 								"bPaginate" : false,
 								"scrollY" : "400px",
+								/*"scrollX": "100%",*/
 
 								columns : cols,
 								"columnDefs" : [
@@ -395,14 +396,17 @@ function fetchStudents(streamId) {
 											"targets" : [ 23 ],
 											"data" : null,
 											"defaultContent" : '<input type="checkbox" class="students">'
-										} ]
+										} ],
 
-							/* "order" : [ [ 0, "desc" ] ], */
+							 "order" : [ [ 6, "desc" ] ]
 							/* "iDisplayLength": 100 */
 
 							});
 
 			table_active.rows.add(data).draw();
+			$(".dataTables_scrollHeadInner").css({"width":"100%"});
+
+			$(".table ").css({"width":"100%"});
 
 		} else {
 			if (table_active)
@@ -481,6 +485,7 @@ function fetchStudentsInactive(streamId) {
 								destroy : true,
 								"bPaginate" : false,
 								"scrollY" : "400px",
+								/*"scrollX": "100%",*/
 
 								columns : cols,
 								"columnDefs" : [
@@ -561,14 +566,17 @@ function fetchStudentsInactive(streamId) {
 											"targets" : [ 23 ],
 											"data" : null,
 											"defaultContent" : '<input type="checkbox" class="studentsInactive">'
-										} ]
+										} ],
 
-							/* "order" : [ [ 0, "desc" ] ], */
+							"order" : [ [ 6, "desc" ] ]
 							/* "iDisplayLength": 100 */
 
 							});
 
 			table_inactive.rows.add(data).draw();
+			$(".dataTables_scrollHeadInner").css({"width":"100%"});
+
+			$(".table ").css({"width":"100%"});
 
 		} else {
 			if (table_inactive)
@@ -825,6 +833,16 @@ function parseStudentsUuuids() {
 
 	return studentsUuids;
 
+}
+
+function refresh(state){
+	console.log('refresh called');
+	
+	/*if(state== 'active')
+		fetchClassesStudents();
+	else
+		fetchClassesStudents();*/
+		
 }
 
 function studentsListModa() {
