@@ -13,10 +13,10 @@ $(document).ready(function() {
 
 	fetchClassesStudents();
 	fetchClasses();
+	
+	clickTable();
 
-	/*
-	 * setTimeout(function (){ fetchStudents($('#streamId').val()); },500)
-	 */
+	/* setTimeout(function (){ fetchStudents($('#streamId').val()); },500) */
 
 });
 
@@ -55,6 +55,8 @@ function fetchStreamsStudents(classIdVal) {
 		// default_streamID=classId.options[classId.selectedIndex].value;
 
 		// $('.DefaultStream').val(default_streamID);
+		studentsHolder=[];
+		console.log(studentsHolder);
 		fetchStudents($('#streamId').val());
 
 		// console.log('Current stream: '+default_streamID);
@@ -119,17 +121,55 @@ var table;
 
 var studentsHolder = [];
 
+function clickTable(){
+	
+	$('#studentsPerClass tbody').on('click', 'input', function() {
+		var data = table.row($(this).parents('tr')).data();
+
+		console.log(data);
+
+		var single_student = {
+			studentId : data['uuid'],
+			oldClassId : data['currentStream'],
+			newClassId : $('#movestreamId').val()
+		};
+
+		console.log(single_student);
+
+		// $.inArray(single_student, studentsHolder) == -1
+		// if(studentsHolder.length >0){
+
+		var index = checkHolder(studentsHolder, single_student);
+		console.log(index);
+
+		if (index == -1)
+			studentsHolder.splice(0, 0, single_student);
+		else
+			studentsHolder.splice(index, 1);
+
+		console.log(studentsHolder);
+
+		// }else{
+		// studentsHolder.push(single_student);
+		// }
+
+		/*
+		 * window .open( location.protocol + "//" + window.location.host +
+		 * "/school/school/staffProfile.jsp?uuid=" + data['uuid'],
+		 * "_blank");
+		 */
+
+	});
+}
 
 function fetchStudents(streamId) {
 
 	varying_url = "student/" + $('#accountId').val() + "/" + streamId;
 
-	table = $('#studentsPerClass').DataTable({
-		destroy : true,
-		"bPaginate" : false,
-		"scrollY" : "400px",
-		"scrollCollapse" : true
-	});
+	/*
+	 * table = $('#studentsPerClass').DataTable({ destroy : true, "bPaginate" :
+	 * false, "scrollY" : "400px", "scrollCollapse" : true });
+	 */
 
 	global_data_passed = {};
 
@@ -145,17 +185,16 @@ function fetchStudents(streamId) {
 
 		var cols = [];
 
-		if (data.length <= 0) {
+		if (data.length > 0) {
+			
+			console.log(studentsHolder);
 
-			table.clear();
+			// table.clear();
 
-			$('#studentsPerClass').DataTable({
-				destroy : true,
-				"bPaginate" : false,
-				"scrollY" : "400px",
-				"scrollCollapse" : true
-			});
-		} else {
+			/*
+			 * $('#studentsPerClass').DataTable({ destroy : true, "bPaginate" :
+			 * false, "scrollY" : "400px", "scrollCollapse" : true });
+			 */
 
 			var getCol = data[0];
 
@@ -176,7 +215,9 @@ function fetchStudents(streamId) {
 			});
 
 			if (table)
-				table.clear();
+				table.clear().draw();
+
+			studentsHolder = [];
 
 			table = $('#studentsPerClass')
 					.DataTable(
@@ -185,7 +226,7 @@ function fetchStudents(streamId) {
 								destroy : true,
 								"bPaginate" : false,
 								"scrollY" : "400px",
-								"scrollCollapse" : true,
+
 								columns : cols,
 								"columnDefs" : [
 										{
@@ -264,119 +305,82 @@ function fetchStudents(streamId) {
 										{
 											"targets" : [ 23 ],
 											"data" : null,
-											"defaultContent" : '<input type="checkbox" class="form-control students">'
-										} ],
+											"defaultContent" : '<input type="checkbox" class="students">'
+										} ]
 
-								"order" : [ [ 0, "desc" ] ],
+							/* "order" : [ [ 0, "desc" ] ], */
 							/* "iDisplayLength": 100 */
 
 							});
 
 			table.rows.add(data).draw();
 
-			$('#studentsPerClass tbody').on('click', 'input', function() {
-				var data = table.row($(this).parents('tr')).data();
+		
+		} else {
 
-				console.log(data);
-				
-				var single_student = {
-						studentId :data['uuid'],
-						oldClassId : data['currentStream'],
-						newClassId : $('#movestreamId').val()
-					};
+			table.clear().draw();
 
-				console.log(single_student);
-
-				// $.inArray(single_student, studentsHolder) == -1
-				//if(studentsHolder.length >0){
-					
-					var index= checkHolder(studentsHolder,single_student);
-					console.log(index);
-					
-					if(index == -1 )
-						studentsHolder.splice(0,0,single_student);
-					else
-						studentsHolder.splice(index,1);
-					
-					console.log(studentsHolder);
-				
-				//}else{
-				//	studentsHolder.push(single_student);
-				//}
-
-				
-
-				/*
-				 * window .open( location.protocol + "//" + window.location.host +
-				 * "/school/school/staffProfile.jsp?uuid=" + data['uuid'],
-				 * "_blank");
-				 */
-
-			});
+			studentsHolder = [];
 		}
 
 	});
 
 }
 
-function checkHolder(studentsHolder,single_student){
-	
-	
-	var index=-1;
-	
+function checkHolder(studentsHolder, single_student) {
+
+	var index = -1;
+
 	for (var i = 0; i < studentsHolder.length; i++) {
 
-		if (studentsHolder[i]["studentId"] === single_student.studentId)
-			{
-			
-			console.log(studentsHolder[i]);
-			
-			index=i;
-			break
-			
-			}
+		if (studentsHolder[i]["studentId"] === single_student.studentId) {
 
-			//studentsHolder.splice(i,1);
-	//	else
-		//	studentsHolder.push(single_student);
+			console.log(studentsHolder[i]);
+
+			index = i;
+			break
+
+		}
+
+		// studentsHolder.splice(i,1);
+		// else
+		// studentsHolder.push(single_student);
 
 	}
-	
+
 	return index;
-	
+
 }
 
-
-function initShift(){
-	if(studentsHolder.length <=0){
+function initShift() {
+	if (studentsHolder.length <= 0) {
 		$('#warningTitle').html('Selected Students');
-		$('#warningSms').html('No students selected, please select at least one student');
-		
+		$('#warningSms').html(
+				'No students selected, please select at least one student');
+
 		$('#warning').modal('show');
-		
-		setTimeout(function(){
+
+		setTimeout(function() {
 			$('#warning').modal('hide');
-		},2000);
-		
-		
-	}
-	else if($('#movestreamId').val() == $('#streamId').val()){
+		}, 2000);
+
+	} else if ($('#movestreamId').val() == $('#streamId').val()) {
 		$('#warningTitle').html('Shift Students Error');
-		$('#warningSms').html('The Streams are similar, select a differrent stream');
-		
+		$('#warningSms').html(
+				'The Streams are similar, select a differrent stream');
+
 		$('#warning').modal('show');
-		
-		setTimeout(function(){
+
+		setTimeout(function() {
 			$('#warning').modal('hide');
-		},2000);
-		
-	}
-	else if(rootCheckFormValidation($('#shiftForm'))){
-		
-		if(updateNewStream(studentsHolder)){
+		}, 2000);
+
+	} else if (rootCheckFormValidation($('#shiftForm'))) {
+
+		if (updateNewStream(studentsHolder)) {
 			varying_url = "student/changeclass/" + $('#accountId').val();
 
-			global_data_passed =studentsHolder;
+			global_data_passed = studentsHolder;
 
 			console.log(JSON.stringify(global_data_passed));
 
@@ -390,37 +394,37 @@ function initShift(){
 
 				if (rootParseApiResponseData(data)) {
 
-					studentsHolder=[];
-					//fetchClassesStudents();
+					studentsHolder = [];
+					// fetchClassesStudents();
 					fetchStudents($('#streamId').val());
 					fetchClasses();
 
-				//	fetchStudents($('#movestreamId').val());
-					
-				/*	$('#populateOptionsStudents').val($('#classList').val());
-					fetchStreamsStudents($('#populateOptionsStudents').val());
-					
-					setTimeout(function(){
-						$('#streamId').val($('#movestreamId').val());
-					},500);*/
-					
+					// fetchStudents($('#movestreamId').val());
+
+					/*
+					 * $('#populateOptionsStudents').val($('#classList').val());
+					 * fetchStreamsStudents($('#populateOptionsStudents').val());
+					 * 
+					 * setTimeout(function(){
+					 * $('#streamId').val($('#movestreamId').val()); },500);
+					 */
+
 				}
 
 			});
-			
-			
+
 		}
-		
+
 	}
 }
 
-function updateNewStream(studentsHolder){
-	
-	for(var i=0; i<studentsHolder.length;i++){
-		
-		studentsHolder[i]["newClassId"]=$('#movestreamId').val();
+function updateNewStream(studentsHolder) {
+
+	for (var i = 0; i < studentsHolder.length; i++) {
+
+		studentsHolder[i]["newClassId"] = $('#movestreamId').val();
 	}
-	
+
 	return true;
 }
 

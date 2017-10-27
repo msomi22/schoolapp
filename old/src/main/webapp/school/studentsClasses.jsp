@@ -55,7 +55,7 @@
 
 <!-- Styled checkbox -->
 
-<link href="css/customReportStyle.css" rel="stylesheet" />
+<!-- <link href="css/customReportStyle.css" rel="stylesheet" /> -->
 
 
 <!-- page content -->
@@ -129,7 +129,8 @@
 													<select
 														class="form-control formelement populateOptionsStudents"
 														id="populateOptionsStudents"
-														onchange="fetchStreamsStudents(this.value)" required="required">
+														onchange="fetchStreamsStudents(this.value)"
+														required="required">
 
 
 													</select>
@@ -148,8 +149,8 @@
 												<div class="col-md-1 pull-right">
 													<br>
 
-													<button class="form-control btn btn-primary" type="button" id="btn_shift"
-														onclick="initShift()">Submit</button>
+													<button class="form-control btn btn-primary" type="button"
+														id="btn_shift" onclick="initShift()">Submit</button>
 												</div>
 
 												<div class="col-md-2 pull-right">
@@ -164,7 +165,8 @@
 												<div class="col-md-2 col-md-offset-1 pull-right">
 													<h6 for="classMoveList">Move to Class/Form:</h6>
 													<select class="form-control formelement populateOptions"
-														id="classList" onchange="fetchStreams(this.value)" required="required">
+														id="classList" onchange="fetchStreams(this.value)"
+														required="required">
 
 
 													</select>
@@ -181,49 +183,50 @@
 
 										<br>
 
-										<div class="table-responsive">
-											<table class="table table-striped jambo_table bulk_action"
-												id="studentsPerClass">
-												<thead>
-													<tr class="headings secondary-assent">
+										<div class="row">
 
-														<th class="column-title hidden">regStream</th>
-														<th class="column-title hidden">currentStream</th>
-														<th class="column-title hidden">isActive</th>
-														<th class="column-title hidden">isAlumni</th>
-														<th class="column-title hidden">isBoarding</th>
-														<th class="column-title hidden">isGoKFeeEligibe</th>
+											<div class="table-responsive">
+												<table class="table table-striped jambo_table bulk_action"
+													id="studentsPerClass">
+													<thead>
+														<tr class="headings secondary-assent">
 
-														<th class="column-title">regNo</th>
-														<th class="column-title">firstname</th>
-														<th class="column-title">middlename</th>
-														<th class="column-title">lastname</th>
-														<th class="column-title">gender</th>
-														<th class="column-title hidden">dob</th>
-														<th class="column-title hidden">bcertNo</th>
-														<th class="column-title hidden">county</th>
-														<th class="column-title hidden">regTerm</th>
-														<th class="column-title hidden">finalYear</th>
-														<th class="column-title hidden">finalTerm</th>
-														<th class="column-title hidden">passport</th>
-														<th class="column-title hidden">lastUpdated</th>
-														<th class="column-title hidden">admissionDate</th>
-														<th class="column-title hidden">apiParentPrimary</th>
+															<th class="column-title hidden">regStream</th>
+															<th class="column-title hidden">currentStream</th>
+															<th class="column-title hidden">isActive</th>
+															<th class="column-title hidden">isAlumni</th>
+															<th class="column-title hidden">isBoarding</th>
+															<th class="column-title hidden">isGoKFeeEligibe</th>
 
-														<th class="column-title hidden">uuid</th>
-														<th class="column-title hidden">accountId</th>
+															<th class="column-title">regNo</th>
+															<th class="column-title">firstname</th>
+															<th class="column-title">middlename</th>
+															<th class="column-title">lastname</th>
+															<th class="column-title">gender</th>
+															<th class="column-title hidden">dob</th>
+															<th class="column-title hidden">bcertNo</th>
+															<th class="column-title hidden">county</th>
+															<th class="column-title hidden">regTerm</th>
+															<th class="column-title hidden">finalYear</th>
+															<th class="column-title hidden">finalTerm</th>
+															<th class="column-title hidden">passport</th>
+															<th class="column-title hidden">lastUpdated</th>
+															<th class="column-title hidden">admissionDate</th>
+															<th class="column-title hidden">apiParentPrimary</th>
 
-														<th class="column-title"><input type="checkbox"
-															name="selectedStudents" id="selectedStudents"></th>
+															<th class="column-title hidden">uuid</th>
+															<th class="column-title hidden">accountId</th>
 
-													</tr>
-												</thead>
+															<th class="column-title"></th>
 
-												<tbody class='tablebody'>
+														</tr>
+													</thead>
+
+													<tbody class='tablebody'>
 
 
 
-													<!-- <tr class="tabledit" style='color: black;'>
+														<!-- <tr class="tabledit" style='color: black;'>
 
 										<td width="5%">1</td>
 										<td class="center hidden">### ###</td>
@@ -243,10 +246,12 @@
 									</tr> -->
 
 
-												</tbody>
+													</tbody>
 
 
-											</table>
+												</table>
+											</div>
+
 										</div>
 
 										<br> <br>
@@ -293,8 +298,7 @@
 															<th class="column-title">regno</th>
 															<th class="column-title">streamDesc</th>
 
-															<th class="column-title"><input type="checkbox"
-																name="selectedStudents" id="selectedInactiveStudents"></th>
+															<th class="column-title"></th>
 
 
 														</tr>
@@ -335,12 +339,7 @@
 
 										<br> <br> <br>
 
-										<div class="row">
 
-
-											<div id="subjectList"></div>
-
-										</div>
 
 
 
