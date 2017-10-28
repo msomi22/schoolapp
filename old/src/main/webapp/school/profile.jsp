@@ -410,11 +410,14 @@
 													<div class="col-md-5 col-md-offset-1">
 
 
-														<h4>Class</h4>
+														<h4>Govt Fund Eligible</h4>
 														
 													
 
-														<select class="form-control formelement populateOptions classId" id="classList" onchange="fetchStreams(this.value)" required="required">
+														<select class="form-control formelement " id="isGoKFeeEligibe" name="isGoKFeeEligibe" required="required">
+														<option value="1">YES</option>
+														
+														<option value="0">NO</option>
 														
 														</select>
 
@@ -431,7 +434,7 @@
 														
 														
 
-														<select class="form-control formelement populateStreamOptions"
+														<select class="form-control formelement populateStreamOptionsStudent"
 															name="currentStream" id="currentStream" required="required">
 
 														</select>

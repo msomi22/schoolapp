@@ -270,6 +270,8 @@
 		// sessionStorage.clear();
 
 		disableBackButton();
+		
+		
 
 	})
 
@@ -277,6 +279,9 @@
 		window.history.forward();
 	}
 	setTimeout("disableBackButton()", 0);
+	
+	
+	
 	
 	</script>
 	

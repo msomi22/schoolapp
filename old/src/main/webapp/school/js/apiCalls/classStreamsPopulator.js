@@ -42,6 +42,36 @@ function fetchStreams(classIdVal) {
 
 }
 
+
+function fetchStreams() {
+
+
+	varying_url = "general/stream/" + $('#accountId').val();
+
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for fetching streams');
+
+		console.log(data);
+
+		var stremSelect = $('.populateStreamOptionsStudent');
+		stremSelect.empty();
+		
+
+		for (var i = 0; i < data.length; i++) {
+			stremSelect.append('<option id=' + data[i].uuid + ' value='
+					+ data[i].uuid + '>' + data[i].description + '</option>');
+			
+		}
+		
+
+	});
+
+}
+
 function fetchClasses() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));

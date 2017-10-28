@@ -30,7 +30,8 @@ $(document)
 
 					fetchSubjects();
 					
-					fetchClasses();
+					//fetchClasses();
+					fetchStreams();
 
 				});
 
@@ -63,25 +64,27 @@ function fetchBasicInfo() {
 			}
 
 			if (key === "currentStream") {
-				$('#currentStream').val(value.trim());
+				$('#currentStream').val(value);
+/*
+				
 
-				$('#')
-
-				console.log(key + " value:" + value.trim());
+				console.log(key + " value:" + value.trim());*/
 
 			}
 
 			if (key === "regStream")
 				$('#regStream').val(value);
+			if (key === "isGoKFeeEligibe")
+				$('#isGoKFeeEligibe').val(value);
 
 			if (key === "gender")
-				$('#gender').val(value.trim());
+				$('#gender').val(value);
 
 			if (key === "isBoarding")
-				$('#isBoarding').val(value.trim());
+				$('#isBoarding').val(value);
 
 			if (key === "county")
-				$('#county').val(value.trim());
+				$('#county').val(value);
 
 		});
 
@@ -436,6 +439,14 @@ function parseData(data) {
 
 			$('#success').modal('hide');
 		}, 2500);
+		
+		request_type = 'GET';
+		
+		data_passed={};
+
+		url = "one/" + $('#passedParam').val();
+
+		fetchBasicInfo();
 		
 		
 		return true;
