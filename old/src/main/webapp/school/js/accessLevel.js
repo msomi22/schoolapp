@@ -10,16 +10,19 @@ function fetchAccessLevelsFilter() {
 	if (curentAcessLevel == 'C3915245-00EE-4EF4-9898-ACE59683DD60') {
 
 		console.log('Principal logged in')
+		$('#addNewStudentMenu').show(2000);
 		
 
 		if ($('#termYearConfig').length) {
 			$('#termYearConfig').show(2000);
+			
 		}
 	}
 
 	else if (curentAcessLevel == '615F04C1-00BF-499C-AC7A-B46B69243AAA') {
 		console.log('Deputy Principal logged in')
 		$('#financeMenu').remove();
+		
 
 	}
 
@@ -33,6 +36,7 @@ function fetchAccessLevelsFilter() {
 		console.log('HOD logged in')
 		$('#financeMenu').remove();
 		$('#studentMenu').remove();
+		
 		// $('#finance').remove();
 
 	} else if (curentAcessLevel == 'BDF7F33D-1936-43F3-B14B-8FC3EA3A1265') {
@@ -40,6 +44,7 @@ function fetchAccessLevelsFilter() {
 		$('#financeMenu').remove();
 		$('#studentListMenu').remove();
 		$('#studentNewMenu').remove();
+		$('#addNewStudentMenu').html('');
 		$('#controlMenu').remove();
 		$('#staffMenu').remove();
 

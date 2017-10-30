@@ -105,7 +105,19 @@ public class SchoolLogin extends HttpServlet{
 				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
 						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 				
+				
+				
+				if(StringUtils.equals(staff.getAcessLevelId(),"615F04C1-00BF-499C-AC7A-B46B69243AAA") | 
+						StringUtils.equals(staff.getAcessLevelId(),"0DE968C9-7309-C481-58F7-AB6CDB1011EH")|
+						StringUtils.equals(staff.getAcessLevelId(),"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265")|
+						StringUtils.equals(staff.getAcessLevelId(),"64553348-3229-4869-A13D-CADFC1D3AF46"))
+				
 				response.sendRedirect("school/studentIndex.jsp"); 
+				
+				else if(StringUtils.equals(staff.getAcessLevelId(),"1CC7F06E-9938-4850-81FB-9CC249C7CFA2"))
+					response.sendRedirect("school/generateReport.jsp"); 
+				else if(StringUtils.equals(staff.getAcessLevelId(),"0DE968C9-7309-C481-58F7-AB6CDB1011EF"))
+					response.sendRedirect("school/fee.jsp"); 
                 
 				logger.info("success"); 
 				
