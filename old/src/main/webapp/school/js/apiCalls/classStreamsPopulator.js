@@ -43,7 +43,7 @@ function fetchStreams(classIdVal) {
 }
 
 
-function fetchStreams() {
+function fetchStreamsStudent() {
 
 
 	varying_url = "general/stream/" + $('#accountId').val();

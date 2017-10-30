@@ -31,7 +31,7 @@ $(document)
 					fetchSubjects();
 					
 					//fetchClasses();
-					fetchStreams();
+					fetchStreamsStudent();
 
 				});
 
