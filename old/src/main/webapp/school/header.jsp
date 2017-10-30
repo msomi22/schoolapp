@@ -170,16 +170,16 @@
 
 							<h3>General</h3>
 							<ul class="nav side-menu">
-								<li><a><i class="fa fa-home"></i> Students <span
+								<li id="studentMenu"><a><i class="fa fa-home"></i> Students <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
-										<li><a href="studentIndex.jsp">Students List</a></li>
-										<li><a href="registerStudent.jsp">New Student</a></li>
+										<li id="studentListMenu"><a href="studentIndex.jsp">Students List</a></li>
+										<li id="studentNewMenu"><a href="registerStudent.jsp">New Student</a></li>
 
 										<li><a href="studentsClasses.jsp">Student and Class</a></li>
 									</ul></li>
 
-								<li><a><i class="fa fa-book"></i> Academics <span
+								<li id="academicsMenu"><a><i class="fa fa-book"></i> Academics <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="generateReport.jsp">Exam Reports</a></li>
@@ -188,7 +188,7 @@
 
 									</ul></li>
 
-								<li><a><i class="fa fa-users"></i> Staff <span
+								<li id="staffMenu"><a><i class="fa fa-users"></i> Staff <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="staff.jsp">Staff</a></li>
@@ -197,7 +197,7 @@
 
 
 
-								<li><a><i class="fa fa-money"></i> Finance <span
+								<li id="financeMenu"><a><i class="fa fa-money"></i> Finance <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="fee.jsp">Fee Payment</a></li>
@@ -206,13 +206,13 @@
 										<li><a href="#">Pocket Money</a></li>
 									</ul></li>
 
-								<li><a><i class="fa fa-cog"></i> Control Panel <span
+								<li id="controlMenu"><a><i class="fa fa-cog"></i> Control Panel <span
 										class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
-										<li><a href="exam.jsp">Exam</a></li>
-										<li><a href="streams.jsp">Stream</a></li>
-										<li><a href="settings.jsp">Settings</a></li>
-										<li><a href="misc.jsp">Misc Settings</a></li>
+										<li id="examsMenu"><a href="exam.jsp">Exam</a></li>
+										<li id="streamsMenu"><a href="streams.jsp">Stream</a></li>
+										<li id="settingsMenu"><a href="settings.jsp">Settings</a></li>
+										<li id="miscSettingsMenu"><a href="misc.jsp">Misc Settings</a></li>
 									</ul></li>
 
 
@@ -277,6 +277,7 @@
 											Profile</a> <input type="hidden" id="user" value="<%=user%>">
 											<input type="hidden" id="globalAccountId" value="<%=accountId%>">
 										<input type="hidden" id="userId" value="<%=userId%>">
+										<input type="hidden" id="accessLevel" value="<%=userAccessLevel%>">
 
 									</li>
 									<li><a href="settings.jsp"> <span

@@ -52,6 +52,8 @@
 </div>
 </div>
 
+
+
 <!-- jQuery -->
 <script src="../vendors/jquery/dist/jquery.min.js"></script>
 <!-- <script src="../vendors/jquery-ui/jquery-ui.min.js"></script> -->
@@ -59,6 +61,9 @@
 
 <!-- Bootstrap -->
 <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script src="js/accessLevel.js"></script>
 
 <script src="js/registerNewStudent.js"></script>
 
