@@ -69,9 +69,9 @@ public class GetStudents extends HttpServlet{
 		idsMap.put("examId", examId); 
 		idsMap.put("subjectId", subjectId); 
 		
-		System.out.println(jwt);
+		/*System.out.println(jwt);
 		System.out.println("userId : " + userId);
-		System.out.println("jwtSubject : " + jwtSubject);
+		System.out.println("jwtSubject : " + jwtSubject);*/
 		
 		ApiCredentials apiKey = new ApiCredentials();
 
@@ -100,12 +100,14 @@ public class GetStudents extends HttpServlet{
 				students = studentDAO.getStudentByStream(accountId, streamId);
 			}
 
+             
+			       students
+			       .parallelStream()
+			       .filter(s -> StringUtils.equals(s.getIsActive(), "1"))
+			       .filter(s -> studentSubjectDAO.getstudentSubject(s.getUuid(), subjectId) != null) 
+			       .forEach(student -> {   
 
-			students.forEach(student -> {
-
-				if(studentSubjectDAO.getstudentSubject(student.getUuid(), subjectId) != null){ 
-					selectedStudents.add(student);
-				}
+			    	   selectedStudents.add(student);
 
 			});
 
