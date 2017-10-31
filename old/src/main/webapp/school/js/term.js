@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$('.c_year').val($('#currentYear').val());
 	$('#term').val($('#currentTerm').val());
 	
-	
+	if(checkAccessFee()){
 
 	setTimeout(function(){
 		feeTermFeeList();
@@ -14,7 +14,7 @@ $(document).ready(function() {
 	
 	$('.accountId').val($('#accountId').val());
 
-	
+	}
 
 })
 

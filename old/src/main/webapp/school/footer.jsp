@@ -65,6 +65,8 @@
 
 <script src="js/accessLevel.js"></script>
 
+<script src="js/checkAcess.js"></script>
+
 <script src="js/registerNewStudent.js"></script>
 
 <script

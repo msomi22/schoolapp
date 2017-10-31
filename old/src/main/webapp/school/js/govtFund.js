@@ -6,6 +6,8 @@ var accoutId = "";
 var uuid = "";
 
 $(document).ready(function() {
+	
+	if(checkAccessFee())
 	initLoad();
 	
 

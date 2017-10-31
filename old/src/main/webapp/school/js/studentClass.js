@@ -10,11 +10,15 @@ $(document).ready(function() {
 		"scrollY" : "400px",
 		"scrollCollapse" : true
 	});
+	
+	
+	if(checkAccessStudents()){
 
 	fetchClassesStudents();
 	fetchClasses();
 
 	clickTable();
+	}
 
 	/* setTimeout(function (){ fetchStudents($('#streamId').val()); },500) */
 

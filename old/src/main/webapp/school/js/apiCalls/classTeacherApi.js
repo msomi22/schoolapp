@@ -1,11 +1,17 @@
 $(document).ready(function() {
 
 	// var url= "general/class/" + $('#accountId').val();
+	
+	
+	if(checkAccessStaff()){
+	
 
 	fetchClasses();
 
 	fetchCTList();
 	populateCTSelect();
+	
+	}
 
 });
 

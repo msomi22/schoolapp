@@ -34,17 +34,7 @@ $(document).ready(
 		});
 
 
-function checkAccessFee(){
-	var curentAcessLevel = $('#accessLevel').val();
 
-	if (curentAcessLevel != 'C3915245-00EE-4EF4-9898-ACE59683DD60' ||
-			curentAcessLevel != '0DE968C9-7309-C481-58F7-AB6CDB1011EF') {
-		window.location = location.protocol +"//"+ window.location.host+"/school/index.jsp";
-		
-		
-	}else
-		return true
-}
 
 function initPayment() {
 

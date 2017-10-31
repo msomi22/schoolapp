@@ -1,8 +1,12 @@
 $(document).ready(function (){
 	
+	
+	if(checkAccessControl()){
+	
 	fetchCategories();
 	
 	fetchSettingsConfig();
+	}
 	
 })
 

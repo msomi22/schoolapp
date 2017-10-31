@@ -13,6 +13,8 @@ var base_url = location.protocol + "//" + window.location.host
 $(document)
 		.ready(
 				function() {
+					
+					if(checkAccessControl()){
 
 					$
 							.ajax(
@@ -65,6 +67,7 @@ $(document)
 								console.log(textStatus);
 
 							});
+					}
 
 				});
 
