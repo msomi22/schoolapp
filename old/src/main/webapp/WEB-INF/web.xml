@@ -177,6 +177,17 @@
   </servlet-mapping>
   
   
+  <servlet>
+    <servlet-name>SchoolLogout</servlet-name>
+    <servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogout</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>SchoolLogout</servlet-name>
+    <url-pattern>/schoolLogout</url-pattern>
+  </servlet-mapping>
+  
+  
    <servlet>
     <servlet-name>TopBottomImprovedDroppedList</servlet-name>
     <servlet-class>com.yahoo.petermwenda83.server.servlet.reports.TopBottomImprovedDroppedList</servlet-class>

@@ -56,7 +56,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
         try (
         		 Connection conn = dbutils.getConnection();
      	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
-     	         		+ " studentId=? AND subjectId = ? AND examId =? AND term = ? AND year = ? AND streamId;");    		   
+     	         		+ " studentId=? AND subjectId = ? AND examId =? AND term = ? AND year = ? AND streamId = ?;");    		   
      	   ) {
          	   pstmt.setString(1, accountId);      
          	   pstmt.setString(2, studentId); 

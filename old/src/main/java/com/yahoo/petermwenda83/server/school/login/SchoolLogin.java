@@ -106,6 +106,31 @@ public class SchoolLogin extends HttpServlet {
 				// String id, String issuer, String subject, long ttlMillis, String secret
 				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN, JWT.createJWT(staff.getUuid(),
 						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
+<<<<<<< HEAD
+=======
+				
+				
+				
+				if(StringUtils.equals(staff.getAcessLevelId(),"C3915245-00EE-4EF4-9898-ACE59683DD60") | 
+						StringUtils.equals(staff.getAcessLevelId(),"615F04C1-00BF-499C-AC7A-B46B69243AAA") | 
+						StringUtils.equals(staff.getAcessLevelId(),"0DE968C9-7309-C481-58F7-AB6CDB1011EH")|
+						StringUtils.equals(staff.getAcessLevelId(),"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265")|
+						StringUtils.equals(staff.getAcessLevelId(),"64553348-3229-4869-A13D-CADFC1D3AF46"))
+				
+				response.sendRedirect("school/studentIndex.jsp"); 
+				
+				else if(StringUtils.equals(staff.getAcessLevelId(),"1CC7F06E-9938-4850-81FB-9CC249C7CFA2"))
+					response.sendRedirect("school/generateReport.jsp"); 
+				else if(StringUtils.equals(staff.getAcessLevelId(),"0DE968C9-7309-C481-58F7-AB6CDB1011EF"))
+					response.sendRedirect("school/fee.jsp"); 
+                
+				logger.info("success login user : " + staff.getUsername() + " ,  time : " + new Date()); 
+				
+
+			}else{
+				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
+				response.sendRedirect("index.jsp");
+>>>>>>> f9ba51e22746d966c9eef1a95b1f333d85433668
 
 				if (StringUtils.equals(staff.getAcessLevelId(), "C3915245-00EE-4EF4-9898-ACE59683DD60")
 						| StringUtils.equals(staff.getAcessLevelId(), "615F04C1-00BF-499C-AC7A-B46B69243AAA")

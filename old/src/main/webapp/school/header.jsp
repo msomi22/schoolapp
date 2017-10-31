@@ -36,7 +36,8 @@
 	}
 
 	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
-	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+	//response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
 
 	String username = "";
 
@@ -284,7 +285,7 @@
 											class="badge bg-red pull-right">New</span> <span>Settings</span>
 									</a></li>
 									<li><a href="javascript:;">Help</a></li>
-									<li><a href="../index.jsp"><i
+									<li><a href="../schoolLogout"><i
 											class="fa fa-sign-out pull-right"></i> Log Out</a></li>
 								</ul></li>
 
