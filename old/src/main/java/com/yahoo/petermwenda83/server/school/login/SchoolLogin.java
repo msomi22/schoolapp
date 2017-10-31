@@ -120,7 +120,7 @@ public class SchoolLogin extends HttpServlet{
 				else if(StringUtils.equals(staff.getAcessLevelId(),"0DE968C9-7309-C481-58F7-AB6CDB1011EF"))
 					response.sendRedirect("school/fee.jsp"); 
                 
-				logger.info("success"); 
+				logger.info("success login user : " + staff.getUsername() + " ,  time : " + new Date()); 
 				
 
 			}else{
