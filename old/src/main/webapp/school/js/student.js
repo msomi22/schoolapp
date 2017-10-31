@@ -103,6 +103,9 @@ $(document).ready(
 		function() {
 			
 			
+			if(checkAccessStudents()){
+			
+			
 			count = 0;
 			
 			
@@ -121,8 +124,25 @@ $(document).ready(
 					+ "&offset=" + start;
 
 			fetchStudents(false);
+			
+			}
 
 		});
+
+
+function checkAccessStudents(){
+	var curentAcessLevel = $('#accessLevel').val();
+
+	if (curentAcessLevel != 'C3915245-00EE-4EF4-9898-ACE59683DD60' ||
+			curentAcessLevel != '615F04C1-00BF-499C-AC7A-B46B69243AAA'||
+			curentAcessLevel != 'BDF7F33D-1936-43F3-B14B-8FC3EA3A1265'||
+			curentAcessLevel != '64553348-3229-4869-A13D-CADFC1D3AF46') {
+		window.location = location.protocol +"//"+ window.location.host+"/school/index.jsp";
+		
+		
+	}else
+		return true
+}
 
 function delayInput() {
 
