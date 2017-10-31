@@ -8,3 +8,6 @@
 4) promote,activate, etc ...  selected students stundents
 5) pocket money
 6) admin panel 
+
+
+when a student become an alumni/ is deactivated / remove them from current class, put the in ALMNI_CLASS
