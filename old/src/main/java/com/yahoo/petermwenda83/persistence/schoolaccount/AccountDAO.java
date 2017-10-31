@@ -252,7 +252,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getAllSchools()
 	 */
 	public List<Account> getAccounts() {
-		List<Account> list =new  ArrayList<>(); 
+		List<Account> list = null;
 		try(   
 				Connection conn = dbutils.getConnection();
 				PreparedStatement  pstmt = conn.prepareStatement("SELECT * FROM Account ;");   
