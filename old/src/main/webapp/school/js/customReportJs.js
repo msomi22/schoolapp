@@ -20,7 +20,9 @@ function examWarningModal() {
 $(document).ready(function(){
 	$('#accountId_tbid').val($('#accountId').val());
 	
-	fetchClasses();
+	
+	if(checkAccessAcademics())
+		fetchClasses();
 })
 
 

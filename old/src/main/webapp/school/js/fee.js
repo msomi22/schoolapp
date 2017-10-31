@@ -8,6 +8,9 @@ var search_state = false;
 
 $(document).ready(
 		function() {
+			
+			
+			if(checkAccessFee()){
 
 			$('.accountId').val($('#accountId').val());
 
@@ -25,8 +28,13 @@ $(document).ready(
 			});
 
 			otherFeeTermFeeList();
+			
+			}
 
 		});
+
+
+
 
 function initPayment() {
 

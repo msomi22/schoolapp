@@ -3,11 +3,10 @@ var table;
 $(document)
 		.ready(
 				function() {
-
-				
 					
 					
-					fetchMisc();
+					if(checkAccessControl())
+						fetchMisc();
 
 				});
 

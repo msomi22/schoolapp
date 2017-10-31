@@ -6,10 +6,13 @@ $(document)
 
 				
 					
-					
+					if(checkAccessStaff())
 					fetchStaffs();
 
 				});
+
+
+
 
 function addStaffApiCall() {
 	

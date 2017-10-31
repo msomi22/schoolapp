@@ -103,6 +103,9 @@ $(document).ready(
 		function() {
 			
 			
+			if(checkAccessStudents()){
+			
+			
 			count = 0;
 			
 			
@@ -121,8 +124,11 @@ $(document).ready(
 					+ "&offset=" + start;
 
 			fetchStudents(false);
+			
+			}
 
 		});
+
 
 function delayInput() {
 

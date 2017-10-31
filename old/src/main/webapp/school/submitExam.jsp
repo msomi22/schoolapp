@@ -461,4 +461,11 @@
         
       
 <jsp:include page="footer.jsp" />
+
+<script>
+$(document).ready(function(){
+	checkAccessAcademics();
+})
+
+</script>
         
