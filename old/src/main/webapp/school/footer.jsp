@@ -106,6 +106,14 @@
 		autoclose : true
 
 	});
+	
+	var message = "function disabled";
+
+	function rtclickcheck(keyp){ if (navigator.appName == "Netscape" && keyp.which == 3){  console.log(message); return false; }
+
+	if (navigator.appVersion.indexOf("MSIE") != -1 && event.button == 2) { console.log(message); return false; } }
+
+	document.onmousedown = rtclickcheck;
 </script>
 
 <!-- Cropper -->
