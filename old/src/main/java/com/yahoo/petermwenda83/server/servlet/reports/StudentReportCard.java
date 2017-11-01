@@ -192,8 +192,8 @@ public class StudentReportCard extends HttpServlet{
 		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 		saveMean = StringUtils.trimToEmpty(request.getParameter("saveMean")); //1 means save, 
 		graphType = StringUtils.trimToEmpty(request.getParameter("graphType")); //1 means bar,  0 line
-		saveMean = "1";
-		graphType = "1";
+		/*saveMean = "1";
+		graphType = "1";*/
 		
 		//check for hide points
 		hidePoints = hidePts ? true : false;

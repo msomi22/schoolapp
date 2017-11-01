@@ -210,6 +210,7 @@
 
 
 											<input type="hidden" name="paper123Id" id="paper123Id">
+											<input type="hidden" name="saveMean" value="1">
 
 
 
@@ -512,6 +513,34 @@
 														value="ranklist" onclick="redirect(this.id)"> <label
 														for="ranklist">
 														<h6>Rank List</h6>
+
+													</label>
+												</div>
+
+											</div>
+
+
+
+
+											<br>
+											
+												<!-- Type of report element -->
+											<h4>Type of Graph:</h4>
+
+											<div class="row">
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="bar" name="graphType"
+														value="1" checked>
+													<label for="bar">
+														<h6>Bar Graph</h6>
+
+													</label>
+												</div>
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="line" name="graphType"
+														value="0"> <label
+														for="line">
+														<h6>Line Graph</h6>
 
 													</label>
 												</div>
