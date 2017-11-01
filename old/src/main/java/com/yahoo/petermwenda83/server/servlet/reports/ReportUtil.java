@@ -1091,23 +1091,41 @@ public class ReportUtil {
 		dataset.setValue(Double.valueOf(df2.format(yearFour.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearFour.getYear() + " T 3");
 
 		dataset.setValue(12, "Control ", "Control ");
+		
+		if(StringUtils.equals(graphType, "1")) {
+			
+			JFreeChart chart = ChartFactory.createBarChart("Yearly Performance", // chart title
+					"Year", // domain axis label (Y axis)
+					"Mean", //  range axis label (X axis)
+					dataset, // data
+					PlotOrientation.VERTICAL, // orientation
+					false, // include legend
+					true, // tooltips?
+					false);// URLs?
+			
+			CategoryPlot categoryPlot = chart.getCategoryPlot();
+			BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
+			br.setMaximumBarWidth(0.05); // set maximum width to 10% of chart
 
-		JFreeChart chart = ChartFactory.createBarChart("Yearly Performance", // chart title
-				"Year", // domain axis label (Y axis)
-				"Mean", //  range axis label (X axis)
-				dataset, // data
-				PlotOrientation.VERTICAL, // orientation
-				false, // include legend
-				true, // tooltips?
-				false);// URLs?
 
+			return chart;
+			
+		}else {
+			
+			JFreeChart chart = ChartFactory.createLineChart("Yearly Performance", // chart title
+						"Year", // domain axis label (Y axis)
+						"Mean", //  range axis label (X axis)
+						dataset, // data
+						PlotOrientation.VERTICAL, // orientation
+						true, // include legend
+						true, // tooltips?
+						false);// URLs?
+			
+			
+			return chart;
+			
+		}
 
-		CategoryPlot categoryPlot = chart.getCategoryPlot();
-		BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
-		br.setMaximumBarWidth(0.05); // set maximum width to 10% of chart
-
-
-		return chart;
 	}
 
 

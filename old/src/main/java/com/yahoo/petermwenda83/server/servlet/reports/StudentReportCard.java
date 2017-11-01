@@ -192,8 +192,8 @@ public class StudentReportCard extends HttpServlet{
 		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 		saveMean = StringUtils.trimToEmpty(request.getParameter("saveMean")); //1 means save, 
 		graphType = StringUtils.trimToEmpty(request.getParameter("graphType")); //1 means bar,  0 line
-		saveMean = "1";
-		graphType = "1";
+		//saveMean = "1";
+		//graphType = "0";
 		
 		//check for hide points
 		hidePoints = hidePts ? true : false;
@@ -1417,6 +1417,45 @@ public class StudentReportCard extends HttpServlet{
 
 										position++;
 										prevtotal=total;
+										
+										
+										PdfPTable perfTable = new PdfPTable(1);   
+										perfTable.setWidthPercentage(100); 
+										perfTable.setWidths(new int[]{2});  
+										
+										PdfPCell countCell = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
+										countCell.setBackgroundColor(baseColor);
+										countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+										PdfPCell regNoCell = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
+										regNoCell.setBackgroundColor(baseColor);
+										regNoCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+										PdfPCell nameCell = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
+										nameCell.setBackgroundColor(baseColor);
+										nameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+										
+										//add performance table TODO
+										/**
+										 * FORM xx    FORM yy ...
+										 * term mean position ...
+										 * 1
+										 * 2
+										 * 3
+										 */
+										
+										List<YearlyMean> yearlyMeanList  = new ArrayList<>();
+										if(!yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId()).isEmpty()) {
+											yearlyMeanList = yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId());
+										}
+										
+										
+										
+										
+										
+										
+										
 
 										document.add(examTable);
 

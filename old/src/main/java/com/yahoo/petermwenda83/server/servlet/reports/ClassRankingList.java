@@ -188,7 +188,7 @@ public class ClassRankingList extends HttpServlet{
 		String noOfSub = request.getParameter("subjects");
 		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 		saveMean = StringUtils.trimToEmpty(request.getParameter("saveMean")); //1 means save, 
-		saveMean = "1";
+		//saveMean = "1";
 
 		//check for hide points
 		hidePoints = hidePts ? true : false;
