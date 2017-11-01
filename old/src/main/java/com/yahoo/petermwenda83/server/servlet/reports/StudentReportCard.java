@@ -176,6 +176,8 @@ public class StudentReportCard extends HttpServlet{
 		String year;
 		String classroomId;
 		String paper123Id = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+		String saveMean = "";
+		String graphType = "";
 
 		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 
@@ -188,11 +190,11 @@ public class StudentReportCard extends HttpServlet{
 
 		String noOfSub = request.getParameter("subjects");
 		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
-		//System.out.println("paper123Id : " + paper123Id);
-		//System.out.println("noOfSub : " + noOfSub);//seven
-		//paper123Id = StringUtils.equalsIgnoreCase(noOfSub, "seven") ? "" : paper123Id;
-		//System.out.println("paper123Id : " + paper123Id);
-
+		saveMean = StringUtils.trimToEmpty(request.getParameter("saveMean")); //1 means save, 
+		graphType = StringUtils.trimToEmpty(request.getParameter("graphType")); //1 means bar,  0 line
+		saveMean = "1";
+		graphType = "1";
+		
 		//check for hide points
 		hidePoints = hidePts ? true : false;
 		//check for hide grades
@@ -247,7 +249,7 @@ public class StudentReportCard extends HttpServlet{
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
 			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
 
-			populatePDFDocument(accountId,streamId,classroomId,term,year,examType,paper123Id);
+			populatePDFDocument(accountId, streamId, classroomId, term, year, examType, paper123Id, saveMean, graphType);
 
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
@@ -267,20 +269,22 @@ public class StudentReportCard extends HttpServlet{
 	 * @param streamId 
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term, String year, String examType, String paper123Id) {
-		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year, examType, paper123Id));
+	public void populatePDFDocument(String accountId, String streamId, String classroomId ,String term,
+			String year, String examType, String paper123Id, String saveMean, String graphType) {
+		Timeit.code(() -> compute(accountId, streamId, classroomId ,term, year, examType, paper123Id, saveMean, graphType));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute(String accountId, String streamId, String classroomId , String term, String year, String examType, String paper123Id) {
+	public  void compute(String accountId, String streamId, String classroomId , 
+			String term, String year, String examType, String paper123Id, String saveMean, String graphType) {
 
 		try {
 
 			document.open();
 
-			generateReport(accountId, streamId, classroomId , term, year, examType, paper123Id);
+			generateReport(accountId, streamId, classroomId , term, year, examType, paper123Id, saveMean, graphType);
 
 			document.close();
 
@@ -301,7 +305,8 @@ public class StudentReportCard extends HttpServlet{
 	 * @param baseColor
 	 * @throws DocumentException
 	 */
-	private void generateReport(String accountId, String streamId,  String classroomId ,String term, String year, String examType, String paper123Id)
+	private void generateReport(String accountId, String streamId,  String classroomId ,
+			String term, String year, String examType, String paper123Id, String saveMean, String graphType)
 			throws DocumentException {
 
 
@@ -615,9 +620,41 @@ public class StudentReportCard extends HttpServlet{
 
 
 				double mean = 0;
+				
+				//TODO
+				String termPosition = "";
+				
+
+				String classPositionMSG = "";
+				String streamPositionMSG = "";
+
+				if(classResult){
 
 
 
+					classPositionMSG = pos + " Out of : " + performanceList.size();
+
+					streamPositionMSG = ReportUtil.getStreamPosition(accountId, student.getUuid(), student.getCurrentStream(), 
+							performanceList,rankWithPoints,rankWithTotalMarks); 
+
+
+				}else{
+
+					if(!classResult){
+
+						if(!classperformanceList.isEmpty()){
+							classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
+									classperformanceList,rankWithPoints,rankWithTotalMarks);
+						}
+					}
+
+
+					streamPositionMSG = pos + " Out of : " + performanceList.size();
+
+				}
+
+				
+				termPosition = classPositionMSG;
 
 				if(grade7subjects && !grade11subjects){
 
@@ -655,21 +692,26 @@ public class StudentReportCard extends HttpServlet{
 						if(StringUtils.equals(term, "1")){
 
 							yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);
+							yearlyMean.setTermOnePosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "2")){
 
 							yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);
+							yearlyMean.setTermTwoPosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "3")){
 
 							yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);
+							yearlyMean.setTermThreePosition(termPosition);
 
 						}
 
                         //TODO
-						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+						if(StringUtils.equals(saveMean, "1")) {
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+						}
 
 					}
 
@@ -694,21 +736,26 @@ public class StudentReportCard extends HttpServlet{
 						if(StringUtils.equals(term, "1")){
 
 							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(mean))); 
+							yearlyMean.setTermOnePosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "2")){
 
 							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(mean)));
+							yearlyMean.setTermTwoPosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "3")){
 
 							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(mean)));
+							yearlyMean.setTermThreePosition(termPosition);
 
 						}
 
                          //TODO
-						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+						if(StringUtils.equals(saveMean, "1")) {
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+						}
 
 
 
@@ -793,34 +840,6 @@ public class StudentReportCard extends HttpServlet{
 				//add student name
 				studentRight.addCell(yearInfoCell);
 				studentRight.addCell(yearDescCell);
-
-				String classPositionMSG = "";
-				String streamPositionMSG = "";
-
-				if(classResult){
-
-
-
-					classPositionMSG = pos + " Out of : " + performanceList.size();
-
-					streamPositionMSG = ReportUtil.getStreamPosition(accountId, student.getUuid(), student.getCurrentStream(), 
-							performanceList,rankWithPoints,rankWithTotalMarks); 
-
-
-				}else{
-
-					if(!classResult){
-
-						if(!classperformanceList.isEmpty()){
-							classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
-									classperformanceList,rankWithPoints,rankWithTotalMarks);
-						}
-					}
-
-
-					streamPositionMSG = pos + " Out of : " + performanceList.size();
-
-				}
 
 				//student class position
 				PdfPCell classGradeInfoCell = new PdfPCell(new Phrase("Overall position:",timesRomanNarmal8)); 
@@ -1348,7 +1367,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 										ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
-										JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO);  
+										JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO, graphType);  
 
 										try {
 

@@ -489,13 +489,16 @@ ALTER TABLE sysConfig OWNER TO school;
     year text,
     meanOne float, 
     meanTwo float, 
-    meanThree float 
+    meanThree float,
+    termOnePosition text,
+    termTwoPosition text,
+    termThreePosition text
    
    
 );
 
 -- import data from the CSV file for the yearlyMean table
-\COPY yearlyMean(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) FROM '/tmp/yearlyMean.csv' WITH DELIMITER AS '|' CSV HEADER
+--\COPY yearlyMean(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) FROM '/tmp/yearlyMean.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE yearlyMean OWNER TO school;
 
 

@@ -1046,7 +1046,7 @@ public class ReportUtil {
 	 * @return
 	 */
 	public static JFreeChart generateLineGraph(String accountId, String studentId, YearlyMeanDAO yearlyMeanDAO, 
-			StudentDAO studentDAO) {
+			StudentDAO studentDAO, String graphType) {
 
 		Student student = studentDAO.getStudentById(accountId, studentId); 
 		int regYear = Integer.valueOf(yearformatter.format(student.getAdmissionDate()));  

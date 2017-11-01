@@ -22,6 +22,9 @@ public class YearlyMean extends StorableBean{
 	private double meanOne;
 	private double meanTwo;
 	private double meanThree;
+	private String termOnePosition;
+	private String termTwoPosition;
+	private String termThreePosition;
 	
 	public YearlyMean() {
 		studentId = "";
@@ -29,6 +32,9 @@ public class YearlyMean extends StorableBean{
 		meanOne = 0;
 		meanTwo = 0;
 		meanThree = 0;
+		termOnePosition = "";
+		termTwoPosition = "";
+		termThreePosition = "";
 	}
 	
 	
@@ -113,12 +119,61 @@ public class YearlyMean extends StorableBean{
 
 
 	/**
+	 * @return the termOnePosition
+	 */
+	public String getTermOnePosition() {
+		return termOnePosition;
+	}
+
+
+	/**
+	 * @param termOnePosition the termOnePosition to set
+	 */
+	public void setTermOnePosition(String termOnePosition) {
+		this.termOnePosition = termOnePosition;
+	}
+
+	/**
+	 * @return the termTwoPosition
+	 */
+	public String getTermTwoPosition() {
+		return termTwoPosition;
+	}
+
+
+	/**
+	 * @param termTwoPosition the termTwoPosition to set
+	 */
+	public void setTermTwoPosition(String termTwoPosition) {
+		this.termTwoPosition = termTwoPosition;
+	}
+
+
+	/**
+	 * @return the termThreePosition
+	 */
+	public String getTermThreePosition() {
+		return termThreePosition;
+	}
+
+
+	/**
+	 * @param termThreePosition the termThreePosition to set
+	 */
+	public void setTermThreePosition(String termThreePosition) {
+		this.termThreePosition = termThreePosition;
+	}
+
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "YearlyMean [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
-				+ ", meanThree=" + meanThree + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", meanThree=" + meanThree + ", termOnePosition=" + termOnePosition + ", termTwoPosition="
+				+ termTwoPosition + ", termThreePosition=" + termThreePosition + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

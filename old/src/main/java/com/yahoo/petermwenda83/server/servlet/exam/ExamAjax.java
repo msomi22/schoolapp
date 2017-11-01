@@ -73,10 +73,14 @@ public class ExamAjax extends HttpServlet{
 		String examId = StringUtils.trimToEmpty(request.getParameter("examId"));
 		String streamId = StringUtils.trimToEmpty(request.getParameter("streamId"));
 		String score = StringUtils.trimToEmpty(request.getParameter("score"));
+		String outof = StringUtils.trimToEmpty(request.getParameter("outof"));
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
+		
+		outof = "30";
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
+		//String jwt = "";
 		String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
 		String jwtSubject = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
 
@@ -88,7 +92,7 @@ public class ExamAjax extends HttpServlet{
 
 		if(StringUtils.equalsIgnoreCase(decision, "submitExam")){
 
-			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score,jwt,userId,jwtSubject)).getBytes());
+			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score , outof ,jwt , userId, jwtSubject)).getBytes());
 			out.flush();
 			out.close();
 
@@ -108,7 +112,7 @@ public class ExamAjax extends HttpServlet{
 	 * @return
 	 */
 	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
-			String streamId, String score, String jwt, String userId, String jwtSubject) {
+			String streamId, String score, String outof, String jwt, String userId, String jwtSubject) {
 
 		JsonObject jsonObject = new JsonObject();
 		String message = "";
@@ -160,7 +164,27 @@ public class ExamAjax extends HttpServlet{
 			jsonObject.addProperty("responseMessage", "Score not valid, scores should be between 0 and 100 " + score + "." );
 			return jsonObject;
 
-		}else{
+		}else if(StringUtils.isBlank(outof)){
+
+			jsonObject.addProperty("responseMessage", "Blank outof not allowed " + outof + "." );
+			return jsonObject;
+
+		}else if(!StringUtils.isNumeric(outof)){  
+
+			jsonObject.addProperty("responseMessage", "Score  outof not valid, numerics only " + outof + "." );
+			return jsonObject;
+
+		}else if(Integer.valueOf(outof) < 0 || Integer.valueOf(outof) > 100){  
+
+			jsonObject.addProperty("responseMessage", "Score outof not valid, outof should be between 0 and 100 " + outof + "." );
+			return jsonObject;
+
+		}/*else if(Integer.valueOf(score) > Integer.valueOf(outof)){  
+
+			jsonObject.addProperty("responseMessage", "Score " + score + " cant be geater tha outof " + outof);
+			return jsonObject;
+
+		}*/else{
 
 
 			Exam exam = examDAO.getExam(accountId, examId);
@@ -186,16 +210,19 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.LANG_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Language: score can't be greater than '" + ReportUtil.LANG_P1_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.LANG_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Language: score can't be greater than '" + ReportUtil.LANG_P2_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.LANG_P3_OUTOF){
 
 						message = "Score not valid, Paper 3, Language: score can't be greater than '" + ReportUtil.LANG_P3_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else{
@@ -209,16 +236,19 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
 						message = "Score not valid, Paper 3, Science: score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else{
@@ -231,16 +261,19 @@ public class ExamAjax extends HttpServlet{
 					if(StringUtils.equals(exam.getCode(), "P3")){
 
 						message = "This subject has no paper 3";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
 
 						message = "Score not valid, Paper 1, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 						message = "Score not valid, Paper 2, Humanity/maths: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
+						jsonObject.addProperty("responseMessage", message); 
 						return jsonObject;
 
 					}else{
@@ -260,16 +293,19 @@ public class ExamAjax extends HttpServlet{
 						if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.SCI_AGR_P1_OUTOF){
 
 							message = "Score not valid, Paper 1, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P1_OUTOF + "'";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.SCI_AGR_P2_OUTOF){
 
 							message = "Score not valid, Paper 2, Agriculture score can't be greater than '" + ReportUtil.SCI_AGR_P2_OUTOF + "'";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P3") && scoreInt > ReportUtil.SCI_AGR_P3_OUTOF){
 
 							message = "Score not valid, Paper 3 Agriculture, score can't be greater than '" + ReportUtil.SCI_AGR_P3_OUTOF + "'";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else{
@@ -282,16 +318,19 @@ public class ExamAjax extends HttpServlet{
 						if(StringUtils.equals(exam.getCode(), "P3")){
 
 							message = "This subject has no paper 3";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P1") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P1_OUTOF){
 
 							message = "Score not valid, Paper 1, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P1_OUTOF + "'";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else if(StringUtils.equals(exam.getCode(), "P2") && scoreInt > ReportUtil.HUMAN_TECH_MATH_P2_OUTOF){
 
 							message = "Score not valid, Paper 2, Technical: score can't be greater than '" + ReportUtil.HUMAN_TECH_MATH_P2_OUTOF + "'";
+							jsonObject.addProperty("responseMessage", message); 
 							return jsonObject;
 
 						}else{
@@ -304,15 +343,16 @@ public class ExamAjax extends HttpServlet{
 				}
 
 			}else{
-
-				if(Integer.valueOf(score) > examDAO.getExam(accountId, examId).getOutOf()){  
+				
+				
+				if(Integer.valueOf(score) > Integer.valueOf(outof)){  
 
 					jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
 					return jsonObject;
 
 				}else{
 
-					scoreDouble = ((double)scoreInt / (double)exam.getOutOf()) * 100; 
+					scoreDouble = ((double)scoreInt / (double)Integer.valueOf(outof)) * 100; 
 
 					scoreDouble = Math.ceil(scoreDouble);
 					scoreValid = true;
