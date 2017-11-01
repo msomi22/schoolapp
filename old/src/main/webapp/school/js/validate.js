@@ -62,6 +62,8 @@ function validateOutOf(score){
 }
 
 function validateScore(id) {
+	
+	$('#outOfCustom').prop('disabled',true);
 
 	// define a regex of the score
 	///^[0-9]|[0-9][0-9]$/

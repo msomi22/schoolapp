@@ -76,7 +76,7 @@ public class ExamAjax extends HttpServlet{
 		String outof = StringUtils.trimToEmpty(request.getParameter("outof"));
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
 		
-		outof = "30";
+		outof = StringUtils.trimToEmpty(request.getParameter("outOf"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
