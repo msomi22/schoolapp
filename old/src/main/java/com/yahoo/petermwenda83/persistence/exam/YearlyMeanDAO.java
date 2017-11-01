@@ -130,7 +130,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 		if(!existYearlyMean(accountId,studentId,year)){
 			try(   Connection conn = dbutils.getConnection();
 					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO YearlyMean" 
-							+"(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree) VALUES (?,?,?,?,?,?,?);");
+							+"(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree,termOnePosition,termTwoPosition,termThreePosition) VALUES (?,?,?,?,?,?,?,?,?,?);");
 					){
 
 				pstmt.setString(1, yearlyMean.getUuid());
@@ -140,6 +140,9 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 				pstmt.setDouble(5, yearlyMean.getMeanOne());
 				pstmt.setDouble(6, yearlyMean.getMeanTwo());
 				pstmt.setDouble(7, yearlyMean.getMeanThree());
+				pstmt.setString(8, yearlyMean.getTermOnePosition());
+				pstmt.setString(9, yearlyMean.getTermTwoPosition());
+				pstmt.setString(10, yearlyMean.getTermThreePosition());
 
 				pstmt.executeUpdate();
 
@@ -154,15 +157,20 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 
 			try (  Connection conn = dbutils.getConnection();
 					PreparedStatement pstmt = conn.prepareStatement("UPDATE YearlyMean SET meanOne=?,"
-							+ "meanTwo=?,meanThree =? WHERE accountId = ? AND studentId =?"
+							+ " meanTwo=?, meanThree =?, termOnePosition =?, termTwoPosition =?, termThreePosition=?"
+							+ " WHERE accountId = ? AND studentId =?"
 							+ "AND year = ?;");
 					) { 
 				pstmt.setDouble(1, yearlyMean.getMeanOne());
 				pstmt.setDouble(2, yearlyMean.getMeanTwo());
 				pstmt.setDouble(3, yearlyMean.getMeanThree());
-				pstmt.setString(4, accountId);
-				pstmt.setString(5, studentId);
-				pstmt.setString(6, year);
+				pstmt.setString(4, yearlyMean.getTermOnePosition());
+				pstmt.setString(5, yearlyMean.getTermTwoPosition());
+				pstmt.setString(6, yearlyMean.getTermThreePosition());
+				pstmt.setString(7, accountId);
+				pstmt.setString(8, studentId);
+				pstmt.setString(9, year);
+				
 				pstmt.executeUpdate(); 
 
 			} catch (SQLException e) {
