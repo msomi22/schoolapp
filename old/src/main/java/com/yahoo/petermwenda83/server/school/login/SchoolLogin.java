@@ -104,6 +104,10 @@ public class SchoolLogin extends HttpServlet {
 				// token
 				ApiCredentials apiKey = new ApiCredentials();
 				// String id, String issuer, String subject, long ttlMillis, String secret
+				
+				//String id, String issuer, String subject, long ttlMillis, String secret
+				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
+						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 
 
 				if (StringUtils.equals(staff.getAcessLevelId(), "C3915245-00EE-4EF4-9898-ACE59683DD60")
