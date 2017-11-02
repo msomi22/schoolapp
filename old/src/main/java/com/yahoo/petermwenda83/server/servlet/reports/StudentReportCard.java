@@ -740,7 +740,8 @@ public class StudentReportCard extends HttpServlet{
 
 						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
-							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
+							
 						}
 
 					}
@@ -784,7 +785,7 @@ public class StudentReportCard extends HttpServlet{
 
 						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
-							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
 
 
@@ -1827,7 +1828,7 @@ public class StudentReportCard extends HttpServlet{
 		perfTable.addCell(t1_form4Position);
 		//*****************************************TERM 1 END
 		//*****************************************TERM 2
-		PdfPCell t2_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_termCell = new PdfPCell(new Paragraph("2" ,timesRomanNarmal4));											
 		t2_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 		PdfPCell t2_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
@@ -1870,7 +1871,7 @@ public class StudentReportCard extends HttpServlet{
 		perfTable.addCell(t2_form4Position);
 		//*****************************************TERM 2 END
 		//*****************************************TERM 3
-		PdfPCell t3_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_termCell = new PdfPCell(new Paragraph("3" ,timesRomanNarmal4));											
 		t3_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 		PdfPCell t3_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											

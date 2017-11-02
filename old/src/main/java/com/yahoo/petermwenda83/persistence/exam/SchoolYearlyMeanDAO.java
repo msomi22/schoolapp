@@ -15,9 +15,9 @@ public interface SchoolYearlyMeanDAO {
 	
 	public YearlyMean getYearlyMean(String accountId,String studentId,String year);
 	
-	public boolean existYearlyMean(String accountId,String studentId,String year);
+	public boolean existYearlyMean(String accountId,String studentId,String classId,String year);
 	
-	public boolean putYearlyMean(YearlyMean yearlyMean,String accountId,String studentId,String year);
+	public boolean putYearlyMean(YearlyMean yearlyMean,String accountId,String studentId,String classId,String year);
 	
 	public List<YearlyMean> getYearlyMean(String accountId, String studentId);
 	

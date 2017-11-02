@@ -728,7 +728,7 @@ public class ReportUtil {
 			}else {
 				code = perfomance.getSubjectId();
 			}
-			logger.info(code); 
+			//logger.info(code); 
 		}
 		
 		
