@@ -383,7 +383,7 @@ function generateReceipt() {
 
 	// window.location="feeReceipt?accountId="+$('#accountId').val()+"&studentId="+$('#studentId').val();
 	window.open("feeReceipt?accountId=" + $('#accountId').val() + "&studentId="
-			+ $('#studentId').val(), "_blank");
+			+ studentId, "_blank");
 }
 
 function showHistory(state) {

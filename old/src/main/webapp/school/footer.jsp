@@ -323,6 +323,8 @@
 		 
 		 alert(window.location);
 		}
+	
+	console.log(window.location);
 </script>
 
 

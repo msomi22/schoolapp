@@ -17,7 +17,7 @@ $(document).ready(function(){
 		searching : false,
 		"bPaginate" : false,
 		"bLengthChange" : false,
-		"scrollY" : "400px",
+		"scrollY" : "350px",
 		"scrollCollapse" : true
 	});
 })
