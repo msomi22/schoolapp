@@ -192,8 +192,10 @@ public class StudentReportCard extends HttpServlet{
 		paper123Id = StringUtils.trimToEmpty(request.getParameter("paper123Id")); 
 		saveMean = StringUtils.trimToEmpty(request.getParameter("saveMean")); //1 means save, 
 		graphType = StringUtils.trimToEmpty(request.getParameter("graphType")); //1 means bar,  0 line
+
 		/*saveMean = "1";
 		graphType = "1";*/
+
 		
 		//check for hide points
 		hidePoints = hidePts ? true : false;
@@ -1417,6 +1419,141 @@ public class StudentReportCard extends HttpServlet{
 
 										position++;
 										prevtotal=total;
+										
+										
+										PdfPTable header = new PdfPTable(4);   
+										header.setWidthPercentage(90); 
+										header.setWidths(new int[]{30,30,30,30}); 
+										
+										PdfPCell cell1 = new PdfPCell(new Paragraph("Form 1", timesRomanNarmal6));
+										cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										cell1.setBackgroundColor(baseColor);
+
+										PdfPCell cell2 = new PdfPCell(new Paragraph("Form 2", timesRomanNarmal6));
+										cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										cell2.setBackgroundColor(baseColor);
+
+										PdfPCell cell3 = new PdfPCell(new Paragraph("Form 3", timesRomanNarmal6));
+										cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										cell3.setBackgroundColor(baseColor);
+										
+										PdfPCell cell4 = new PdfPCell(new Paragraph("Form 4", timesRomanNarmal6));
+										cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										cell4.setBackgroundColor(baseColor);
+										
+										header.addCell(cell1);
+										header.addCell(cell2);
+										header.addCell(cell3);
+										header.addCell(cell4); 
+										
+										
+										
+										PdfPTable perfTable = new PdfPTable(12);   
+										perfTable.setWidthPercentage(90); 
+										perfTable.setWidths(new int[]{8,12,10,8,12,10,8,12,10,8,12,10});   
+										//*************
+										PdfPCell termCell1 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
+										termCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										termCell1.setBackgroundColor(baseColor);
+
+										PdfPCell meanCell1 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
+										meanCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell1.setBackgroundColor(baseColor);
+
+										PdfPCell posCell1 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
+										posCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell1.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell termCell2 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
+										termCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										termCell2.setBackgroundColor(baseColor);
+
+										PdfPCell meanCell2 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
+										meanCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell2.setBackgroundColor(baseColor);
+
+										PdfPCell posCell2 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
+										posCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell2.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell termCell3 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
+										termCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										termCell3.setBackgroundColor(baseColor);
+
+										PdfPCell meanCell3 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
+										meanCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell3.setBackgroundColor(baseColor);
+
+										PdfPCell posCell3 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
+										posCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell3.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell termCell4 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
+										termCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										termCell4.setBackgroundColor(baseColor);
+
+										PdfPCell meanCell4 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
+										meanCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell4.setBackgroundColor(baseColor);
+
+										PdfPCell posCell4 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
+										posCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell4.setBackgroundColor(baseColor);
+										
+										perfTable.addCell(termCell1);
+										perfTable.addCell(meanCell1);
+										perfTable.addCell(posCell1);
+										
+										perfTable.addCell(termCell2);
+										perfTable.addCell(meanCell2);
+										perfTable.addCell(posCell2);
+										
+										perfTable.addCell(termCell3);
+										perfTable.addCell(meanCell3);
+										perfTable.addCell(posCell3);
+										
+										perfTable.addCell(termCell4);
+										perfTable.addCell(meanCell4);
+										perfTable.addCell(posCell4);
+										
+										for(int x=0;x<9;x++) {
+											
+											PdfPCell cell11 = new PdfPCell(new Paragraph("1",timesRomanNarmal4));											
+											cell11.setHorizontalAlignment(Element.ALIGN_LEFT);
+											
+											PdfPCell cell22 = new PdfPCell(new Paragraph("10.56",timesRomanNarmal4));											
+											cell22.setHorizontalAlignment(Element.ALIGN_LEFT);
+											
+											PdfPCell cell33 = new PdfPCell(new Paragraph("1 / 30",timesRomanNarmal4));											
+											cell33.setHorizontalAlignment(Element.ALIGN_LEFT);
+											
+											perfTable.addCell(cell11);
+											perfTable.addCell(cell22);
+											perfTable.addCell(cell33);
+											
+										}
+
+										
+										//add performance table TODO
+										/**
+										 * FORM xx    FORM yy ...
+										 * term mean position ...
+										 * 1
+										 * 2
+										 * 3
+										 */
+										
+										List<YearlyMean> yearlyMeanList  = new ArrayList<>();
+										if(!yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId()).isEmpty()) {
+											yearlyMeanList = yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId());
+										}
+										
+										
+										
+										
+										
+										
+										
 
 										document.add(examTable);
 
@@ -1436,6 +1573,9 @@ public class StudentReportCard extends HttpServlet{
 										document.add(new Paragraph("\n"));
 
 										document.add(footerTable);
+										document.add(header);
+										document.add(perfTable);
+										
 
 										document.newPage();
 

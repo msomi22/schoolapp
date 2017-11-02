@@ -7,12 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
+import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -184,6 +186,33 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 		}
 
 		return success;
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolYearlyMeanDAO#getYearlyMean(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<YearlyMean> getYearlyMean(String accountId, String studentId) {
+		List<YearlyMean> list = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM YearlyMean WHERE accountId =? AND studentId =? ORDER BY year DESC;");  
+				) {
+			
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+		
+			try(ResultSet rset = pstmt.executeQuery();){
+
+				list = beanProcessor.toBeanList(rset, YearlyMean.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying YearlyMean List for accountId " + accountId + " , studentId " + studentId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return list;
 	}
 
 	
