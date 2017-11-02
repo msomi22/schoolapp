@@ -486,10 +486,14 @@ ALTER TABLE sysConfig OWNER TO school;
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES Student(uuid),
+    streamId text REFERENCES Stream(uuid),  
     year text,
     meanOne float, 
     meanTwo float, 
-    meanThree float 
+    meanThree float,
+    termOnePosition text,
+    termTwoPosition text,
+    termThreePosition text
    
    
 );

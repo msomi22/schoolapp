@@ -486,6 +486,7 @@ ALTER TABLE sysConfig OWNER TO school;
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES Student(uuid),
+    classId text REFERENCES classRoom(uuid),
     year text,
     meanOne float, 
     meanTwo float, 

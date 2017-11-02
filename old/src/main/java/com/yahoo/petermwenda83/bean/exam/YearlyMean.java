@@ -18,6 +18,7 @@ import com.yahoo.petermwenda83.bean.StorableBean;
 public class YearlyMean extends StorableBean{
 	
 	private String studentId;
+	private String classId;
 	private String year;
 	private double meanOne;
 	private double meanTwo;
@@ -28,6 +29,7 @@ public class YearlyMean extends StorableBean{
 	
 	public YearlyMean() {
 		studentId = "";
+		classId = "";
 		year = "";
 		meanOne = 0;
 		meanTwo = 0;
@@ -37,14 +39,12 @@ public class YearlyMean extends StorableBean{
 		termThreePosition = "";
 	}
 	
-	
 	/**
 	 * @return the studentId
 	 */
 	public String getStudentId() {
 		return studentId;
 	}
-
 
 	/**
 	 * @param studentId the studentId to set
@@ -53,6 +53,20 @@ public class YearlyMean extends StorableBean{
 		this.studentId = studentId;
 	}
 
+	
+	/**
+	 * @return the classId
+	 */
+	public String getClassId() {
+		return classId;
+	}
+
+	/**
+	 * @param classId the classId to set
+	 */
+	public void setClassId(String classId) {
+		this.classId = classId;
+	}
 
 	/**
 	 * @return the year
@@ -61,14 +75,12 @@ public class YearlyMean extends StorableBean{
 		return year;
 	}
 
-
 	/**
 	 * @param year the year to set
 	 */
 	public void setYear(String year) {
 		this.year = year;
 	}
-
 
 	/**
 	 * @return the meanOne
@@ -77,14 +89,12 @@ public class YearlyMean extends StorableBean{
 		return meanOne;
 	}
 
-
 	/**
 	 * @param meanOne the meanOne to set
 	 */
 	public void setMeanOne(double meanOne) {
 		this.meanOne = meanOne;
 	}
-
 
 	/**
 	 * @return the meanTwo
@@ -93,14 +103,12 @@ public class YearlyMean extends StorableBean{
 		return meanTwo;
 	}
 
-
 	/**
 	 * @param meanTwo the meanTwo to set
 	 */
 	public void setMeanTwo(double meanTwo) {
 		this.meanTwo = meanTwo;
 	}
-
 
 	/**
 	 * @return the meanThree
@@ -109,7 +117,6 @@ public class YearlyMean extends StorableBean{
 		return meanThree;
 	}
 
-
 	/**
 	 * @param meanThree the meanThree to set
 	 */
@@ -117,14 +124,12 @@ public class YearlyMean extends StorableBean{
 		this.meanThree = meanThree;
 	}
 
-
 	/**
 	 * @return the termOnePosition
 	 */
 	public String getTermOnePosition() {
 		return termOnePosition;
 	}
-
 
 	/**
 	 * @param termOnePosition the termOnePosition to set
@@ -140,14 +145,12 @@ public class YearlyMean extends StorableBean{
 		return termTwoPosition;
 	}
 
-
 	/**
 	 * @param termTwoPosition the termTwoPosition to set
 	 */
 	public void setTermTwoPosition(String termTwoPosition) {
 		this.termTwoPosition = termTwoPosition;
 	}
-
 
 	/**
 	 * @return the termThreePosition
@@ -156,7 +159,6 @@ public class YearlyMean extends StorableBean{
 		return termThreePosition;
 	}
 
-
 	/**
 	 * @param termThreePosition the termThreePosition to set
 	 */
@@ -164,18 +166,16 @@ public class YearlyMean extends StorableBean{
 		this.termThreePosition = termThreePosition;
 	}
 
-
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "YearlyMean [studentId=" + studentId + ", year=" + year + ", meanOne=" + meanOne + ", meanTwo=" + meanTwo
-				+ ", meanThree=" + meanThree + ", termOnePosition=" + termOnePosition + ", termTwoPosition="
-				+ termTwoPosition + ", termThreePosition=" + termThreePosition + ", getUuid()=" + getUuid()
-				+ ", getAccountId()=" + getAccountId() + "]";
+		return "YearlyMean [studentId=" + studentId + ", classId=" + classId + ", year=" + year + ", meanOne="
+				+ meanOne + ", meanTwo=" + meanTwo + ", meanThree=" + meanThree + ", termOnePosition=" + termOnePosition
+				+ ", termTwoPosition=" + termTwoPosition + ", termThreePosition=" + termThreePosition + ", getUuid()="
+				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
-
 
 	/**
 	 * 

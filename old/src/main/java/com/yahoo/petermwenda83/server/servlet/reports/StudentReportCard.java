@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -62,11 +64,22 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.MiscellanousDAO;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
+import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.FormFour;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.FormOne;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.FormThree;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.FormTwo;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.Forms;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.MP;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.PerformanceTable;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.TermOneObj;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.TermThreeObj;
+import com.yahoo.petermwenda83.server.servlet.reports.test2.TermTwoObj;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
@@ -95,11 +108,14 @@ public class StudentReportCard extends HttpServlet{
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static MiscellanousDAO miscellanousDAO;
 	//private static ClassMeanDAO classMeanDAO;
+	private static PrimaryDAO primaryDAO;
 
 
 	private Font timesRomanNarmal8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private Font timesRomanNarmal6 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private Font timesRomanNarmal4 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+	//private Font timesRomanNarmal6White = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
+
 
 	private Document document;
 	private PdfWriter writer;
@@ -148,6 +164,7 @@ public class StudentReportCard extends HttpServlet{
 		miscellanousDAO = MiscellanousDAO.getInstance();
 
 		//classMeanDAO = ClassMeanDAO.getInstance();
+		primaryDAO = PrimaryDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -194,7 +211,7 @@ public class StudentReportCard extends HttpServlet{
 		graphType = StringUtils.trimToEmpty(request.getParameter("graphType")); //1 means bar,  0 line
 		//saveMean = "1";
 		//graphType = "0";
-		
+
 		//check for hide points
 		hidePoints = hidePts ? true : false;
 		//check for hide grades
@@ -245,6 +262,10 @@ public class StudentReportCard extends HttpServlet{
 
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
+
+			if(exams.length == 3) {
+				saveMean = "1";
+			}
 
 			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";
 			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
@@ -307,7 +328,7 @@ public class StudentReportCard extends HttpServlet{
 	 */
 	private void generateReport(String accountId, String streamId,  String classroomId ,
 			String term, String year, String examType, String paper123Id, String saveMean, String graphType)
-			throws DocumentException {
+					throws DocumentException {
 
 
 
@@ -376,14 +397,14 @@ public class StudentReportCard extends HttpServlet{
 
 			}else{
 
-				
+
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult, paper123Id);
 
 
 				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
 				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true, paper123Id); 
 
-				
+
 
 
 
@@ -407,7 +428,7 @@ public class StudentReportCard extends HttpServlet{
 		}
 
 
-		
+
 
 		//avoid document has no page exception
 		if(!performanceList.isEmpty()){
@@ -444,10 +465,10 @@ public class StudentReportCard extends HttpServlet{
 
 
 			for(Performance2 performance2 : performanceList){
-				
+
 				String avg_points_grade = "0";
 				String avgPoints = "0";
-				
+
 				int mainPoint = performance2.getTotalPoint();
 				int meanTotal = performance2.getTotalMean();
 
@@ -478,8 +499,8 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 				List<Subject> subjects = subjectDAO.getSubjects(accountId);
-				
-				
+
+
 
 				Map<String,Integer> exam1 = performance2.getExam1();
 				Map<String,Integer> exam2 = performance2.getExam2();
@@ -487,13 +508,13 @@ public class StudentReportCard extends HttpServlet{
 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-                 
-					
+
+
 					if(rankWithPoints && !rankWithTotalMarks){
 
 
 						if(grade7subjects && !grade11subjects){
-							
+
 							avg_points_grade = ReportUtil.getGrade(String.valueOf(mainPoint),"subjectId", accountId, subjectDAO, gradingSystemDAO);
 							avgPoints = String.valueOf(mainPoint); 
 
@@ -597,10 +618,16 @@ public class StudentReportCard extends HttpServlet{
 					strm = "";
 				}
 
+				//TODO
+				String kcpe = " , KCPE : ";
+				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
+					kcpe += primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();
+				}
+
 
 				//student form
 				PdfPCell streamInfoCell = new PdfPCell(new Phrase("Class:",timesRomanNarmal8)); 
-				PdfPCell streamDescCell = new PdfPCell(new Phrase(correctClass + strm,  timesRomanNarmal6)); 
+				PdfPCell streamDescCell = new PdfPCell(new Phrase(correctClass + strm + kcpe,  timesRomanNarmal6)); 
 				streamInfoCell.setBorder(Rectangle.NO_BORDER);
 				streamDescCell.setBorder(Rectangle.NO_BORDER);
 				//add student name
@@ -620,10 +647,10 @@ public class StudentReportCard extends HttpServlet{
 
 
 				double mean = 0;
-				
+
 				//TODO
 				String termPosition = "";
-				
+
 
 				String classPositionMSG = "";
 				String streamPositionMSG = "";
@@ -653,7 +680,7 @@ public class StudentReportCard extends HttpServlet{
 
 				}
 
-				
+
 				termPosition = classPositionMSG;
 
 				if(grade7subjects && !grade11subjects){
@@ -667,7 +694,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-							
+
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						}else {
@@ -684,7 +711,7 @@ public class StudentReportCard extends HttpServlet{
 						}else {
 							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
 						}
-						
+
 						yearlyMean.setAccountId(accountId);
 						yearlyMean.setStudentId(student.getUuid());
 						yearlyMean.setYear(year);
@@ -708,7 +735,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-                        //TODO
+						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 						}
@@ -728,7 +755,7 @@ public class StudentReportCard extends HttpServlet{
 						}else {
 							yearlyMean = yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year);
 						}
-						
+
 						yearlyMean.setAccountId(accountId);
 						yearlyMean.setStudentId(student.getUuid());
 						yearlyMean.setYear(year);
@@ -752,7 +779,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-                         //TODO
+						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
 						}
@@ -961,7 +988,7 @@ public class StudentReportCard extends HttpServlet{
 					if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
 						exam3Score = "";
 					}
-					
+
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 					if(Integer.valueOf(examAverage) > 0){
@@ -1417,12 +1444,57 @@ public class StudentReportCard extends HttpServlet{
 
 										position++;
 										prevtotal=total;
-										
-										
-										PdfPTable header = new PdfPTable(4);   
-										header.setWidthPercentage(90); 
-										header.setWidths(new int[]{30,30,30,30}); 
-										
+
+
+										PdfPTable perfTable = new PdfPTable(9);   
+										perfTable.setWidthPercentage(90); 
+										perfTable.setWidths(new int[]{8,10,10,10,10,10,10,10,10});  
+										//timesRomanNarmal6White.setColor(BaseColor.WHITE); 
+										//*************
+										PdfPCell termCell1 = new PdfPCell(new Paragraph("Term", timesRomanNarmal4));
+										termCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										termCell1.setBackgroundColor(baseColor);
+
+										PdfPCell meanCell1 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal4));
+										meanCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell1.setBackgroundColor(baseColor);
+
+										PdfPCell posCell1 = new PdfPCell(new Paragraph("Position", timesRomanNarmal4));
+										posCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell1.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell meanCell2 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal4));
+										meanCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell2.setBackgroundColor(baseColor);
+
+										PdfPCell posCell2 = new PdfPCell(new Paragraph("Position", timesRomanNarmal4));
+										posCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell2.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell meanCell3 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal4));
+										meanCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell3.setBackgroundColor(baseColor);
+
+										PdfPCell posCell3 = new PdfPCell(new Paragraph("Position", timesRomanNarmal4));
+										posCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell3.setBackgroundColor(baseColor);
+										//*************
+										PdfPCell meanCell4 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal4));
+										meanCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										meanCell4.setBackgroundColor(baseColor);
+
+										PdfPCell posCell4 = new PdfPCell(new Paragraph("Position", timesRomanNarmal4));
+										posCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+										posCell4.setBackgroundColor(baseColor);
+
+										PdfPTable titleTable = new PdfPTable(5);   
+										titleTable.setWidthPercentage(90); 
+										titleTable.setWidths(new int[]{8,20,20,20,20});   
+
+										PdfPCell cell0 = new PdfPCell(new Paragraph("", timesRomanNarmal6));
+										cell0.setHorizontalAlignment(Element.ALIGN_LEFT);
+										//cell0.setBackgroundColor(baseColor);
+
 										PdfPCell cell1 = new PdfPCell(new Paragraph("Form 1", timesRomanNarmal6));
 										cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
 										cell1.setBackgroundColor(baseColor);
@@ -1434,129 +1506,238 @@ public class StudentReportCard extends HttpServlet{
 										PdfPCell cell3 = new PdfPCell(new Paragraph("Form 3", timesRomanNarmal6));
 										cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
 										cell3.setBackgroundColor(baseColor);
-										
+
 										PdfPCell cell4 = new PdfPCell(new Paragraph("Form 4", timesRomanNarmal6));
 										cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 										cell4.setBackgroundColor(baseColor);
-										
-										header.addCell(cell1);
-										header.addCell(cell2);
-										header.addCell(cell3);
-										header.addCell(cell4); 
-										
-										
-										
-										PdfPTable perfTable = new PdfPTable(12);   
-										perfTable.setWidthPercentage(90); 
-										perfTable.setWidths(new int[]{8,12,10,8,12,10,8,12,10,8,12,10});   
-										//*************
-										PdfPCell termCell1 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
-										termCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-										termCell1.setBackgroundColor(baseColor);
 
-										PdfPCell meanCell1 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
-										meanCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-										meanCell1.setBackgroundColor(baseColor);
+										titleTable.addCell(cell0);
+										titleTable.addCell(cell1);
+										titleTable.addCell(cell2); 
+										titleTable.addCell(cell3);
+										titleTable.addCell(cell4);
 
-										PdfPCell posCell1 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
-										posCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-										posCell1.setBackgroundColor(baseColor);
-										//*************
-										PdfPCell termCell2 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
-										termCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-										termCell2.setBackgroundColor(baseColor);
 
-										PdfPCell meanCell2 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
-										meanCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-										meanCell2.setBackgroundColor(baseColor);
 
-										PdfPCell posCell2 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
-										posCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-										posCell2.setBackgroundColor(baseColor);
-										//*************
-										PdfPCell termCell3 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
-										termCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-										termCell3.setBackgroundColor(baseColor);
-
-										PdfPCell meanCell3 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
-										meanCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-										meanCell3.setBackgroundColor(baseColor);
-
-										PdfPCell posCell3 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
-										posCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-										posCell3.setBackgroundColor(baseColor);
-										//*************
-										PdfPCell termCell4 = new PdfPCell(new Paragraph("Term", timesRomanNarmal6));
-										termCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
-										termCell4.setBackgroundColor(baseColor);
-
-										PdfPCell meanCell4 = new PdfPCell(new Paragraph("Mean", timesRomanNarmal6));
-										meanCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
-										meanCell4.setBackgroundColor(baseColor);
-
-										PdfPCell posCell4 = new PdfPCell(new Paragraph("Position", timesRomanNarmal6));
-										posCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
-										posCell4.setBackgroundColor(baseColor);
-										
 										perfTable.addCell(termCell1);
+
 										perfTable.addCell(meanCell1);
 										perfTable.addCell(posCell1);
-										
-										perfTable.addCell(termCell2);
+
 										perfTable.addCell(meanCell2);
 										perfTable.addCell(posCell2);
-										
-										perfTable.addCell(termCell3);
+
 										perfTable.addCell(meanCell3);
 										perfTable.addCell(posCell3);
-										
-										perfTable.addCell(termCell4);
+
 										perfTable.addCell(meanCell4);
 										perfTable.addCell(posCell4);
-										
-										for(int x=0;x<9;x++) {
-											
-											PdfPCell cell11 = new PdfPCell(new Paragraph("1",timesRomanNarmal4));											
-											cell11.setHorizontalAlignment(Element.ALIGN_LEFT);
-											
-											PdfPCell cell22 = new PdfPCell(new Paragraph("10.56",timesRomanNarmal4));											
-											cell22.setHorizontalAlignment(Element.ALIGN_LEFT);
-											
-											PdfPCell cell33 = new PdfPCell(new Paragraph("1 / 30",timesRomanNarmal4));											
-											cell33.setHorizontalAlignment(Element.ALIGN_LEFT);
-											
-											perfTable.addCell(cell11);
-											perfTable.addCell(cell22);
-											perfTable.addCell(cell33);
-											
-										}
 
-										
 										//add performance table TODO
-										/**
-										 * FORM xx    FORM yy ...
-										 * term mean position ...
-										 * 1
-										 * 2
-										 * 3
-										 */
-										
+
+										PerformanceTable performanceT = new PerformanceTable();
+
+
 										List<YearlyMean> yearlyMeanList  = new ArrayList<>();
 										if(!yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId()).isEmpty()) {
 											yearlyMeanList = yearlyMeanDAO.getYearlyMean(accountId, performance2.getStudentId());
 										}
-										
-										
-										
-										
-										
-										
-										
+
+										if(!yearlyMeanList.isEmpty()) {
+
+											yearlyMeanList.parallelStream().forEach(yearlymean ->{
+												
+												
+											
+												if(StringUtils.equals(yearlymean.getClassId(), "FORM 1")) {
+													
+													TermOneObj t1 = new TermOneObj();
+													Forms forms_t1 = new Forms(); ///
+													
+													FormOne formone_t1 = new FormOne(); 
+													FormOne formone_t2 = new FormOne(); 
+													FormOne formone_t3 = new FormOne(); 
+													
+													MP mp_t1 = new MP();
+													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setPos(yearlymean.getTermOnePosition()); 
+													formone_t1.setMp(mp_t1);
+													forms_t1.setFormOne(formone_t1);
+													t1.setForms(forms_t1); 
+
+
+													TermTwoObj t2 = new TermTwoObj();
+													Forms forms_t2 = new Forms();
+													
+													MP mp_t2 = new MP();
+													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
+													formone_t2.setMp(mp_t2);
+													forms_t2.setFormOne(formone_t2);
+													t2.setForms(forms_t2); 
+													
+													
+													TermThreeObj t3 = new TermThreeObj();
+													Forms forms_t3 = new Forms();
+													
+													MP mp_t3 = new MP();
+													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setPos(yearlymean.getTermThreePosition()); 
+													formone_t3.setMp(mp_t3);
+													forms_t3.setFormOne(formone_t3);
+													t3.setForms(forms_t3); 
+
+													performanceT.setTermOneObj(t1);
+													performanceT.setTermTwoObj(t2);
+													performanceT.setTermThreeObj(t3);
+													
+												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 2")) {
+													
+
+													
+													TermOneObj t1 = new TermOneObj();
+													Forms forms_t1 = new Forms(); ///
+													
+													FormTwo formtwo_t1 = new FormTwo(); 
+													FormTwo formtwo_t2 = new FormTwo(); 
+													FormTwo formtwo_t3 = new FormTwo(); 
+													
+													MP mp_t1 = new MP();
+													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setPos(yearlymean.getTermOnePosition()); 
+													formtwo_t1.setMp(mp_t1);
+													forms_t1.setFormTwo(formtwo_t1);
+													t1.setForms(forms_t1); 
+
+
+													TermTwoObj t2 = new TermTwoObj();
+													Forms forms_t2 = new Forms();
+													
+													MP mp_t2 = new MP();
+													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
+													formtwo_t2.setMp(mp_t2);
+													forms_t2.setFormTwo(formtwo_t2);
+													t2.setForms(forms_t2); 
+													
+													
+													TermThreeObj t3 = new TermThreeObj();
+													Forms forms_t3 = new Forms();
+													
+													MP mp_t3 = new MP();
+													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setPos(yearlymean.getTermThreePosition()); 
+													formtwo_t3.setMp(mp_t3);
+													forms_t3.setFormTwo(formtwo_t3);
+													t3.setForms(forms_t3); 
+
+													performanceT.setTermOneObj(t1);
+													performanceT.setTermTwoObj(t2);
+													performanceT.setTermThreeObj(t3);
+													
+												
+													
+												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 3")) {
+													
+													TermOneObj t1 = new TermOneObj();
+													Forms forms_t1 = new Forms(); ///
+													
+													FormThree formthree_t1 = new FormThree(); 
+													FormThree formthree_t2 = new FormThree(); 
+													FormThree formthree_t3 = new FormThree(); 
+													
+													MP mp_t1 = new MP();
+													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setPos(yearlymean.getTermOnePosition()); 
+													formthree_t1.setMp(mp_t1);
+													forms_t1.setFormThree(formthree_t1);
+													t1.setForms(forms_t1); 
+
+
+													TermTwoObj t2 = new TermTwoObj();
+													Forms forms_t2 = new Forms();
+													
+													MP mp_t2 = new MP();
+													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
+													formthree_t2.setMp(mp_t2);
+													forms_t2.setFormThree(formthree_t2);
+													t2.setForms(forms_t2); 
+													
+													
+													TermThreeObj t3 = new TermThreeObj();
+													Forms forms_t3 = new Forms();
+													
+													MP mp_t3 = new MP();
+													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setPos(yearlymean.getTermThreePosition()); 
+													formthree_t3.setMp(mp_t3);
+													forms_t3.setFormThree(formthree_t3);
+													t3.setForms(forms_t3); 
+
+													performanceT.setTermOneObj(t1);
+													performanceT.setTermTwoObj(t2);
+													performanceT.setTermThreeObj(t3);
+													
+												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 4")) {
+													
+													TermOneObj t1 = new TermOneObj();
+													Forms forms_t1 = new Forms(); ///
+													
+													FormFour formfour_t1 = new FormFour(); 
+													FormFour formfour_t2 = new FormFour(); 
+													FormFour formfour_t3 = new FormFour(); 
+													
+													MP mp_t1 = new MP();
+													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setPos(yearlymean.getTermOnePosition()); 
+													formfour_t1.setMp(mp_t1);
+													forms_t1.setFormFour(formfour_t1);
+													t1.setForms(forms_t1); 
+
+
+													TermTwoObj t2 = new TermTwoObj();
+													Forms forms_t2 = new Forms();
+													
+													MP mp_t2 = new MP();
+													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
+													formfour_t2.setMp(mp_t2);
+													forms_t2.setFormFour(formfour_t2);
+													t2.setForms(forms_t2); 
+													
+													
+													TermThreeObj t3 = new TermThreeObj();
+													Forms forms_t3 = new Forms();
+													
+													MP mp_t3 = new MP();
+													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setPos(yearlymean.getTermThreePosition()); 
+													formfour_t3.setMp(mp_t3);
+													forms_t3.setFormFour(formfour_t3);
+													t3.setForms(forms_t3); 
+
+													performanceT.setTermOneObj(t1);
+													performanceT.setTermTwoObj(t2);
+													performanceT.setTermThreeObj(t3);
+													
+												}
+											
+											});
+										}
+
+										generateTable(perfTable, performanceT);
+
+
+
+
+
+
 
 										document.add(examTable);
 
 										document.add(gradesTable);
-										document.add(new Paragraph("\n"));
+										//document.add(new Paragraph("\n"));
 
 										document.add(underline);
 
@@ -1571,9 +1752,9 @@ public class StudentReportCard extends HttpServlet{
 										document.add(new Paragraph("\n"));
 
 										document.add(footerTable);
-										document.add(header);
+										document.add(titleTable);
 										document.add(perfTable);
-										
+
 
 										document.newPage();
 
@@ -1595,6 +1776,143 @@ public class StudentReportCard extends HttpServlet{
 
 
 	/**
+	 * @param perfTable
+	 * @param performanceT 
+	 */
+	private void generateTable(PdfPTable perfTable, PerformanceTable performanceT) {
+		//*****************************************TERM 1
+		PdfPCell t1_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t1_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t1_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t1_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t1_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t1_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t1_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t1_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t1_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t1_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t1_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+		perfTable.addCell(t1_termCell);
+
+		perfTable.addCell(t1_form1Mean);
+		perfTable.addCell(t1_form1Position);
+
+		perfTable.addCell(t1_form2Mean);
+		perfTable.addCell(t1_form2Position);
+
+		perfTable.addCell(t1_form3Mean);
+		perfTable.addCell(t1_form3Position);
+
+		perfTable.addCell(t1_form4Mean);
+		perfTable.addCell(t1_form4Position);
+		//*****************************************TERM 1 END
+		//*****************************************TERM 2
+		PdfPCell t2_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t2_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t2_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t2_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t2_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t2_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t2_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t2_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t2_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t2_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t2_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+		perfTable.addCell(t2_termCell);
+
+		perfTable.addCell(t2_form1Mean);
+		perfTable.addCell(t2_form1Position);
+
+		perfTable.addCell(t2_form2Mean);
+		perfTable.addCell(t2_form2Position);
+
+		perfTable.addCell(t2_form3Mean);
+		perfTable.addCell(t2_form3Position);
+
+		perfTable.addCell(t2_form4Mean);
+		perfTable.addCell(t2_form4Position);
+		//*****************************************TERM 2 END
+		//*****************************************TERM 3
+		PdfPCell t3_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t3_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t3_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t3_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t3_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t3_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t3_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t3_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		t3_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell t3_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		t3_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+		perfTable.addCell(t3_termCell);
+
+		perfTable.addCell(t3_form1Mean);
+		perfTable.addCell(t3_form1Position);
+
+		perfTable.addCell(t3_form2Mean);
+		perfTable.addCell(t3_form2Position);
+
+		perfTable.addCell(t3_form3Mean);
+		perfTable.addCell(t3_form3Position);
+
+		perfTable.addCell(t3_form4Mean);
+		perfTable.addCell(t3_form4Position);
+		//*****************************************TERM 3 END
+	}
+
+
+	/**
 	 * @param accountId
 	 * @param streamId
 	 * @param term
@@ -1605,7 +1923,7 @@ public class StudentReportCard extends HttpServlet{
 			List<Student> studentsList, String examType, boolean classResult, String paper123Id) {
 
 		List<Performance2> performance2List = new ArrayList<>();
-		
+
 		List<Perfomance> exam1  = new ArrayList<>();
 		List<Perfomance> exam2 = new ArrayList<>();
 		List<Perfomance> exam3 = new ArrayList<>();
@@ -1625,9 +1943,9 @@ public class StudentReportCard extends HttpServlet{
 				if(classResult){
 
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
-						
+
 						exam1 = perfomanceDAO.getClassPerformance(accountId, ReportUtil.PAPER123ID, student.getUuid(), class_streamId, term, year);
-						
+
 					}else {
 
 						exam1 = perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
@@ -1663,7 +1981,7 @@ public class StudentReportCard extends HttpServlet{
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
 						//if(!exam1.isEmpty()) {
-							totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
 						//}
 
 
@@ -1677,7 +1995,7 @@ public class StudentReportCard extends HttpServlet{
 
 				}
 
-				
+
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
 
@@ -1700,7 +2018,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) || StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)){
-					
+
 					totalPoint = totalExam1.getTotalPoints();
 					totalMeans = totalExam1.getTotalMean();
 
@@ -1796,45 +2114,45 @@ public class StudentReportCard extends HttpServlet{
 
 
 			if(totalMeans > 0 || totalPoint > 0){
-				
+
 				Performance2 performance2 = new Performance2();
-				
-				
+
+
 				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
-					
+
 					performance2.setExam1(totalExam1.getPaper1Map());
 					performance2.setExam2(totalExam1.getPaper2Map());
 					performance2.setExam3(totalExam1.getPaper3Map()); 
-					
+
 					performance2.setExam1TotalPoints(totalExam1.getTotalPoints());
 					performance2.setExam2TotalPoints(totalExam1.getTotalPoints());
 					performance2.setExam3TotalPoints(totalExam1.getTotalPoints());
-					
+
 				}else {
-					
+
 					performance2.setExam1(totalExam1.getPerfomanceMap());
 					performance2.setExam2(totalExam2.getPerfomanceMap());
 					performance2.setExam3(totalExam3.getPerfomanceMap()); 
-					
+
 					performance2.setExam1TotalPoints(totalExam1.getTotalPoints());
 					performance2.setExam2TotalPoints(totalExam2.getTotalPoints());
 					performance2.setExam3TotalPoints(totalExam3.getTotalPoints());
-					
+
 				}
-	
-					performance2.setStudentId(student.getUuid());
-					performance2.setTotalMean(totalMeans); 
-					performance2.setTotalPoint(totalPoint);
-					performance2.setStreamId(student.getCurrentStream()); 
-					performance2.setClassroomId(class_streamId); 
-             
-					performance2List.add(performance2);
-				
+
+				performance2.setStudentId(student.getUuid());
+				performance2.setTotalMean(totalMeans); 
+				performance2.setTotalPoint(totalPoint);
+				performance2.setStreamId(student.getCurrentStream()); 
+				performance2.setClassroomId(class_streamId); 
+
+				performance2List.add(performance2);
+
 
 			}
-			
+
 		}
-		
+
 		return performance2List;
 
 	}
