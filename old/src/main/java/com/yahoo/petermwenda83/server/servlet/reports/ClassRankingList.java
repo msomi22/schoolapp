@@ -928,7 +928,7 @@ public class ClassRankingList extends HttpServlet{
 
 		                 //TODO
 						if(StringUtils.equals(saveMean, "1")) {
-							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
 						
 
@@ -969,7 +969,7 @@ public class ClassRankingList extends HttpServlet{
 
 		                 //TODO
 						if(StringUtils.equals(saveMean, "1")) {
-							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
 
 					}
@@ -1016,7 +1016,7 @@ public class ClassRankingList extends HttpServlet{
 
 	                 //TODO
 					if(StringUtils.equals(saveMean, "1")) {
-						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), year);
+						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 					}
 					
 					

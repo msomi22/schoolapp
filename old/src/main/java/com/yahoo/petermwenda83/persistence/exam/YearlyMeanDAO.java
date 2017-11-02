@@ -14,7 +14,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
-import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -82,33 +81,36 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 
 
 	@Override
-	public boolean existYearlyMean(String accountId,String studentId,String year) {
+	public boolean existYearlyMean(String accountId,String studentId,String classId,String year) {
 		boolean studentexist = false;
 
 		String dbAccountId = "";
 		String dbStudentId = "";
+		String dbclassId = "";
 		String dbYear = "";
 
 		ResultSet rset = null;
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM YearlyMean"
-						+ " WHERE accountId = ? AND studentId =? AND year =?;");       
+						+ " WHERE accountId = ? AND studentId =? AND classId =? AND year =?;");       
 
 				){
 
 			pstmt.setString(1, accountId); 
 			pstmt.setString(2, studentId); 
-			pstmt.setString(3, year); 
+			pstmt.setString(3, classId); 
+			pstmt.setString(4, year); 
 			rset = pstmt.executeQuery();
 
 			if(rset.next()){
 				dbAccountId = rset.getString("accountId");
 				dbStudentId = rset.getString("studentId");
+				dbclassId = rset.getString("classId");
 				dbYear = rset.getString("year");
 
 				studentexist = (dbAccountId != accountId &&
-						dbStudentId != studentId && 
+						dbStudentId != studentId && dbclassId != classId && 
 						dbYear != year ) ? true : false;
 
 			}
@@ -127,24 +129,29 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolYearlyMeanDAO#put(com.yahoo.petermwenda83.bean.exam.YearlyMean)
 	 */
 	@Override
-	public boolean putYearlyMean(YearlyMean yearlyMean,String accountId,String studentId,String year) {
+	public boolean putYearlyMean(YearlyMean yearlyMean,String accountId,String studentId,String classId,String year) {
 		boolean success = true;
-		if(!existYearlyMean(accountId,studentId,year)){
+		
+		//System.out.println("******************************* classId : " + classId);
+		
+		if(!existYearlyMean(accountId,studentId,classId,year)){
 			try(   Connection conn = dbutils.getConnection();
 					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO YearlyMean" 
-							+"(uuid,accountId,studentId,year,meanOne,meanTwo,meanThree,termOnePosition,termTwoPosition,termThreePosition) VALUES (?,?,?,?,?,?,?,?,?,?);");
+							+"(uuid,accountId,studentId,classId,year,meanOne,meanTwo,meanThree,termOnePosition,termTwoPosition,termThreePosition) "
+							+ "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
 					){
 
 				pstmt.setString(1, yearlyMean.getUuid());
 				pstmt.setString(2, accountId);
 				pstmt.setString(3, studentId);
-				pstmt.setString(4, year);
-				pstmt.setDouble(5, yearlyMean.getMeanOne());
-				pstmt.setDouble(6, yearlyMean.getMeanTwo());
-				pstmt.setDouble(7, yearlyMean.getMeanThree());
-				pstmt.setString(8, yearlyMean.getTermOnePosition());
-				pstmt.setString(9, yearlyMean.getTermTwoPosition());
-				pstmt.setString(10, yearlyMean.getTermThreePosition());
+				pstmt.setString(4, classId);
+				pstmt.setString(5, year);
+				pstmt.setDouble(6, yearlyMean.getMeanOne());
+				pstmt.setDouble(7, yearlyMean.getMeanTwo());
+				pstmt.setDouble(8, yearlyMean.getMeanThree());
+				pstmt.setString(9, yearlyMean.getTermOnePosition());
+				pstmt.setString(10, yearlyMean.getTermTwoPosition());
+				pstmt.setString(11, yearlyMean.getTermThreePosition());
 
 				pstmt.executeUpdate();
 
@@ -160,7 +167,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 			try (  Connection conn = dbutils.getConnection();
 					PreparedStatement pstmt = conn.prepareStatement("UPDATE YearlyMean SET meanOne=?,"
 							+ " meanTwo=?, meanThree =?, termOnePosition =?, termTwoPosition =?, termThreePosition=?"
-							+ " WHERE accountId = ? AND studentId =?"
+							+ " WHERE accountId = ? AND studentId =? AND classId =? "
 							+ "AND year = ?;");
 					) { 
 				pstmt.setDouble(1, yearlyMean.getMeanOne());
@@ -171,7 +178,8 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 				pstmt.setString(6, yearlyMean.getTermThreePosition());
 				pstmt.setString(7, accountId);
 				pstmt.setString(8, studentId);
-				pstmt.setString(9, year);
+				pstmt.setString(9, classId);
+				pstmt.setString(10, year);
 				
 				pstmt.executeUpdate(); 
 
