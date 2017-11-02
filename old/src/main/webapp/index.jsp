@@ -46,7 +46,7 @@
 					<%
 						String loginErrStr = "";
 					
-				
+				/* 
 
 						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null | session !=null) {
 							loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
@@ -59,7 +59,7 @@
 						     //   response.sendRedirect("index.jsp");
 							
 						
-						}
+						} */
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {
 					%>
@@ -271,6 +271,8 @@
 
 		disableBackButton();
 		
+		/* window.location = location.protocol + "//" + window.location.host
+		+ "/school/schoolLogout"; */
 		
 
 	})
@@ -279,6 +281,10 @@
 		window.history.forward();
 	}
 	setTimeout("disableBackButton()", 0);
+	
+	
+	
+	
 	
 	
 	

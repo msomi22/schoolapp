@@ -212,6 +212,9 @@ public class StudentReportCard extends HttpServlet{
 		//saveMean = "1";
 		//graphType = "0";
 
+		/*saveMean = "1";
+		graphType = "1";*/
+
 		//check for hide points
 		hidePoints = hidePts ? true : false;
 		//check for hide grades
