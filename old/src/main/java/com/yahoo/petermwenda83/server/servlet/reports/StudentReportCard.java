@@ -1551,9 +1551,7 @@ public class StudentReportCard extends HttpServlet{
 
 											yearlyMeanList.parallelStream().forEach(yearlymean ->{
 												
-												
-											
-												if(StringUtils.equals(yearlymean.getClassId(), "FORM 1")) {
+												if(StringUtils.equals(yearlymean.getClassId(), "C143978A-E021-4015-BC67-5A00D6C910D1")) {
 													
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
@@ -1595,7 +1593,7 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
 													
-												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 2")) {
+												}else if(StringUtils.equals(yearlymean.getClassId(), "3E22E428-3155-42F5-B73E-66553ED501C9")) {
 													
 
 													
@@ -1641,7 +1639,7 @@ public class StudentReportCard extends HttpServlet{
 													
 												
 													
-												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 3")) {
+												}else if(StringUtils.equals(yearlymean.getClassId(), "A4BFC2BD-262F-4207-99C8-057D6ADF80C7")) {
 													
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
@@ -1683,7 +1681,7 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
 													
-												}else if(StringUtils.equals(yearlymean.getClassId(), "FORM 4")) {
+												}else if(StringUtils.equals(yearlymean.getClassId(), "14E56350-08DA-45CC-97D9-C225AF74A7AD")) {
 													
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
@@ -1784,6 +1782,8 @@ public class StudentReportCard extends HttpServlet{
 	 * @param performanceT 
 	 */
 	private void generateTable(PdfPTable perfTable, PerformanceTable performanceT) {
+		
+	//	System.out.println(performanceT); 
 		//*****************************************TERM 1
 		PdfPCell t1_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
 		t1_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
