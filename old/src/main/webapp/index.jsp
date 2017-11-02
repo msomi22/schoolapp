@@ -272,10 +272,19 @@
 		disableBackButton();
 		
 		/* window.location = location.protocol + "//" + window.location.host
-		+ "/school/schoolLogout"; */
+		+ "/school/schoolLogout"; 
+		window.onhashchange = function() {
+ //blah blah blah
+}*/
 		
 
 	})
+	
+	window.onhashchange = function() {
+ //blah blah blah
+ 
+		console.log(window.location);
+}
 
 	function disableBackButton() {
 		window.history.forward();

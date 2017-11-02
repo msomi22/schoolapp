@@ -1787,28 +1787,28 @@ public class StudentReportCard extends HttpServlet{
 		PdfPCell t1_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
 		t1_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t1_form1Mean = new PdfPCell(new Paragraph( performanceT.getTermOneObj().getForms().getFormOne().getMp().getMean() ,timesRomanNarmal4));											
 		t1_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t1_form1Position = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormOne().getMp().getPos() ,timesRomanNarmal4));											
 		t1_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t1_form2Mean = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormTwo().getMp().getMean() ,timesRomanNarmal4));											
 		t1_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t1_form2Position = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormTwo().getMp().getPos() ,timesRomanNarmal4));											
 		t1_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t1_form3Mean = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormThree().getMp().getMean() ,timesRomanNarmal4));											
 		t1_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t1_form3Position = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormThree().getMp().getPos() ,timesRomanNarmal4));											
 		t1_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t1_form4Mean = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormFour().getMp().getMean() ,timesRomanNarmal4));											
 		t1_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t1_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t1_form4Position = new PdfPCell(new Paragraph(performanceT.getTermOneObj().getForms().getFormFour().getMp().getPos() ,timesRomanNarmal4));											
 		t1_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 
@@ -1827,31 +1827,31 @@ public class StudentReportCard extends HttpServlet{
 		perfTable.addCell(t1_form4Position);
 		//*****************************************TERM 1 END
 		//*****************************************TERM 2
-		PdfPCell t2_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_termCell = new PdfPCell(new Paragraph("2" ,timesRomanNarmal4));											
 		t2_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t2_form1Mean = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormOne().getMp().getMean() ,timesRomanNarmal4));											
 		t2_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_form1Position = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormOne().getMp().getPos() ,timesRomanNarmal4));											
 		t2_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t2_form2Mean = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormTwo().getMp().getMean() ,timesRomanNarmal4));											
 		t2_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_form2Position = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormTwo().getMp().getPos() ,timesRomanNarmal4));											
 		t2_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t2_form3Mean = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormThree().getMp().getMean() ,timesRomanNarmal4));											
 		t2_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_form3Position = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormThree().getMp().getPos() ,timesRomanNarmal4));											
 		t2_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t2_form4Mean = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormFour().getMp().getMean() ,timesRomanNarmal4));											
 		t2_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t2_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t2_form4Position = new PdfPCell(new Paragraph(performanceT.getTermTwoObj().getForms().getFormFour().getMp().getPos() ,timesRomanNarmal4));											
 		t2_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 
@@ -1870,31 +1870,31 @@ public class StudentReportCard extends HttpServlet{
 		perfTable.addCell(t2_form4Position);
 		//*****************************************TERM 2 END
 		//*****************************************TERM 3
-		PdfPCell t3_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_termCell = new PdfPCell(new Paragraph("3" ,timesRomanNarmal4));											
 		t3_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form1Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t3_form1Mean = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormOne().getMp().getMean() ,timesRomanNarmal4));											
 		t3_form1Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form1Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_form1Position = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormOne().getMp().getPos() ,timesRomanNarmal4));											
 		t3_form1Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form2Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t3_form2Mean = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormTwo().getMp().getMean() ,timesRomanNarmal4));											
 		t3_form2Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form2Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_form2Position = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormTwo().getMp().getPos() ,timesRomanNarmal4));											
 		t3_form2Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form3Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t3_form3Mean = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormThree().getMp().getMean() ,timesRomanNarmal4));											
 		t3_form3Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form3Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_form3Position = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormThree().getMp().getPos() ,timesRomanNarmal4));											
 		t3_form3Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form4Mean = new PdfPCell(new Paragraph(" 10.0" ,timesRomanNarmal4));											
+		PdfPCell t3_form4Mean = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormFour().getMp().getMean(),timesRomanNarmal4));											
 		t3_form4Mean.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-		PdfPCell t3_form4Position = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
+		PdfPCell t3_form4Position = new PdfPCell(new Paragraph(performanceT.getTermThreeObj().getForms().getFormFour().getMp().getPos(),timesRomanNarmal4));											
 		t3_form4Position.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 

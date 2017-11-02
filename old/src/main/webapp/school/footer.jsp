@@ -307,14 +307,22 @@
 		console.log('Heheheh');
 		// sessionStorage.clear();
 
-		disableBackButton();
+	//	disableBackButton();
 
 	})
 
 	function disableBackButton() {
 		window.history.forward();
 	}
-	setTimeout("disableBackButton()", 0);
+	//setTimeout("disableBackButton()", 0);
+	
+	window.onhashchange = function() {
+		 //blah blah blah
+		 
+				console.log(window.location);
+		 
+		 alert(window.location);
+		}
 </script>
 
 
