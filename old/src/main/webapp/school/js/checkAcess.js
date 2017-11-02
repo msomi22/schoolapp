@@ -4,7 +4,7 @@ function checkAccessFee() {
 	if (curentAcessLevel !== 'C3915245-00EE-4EF4-9898-ACE59683DD60'
 			&& curentAcessLevel !== '0DE968C9-7309-C481-58F7-AB6CDB1011EF') {
 		window.location = location.protocol + "//" + window.location.host
-				+ "/school/index.jsp";
+				+ "/school/schoolLogout";
 
 	} else
 		return true
@@ -20,7 +20,7 @@ function checkAccessStudents() {
 
 		console.log(curentAcessLevel);
 		window.location = location.protocol + "//" + window.location.host
-				+ "/school/index.jsp";
+				+ "/school/schoolLogout";
 
 	} else
 		return true
@@ -37,7 +37,7 @@ function checkAccessAcademics() {
 
 		console.log(curentAcessLevel);
 		window.location = location.protocol + "//" + window.location.host
-				+ "/school/index.jsp";
+				+ "/school/schoolLogout";
 
 	} else
 		return true
@@ -51,7 +51,7 @@ function checkAccessStaff() {
 			&& curentAcessLevel !== '0DE968C9-7309-C481-58F7-AB6CDB1011EH'
 			&& curentAcessLevel !== '1CC7F06E-9938-4850-81FB-9CC249C7CFA2') {
 		window.location = location.protocol + "//" + window.location.host
-				+ "/school/index.jsp";
+				+ "/school/schoolLogout";
 
 	} else
 		return true
@@ -70,7 +70,7 @@ function checkAccessControl() {
 
 		console.log(curentAcessLevel);
 		window.location = location.protocol + "//" + window.location.host
-				+ "/school/index.jsp";
+				+ "/school/schoolLogout";
 
 	} else
 		return true

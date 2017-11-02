@@ -5,26 +5,22 @@ function examWarningModal() {
 	setTimeout(function() {
 		$('#examWarning').modal('hide');
 	}, 5000);
-	
-	/*$('.SlectBox').html('');
-	$('.SlectBox')[0].sumo.reload();*/
-	
-	
+
+	/*
+	 * $('.SlectBox').html(''); $('.SlectBox')[0].sumo.reload();
+	 */
+
 	$("#exam").focus();
 	$("#exam").val("");
-	
-	
+
 }
 
-
-$(document).ready(function(){
+$(document).ready(function() {
 	$('#accountId_tbid').val($('#accountId').val());
-	
-	
-	if(checkAccessAcademics())
+
+	if (checkAccessAcademics())
 		fetchClasses();
 })
-
 
 $("#exam")
 		.change(
@@ -36,127 +32,112 @@ $("#exam")
 						$('#smsWarning')
 								.text(
 										'At least one exam and not more than three exams are allowed.');
-						
-						
-						
-						/*var num = $('option').length;
-					    for(var i=0; i<num-1; i++){
-					      $('.SlectBox')[0].sumo.unSelectItem(i);
-					    }
-*/
+
+						/*
+						 * var num = $('option').length; for(var i=0; i<num-1;
+						 * i++){ $('.SlectBox')[0].sumo.unSelectItem(i); }
+						 */
 						var obj = [];
-					    $('option:selected').each(function () {
-					        obj.push($(this).index());
-					    });
+						$('option:selected').each(function() {
+							obj.push($(this).index());
+						});
 
-					    for (var i = 0; i < obj.length; i++) {
-					        $('.SlectBox')[0].sumo.unSelectItem(obj[i]);
-					    }
-						examWarningModal();
-						
+						for (var i = 0; i < obj.length; i++) {
+							$('.SlectBox')[0].sumo.unSelectItem(obj[i]);
 						}
+						examWarningModal();
 
-				
+					}
+
 				});
 
-function validateExamSelected(){
-	
-	
-	if ($("#exam option:selected").length >0) {
+function validateExamSelected() {
+
+	if ($("#exam option:selected").length > 0) {
 
 		var selectedExams = $('#exam option:selected').text();
-		
-		//alert(selectedExams);
+
+		// alert(selectedExams);
 
 		if (selectedExams.includes('PAPER 1')
 				| selectedExams.includes('PAPER 2')
 				| selectedExams.includes('PAPER 3')) {
 
 			if (!(selectedExams.includes('PAPER 1')
-					&& selectedExams.includes('PAPER 2') 
-					&& selectedExams.includes('PAPER 3'))) 
-			{
+					&& selectedExams.includes('PAPER 2') && selectedExams
+					.includes('PAPER 3'))) {
 
-				$('#titleWarning').text(
-						'Exam Papers Number Warning');
+				$('#titleWarning').text('Exam Papers Number Warning');
 
 				$('#smsWarning')
 						.text(
 								'Exam Papers selected must be three i.e PAPER 1, PAPER 2 and PAPER 3');
-				
-				
-				var obj = [];
-			    $('option:selected').each(function () {
-			        obj.push($(this).index());
-			    });
 
-			    for (var i = 0; i < obj.length; i++) {
-			        $('.SlectBox')[0].sumo.unSelectItem(obj[i]);
-			    }
-			    
+				var obj = [];
+				$('option:selected').each(function() {
+					obj.push($(this).index());
+				});
+
+				for (var i = 0; i < obj.length; i++) {
+					$('.SlectBox')[0].sumo.unSelectItem(obj[i]);
+				}
 
 				examWarningModal();
-				
-				
 
-			}else if(selectedExams.includes('PAPER 1')
-					&& selectedExams.includes('PAPER 2') 
-					&& selectedExams.includes('PAPER 3')){
-				
+			} else if (selectedExams.includes('PAPER 1')
+					&& selectedExams.includes('PAPER 2')
+					&& selectedExams.includes('PAPER 3')) {
+
 				$('#examType').val('P123');
+				$('#saveMean').val('1');
+
 				$('#paper123Id').val('C3915245-00EE-4EF4-9898-ACE59683DD60');
 				$('#no_subjects_show').hide(1000);
-			}
-			else{
-				
+			} else {
+
 				$('#examType').val('others');
+				$('#saveMean').val('0');
 				$('#paper123Id').val('');
 				$('#no_subjects_show').show(1000);
 			}
 
-		}
-		else{
-			
+		} else if (selectedExams.includes('END TERM')) {
+			$('#saveMean').val('1');
 			$('#examType').val('others');
 			$('#paper123Id').val('');
+			
+			$('#no_subjects_show').show(1000);
+		} else {
+
+			$('#examType').val('others');
+			$('#paper123Id').val('');
+			$('#saveMean').val('0');
 			$('#no_subjects_show').show(1000);
 		}
 
 	}
 
-	
-	
 }
 
-function hideSubjects(){
-	if ($("#exam option:selected").length >0) {
+function hideSubjects() {
+	if ($("#exam option:selected").length > 0) {
 
 		var selectedExams = $('#exam option:selected').text();
-		
-		
-		
-		if(selectedExams.includes('PAPER 1')
-				&& selectedExams.includes('PAPER 2') 
-				&& selectedExams.includes('PAPER 3')){
-			
-		//	$('#examType').val('P123');
+
+		if (selectedExams.includes('PAPER 1')
+				&& selectedExams.includes('PAPER 2')
+				&& selectedExams.includes('PAPER 3')) {
+
+			// $('#examType').val('P123');
 			$('#no_subjects_show').hide(1000);
-		}else{
-			
-			
+		} else {
+
 			$('#no_subjects_show').show(1000);
-			
-			
-			
-			
-			
+
 		}
-		
-		
-		
+
 	}
-	
-	
+
 }
 
 function redirect(reportType) {
@@ -186,7 +167,6 @@ function scopeSwap(scopeType) {
 	}
 }
 
-
 function scopeSwapTBID(scopeType) {
 
 	if (scopeType == "class_tbid") {
@@ -200,22 +180,17 @@ function scopeSwapTBID(scopeType) {
 	}
 }
 
+function showTBIDModal() {
 
-function showTBIDModal(){
-	
-	
 	scopeSwapTBID('class_tbid');
 	scopeSwap('class');
-	
+
 	$('#generateReport').get(0).reset();
 	$('#TBIDForm').get(0).reset();
 	$('#TBIDModal').modal('show');
 }
 
-function trace(){
-	
+function trace() {
+
 	console.log(JSON.stringify($('#generateReport').serializeJSON()));
 }
-
-
-
