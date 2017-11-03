@@ -27,7 +27,6 @@ import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.Subject;
-import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
@@ -35,6 +34,7 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.util.performance.comparator.FinalResultMeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PerformanceComparator;
 
 /**
@@ -48,7 +48,7 @@ public class ReportUtil {
 	public static DecimalFormat df2 = new DecimalFormat(".##");
 	public final static double STD_CONSTANT = 1.19;
 	public final static double GRAPH_CONSTANT = 0.12;
-	
+
 	public final static String PAPER123ID = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 
 	public static final int LANG_P1_OUTOF = 60;
@@ -61,7 +61,7 @@ public class ReportUtil {
 
 	public static final int HUMAN_TECH_MATH_P1_OUTOF = 100;
 	public static final int HUMAN_TECH_MATH_P2_OUTOF = 100;
-	
+
 	public static final int PAPER_1_2_CONSTANT = 70;
 	public static final int PAPER_1_2_DIVISOR = 160;
 
@@ -69,34 +69,50 @@ public class ReportUtil {
 
 	public static final String SCOPE_CLASS = "class";
 	public static final String SCOPE_STREAM = "stream";
-	
+
 	public static final String CAT_LANG = "Languages";
 	public static final String CAT_SCI = "Sciences";
 	public static final String CAT_HUM = "Humanities";
 	public static final String CAT_TECH = "Technicals";
 	public static final String CAT_MATH = "Mathematics";
-	
+
 	private static SubCategoryDAO subCategoryDAO2;
 	private static CategoryDAO categoryDAO2;
-	private static Logger logger;// = Logger.getLogger(this.getClass());
-	
-	private static SubjectDAO subDAO;
-	
-	
+	private static Logger logger;
+
+
+	private static GradingSystemDAO gradingSystemDAO;
+	private static SubCategoryDAO subCategoryDAO;
+	private static CategoryDAO categoryDAO;
+	private static SubjectDAO subjectDAO;
+	private static StudentDAO studentDAO;
+	private static YearlyMeanDAO yearlyMeanDAO;
+
+
+
 	static {
 		subCategoryDAO2 = SubCategoryDAO.getInstance();
 		categoryDAO2 = CategoryDAO.getInstance();
+		gradingSystemDAO = GradingSystemDAO.getInstance();
+		gradingSystemDAO = GradingSystemDAO.getInstance();
+		subCategoryDAO = SubCategoryDAO.getInstance();
+		categoryDAO = CategoryDAO.getInstance(); 
+		subjectDAO = SubjectDAO.getInstance();
+		studentDAO = StudentDAO.getInstance();
+
+		yearlyMeanDAO = YearlyMeanDAO.getInstance();
+
 		logger = Logger.getLogger(ReportUtil.class);
-		subDAO = SubjectDAO.getInstance();
 	}
-	
-	
+
+
 
 	/**
+	 * 
 	 * @param accountId
 	 * @param streamId
-	 * @param teacherSubjectDAO 
-	 * @param uuid
+	 * @param subjectId
+	 * @param teacherSubjectDAO
 	 * @return
 	 */
 	public static String getInitials(String accountId, String streamId, String subjectId, TeacherSubjectDAO teacherSubjectDAO) { 
@@ -109,27 +125,23 @@ public class ReportUtil {
 
 
 
-	/**
+	/** 
 	 * 
-	 * @param accountId account unique id
-	 * @param exam exam to rank
-	 * @param subCategoryDAO subject category DAO
-	 * @param categoryDAO category DAO
-	 * @param subjectDAO subject DAO
-	 * @param gradingSystemDAO ranking criteria DAO
-	 * 
-	 * @return student performance object based on the best 7/11 subjects
+	 * @param accountId  accountId account unique id
+	 * @param streamId
+	 * @param exam exam exam to rank
+	 * @param examType
+	 * @return performance object based on the best 7/11 subjects 
 	 */
 
-	public static Performance3 findExamTotalForm234(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
-			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO, ExamDAO examDAO,String examType) {
+	public static Performance3 findExamTotalForm234(String accountId, String streamId, List<Perfomance> exam , String examType) {
 
 		List<Perfomance> finalPerfomanceList = new ArrayList<>();
 		Map<String,Integer> perfomanceMap = new HashMap<>(); 
 		Map<String,Integer> paper1Map = new HashMap<>(); 
 		Map<String,Integer> paper2Map = new HashMap<>(); 
 		Map<String,Integer> paper3Map = new HashMap<>(); 
-		
+
 		Performance3 performance3 = new Performance3();
 
 		if(!exam.isEmpty()){
@@ -150,21 +162,21 @@ public class ReportUtil {
 			List<Perfomance> selectedTechnicalsList = new ArrayList<>();
 
 			for (Perfomance perfomance : filteredExam) {
-			
+
 				if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-					PerformanceP123 performanceP123 = computePaper123(subjectDAO,subCategoryDAO, categoryDAO , accountId, perfomance, gradingSystemDAO);
+					PerformanceP123 performanceP123 = computePaper123( accountId, perfomance);
 					perfomance.setScore(performanceP123.getTotalMean()); 
 					//mm
 				}
-				
+
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
-				
+
 				paper1Map.put(perfomance.getSubjectId(), perfomance.getPaper1());
 				paper2Map.put(perfomance.getSubjectId(), perfomance.getPaper2());
 				paper3Map.put(perfomance.getSubjectId(), perfomance.getPaper3());
-				
+
 				//perfomance.setScore(performanceP123.getTotalMean()); 
-				
+
 
 				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
 				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
@@ -173,6 +185,8 @@ public class ReportUtil {
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
 					selectedLanguagesList.add(perfomance);
 					languagesCount++;
+
+					//JavaLogger.logInfo("____________ languagesCount" + languagesCount);
 
 
 					if (languagesCount > 2) {
@@ -187,6 +201,8 @@ public class ReportUtil {
 					selectedSciencesList.add(perfomance);
 					sciencesCount++;
 
+					//JavaLogger.logInfo("____________ sciencesCount" + sciencesCount);
+
 					if (sciencesCount > 2) {
 						//add remaining subjects if any to technical list
 						Collections.sort(selectedSciencesList, new PerformanceComparator());	
@@ -200,6 +216,8 @@ public class ReportUtil {
 					selectedHumanitiesList.add(perfomance);
 					humanitiesCount++;
 
+					//JavaLogger.logInfo("____________ Humanities" + humanitiesCount);
+
 					if (humanitiesCount > 1) {
 						//add remaining subjects if any to technical list
 						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
@@ -211,6 +229,8 @@ public class ReportUtil {
 				//add all technical
 				else if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
 					selectedTechnicalsList.add(perfomance);
+
+					//JavaLogger.logInfo("____________ Technicals" );
 
 
 				}
@@ -226,7 +246,9 @@ public class ReportUtil {
 							.findAny()
 							.orElse("");
 
-					  finalPerfomanceList.add(perfomance);
+					finalPerfomanceList.add(perfomance);
+
+					// JavaLogger.logInfo("____________ Mathematics" );
 
 					if(StringUtils.isEmpty(subjectId) || StringUtils.isBlank(subjectId)){ 
 						//finalPerfomanceList.add(perfomance);
@@ -255,7 +277,7 @@ public class ReportUtil {
 			performance3.setPaper3Map(paper3Map);
 
 			performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+			performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList)); 
 		}
 
 
@@ -265,19 +287,360 @@ public class ReportUtil {
 
 
 
-/**
- * 
- * @param finalPerfomanceList
- * @param subjectDAO
- * @param subCategoryDAO
- * @param categoryDAO
- * @param examDAO
- * @param gradingSystemDAO
- * @param accountId
- * @return
- */
-	public static PerformanceP123 computeP123(List<Perfomance> finalPerfomanceList, SubjectDAO subjectDAO, 
-			SubCategoryDAO subCategoryDAO, CategoryDAO categoryDAO , ExamDAO examDAO, GradingSystemDAO gradingSystemDAO, String accountId){ 
+	/**
+	 * 
+	 * @param performanceList
+	 * @param accountId
+	 * @param grade11subjects 
+	 * @param grade7subjects 
+	 * @return
+	 */
+	public static List<Performance2> getAverage( List<Performance2> performanceList, String accountId, boolean grade7subjects, boolean grade11subjects) {
+
+		List<Performance2> finalList = new ArrayList<>();
+
+		for(Performance2 performance2 : performanceList){
+
+			Map<String,Integer> exam1 = performance2.getExam1();
+			Map<String,Integer> exam2 = performance2.getExam2();
+			Map<String,Integer> exam3 = performance2.getExam3(); 
+
+			List<Subject> subjects = subjectDAO.getSubjects(accountId);
+
+			List<FinaResult> linaResultList = new ArrayList<>();
+
+			subjects.parallelStream().forEach(subject -> {
+
+				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+				String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+				String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+
+
+
+				if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+					exam1Score = "";
+				}
+				if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+					exam2Score = "";
+				}
+				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+					exam3Score = "";
+				}
+
+
+
+				double average = ReportUtil.findExamAverage2(exam1Score,exam2Score,exam3Score);
+				String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
+				int point =  Integer.valueOf(avgpoint); 
+
+				FinaResult finaResult = new FinaResult();
+				finaResult.setAverage((int)average); 
+				finaResult.setPoint(point);
+				finaResult.setSubjectId(subject.getUuid());
+
+				linaResultList.add(finaResult);
+
+			});
+
+
+			//Student stu = studentDAO.getStudentById(accountId, performance2.getStudentId());
+			//System.out.println(" ______________ " + stu.getRegNo() + " , name : " + stu.getFirstname());
+
+			if(grade7subjects && !grade11subjects) {
+				
+				ExamAvg examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
+				performance2.setTotalMean(examavg.getToatlAverage());
+				performance2.setTotalPoint(examavg.getTotalPoint());
+				finalList.add(performance2);
+
+			}
+
+			if(!grade7subjects && grade11subjects) {
+				
+				ExamAvg examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
+				performance2.setTotalMean(examavg.getToatlAverage());
+				performance2.setTotalPoint(examavg.getTotalPoint());
+				finalList.add(performance2);
+
+			}
+			
+			
+
+
+		}
+
+		return finalList;
+	}
+
+
+	/**
+	 * 
+	 * @param linaResultList
+	 * @param accountId
+	 * @return
+	 */
+	public static ExamAvg examAverage(List<FinaResult> linaResultList , String accountId, String studentId) {
+
+		List<FinaResult> finalPerfomanceList = new ArrayList<>();
+
+		ExamAvg examAvg = new ExamAvg();
+
+		if(!linaResultList.isEmpty()){
+
+			int languagesCount = 0;
+			int sciencesCount = 0;
+			int humanitiesCount = 0;
+
+			List<FinaResult> removedSubjectsPerfomanceList = new ArrayList<>();
+			List<FinaResult> selectedLanguagesList = new ArrayList<>();
+			List<FinaResult> selectedSciencesList = new ArrayList<>();
+			List<FinaResult> selectedHumanitiesList = new ArrayList<>();
+			List<FinaResult> selectedTechnicalsList = new ArrayList<>();
+
+			for (FinaResult finaResult : linaResultList) {
+
+				Subject subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+				String desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+
+				//select two best languages
+				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
+					selectedLanguagesList.add(finaResult);
+					languagesCount++;
+
+
+					if (languagesCount > 2) {
+						Collections.sort(selectedLanguagesList, new FinalResultMeanComparator());
+						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
+
+					}
+
+				}
+
+				//select two best sciences
+				else if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
+					selectedSciencesList.add(finaResult);
+					sciencesCount++;
+
+					if (sciencesCount > 2) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedSciencesList, new FinalResultMeanComparator());	
+						selectedTechnicalsList.add(selectedSciencesList.remove(0));
+
+					}
+
+				}
+
+				//select one best humanity 
+				else if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
+					selectedHumanitiesList.add(finaResult);
+					humanitiesCount++;
+
+					if (humanitiesCount > 1) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedHumanitiesList, new FinalResultMeanComparator());
+						selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
+
+					}
+
+				}
+
+				//add all technical
+				else if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
+					selectedTechnicalsList.add(finaResult);
+
+
+				}
+
+				//add mathematics
+				else if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
+
+					finalPerfomanceList.add(finaResult);
+
+				}
+
+			}
+
+			//select one best from the technical
+			Collections.sort(selectedTechnicalsList, new FinalResultMeanComparator());
+
+			if(selectedTechnicalsList.size() > 0){
+				FinaResult highestTechnical = selectedTechnicalsList.remove(selectedTechnicalsList.size()-1);
+				finalPerfomanceList.add(highestTechnical);
+
+			}
+
+			finalPerfomanceList.addAll(selectedLanguagesList);
+			finalPerfomanceList.addAll(selectedSciencesList);
+			finalPerfomanceList.addAll(selectedHumanitiesList);
+
+			examAvg.setToatlAverage(getTotalAvg(finalPerfomanceList));
+			examAvg.setTotalPoint(getTotalPints(finalPerfomanceList));
+
+		}
+
+		return examAvg;
+	}
+	
+	
+	/**
+	 * 
+	 * @param linaResultList
+	 * @param accountId
+	 * @return
+	 */
+	public static ExamAvg examAverage11(List<FinaResult> linaResultList , String accountId, String studentId) {
+
+		List<FinaResult> finalPerfomanceList = new ArrayList<>();
+
+		ExamAvg examAvg = new ExamAvg();
+
+		if(!linaResultList.isEmpty()){
+
+			int languagesCount = 0;
+			int sciencesCount = 0;
+			int humanitiesCount = 0;
+			int technicalCount = 0;
+
+			List<FinaResult> removedSubjectsPerfomanceList = new ArrayList<>();
+			List<FinaResult> selectedLanguagesList = new ArrayList<>();
+			List<FinaResult> selectedSciencesList = new ArrayList<>();
+			List<FinaResult> selectedHumanitiesList = new ArrayList<>();
+			List<FinaResult> selectedTechnicalsList = new ArrayList<>();
+
+			for (FinaResult finaResult : linaResultList) {
+
+				Subject subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+				String desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+
+				//select two best languages
+				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
+					selectedLanguagesList.add(finaResult);
+					languagesCount++;
+
+
+					if (languagesCount > 2) {
+						Collections.sort(selectedLanguagesList, new FinalResultMeanComparator());
+						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
+
+					}
+
+				}
+
+				//select two best sciences
+				else if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
+					selectedSciencesList.add(finaResult);
+					sciencesCount++;
+
+					if (sciencesCount > 3) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedSciencesList, new FinalResultMeanComparator());	
+						selectedTechnicalsList.add(selectedSciencesList.remove(0));
+
+					}
+
+				}
+
+				//select one best humanity 
+				else if (StringUtils.equalsIgnoreCase(desc, "Humanities")) {
+					selectedHumanitiesList.add(finaResult);
+					humanitiesCount++;
+
+					if (humanitiesCount > 3) {
+						//add remaining subjects if any to technical list
+						Collections.sort(selectedHumanitiesList, new FinalResultMeanComparator());
+						selectedTechnicalsList.add(selectedHumanitiesList.remove(0));
+
+					}
+
+				}
+
+				//add selected technical
+				else if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
+					
+					selectedTechnicalsList.add(finaResult);
+					technicalCount++;
+
+					if(technicalCount > 2){
+						Collections.sort(selectedTechnicalsList, new FinalResultMeanComparator());
+						selectedTechnicalsList.remove(0);
+					}
+
+
+				}
+
+				//add mathematics
+				else if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
+
+					finalPerfomanceList.add(finaResult);
+
+				}
+
+			}
+			
+			
+	
+			//select one best from the technical
+			Collections.sort(selectedTechnicalsList, new FinalResultMeanComparator());
+
+			if(selectedTechnicalsList.size() > 0){
+				FinaResult highestTechnical = selectedTechnicalsList.remove(selectedTechnicalsList.size()-1);
+				finalPerfomanceList.add(highestTechnical);
+
+			}
+
+			finalPerfomanceList.addAll(selectedLanguagesList);
+			finalPerfomanceList.addAll(selectedSciencesList);
+			finalPerfomanceList.addAll(selectedHumanitiesList);
+			//TODO
+			finalPerfomanceList.addAll(selectedTechnicalsList);
+
+			examAvg.setToatlAverage(getTotalAvg(finalPerfomanceList));
+			examAvg.setTotalPoint(getTotalPints(finalPerfomanceList));
+
+		}
+
+		return examAvg;
+	}
+
+	/** 
+	 * 
+	 * @param finalPerfomanceList
+	 * @return
+	 */
+	public static int getTotalAvg(List<FinaResult> finalPerfomanceList) {
+		int total = 0;
+		for( FinaResult result : finalPerfomanceList ){
+
+			total += result.getAverage();
+
+			//System.out.println(" ,,,,,,,,,,,,,,,,,,, avg:  " + result.getAverage() + " , total : " + total); 
+		}
+		return total;
+	}
+
+	/**
+	 * 
+	 * @param finalPerfomanceList
+	 */
+	public static int getTotalPints(List<FinaResult> finalPerfomanceList) {
+		int totalPoint = 0;
+		for( FinaResult result : finalPerfomanceList ){
+			int point = result.getPoint();
+			totalPoint += point;
+
+			//System.out.println(" ,,,,,,,,,,,,,,,,, avg: " + result.getAverage() + " , totalPoint : " + totalPoint); 
+		}
+		return totalPoint;
+	}
+
+
+	/**
+	 * 
+	 * @param finalPerfomanceList
+	 * @param accountId
+	 * @return
+	 */
+	public static PerformanceP123 computeP123(List<Perfomance> finalPerfomanceList, String accountId){ 
 
 		PerformanceP123 performanceP123 = new PerformanceP123();
 		//double total = 0;
@@ -296,9 +659,9 @@ public class ReportUtil {
 
 
 		for(Perfomance perfomance : finalPerfomanceList){
-			
+
 			performanceP123.setStudentId(perfomance.getStudentId()); 
-			
+
 			Subject subject = subjectMap.get(perfomance.getSubjectId());
 			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
 			Category cat = categoryDAO.getCategoryById(accountId, catId);
@@ -312,9 +675,9 @@ public class ReportUtil {
 				grandTotal += sum;
 				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
 
-				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
+				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
-				
+
 
 			}
 
@@ -322,12 +685,12 @@ public class ReportUtil {
 				//check the exam
 				sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
 				grandTotal += sum;
-				
+
 				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
 
-				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
+				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
-				
+
 
 			}
 
@@ -341,13 +704,13 @@ public class ReportUtil {
 						StringUtils.containsIgnoreCase(subject.getDescription(), "Home Science") ||
 						StringUtils.equalsIgnoreCase(subject.getCode(), "COM") || 
 						StringUtils.containsIgnoreCase(subject.getDescription(), "Computer Studies")){
-				
+
 					sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
 					grandTotal += sum;
-					
+
 					//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
 
-					int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
+					int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 					grandPoints += point;
 
 
@@ -356,10 +719,10 @@ public class ReportUtil {
 
 					sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
 					grandTotal += sum;
-					
+
 					//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
 
-					int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
+					int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 					grandPoints += point;
 
 				}
@@ -372,46 +735,41 @@ public class ReportUtil {
 				//check the exam
 				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
 				grandTotal += sum;
-				
+
 				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
 
-				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
+				int point = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
-				
+
 			}
-			
+
 
 		}
-		
-		
-		
+
+
+
 		performanceP123.setTotalMean((int)Math.round(grandTotal));
 		performanceP123.setTotalPoints(grandPoints); 
-		
-		
+
+
 		return performanceP123;
 
 	}
 
-	
+
 	/**
 	 * 
-	 * @param finalPerfomanceList
-	 * @param subjectDAO
-	 * @param subCategoryDAO
-	 * @param categoryDAO
-	 * @param examDAO
-	 * @param gradingSystemDAO
 	 * @param accountId
+	 * @param perfomance
+	 * @return
 	 */
-	public static PerformanceP123 computePaper123(SubjectDAO subjectDAO,SubCategoryDAO subCategoryDAO, CategoryDAO categoryDAO , String accountId,
-			Perfomance perfomance, GradingSystemDAO gradingSystemDAO) {
-	
-		
+	public static PerformanceP123 computePaper123(String accountId,Perfomance perfomance) {
+
+
 		PerformanceP123 performanceP123 = new PerformanceP123();
 		int points = 0;
 		double sum = 0;
-		
+
 		List<Subject> subjects = subjectDAO.getSubjects(accountId);
 
 		Map<String,Subject> subjectMap = new HashMap<>();
@@ -420,108 +778,102 @@ public class ReportUtil {
 		}
 
 
-			Subject subject = subjectMap.get(perfomance.getSubjectId());
-			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
-			Category cat = categoryDAO.getCategoryById(accountId, catId);
+		Subject subject = subjectMap.get(perfomance.getSubjectId());
+		String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
+		Category cat = categoryDAO.getCategoryById(accountId, catId);
 
 
-			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
-				
-				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2() + perfomance.getPaper3()) / 2; 
-				points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
-				
-				performanceP123.setStudentId(perfomance.getStudentId());
-				performanceP123.setTotalMean((int)Math.round(sum)); 
-				performanceP123.setTotalPoints(points);
-				
-				return performanceP123;
-				
+		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 
-			}
+			sum = (double)(perfomance.getPaper1() + perfomance.getPaper2() + perfomance.getPaper3()) / 2; 
+			points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 
-			if(StringUtils.equals(cat.getDescription(), "Sciences")){
-				
-				sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
-				points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
-				
-				performanceP123.setStudentId(perfomance.getStudentId());
-				performanceP123.setTotalMean((int)Math.round(sum)); 
-				performanceP123.setTotalPoints(points);
-				
-				return performanceP123;
+			performanceP123.setStudentId(perfomance.getStudentId());
+			performanceP123.setTotalMean((int)Math.round(sum)); 
+			performanceP123.setTotalPoints(points);
 
-
-			}
-
-
-			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Technicals")){
-
-
-				if(StringUtils.equalsIgnoreCase(subject.getCode(), "AGR") || 
-						StringUtils.containsIgnoreCase(subject.getDescription(), "Agriculture") || 
-						StringUtils.equalsIgnoreCase(subject.getCode(), "HSC") || 
-						StringUtils.containsIgnoreCase(subject.getDescription(), "Home Science") ||
-						StringUtils.equalsIgnoreCase(subject.getCode(), "COM") || 
-						StringUtils.containsIgnoreCase(subject.getDescription(), "Computer Studies")){
-				
-					sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
-					points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
-					
-					performanceP123.setStudentId(perfomance.getStudentId());
-					performanceP123.setTotalMean((int)Math.round(sum)); 
-					performanceP123.setTotalPoints(points);
-					
-					return performanceP123;
-
-				}else{
-
-
-					sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
-					points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
-					
-					performanceP123.setStudentId(perfomance.getStudentId());
-					performanceP123.setTotalMean((int)Math.round(sum)); 
-					performanceP123.setTotalPoints(points);
-					
-					return performanceP123;
-
-				}
-
-			}
-
-
-			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || 
-					StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
-				
-				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
-				points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
-				
-				performanceP123.setStudentId(perfomance.getStudentId());
-				performanceP123.setTotalMean((int)Math.round(sum)); 
-				performanceP123.setTotalPoints(points);
-				
-				return performanceP123;
-				
-			}
-			
 			return performanceP123;
-	
-	}
 
+
+		}
+
+		if(StringUtils.equals(cat.getDescription(), "Sciences")){
+
+			sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
+			points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+
+			performanceP123.setStudentId(perfomance.getStudentId());
+			performanceP123.setTotalMean((int)Math.round(sum)); 
+			performanceP123.setTotalPoints(points);
+
+			return performanceP123;
+
+
+		}
+
+
+		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Technicals")){
+
+
+			if(StringUtils.equalsIgnoreCase(subject.getCode(), "AGR") || 
+					StringUtils.containsIgnoreCase(subject.getDescription(), "Agriculture") || 
+					StringUtils.equalsIgnoreCase(subject.getCode(), "HSC") || 
+					StringUtils.containsIgnoreCase(subject.getDescription(), "Home Science") ||
+					StringUtils.equalsIgnoreCase(subject.getCode(), "COM") || 
+					StringUtils.containsIgnoreCase(subject.getDescription(), "Computer Studies")){
+
+				sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
+				points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+
+				performanceP123.setStudentId(perfomance.getStudentId());
+				performanceP123.setTotalMean((int)Math.round(sum)); 
+				performanceP123.setTotalPoints(points);
+
+				return performanceP123;
+
+			}else{
+
+
+				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
+				points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+
+				performanceP123.setStudentId(perfomance.getStudentId());
+				performanceP123.setTotalMean((int)Math.round(sum)); 
+				performanceP123.setTotalPoints(points);
+
+				return performanceP123;
+
+			}
+
+		}
+
+
+		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || 
+				StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
+
+			sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
+			points = getPoints(String.valueOf((int)Math.round(sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+
+			performanceP123.setStudentId(perfomance.getStudentId());
+			performanceP123.setTotalMean((int)Math.round(sum)); 
+			performanceP123.setTotalPoints(points);
+
+			return performanceP123;
+
+		}
+
+		return performanceP123;
+
+	}
 
 	/**
 	 * 
 	 * @param accountId
+	 * @param streamId
 	 * @param exam
-	 * @param subCategoryDAO
-	 * @param categoryDAO
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
 	 * @return
 	 */
-
-	public static Performance3 findExamTotalForm1(String accountId, String streamId, List<Perfomance> exam , SubCategoryDAO subCategoryDAO,
-			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO) {
+	public static Performance3 findExamTotalForm1(String accountId, String streamId, List<Perfomance> exam ) {
 
 
 
@@ -562,6 +914,8 @@ public class ReportUtil {
 					selectedLanguagesList.add(perfomance);
 					languagesCount++;
 
+					//System.out.println("____________" + " Languages " + perfomance.getSubjectId() + " *** "+ perfomance.getScore());
+
 
 					if (languagesCount > 2) {
 						Collections.sort(selectedLanguagesList, new PerformanceComparator());
@@ -574,6 +928,8 @@ public class ReportUtil {
 				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
 					selectedSciencesList.add(perfomance);
 					sciencesCount++;
+
+					//System.out.println("____________" + " Sciences " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
 
 					if (sciencesCount > 3) {
 						//add remaining subjects if any to technical list
@@ -588,6 +944,8 @@ public class ReportUtil {
 					selectedHumanitiesList.add(perfomance);
 					humanitiesCount++;
 
+					//System.out.println("____________" + " Humanities " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
+
 					if (humanitiesCount > 3) {
 						//add remaining subjects if any to technical list
 						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
@@ -601,6 +959,8 @@ public class ReportUtil {
 					selectedTechnicalsList.add(perfomance);
 					technicalCount++;
 
+					//System.out.println("____________" + " Technicals " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
+
 					if(technicalCount > 2){
 						Collections.sort(selectedTechnicalsList, new PerformanceComparator());
 						selectedTechnicalsList.remove(0);
@@ -612,13 +972,14 @@ public class ReportUtil {
 				//add mathematics
 				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
 					finalPerfomanceList.add(perfomance);
+					//System.out.println("____________" + " Mathematics " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
 
 
 				}
 
 			}//end for each loop
 
-
+//TODO
 			finalPerfomanceList.addAll(selectedLanguagesList);
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
@@ -629,85 +990,79 @@ public class ReportUtil {
 		Performance3 performance3 = new Performance3();
 		performance3.setPerfomanceMap(perfomanceMap); 
 		performance3.setTotalMean(getTotalsByTotalPerExam(finalPerfomanceList)); 
-		performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList, subjectDAO, gradingSystemDAO)); 
+
+		performance3.setTotalPoints(getTotalsByPointsPerExam(finalPerfomanceList)); 
 
 		return performance3;
 	}
-	
-	
-	
+
+
 
 	/**
+	 * 
 	 * @param accountId
 	 * @param exam
-	 * @param subCategoryDAO
-	 * @param categoryDAO
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
-	 * @param examDAO
 	 * @param examType
+	 * @return
 	 */
-	public static SubjectPerformance findSubjectPerformance(String accountId, List<Perfomance> exam, SubCategoryDAO subCategoryDAO,
-			CategoryDAO categoryDAO, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO, ExamDAO examDAO,
-			String examType) {
-		
-		
+	public static SubjectPerformance findSubjectPerformance(String accountId, List<Perfomance> exam, String examType) {
+
+
 		SubjectPerformance subjectPerformance = new SubjectPerformance();
-		
-		
-		
+
+
+
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-			
-		
+
+
 			PerformanceP123 performanceP123 = new PerformanceP123();
-			performanceP123 = ReportUtil.computeP123(exam, subjectDAO, subCategoryDAO, categoryDAO, examDAO, gradingSystemDAO, accountId);
+			performanceP123 = ReportUtil.computeP123(exam, accountId);
 
 			if(performanceP123.getTotalMean()  > 0){
 				subjectPerformance.setAverage((double)performanceP123.getTotalMean() / (double)exam.size());  
 			}
-			
+
 			subjectPerformance.setTotal(performanceP123.getTotalMean());  
-			
-			
+
+
 
 		}else{
-		
+
 
 			if(getTotalsByTotalPerExam(exam) > 0){
 				subjectPerformance.setAverage((double)getTotalsByTotalPerExam(exam) / (double)exam.size()); 
 			}
-			
+
 			subjectPerformance.setTotal((double)getTotalsByTotalPerExam(exam));  
 
 		}
-		
+
 		return subjectPerformance;
 	}
-
 
 
 
 	/**
 	 * 
 	 * @param perfomanceList
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
 	 * @return
 	 */
+	public static int getTotalsByPointsPerExam(List<Perfomance> perfomanceList){
 
-
-	public static int getTotalsByPointsPerExam(List<Perfomance> perfomanceList, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
 		int totalPoints = 0;
 
 		for( Perfomance perfomance : perfomanceList ){
-			int point = getPoints(String.valueOf(perfomance.getScore()),perfomance.getSubjectId(),perfomance.getAccountId(), subjectDAO, gradingSystemDAO);
 
+			int point = getPoints(String.valueOf(perfomance.getScore()),perfomance.getSubjectId(),perfomance.getAccountId());
+
+			String code = subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode();
+			//System.out.println(code  + " , score : " + perfomance.getScore());
 			totalPoints += point;
 		}
 
+		//System.out.println("-----------------------------------------------------------------------------------------------------------");
 		return totalPoints;
 	}
-
 
 
 	/**
@@ -717,25 +1072,24 @@ public class ReportUtil {
 	 */
 
 	public static int getTotalsByTotalPerExam(List<Perfomance> perfomanceList){
-		
+
 		int totals = 0;
 		for( Perfomance perfomance : perfomanceList ){
 			totals += perfomance.getScore();
-			
+
 			String code  = "";
-			if(subDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode() != null) {
-				code = subDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode();
+			if(subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode() != null) {
+				code = subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode();
 			}else {
 				code = perfomance.getSubjectId();
 			}
-			//logger.info(code); 
+			//logger.info("-----------" + code + " , score: " + perfomance.getScore()); 
 		}
-		
-		
+		//logger.info("__________________________________________" + " totals : " + totals); 
+
 
 		return totals;
 	}
-
 
 
 
@@ -744,12 +1098,10 @@ public class ReportUtil {
 	 * @param value
 	 * @param subjectId
 	 * @param accountId
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
 	 * @return
 	 */
 
-	public static int getPoints(String value, String subjectId, String accountId, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
+	public static int getPoints(String value, String subjectId, String accountId){
 
 		if(value.length() == 0){
 			value = "0";
@@ -791,22 +1143,14 @@ public class ReportUtil {
 
 
 
-
-
-
-
-
 	/**
 	 * 
 	 * @param value
 	 * @param subjectId
 	 * @param accountId
-	 * @param subjectDAO
-	 * @param gradingSystemDAO
 	 * @return
 	 */
-
-	public static String getGrade(String value, String subjectId, String accountId, SubjectDAO subjectDAO, GradingSystemDAO gradingSystemDAO){
+	public static String getGrade(String value, String subjectId, String accountId){
 
 		if(value.length() == 0){
 			value = "0";
@@ -825,7 +1169,7 @@ public class ReportUtil {
 		if(gradingSystemDAO.getGradingSystemList(accountId, categoryId) != null) {
 			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
 		}
-		
+
 
 		if(gradingSystemList.isEmpty()){
 			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
@@ -850,16 +1194,13 @@ public class ReportUtil {
 
 
 
-
 	/**
 	 * 
 	 * @param mean
 	 * @param accountId
-	 * @param gradingSystemDAO
 	 * @return
 	 */
-
-	public static String getGradeMainForm234(int mean, String accountId, GradingSystemDAO gradingSystemDAO) {
+	public static String getGradeMainForm234(int mean, String accountId) {
 
 		String grade = "";
 
@@ -887,12 +1228,14 @@ public class ReportUtil {
 
 
 
-
-	/** 
+	/**
 	 * 
+	 * @param subject
 	 * @param exam1Score
 	 * @param exam2Score
 	 * @param exam3Score
+	 * @param arrsize
+	 * @param examType
 	 * @return
 	 */
 
@@ -912,12 +1255,12 @@ public class ReportUtil {
 
 		double sum = 0;
 		double mean = 0;
-		
+
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
-			
+
 			String catId = subCategoryDAO2.getSubCategory(subject.getAccountId(), subject.getUuid()).getCategoryId();
 			Category cat = categoryDAO2.getCategoryById(subject.getAccountId(), catId);
-			
+
 			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 				//
 				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
@@ -942,16 +1285,16 @@ public class ReportUtil {
 						StringUtils.containsIgnoreCase(subject.getDescription(), "Home Science") ||
 						StringUtils.equalsIgnoreCase(subject.getCode(), "COM") || 
 						StringUtils.containsIgnoreCase(subject.getDescription(), "Computer Studies")){
-					
+
 					sum =  (double) (Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score)) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + Integer.parseInt(exam3Score);  
 					mean = Math.round(sum); 
 
 				}else{
-	               //
+					//
 					sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
 					mean = Math.round(sum/2); 
 
-					
+
 
 				}
 
@@ -960,18 +1303,18 @@ public class ReportUtil {
 
 			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Humanities") || 
 					StringUtils.equalsIgnoreCase(cat.getDescription(), "Mathematics")){
-				
-	            //
+
+				//
 				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
 				mean = Math.round(sum/2); 
-				
+
 			}
-			
+
 			return String.valueOf((int)mean); 
-			
+
 		}else {
-			
-			
+
+
 			if(arrsize == 3){
 
 				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
@@ -988,10 +1331,41 @@ public class ReportUtil {
 				sum = Integer.parseInt(exam1Score); 
 				mean = Math.round(sum); 
 			}
-			
+
 			return String.valueOf((int)mean); 
 		}
-		
+
+	}
+
+	/**
+	 * 
+	 * @param exam1Score
+	 * @param exam2Score
+	 * @param exam3Score
+	 * @return
+	 */
+	public static double findExamAverage2(String exam1Score, String exam2Score, String exam3Score) {
+
+		if(exam1Score.length() == 0){
+			exam1Score = "0";
+		}
+
+		if(exam2Score.length() == 0){
+			exam2Score = "0";
+		}
+
+		if(exam3Score.length() == 0){
+			exam3Score = "0";
+		}
+
+		double sum = 0;
+		double mean = 0;
+
+		sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
+		mean = Math.round(sum/3);
+
+		return mean;
+
 	}
 
 
@@ -1004,7 +1378,6 @@ public class ReportUtil {
 	 * @param accountId
 	 * @return
 	 */
-
 	public static String getRemarks(String examAverage, String uuid, String accountId) {
 
 		String remark = "";
@@ -1038,15 +1411,14 @@ public class ReportUtil {
 
 
 	/**
+	 * 
 	 * @param accountId
-	 * @param uuid
-	 * @param yearlyMeanDAO 
-	 * @param studentDAO 
-	 * @param sysConfigDAO 
+	 * @param studentId
+	 * @param graphType
 	 * @return
 	 */
-	public static JFreeChart generateLineGraph(String accountId, String studentId, YearlyMeanDAO yearlyMeanDAO, 
-			StudentDAO studentDAO, String graphType) {
+	public static JFreeChart generateLineGraph(String accountId, String studentId,
+			String graphType) {
 
 		Student student = studentDAO.getStudentById(accountId, studentId); 
 		int regYear = Integer.valueOf(yearformatter.format(student.getAdmissionDate()));  
@@ -1091,9 +1463,9 @@ public class ReportUtil {
 		dataset.setValue(Double.valueOf(df2.format(yearFour.getMeanThree() * GRAPH_CONSTANT)), "Mean" , yearFour.getYear() + " T 3");
 
 		dataset.setValue(12, "Control ", "Control ");
-		
+
 		if(StringUtils.equals(graphType, "1")) {
-			
+
 			JFreeChart chart = ChartFactory.createBarChart("Yearly Performance", // chart title
 					"Year", // domain axis label (Y axis)
 					"Mean", //  range axis label (X axis)
@@ -1102,34 +1474,38 @@ public class ReportUtil {
 					false, // include legend
 					true, // tooltips?
 					false);// URLs?
-			
+
 			CategoryPlot categoryPlot = chart.getCategoryPlot();
 			BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
 			br.setMaximumBarWidth(0.05); // set maximum width to 10% of chart
 
 
 			return chart;
-			
+
 		}else {
-			
+
 			JFreeChart chart = ChartFactory.createLineChart("Yearly Performance", // chart title
-						"Year", // domain axis label (Y axis)
-						"Mean", //  range axis label (X axis)
-						dataset, // data
-						PlotOrientation.VERTICAL, // orientation
-						true, // include legend
-						true, // tooltips?
-						false);// URLs?
-			
-			
+					"Year", // domain axis label (Y axis)
+					"Mean", //  range axis label (X axis)
+					dataset, // data
+					PlotOrientation.VERTICAL, // orientation
+					true, // include legend
+					true, // tooltips?
+					false);// URLs?
+
+
 			return chart;
-			
+
 		}
 
 	}
 
 
-
+	/**
+	 * 
+	 * @author peter
+	 *
+	 */
 	static class StreamResult{
 
 		String studentId;
@@ -1214,20 +1590,17 @@ public class ReportUtil {
 	}
 
 
-
 	/**
 	 * 
 	 * @param accountId
-	 * @param uuid
-	 * @param exams
+	 * @param studentId
 	 * @param streamId
 	 * @param performanceList
-	 * @param rankWithTotalMarks 
-	 * @param rankWithPoints 
+	 * @param rankWithPoints
+	 * @param rankWithTotalMarks
 	 * @return
 	 */
-
-	public static String getStreamPosition(String accountId, String studentId, String streamId,
+	static String getStreamPosition(String accountId, String studentId, String streamId,
 			List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks) {
 
 
@@ -1303,12 +1676,10 @@ public class ReportUtil {
 
 
 
-
 	/**
+	 * 
 	 * @param accountId
-	 * @param uuid
-	 * @param classroomId
-	 * @param classResult
+	 * @param studentId
 	 * @param performanceList
 	 * @param rankWithPoints
 	 * @param rankWithTotalMarks
@@ -1394,11 +1765,15 @@ public class ReportUtil {
 
 
 	/**
+	 * 
 	 * @param performanceList
 	 * @param rankWithPoints
 	 * @param rankWithTotalMarks
+	 * @param grade7subjects
+	 * @param grade11subjects
 	 * @return
 	 */
+
 	public static String getclassMean(List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks, 
 			boolean grade7subjects,boolean grade11subjects) {
 
@@ -1450,7 +1825,7 @@ public class ReportUtil {
 
 
 
-	
+
 
 
 
@@ -1461,11 +1836,11 @@ public class ReportUtil {
 	 * @return
 	 */
 	public static String getclassTeacherComment(String accountId, double total, List<FailedSubject> failedSubjects) {
-		
+
 		List<String> failedList = new ArrayList<>();
-		
+
 		String message = "";
-		
+
 		if(total>70){
 			message = "Excellent";
 		}else if(total>60){
@@ -1479,25 +1854,25 @@ public class ReportUtil {
 		}else{
 			message = "Horrible"; 
 		}
-		
+
 		failedSubjects.forEach(p -> {
-			
+
 			if(p.getScore() < 30){
 				failedList.add(p.getSubjectCode()); 
 			}
-			
-			
+
+
 		});
-		
+
 		String subjects = "";
 		if(!failedList.isEmpty()){
-			 subjects = failedList.toString();
+			subjects = failedList.toString();
 		}
-		
+
 		if(!StringUtils.isBlank(subjects)){
 			message += " , put more effort in " + failedList.toString();
 		}
-		
+
 		return message; 
 	}
 

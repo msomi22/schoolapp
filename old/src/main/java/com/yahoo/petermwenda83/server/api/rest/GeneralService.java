@@ -942,7 +942,7 @@ public class GeneralService {
 
 					studentScore += "Total: " + totalMean + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
-									accountId, gradingSystemDAO) ;
+									accountId) ;
 
 
 				}else {
@@ -950,7 +950,7 @@ public class GeneralService {
 
 					studentScore += "Total: " + totalMean + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 							ReportUtil.getGradeMainForm234((int)Math.round(mean), 
-									accountId, gradingSystemDAO);
+									accountId);
 
 				}
 
@@ -984,8 +984,8 @@ public class GeneralService {
 
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, examIds.length,examType);
 
-					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
+					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId);
+					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId));
 
 					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
 

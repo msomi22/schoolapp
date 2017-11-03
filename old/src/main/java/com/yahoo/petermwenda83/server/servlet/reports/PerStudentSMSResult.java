@@ -262,10 +262,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList,examType);
 					}else {
 						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), 
-								perfomanceList, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList);
 					}
 					
 					totalPoint = totalExam1.getTotalPoints();
@@ -286,10 +286,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList1,  examType);
 					}else {
 						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(),
-								perfomanceList1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList1);
 					}
 				}
 
@@ -298,10 +298,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList2,  examType);
 					}else {
 						totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), 
-								perfomanceList2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList2);
 					}
 					
 					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints();
@@ -328,10 +328,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList1,  examType);
 					}else {
 						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), 
-								perfomanceList1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList1);
 					}
 				}
 
@@ -341,10 +341,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList2,  examType);
 					}else {
 						totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), 
-								perfomanceList2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList2);
 					}
 				}
 				if( perfomanceDAO.getStreamPerformance(accountId, examIds[2], studentId, streamId, term, year) != null) {
@@ -353,10 +353,10 @@ public class PerStudentSMSResult {
 					
 					if(subjects7) {
 						totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), 
-								perfomanceList3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+								perfomanceList3, examType);
 					}else {
 						totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), 
-								perfomanceList3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+								perfomanceList3);
 					}
 					
 					totalPoint = totalExam1.getTotalPoints() + totalExam2.getTotalPoints() + totalExam3.getTotalPoints();

@@ -6,12 +6,7 @@ package com.yahoo.petermwenda83.server.servlet.reports.test;
 import java.util.ArrayList;
 import java.util.List;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
-import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
-import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
-import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
-import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
-import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 
 /**
@@ -26,20 +21,10 @@ public class P123test {
 	final static String databasePassword = "AllaManO1";
 	final static int databasePort = 5432;
 	
-	private static SubjectDAO subjectDAO;
-	private static SubCategoryDAO subCategoryDAO;
-	private static CategoryDAO categoryDAO;
-	private static ExamDAO examDAO;
-	private static GradingSystemDAO gradingSystemDAO;
 	private static PerfomanceDAO perfomanceDAO;
 	
 
 	static{
-		subjectDAO = new SubjectDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		subCategoryDAO = new SubCategoryDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		categoryDAO = new CategoryDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		examDAO = new ExamDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		gradingSystemDAO = new GradingSystemDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		perfomanceDAO = new PerfomanceDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
 		
 	}
@@ -60,7 +45,7 @@ public class P123test {
 		List<Perfomance> perfomanceList = new ArrayList<>();
 		perfomanceList = perfomanceDAO.getStreamPerformance(accountId, examId, studentId, streamId, term, year);
 		
-		System.out.println("grandTotal : " + ReportUtil.computeP123(perfomanceList, subjectDAO, subCategoryDAO, categoryDAO,examDAO,gradingSystemDAO, accountId)); 
+		System.out.println("grandTotal : " + ReportUtil.computeP123(perfomanceList, accountId)); 
 
 	}
 
