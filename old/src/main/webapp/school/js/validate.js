@@ -124,6 +124,8 @@ function validateScore(id) {
 			var url = $('#submitExam').attr("action");
 
 			var form = $('#submitExam');
+			
+			setTimeout(function(){
 
 			jQuery.ajax({
 				url : 'examAjax',
@@ -188,6 +190,8 @@ function validateScore(id) {
 				}
 
 			});
+			
+			},0);
 
 		}
 
