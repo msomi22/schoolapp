@@ -1892,16 +1892,16 @@ public class ReportUtil {
 			remarks += "Good.";
 			
 		}else if(mean > 60) {
-			remarks = "good but you can do better.";
+			remarks += "good but you can do better.";
 			
 		}else if(mean > 50) {
-			remarks = "not very good.";
+			remarks += "not very good.";
 			
 		}else if(mean > 40) {
-			remarks = "much below average.";
+			remarks += "much below average.";
 			
 		}else {
-			remarks = "Horrible!";
+			remarks += "Horrible!";
 		}
 		
 		if(mean <=0) {
