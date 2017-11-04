@@ -467,8 +467,8 @@ public class StudentReportCard extends HttpServlet{
 
 				int mainPoint = performance2.getTotalPoint();
 				int meanTotal = performance2.getTotalMean();
-				
-				
+
+
 				if(rankWithPoints && !rankWithTotalMarks){
 
 					total = mainPoint;
@@ -502,10 +502,10 @@ public class StudentReportCard extends HttpServlet{
 				Map<String,Integer> exam1 = performance2.getExam1();
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
-				
+
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-                //
+					//
 
 					if(rankWithPoints && !rankWithTotalMarks){
 
@@ -567,8 +567,8 @@ public class StudentReportCard extends HttpServlet{
 
 
 				String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
-				
-				
+
+
 
 				/**
 				 *   arrange student info here
@@ -612,35 +612,35 @@ public class StudentReportCard extends HttpServlet{
 				if(!classResult){
 					strm = "";
 				}
-				
+
 				//TODO
 				double vadd = 0;
 				String kcpe = " , KCPE : ";
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
-					
+
 					String kcpemarks = "0"; 
 					double valuea = 0;
-					
+
 					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
 						kcpemarks = primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();//out of 500
 					}
-					
+
 					kcpe += kcpemarks;
-					
+
 					int kcpem = Integer.valueOf(kcpemarks);
 					if(kcpem > 0) {
 						valuea = (double)kcpem/500*84; 
 					}
-					 
-					
+
+
 					int cp = performance2.getTotalPoint();//out of 84
-					vadd = cp - valuea;
+					vadd = cp - (int)valuea;
 					vadd = vadd == cp ? 0 : vadd;
-					
-					
+
+
 				}
-				
-				String valueAdd = "" + vadd; 
+
+				String valueAdd = "" + ReportUtil.df2.format(vadd); 
 				kcpe += " , V.A : " + valueAdd; 
 
 
@@ -814,12 +814,12 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
-				
-				
+
+
 
 				//rank 11 subjects 
 				if(!grade7subjects && grade11subjects){
-                          //
+					//
 
 					mean = (double)meanTotal / 11; 
 
@@ -855,23 +855,6 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-
-
 
 
 
@@ -1329,8 +1312,11 @@ public class StudentReportCard extends HttpServlet{
 								miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") : "";
 
 								String headteacherRemarks = "Thanks " + student.getFirstname().toUpperCase() + " ";
+
 								headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
 										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
+                                        //TODO
+										headteacherRemarks += " .In conclusion, " + ReportUtil.getHeadTeacherRemarks((int)total);
 
 
 										String classTeacherRemarks = ReportUtil.getclassTeacherComment(accountId,total,failedSubjects);
@@ -2201,13 +2187,13 @@ public class StudentReportCard extends HttpServlet{
 			//System.out.println("**********************************************************"); 
 
 		}
-		
+
 		if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 			return performance2List;
-			
+
 		}else {
 			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
-			
+
 		}
 
 		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);

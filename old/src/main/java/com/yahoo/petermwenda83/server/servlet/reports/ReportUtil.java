@@ -1877,6 +1877,41 @@ public class ReportUtil {
 	}
 
 
+	/**
+	 * 
+	 * @return
+	 */
+	public static String getHeadTeacherRemarks(int mean) {
+		
+		String remarks = "Your class work is ";
+		
+		if(mean > 80) {
+			remarks += "Excellent.";
+			
+		}else if(mean > 70) {
+			remarks += "Good.";
+			
+		}else if(mean > 60) {
+			remarks = "good but you can do better.";
+			
+		}else if(mean > 50) {
+			remarks = "not very good.";
+			
+		}else if(mean > 40) {
+			remarks = "much below average.";
+			
+		}else {
+			remarks = "Horrible!";
+		}
+		
+		if(mean <=0) {
+			remarks = "";
+		}
+		
+		
+		return remarks;
+	}
+
 
 
 }
