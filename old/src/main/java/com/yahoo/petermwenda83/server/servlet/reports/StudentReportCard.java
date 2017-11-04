@@ -458,7 +458,7 @@ public class StudentReportCard extends HttpServlet{
 			String pos = "";
 
 
-			//TODO
+			//
 
 			for(Performance2 performance2 : performanceList){
 
@@ -505,7 +505,7 @@ public class StudentReportCard extends HttpServlet{
 				
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-                //TODO
+                //
 
 					if(rankWithPoints && !rankWithTotalMarks){
 
@@ -568,8 +568,6 @@ public class StudentReportCard extends HttpServlet{
 
 				String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
 				
-				System.out.println(student.getRegNo() + " , mainPoint : " + mainPoint + " avgPoints : " + avgPoints + " grade: " + avg_points_grade); 
-
 				
 
 				/**
@@ -614,12 +612,36 @@ public class StudentReportCard extends HttpServlet{
 				if(!classResult){
 					strm = "";
 				}
-
-				//
+				
+				//TODO
+				double vadd = 0;
 				String kcpe = " , KCPE : ";
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
-					kcpe += primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();
+					
+					String kcpemarks = "0"; 
+					double valuea = 0;
+					
+					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
+						kcpemarks = primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();//out of 500
+					}
+					
+					kcpe += kcpemarks;
+					
+					int kcpem = Integer.valueOf(kcpemarks);
+					if(kcpem > 0) {
+						valuea = (double)kcpem/500*84; 
+					}
+					 
+					
+					int cp = performance2.getTotalPoint();//out of 84
+					vadd = cp - valuea;
+					vadd = vadd == cp ? 0 : vadd;
+					
+					
 				}
+				
+				String valueAdd = "" + vadd; 
+				kcpe += " , V.A : " + valueAdd; 
 
 
 				//student form
@@ -797,7 +819,7 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 11 subjects 
 				if(!grade7subjects && grade11subjects){
-                          //TODO
+                          //
 
 					mean = (double)meanTotal / 11; 
 
@@ -833,6 +855,21 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
 
 
@@ -966,7 +1003,7 @@ public class StudentReportCard extends HttpServlet{
 
 				List<FailedSubject> failedSubjects = new ArrayList<>();
 
-				//TODO
+				//
 				subjects.forEach(subject -> {
 
 					FailedSubject failedSubject = new FailedSubject();
@@ -1184,7 +1221,7 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 						if(!grade7subjects && grade11subjects){
-							//TODO
+							//
 							mainScore = (int)Math.round(avg) + "";
 						}
 
