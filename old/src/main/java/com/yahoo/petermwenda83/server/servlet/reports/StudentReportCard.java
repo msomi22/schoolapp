@@ -615,11 +615,12 @@ public class StudentReportCard extends HttpServlet{
 
 				//TODO
 				double vadd = 0;
+				String kcpemarks = "0"; 
+				double valuea = 0;
 				String kcpe = " , KCPE : ";
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
 
-					String kcpemarks = "0"; 
-					double valuea = 0;
+					
 
 					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
 						kcpemarks = primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();//out of 500
