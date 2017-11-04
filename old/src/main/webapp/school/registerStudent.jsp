@@ -137,7 +137,7 @@
 
 											<!-- Current avatar -->
 											<div class="avatar-view" title="Change the avatar">
-												<img src="images/user.png" alt="Avatar">
+												<img id="img_avatar_student"src="images/user.png" alt="Avatar">
 												<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
@@ -684,6 +684,7 @@
 <jsp:include page="modals/importStudents.html" />
 
 
+<script src="js/registerNewStudent.js"></script>
 <script src="js/apiCalls/student.js"></script>
 
 
