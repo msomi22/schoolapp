@@ -679,18 +679,18 @@ public class ClassRankingList extends HttpServlet{
 				//int avg_points = 0;
 
 
-				int mainPoint = performance2.getTotalPoint();
-				int totalMean = performance2.getTotalMean();
+				//int mainPoint = performance2.getTotalPoint();
+				//int totalMean = performance2.getTotalMean();
 
 				if(rankWithPoints && !rankWithTotalMarks){ 
 
-					total = mainPoint;
+					total = performance2.getTotalPoint();
 
 				}
 
 				if(!rankWithPoints && rankWithTotalMarks){
 
-					total = totalMean;
+					total = performance2.getTotalMean();
 
 				}
 				
@@ -735,12 +735,12 @@ public class ClassRankingList extends HttpServlet{
 
 						if(grade7subjects && !grade11subjects){
 
-							avg_points_grade = ReportUtil.getGrade(String.valueOf(mainPoint),"subjectId", accountId);
-							avgPoints = String.valueOf(mainPoint); 
+							avg_points_grade = ReportUtil.getGrade(String.valueOf(performance2.getTotalPoint()),"subjectId", accountId);
+							avgPoints = String.valueOf(performance2.getTotalPoint()); 
 
 						}else if(!grade7subjects && grade11subjects){
 
-							double avg = ((double)Double.valueOf(mainPoint) / 132) * 84; 
+							double avg = ((double)Double.valueOf(performance2.getTotalPoint()) / 132) * 84; 
 							avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId);
 							avgPoints = String.valueOf((int)avg); 
 
@@ -825,11 +825,11 @@ public class ClassRankingList extends HttpServlet{
 				double avgMean = 0;
 				double pointsAvg = 0;
 				if(grade7subjects && !grade11subjects){
-					avgMean = totalMean > 0 ? (double)totalMean / 7 : 0;
+					avgMean = performance2.getTotalMean() > 0 ? (double)performance2.getTotalMean() / 7 : 0;
 					pointsAvg = performance2.getTotalPoint();
 				}
 				if(!grade7subjects && grade11subjects){
-					avgMean = totalMean > 0 ? (double)totalMean / 11 : 0;
+					avgMean = performance2.getTotalMean() > 0 ? (double)performance2.getTotalMean() / 11 : 0;
 					pointsAvg = ((double)performance2.getTotalPoint() / 132) * 84;
 
 				}
@@ -899,20 +899,20 @@ public class ClassRankingList extends HttpServlet{
 						yearlyMean.setYear(year);
 
 						if(StringUtils.equals(term, "1")){
-
-							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(avgPoints))); 
+							
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(performance2.getTotalPoint()))); 
 							yearlyMean.setTermOnePosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "2")){
 
-							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+							yearlyMean.setMeanTwo(Double.valueOf(ReportUtil.df2.format(performance2.getTotalPoint())));
 							yearlyMean.setTermTwoPosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "3")){
 
-							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(avgPoints)));
+							yearlyMean.setMeanThree(Double.valueOf(ReportUtil.df2.format(performance2.getTotalPoint())));
 							yearlyMean.setTermThreePosition(termPosition);
 
 						}
@@ -941,7 +941,7 @@ public class ClassRankingList extends HttpServlet{
 
 						if(StringUtils.equals(term, "1")){
 
-							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(pointsAvg))); 
+							yearlyMean.setMeanOne(Double.valueOf(ReportUtil.df2.format(pointsAvg))); //
 							yearlyMean.setTermOnePosition(termPosition);
 
 						}
@@ -1466,10 +1466,22 @@ public class ClassRankingList extends HttpServlet{
 
 
 		}
+		
+		
+		
+		
+		
+		if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+			return performance2List;
+			
+		}else {
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+			
+		}
 
 		//System.out.println(" ------ " + performance2List);
 
-		return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
 
 	}
 

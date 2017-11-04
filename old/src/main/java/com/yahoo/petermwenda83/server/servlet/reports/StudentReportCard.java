@@ -1184,10 +1184,11 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 						if(!grade7subjects && grade11subjects){
+							//TODO
 							mainScore = (int)Math.round(avg) + "";
 						}
 
-						examTable.addCell(new Paragraph(meanStr + " , " + mainScore ,timesRomanNarmal6)); 
+						examTable.addCell(new Paragraph(meanStr + " , " + performance2.getTotalPoint() ,timesRomanNarmal6)); 
 
 
 					}
@@ -2163,8 +2164,16 @@ public class StudentReportCard extends HttpServlet{
 			//System.out.println("**********************************************************"); 
 
 		}
+		
+		if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+			return performance2List;
+			
+		}else {
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+			
+		}
 
-		return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
 
 	}
 

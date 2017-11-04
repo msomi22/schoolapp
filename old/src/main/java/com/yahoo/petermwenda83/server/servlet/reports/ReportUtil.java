@@ -1786,7 +1786,7 @@ public class ReportUtil {
 		for(Performance2 performance : performanceList){
 
 
-			if(!rankWithPoints && rankWithTotalMarks){
+			//if(!rankWithPoints && rankWithTotalMarks){
 
 				total = performance.getTotalMean();
 
@@ -1797,7 +1797,7 @@ public class ReportUtil {
 					median = total > 0 ? total / 11 : 0;
 				}
 
-			}else{
+			/*}/*else{
 
 				total = performance.getTotalPoint();
 
@@ -1809,7 +1809,7 @@ public class ReportUtil {
 					median = (total / 132) * 84;
 				}
 
-			}
+			}*/
 
 
 			totalMean += median;
