@@ -97,6 +97,12 @@
          <div class="">
           <!-- top tiles -->
           <div class="row tile_count">
+          
+          <br>
+          
+          <br>
+          
+          <br>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <input type="hidden" id="total_students" value="<%=studentDAO.activeCount(accountId, "0") + studentDAO.activeCount(accountId, "1") %>">
               <span class="count_top"><i class="fa fa-user"></i> Active Students <%=username %></span>
