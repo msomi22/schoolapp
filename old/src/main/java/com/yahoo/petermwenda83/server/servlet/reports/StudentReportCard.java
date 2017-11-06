@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -66,8 +64,6 @@ import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
-import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
-import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.reports.test2.FormFour;
@@ -94,9 +90,7 @@ import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 public class StudentReportCard extends HttpServlet{
 
 	private static GradingSystemDAO gradingSystemDAO;
-	private static SubCategoryDAO subCategoryDAO;
 	private static PerfomanceDAO perfomanceDAO;
-	private static CategoryDAO categoryDAO;
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
@@ -149,9 +143,7 @@ public class StudentReportCard extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		gradingSystemDAO = GradingSystemDAO.getInstance();
-		subCategoryDAO = SubCategoryDAO.getInstance();
 		perfomanceDAO = PerfomanceDAO.getInstance();
-		categoryDAO = CategoryDAO.getInstance(); 
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
@@ -466,6 +458,7 @@ public class StudentReportCard extends HttpServlet{
 			String pos = "";
 
 
+			//
 
 			for(Performance2 performance2 : performanceList){
 
@@ -474,6 +467,7 @@ public class StudentReportCard extends HttpServlet{
 
 				int mainPoint = performance2.getTotalPoint();
 				int meanTotal = performance2.getTotalMean();
+
 
 				if(rankWithPoints && !rankWithTotalMarks){
 
@@ -511,20 +505,20 @@ public class StudentReportCard extends HttpServlet{
 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
-
+					//
 
 					if(rankWithPoints && !rankWithTotalMarks){
 
 
 						if(grade7subjects && !grade11subjects){
 
-							avg_points_grade = ReportUtil.getGrade(String.valueOf(mainPoint),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+							avg_points_grade = ReportUtil.getGrade(String.valueOf(mainPoint),"subjectId", accountId);
 							avgPoints = String.valueOf(mainPoint); 
 
 						}else if(!grade7subjects && grade11subjects){
 
 							double avg = ((double)Double.valueOf(mainPoint) / 132) * 84; 
-							avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId, subjectDAO, gradingSystemDAO);
+							avg_points_grade = ReportUtil.getGrade(String.valueOf((int)avg),"subjectId", accountId);
 							avgPoints = String.valueOf((int)avg); 
 
 
@@ -533,9 +527,6 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
-
-
-
 
 
 				PdfPTable headerTable = new PdfPTable(2);
@@ -576,6 +567,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 				String studentName = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
+
 
 
 				/**
@@ -622,10 +614,35 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 				//TODO
+				double vadd = 0;
+				String kcpemarks = "0"; 
+				double valuea = 0;
 				String kcpe = " , KCPE : ";
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
-					kcpe += primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();
+
+					
+
+					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
+						kcpemarks = primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();//out of 500
+					}
+
+					kcpe += kcpemarks;
+
+					int kcpem = Integer.valueOf(kcpemarks);
+					if(kcpem > 0) {
+						valuea = (double)kcpem/500*84; 
+					}
+
+
+					int cp = performance2.getTotalPoint();//out of 84
+					vadd = cp - (int)valuea;
+					vadd = vadd == cp ? 0 : vadd;
+
+
 				}
+
+				String valueAdd = "" + ReportUtil.df2.format(vadd); 
+				kcpe += " , V.A : " + valueAdd; 
 
 
 				//student form
@@ -651,7 +668,7 @@ public class StudentReportCard extends HttpServlet{
 
 				double mean = 0;
 
-				//TODO
+				//
 				String termPosition = "";
 
 
@@ -702,8 +719,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}else {
 
-							studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, 
-									accountId, gradingSystemDAO) + ")";
+							studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, accountId) + ")";
 
 						}
 
@@ -738,10 +754,10 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-						//TODO
+						//
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
-							
+
 						}
 
 					}
@@ -749,8 +765,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
-								ReportUtil.getGradeMainForm234((int)Math.round(mean), 
-										accountId, gradingSystemDAO);
+								ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
 
 
 						YearlyMean yearlyMean;
@@ -783,7 +798,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-						//TODO
+						//
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
@@ -801,9 +816,11 @@ public class StudentReportCard extends HttpServlet{
 
 				}
 
+
+
 				//rank 11 subjects 
 				if(!grade7subjects && grade11subjects){
-
+					//
 
 					mean = (double)meanTotal / 11; 
 
@@ -819,8 +836,7 @@ public class StudentReportCard extends HttpServlet{
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						}else {
-							studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), 
-									accountId, gradingSystemDAO) + ")";
+							studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId) + ")";
 
 
 						}
@@ -830,8 +846,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
-								ReportUtil.getGradeMainForm234((int)Math.round(mean), 
-										accountId, gradingSystemDAO);
+								ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
 					}
 
 					PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));
@@ -841,8 +856,6 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
-
-
 
 
 
@@ -974,7 +987,7 @@ public class StudentReportCard extends HttpServlet{
 
 				List<FailedSubject> failedSubjects = new ArrayList<>();
 
-
+				//
 				subjects.forEach(subject -> {
 
 					FailedSubject failedSubject = new FailedSubject();
@@ -1005,23 +1018,23 @@ public class StudentReportCard extends HttpServlet{
 
 
 
-					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId,subjectDAO, gradingSystemDAO));
+					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId);
+					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId));
 
 					String remarks = ReportUtil.getRemarks(examAverage,subject.getUuid(),accountId); 
 
-					String exam1Grade = ReportUtil.getGrade(exam1Score,subject.getUuid(),accountId, subjectDAO, gradingSystemDAO);
-					String exam1Points = String.valueOf(ReportUtil.getPoints(exam1Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+					String exam1Grade = ReportUtil.getGrade(exam1Score,subject.getUuid(),accountId);
+					String exam1Points = String.valueOf(ReportUtil.getPoints(exam1Score, subject.getUuid(), accountId));
 
 					exam1Points = StringUtils.equals(exam1Points, "0") ? "" : exam1Points;
 
-					String exam2Grade = ReportUtil.getGrade(exam2Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-					String exam2Points = String.valueOf(ReportUtil.getPoints(exam2Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+					String exam2Grade = ReportUtil.getGrade(exam2Score,subject.getUuid(), accountId);
+					String exam2Points = String.valueOf(ReportUtil.getPoints(exam2Score, subject.getUuid(), accountId));
 
 					exam2Points = StringUtils.equals(exam2Points, "0") ? "" : exam2Points;
 
-					String exam3Grade = ReportUtil.getGrade(exam3Score,subject.getUuid(), accountId, subjectDAO, gradingSystemDAO);
-					String exam3Points = String.valueOf(ReportUtil.getPoints(exam3Score, subject.getUuid(), accountId, subjectDAO, gradingSystemDAO));
+					String exam3Grade = ReportUtil.getGrade(exam3Score,subject.getUuid(), accountId);
+					String exam3Points = String.valueOf(ReportUtil.getPoints(exam3Score, subject.getUuid(), accountId));
 
 					exam3Points = StringUtils.equals(exam3Points, "0") ? "" : exam3Points;
 
@@ -1042,6 +1055,7 @@ public class StudentReportCard extends HttpServlet{
 
 					examAverage = StringUtils.equals(examAverage, "0") ? "" : examAverage;
 					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
+
 
 					String score1 = exam1Score + " " + exam1Grade +  " " + exam1Points; 
 					String score2 = exam2Score + " " + exam2Grade +  " " + exam2Points;
@@ -1121,13 +1135,13 @@ public class StudentReportCard extends HttpServlet{
 
 					////mean
 
-					String ex1Grade = ReportUtil.getGrade(exm1,"x",accountId, subjectDAO, gradingSystemDAO);
-					String ex2Grade = ReportUtil.getGrade(exm2,"x",accountId, subjectDAO, gradingSystemDAO);
-					String ex3Grade = ReportUtil.getGrade(exm3,"x",accountId, subjectDAO, gradingSystemDAO);
+					String ex1Grade = ReportUtil.getGrade(exm1,"x",accountId);
+					String ex2Grade = ReportUtil.getGrade(exm2,"x",accountId);
+					String ex3Grade = ReportUtil.getGrade(exm3,"x",accountId);
 
-					String exa1Point = String.valueOf(ReportUtil.getPoints(exm1,"x",accountId, subjectDAO, gradingSystemDAO));
-					String exa2Point = String.valueOf(ReportUtil.getPoints(exm2,"x",accountId, subjectDAO, gradingSystemDAO));
-					String exa3Point = String.valueOf(ReportUtil.getPoints(exm3,"x",accountId, subjectDAO, gradingSystemDAO));
+					String exa1Point = String.valueOf(ReportUtil.getPoints(exm1,"x",accountId));
+					String exa2Point = String.valueOf(ReportUtil.getPoints(exm2,"x",accountId));
+					String exa3Point = String.valueOf(ReportUtil.getPoints(exm3,"x",accountId));
 
 					if(StringUtils.equals(exm1, "0") || StringUtils.equals(exa1Point, "0")){
 						exm1 = "";
@@ -1191,10 +1205,11 @@ public class StudentReportCard extends HttpServlet{
 						}
 
 						if(!grade7subjects && grade11subjects){
+							//
 							mainScore = (int)Math.round(avg) + "";
 						}
 
-						examTable.addCell(new Paragraph(meanStr + " , " + mainScore ,timesRomanNarmal6)); 
+						examTable.addCell(new Paragraph(meanStr + " , " + performance2.getTotalPoint() ,timesRomanNarmal6)); 
 
 
 					}
@@ -1219,7 +1234,7 @@ public class StudentReportCard extends HttpServlet{
 									mainExam = avg_points_grade;
 
 								}else {
-									mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId, gradingSystemDAO);
+									mainExam = ReportUtil.getGradeMainForm234(mainPoint, accountId);
 
 								}
 							}
@@ -1227,7 +1242,7 @@ public class StudentReportCard extends HttpServlet{
 							if(!rankWithPoints && rankWithTotalMarks){
 
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId, gradingSystemDAO);
+								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
 
 							}
 
@@ -1242,13 +1257,13 @@ public class StudentReportCard extends HttpServlet{
 
 							if(rankWithPoints && !rankWithTotalMarks){
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId, gradingSystemDAO);
+								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId);
 
 							}
 
 							if(!rankWithPoints && rankWithTotalMarks){
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId, gradingSystemDAO);
+								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
 
 							}
 
@@ -1298,8 +1313,11 @@ public class StudentReportCard extends HttpServlet{
 								miscellanousDAO.getValueByKey(accountId, "OPENING_DATE") : "";
 
 								String headteacherRemarks = "Thanks " + student.getFirstname().toUpperCase() + " ";
+
 								headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
 										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
+                                        //TODO
+										headteacherRemarks += " .In conclusion, " + ReportUtil.getHeadTeacherRemarks((int)total);
 
 
 										String classTeacherRemarks = ReportUtil.getclassTeacherComment(accountId,total,failedSubjects);
@@ -1398,7 +1416,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 										ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
-										JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() ,yearlyMeanDAO, studentDAO, graphType);  
+										JFreeChart lineGraph = ReportUtil.generateLineGraph(accountId,student.getUuid() , graphType);  
 
 										try {
 
@@ -1537,7 +1555,7 @@ public class StudentReportCard extends HttpServlet{
 										perfTable.addCell(meanCell4);
 										perfTable.addCell(posCell4);
 
-										//add performance table TODO
+										//add performance table 
 
 										PerformanceTable performanceT = new PerformanceTable();
 
@@ -1550,18 +1568,18 @@ public class StudentReportCard extends HttpServlet{
 										if(!yearlyMeanList.isEmpty()) {
 
 											yearlyMeanList.parallelStream().forEach(yearlymean ->{
-												
+
 												if(StringUtils.equals(yearlymean.getClassId(), "C143978A-E021-4015-BC67-5A00D6C910D1")) {
-													
+
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
-													
+
 													FormOne formone_t1 = new FormOne(); 
 													FormOne formone_t2 = new FormOne(); 
 													FormOne formone_t3 = new FormOne(); 
-													
+
 													MP mp_t1 = new MP();
-													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setMean(ReportUtil.df2.format(yearlymean.getMeanOne())); 
 													mp_t1.setPos(yearlymean.getTermOnePosition()); 
 													formone_t1.setMp(mp_t1);
 													forms_t1.setFormOne(formone_t1);
@@ -1570,20 +1588,20 @@ public class StudentReportCard extends HttpServlet{
 
 													TermTwoObj t2 = new TermTwoObj();
 													Forms forms_t2 = new Forms();
-													
+
 													MP mp_t2 = new MP();
-													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setMean(ReportUtil.df2.format(yearlymean.getMeanTwo())); 
 													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
 													formone_t2.setMp(mp_t2);
 													forms_t2.setFormOne(formone_t2);
 													t2.setForms(forms_t2); 
-													
-													
+
+
 													TermThreeObj t3 = new TermThreeObj();
 													Forms forms_t3 = new Forms();
-													
+
 													MP mp_t3 = new MP();
-													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setMean(ReportUtil.df2.format(yearlymean.getMeanThree())); 
 													mp_t3.setPos(yearlymean.getTermThreePosition()); 
 													formone_t3.setMp(mp_t3);
 													forms_t3.setFormOne(formone_t3);
@@ -1592,20 +1610,20 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermOneObj(t1);
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
-													
-												}else if(StringUtils.equals(yearlymean.getClassId(), "3E22E428-3155-42F5-B73E-66553ED501C9")) {
-													
 
-													
+												}else if(StringUtils.equals(yearlymean.getClassId(), "3E22E428-3155-42F5-B73E-66553ED501C9")) {
+
+
+
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
-													
+
 													FormTwo formtwo_t1 = new FormTwo(); 
 													FormTwo formtwo_t2 = new FormTwo(); 
 													FormTwo formtwo_t3 = new FormTwo(); 
-													
+
 													MP mp_t1 = new MP();
-													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setMean(ReportUtil.df2.format(yearlymean.getMeanOne())); 
 													mp_t1.setPos(yearlymean.getTermOnePosition()); 
 													formtwo_t1.setMp(mp_t1);
 													forms_t1.setFormTwo(formtwo_t1);
@@ -1614,20 +1632,20 @@ public class StudentReportCard extends HttpServlet{
 
 													TermTwoObj t2 = new TermTwoObj();
 													Forms forms_t2 = new Forms();
-													
+
 													MP mp_t2 = new MP();
-													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setMean(ReportUtil.df2.format(yearlymean.getMeanTwo())); 
 													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
 													formtwo_t2.setMp(mp_t2);
 													forms_t2.setFormTwo(formtwo_t2);
 													t2.setForms(forms_t2); 
-													
-													
+
+
 													TermThreeObj t3 = new TermThreeObj();
 													Forms forms_t3 = new Forms();
-													
+
 													MP mp_t3 = new MP();
-													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setMean(ReportUtil.df2.format(yearlymean.getMeanThree())); 
 													mp_t3.setPos(yearlymean.getTermThreePosition()); 
 													formtwo_t3.setMp(mp_t3);
 													forms_t3.setFormTwo(formtwo_t3);
@@ -1636,20 +1654,20 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermOneObj(t1);
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
-													
-												
-													
+
+
+
 												}else if(StringUtils.equals(yearlymean.getClassId(), "A4BFC2BD-262F-4207-99C8-057D6ADF80C7")) {
-													
+
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
-													
+
 													FormThree formthree_t1 = new FormThree(); 
 													FormThree formthree_t2 = new FormThree(); 
 													FormThree formthree_t3 = new FormThree(); 
-													
+
 													MP mp_t1 = new MP();
-													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setMean(ReportUtil.df2.format(yearlymean.getMeanOne())); 
 													mp_t1.setPos(yearlymean.getTermOnePosition()); 
 													formthree_t1.setMp(mp_t1);
 													forms_t1.setFormThree(formthree_t1);
@@ -1658,20 +1676,20 @@ public class StudentReportCard extends HttpServlet{
 
 													TermTwoObj t2 = new TermTwoObj();
 													Forms forms_t2 = new Forms();
-													
+
 													MP mp_t2 = new MP();
-													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setMean(ReportUtil.df2.format(yearlymean.getMeanTwo())); 
 													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
 													formthree_t2.setMp(mp_t2);
 													forms_t2.setFormThree(formthree_t2);
 													t2.setForms(forms_t2); 
-													
-													
+
+
 													TermThreeObj t3 = new TermThreeObj();
 													Forms forms_t3 = new Forms();
-													
+
 													MP mp_t3 = new MP();
-													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setMean(ReportUtil.df2.format(yearlymean.getMeanThree())); 
 													mp_t3.setPos(yearlymean.getTermThreePosition()); 
 													formthree_t3.setMp(mp_t3);
 													forms_t3.setFormThree(formthree_t3);
@@ -1680,18 +1698,18 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermOneObj(t1);
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
-													
+
 												}else if(StringUtils.equals(yearlymean.getClassId(), "14E56350-08DA-45CC-97D9-C225AF74A7AD")) {
-													
+
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
-													
+
 													FormFour formfour_t1 = new FormFour(); 
 													FormFour formfour_t2 = new FormFour(); 
 													FormFour formfour_t3 = new FormFour(); 
-													
+
 													MP mp_t1 = new MP();
-													mp_t1.setMean(yearlymean.getMeanOne()+""); 
+													mp_t1.setMean(ReportUtil.df2.format(yearlymean.getMeanOne())); 
 													mp_t1.setPos(yearlymean.getTermOnePosition()); 
 													formfour_t1.setMp(mp_t1);
 													forms_t1.setFormFour(formfour_t1);
@@ -1700,20 +1718,20 @@ public class StudentReportCard extends HttpServlet{
 
 													TermTwoObj t2 = new TermTwoObj();
 													Forms forms_t2 = new Forms();
-													
+
 													MP mp_t2 = new MP();
-													mp_t2.setMean(yearlymean.getMeanTwo()+""); 
+													mp_t2.setMean(ReportUtil.df2.format(yearlymean.getMeanTwo())); 
 													mp_t2.setPos(yearlymean.getTermTwoPosition()); 
 													formfour_t2.setMp(mp_t2);
 													forms_t2.setFormFour(formfour_t2);
 													t2.setForms(forms_t2); 
-													
-													
+
+
 													TermThreeObj t3 = new TermThreeObj();
 													Forms forms_t3 = new Forms();
-													
+
 													MP mp_t3 = new MP();
-													mp_t3.setMean(yearlymean.getMeanThree()+""); 
+													mp_t3.setMean(ReportUtil.df2.format(yearlymean.getMeanThree())); 
 													mp_t3.setPos(yearlymean.getTermThreePosition()); 
 													formfour_t3.setMp(mp_t3);
 													forms_t3.setFormFour(formfour_t3);
@@ -1722,9 +1740,9 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermOneObj(t1);
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
-													
+
 												}
-											
+
 											});
 										}
 
@@ -1782,8 +1800,8 @@ public class StudentReportCard extends HttpServlet{
 	 * @param performanceT 
 	 */
 	private void generateTable(PdfPTable perfTable, PerformanceTable performanceT) {
-		
-	//	System.out.println(performanceT); 
+
+		//	System.out.println(performanceT); 
 		//*****************************************TERM 1
 		PdfPCell t1_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
 		t1_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1916,6 +1934,7 @@ public class StudentReportCard extends HttpServlet{
 	}
 
 
+
 	/**
 	 * @param accountId
 	 * @param streamId
@@ -1985,14 +2004,14 @@ public class StudentReportCard extends HttpServlet{
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
 						//if(!exam1.isEmpty()) {
-						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, examType);
 						//}
 
 
 					}else {
-						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-						totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-						totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+						totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, examType);
+						totalExam2 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam2, examType);
+						totalExam3 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam3, examType);
 
 
 					}
@@ -2006,15 +2025,15 @@ public class StudentReportCard extends HttpServlet{
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
 						if(!exam1.isEmpty()) {
-							totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+							totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, examType);
 						}
 
 
 					}else {
 
-						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-						totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-						totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam3, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+						totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1);
+						totalExam2 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam2);
+						totalExam3 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam3);
 
 					}
 
@@ -2035,6 +2054,11 @@ public class StudentReportCard extends HttpServlet{
 
 					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 					totalMeans = totalMeans / 3;
+
+
+					/*System.out.println(student.getRegNo() + " ** " + student.getFirstname() + 
+							" ,e1 :" + totalExam1.getTotalMean() + " ,e2 : " + totalExam2.getTotalMean() + " , e3: " + totalExam3.getTotalMean() 
+							+ " ,totalMeans : " + totalMeans );*/
 
 
 
@@ -2061,14 +2085,14 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
-					totalExam2 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam1, examType);
+					totalExam2 = ReportUtil.findExamTotalForm234(accountId,student.getCurrentStream(), exam2, examType);
 				}
 
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
-					totalExam2 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam2, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam1);
+					totalExam2 = ReportUtil.findExamTotalForm1(accountId,student.getCurrentStream(), exam2);
 				}
 
 
@@ -2078,6 +2102,10 @@ public class StudentReportCard extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean();
 				totalMeans = totalMeans / 2;
+
+
+				/*System.out.println(student.getRegNo() + " ** " + student.getFirstname() + 
+						" ,e1 :" + totalExam1.getTotalMean() + " ,e2 : " + totalExam2.getTotalMean() + " ,totalMeans : " + totalMeans );*/
 
 
 			}
@@ -2096,12 +2124,12 @@ public class StudentReportCard extends HttpServlet{
 
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO, examDAO, examType);
+					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1,  examType);
 				}
 
 				//rank 11 subjects
 				if(!grade7subjects && grade11subjects){
-					totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1, subCategoryDAO, categoryDAO, subjectDAO, gradingSystemDAO);
+					totalExam1 = ReportUtil.findExamTotalForm1(accountId, student.getCurrentStream(), exam1);
 				}
 
 
@@ -2152,12 +2180,24 @@ public class StudentReportCard extends HttpServlet{
 
 				performance2List.add(performance2);
 
+				//System.out.println(" ************** " +  student.getRegNo() + " " + student.getFirstname() + " " + totalPoint);
+
 
 			}
 
+			//System.out.println("**********************************************************"); 
+
 		}
 
-		return performance2List;
+		if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
+			return performance2List;
+
+		}else {
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+
+		}
+
+		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
 
 	}
 

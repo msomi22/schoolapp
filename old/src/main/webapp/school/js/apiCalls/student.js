@@ -19,12 +19,14 @@ function newStudent() {
 
 		globalApiCall(function(data) {
 
-			console.log('Genius Code for adding student');
+			console.log('Code for adding student');
 
 			console.log(data);
 
 			if(rootParseApiResponseData(data)){
 				$('#registerNewStudent').get(0).reset();
+				
+				$('#img_avatar_student').prop('src','images/user.png');
 				
 			}
 

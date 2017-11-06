@@ -1,5 +1,9 @@
 $(document).ready(function() {
 	
+	
+	$('#avata_show').show();
+	$('#not_possible').hide();
+	
 	//alert("loaded");
 	$("#registerNewStudent").submit(function(e) {
 		e.preventDefault();

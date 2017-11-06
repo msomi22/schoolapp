@@ -415,9 +415,19 @@ public class ExamAjax extends HttpServlet{
 			perfomance.setYear(sysConfig.getYear()); 
 
 			if(scoreValid){
+				
+				boolean stored = false;
 
-				boolean stored = examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
-						sysConfig.getTerm(), sysConfig.getYear(), streamId);
+				try {
+					
+					Thread.sleep(2000);
+					 stored = examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
+							sysConfig.getTerm(), sysConfig.getYear(), streamId);
+					 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} 
+				
 				if(stored){
 
 					message = "OK";
