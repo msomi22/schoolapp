@@ -329,8 +329,6 @@ public class StaffService {
 
 				Staff staff = staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid());
 
-				String password = SecurityUtil.getMD5Hash(apiStaffFull.getPassword());
-
 				if(!StringUtils.equals(apiStaffFull.getLogedUserAccessId(), 
 						staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserId()).getAcessLevelId())){
 
@@ -355,7 +353,7 @@ public class StaffService {
 					staff.setLastupdated(new Date().toString());
 					staff.setMiddlename(apiStaffFull.getMiddlename());
 					staff.setMobile(apiStaffFull.getMobile());
-					staff.setPassword(password);
+					//staff.setPassword(password);
 					staff.setStaffNo(apiStaffFull.getStaffNo());
 					staff.setUsername(apiStaffFull.getUsername());
 
@@ -420,6 +418,8 @@ public class StaffService {
 				return response;
 				
 			}else {
+				
+				//String password = SecurityUtil.getMD5Hash(apiStaffFull.getPassword());
 				
 				staff.setPassword(SecurityUtil.getMD5Hash(staffProfile.getNewpassword())); 
 				
