@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
+import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 
 /** 
  * @author peter
@@ -164,7 +165,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 			pstmt.setString(6, school.getLogo());
 			pstmt.setString(7, school.getSignature());
 			pstmt.setString(8, school.getUsername());
-			pstmt.setString(9, school.getPassword());
+			pstmt.setString(9, SecurityUtil.getMD5Hash(school.getPassword()));   
 			pstmt.setString(10, school.getMobile());
 			pstmt.setString(11, school.getEmail());
 			pstmt.setString(12, school.getAddress());
