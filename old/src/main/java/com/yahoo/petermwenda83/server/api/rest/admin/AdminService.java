@@ -44,6 +44,7 @@ import com.yahoo.petermwenda83.persistence.subject.SubCategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.api.rest.bean.ApiResponse;
 import com.yahoo.petermwenda83.server.api.rest.bean.admin.ApiAccount;
+import com.yahoo.petermwenda83.server.servlet.util.SYS_COSTANTS;
 
 /**
  * @author peter
@@ -277,8 +278,8 @@ public class AdminService {
 		String[] accessIds = {"C3915245-00EE-4EF4-9898-ACE59683DD60","615F04C1-00BF-499C-AC7A-B46B69243AAA",
 				"0DE968C9-7309-C481-58F7-AB6CDB1011EH","1CC7F06E-9938-4850-81FB-9CC249C7CFA2",
 				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
-		"0DE968C9-7309-C481-58F7-AB6CDB1011EF"};
-		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar"};
+		"0DE968C9-7309-C481-58F7-AB6CDB1011EF", SYS_COSTANTS.SYS_ACCESS_LEVEL_ID};
+		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar",SYS_COSTANTS.SYS_ACCESS_LEVEL}; 
 
 		String astr = "";
 		for(int count=0;count<accessIds.length;count++) {
@@ -315,11 +316,15 @@ public class AdminService {
 
 		String[] streamIds = {"4DA86139-6A72-4089-8858-6A3A613FDFE6","59E5F556-4B04-43B2-8139-E2D39A7836C6",
 				"46398A47-93F2-4591-B36F-1C28B03CC2F3","D3733507-C113-4795-91ED-D3CD8039EA03",
-				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63"};
+				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63", 
+				SYS_COSTANTS.SYS_DEFAULT_STREAM_ID};
+		
 		String[] classIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
 				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD",
-				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9"};
-		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S"};
+				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9", 
+				"14E56350-08DA-45CC-97D9-C225AF74A7AD"};
+		
+		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S", SYS_COSTANTS.SYS_DEFAULT_STREAM}; 
 
 		for(int count=0;count<streamIds.length;count++) {
 			Stream stream = new Stream();
