@@ -137,7 +137,7 @@
 
 </head>
 
-<body class="nav-md footer_fixed"  oncontextmenu="return false">
+<body class="nav-md footer_fixed"  oncontextmenu="return false" onload="disableBackButton()">
 	<div class="container body">
 		<div class="main_container">
 			<div class="col-md-3 left_col menu_fixed">
@@ -253,18 +253,40 @@
 
 
 
-						<ul class="nav navbar-nav navbar-right">
+						<ul style="margin-left:200px"  class="nav navbar-nav">
 
-							<li class="pull-left">
+							<li class="">
 								<h2><%=account.getName()%></h2>
 							</li>
 
-							<li class="pull-left">
+							<li class="">
 								<h2 class="year sec_text "></h2>
 							</li>
-							<li class="pull-left">
+							<li class="">
 								<h2 class="term sec_text "></h2>
 							</li>
+							
+							
+							<li style="margin-left:500px" role="presentation" class="dropdown"><a
+								href="javascript:;" class="dropdown-toggle info-number"
+								data-toggle="dropdown" aria-expanded="false"> <i
+									class="fa fa-envelope-o"></i> <span class="badge bg-green"></span>
+							</a>
+								<ul id="menu1" class="dropdown-menu list-unstyled msg_list"
+									role="menu">
+									<li><a> <span class="image"><img
+												src="images/img.jpg" alt="Profile Image" /></span> <span> <span>Peter
+													Mwenda</span> <span class="time">3 mins ago</span>
+										</span> <span class="message"> New system coming soon... </span>
+									</a></li>
+									<li>
+										<div class="text-center">
+											<a> <strong>See All Alerts</strong> <i
+												class="fa fa-angle-right"></i>
+											</a>
+										</div>
+									</li>
+								</ul></li>
 
 
 
@@ -289,26 +311,7 @@
 											class="fa fa-sign-out pull-right"></i> Log Out</a></li>
 								</ul></li>
 
-							<li role="presentation" class="dropdown"><a
-								href="javascript:;" class="dropdown-toggle info-number"
-								data-toggle="dropdown" aria-expanded="false"> <i
-									class="fa fa-envelope-o"></i> <span class="badge bg-green"></span>
-							</a>
-								<ul id="menu1" class="dropdown-menu list-unstyled msg_list"
-									role="menu">
-									<li><a> <span class="image"><img
-												src="images/img.jpg" alt="Profile Image" /></span> <span> <span>Peter
-													Mwenda</span> <span class="time">3 mins ago</span>
-										</span> <span class="message"> New system coming soon... </span>
-									</a></li>
-									<li>
-										<div class="text-center">
-											<a> <strong>See All Alerts</strong> <i
-												class="fa fa-angle-right"></i>
-											</a>
-										</div>
-									</li>
-								</ul></li>
+							
 						</ul>
 					</nav>
 				</div>

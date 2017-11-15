@@ -24,13 +24,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-/**
- * Read the configuration file (Use Key Value pair)
- * 
- * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
- * @author <a href="mailto:michael@tawi.mobi">Michael Wakahe</a>
- *
- */
+
 public class PropertiesConfig extends HttpServlet {
 
 	/**

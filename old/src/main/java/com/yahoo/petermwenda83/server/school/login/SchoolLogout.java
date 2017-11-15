@@ -46,7 +46,7 @@ public class SchoolLogout  extends HttpServlet{
 
 	       HttpSession session = request.getSession(true);
 
-	       response.sendRedirect("index.jsp");
+	      
 	       
 	       String username = ""; 
 	       
@@ -61,6 +61,9 @@ public class SchoolLogout  extends HttpServlet{
 	           
 	           
 	       }
+	       
+	       
+	       response.sendRedirect("index.jsp");
 	       
 	   }
 

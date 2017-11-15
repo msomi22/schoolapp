@@ -1,5 +1,6 @@
-/*
-*//*************************************************************
+
+
+/*************************************************************
  * Online School Management System                           *
  * Forth Year Project                                        *
  * Maasai Mara University                                    *
@@ -8,7 +9,7 @@
  * Name: Njeru Mwenda Peter                                  *
  * ADM NO : BS02/009/2012                                    *
  *                                                           *
- *************************************************************//*
+ *************************************************************/
 package com.yahoo.petermwenda83.persistence;
 
 import java.sql.Connection;
@@ -16,11 +17,11 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-*//**
+/**
  * Tests our class with database credentials.
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
- *//*
+ */
 
 public class TestDBCredentials {
 	private DBCredentials dBCredentials;
@@ -36,4 +37,3 @@ public class TestDBCredentials {
 	}
 
 }
-*/

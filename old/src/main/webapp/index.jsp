@@ -46,20 +46,19 @@
 					<%
 						String loginErrStr = "";
 					
-				/* 
+				
 
 						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null | session !=null) {
 							loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
 
-							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY, "");
-							session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID, "");
+							
 							//  session.invalidate();
 							 // session.invalidate(); 
 
 						     //   response.sendRedirect("index.jsp");
 							
 						
-						} */
+						} 
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {
 					%>
@@ -289,7 +288,7 @@
 	function disableBackButton() {
 		window.history.forward();
 	}
-	setTimeout("disableBackButton()", 0);
+	setInterval("disableBackButton()", 10);
 	
 	
 	
