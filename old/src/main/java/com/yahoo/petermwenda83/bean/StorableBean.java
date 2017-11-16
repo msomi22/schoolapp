@@ -27,7 +27,7 @@ public class StorableBean implements Serializable {
 	@JsonIgnore
 	private int id;
 	private String uuid;
-	private String accountId;
+	private String accountId;  
 	/**
 	 * 
 	 */

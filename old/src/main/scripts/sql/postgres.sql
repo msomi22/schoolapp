@@ -504,6 +504,28 @@ ALTER TABLE yearlyMean OWNER TO school;
 
 
 
+-- -------------------
+-- Table ClassMean
+-- -------------------
+ CREATE TABLE  ClassMean (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountId text REFERENCES Account(uuid),
+    classId text REFERENCES classRoom(uuid),
+    streamId text REFERENCES Stream(uuid),
+    classmean float, 
+    streammean float, 
+    term text,
+    year text,
+    dateAdded timestamp with time zone DEFAULT now()
+   
+   
+);
+ALTER TABLE ClassMean OWNER TO school;
+--uuid,accountId,classId,streamId,classmean,streammean,term,year,dateAdded
+
+
+
 -- ==================
 -- ==================
 -- .7 Pocket Money Management
