@@ -9,7 +9,7 @@ import java.util.Date;
 import com.yahoo.petermwenda83.bean.StorableBean;
 
 /**
- * @author peter
+ * @author peter  
  *
  */
 public class ClassMean extends StorableBean{

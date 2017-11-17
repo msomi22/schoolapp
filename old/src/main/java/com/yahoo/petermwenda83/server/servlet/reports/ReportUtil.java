@@ -399,8 +399,18 @@ public class ReportUtil {
 
 			for (FinaResult finaResult : linaResultList) {
 
-				Subject subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
-				String desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+				Subject subj;
+				if(subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()) != null) {
+					 subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+				}else {
+					subj = new Subject();
+				}
+				
+				String desc = "";
+				if(categoryDAO.getCategoryById(accountId, subj.getCategoryId()) != null) {
+					 desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+				}
+				
 
 				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {

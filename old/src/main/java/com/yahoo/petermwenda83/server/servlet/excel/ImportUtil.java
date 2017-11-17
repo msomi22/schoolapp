@@ -21,6 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.student.Student;
+import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
@@ -41,9 +42,11 @@ public class ImportUtil {
 	private List<String> categoryList;
 	
 	private static SubjectDAO subjectDAO;
+	private static PrimaryDAO primaryDAO;
 	
 	static {
 		subjectDAO = SubjectDAO.getInstance();
+		primaryDAO = PrimaryDAO.getInstance();
 	}
 
 	public ImportUtil(){
@@ -305,7 +308,20 @@ public class ImportUtil {
 						
 						student.setLastUpdated(new Date().toString()); 
 						
+						
+						
 						if(studentDAO.putStudent(student)) {
+							
+							StudentPrimary primary = new StudentPrimary();
+							primary.setAccountId(accountId);
+							primary.setStudentId(student.getUuid());
+							primary.setSchoolName("Default"); 
+							primary.setIndex("308303119");
+							primary.setKcpeyear("2017"); 
+							primary.setKcpemark(kcpe);
+							primaryDAO.putStudentPrimary(primary);
+							
+							
 							StudentService studentService = new StudentService();
 							subjectDAO.getSubjects(accountId).forEach(subject -> {
 								ApiSubject apiSubject = new ApiSubject();
