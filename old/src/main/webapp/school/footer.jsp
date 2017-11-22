@@ -38,7 +38,7 @@
 
 
 		<div class="col-md-2 col-sm-6 col-md-offset-4">
-			&copy; AppleTech Limited.
+			&copy; F.M.S (Fast Modern School Mgt Sys.)
 			<%=Calendar.getInstance().get(Calendar.YEAR)%>.
 		</div>
 
