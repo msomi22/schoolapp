@@ -168,6 +168,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 		boolean success = true;
 		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year, streamId) && 
 				scoreDuplicate(accountId, studentId ,subjectId ,examId ,term ,year, streamId).size() == 0) {
+			
 		try(   Connection conn = dbutils.getConnection();
 				
 				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Performance"
@@ -179,9 +180,9 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 				pstmtCatOne.setString(1, accountId);
 				pstmtCatOne.setString(2, studentId);
 				pstmtCatOne.setString(3, subjectId);
-				pstmtCatOne.setString(4, perfomance.getStreamId());
+				pstmtCatOne.setString(4, streamId);
 				pstmtCatOne.setString(5, perfomance.getClassRoomId());
-				pstmtCatOne.setString(6, perfomance.getExamId());
+				pstmtCatOne.setString(6, examId);
 				pstmtCatOne.setInt(7, perfomance.getScore()); 
 				pstmtCatOne.setInt(8, perfomance.getPaper1()); 
 				pstmtCatOne.setInt(9, perfomance.getPaper2()); 
@@ -215,7 +216,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 					pstmtCatOne.setString(5, accountId);
 					pstmtCatOne.setString(6, studentId);
 					pstmtCatOne.setString(7, subjectId);
-					pstmtCatOne.setString(8, perfomance.getStreamId());
+					pstmtCatOne.setString(8, streamId);
 					pstmtCatOne.setString(9, examId);
 					pstmtCatOne.setString(10, term);
 					pstmtCatOne.setString(11, year);

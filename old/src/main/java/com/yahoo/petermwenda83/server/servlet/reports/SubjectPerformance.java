@@ -10,7 +10,6 @@ package com.yahoo.petermwenda83.server.servlet.reports;
 public class SubjectPerformance {
 	
 	private double total;
-	private double average;
 	private int entry;
 
 	/**
@@ -18,7 +17,6 @@ public class SubjectPerformance {
 	 */
 	public SubjectPerformance() {
 		total = 0;
-		average = 0;
 		entry = 0;
 	}
 
@@ -41,28 +39,6 @@ public class SubjectPerformance {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-
-
-
-
-	/**
-	 * @return the average
-	 */
-	public double getAverage() {
-		return average;
-	}
-
-
-
-
-	/**
-	 * @param average the average to set
-	 */
-	public void setAverage(double average) {
-		this.average = average;
-	}
-
-
 
 
 	/**
@@ -90,7 +66,7 @@ public class SubjectPerformance {
 	 */
 	@Override
 	public String toString() {
-		return "SubjectPerformance [total=" + total + ", average=" + average + ", entry=" + entry + "]";
+		return "SubjectPerformance [total=" + total + ", entry=" + entry + "]";
 	}
 
 }

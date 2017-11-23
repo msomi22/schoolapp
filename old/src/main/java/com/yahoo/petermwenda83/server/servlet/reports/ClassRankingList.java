@@ -791,7 +791,7 @@ public class ClassRankingList extends HttpServlet{
 						exam3Score = "";
 					}
 
-				
+				        //TODO
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 
@@ -1515,7 +1515,7 @@ public class ClassRankingList extends HttpServlet{
 		SubjectPerformance totalExam2 = new SubjectPerformance();
 		SubjectPerformance totalExam3 = new SubjectPerformance();
 
-		double totalAvg = 0;
+		//double totalAvg = 0;
 		double total = 0;
 		int entry = 0;
 
@@ -1566,8 +1566,6 @@ public class ClassRankingList extends HttpServlet{
 
 				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 					
-					totalAvg = totalExam1.getAverage();
-					totalAvg = totalAvg > 0 ? totalAvg : 0;
 
 					AtomicInteger count = new  AtomicInteger();
 					exam1.parallelStream().forEach(ex -> {
@@ -1584,8 +1582,6 @@ public class ClassRankingList extends HttpServlet{
 
 				}else {
 					
-					totalAvg = totalExam1.getAverage() + totalExam2.getAverage() + totalExam3.getAverage();
-					totalAvg = totalAvg > 0 ? totalAvg / 3 : 0;
 
 					AtomicInteger count1 = new  AtomicInteger();
 					exam1.parallelStream().forEach(ex -> {
@@ -1611,7 +1607,14 @@ public class ClassRankingList extends HttpServlet{
 					
 					entry = (int)PeterMid.computeMax(count1.get(), count2.get(), count3.get());
 					
-					total = (totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal()) / 3;
+					total = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();  
+					total = Math.round(total/3);
+					
+					//TODO
+					/*System.out.println("---------------------------------------"
+							+ "Total : " + total + " E1: " + totalExam1.getTotal() + " E2: " + totalExam2.getTotal() +
+							" E3: " + totalExam3.getTotal() + " sub: " + subject.getCode()); */
+					
 
 
 				}
@@ -1633,9 +1636,6 @@ public class ClassRankingList extends HttpServlet{
 				totalExam1 = ReportUtil.findSubjectPerformance(accountId, exam1, examType);
 
 				totalExam2 = ReportUtil.findSubjectPerformance(accountId, exam2, examType);
-
-				totalAvg = totalExam1.getAverage() + totalExam2.getAverage();
-				totalAvg = totalAvg > 0 ? totalAvg / 2 : 0;
 
 				AtomicInteger count1 = new  AtomicInteger();
 				exam1.parallelStream().forEach(ex -> {
@@ -1669,8 +1669,6 @@ public class ClassRankingList extends HttpServlet{
 
 				totalExam1 =ReportUtil.findSubjectPerformance(accountId, exam1, examType);
 
-				totalAvg = totalExam1.getAverage() > 0 ? totalExam1.getAverage() : 0;
-				
 				AtomicInteger count1 = new  AtomicInteger();
 				exam1.parallelStream().forEach(ex -> {
 					if(ex.getScore() > 0) {
@@ -1688,13 +1686,16 @@ public class ClassRankingList extends HttpServlet{
 			//Business logic here
 			SubjectAnalysis subjectAnalysis = new SubjectAnalysis();
 			subjectAnalysis.setSubjectId(subject.getUuid()); 
-			subjectAnalysis.setTotal(Double.parseDouble(ReportUtil.df2.format(total))); 
-			subjectAnalysis.setAverage(Double.parseDouble(ReportUtil.df2.format(totalAvg)));
-			subjectAnalysis.setEntry(entry);
-
+			
+			if(entry > 0) {
+				subjectAnalysis.setTotal((int)total); 
+				subjectAnalysis.setAverage(Double.parseDouble(ReportUtil.df2.format(total/entry)));
+				subjectAnalysis.setEntry(entry);
+				
+			}
+			
 			performance1List.add(subjectAnalysis);
-
-			totalAvg = 0;
+			
 			total = 0;
 			entry = 0;
 

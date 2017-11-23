@@ -737,24 +737,27 @@ public class StudentReportCard extends HttpServlet{
 
 						if(StringUtils.equals(term, "1")){
 
-							yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanOne(mean);//mean
 							yearlyMean.setTermOnePosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "2")){
 
-							yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanTwo(mean);//mean
 							yearlyMean.setTermTwoPosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "3")){
 
-							yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanThree(mean);//mean
 							yearlyMean.setTermThreePosition(termPosition);
 
 						}
 
-						//
+						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 
@@ -798,7 +801,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-						//
+						//TODO
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
