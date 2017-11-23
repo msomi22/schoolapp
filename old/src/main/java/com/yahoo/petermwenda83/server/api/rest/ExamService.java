@@ -538,7 +538,7 @@ public class ExamService {
 				
 				if(stored){
 
-					response.setMessage("error");
+					response.setMessage("success");
 					response.setDescription("Score saved successfully.");
 					return response;
 

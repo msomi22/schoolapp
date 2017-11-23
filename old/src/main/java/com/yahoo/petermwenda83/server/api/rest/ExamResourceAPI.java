@@ -49,7 +49,7 @@ public class ExamResourceAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 	@GET
-	@Path("/student/{accountId}/{streamId}/{subjectId}/{examUuid}/")   
+	@Path("/student/{accountId}/{streamId}/{subjectId}/{examUuid}")   
 	public Object getStudents(@PathParam("accountId") String accountId, @PathParam("streamId") String streamId, 
 			    @PathParam("subjectId") String subjectId, @PathParam("examUuid") String examUuid,
 			    @HeaderParam("authorization") String auth) {
@@ -80,7 +80,7 @@ public class ExamResourceAPI {
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
 	} )
 	@POST
-	@Path("/submit/")   
+	@Path("/submit/{accountId}")    
 	public Object submitExamScore(@PathParam("accountId") String accountId, SubmitExam submitExam,
 			    @HeaderParam("authorization") String auth) {
 
