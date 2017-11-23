@@ -28,8 +28,8 @@ import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
-import com.yahoo.petermwenda83.server.api.rest.jwt.ApiCredentials;
-import com.yahoo.petermwenda83.server.api.rest.jwt.JWT;
+import com.yahoo.petermwenda83.server.api.rest.ExamService;
+import com.yahoo.petermwenda83.server.api.rest.bean.SubmitExam;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -79,20 +79,30 @@ public class ExamAjax extends HttpServlet{
 		outof = StringUtils.trimToEmpty(request.getParameter("outOf"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
-		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
-		//String jwt = "";
-		String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-		String jwtSubject = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
-
-
+		
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
 				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
 				.setPrettyPrinting().serializeNulls().create();
+		
+		
+		ExamService examService = new ExamService();
 
 
 		if(StringUtils.equalsIgnoreCase(decision, "submitExam")){
-
-			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score , outof ,jwt , userId, jwtSubject)).getBytes());
+			
+			SubmitExam submitExam = new SubmitExam();
+			submitExam.setAccountId(accountId);
+			submitExam.setStudentId(studentId);
+			submitExam.setSubjectId(subjectId);
+			submitExam.setExamId(examId);
+			submitExam.setStreamId(streamId);
+			submitExam.setScore(Integer.valueOf(score));
+			submitExam.setOutof(Integer.valueOf(outof)); 
+			
+			//out.write(gson.toJson(examService.saveScore(submitExam)).getBytes());
+			
+			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score, outof)).getBytes());
+			
 			out.flush();
 			out.close();
 
@@ -111,20 +121,14 @@ public class ExamAjax extends HttpServlet{
 	 * @param jwtSubject 
 	 * @return
 	 */
-	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
-			String streamId, String score, String outof, String jwt, String userId, String jwtSubject) {
+	public JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
+			String streamId, String score, String outof) {
 
 		JsonObject jsonObject = new JsonObject();
 		String message = "";
-		ApiCredentials apiKey = new ApiCredentials();
+		
 
-
-		if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
-
-			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
-			return jsonObject;
-
-		}else if(StringUtils.isBlank(studentId)){
+         if(StringUtils.isBlank(studentId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no studentId.");
 			return jsonObject;

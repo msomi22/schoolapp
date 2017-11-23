@@ -166,6 +166,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 
 		boolean success = true;
+		
 		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year, streamId) && 
 				scoreDuplicate(accountId, studentId ,subjectId ,examId ,term ,year, streamId).size() == 0) {
 			
