@@ -111,7 +111,7 @@
 
 							<div>
 								<h1>
-									<i class="fa fa-graduation-cap"></i> F.M.S (Fast Modern School Mgt Sys.)
+									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
 							</div>
@@ -158,7 +158,7 @@
 
 							<div>
 								<h1>
-									<i class="fa fa-graduation-cap"></i> F.M.S (Fast Modern School Mgt Sys.)
+									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
 							</div>
@@ -217,7 +217,7 @@
 
 							<div>
 								<h1>
-									<i class="fa fa-graduation-cap"></i>F.M.S (Fast Modern School Mgt Sys.)
+									<i class="fa fa-graduation-cap"></i>F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
 							</div>

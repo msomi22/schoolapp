@@ -43,7 +43,7 @@ function validateOutOf(score){
 	
 	if (score.length > 0) {
 
-		if (!score.match(scoreRegx) || score.length > 2) {
+		if (!score.match(scoreRegx) || score.length > 3 || score >100) {
 
 			
 			$('#scorewarning').modal('show');
@@ -108,13 +108,7 @@ function validateScore(id) {
 			$("#outOf").val($("#outOfCustom").val());
 
 			// log values
-			console.log("Student Id: " + studentId);
-
-			console.log("Subject Id: " + subjectId);
-			console.log("Exam Id: " + examId);
-			console.log("Stream ID:" + streamId);
-
-			console.log("Score " + score);
+			
 
 			// submit
 			// $('#submitExam').attr('action', 'examAjax');
@@ -126,6 +120,14 @@ function validateScore(id) {
 			var form = $('#submitExam');
 			
 			setTimeout(function(){
+				
+				console.log("Student Id: " + studentId);
+
+				console.log("Subject Id: " + subjectId);
+				console.log("Exam Id: " + examId);
+				console.log("Stream ID:" + streamId);
+
+				console.log("Score " + trimVar(Cells[6].innerText));
 
 			jQuery.ajax({
 				url : 'examAjax',
@@ -191,7 +193,7 @@ function validateScore(id) {
 
 			});
 			
-			},0);
+			},2000);
 
 		}
 

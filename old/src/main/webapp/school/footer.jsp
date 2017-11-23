@@ -38,7 +38,7 @@
 
 
 		<div class="col-md-2 col-sm-6 col-md-offset-4">
-			&copy; F.M.S (Fast Modern School Mgt Sys.)
+			&copy; F.M.S 
 			<%=Calendar.getInstance().get(Calendar.YEAR)%>.
 		</div>
 
