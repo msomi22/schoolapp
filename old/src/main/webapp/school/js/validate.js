@@ -102,10 +102,7 @@ function validateScore(id) {
 
 			// setting the hidden values
 
-			$("#score").val(score);
-			$("#studentId").val(studentId);
 			
-			$("#outOf").val($("#outOfCustom").val());
 
 			// log values
 			
@@ -115,11 +112,18 @@ function validateScore(id) {
 
 			// $("#submitExam").submit();
 
-			var url = $('#submitExam').attr("action");
-
-			var form = $('#submitExam');
+			
 			
 			setTimeout(function(){
+				
+				$("#score").val(trimVar(Cells[6].innerText));
+				$("#studentId").val(studentId);
+				
+				$("#outOf").val($("#outOfCustom").val());
+				
+				var url = $('#submitExam').attr("action");
+
+				var form = $('#submitExam');
 				
 				console.log("Student Id: " + studentId);
 
