@@ -2196,7 +2196,7 @@ public class StudentReportCard extends HttpServlet{
 			return performance2List;
 
 		}else {
-			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects,exams.length);
 
 		}
 

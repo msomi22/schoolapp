@@ -1416,7 +1416,7 @@ public class ClassRankingList extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean();
 				
-				//System.out.println(" --totalExam1--- " + totalExam1);
+				System.out.println(" --totalExam1--- " + totalExam1);
 
 
 
@@ -1475,7 +1475,7 @@ public class ClassRankingList extends HttpServlet{
 			return performance2List;
 			
 		}else {
-			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects,exams.length);
 			
 		}
 

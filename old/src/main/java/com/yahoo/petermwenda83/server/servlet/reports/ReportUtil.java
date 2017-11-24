@@ -291,9 +291,11 @@ public class ReportUtil {
 	 * @param accountId
 	 * @param grade11subjects 
 	 * @param grade7subjects 
+	 * @param length 
 	 * @return
 	 */
-	public static List<Performance2> getAverage( List<Performance2> performanceList, String accountId, boolean grade7subjects, boolean grade11subjects) {
+	public static List<Performance2> getAverage( List<Performance2> performanceList, String accountId, boolean grade7subjects,
+			boolean grade11subjects, int length) {
 
 		List<Performance2> finalList = new ArrayList<>();
 
@@ -326,8 +328,19 @@ public class ReportUtil {
 				}
 
 
-
-				double average = ReportUtil.findExamAverage2(exam1Score,exam2Score,exam3Score);
+				double average  = 0;
+				if(length == 3) {
+					average = ReportUtil.findThreeExamAverage(exam1Score,exam2Score,exam3Score);
+					
+				}else if(length == 2) {
+					average = ReportUtil.findTwoExamAverage(exam1Score,exam2Score);
+					
+				}else if(length == 1) {
+					average = ReportUtil.findOneExamAverage(exam1Score);
+					
+				}
+				
+				
 				String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
 				int point =  Integer.valueOf(avgpoint); 
 
@@ -1344,7 +1357,7 @@ public class ReportUtil {
 	 * @param exam3Score
 	 * @return
 	 */
-	public static double findExamAverage2(String exam1Score, String exam2Score, String exam3Score) {
+	public static double findThreeExamAverage(String exam1Score, String exam2Score, String exam3Score) {
 
 		if(exam1Score.length() == 0){
 			exam1Score = "0";
@@ -1363,6 +1376,60 @@ public class ReportUtil {
 
 		sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
 		mean = Math.round(sum/3);
+
+		return mean;
+
+	}
+
+	
+	/**
+	 * 
+	 * @param exam1Score
+	 * @param exam2Score
+	 * @param exam3Score
+	 * @return
+	 */
+	public static double findTwoExamAverage(String exam1Score, String exam2Score) {
+
+		if(exam1Score.length() == 0){
+			exam1Score = "0";
+		}
+
+		if(exam2Score.length() == 0){
+			exam2Score = "0";
+		}
+
+
+		double sum = 0;
+		double mean = 0;
+
+		sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+		mean = Math.round(sum/2);
+
+		return mean;
+
+	}
+
+	
+	/**
+	 * 
+	 * @param exam1Score
+	 * @param exam2Score
+	 * @param exam3Score
+	 * @return
+	 */
+	public static double findOneExamAverage(String score) {
+
+		if(score.length() == 0){
+			score = "0";
+		}
+
+		
+		double sum = 0;
+		double mean = 0;
+
+		sum = Integer.parseInt(score); 
+		mean = Math.round(sum);
 
 		return mean;
 
