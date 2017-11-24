@@ -4,6 +4,7 @@
 package com.yahoo.petermwenda83.server.api.rest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -198,6 +199,8 @@ public class ExamService {
 
 		}
 
+		Collections.sort(studentExamList);
+		
 		return studentExamList;
 	}
 

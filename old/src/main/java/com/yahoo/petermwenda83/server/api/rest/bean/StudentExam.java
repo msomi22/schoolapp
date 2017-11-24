@@ -7,7 +7,7 @@ package com.yahoo.petermwenda83.server.api.rest.bean;
  * @author peter
  *
  */
-public class StudentExam {
+public class StudentExam implements Comparable<StudentExam>{
 	
 	private String studentId;
 	private int count;
@@ -137,6 +137,11 @@ public class StudentExam {
 		return "StudentExam [studentId=" + studentId + ", count=" + count + ", regNo=" + regNo + ", firstname="
 				+ firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", score=" + score + "]";
 	}
+
+	@Override
+	public int compareTo(StudentExam ss) {
+		return getRegNo().compareTo(((StudentExam) ss).getRegNo());  
+		}
 
 	
 

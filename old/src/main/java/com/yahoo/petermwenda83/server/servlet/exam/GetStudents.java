@@ -5,6 +5,7 @@ package com.yahoo.petermwenda83.server.servlet.exam;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +114,23 @@ public class GetStudents extends HttpServlet{
 
 
 		}
+		
+		/**
+		 * Java provides Comparable interface which should be implemented by any custom class if we want to use 
+		 * Arrays or Collections sorting methods.
+		 * Comparable interface has compareTo(T obj) method which is used by sorting methods
+		 * We should override this method in such a way that it returns a negative integer, zero, or a positive integer 
+		 * if “this” object is less than, equal to, or greater than the object passed as argument.
+		 * 
+		 * Read more on Java Comparator
+		 * 
+		 * Comparator interface compare(Object o1, Object o2) method need to be implemented that takes two Object argument, 
+		 * it should be implemented in such a way that it returns negative int if first argument is less than the second one and 
+		 * returns zero if they are equal and positive int if first argument is greater than second one.
+		 * 
+		 * Read more here ( https://www.journaldev.com/780/comparable-and-comparator-in-java-example ) 
+		 */
+		Collections.sort(selectedStudents); 
 
 		session.setAttribute(SessionConstants.EXAM_GET_STUDENTS_IDS, idsMap);  
 		session.setAttribute(SessionConstants.EXAM_GET_STUDENTS, selectedStudents); 
