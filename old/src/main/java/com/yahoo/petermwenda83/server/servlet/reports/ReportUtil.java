@@ -1768,19 +1768,16 @@ public class ReportUtil {
 		for(Performance2 performance : performanceList){
 
 
-			int mainPoint = performance.getTotalPoint();
-			int totalMean = performance.getTotalMean();
-
 			if(rankWithPoints && !rankWithTotalMarks){  
 
-				total = mainPoint;
+				total = performance.getTotalPoint();
 
 
 			}
 
 			if(!rankWithPoints && rankWithTotalMarks){
 
-				total = totalMean;
+				total = performance.getTotalMean();
 
 			}
 
@@ -1800,8 +1797,8 @@ public class ReportUtil {
 			StreamResult streamResult = new StreamResult();
 			streamResult.setResult(cposition + " Out of: " + performanceList.size());
 			streamResult.setStudentId(performance.getStudentId());
-			streamResult.setTotal(totalMean);
-			streamResult.setPoint(mainPoint); 
+			streamResult.setTotal(performance.getTotalMean());
+			streamResult.setPoint(performance.getTotalPoint()); 
 
 			positionList.add(streamResult);
 
@@ -1811,7 +1808,7 @@ public class ReportUtil {
 		}
 
 		//return object
-		StreamResult position = positionList.parallelStream()
+		StreamResult position = positionList.stream() 
 				.filter(student -> studentId.equals(student.getStudentId()))
 				.findAny()
 				.orElse(null);

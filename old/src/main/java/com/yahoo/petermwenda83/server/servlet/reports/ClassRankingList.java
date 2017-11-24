@@ -351,6 +351,7 @@ public class ClassRankingList extends HttpServlet{
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult, paper123Id);
 
 				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
+				
 				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true, paper123Id); 
 
 				if(rankWithPoints && !rankWithTotalMarks){
@@ -865,6 +866,7 @@ public class ClassRankingList extends HttpServlet{
 				}else{
 
 					if(!classResult){
+						
 						if(!classperformanceList.isEmpty()){
 							classPositionMSG = ReportUtil.getClassPosition(accountId, student.getUuid() , 
 									classperformanceList,rankWithPoints,rankWithTotalMarks);
