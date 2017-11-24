@@ -36,7 +36,7 @@ import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 
-/** http://localhost:8080/school/school/studentPerStreamExcel?accountId=b83e9b89-0d52-4191-a6bf-acf501267e2e1&streamId=4DA86139-6A72-4089-8858-6A3A613FDFE6&decisionFlag=0
+/** http://localhost:8080/school/school/studentPerStreamExcel?accountId=b83e9b89-0d52-4191-a6bf-acf501267e2e1&uuid=4DA86139-6A72-4089-8858-6A3A613FDFE6&decisionFlag=0
  * 
  * @author peter
  *
@@ -147,19 +147,19 @@ public class StudentPerStreamExcel extends HttpServlet{
 		cell3.setCellValue(ch.createRichTextString("Midlename")); 
 		cell3.setCellStyle(style2);
 
-		XSSFCell cell4 = r1.createCell(2);
+		XSSFCell cell4 = r1.createCell(3);
 		cell4.setCellValue(ch.createRichTextString("Lastname")); 
 		cell4.setCellStyle(style2);
 
-		XSSFCell cell5 = r1.createCell(2);
+		XSSFCell cell5 = r1.createCell(4);
 		cell5.setCellValue(ch.createRichTextString("AdmClass")); 
 		cell5.setCellStyle(style2);
 
-		XSSFCell cell6 = r1.createCell(2);
+		XSSFCell cell6 = r1.createCell(5);
 		cell6.setCellValue(ch.createRichTextString("CurrentClass")); 
 		cell6.setCellStyle(style2);
 
-		XSSFCell cell7 = r1.createCell(2);
+		XSSFCell cell7 = r1.createCell(6);
 		cell7.setCellValue(ch.createRichTextString("Gender")); 
 		cell7.setCellStyle(style2);
 
