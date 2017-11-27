@@ -1035,12 +1035,20 @@ public class ClassRankingList extends HttpServlet{
 				String prevMean = "";
 
 				if(Integer.valueOf(term) == 1){
-					previousMean = yearlymean.getMeanOne();
-				}else if(Integer.valueOf(term) == 2){
-					previousMean = yearlymean.getMeanTwo();
-				}else if(Integer.valueOf(term) == 3){
 					previousMean = yearlymean.getMeanThree();
+					//previousMean = yearlymean.getMeanOne();
+					
+				}else if(Integer.valueOf(term) == 2){
+					previousMean = yearlymean.getMeanOne();
+					//previousMean = yearlymean.getMeanTwo();
+					
+				}else if(Integer.valueOf(term) == 3){
+					//previousMean = yearlymean.getMeanThree();
+					previousMean = yearlymean.getMeanTwo();
+					
 				}
+				
+				//System.out.println(" *** *** accurateYear: " + accurateYear + "******* " + yearlymean); 
 
 				prevMean = ReportUtil.df2.format(previousMean);
 
@@ -1063,6 +1071,8 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
+				
+				System.out.println(" *** *** deviation : " + deviation + ", previousMean: " + previousMean + ", thisMean : " + thisMean); 
 
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
