@@ -415,6 +415,7 @@ ALTER TABLE Exam OWNER TO school;
 -- -------------------
  CREATE TABLE  Performance (
     id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     studentId text REFERENCES Student(uuid),
     subjectId text REFERENCES Subject(uuid), 

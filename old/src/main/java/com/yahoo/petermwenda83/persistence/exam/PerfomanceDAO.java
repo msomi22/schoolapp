@@ -244,5 +244,66 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		return perfomance; 
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#delteStreamSubjectDuplicate(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean deleteStreamSubjectDuplicate(String accountId, String uuid) {
+
+		boolean success = true;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Performance WHERE accountId =? AND  uuid =?;");       
+
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, uuid); 
+			pstmt.executeUpdate();
+
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when deleting  Perfomance for accountId: " + accountId + " ,and uuid: " + uuid );
+			
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+		}
+
+		return success; 
+	
+	}
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolPerfomanceDAO#getPerformanceList(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Perfomance> getPerformanceList(String accountId, String examId, String studentId, String streamId,
+			String subjectId, String term, String year) {
+		List<Perfomance> list = null;
+
+        try (
+        		 Connection conn = dbutils.getConnection();
+     	         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Performance WHERE accountId = ? AND"
+     	         		+ " examId=? AND studentId = ? AND streamId =? AND subjectId =? AND term = ? AND year = ?;");    		   
+     	   ) {
+         	   pstmt.setString(1, accountId);      
+         	   pstmt.setString(2, examId); 
+         	   pstmt.setString(3, studentId);  
+         	   pstmt.setString(4, streamId); 
+         	   pstmt.setString(5, subjectId); 
+         	   pstmt.setString(6, term); 
+       	       pstmt.setString(7, year); 
+         	   try( ResultSet rset = pstmt.executeQuery();){
+     	       
+     	       list = beanProcessor.toBeanList(rset, Perfomance.class);
+         	   }
+        } catch (SQLException e) {
+            logger.error("SQLException when getting Stream Perfomance List"); 
+            logger.error(ExceptionUtils.getStackTrace(e));
+            System.out.println(ExceptionUtils.getStackTrace(e));
+        }
+        return list;
+	}
+
 	
 }
