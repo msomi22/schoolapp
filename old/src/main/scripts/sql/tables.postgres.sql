@@ -515,6 +515,7 @@ ALTER TABLE yearlyMean OWNER TO school;
     accountId text REFERENCES Account(uuid),
     classId text REFERENCES classRoom(uuid),
     streamId text REFERENCES Stream(uuid),
+    examId text,
     classmean float, 
     streammean float, 
     term text,

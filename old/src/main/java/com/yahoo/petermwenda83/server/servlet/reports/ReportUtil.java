@@ -26,6 +26,7 @@ import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
@@ -86,6 +87,7 @@ public class ReportUtil {
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
+	private static ExamDAO examDAO;
 
 
 
@@ -98,11 +100,55 @@ public class ReportUtil {
 		categoryDAO = CategoryDAO.getInstance(); 
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 
 	}
 
+	
+	public static String getExamName(String accountId, String[] exams, int i) { 
+		
+		String exam11 = "";
+		String exam22 = "";
+		String exam33 = "";
+
+		if(exams.length == 1){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+
+		}
+
+		if(exams.length == 2){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+
+		}
+
+		if(exams.length == 3){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+			exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
+
+		}
+		
+		String examNames = exams.length+"_";
+		
+		if(i == 1) {
+			
+			examNames += exam11.length()== 0 ? "" : exam11+"_";
+			examNames += exam22.length()== 0 ? "" : exam22+"_";
+			examNames += exam33.length()== 0 ? "" : exam33+"_";
+			
+		}else if(i == 0) {
+			
+			examNames = "(1) " + exam11 + "\n(2) " + exam22 +"\n(3) " + exam33;
+			
+		}
+		
+		return examNames;
+	}
 
 
 	/**

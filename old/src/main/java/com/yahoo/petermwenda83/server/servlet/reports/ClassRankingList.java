@@ -53,7 +53,7 @@ import com.yahoo.petermwenda83.bean.student.StudentPrimary;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -82,9 +82,9 @@ public class ClassRankingList extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
-	private static ExamDAO examDAO;
+	//private static ExamDAO examDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
-	//private static ClassMeanDAO classMeanDAO;
+	private static ClassMeanDAO classMeanDAO;
 	private static ClassDAO classDAO;
 	private static PrimaryDAO primaryDAO;
 
@@ -134,9 +134,9 @@ public class ClassRankingList extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		examDAO = ExamDAO.getInstance();
+		//examDAO = ExamDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
-		//classMeanDAO = ClassMeanDAO.getInstance();
+		classMeanDAO = ClassMeanDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 
@@ -254,8 +254,6 @@ public class ClassRankingList extends HttpServlet{
 
 			document.open();
 			
-			
-
 			generateReport(accountId, streamId, classroomId, term, year, examType, paper123Id, saveMean);
 
 			document.close();
@@ -467,18 +465,6 @@ public class ClassRankingList extends HttpServlet{
 			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 
-			 
-			ClassMean class_stream_Mean = new ClassMean();
-			class_stream_Mean.setAccountId(accountId);
-			class_stream_Mean.setClassId(classroomId);
-			class_stream_Mean.setStreamId(streamId);
-			class_stream_Mean.setStreammean(Double.valueOf(classMean));
-			class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
-			class_stream_Mean.setTerm(term);
-			class_stream_Mean.setYear(year); 
-
-			//classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, exams.toString(), term, year);
-
 			classTable.addCell(mainGradeInfoCell);
 			classTable.addCell(mainGradeDescCell);
 
@@ -489,34 +475,26 @@ public class ClassRankingList extends HttpServlet{
 			examTable.setWidthPercentage(58);  
 			examTable.setWidths(new int[]{8,50});  
 
-			String exam11 = "";
-			String exam22 = "";
-			String exam33 = "";
+			String examNames = ReportUtil.getExamName(accountId, exams,1);
+			
+			ClassMean class_stream_Mean = new ClassMean();
+			class_stream_Mean.setAccountId(accountId);
+			class_stream_Mean.setClassId(classroomId);
+			class_stream_Mean.setStreamId(streamId);
+			class_stream_Mean.setExamId(examNames); 
+			class_stream_Mean.setStreammean(Double.valueOf(classMean));
+			class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
+			class_stream_Mean.setTerm(term);
+			class_stream_Mean.setYear(year); 
 
-			if(exams.length == 1){
+			//TODO 
+			classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, examNames, term, year);
 
-				exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
 
-			}
-
-			if(exams.length == 2){
-
-				exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
-				exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
-
-			}
-
-			if(exams.length == 3){
-
-				exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
-				exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
-				exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
-
-			}
-
+			String stringExams = ReportUtil.getExamName(accountId, exams,0);
 
 			PdfPCell examinfoCell = new PdfPCell(new Phrase("Exam:",timesRomanBold8)); 
-			PdfPCell examDescCell = new PdfPCell(new Phrase("(1) " + exam11 + "\n(2) " + exam22 +"\n(3) " + exam33,  timesRomanNormal6));  
+			PdfPCell examDescCell = new PdfPCell(new Phrase(stringExams,  timesRomanNormal6));  
 			examinfoCell.setBorder(Rectangle.NO_BORDER);
 			examDescCell.setBorder(Rectangle.NO_BORDER);
 			examDescCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT); 
@@ -792,7 +770,7 @@ public class ClassRankingList extends HttpServlet{
 						exam3Score = "";
 					}
 
-				        //TODO
+				       
 					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 
@@ -845,7 +823,7 @@ public class ClassRankingList extends HttpServlet{
 				poinst_str = String.valueOf((int) Math.round(pointsAvg)); 
 				mean_str = ReportUtil.df2.format(avgMean);
 				
-				//TODO
+				
 				String termPosition = "";
 
 				String classPositionMSG = "";
@@ -919,7 +897,7 @@ public class ClassRankingList extends HttpServlet{
 
 						}
 
-		                 //TODO
+		                
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
@@ -960,7 +938,7 @@ public class ClassRankingList extends HttpServlet{
 
 						}
 
-		                 //TODO
+		                
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
@@ -1007,7 +985,7 @@ public class ClassRankingList extends HttpServlet{
 
 					}
 
-	                 //TODO
+	             
 					if(StringUtils.equals(saveMean, "1")) {
 						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 					}
@@ -1622,12 +1600,6 @@ public class ClassRankingList extends HttpServlet{
 					total = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();  
 					total = Math.round(total/3);
 					
-					//TODO
-					/*System.out.println("---------------------------------------"
-							+ "Total : " + total + " E1: " + totalExam1.getTotal() + " E2: " + totalExam2.getTotal() +
-							" E3: " + totalExam3.getTotal() + " sub: " + subject.getCode()); */
-					
-
 
 				}
 
