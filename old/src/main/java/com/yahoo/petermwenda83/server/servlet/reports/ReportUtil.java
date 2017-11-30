@@ -141,6 +141,10 @@ public class ReportUtil {
 			examNames += exam22.length()== 0 ? "" : exam22+"_";
 			examNames += exam33.length()== 0 ? "" : exam33+"_";
 			
+			if(StringUtils.endsWith(examNames, "_")) {
+				examNames = removeLastChar(examNames); 
+			}
+			
 		}else if(i == 0) {
 			
 			examNames = "(1) " + exam11 + "\n(2) " + exam22 +"\n(3) " + exam33;
@@ -151,6 +155,9 @@ public class ReportUtil {
 	}
 
 
+	private static String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
+    }
 	/**
 	 * 
 	 * @param accountId
