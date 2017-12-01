@@ -198,6 +198,15 @@
 		<url-pattern>/school/studentPerStreamExcel</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>StreamAnalysis</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StreamAnalysis</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StreamAnalysis</servlet-name>
+		<url-pattern>/school/streamAnalysis</url-pattern>
+	</servlet-mapping>
+	
 	
 	<listener>
 		<listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>

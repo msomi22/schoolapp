@@ -85,6 +85,7 @@ public class ImportUtil {
 				String regNo = "";
 				String firstName = "";
 				String middleName = "";
+				String lastName = "";
 				String gender = "";
 				String kcpe = "";
 				String isDay = "";
@@ -111,9 +112,10 @@ public class ImportUtil {
 							regNo = row.getCell(0)+"";
 							firstName =  row.getCell(1)+"";
 							middleName =  row.getCell(2)+"";
-							gender =  row.getCell(3)+"";
-							kcpe =  row.getCell(4)+"";
-							isDay = row.getCell(5)+"";
+							lastName = row.getCell(3)+"";
+							gender =  row.getCell(4)+"";
+							kcpe =  row.getCell(5)+"";
+							isDay = row.getCell(6)+""; 
 
 							if (StringUtils.isBlank(regNo) || StringUtils.equalsIgnoreCase(regNo, "null")) {
 								return ("Invalid/blank regNo " + regNo + " on line " + count);
@@ -217,6 +219,7 @@ public class ImportUtil {
 				String regNo = "";
 				String firstName = "";
 				String middleName = "";
+				String lastName = "";
 				String gender = "";
 				String kcpe = "";
 				String isDay = "";
@@ -242,9 +245,10 @@ public class ImportUtil {
 							regNo = row.getCell(0)+"";
 							firstName =  row.getCell(1)+"";
 							middleName =  row.getCell(2)+"";
-							gender =  row.getCell(3)+"";
-							kcpe =  row.getCell(4)+"";
-							isDay = row.getCell(5)+"";
+							lastName  =  row.getCell(3)+"";
+							gender =  row.getCell(4)+"";
+							kcpe =  row.getCell(5)+"";
+							isDay = row.getCell(6)+""; 
 							
 							
 							//"Day", "Boarder"
@@ -304,6 +308,7 @@ public class ImportUtil {
 						student.setRegNo(regNo);
 						student.setFirstname(firstName);
 						student.setMiddlename(middleName);
+						student.setLastname(lastName); 
 						student.setGender(gender);
 						
 						student.setLastUpdated(new Date().toString()); 

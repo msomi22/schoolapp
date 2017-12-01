@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
@@ -180,19 +181,18 @@ public class ClassMeanDAO extends GenericDAO implements SchoolClassMeanDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolClassMeanDAO#getClassMean(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<ClassMean> getClassMean(String accountId, String Id,String examId, String term, String year) {
-		List<ClassMean> list = null;
+	public List<ClassMean> getClassMean(String accountId, String streamId,String examId, String term, String year) {
+		List<ClassMean> list = new ArrayList<>();
 		try (
 				Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassMean WHERE accountId = ? AND"
-						+ " (classId=? OR streamId = ?) AND examId =? AND term =? AND term = ? AND year = ?;");    		   
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassMean WHERE accountId = ? AND "
+						+ " streamId =? AND examId =? AND term =? AND year = ?;");    		   
 				) {
 			pstmt.setString(1, accountId);   
-			pstmt.setString(2, Id); 
-			pstmt.setString(3, Id); 
-			pstmt.setString(4, examId); 
-			pstmt.setString(5, term); 
-			pstmt.setString(6, year); 
+			pstmt.setString(2, streamId); 
+			pstmt.setString(3, examId); 
+			pstmt.setString(4, term); 
+			pstmt.setString(5, year); 
 			try( ResultSet rset = pstmt.executeQuery();){
 				list = beanProcessor.toBeanList(rset, ClassMean.class);
 			}
