@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
@@ -27,6 +26,7 @@ import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.staff.TeacherSubjectDAO;
@@ -78,7 +78,7 @@ public class ReportUtil {
 
 	private static SubCategoryDAO subCategoryDAO2;
 	private static CategoryDAO categoryDAO2;
-	private static Logger logger;
+
 
 
 	private static GradingSystemDAO gradingSystemDAO;
@@ -87,6 +87,7 @@ public class ReportUtil {
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
+	private static ExamDAO examDAO;
 
 
 
@@ -99,14 +100,64 @@ public class ReportUtil {
 		categoryDAO = CategoryDAO.getInstance(); 
 		subjectDAO = SubjectDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 
-		logger = Logger.getLogger(ReportUtil.class);
+	}
+
+	
+	public static String getExamName(String accountId, String[] exams, int i) { 
+		
+		String exam11 = "";
+		String exam22 = "";
+		String exam33 = "";
+
+		if(exams.length == 1){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+
+		}
+
+		if(exams.length == 2){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+
+		}
+
+		if(exams.length == 3){
+
+			exam11 = examDAO.getExam(accountId, exams[0]) != null ? examDAO.getExam(accountId, exams[0]).getDescription() : "";
+			exam22 = examDAO.getExam(accountId, exams[1]) != null ? examDAO.getExam(accountId, exams[1]).getDescription() : "";
+			exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
+
+		}
+		
+		String examNames = exams.length+"_";
+		
+		if(i == 1) {
+			
+			examNames += exam11.length()== 0 ? "" : exam11+"_";
+			examNames += exam22.length()== 0 ? "" : exam22+"_";
+			examNames += exam33.length()== 0 ? "" : exam33+"_";
+			
+			if(StringUtils.endsWith(examNames, "_")) {
+				examNames = removeLastChar(examNames); 
+			}
+			
+		}else if(i == 0) {
+			
+			examNames = "(1) " + exam11 + "\n(2) " + exam22 +"\n(3) " + exam33;
+			
+		}
+		
+		return examNames;
 	}
 
 
-
+	private static String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
+    }
 	/**
 	 * 
 	 * @param accountId
@@ -293,9 +344,11 @@ public class ReportUtil {
 	 * @param accountId
 	 * @param grade11subjects 
 	 * @param grade7subjects 
+	 * @param length 
 	 * @return
 	 */
-	public static List<Performance2> getAverage( List<Performance2> performanceList, String accountId, boolean grade7subjects, boolean grade11subjects) {
+	public static List<Performance2> getAverage( List<Performance2> performanceList, String accountId, boolean grade7subjects,
+			boolean grade11subjects, int length) {
 
 		List<Performance2> finalList = new ArrayList<>();
 
@@ -328,8 +381,19 @@ public class ReportUtil {
 				}
 
 
-
-				double average = ReportUtil.findExamAverage2(exam1Score,exam2Score,exam3Score);
+				double average  = 0;
+				if(length == 3) {
+					average = ReportUtil.findThreeExamAverage(exam1Score,exam2Score,exam3Score);
+					
+				}else if(length == 2) {
+					average = ReportUtil.findTwoExamAverage(exam1Score,exam2Score);
+					
+				}else if(length == 1) {
+					average = ReportUtil.findOneExamAverage(exam1Score);
+					
+				}
+				
+				
 				String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
 				int point =  Integer.valueOf(avgpoint); 
 
@@ -347,7 +411,7 @@ public class ReportUtil {
 			//System.out.println(" ______________ " + stu.getRegNo() + " , name : " + stu.getFirstname());
 
 			if(grade7subjects && !grade11subjects) {
-				
+
 				ExamAvg examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
 				performance2.setTotalMean(examavg.getToatlAverage());
 				performance2.setTotalPoint(examavg.getTotalPoint());
@@ -356,15 +420,15 @@ public class ReportUtil {
 			}
 
 			if(!grade7subjects && grade11subjects) {
-				
+
 				ExamAvg examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
 				performance2.setTotalMean(examavg.getToatlAverage());
 				performance2.setTotalPoint(examavg.getTotalPoint());
 				finalList.add(performance2);
 
 			}
-			
-			
+
+
 
 
 		}
@@ -400,17 +464,21 @@ public class ReportUtil {
 			for (FinaResult finaResult : linaResultList) {
 
 				Subject subj;
+
 				if(subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()) != null) {
-					 subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+
+					subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+
 				}else {
+
 					subj = new Subject();
 				}
-				
+
 				String desc = "";
 				if(categoryDAO.getCategoryById(accountId, subj.getCategoryId()) != null) {
-					 desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+					desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
 				}
-				
+
 
 				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
@@ -490,8 +558,8 @@ public class ReportUtil {
 
 		return examAvg;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @param linaResultList
@@ -566,7 +634,7 @@ public class ReportUtil {
 
 				//add selected technical
 				else if (StringUtils.equalsIgnoreCase(desc, "Technicals")) {
-					
+
 					selectedTechnicalsList.add(finaResult);
 					technicalCount++;
 
@@ -586,9 +654,9 @@ public class ReportUtil {
 				}
 
 			}
-			
-			
-	
+
+
+
 			//select one best from the technical
 			Collections.sort(selectedTechnicalsList, new FinalResultMeanComparator());
 
@@ -601,7 +669,7 @@ public class ReportUtil {
 			finalPerfomanceList.addAll(selectedLanguagesList);
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
-			//TODO
+
 			finalPerfomanceList.addAll(selectedTechnicalsList);
 
 			examAvg.setToatlAverage(getTotalAvg(finalPerfomanceList));
@@ -989,7 +1057,7 @@ public class ReportUtil {
 
 			}//end for each loop
 
-//TODO
+
 			finalPerfomanceList.addAll(selectedLanguagesList);
 			finalPerfomanceList.addAll(selectedSciencesList);
 			finalPerfomanceList.addAll(selectedHumanitiesList);
@@ -1029,21 +1097,23 @@ public class ReportUtil {
 			performanceP123 = ReportUtil.computeP123(exam, accountId);
 
 			if(performanceP123.getTotalMean()  > 0){
-				subjectPerformance.setAverage((double)performanceP123.getTotalMean() / (double)exam.size());  
+				subjectPerformance.setTotal(performanceP123.getTotalMean());  
 			}
 
-			subjectPerformance.setTotal(performanceP123.getTotalMean());  
+			
 
 
 
 		}else{
+			
+			
+			int examTotal = getTotalsByTotalPerExam(exam);
 
-
-			if(getTotalsByTotalPerExam(exam) > 0){
-				subjectPerformance.setAverage((double)getTotalsByTotalPerExam(exam) / (double)exam.size()); 
+			if(examTotal > 0){
+				subjectPerformance.setTotal((double)examTotal);  
 			}
 
-			subjectPerformance.setTotal((double)getTotalsByTotalPerExam(exam));  
+			
 
 		}
 
@@ -1058,19 +1128,11 @@ public class ReportUtil {
 	 * @return
 	 */
 	public static int getTotalsByPointsPerExam(List<Perfomance> perfomanceList){
-
 		int totalPoints = 0;
-
 		for( Perfomance perfomance : perfomanceList ){
-
 			int point = getPoints(String.valueOf(perfomance.getScore()),perfomance.getSubjectId(),perfomance.getAccountId());
-
-			String code = subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode();
-			//System.out.println(code  + " , score : " + perfomance.getScore());
 			totalPoints += point;
 		}
-
-		//System.out.println("-----------------------------------------------------------------------------------------------------------");
 		return totalPoints;
 	}
 
@@ -1082,22 +1144,16 @@ public class ReportUtil {
 	 */
 
 	public static int getTotalsByTotalPerExam(List<Perfomance> perfomanceList){
-
 		int totals = 0;
 		for( Perfomance perfomance : perfomanceList ){
 			totals += perfomance.getScore();
-
-			String code  = "";
-			if(subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode() != null) {
-				code = subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode();
-			}else {
-				code = perfomance.getSubjectId();
-			}
-			//logger.info("-----------" + code + " , score: " + perfomance.getScore()); 
+			
+			/*System.out.println("********** totals : " + totals + " score : " + perfomance.getScore() + " sub: " + 
+			subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode());*/
 		}
-		//logger.info("__________________________________________" + " totals : " + totals); 
-
-
+		
+	//	System.out.println("************************************** : "  + totals);
+		
 		return totals;
 	}
 
@@ -1328,7 +1384,7 @@ public class ReportUtil {
 			if(arrsize == 3){
 
 				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
-				mean = Math.round(sum/3);
+				mean = Math.round(sum/3); //TODO
 
 			}
 			if(arrsize == 2){
@@ -1354,7 +1410,7 @@ public class ReportUtil {
 	 * @param exam3Score
 	 * @return
 	 */
-	public static double findExamAverage2(String exam1Score, String exam2Score, String exam3Score) {
+	public static double findThreeExamAverage(String exam1Score, String exam2Score, String exam3Score) {
 
 		if(exam1Score.length() == 0){
 			exam1Score = "0";
@@ -1373,6 +1429,60 @@ public class ReportUtil {
 
 		sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
 		mean = Math.round(sum/3);
+
+		return mean;
+
+	}
+
+	
+	/**
+	 * 
+	 * @param exam1Score
+	 * @param exam2Score
+	 * @param exam3Score
+	 * @return
+	 */
+	public static double findTwoExamAverage(String exam1Score, String exam2Score) {
+
+		if(exam1Score.length() == 0){
+			exam1Score = "0";
+		}
+
+		if(exam2Score.length() == 0){
+			exam2Score = "0";
+		}
+
+
+		double sum = 0;
+		double mean = 0;
+
+		sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score); 
+		mean = Math.round(sum/2);
+
+		return mean;
+
+	}
+
+	
+	/**
+	 * 
+	 * @param exam1Score
+	 * @param exam2Score
+	 * @param exam3Score
+	 * @return
+	 */
+	public static double findOneExamAverage(String score) {
+
+		if(score.length() == 0){
+			score = "0";
+		}
+
+		
+		double sum = 0;
+		double mean = 0;
+
+		sum = Integer.parseInt(score); 
+		mean = Math.round(sum);
 
 		return mean;
 
@@ -1711,19 +1821,16 @@ public class ReportUtil {
 		for(Performance2 performance : performanceList){
 
 
-			int mainPoint = performance.getTotalPoint();
-			int totalMean = performance.getTotalMean();
-
 			if(rankWithPoints && !rankWithTotalMarks){  
 
-				total = mainPoint;
+				total = performance.getTotalPoint();
 
 
 			}
 
 			if(!rankWithPoints && rankWithTotalMarks){
 
-				total = totalMean;
+				total = performance.getTotalMean();
 
 			}
 
@@ -1743,8 +1850,8 @@ public class ReportUtil {
 			StreamResult streamResult = new StreamResult();
 			streamResult.setResult(cposition + " Out of: " + performanceList.size());
 			streamResult.setStudentId(performance.getStudentId());
-			streamResult.setTotal(totalMean);
-			streamResult.setPoint(mainPoint); 
+			streamResult.setTotal(performance.getTotalMean());
+			streamResult.setPoint(performance.getTotalPoint()); 
 
 			positionList.add(streamResult);
 
@@ -1754,7 +1861,7 @@ public class ReportUtil {
 		}
 
 		//return object
-		StreamResult position = positionList.parallelStream()
+		StreamResult position = positionList.stream() 
 				.filter(student -> studentId.equals(student.getStudentId()))
 				.findAny()
 				.orElse(null);
@@ -1798,14 +1905,14 @@ public class ReportUtil {
 
 			//if(!rankWithPoints && rankWithTotalMarks){
 
-				total = performance.getTotalMean();
+			total = performance.getTotalMean();
 
-				if(grade7subjects && !grade11subjects){
-					median = total > 0 ? total / 7 : 0;
-				}
-				if(!grade7subjects && grade11subjects){
-					median = total > 0 ? total / 11 : 0;
-				}
+			if(grade7subjects && !grade11subjects){
+				median = total > 0 ? total / 7 : 0;
+			}
+			if(!grade7subjects && grade11subjects){
+				median = total > 0 ? total / 11 : 0;
+			}
 
 			/*}/*else{
 
@@ -1892,33 +1999,33 @@ public class ReportUtil {
 	 * @return
 	 */
 	public static String getHeadTeacherRemarks(int mean) {
-		
+
 		String remarks = "Your class work is ";
-		
+
 		if(mean > 80) {
 			remarks += "Excellent.";
-			
+
 		}else if(mean > 70) {
 			remarks += "Good.";
-			
+
 		}else if(mean > 60) {
 			remarks += "good but you can do better.";
-			
+
 		}else if(mean > 50) {
 			remarks += "not very good.";
-			
+
 		}else if(mean > 40) {
 			remarks += "much below average.";
-			
+
 		}else {
 			remarks += "Horrible!";
 		}
-		
+
 		if(mean <=0) {
 			remarks = "";
 		}
-		
-		
+
+
 		return remarks;
 	}
 

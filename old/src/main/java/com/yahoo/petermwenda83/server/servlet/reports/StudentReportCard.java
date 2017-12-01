@@ -54,6 +54,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
@@ -101,7 +102,7 @@ public class StudentReportCard extends HttpServlet{
 	private static ClassDAO classDAO;
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static MiscellanousDAO miscellanousDAO;
-	//private static ClassMeanDAO classMeanDAO;
+	private static ClassMeanDAO classMeanDAO;
 	private static PrimaryDAO primaryDAO;
 
 
@@ -155,7 +156,7 @@ public class StudentReportCard extends HttpServlet{
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		miscellanousDAO = MiscellanousDAO.getInstance();
 
-		//classMeanDAO = ClassMeanDAO.getInstance();
+		classMeanDAO = ClassMeanDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
@@ -458,7 +459,7 @@ public class StudentReportCard extends HttpServlet{
 			String pos = "";
 
 
-			//
+			//TODO classMeanDAO
 
 			for(Performance2 performance2 : performanceList){
 
@@ -613,7 +614,7 @@ public class StudentReportCard extends HttpServlet{
 					strm = "";
 				}
 
-				//TODO
+				
 				double vadd = 0;
 				String kcpemarks = "0"; 
 				double valuea = 0;
@@ -737,24 +738,27 @@ public class StudentReportCard extends HttpServlet{
 
 						if(StringUtils.equals(term, "1")){
 
-							yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanOne(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanOne(mean);//mean
 							yearlyMean.setTermOnePosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "2")){
 
-							yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanTwo(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanTwo(mean);//mean
 							yearlyMean.setTermTwoPosition(termPosition);
 
 						}
 						if(StringUtils.equals(term, "3")){
 
-							yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);
+							//yearlyMean.setMeanThree(mainPoint * ReportUtil.STD_CONSTANT);//mean
+							yearlyMean.setMeanThree(mean);//mean
 							yearlyMean.setTermThreePosition(termPosition);
 
 						}
 
-						//
+						
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 
@@ -798,7 +802,6 @@ public class StudentReportCard extends HttpServlet{
 
 						}
 
-						//
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
@@ -1166,7 +1169,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 					double avg = ((double)mainPoint / 132) * 84;
-					String mainScore = "";
+					//String mainScore = "";
 
 
 
@@ -1193,10 +1196,10 @@ public class StudentReportCard extends HttpServlet{
 						if(grade7subjects && !grade11subjects){
 
 							if(StringUtils.equals(ReportUtil.EXAM_TYPE, examType)){
-								mainScore = avgPoints;
+								//mainScore = avgPoints;
 
 							}else {
-								mainScore = (int)Math.round(mainPoint) + "";
+								//mainScore = (int)Math.round(mainPoint) + "";
 
 							}
 
@@ -1206,7 +1209,7 @@ public class StudentReportCard extends HttpServlet{
 
 						if(!grade7subjects && grade11subjects){
 							//
-							mainScore = (int)Math.round(avg) + "";
+							//mainScore = (int)Math.round(avg) + "";
 						}
 
 						examTable.addCell(new Paragraph(meanStr + " , " + performance2.getTotalPoint() ,timesRomanNarmal6)); 
@@ -1316,7 +1319,7 @@ public class StudentReportCard extends HttpServlet{
 
 								headteacherRemarks += miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS")!= null
 										? miscellanousDAO.getValueByKey(accountId, "HEAD_TEACHER_REMARKS") : "";
-                                        //TODO
+                                       
 										headteacherRemarks += " .In conclusion, " + ReportUtil.getHeadTeacherRemarks((int)total);
 
 
@@ -2193,7 +2196,7 @@ public class StudentReportCard extends HttpServlet{
 			return performance2List;
 
 		}else {
-			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
+			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects,exams.length);
 
 		}
 

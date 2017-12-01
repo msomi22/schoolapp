@@ -23,6 +23,7 @@ public class ClassMean extends StorableBean{
 	private String year;
 	private Timestamp dateAdded;
 
+
 	/**
 	 * 
 	 */

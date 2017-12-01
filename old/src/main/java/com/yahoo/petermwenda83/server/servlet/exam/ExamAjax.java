@@ -28,8 +28,8 @@ import com.yahoo.petermwenda83.persistence.exam.ExamEgineDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.subject.CategoryDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
-import com.yahoo.petermwenda83.server.api.rest.jwt.ApiCredentials;
-import com.yahoo.petermwenda83.server.api.rest.jwt.JWT;
+import com.yahoo.petermwenda83.server.api.rest.ExamService;
+import com.yahoo.petermwenda83.server.api.rest.bean.SubmitExam;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
@@ -75,24 +75,34 @@ public class ExamAjax extends HttpServlet{
 		String score = StringUtils.trimToEmpty(request.getParameter("score"));
 		String outof = StringUtils.trimToEmpty(request.getParameter("outof"));
 		String decision = StringUtils.trimToEmpty(request.getParameter("decision"));
-		
+
 		outof = StringUtils.trimToEmpty(request.getParameter("outOf"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
-		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
-		//String jwt = "";
-		String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
-		String jwtSubject = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
-
 
 		Gson gson = new GsonBuilder().disableHtmlEscaping()
 				.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
 				.setPrettyPrinting().serializeNulls().create();
 
 
+		ExamService examService = new ExamService();
+
+
 		if(StringUtils.equalsIgnoreCase(decision, "submitExam")){
 
-			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score , outof ,jwt , userId, jwtSubject)).getBytes());
+			SubmitExam submitExam = new SubmitExam();
+			submitExam.setAccountId(accountId);
+			submitExam.setStudentId(studentId);
+			submitExam.setSubjectId(subjectId);
+			submitExam.setExamId(examId);
+			submitExam.setStreamId(streamId);
+			submitExam.setScore(Integer.valueOf(score));
+			submitExam.setOutof(Integer.valueOf(outof)); 
+
+			//out.write(gson.toJson(examService.saveScore(submitExam)).getBytes());
+
+			out.write(gson.toJson(processData(accountId, studentId, subjectId, examId, streamId, score, outof)).getBytes());
+
 			out.flush();
 			out.close();
 
@@ -111,20 +121,14 @@ public class ExamAjax extends HttpServlet{
 	 * @param jwtSubject 
 	 * @return
 	 */
-	private JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
-			String streamId, String score, String outof, String jwt, String userId, String jwtSubject) {
+	public JsonElement processData(String accountId,String studentId, String subjectId, String examId, 
+			String streamId, String score, String outof) {
 
 		JsonObject jsonObject = new JsonObject();
 		String message = "";
-		ApiCredentials apiKey = new ApiCredentials();
 
 
-		if(!JWT.validateJWT(jwt, apiKey.getSecret(), userId, accountId, jwtSubject)){
-
-			jsonObject.addProperty("responseMessage", "Invalid Json Web token.");
-			return jsonObject;
-
-		}else if(StringUtils.isBlank(studentId)){
+		if(StringUtils.isBlank(studentId)){
 
 			jsonObject.addProperty("responseMessage", "Unexpected error occured, no studentId.");
 			return jsonObject;
@@ -188,8 +192,13 @@ public class ExamAjax extends HttpServlet{
 
 
 			Exam exam = examDAO.getExam(accountId, examId);
+			assert(exam != null);
+
 			SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);
+			assert(sysConfig != null);
+
 			Stream stream = streamDAO.getStream(accountId, streamId);
+			assert(stream != null);
 
 			int scoreInt = Integer.valueOf(score);
 
@@ -343,8 +352,8 @@ public class ExamAjax extends HttpServlet{
 				}
 
 			}else{
-				
-				
+
+
 				if(Integer.valueOf(score) > Integer.valueOf(outof)){  
 
 					jsonObject.addProperty("responseMessage", "Score not allowed " + score + "." );
@@ -362,99 +371,104 @@ public class ExamAjax extends HttpServlet{
 			}
 
 
-			
-
-			Perfomance perfomance = new Perfomance();
-			perfomance.setAccountId(accountId);
-			perfomance.setClassRoomId(stream.getClassRoomId()); 
 
 
-			String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
-			String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
-			String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
-			//PAPER_1_2_3_ID
-			
-			//TODO
-			if(StringUtils.equals(examId, p1)) {
-				
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
-					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+			try {
+
+				Thread.sleep(2000);
+
+				Perfomance perfomance = new Perfomance();
+				perfomance.setAccountId(accountId);
+				perfomance.setClassRoomId(stream.getClassRoomId()); 
+
+
+				String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
+				String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
+				String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
+				//PAPER_1_2_3_ID
+
+				//TODO
+				if(StringUtils.equals(examId, p1)) {
+
+					examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+					if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+						perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+					}
+					perfomance.setPaper1((int)scoreDouble);
+
+				}else if(StringUtils.equals(examId, p2)) {
+
+					examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+					if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+						perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+					}
+					perfomance.setPaper2((int)scoreDouble);
+
+				}else if(StringUtils.equals(examId, p3)) {
+
+					examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
+					if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+						perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+					}
+					perfomance.setPaper3((int)scoreDouble);
+
+				}else {
+					if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
+						perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
+					}
+					perfomance.setScore((int)scoreDouble);
 				}
-				perfomance.setPaper1((int)scoreDouble);
 
-			}else if(StringUtils.equals(examId, p2)) {
-				
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
-					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
-				}
-				perfomance.setPaper2((int)scoreDouble);
 
-			}else if(StringUtils.equals(examId, p3)) {
-				
-				examId = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
-					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
-				}
-				perfomance.setPaper3((int)scoreDouble);
+				perfomance.setExamId(examId); 
+				perfomance.setStreamId(streamId);
+				perfomance.setStudentId(studentId);
+				perfomance.setSubjectId(subjectId);
+				perfomance.setTerm(sysConfig.getTerm());
+				perfomance.setYear(sysConfig.getYear()); 
 
-			}else {
-				if(examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId) != null) {
-					perfomance = examEgineDAO.getPerformance(accountId, examId, studentId, streamId, sysConfig.getTerm(), sysConfig.getYear(), subjectId);
-				}
-				perfomance.setScore((int)scoreDouble);
-			}
-			
-			
-			perfomance.setExamId(examId); 
-			perfomance.setStreamId(streamId);
-			perfomance.setStudentId(studentId);
-			perfomance.setSubjectId(subjectId);
-			perfomance.setTerm(sysConfig.getTerm());
-			perfomance.setYear(sysConfig.getYear()); 
+				if(scoreValid){
 
-			if(scoreValid){
-				
-				boolean stored = false;
+					boolean stored = false;
 
-				try {
-					
-					Thread.sleep(2000);
-					 stored = examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
+					stored = examEgineDAO.putPerfomance(perfomance, accountId, studentId, subjectId, examId, 
 							sysConfig.getTerm(), sysConfig.getYear(), streamId);
-					 
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} 
-				
-				if(stored){
 
-					message = "OK";
 
-					jsonObject.addProperty("responseMessage", message + " -- " + stored);
-					return jsonObject;
+					if(stored){
+
+						message = "OK";
+
+						jsonObject.addProperty("responseMessage", message + " -- " + stored);
+						return jsonObject;
+
+					}else{
+
+						jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please.");
+						return jsonObject;
+
+					}
+
+
+
 
 				}else{
 
-					jsonObject.addProperty("responseMessage", "Unexpected error has occured, contact admin please.");
+					message = message.length() == 0 ? "Unexpected error has occured, contact admin please." : message;
+
+					jsonObject.addProperty("responseMessage", message);
 					return jsonObject;
 
 				}
 
 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} 
 
-
-			}else{
-
-				message = message.length() == 0 ? "Unexpected error has occured, contact admin please." : message;
-
-				jsonObject.addProperty("responseMessage", message);
-				return jsonObject;
-
-			}
 
 		}
+		return jsonObject; 
 
 	}
 

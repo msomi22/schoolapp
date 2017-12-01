@@ -22,7 +22,7 @@ public interface SchoolClassMeanDAO {
 	 * @param year
 	 * @return
 	 */
-	public boolean existClassMean(String accountId,String classId,String streamId,String examId,String term,String year);
+	public boolean existClassMean(String accountId, String classId,String streamId, String examId, String term,String year);
 	
 	/**
 	 * 

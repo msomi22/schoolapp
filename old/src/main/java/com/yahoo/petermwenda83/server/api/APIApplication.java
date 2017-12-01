@@ -9,6 +9,7 @@ import javax.ws.rs.core.Application;
 
 import com.yahoo.petermwenda83.server.api.rest.ClassTeacherRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.ConfigRestFulAPI;
+import com.yahoo.petermwenda83.server.api.rest.ExamResourceAPI;
 import com.yahoo.petermwenda83.server.api.rest.FinanceRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.GeneralRestFulAPI;
 import com.yahoo.petermwenda83.server.api.rest.ReportRestFulAPI;
@@ -55,6 +56,9 @@ public class APIApplication extends Application{
 	        set.add(ReportRestFulAPI.class);
 	        set.add(ConfigRestFulAPI.class);
 	        set.add(FinanceRestFulAPI.class);
+	        
+	        set.add(ExamResourceAPI.class); 
+	        
 	        
 	        set.add(io.swagger.jaxrs.listing.ApiListingResource.class);
 	        set.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);

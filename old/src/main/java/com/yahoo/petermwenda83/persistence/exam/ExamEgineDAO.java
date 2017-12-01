@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -166,28 +167,31 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 
 
 		boolean success = true;
+		
 		if(!studentScoreExist(accountId, studentId ,subjectId ,examId ,term ,year, streamId) && 
 				scoreDuplicate(accountId, studentId ,subjectId ,examId ,term ,year, streamId).size() == 0) {
+			
 		try(   Connection conn = dbutils.getConnection();
 				
 				PreparedStatement pstmtCatOne = conn.prepareStatement("INSERT INTO Performance"
-						+"(accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) "
-						+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+						+"(uuid, accountId, studentId, subjectId, streamId ,classRoomId, examId, score, paper1, paper2, paper3, term, year) "
+						+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
 				
 				){
 
-				pstmtCatOne.setString(1, accountId);
-				pstmtCatOne.setString(2, studentId);
-				pstmtCatOne.setString(3, subjectId);
-				pstmtCatOne.setString(4, perfomance.getStreamId());
-				pstmtCatOne.setString(5, perfomance.getClassRoomId());
-				pstmtCatOne.setString(6, perfomance.getExamId());
-				pstmtCatOne.setInt(7, perfomance.getScore()); 
-				pstmtCatOne.setInt(8, perfomance.getPaper1()); 
-				pstmtCatOne.setInt(9, perfomance.getPaper2()); 
-				pstmtCatOne.setInt(10, perfomance.getPaper3()); 
-				pstmtCatOne.setString(11, term);
-				pstmtCatOne.setString(12, year);
+				pstmtCatOne.setString(1, UUID.randomUUID().toString().toUpperCase());
+				pstmtCatOne.setString(2, accountId);
+				pstmtCatOne.setString(3, studentId);
+				pstmtCatOne.setString(4, subjectId);
+				pstmtCatOne.setString(5, streamId);
+				pstmtCatOne.setString(6, perfomance.getClassRoomId());
+				pstmtCatOne.setString(7, examId);
+				pstmtCatOne.setInt(8, perfomance.getScore()); 
+				pstmtCatOne.setInt(9, perfomance.getPaper1()); 
+				pstmtCatOne.setInt(10, perfomance.getPaper2()); 
+				pstmtCatOne.setInt(11, perfomance.getPaper3()); 
+				pstmtCatOne.setString(12, term);
+				pstmtCatOne.setString(13, year);
 				pstmtCatOne.executeUpdate();
 			
 
@@ -215,7 +219,7 @@ public class ExamEgineDAO extends GenericDAO implements SchoolExamEngineDAO {
 					pstmtCatOne.setString(5, accountId);
 					pstmtCatOne.setString(6, studentId);
 					pstmtCatOne.setString(7, subjectId);
-					pstmtCatOne.setString(8, perfomance.getStreamId());
+					pstmtCatOne.setString(8, streamId);
 					pstmtCatOne.setString(9, examId);
 					pstmtCatOne.setString(10, term);
 					pstmtCatOne.setString(11, year);
