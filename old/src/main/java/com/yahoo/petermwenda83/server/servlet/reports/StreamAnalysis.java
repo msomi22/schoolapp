@@ -235,11 +235,17 @@ public class StreamAnalysis extends HttpServlet{
 		document.add(new Paragraph("\n"));
 		
 		
-		if(classMeanDAO.getClassMean(accountId, streamId, examId, sysConfig.getTerm(), sysConfig.getYear()).isEmpty()) {
+		if(classMeanDAO.getClassMeanList(accountId, streamId, examId, sysConfig.getTerm(), sysConfig.getYear()).isEmpty()) {
 			
 			document.add(new Paragraph("Nothing to display! "));  
 			
 		}else {
+			
+			
+			
+			
+			
+			
 			
 			PdfPTable rankingTable = new PdfPTable(3);   
 			rankingTable.setWidthPercentage(54); 
@@ -267,7 +273,7 @@ public class StreamAnalysis extends HttpServlet{
 			
 			
 			AtomicInteger count = new AtomicInteger();
-			classMeanDAO.getClassMean(accountId, streamId, examId, sysConfig.getTerm(), sysConfig.getYear()).forEach(cmean -> {
+			classMeanDAO.getClassMeanList(accountId, streamId, examId, sysConfig.getTerm(), sysConfig.getYear()).forEach(cmean -> {
 				
 				int c = count.getAndIncrement();
 				

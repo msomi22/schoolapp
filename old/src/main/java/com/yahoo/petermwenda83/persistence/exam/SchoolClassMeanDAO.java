@@ -13,6 +13,9 @@ import com.yahoo.petermwenda83.bean.exam.ClassMean;
  */
 public interface SchoolClassMeanDAO {
 	
+	
+	public ClassMean getClassMean(String accountId,String streamId,String examId,String term,String year); 
+	
 	/**
 	 * 
 	 * @param accountId
@@ -39,6 +42,6 @@ public interface SchoolClassMeanDAO {
 	 * @param year
 	 * @return
 	 */
-	public List<ClassMean> getClassMean(String accountId,String streamId,String examId,String term,String year); 
+	public List<ClassMean> getClassMeanList(String accountId,String streamId,String examId,String term,String year); 
 
 }

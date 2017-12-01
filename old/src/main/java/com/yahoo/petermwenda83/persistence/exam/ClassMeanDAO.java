@@ -15,6 +15,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import com.yahoo.petermwenda83.bean.exam.ClassMean;
+import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.persistence.GenericDAO;
 
 /**
@@ -53,6 +54,41 @@ public class ClassMeanDAO extends GenericDAO implements SchoolClassMeanDAO {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
 
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolClassMeanDAO#getClassMean(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public ClassMean getClassMean(String accountId, String streamId, String examId, String term, String year) {
+		ClassMean classMean = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassMean"
+						+ " WHERE accountId =? AND streamId = ? AND examId = ? AND term = ? AND year = ?;");       
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, streamId); 
+			pstmt.setString(3, examId); 
+			pstmt.setString(4, term); 
+			pstmt.setString(5, year); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				classMean  = beanProcessor.toBean(rset,ClassMean.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting ClassMean for accountId " + accountId + ", "
+					+ "streamId " +  streamId + " , examId " + examId + " , term " + term + " , year " + year);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+
+		}
+
+		return classMean; 
+	}
 
 
 	@Override
@@ -181,7 +217,7 @@ public class ClassMeanDAO extends GenericDAO implements SchoolClassMeanDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolClassMeanDAO#getClassMean(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<ClassMean> getClassMean(String accountId, String streamId,String examId, String term, String year) {
+	public List<ClassMean> getClassMeanList(String accountId, String streamId,String examId, String term, String year) {
 		List<ClassMean> list = new ArrayList<>();
 		try (
 				Connection conn = dbutils.getConnection();
@@ -203,5 +239,7 @@ public class ClassMeanDAO extends GenericDAO implements SchoolClassMeanDAO {
 		}
 		return list;
 	}
+
+	
 
 }
