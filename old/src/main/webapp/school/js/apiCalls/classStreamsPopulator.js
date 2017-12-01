@@ -46,7 +46,7 @@ function fetchStreams(classIdVal) {
 function fetchStreamsStudent() {
 
 
-	varying_url = "general/stream/" + $('#accountId').val();
+	varying_url = "general/stream/" + $('#globalAccountId').val();
 
 	global_data_passed = {};
 	global_request_type = 'GET';

@@ -166,9 +166,10 @@
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12">Stream</label>
 										<div class="col-md-9 col-sm-9 col-xs-12">
-											<select class="form-control formelement" name="streamId"
+											<select class="form-control formelement populateStreamOptionsStudent" name="streamId"
 												id="streamId">
-												<%
+												
+												<%-- <%
 													int studentsCount = 0;
 													if (!StringUtils.isBlank(streamId)) {
 														studentsCount = studentDAO.classStudentCount(accountId, streamId, "1");
@@ -195,7 +196,7 @@
 												<%
 													}
 													}
-												%>
+												%> --%>
 
 
 											</select>
@@ -209,9 +210,9 @@
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
 										<div class="col-md-9 col-sm-9 col-xs-12">
-											<select class="form-control formelement" name="subjectId"
+											<select class="form-control formelement populateSubjects" name="subjectId"
 												id="subjectId">
-												<%
+												<%-- <%
 													if (!StringUtils.isBlank(subjectId)) {
 
 														Subject subject1 = subjectDAO.getSubjectById(accountId, subjectId);
@@ -235,7 +236,7 @@
 												<%
 													}
 													}
-												%>
+												%> --%>
 											</select>
 										</div>
 									</div>
@@ -247,9 +248,9 @@
 									<div class="form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12">Exam</label>
 										<div class="col-md-9 col-sm-9 col-xs-12">
-											<select class="form-control formelement" name="examId"
+											<select class="form-control formelement populateExams" name="examId"
 												id="examId">
-												<%
+											<%-- 	<%
 													if (!StringUtils.isBlank(examId)) {
 
 														Exam exam1 = examDAO.getExam(accountId, examId);
@@ -276,7 +277,7 @@
 												<%
 													}
 													}
-												%>
+												%> --%>
 											</select>
 										</div>
 									</div>
@@ -454,8 +455,16 @@
 
 <jsp:include page="footer.jsp" />
 
+<script src="js/submitExam.js"></script>
+
 <script>
 	$(document).ready(function() {
 		checkAccessAcademics();
+		
+		fetchSubjects();
+		
+		fetchStreamsStudent();
+		
+		fetchExams();
 	})
 </script>
