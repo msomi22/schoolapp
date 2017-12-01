@@ -399,6 +399,7 @@ function fetchStudents(streamId) {
 										{
 											"targets" : [ 23 ],
 											"data" : null,
+											
 											"defaultContent" : '<input type="checkbox" class="students">'
 										} ],
 
@@ -408,6 +409,9 @@ function fetchStudents(streamId) {
 							});
 
 			table_active.rows.add(data).draw();
+			
+			
+			
 			$(".dataTables_scrollHeadInner").css({"width":"100%"});
 
 			$(".table ").css({"width":"100%"});
@@ -849,9 +853,11 @@ function refresh(state){
 		
 }
 
-function studentsListModa() {
+function studentsListModa(action) {
 
 	$('#accountId_StudentsList').val($('#accountId').val());
+	
+	$('#studentsListForm').prop('action',action)
 
 	$('#studentsListModal').modal('show');
 }

@@ -55,7 +55,125 @@ function fetchExams() {
 
 	});
 
-	
-		
 
 }
+
+
+var table;
+
+var editor = new $.fn.dataTable.Editor( {
+    
+} );
+
+function initExamEntry(form){
+	
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	varying_url = "exam/student/" + $('#globalAccountId').val()+"/"+$('#streamId').val()+
+	"/"+$('#subjectId').val()+"/"+$('#examId').val();
+	
+	globalApiCall(function(data) {
+
+		console.log('Code for getting student list for exam entry');
+
+		console.log(data);
+		
+		
+		if(data["message"] != "error" && data.length > 0)
+		{
+		
+
+		var cols = [];
+
+		var getCol = data[0];
+
+		var keys = Object.keys(getCol);
+
+		keys.forEach(function(k) {
+
+			cols.push({
+				title : k,
+				data : k
+			// optionally do some type detection here for render
+			// function
+
+			});
+
+		});
+
+		if (table)
+			table.clear();
+
+		table = $('#submitExamScore')
+				.DataTable(
+						{
+
+							destroy : true,
+							
+							"bPaginate" : false,
+							"bLengthChange" : false,
+							"scrollY" : "350px",
+							"scrollCollapse" : true,
+							columns : cols,
+							"columnDefs" : [
+									{
+										"targets" : [ 0 ],
+										"visible" : false,
+										"searchable" : false
+									},
+									
+									{
+										"targets" : [ 7 ],
+										"data" : null,
+										className: 'editable',
+										"defaultContent" : '0'
+									} ],
+
+							"order" : [ [ 5, "desc" ] ],
+							
+							select: {
+					            style:    'os',
+					            selector: 'td:first-child'
+					        },
+					        buttons: [
+					            { extend: 'create', editor: editor },
+					            { extend: 'edit',   editor: editor },
+					            { extend: 'remove', editor: editor }
+					        ]
+						/* "iDisplayLength": 100 */
+
+						});
+		
+	
+
+		table.rows.add(data).draw();
+		
+		
+		
+		}else{
+			
+			 table.clear().draw();
+		}
+
+		
+		
+
+	});
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
