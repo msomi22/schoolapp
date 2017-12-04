@@ -17,7 +17,27 @@
   "lastUpdated": "string",
   "creationDate": "string"
 }
+/**
+
+{
+  "uuid": "string",
+  "isActive": "1",
+  "name": "Mwangathia Boys Secondary School",
+  "motto": "Inspire to greatness", 
+  "website": "www.mwangathiasec.ac.ke",
+  "logo": "logo.png",
+  "signature": "sig.png",
+  "username": "mangu",
+  "password": "mangu*#@",
+  "mobile": "719654123",
+  "email": "info@mwangathiasec.ac.ke", 
+  "address": "379",
+  "town": "Meru",
+  "isBoarding": "1", 
+  "isMixed": "0",
+  "lastUpdated": "string",
+  "creationDate": "string"
+}
 
 
-
-
+**/
