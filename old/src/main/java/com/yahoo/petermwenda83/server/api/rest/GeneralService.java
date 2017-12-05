@@ -97,10 +97,16 @@ public class GeneralService {
 	 */
 	public List<Object> getStreamList(String accountId) {
 
+
 		if(streamDAO.getStreamList(accountId) != null) {
 
 			List<Object>  list = new ArrayList<>();
-			streamDAO.getStreamList(accountId).forEach(stream -> {
+			//.filter(student -> studentId.equals(student.getStudentId()))
+			streamDAO.
+			getStreamList(accountId).
+			stream().
+			filter(stm -> !"SYS_DEFAULT_STREAM".equals(stm.getDescription())).
+			forEach(stream -> { 
 				ApiStream apiStream = new ApiStream();
 				int count = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
 				apiStream.setAccountId(stream.getAccountId());
@@ -177,8 +183,11 @@ public class GeneralService {
 
 			List<ApiStream>  list = new ArrayList<>();
 
-			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
-				
+			streamDAO.
+			getStreamList(accountId,classId).stream().
+			filter(stm -> !"SYS_DEFAULT_STREAM".equals(stm.getDescription())).
+			forEach(stream -> {
+
 				int count = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
 				ApiStream apiStream = new ApiStream();
 				apiStream.setAccountId(stream.getAccountId());
@@ -421,9 +430,10 @@ public class GeneralService {
 	public List<Object> getExams(String accountId){
 		List<Object> apiExamList = new ArrayList<>();
 
-
 		if(examDAO.getExamList(accountId) != null) {
-			examDAO.getExamList(accountId).forEach(exam -> {
+			examDAO.getExamList(accountId).
+			stream().filter(exm -> !"P123".equals(exm.getDescription())).
+			forEach(exam -> {
 				ApiExam apiExam = new ApiExam();
 				apiExam.setUuid(exam.getUuid());
 				apiExam.setAccountId(accountId);
@@ -639,16 +649,16 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
 			return response;
-			
+
 		}else {
 
 			return miscellanousDAO.getMiscellanousList(accountId);
 
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param accountId
@@ -668,7 +678,7 @@ public class GeneralService {
 
 			Miscellanous miscellanous = miscellanousDAO.getMiscById(accountId, misc.getUuid());
 			miscellanous.setValue(misc.getValue()); 
-			
+
 			//System.out.println(" ************** " + misc.getValue());
 
 			if(miscellanousDAO.updateMiscellanous(miscellanous)) { 
@@ -774,7 +784,7 @@ public class GeneralService {
 		gradingSystem.setPoints(scale.getPoints());
 
 		if(addded) {
-			
+
 			//gradingSystemDAO.putGradingSystem(gradingSystem)
 			apiResponse.setMessage("success");
 			apiResponse.setDescription("Grading scale added sucessfully!");
@@ -1029,28 +1039,28 @@ public class GeneralService {
 	 * @return
 	 */
 	public Object getCategories(String accountId) {
-		
+
 		Response response = new Response();
-		
+
 		if(accountDAO.getAccountById(accountId) == null) {
-			
+
 			response.setMessage("error");
 			response.setDescription("Invalid AccountId!");
 			return response;
-			
+
 		}
 		if(categoryDAO.getCategoryList(accountId) == null) { 
-			
+
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
 			return response;
 
 		}else {
-			
-            return categoryDAO.getCategoryList(accountId);
-            
+
+			return categoryDAO.getCategoryList(accountId);
+
 		}
-		
+
 	}
 
 	/**
@@ -1059,27 +1069,27 @@ public class GeneralService {
 	 * @return
 	 */
 	public Object getApiSysConfig(String accountId) {
-		
+
 		Response response = new Response();
-		
+
 		if(accountDAO.getAccountById(accountId) == null) {
-			
+
 			response.setMessage("error");
 			response.setDescription("Invalid AccountId!");
 			return response;
-			
+
 		}else if(sysConfigDAO.getSysConfig(accountId) == null) { 
-			
+
 			response.setMessage("error");
 			response.setDescription("Config not found!");
 			return response;
-			
+
 		}else {
-			
+
 			return sysConfigDAO.getSysConfig(accountId);
-			
+
 		}
-		
+
 	}
 
 
@@ -1229,6 +1239,6 @@ public class GeneralService {
 	}
 
 
-	
+
 
 }
