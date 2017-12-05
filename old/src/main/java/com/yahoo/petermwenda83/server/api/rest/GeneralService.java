@@ -102,9 +102,10 @@ public class GeneralService {
 			List<Object>  list = new ArrayList<>();
 			streamDAO.getStreamList(accountId).forEach(stream -> {
 				ApiStream apiStream = new ApiStream();
+				int count = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
 				apiStream.setAccountId(stream.getAccountId());
 				apiStream.setClassRoomId(stream.getClassRoomId());
-				apiStream.setDescription(stream.getDescription());
+				apiStream.setDescription(stream.getDescription() + " (" + count + ") "); 
 				apiStream.setUuid(stream.getUuid()); 
 
 				list.add(apiStream);
@@ -177,10 +178,12 @@ public class GeneralService {
 			List<ApiStream>  list = new ArrayList<>();
 
 			streamDAO.getStreamList(accountId,classId).forEach(stream -> {
+				
+				int count = studentDAO.classStudentCount(accountId, stream.getUuid(), "1");
 				ApiStream apiStream = new ApiStream();
 				apiStream.setAccountId(stream.getAccountId());
 				apiStream.setClassRoomId(stream.getClassRoomId());
-				apiStream.setDescription(stream.getDescription());
+				apiStream.setDescription(stream.getDescription() + " (" + count + ") "); 
 				apiStream.setUuid(stream.getUuid()); 
 
 				list.add(apiStream);
@@ -215,10 +218,11 @@ public class GeneralService {
 
 		if(streamDAO.getStream(accountId, uuid) != null) {
 
+			int count = studentDAO.classStudentCount(accountId, uuid, "1");
 			ApiStream apiStream = new ApiStream();
 			apiStream.setAccountId(streamDAO.getStream(accountId, uuid).getAccountId());
 			apiStream.setClassRoomId(streamDAO.getStream(accountId, uuid).getClassRoomId());
-			apiStream.setDescription(streamDAO.getStream(accountId, uuid).getDescription());
+			apiStream.setDescription(streamDAO.getStream(accountId, uuid).getDescription() + " (" + count + ") ");
 			apiStream.setUuid(streamDAO.getStream(accountId, uuid).getUuid());
 
 			return apiStream; 
