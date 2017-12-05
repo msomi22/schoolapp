@@ -324,6 +324,7 @@
 													<tr class="headings secondary-assent">
 
 														<!-- <th class="column-title">studentId</th> -->
+														
 														<th class="column-title">#</th>
 														<th class="column-title">RegNo</th>
 														<th class="column-title">First name</th>
