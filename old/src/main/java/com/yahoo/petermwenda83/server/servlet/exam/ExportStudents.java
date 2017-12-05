@@ -46,7 +46,6 @@ public class ExportStudents  extends HttpServlet{
 
 	private static final long serialVersionUID = 3896751907947782599L;
 
-	
 	private static StudentDAO studentDAO;
 	private static StreamDAO streamDAO;
 	private static SysConfigDAO sysConfigDAO;
@@ -123,9 +122,10 @@ public class ExportStudents  extends HttpServlet{
 		s.setColumnWidth(0, 1900); //RegNo
 		s.setColumnWidth(1, 3700); //Firstname
 		s.setColumnWidth(2, 3700); //Middlename
-		s.setColumnWidth(3, 1500); //cell
+		s.setColumnWidth(3, 3700); //Lastname
 		s.setColumnWidth(4, 1500); //cell
 		s.setColumnWidth(5, 1500); //cell
+		s.setColumnWidth(6, 1500); //cell
 
 		CellStyle style = xf.createCellStyle();
 		style.setAlignment(CellStyle.ALIGN_CENTER);
@@ -152,18 +152,22 @@ public class ExportStudents  extends HttpServlet{
 		XSSFCell cell3 = r1.createCell(2);
 		cell3.setCellValue(ch.createRichTextString("Midlename")); 
 		cell3.setCellStyle(style2);
-
+		
 		XSSFCell cell4 = r1.createCell(3);
-		cell4.setCellValue(ch.createRichTextString(""));
+		cell4.setCellValue(ch.createRichTextString("Lastname")); 
 		cell4.setCellStyle(style2);
 
 		XSSFCell cell5 = r1.createCell(4);
-		cell5.setCellValue(ch.createRichTextString(""));
+		cell5.setCellValue(ch.createRichTextString("Score"));
 		cell5.setCellStyle(style2);
 
 		XSSFCell cell6 = r1.createCell(5);
-		cell6.setCellValue(ch.createRichTextString("")); 
+		cell6.setCellValue(ch.createRichTextString("Score"));
 		cell6.setCellStyle(style2);
+
+		XSSFCell cell7 = r1.createCell(6);
+		cell7.setCellValue(ch.createRichTextString("Score")); 
+		cell7.setCellStyle(style2);
 
 
 
@@ -228,13 +232,16 @@ public class ExportStudents  extends HttpServlet{
 			c3.setCellValue(stu.getMiddlename());
 			
 			XSSFCell c4 = r.createCell(3);        	
-			c4.setCellValue(ch.createRichTextString(""));
+			c4.setCellValue(stu.getLastname());  
 			
 			XSSFCell c5 = r.createCell(4);        	
 			c5.setCellValue(ch.createRichTextString(""));
 			
 			XSSFCell c6 = r.createCell(5);        	
 			c6.setCellValue(ch.createRichTextString(""));
+			
+			XSSFCell c7 = r.createCell(6);        	
+			c7.setCellValue(ch.createRichTextString(""));
 			
 			
 
