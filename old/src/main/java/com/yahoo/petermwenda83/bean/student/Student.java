@@ -413,6 +413,9 @@ public class Student extends StorableBean implements Comparable<Student> {
 
 	@Override
 	public int compareTo(Student ss) {
+		if(ss == null) {
+			ss = new Student();
+		}
 		return getRegNo().compareTo(((Student) ss).getRegNo()); 
 	}
 
