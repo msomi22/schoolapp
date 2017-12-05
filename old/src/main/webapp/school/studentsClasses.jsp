@@ -106,8 +106,13 @@
 
 
 												<button class="btn btn-primary secondary-assent  cards"
-													onclick="studentsListModa()">
+													onclick="studentsListModa('studentPerStream')">
 													Export <i class="fa fa-file-pdf-o"> </i>
+												</button>
+												
+												<button class="btn btn-primary secondary-assent  cards pull-right"
+													onclick="studentsListModa('studentPerStreamExcel')">
+													Export <i class="fa fa-file-excel-o"> </i>
 												</button>
 											</div>
 
@@ -120,7 +125,7 @@
 
 												<button class="btn btn-primary secondary-assent  cards"
 													onclick="studentStatus('inactivate')">
-													Deactivate <i class="fa fa-file-pdf-o"> </i>
+													Deactivate <i class="fa fa-chain-broken"> </i>
 												</button>
 											</div>
 

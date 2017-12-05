@@ -169,7 +169,7 @@
 											<select class="form-control formelement populateStreamOptionsStudent" name="streamId"
 												id="streamId">
 												
-												<%-- <%
+												 <%
 													int studentsCount = 0;
 													if (!StringUtils.isBlank(streamId)) {
 														studentsCount = studentDAO.classStudentCount(accountId, streamId, "1");
@@ -196,7 +196,7 @@
 												<%
 													}
 													}
-												%> --%>
+												%> 
 
 
 											</select>
@@ -212,7 +212,7 @@
 										<div class="col-md-9 col-sm-9 col-xs-12">
 											<select class="form-control formelement populateSubjects" name="subjectId"
 												id="subjectId">
-												<%-- <%
+												 <%
 													if (!StringUtils.isBlank(subjectId)) {
 
 														Subject subject1 = subjectDAO.getSubjectById(accountId, subjectId);
@@ -236,7 +236,7 @@
 												<%
 													}
 													}
-												%> --%>
+												%> 
 											</select>
 										</div>
 									</div>
@@ -250,7 +250,7 @@
 										<div class="col-md-9 col-sm-9 col-xs-12">
 											<select class="form-control formelement populateExams" name="examId"
 												id="examId">
-											<%-- 	<%
+												<%
 													if (!StringUtils.isBlank(examId)) {
 
 														Exam exam1 = examDAO.getExam(accountId, examId);
@@ -277,7 +277,7 @@
 												<%
 													}
 													}
-												%> --%>
+												%> 
 											</select>
 										</div>
 									</div>
@@ -290,7 +290,7 @@
 									type="hidden" name="decision" id="decision" value="submitExam">
 
 								<div class="col-md-3 col-sm-12 col-xs-12 form-group">
-									<button type="submit" class="btn btn-primary">Submit</button>
+									<button type="submit"  class="btn btn-primary">Submit</button>
 								</div>
 							</form>
 
@@ -323,26 +323,28 @@
 												<thead>
 													<tr class="headings secondary-assent">
 
+														<!-- <th class="column-title">studentId</th> -->
+														
 														<th class="column-title">#</th>
 														<th class="column-title">RegNo</th>
 														<th class="column-title">First name</th>
 														<th class="column-title">Middle name</th>
 														<th class="column-title">Last name</th>
 														<th class="column-title">Score</th>
-														<th class="column-title">Score OutOf <input
+														<th class="column-title">Enter Score <input
 															type="text" style="color: black" maxlength="3"
 															id="outOfCustom" value="<%=currentOutOf%>"
 															onkeyup="validateOutOf(this.value)"
 															<%if (currentOutOf == 0) {%> disabled <%}%>>
 														</th>
-														<td class="hidden">uuid</td>
+														
 
 													</tr>
 												</thead>
 
 												<tbody class='tablebody'>
 
-													<%
+												<%
 														String p1 = "AE24F15B-5038-4A15-8607-1DB2A7A0B7DE";
 														String p2 = "4531A31D-1F8A-40D7-BFE6-D3CB3D91951A";
 														String p3 = "69A569CA-1D4F-458E-99DD-FB2BE705BF5C";
@@ -422,7 +424,7 @@
 														studentCount++;
 															}
 														}
-													%>
+													%> 
 												</tbody>
 											</table>
 										</div>
@@ -455,16 +457,34 @@
 
 <jsp:include page="footer.jsp" />
 
-<script src="js/submitExam.js"></script>
+<!-- <script src="js/submitExam.js"></script> -->
 
 <script>
 	$(document).ready(function() {
 		checkAccessAcademics();
 		
-		fetchSubjects();
+		/* fetchSubjects();
 		
 		fetchStreamsStudent();
 		
 		fetchExams();
+		
+		$("#submitExamScore").DataTable({
+			destroy : true,
+			searching : false,
+			"bPaginate" : false,
+			"bLengthChange" : false,
+			"scrollY" : "350px",
+			"scrollCollapse" : true
+			
+		});
+		
+		
+		
+		
+		
+		$('#submitExamScore').on( 'click', 'tbody td.editable', function (e) {
+	        editor.inline( this );
+	    } ); */
 	})
 </script>
