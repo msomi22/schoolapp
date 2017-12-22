@@ -384,7 +384,7 @@ public class StudentService {
 
 			Staff staff = staffDAO.getStaff(studentPayFee.getAccountId(), studentPayFee.getStaffId());
 			Account account = accountDAO.getAccountById(studentPayFee.getAccountId());
-			//TODO
+			
 			account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
 			student.getIsBoarding();//boarders = 1, day = 0
 
@@ -1549,7 +1549,6 @@ public class StudentService {
 				if (studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
 					Student student = studentDAO.getStudentById(accountId, studentid.getUuid());
 					student.setIsActive("1");
-					student.setIsAlumni("0");
 					update = studentDAO.updateStudent(student);
 				}
 			}
@@ -1571,7 +1570,6 @@ public class StudentService {
 				if (studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
 					Student student = studentDAO.getStudentById(accountId, studentid.getUuid());
 					student.setIsActive("0");
-					student.setIsAlumni("1");
 					update = studentDAO.updateStudent(student);
 				}
 			}
@@ -1586,7 +1584,52 @@ public class StudentService {
 
 			}
 
-		} else {
+		}else if (StringUtils.equals(action, "isalumni")) {
+			
+			for (StudentStatus studentid : students) {
+
+				if (studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
+					Student student = studentDAO.getStudentById(accountId, studentid.getUuid());
+					student.setIsAlumni("1");
+					update = studentDAO.updateStudent(student);
+				}
+			}
+
+			if (update) {
+				response.setMessage("success");
+				response.setDescription("Operation successfull.");
+
+			} else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later.");
+
+			}
+			
+			
+		}else if (StringUtils.equals(action, "isnalumni")) { 
+			
+			for (StudentStatus studentid : students) {
+
+				if (studentDAO.getStudentById(accountId, studentid.getUuid()) != null) {
+					Student student = studentDAO.getStudentById(accountId, studentid.getUuid());
+					student.setIsAlumni("0");
+					update = studentDAO.updateStudent(student);
+				}
+			}
+
+			if (update) {
+				response.setMessage("success");
+				response.setDescription("Operation successfull.");
+
+			} else {
+				response.setMessage("error");
+				response.setDescription("Something went wrong, try again later.");
+
+			}
+			
+		}
+		
+		else {
 
 			response.setMessage("error");
 			response.setDescription("Invalid action '" + action + "'");
@@ -1596,7 +1639,7 @@ public class StudentService {
 		return response;
 	}
 
-	/**
+	/** TODO
 	 * 
 	 * @param accountId
 	 * @param changeClass
@@ -1673,6 +1716,52 @@ public class StudentService {
 
 		}
 	}
+	
+	
+	/** TODO
+	 * 
+	 * @param accountId
+	 * @param status
+	 * @return
+	 */
+	public Object getStatusStudents(String accountId,String streamId, String status) {
+
+		Response response = new Response();
+
+		if(accountDAO.getAccountById(accountId) == null) {
+			//AccountId not found
+			response.setMessage("error");
+			response.setDescription("AccountId not found!"); 
+			return response;
+
+		}else if(studentDAO.activeCount(accountId, status) <= 0) {
+			//No students
+			response.setMessage("error");
+			response.setDescription("No students found!"); 
+			return response;
+
+		}else if(!validStatus(status)) {
+			//No students
+			response.setMessage("error");
+			response.setDescription("Status invalid!"); 
+			return response;
+
+		}else {
+			int totalActive = studentDAO.activeCount(accountId, status); 
+			String msg = "";
+			if(StringUtils.equals(status, "1")) {
+				msg = "Active";
+			}else {
+				msg = "Inactive"; 
+			}
+			response.setMessage("sucess");
+			response.setDescription("Total " + msg + " student(s)  | " + totalActive);  
+			return response;
+
+		}
+	}
+
+
 
 
 	/** 
