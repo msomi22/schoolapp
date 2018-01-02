@@ -175,19 +175,23 @@
 
 													<select id="exam" name="exam"
 														onblur="validateExamSelected()" onchange="hideSubjects()"
-														class="formelement SlectBox form-control"
+														class="formelement SlectBox form-control populateExams"
 														required="required" multiple>
 
-														<%
+													 	<%
 															if (examList != null) {
 
 																for (Exam exam : examList) {
+																	
+																	if(!exam.getDescription().contains("P123"))
+																	{
 														%>
 
 														<option value="<%=exam.getUuid()%>">
 															<%=exam.getDescription()%></option>
 
 														<%
+																	}
 															}
 															} else {
 														%>

@@ -116,3 +116,42 @@ function fetchClasses() {
 	});
 
 }
+
+
+
+function fetchExams() {
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+	
+	
+
+	varying_url = "general/exam/" + $('#accountId').val();//url;
+
+	global_data_passed = {};
+
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for fetching exams');
+
+		console.log(data);
+
+		var examSelect = $('.populateExams');
+		examSelect.empty();
+		// classSelect.options[classSelect.options.length]
+		// = new Option('Form 1', 'Value1');
+
+		for (var i = 0; i < data.length; i++) {
+			examSelect.append('<option id=' + data[i].uuid + ' value='
+					+ data[i].uuid + '>' + data[i].description + '</option>');
+			// classSelect.options[classSelect.options.length]
+			// = new Option(data[i].description,
+			// data[i].uuid);
+		}
+
+		
+
+	});
+
+}

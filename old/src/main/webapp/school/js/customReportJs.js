@@ -18,8 +18,11 @@ function examWarningModal() {
 $(document).ready(function() {
 	$('#accountId_tbid').val($('#accountId').val());
 
-	if (checkAccessAcademics())
+	if (checkAccessAcademics()){
 		fetchClasses();
+		fetchExams();
+	}
+		
 })
 
 $("#exam")
