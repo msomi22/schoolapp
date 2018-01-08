@@ -229,6 +229,7 @@ public class AdminService {
 
 
 			Account account = new Account();
+			accountId = account.getUuid();
 			account.setIsActive("1");
 			account.setName(apiAccount.getName());
 			account.setMotto(apiAccount.getMotto());
@@ -244,11 +245,11 @@ public class AdminService {
 			account.setIsBoarding(apiAccount.getIsBoarding());
 			account.setIsMixed(apiAccount.getIsMixed()); 
 			account.setLastUpdated(new Date().toString());
-			account.setUuid(account.getUuid());
+			account.setUuid(accountId);
 
 			if(accountDAO.putAccount(account)) {
 
-				Object object = pupulateDefaluts(account.getUuid()); 
+				Object object = populateDefaluts(accountId); 
 
 				return object;
 
@@ -270,7 +271,9 @@ public class AdminService {
 	 * @param uuid
 	 * @return
 	 */
-	private Object pupulateDefaluts(String accountId) {
+	private Object populateDefaluts(String accountId) {
+		
+		int newIds = 0;
 
 		ApiResponse apiResponse = new ApiResponse("success");  
 
@@ -285,7 +288,11 @@ public class AdminService {
 		String astr = "";
 		for(int count=0;count<accessIds.length;count++) {
 			AcessLevel acessLevel = new AcessLevel();
-			acessLevel.setUuid(accessIds[count]); 
+			if(newIds == 1) {
+				acessLevel.setUuid(acessLevel.getUuid());
+			}else {
+				acessLevel.setUuid(accessIds[count]);
+			}
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
 			acessLevelDAO.putAcessLevel(acessLevel); 
@@ -303,7 +310,11 @@ public class AdminService {
 
 		for(int count=0;count<classRoomIds.length;count++) {
 			ClassRoom classRoom = new ClassRoom();
-			classRoom.setUuid(classRoomIds[count]);
+			if(newIds == 1) {
+				classRoom.setUuid(classRoom.getUuid());
+			}else {
+				classRoom.setUuid(classRoomIds[count]);
+			}
 			classRoom.setAccountId(accountId);
 			classRoom.setDescription(classes[count]); 
 			classDAO.putClassRoom(classRoom);
@@ -329,7 +340,11 @@ public class AdminService {
 
 		for(int count=0;count<streamIds.length;count++) {
 			Stream stream = new Stream();
-			stream.setUuid(streamIds[count]);
+			if(newIds == 1) {
+				stream.setUuid(stream.getUuid());
+			}else {
+				stream.setUuid(streamIds[count]);
+			}
 			stream.setAccountId(accountId);
 			stream.setClassRoomId(classIds[count]);
 			stream.setDescription(streams[count]); 
@@ -352,7 +367,11 @@ public class AdminService {
 
 		for(int count=0;count<categoryIds.length;count++) {
 			Category category = new Category();
-			category.setUuid(categoryIds[count]);
+			if(newIds == 1) {
+				category.setUuid(category.getUuid());
+			}else {
+				category.setUuid(categoryIds[count]);
+			}
 			category.setAccountId(accountId);
 			category.setMaxNo(maxNo[count]); 
 			category.setDescription(categorys[count]);
@@ -380,7 +399,11 @@ public class AdminService {
 
 		for(int count=0;count<gradingSystemIds.length;count++) {
 			GradingSystem gradingSystem = new GradingSystem();
-			gradingSystem.setUuid(gradingSystemIds[count]);
+			if(newIds == 1) {
+				gradingSystem.setUuid(gradingSystem.getUuid());
+			}else {
+				gradingSystem.setUuid(gradingSystemIds[count]);
+			}
 			gradingSystem.setAccountId(accountId);
 			gradingSystem.setCategoryId(gcateId);
 			gradingSystem.setLowerLimit(lowerLimits[count]);
@@ -401,7 +424,11 @@ public class AdminService {
 
 		for(int count=0;count<miscellanousIds.length;count++) {
 			Miscellanous miscellanous = new Miscellanous();
-			miscellanous.setUuid(miscellanousIds[count]);
+			if(newIds == 1) {
+				miscellanous.setUuid(miscellanous.getUuid());
+			}else {
+				miscellanous.setUuid(miscellanousIds[count]);
+			}
 			miscellanous.setAccountId(accountId);
 			miscellanous.setKey(keys[count]);
 			miscellanous.setValue(values[count]);
@@ -449,7 +476,11 @@ public class AdminService {
 
 		for(int count=0;count<subjectIds.length;count++) {
 			Subject subject = new Subject();
-			subject.setUuid(subjectIds[count]);
+			if(newIds == 1) {
+				subject.setUuid(subject.getUuid());
+			}else {
+				subject.setUuid(subjectIds[count]);
+			}
 			subject.setAccountId(accountId);
 			subject.setCategoryId(subcatIds[count]);
 			subject.setCode(subCodes[count]);
@@ -467,7 +498,11 @@ public class AdminService {
 		for(int count=0;count<uuids.length;count++) {
 
 			SubCategory subCategory = new SubCategory();
-			subCategory.setUuid(uuids[count]);
+			if(newIds == 1) {
+				subCategory.setUuid(subCategory.getUuid());
+			}else {
+				subCategory.setUuid(uuids[count]);
+			}
 			subCategory.setAccountId(accountId);
 			subCategory.setCategoryId(catIds[count]);
 			subCategory.setSubjectId(subIds[count]);
@@ -489,7 +524,11 @@ public class AdminService {
 
 		for(int count=0;count<examIds.length;count++) {
 			Exam exam = new Exam();
-			exam.setUuid(examIds[count]);
+			if(newIds == 1) {
+				exam.setUuid(exam.getUuid());
+			}else {
+				exam.setUuid(examIds[count]);
+			}
 			exam.setAccountId(accountId);
 			exam.setCode(examCodes[count]);
 			exam.setDescription(examDesc[count]);
@@ -535,7 +574,11 @@ public class AdminService {
 		
 		for(int count=0;count<apiIds.length;count++) {
 			ApiCredential apiCredential = new ApiCredential();
-			apiCredential.setUuid(apiIds[count]);
+			if(newIds == 1) {
+				apiCredential.setUuid(apiCredential.getUuid());
+			}else {
+				apiCredential.setUuid(apiIds[count]);
+			}
 			apiCredential.setAccountId(accountId);
 			apiCredential.setApiType(apiCats[count]); 
 			apiCredential.setApiKey(RandomStringUtils.randomAlphabetic(20)); 

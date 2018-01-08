@@ -17,8 +17,7 @@ def newAccount():
 
 
 def newStaff(): 
-	uuid = 'ceaf0dc9-016f-4e7b-8b26-c02c17f87ac0'
-	url = 'http://localhost:8080/school/webapi/staff/'+uuid
+	url = 'http://localhost:8080/school/webapi/staff/fca2f222-8d24-4ace-a464-34db8010d08d'
 	headers = {'content-type': 'application/json'}
 	data = json.load(open('staff.json')) 
 	json_string = json.dumps(data)
@@ -29,10 +28,11 @@ def newStaff():
 
 
 
-print newAccount()
-#time.sleep(10)  
-#print newStaff()
-print 'Please modify me!' 
+
+
+#print newAccount()
+print newStaff() 
+
 
 
 
