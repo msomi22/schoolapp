@@ -140,6 +140,7 @@ public class AdminService {
 		ApiResponse apiResponse = new ApiResponse(); 
 
 		String accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
+		accountId = "";
 
 
 		if(accountDAO.getAccountById(accountId) != null) { 
@@ -243,7 +244,7 @@ public class AdminService {
 			account.setIsBoarding(apiAccount.getIsBoarding());
 			account.setIsMixed(apiAccount.getIsMixed()); 
 			account.setLastUpdated(new Date().toString());
-			account.setUuid(accountId);
+			account.setUuid(account.getUuid());
 
 			if(accountDAO.putAccount(account)) {
 
