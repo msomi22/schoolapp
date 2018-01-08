@@ -31,8 +31,8 @@ def newStaff():
 
 
 print newAccount()
-time.sleep(10)  
-print newStaff() 
+#time.sleep(10)  
+#print newStaff() 
 
 
 

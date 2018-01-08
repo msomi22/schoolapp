@@ -308,12 +308,13 @@ public class ImportUtil {
 						student.setRegNo(regNo);
 						student.setFirstname(firstName);
 						student.setMiddlename(middleName);
-						student.setLastname(lastName); 
+						if(!StringUtils.isBlank(lastName)) {
+							if(!StringUtils.equals(lastName, "null")) {
+								student.setLastname(lastName); 
+							}
+						}
 						student.setGender(gender);
-						
 						student.setLastUpdated(new Date().toString()); 
-						
-						
 						
 						if(studentDAO.putStudent(student)) {
 							
