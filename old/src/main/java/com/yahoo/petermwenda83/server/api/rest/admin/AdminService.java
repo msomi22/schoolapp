@@ -284,6 +284,7 @@ public class AdminService {
 				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
 		"0DE968C9-7309-C481-58F7-AB6CDB1011EF", SYS_COSTANTS.SYS_ACCESS_LEVEL_ID};
 		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar",SYS_COSTANTS.SYS_ACCESS_LEVEL}; 
+		int[] a_Ids= {100,200,300,400,500,600,700,800}; 
 
 		String astr = "";
 		for(int count=0;count<accessIds.length;count++) {
@@ -295,6 +296,7 @@ public class AdminService {
 			}
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
+			acessLevel.setAcessId(String.valueOf(a_Ids[count]));  
 			acessLevelDAO.putAcessLevel(acessLevel); 
 			astr = " AcessLevel(s) added,";
 		}

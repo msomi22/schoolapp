@@ -22,9 +22,11 @@ import com.yahoo.petermwenda83.bean.StorableBean;
 public class AcessLevel extends StorableBean{
 	
 	private String  description;
+	private String  acessId;
 	    
 	public AcessLevel() {
-		description ="";
+		description = "";
+		acessId = "";
 	}
 
 	/**
@@ -41,6 +43,21 @@ public class AcessLevel extends StorableBean{
 		this.description = description;
 	}
 
+	
+	/**
+	 * @return the acessId
+	 */
+	public String getAcessId() {
+		return acessId;
+	}
+
+	/**
+	 * @param acessId the acessId to set
+	 */
+	public void setAcessId(String acessId) {
+		this.acessId = acessId;
+	}
+
 	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
@@ -49,6 +66,8 @@ public class AcessLevel extends StorableBean{
 		builder.append(getUuid()); 
 		builder.append(",description=");
 		builder.append(description);
+		builder.append(",acessId=");
+		builder.append(acessId);
 		return builder.toString(); 
 		}
 	
