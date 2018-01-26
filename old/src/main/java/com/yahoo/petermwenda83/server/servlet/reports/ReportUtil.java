@@ -26,6 +26,7 @@ import com.yahoo.petermwenda83.bean.exam.YearlyMean;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
@@ -78,9 +79,8 @@ public class ReportUtil {
 
 	private static SubCategoryDAO subCategoryDAO2;
 	private static CategoryDAO categoryDAO2;
-
-
-
+	private static StreamDAO streamDAO;
+	
 	private static GradingSystemDAO gradingSystemDAO;
 	private static SubCategoryDAO subCategoryDAO;
 	private static CategoryDAO categoryDAO;
@@ -94,7 +94,7 @@ public class ReportUtil {
 	static {
 		subCategoryDAO2 = SubCategoryDAO.getInstance();
 		categoryDAO2 = CategoryDAO.getInstance();
-		gradingSystemDAO = GradingSystemDAO.getInstance();
+		streamDAO = StreamDAO.getInstance();
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		subCategoryDAO = SubCategoryDAO.getInstance();
 		categoryDAO = CategoryDAO.getInstance(); 
@@ -2027,6 +2027,26 @@ public class ReportUtil {
 
 
 		return remarks;
+	}
+
+
+	
+	public static List<?> generateClassMeans(List<Performance2> performanceList,String accountId) {
+		
+		//List<Performance2> subList = new ArrayList<>();
+		Map<String,List<Performance2>> sublistMap = new HashMap<>();
+		
+		performanceList.forEach(per -> {
+			//222,222,222,333,222,222,333,222,333,444,222 (11 - 400) 
+			//performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList());
+			sublistMap.put(per.getStreamId(), performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList()));
+			performanceList.removeAll(performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList()));
+		});
+		
+		System.out.println("----------------------------------------------------------------------");
+		System.out.println(sublistMap.toString());
+		
+		return null;
 	}
 
 
