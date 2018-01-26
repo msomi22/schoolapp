@@ -475,20 +475,36 @@ public class ClassRankingList extends HttpServlet{
 			examTable.setWidthPercentage(58);  
 			examTable.setWidths(new int[]{8,50});  
 
-			String examNames = ReportUtil.getExamName(accountId, exams,1);
+			
+			
+			
+			if(classResult) {
+				//classes
+				
+				ReportUtil.generateClassMeans(performanceList,accountId);
+				
+				
+			}else {//single stream
+				
+				String examNames = ReportUtil.getExamName(accountId, exams,1);
+				
+				ClassMean class_stream_Mean = new ClassMean();
+				class_stream_Mean.setAccountId(accountId);
+				class_stream_Mean.setClassId(classroomId);
+				class_stream_Mean.setStreamId(streamId);
+				class_stream_Mean.setExamId(examNames); 
+				class_stream_Mean.setStreammean(Double.valueOf(classMean));
+				class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
+				class_stream_Mean.setTerm(term);
+				class_stream_Mean.setYear(year); 
 
-			ClassMean class_stream_Mean = new ClassMean();
-			class_stream_Mean.setAccountId(accountId);
-			class_stream_Mean.setClassId(classroomId);
-			class_stream_Mean.setStreamId(streamId);
-			class_stream_Mean.setExamId(examNames); 
-			class_stream_Mean.setStreammean(Double.valueOf(classMean));
-			class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
-			class_stream_Mean.setTerm(term);
-			class_stream_Mean.setYear(year); 
+				//TODO 
+				classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, examNames, term, year);
+				
+				
+			}
 
-			//TODO 
-			classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, examNames, term, year);
+			
 
 
 			String stringExams = ReportUtil.getExamName(accountId, exams,0);

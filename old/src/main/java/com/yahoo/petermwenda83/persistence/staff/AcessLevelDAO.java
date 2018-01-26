@@ -153,12 +153,13 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO AcessLevel" 
-						+"(uuid,accountId,description) VALUES (?,?,?);");
+						+"(uuid,accountId,acessId,description) VALUES (?,?,?,?);");
 				){
 
 			pstmt.setString(1, acessLevel.getUuid());
 			pstmt.setString(2, acessLevel.getAccountId());
-			pstmt.setString(3, acessLevel.getDescription());
+			pstmt.setString(3, acessLevel.getAcessId());
+			pstmt.setString(4, acessLevel.getDescription());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -179,12 +180,13 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 		boolean success = true;
 
 		try (  Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE AcessLevel SET description = ?"
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE AcessLevel SET description = ?, acessId=?"
 						+ "WHERE uuid = ? AND accountId = ?;");
 				) {           			 	            
 			pstmt.setString(1, acessLevel.getDescription());
-			pstmt.setString(2, acessLevel.getUuid());
-			pstmt.setString(3, acessLevel.getAccountId());
+			pstmt.setString(2, acessLevel.getAcessId());
+			pstmt.setString(3, acessLevel.getUuid());
+			pstmt.setString(4, acessLevel.getAccountId());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

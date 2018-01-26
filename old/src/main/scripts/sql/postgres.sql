@@ -221,7 +221,7 @@ CREATE TABLE Student(
     isAlumni text,
     isBoarding text,
     isGoKFeeEligibe text,
-    regNo text UNIQUE NOT NULL ,
+    regNo text,
     firstname text ,
     middlename text ,
     lastname text ,
@@ -312,6 +312,7 @@ CREATE TABLE AcessLevel (
     id SERIAL PRIMARY KEY,
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
+    acessId text,
     description text
 );
 --\COPY AcessLevel(uuid,accountId,description) FROM '/tmp/AcessLevel.csv' WITH DELIMITER AS '|' CSV HEADER
@@ -326,15 +327,15 @@ CREATE TABLE Staff (
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     acessLevelId text REFERENCES AcessLevel(uuid),
-    staffNo text UNIQUE NOT NULL,
+    staffNo text,
     isActive text,
     firstname text,
     middlename text,
     lastname text,
     gender text, 
-    mobile text UNIQUE NOT NULL,
-    email text UNIQUE NOT NULL,
-    username text UNIQUE NOT NULL,
+    mobile text,
+    email text,
+    username text,
     password text,
     lastUpdated text,
     regDate timestamp with time zone DEFAULT now()
