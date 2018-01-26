@@ -217,15 +217,15 @@ public class ClassMeanDAO extends GenericDAO implements SchoolClassMeanDAO {
 	 * @see com.yahoo.petermwenda83.persistence.exam.SchoolClassMeanDAO#getClassMean(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<ClassMean> getClassMeanList(String accountId, String streamId,String examId, String term, String year) {
+	public List<ClassMean> getClassMeanList(String accountId, String classid,String examId, String term, String year) {
 		List<ClassMean> list = new ArrayList<>();
 		try (
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM ClassMean WHERE accountId = ? AND "
-						+ " streamId =? AND examId =? AND term =? AND year = ?;");    		   
+						+ " classid =? AND examId =? AND term =? AND year = ?;");    		   
 				) {
 			pstmt.setString(1, accountId);   
-			pstmt.setString(2, streamId); 
+			pstmt.setString(2, classid); 
 			pstmt.setString(3, examId); 
 			pstmt.setString(4, term); 
 			pstmt.setString(5, year); 

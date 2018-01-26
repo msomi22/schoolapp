@@ -42,6 +42,6 @@ public interface SchoolClassMeanDAO {
 	 * @param year
 	 * @return
 	 */
-	public List<ClassMean> getClassMeanList(String accountId,String streamId,String examId,String term,String year); 
+	public List<ClassMean> getClassMeanList(String accountId,String classid, String examId, String term, String year); 
 
 }

@@ -481,7 +481,8 @@ public class ClassRankingList extends HttpServlet{
 			if(classResult) {
 				//classes
 				
-				ReportUtil.generateClassMeans(performanceList,accountId);
+				ReportUtil.generateClassMeans(performanceList, accountId, classroomId,rankWithPoints, 
+						rankWithTotalMarks, grade7subjects, grade11subjects, exams,term,year,classMeanDAO);
 				
 				
 			}else {//single stream
@@ -1066,7 +1067,7 @@ public class ClassRankingList extends HttpServlet{
 
 				double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
 
-				System.out.println(" *** *** deviation : " + deviation + ", previousMean: " + previousMean + ", thisMean : " + thisMean); 
+				//System.out.println(" *** *** deviation : " + deviation + ", previousMean: " + previousMean + ", thisMean : " + thisMean); 
 
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
@@ -1235,7 +1236,8 @@ public class ClassRankingList extends HttpServlet{
 			crankingTable.addCell(p_c_meanCell); 
 
 			AtomicInteger c_count = new AtomicInteger();
-			classMeanDAO.getClassMeanList(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), term, year).forEach(cmean -> {
+			
+			classMeanDAO.getClassMeanList(accountId, classroomId, ReportUtil.getExamName(accountId, exams,1), term, year).forEach(cmean -> {
 
 				int c = c_count.incrementAndGet();
 				String stream = "";
@@ -1487,7 +1489,7 @@ public class ClassRankingList extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean();
 
-				System.out.println(" --totalExam1--- " + totalExam1);
+				//System.out.println(" --totalExam1--- " + totalExam1);
 
 
 

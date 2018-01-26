@@ -20,6 +20,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import com.yahoo.petermwenda83.bean.exam.ClassMean;
 import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.exam.YearlyMean;
@@ -27,6 +28,7 @@ import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
 import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.GradingSystemDAO;
 import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
@@ -80,7 +82,7 @@ public class ReportUtil {
 	private static SubCategoryDAO subCategoryDAO2;
 	private static CategoryDAO categoryDAO2;
 	private static StreamDAO streamDAO;
-	
+
 	private static GradingSystemDAO gradingSystemDAO;
 	private static SubCategoryDAO subCategoryDAO;
 	private static CategoryDAO categoryDAO;
@@ -105,9 +107,9 @@ public class ReportUtil {
 
 	}
 
-	
+
 	public static String getExamName(String accountId, String[] exams, int i) { 
-		
+
 		String exam11 = "";
 		String exam22 = "";
 		String exam33 = "";
@@ -132,32 +134,32 @@ public class ReportUtil {
 			exam33 = examDAO.getExam(accountId, exams[2]) != null ? examDAO.getExam(accountId, exams[2]).getDescription() : "";
 
 		}
-		
+
 		String examNames = exams.length+"_";
-		
+
 		if(i == 1) {
-			
+
 			examNames += exam11.length()== 0 ? "" : exam11+"_";
 			examNames += exam22.length()== 0 ? "" : exam22+"_";
 			examNames += exam33.length()== 0 ? "" : exam33+"_";
-			
+
 			if(StringUtils.endsWith(examNames, "_")) {
 				examNames = removeLastChar(examNames); 
 			}
-			
+
 		}else if(i == 0) {
-			
+
 			examNames = "(1) " + exam11 + "\n(2) " + exam22 +"\n(3) " + exam33;
-			
+
 		}
-		
+
 		return examNames;
 	}
 
 
 	private static String removeLastChar(String str) {
-        return str.substring(0, str.length() - 1);
-    }
+		return str.substring(0, str.length() - 1);
+	}
 	/**
 	 * 
 	 * @param accountId
@@ -352,85 +354,92 @@ public class ReportUtil {
 
 		List<Performance2> finalList = new ArrayList<>();
 
-		for(Performance2 performance2 : performanceList){
+		if(!performanceList.isEmpty()) {
+			for(Performance2 performance2 : performanceList){
 
-			Map<String,Integer> exam1 = performance2.getExam1();
-			Map<String,Integer> exam2 = performance2.getExam2();
-			Map<String,Integer> exam3 = performance2.getExam3(); 
+				Map<String,Integer> exam1 = performance2.getExam1();
+				Map<String,Integer> exam2 = performance2.getExam2();
+				Map<String,Integer> exam3 = performance2.getExam3(); 
 
-			List<Subject> subjects = subjectDAO.getSubjects(accountId);
+				List<Subject> subjects = subjectDAO.getSubjects(accountId);
 
-			List<FinaResult> linaResultList = new ArrayList<>();
+				List<FinaResult> linaResultList = new ArrayList<>();
 
-			subjects.parallelStream().forEach(subject -> {
+				subjects.parallelStream().forEach(subject -> {
 
-				String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
-				String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
-				String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
 
 
 
-				if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
-					exam1Score = "";
+					if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
+						exam1Score = "";
+					}
+					if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
+						exam2Score = "";
+					}
+					if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
+						exam3Score = "";
+					}
+
+
+					double average  = 0;
+					if(length == 3) {
+						average = ReportUtil.findThreeExamAverage(exam1Score,exam2Score,exam3Score);
+
+					}else if(length == 2) {
+						average = ReportUtil.findTwoExamAverage(exam1Score,exam2Score);
+
+					}else if(length == 1) {
+						average = ReportUtil.findOneExamAverage(exam1Score);
+
+					}
+
+
+					String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
+					int point =  Integer.valueOf(avgpoint); 
+
+					FinaResult finaResult = new FinaResult();
+					finaResult.setAverage((int)average); 
+					finaResult.setPoint(point);
+					finaResult.setSubjectId(subject.getUuid());
+
+					linaResultList.add(finaResult);
+
+				});
+
+
+				//Student stu = studentDAO.getStudentById(accountId, performance2.getStudentId());
+				//System.out.println(" ______________ " + stu.getRegNo() + " , name : " + stu.getFirstname());
+
+				if(grade7subjects && !grade11subjects) {
+
+					if(!linaResultList.isEmpty() || linaResultList != null) {
+						ExamAvg examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
+						performance2.setTotalMean(examavg.getToatlAverage());
+						performance2.setTotalPoint(examavg.getTotalPoint());
+						finalList.add(performance2);
+					}
+
+
 				}
-				if(StringUtils.equals(exam2Score, "0")|| exam2Score.equalsIgnoreCase("null")){
-					exam2Score = "";
+
+				if(!grade7subjects && grade11subjects) {
+
+					if(!linaResultList.isEmpty() || linaResultList != null) {
+						ExamAvg examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
+						performance2.setTotalMean(examavg.getToatlAverage());
+						performance2.setTotalPoint(examavg.getTotalPoint());
+						finalList.add(performance2);
+					}
+
+
 				}
-				if(StringUtils.equals(exam3Score, "0")|| exam3Score.equalsIgnoreCase("null")){
-					exam3Score = "";
-				}
 
 
-				double average  = 0;
-				if(length == 3) {
-					average = ReportUtil.findThreeExamAverage(exam1Score,exam2Score,exam3Score);
-					
-				}else if(length == 2) {
-					average = ReportUtil.findTwoExamAverage(exam1Score,exam2Score);
-					
-				}else if(length == 1) {
-					average = ReportUtil.findOneExamAverage(exam1Score);
-					
-				}
-				
-				
-				String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
-				int point =  Integer.valueOf(avgpoint); 
-
-				FinaResult finaResult = new FinaResult();
-				finaResult.setAverage((int)average); 
-				finaResult.setPoint(point);
-				finaResult.setSubjectId(subject.getUuid());
-
-				linaResultList.add(finaResult);
-
-			});
-
-
-			//Student stu = studentDAO.getStudentById(accountId, performance2.getStudentId());
-			//System.out.println(" ______________ " + stu.getRegNo() + " , name : " + stu.getFirstname());
-
-			if(grade7subjects && !grade11subjects) {
-
-				ExamAvg examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
-				performance2.setTotalMean(examavg.getToatlAverage());
-				performance2.setTotalPoint(examavg.getTotalPoint());
-				finalList.add(performance2);
 
 			}
-
-			if(!grade7subjects && grade11subjects) {
-
-				ExamAvg examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
-				performance2.setTotalMean(examavg.getToatlAverage());
-				performance2.setTotalPoint(examavg.getTotalPoint());
-				finalList.add(performance2);
-
-			}
-
-
-
-
 		}
 
 		return finalList;
@@ -1100,20 +1109,20 @@ public class ReportUtil {
 				subjectPerformance.setTotal(performanceP123.getTotalMean());  
 			}
 
-			
+
 
 
 
 		}else{
-			
-			
+
+
 			int examTotal = getTotalsByTotalPerExam(exam);
 
 			if(examTotal > 0){
 				subjectPerformance.setTotal((double)examTotal);  
 			}
 
-			
+
 
 		}
 
@@ -1147,13 +1156,13 @@ public class ReportUtil {
 		int totals = 0;
 		for( Perfomance perfomance : perfomanceList ){
 			totals += perfomance.getScore();
-			
+
 			/*System.out.println("********** totals : " + totals + " score : " + perfomance.getScore() + " sub: " + 
 			subjectDAO.getSubjectById(perfomance.getAccountId(), perfomance.getSubjectId()).getCode());*/
 		}
-		
-	//	System.out.println("************************************** : "  + totals);
-		
+
+		//	System.out.println("************************************** : "  + totals);
+
 		return totals;
 	}
 
@@ -1434,7 +1443,7 @@ public class ReportUtil {
 
 	}
 
-	
+
 	/**
 	 * 
 	 * @param exam1Score
@@ -1463,7 +1472,7 @@ public class ReportUtil {
 
 	}
 
-	
+
 	/**
 	 * 
 	 * @param exam1Score
@@ -1477,7 +1486,7 @@ public class ReportUtil {
 			score = "0";
 		}
 
-		
+
 		double sum = 0;
 		double mean = 0;
 
@@ -2030,23 +2039,51 @@ public class ReportUtil {
 	}
 
 
-	
-	public static List<?> generateClassMeans(List<Performance2> performanceList,String accountId) {
-		
-		//List<Performance2> subList = new ArrayList<>();
-		Map<String,List<Performance2>> sublistMap = new HashMap<>();
-		
-		performanceList.forEach(per -> {
-			//222,222,222,333,222,222,333,222,333,444,222 (11 - 400) 
-			//performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList());
-			sublistMap.put(per.getStreamId(), performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList()));
-			performanceList.removeAll(performanceList.stream().filter(sub -> StringUtils.equals(per.getStreamId(), sub.getStreamId())).collect(Collectors.toList()));
+	/**
+	 * 
+	 * @param performanceList
+	 * @param accountId
+	 * @param classroomId
+	 * @param grade11subjects 
+	 * @param grade7subjects 
+	 * @param rankWithTotalMarks 
+	 * @param rankWithPoints 
+	 * @param exams 
+	 * @param year 
+	 * @param term 
+	 * @param classMeanDAO 
+	 * @return
+	 */
+	public static void generateClassMeans(List<Performance2> performanceList, String accountId, String classroomId, boolean rankWithPoints, 
+			boolean rankWithTotalMarks, boolean grade7subjects, boolean grade11subjects, String[] exams, String term, String year, ClassMeanDAO classMeanDAO) {
+
+		//Map<String,List<Performance2>> sublistMap = new HashMap<>();
+
+		streamDAO.getStreamList(accountId).stream().filter(stream -> StringUtils.equals(stream.getClassRoomId(), classroomId)).forEach(strm -> {
+
+			List<Performance2> subList = new ArrayList<>();
+			subList = performanceList.stream().filter(sub -> StringUtils.equals(strm.getUuid(), sub.getStreamId())).collect(Collectors.toList());
+
+			
+			String classMean = "0";
+			classMean = getclassMean(subList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
+			String examNames = getExamName(accountId, exams,1);
+			
+			ClassMean class_stream_Mean = new ClassMean();
+			class_stream_Mean.setAccountId(accountId);
+			class_stream_Mean.setClassId(classroomId);
+			class_stream_Mean.setStreamId(strm.getUuid()); 
+			class_stream_Mean.setExamId(examNames); 
+			class_stream_Mean.setStreammean(Double.valueOf(classMean));
+			class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
+			class_stream_Mean.setTerm(term);
+			class_stream_Mean.setYear(year); 
+
+			//TODO 
+			classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, strm.getUuid(), examNames, term, year);
+			
 		});
-		
-		System.out.println("----------------------------------------------------------------------");
-		System.out.println(sublistMap.toString());
-		
-		return null;
+
 	}
 
 
