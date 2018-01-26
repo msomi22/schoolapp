@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 	if (checkAccessAcademics()){
 		fetchClasses();
-		fetchExams();
+		//fetchExams();
 	}
 		
 })

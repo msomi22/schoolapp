@@ -167,7 +167,7 @@
                     
                     </c:forEach> --%>
 
-													<!-- Exam element -->
+													<!-- Exam element  populateExams-->
 
 
 
@@ -175,7 +175,7 @@
 
 													<select id="exam" name="exam"
 														onblur="validateExamSelected()" onchange="hideSubjects()"
-														class="formelement SlectBox form-control populateExams"
+														class="formelement SlectBox form-control "
 														required="required" multiple>
 
 													 	<%
