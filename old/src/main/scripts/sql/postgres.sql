@@ -1,15 +1,4 @@
 
--- Schema Name: schooldb
--- Username: school
--- Password: AllaManO1
-
--- These tables describe the database a School Management system
-
--- Make sure you have created a Postgres user with the above username, password
--- and appropriate permissions. For development environments, you can make the 
--- database user to be a superuser to allow for copying of external files. 
-
--- Then run the "dbSetup.sh" script in the bin folder of this project.
 
 \c postgres
 
