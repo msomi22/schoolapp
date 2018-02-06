@@ -17,7 +17,7 @@ def newAccount():
 
 
 def newStaff(): 
-	url = 'http://localhost:8080/school/webapi/staff/ca4eab8a-b9f5-428c-b9e6-2cbe0d582f70'
+	url = 'http://localhost:8080/school/webapi/staff/af2e7af5-113b-408d-82e2-fc2cb815b49a'
 	headers = {'content-type': 'application/json'}
 	data = json.load(open('staff.json')) 
 	json_string = json.dumps(data)
@@ -30,8 +30,8 @@ def newStaff():
 
 
 
-print newAccount()
-#print newStaff() 
+#print newAccount()
+print newStaff() 
 
 
 
