@@ -81,7 +81,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 
 
 	@Override
-	public boolean existYearlyMean(String accountId,String studentId,String classId,String year) {
+	public boolean existYearlyMean(String accountId,String uuid,String studentId,String classId,String year) {
 		boolean studentexist = false;
 
 		String dbAccountId = "";
@@ -93,7 +93,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 		try(
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM YearlyMean"
-						+ " WHERE accountId = ? AND studentId =? AND classId =? AND year =?;");       
+						+ " WHERE accountId = ? AND studentId =? AND classId =? AND year =? AND uuid =?;");       
 
 				){
 
@@ -101,6 +101,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 			pstmt.setString(2, studentId); 
 			pstmt.setString(3, classId); 
 			pstmt.setString(4, year); 
+			pstmt.setString(5, uuid); 
 			rset = pstmt.executeQuery();
 
 			if(rset.next()){
@@ -134,7 +135,7 @@ public class YearlyMeanDAO  extends GenericDAO implements SchoolYearlyMeanDAO {
 		
 		//System.out.println("******************************* classId : " + classId);
 		
-		if(!existYearlyMean(accountId,studentId,classId,year)){
+		if(!existYearlyMean(accountId,yearlyMean.getUuid(),studentId,classId,year)){
 			try(   Connection conn = dbutils.getConnection();
 					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO YearlyMean" 
 							+"(uuid,accountId,studentId,classId,year,meanOne,meanTwo,meanThree,termOnePosition,termTwoPosition,termThreePosition) "
