@@ -337,7 +337,7 @@ public class QuartzJob implements Job{
 	 */
 	private void StartBackup() {
 
-		String file = GetBackupScript.getBackupFile();
+	/*	String file = GetBackupScript.getBackupFile();
 		ProcessBuilder pb = new ProcessBuilder(file,"arg","arg");
 		try {
 			Process p = pb.start();
@@ -351,7 +351,7 @@ public class QuartzJob implements Job{
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}
+		}*/
 
 
 	}

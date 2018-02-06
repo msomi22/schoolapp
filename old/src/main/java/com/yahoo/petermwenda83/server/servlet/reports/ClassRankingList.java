@@ -88,14 +88,14 @@ public class ClassRankingList extends HttpServlet{
 	private static ClassDAO classDAO;
 	private static PrimaryDAO primaryDAO;
 
-	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
+	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 
 	//private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
-	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 
-	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
-	private Font timesRomanBold6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.BOLD);
+	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
+	private Font timesRomanBold6 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
 	private Document document;
 	private PdfWriter writer;
