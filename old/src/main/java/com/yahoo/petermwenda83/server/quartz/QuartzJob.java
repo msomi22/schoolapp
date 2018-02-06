@@ -74,7 +74,7 @@ public class QuartzJob implements Job{
 		synchGoKeMoney();
 		checkExamDuplicate();  
 
-		/*try {
+		try {
 
 			if(SystemUtils.IS_OS_WINDOWS){
 				backUpWin();
@@ -88,7 +88,7 @@ public class QuartzJob implements Job{
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 
 	}
 
