@@ -2064,7 +2064,7 @@ public class ReportUtil {
 
 		streamDAO.getStreamList(accountId).stream().
 		                   filter(stream -> StringUtils.equals(stream.getClassRoomId(), classroomId)).
-		                   filter(stream -> StringUtils.equalsIgnoreCase(stream.getDescription(), "SYS_DEFAULT_STREAM")).forEach(strm -> {
+		                   filter(stream -> !StringUtils.equalsIgnoreCase(stream.getDescription(), "SYS_DEFAULT_STREAM")).forEach(strm -> {
 
 			List<Performance2> subList = new ArrayList<>();
 			subList = performanceList.stream().filter(sub -> StringUtils.equals(strm.getUuid(), sub.getStreamId())).collect(Collectors.toList());
