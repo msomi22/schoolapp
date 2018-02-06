@@ -74,7 +74,7 @@ public class QuartzJob implements Job{
 		synchGoKeMoney();
 		checkExamDuplicate();  
 
-		try {
+		/*try {
 
 			if(SystemUtils.IS_OS_WINDOWS){
 				backUpWin();
@@ -88,7 +88,7 @@ public class QuartzJob implements Job{
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 
@@ -337,7 +337,7 @@ public class QuartzJob implements Job{
 	 */
 	private void StartBackup() {
 
-	/*	String file = GetBackupScript.getBackupFile();
+		String file = GetBackupScript.getBackupFile();
 		ProcessBuilder pb = new ProcessBuilder(file,"arg","arg");
 		try {
 			Process p = pb.start();
@@ -351,7 +351,7 @@ public class QuartzJob implements Job{
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}*/
+		}
 
 
 	}
