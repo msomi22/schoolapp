@@ -915,7 +915,7 @@ public class ClassRankingList extends HttpServlet{
 						}
 
 
-						if(StringUtils.equals(saveMean, "1")) {
+						if(StringUtils.equals(saveMean, "4")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
 
