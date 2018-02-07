@@ -1944,7 +1944,10 @@ public class ReportUtil {
 
 		}
 
-		classMean = totalMean / performanceList.size();
+		if(totalMean > 0) {
+			classMean = totalMean / performanceList.size();
+		}
+		
 
 		return df2.format(classMean); 
 	}
@@ -2059,14 +2062,27 @@ public class ReportUtil {
 
 		//Map<String,List<Performance2>> sublistMap = new HashMap<>();
 
-		streamDAO.getStreamList(accountId).stream().filter(stream -> StringUtils.equals(stream.getClassRoomId(), classroomId)).forEach(strm -> {
+		streamDAO.getStreamList(accountId).stream().
+		                   filter(stream -> StringUtils.equals(stream.getClassRoomId(), classroomId)).
+		                   filter(stream -> !StringUtils.equalsIgnoreCase(stream.getDescription(), "SYS_DEFAULT_STREAM")).forEach(strm -> {
 
 			List<Performance2> subList = new ArrayList<>();
 			subList = performanceList.stream().filter(sub -> StringUtils.equals(strm.getUuid(), sub.getStreamId())).collect(Collectors.toList());
 
 			
-			String classMean = "0";
-			classMean = getclassMean(subList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
+			String classMean = "0.0";
+			
+			if(!subList.isEmpty() || subList != null) {
+				classMean = getclassMean(subList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
+			}
+			
+			//
+			
+			//System.out.println("classMean -- " + classMean); 
+			if(StringUtils.isBlank(classMean)) {
+				classMean = "0.0";
+			}
+			
 			String examNames = getExamName(accountId, exams,1);
 			
 			ClassMean class_stream_Mean = new ClassMean();
