@@ -1179,7 +1179,7 @@ public class PerformanceListF12 extends HttpServlet {
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/11; 
+					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
 					MEANMapgn.put(uuid,meangn);
 
 					totalmean = 0;
