@@ -24,7 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
-import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -32,32 +32,26 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 
 /**
+ * 
+ * /school/exportExcel
+ * 
+ * exportExcel
+ * 
  * @author peter
  *
  */
 public class ExportExcel  extends HttpServlet{
-	
+
 	private static PerfomanceDAO perfomanceDAO;
 	private static SubjectDAO subjectDAO;
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static SysConfigDAO sysConfigDAO;
-	
-	static final String databaseName = "schooldb";
-	static final String Host = "localhost";
-	static final String databaseUsername = "school";
-	static final String databasePassword = "AllaManO1";
-	static final int databasePort = 5432;
-	
+
 	private ServletOutputStream out;
 	private String excelName = "";
-	
-	static {
-		perfomanceDAO = new PerfomanceDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		subjectDAO = new SubjectDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-		studentDAO = new StudentDAO(databaseName, Host, databaseUsername, databasePassword, databasePort);
-	}
-	
+
+
 	/**  
 	 *
 	 * @param config
@@ -74,7 +68,7 @@ public class ExportExcel  extends HttpServlet{
 		sysConfigDAO = SysConfigDAO.getInstance(); 
 
 	}
-	
+
 
 	/**    
 	 *
@@ -94,7 +88,11 @@ public class ExportExcel  extends HttpServlet{
 
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
 		String streamId = StringUtils.trim(request.getParameter("uuid"));
-		String decisionFlag = StringUtils.trim(request.getParameter("decisionFlag"));
+		String examId = StringUtils.trim(request.getParameter("examId"));
+
+		accountId = "af2e7af5-113b-408d-82e2-fc2cb815b49a";
+		streamId = "126385be-53e6-45e0-ad13-9264a1d2b3cd";
+		examId = "D50E6399-B913-42F2-A5B6-F0D4BAAF9571";
 
 		Account school = new Account();
 
@@ -102,28 +100,17 @@ public class ExportExcel  extends HttpServlet{
 
 		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId); 
 
-		excelName = "";
+		excelName = "test";
 
 		response.setHeader("Content-Disposition","attachment; filename="+excelName+".xlsx"); 
 
-		//createExcelSheets(sysConfig,school,streamId,decisionFlag);
+		createExcelSheets(sysConfig,school,streamId,examId);
 	}
 
 
-	
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
 
-		report();
-		
-	}
-	
-	
-	
+
 	/** TODO
 	 * 1. StreamId (Form 1 N)
 	 *    ExamId           (Cat 1)
@@ -134,19 +121,23 @@ public class ExportExcel  extends HttpServlet{
 	 *    
 	 *    Fetch the students for a stream
 	 *    fetch performance data for each subject.
+	 *    
+	 *    
+	 * @param examId2 
+	 * @param streamId2 
+	 * @param school 
+	 * @param sysConfig 
+	 * @throws IOException 
 	 * 
 	 * 
 	 */
-	
-	
-	public static void report() {
-		
-		String accountId = "ca4eab8a-b9f5-428c-b9e6-2cbe0d582f70";
-		String streamId = "4DA86139-6A72-4089-8858-6A3A613FDFE6";
-		String examId = "D50E6399-B913-42F2-A5B6-F0D4BAAF9571";
-		String term = "1";
-		String year = "2018";
-		
+
+
+	public void createExcelSheets(SysConfig sysConfig, Account school, String streamId, String examId) throws IOException { 
+
+		String term = sysConfig.getTerm();
+		String year = sysConfig.getYear();
+
 		//****************************
 		XSSFWorkbook xf = new XSSFWorkbook();
 		XSSFCreationHelper ch =xf.getCreationHelper();
@@ -156,23 +147,23 @@ public class ExportExcel  extends HttpServlet{
 		s.setColumnWidth(1, 3700); //Firstname
 		s.setColumnWidth(2, 3700); //Middlename
 
-		s.setColumnWidth(3, 3700);
-		s.setColumnWidth(4, 3700); 
-		s.setColumnWidth(5, 3700); 
-		
-		s.setColumnWidth(6, 3700);
-		s.setColumnWidth(7, 3700); 
-		s.setColumnWidth(8, 3700); 
-		
-		s.setColumnWidth(9, 3700);
-		s.setColumnWidth(10, 3700); 
-		s.setColumnWidth(11, 3700); 
-		
-		s.setColumnWidth(12, 3700);
-		s.setColumnWidth(13, 3700); 
-		s.setColumnWidth(14, 3700); 
-		
-		s.setColumnWidth(15, 3700); 
+		s.setColumnWidth(3, 1900);
+		s.setColumnWidth(4, 1900); 
+		s.setColumnWidth(5, 1900); 
+
+		s.setColumnWidth(6, 1900);
+		s.setColumnWidth(7, 1900); 
+		s.setColumnWidth(8, 1900); 
+
+		s.setColumnWidth(9, 1900);
+		s.setColumnWidth(10, 1900); 
+		s.setColumnWidth(11, 1900); 
+
+		s.setColumnWidth(12, 1900);
+		s.setColumnWidth(13, 1900); 
+		s.setColumnWidth(14, 1900); 
+
+		s.setColumnWidth(15, 1900); 
 
 
 		CellStyle style = xf.createCellStyle();
@@ -201,56 +192,78 @@ public class ExportExcel  extends HttpServlet{
 		cell3.setCellValue(ch.createRichTextString("Midlename")); 
 		cell3.setCellStyle(style2);
 
-		
-		//**********************************************************
-		
+		int c = 3;
+		for(Subject subject : subjectDAO.getSubjects(school.getUuid())){
+			XSSFCell cell = r1.createCell(c); 
+			cell.setCellValue(ch.createRichTextString(subject.getCode())); 
+			cell.setCellStyle(style2);
+			c++;
+		}
 
-		
-		studentDAO.getStudentByStream(accountId, streamId).forEach(student -> {
-			
-			AtomicInteger ai = new AtomicInteger();
-			perfomanceDAO.getStreamPerformance(accountId, examId, student.getUuid(), streamId, term, year).forEach(performance -> {
-				
-				int count = ai.incrementAndGet();
-				int count2 = ai.incrementAndGet();
-				count += 2;
-				
-				String sub = subjectDAO.getSubjectById(accountId, performance.getSubjectId()).getCode(); 
-				
-				
-				XSSFCell sub111 = r1.createCell(count);  
-				sub111.setCellValue(ch.createRichTextString(sub)); 
-				sub111.setCellStyle(style2);
-				
-				
-				
-				
-			
-				
-				System.out.println("reg: " +student.getRegNo() + " , sub : " + sub + ", score : " + performance.getScore());
-				
-				
-				
-				
-				
-				
+
+		//**********************************************************
+
+
+		AtomicInteger count = new AtomicInteger();
+
+		studentDAO.getStudentByStream(school.getUuid(), streamId).forEach(student -> {
+
+			count.getAndIncrement();
+			int i = count.get();
+
+			XSSFRow r = s.createRow(i);
+
+			XSSFCell c1 = r.createCell(0);
+			c1.setCellValue(student.getRegNo());
+
+			XSSFCell c2 = r.createCell(1);        	
+			c2.setCellValue(student.getFirstname());
+
+			XSSFCell c3 = r.createCell(2);         	
+			c3.setCellValue(student.getMiddlename());
+
+
+			AtomicInteger subc = new AtomicInteger();
+			subjectDAO.getSubjects(school.getUuid()).forEach(subject -> {
+
+				subc.getAndIncrement();
+				int sc = subc.get();
+
+				perfomanceDAO.getPerformanceList(school.getUuid(), examId, student.getUuid(), streamId, subject.getUuid(), term, year).forEach(performance -> {
+					//String sub = subjectDAO.getSubjectById(school.getUuid(), performance.getSubjectId()).getCode();
+					//System.out.println(" *** sc" + (sc+2)); 
+					XSSFCell c4 = r.createCell(sc+2);        	
+					c4.setCellValue(performance.getScore());
+
+				});
 			});
-			System.out.println(" -------------------------- ");
-			
-		});;
-		
-		
-		
-		
-		
+			//System.out.println(" -------------------------- ");
+		});
+
+		xf.write(out);
+		out.flush();          
+		out.close();
+
+
+	}
+
+	/**
+	 *
+	 * @param request
+	 * @param response
+	 * @throws ServletException, IOException
+	 * @throws java.io.IOException
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
 	}
 	
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2163317809910216680L;
 
 }

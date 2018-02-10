@@ -92,9 +92,9 @@ public class ClassRankingList extends HttpServlet{
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 
 	//private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
-	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
-	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
+	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanBold6 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
 	private Document document;
@@ -442,8 +442,8 @@ public class ClassRankingList extends HttpServlet{
 			 * class column
 			 */
 			PdfPTable classTable = new PdfPTable(2);
-			classTable.setWidthPercentage(58);  
-			classTable.setWidths(new int[]{8,50});  
+			classTable.setWidthPercentage(60);  
+			classTable.setWidths(new int[]{10,50});  
 
 
 			PdfPCell nameInfoCell = new PdfPCell(new Phrase("Class:",timesRomanBold8)); 
@@ -472,8 +472,8 @@ public class ClassRankingList extends HttpServlet{
 			 * exam column
 			 */
 			PdfPTable examTable = new PdfPTable(2);
-			examTable.setWidthPercentage(58);  
-			examTable.setWidths(new int[]{8,50});  
+			examTable.setWidthPercentage(60);  
+			examTable.setWidths(new int[]{10,50});  
 
 			
 			
@@ -525,8 +525,8 @@ public class ClassRankingList extends HttpServlet{
 			 * term/year column
 			 */
 			PdfPTable termYearTable = new PdfPTable(2);
-			termYearTable.setWidthPercentage(58); 
-			termYearTable.setWidths(new int[]{8,50}); 
+			termYearTable.setWidthPercentage(60); 
+			termYearTable.setWidths(new int[]{10,50}); 
 
 
 			// term
@@ -572,7 +572,7 @@ public class ClassRankingList extends HttpServlet{
 
 			PdfPTable rankingTable = new PdfPTable(25);   
 			rankingTable.setWidthPercentage(100); 
-			rankingTable.setWidths(new int[]{8,12,20,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12}); 
+			rankingTable.setWidths(new int[]{8,12,20,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,12,12,12}); 
 			rankingTable.setHeaderRows(1); 
 			rankingTable.isSkipFirstHeader();
 
@@ -764,7 +764,7 @@ public class ClassRankingList extends HttpServlet{
 				rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
 				String name = student.getFirstname() + " " +  student.getMiddlename();
-				name = name.substring(0, Math.min(name.length(), 8));//14
+				name = name.substring(0, Math.min(name.length(), 14));//14
 				rankingTable.addCell(new Paragraph(name ,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(kcpe,timesRomanNormal6));
