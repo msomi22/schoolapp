@@ -509,7 +509,7 @@
 		
 		if(rootCheckFormValidation($(form))){
 			
-			$(form).submit();
+			$('#submitExam').submit();
 			
 		}
 		
