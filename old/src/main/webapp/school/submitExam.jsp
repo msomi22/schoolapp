@@ -503,6 +503,8 @@
 		
 		$('#submitExam').attr('action', 'exportExcel');
 		
+		$('#accountId').val($('#globalAccountId').val());
+		
 		console.log($('#submitExam').attr('action'));
 		
 		if(rootCheckFormValidation($(form))){
