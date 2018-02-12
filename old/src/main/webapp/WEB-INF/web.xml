@@ -208,6 +208,20 @@
 	</servlet-mapping>
 	
 	
+	<servlet>
+		<servlet-name>ExportExcel</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.exam.ExportExcel</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportExcel</servlet-name>
+		<url-pattern>/school/exportExcel</url-pattern>
+	</servlet-mapping>
+	
+	
+	
+	
+	
+	
 	<listener>
 		<listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
 	</listener>

@@ -474,12 +474,16 @@ public class ReportUtil {
 
 				Subject subj;
 
-				if(subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()) != null) {
+				if(!StringUtils.equals(finaResult.getSubjectId(), "")) {
 
-					subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+					if(subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()) != null) {
+						subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+						
+					}else {
 
+						subj = new Subject();
+					}
 				}else {
-
 					subj = new Subject();
 				}
 
