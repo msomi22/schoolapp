@@ -291,10 +291,10 @@
 									type="hidden" name="decision" id="decision" value="submitExam">
 
 								<div class="col-md-3 col-sm-12 col-xs-12 form-group">
-									<button type="submit"  class="btn btn-primary">Submit</button>
+									<button type="button" onclick= "exportCorrectionList('getStudents')"   class="btn btn-primary">Submit</button>
 									
 									<button type="button" class="btn btn-primary secondary-assent  cards pull-right"
-													onclick="exportCorrectionList(this.form)">
+													onclick="exportCorrectionList('exportExcel')">
 													Export <i class="fa fa-file-excel-o"> </i>
 													</button>
 								</div>
@@ -497,11 +497,11 @@
 	    } ); */
 	})
 	
-	function exportCorrectionList(form){
+	function exportCorrectionList(url){
 		
 		//$('').action = 'exportExcel';
 		
-		$('#submitExam').attr('action', 'exportExcel');
+		$('#submitExam').attr('action', url);
 		
 		$('#accountId').val($('#globalAccountId').val());
 		
