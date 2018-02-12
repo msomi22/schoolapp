@@ -507,7 +507,7 @@
 		
 		console.log($('#submitExam').attr('action'));
 		
-		if(rootCheckFormValidation($(form))){
+		if(rootCheckFormValidation($('#submitExam'))){
 			
 			$('#submitExam').submit();
 			
