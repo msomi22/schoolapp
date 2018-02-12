@@ -116,7 +116,7 @@
 												</button>
 											</div>
 
-											<div class="col-md-6 col-md-offset-1 alert alert-info">
+											<div class="col-md-5 col-md-offset-1 alert alert-info">
 												Alter student's classes and state(Active or Inactive)</div>
 												
 												
