@@ -87,7 +87,7 @@ public class ExportExcel  extends HttpServlet{
 		response.setHeader("Pragma", "public");
 
 		String accountId = StringUtils.trim(request.getParameter("accountId"));
-		String streamId = StringUtils.trim(request.getParameter("uuid"));
+		String streamId = StringUtils.trim(request.getParameter("streamId"));
 		String examId = StringUtils.trim(request.getParameter("examId"));
 
 		accountId = "af2e7af5-113b-408d-82e2-fc2cb815b49a";
@@ -111,25 +111,13 @@ public class ExportExcel  extends HttpServlet{
 
 
 
-	/** TODO
-	 * 1. StreamId (Form 1 N)
-	 *    ExamId           (Cat 1)
-	 * 
-	 * 2. StreamId (Form 1 N)
-	 *    ExamId           (Cat 1)
-	 *    SubjectId        (Eng, Kisw)
-	 *    
-	 *    Fetch the students for a stream
-	 *    fetch performance data for each subject.
-	 *    
-	 *    
-	 * @param examId2 
-	 * @param streamId2 
+	/** 
+	 * @param examId
+	 * @param streamId
 	 * @param school 
 	 * @param sysConfig 
 	 * @throws IOException 
-	 * 
-	 * 
+	 *
 	 */
 
 
@@ -201,9 +189,6 @@ public class ExportExcel  extends HttpServlet{
 		}
 
 
-		//**********************************************************
-
-
 		AtomicInteger count = new AtomicInteger();
 
 		studentDAO.getStudentByStream(school.getUuid(), streamId).forEach(student -> {
@@ -230,14 +215,12 @@ public class ExportExcel  extends HttpServlet{
 				int sc = subc.get();
 
 				perfomanceDAO.getPerformanceList(school.getUuid(), examId, student.getUuid(), streamId, subject.getUuid(), term, year).forEach(performance -> {
-					//String sub = subjectDAO.getSubjectById(school.getUuid(), performance.getSubjectId()).getCode();
-					//System.out.println(" *** sc" + (sc+2)); 
 					XSSFCell c4 = r.createCell(sc+2);        	
 					c4.setCellValue(performance.getScore());
 
 				});
 			});
-			//System.out.println(" -------------------------- ");
+		
 		});
 
 		xf.write(out);

@@ -63,6 +63,7 @@ import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
+import com.yahoo.petermwenda83.util.performance.comparator.ClassMeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.MeanComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.PointsComparator;
 import com.yahoo.petermwenda83.util.performance.comparator.SubjectPointComparator;
@@ -498,8 +499,7 @@ public class ClassRankingList extends HttpServlet{
 				class_stream_Mean.setClassmean(Double.valueOf(classMean)); 
 				class_stream_Mean.setTerm(term);
 				class_stream_Mean.setYear(year); 
-
-				//TODO 
+ 
 				classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, streamId, examNames, term, year);
 				
 				
@@ -1237,7 +1237,12 @@ public class ClassRankingList extends HttpServlet{
 
 			AtomicInteger c_count = new AtomicInteger();
 			
-			classMeanDAO.getClassMeanList(accountId, classroomId, ReportUtil.getExamName(accountId, exams,1), term, year).forEach(cmean -> {
+			List<ClassMean> clist = classMeanDAO.getClassMeanList(accountId, classroomId, ReportUtil.getExamName(accountId, exams,1), term, year);
+			//sort the list TODO
+			Collections.sort(clist, new ClassMeanComparator());
+			Collections.reverse(clist);
+			
+			clist.forEach(cmean -> {
 
 				int c = c_count.incrementAndGet();
 				String stream = "";
