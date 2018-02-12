@@ -19,6 +19,8 @@ public class ExamConstants {
 	public static final int LOGO_R = -50;
 	public static final int LOGO_SCALE = 8;
 	
+	public static final int NO_OF_SUB = 10;
+	
 	
 	public static final Font courierBold10 = new Font(Font.FontFamily.COURIER, 10,Font.BOLD);
 	public static final Font courierBold14 = new Font(Font.FontFamily.COURIER, 14,Font.BOLD);
