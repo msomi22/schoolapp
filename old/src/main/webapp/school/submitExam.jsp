@@ -285,12 +285,18 @@
 								</div>
 
 								<input type="hidden" name="studentId" id="studentId" value="">
+								<input type="hidden" name="accountId" id="accountId" value="">
 								<input type="hidden" name="score" id="score" value=""> <input
 									type="hidden" name="outOf" id="outOf" value=""> <input
 									type="hidden" name="decision" id="decision" value="submitExam">
 
 								<div class="col-md-3 col-sm-12 col-xs-12 form-group">
 									<button type="submit"  class="btn btn-primary">Submit</button>
+									
+									<button type="button" class="btn btn-primary secondary-assent  cards pull-right"
+													onclick="exportCorrectionList(this.form)">
+													Export <i class="fa fa-file-excel-o"> </i>
+													</button>
 								</div>
 							</form>
 
@@ -463,6 +469,9 @@
 	$(document).ready(function() {
 		checkAccessAcademics();
 		
+		
+	
+		
 		/* fetchSubjects();
 		
 		fetchStreamsStudent();
@@ -487,4 +496,20 @@
 	        editor.inline( this );
 	    } ); */
 	})
+	
+	function exportCorrectionList(form){
+		
+		//$('').action = 'exportExcel';
+		
+		$('#submitExam').attr('action', 'exportExcel');
+		
+		console.log($('#submitExam').attr('action'));
+		
+		if(rootCheckFormValidation($(form))){
+			
+			$(form).submit();
+			
+		}
+		
+	}
 </script>
