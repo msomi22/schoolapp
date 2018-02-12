@@ -25,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.yahoo.petermwenda83.bean.account.Account;
 import com.yahoo.petermwenda83.bean.exam.SysConfig;
 import com.yahoo.petermwenda83.bean.subject.Subject;
+import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
 import com.yahoo.petermwenda83.persistence.exam.SysConfigDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
@@ -32,10 +33,8 @@ import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 
 /**
- * 
- * /school/exportExcel
- * 
- * exportExcel
+ *
+ * http://localhost:8080/school/school/exportExcel
  * 
  * @author peter
  *
@@ -47,6 +46,7 @@ public class ExportExcel  extends HttpServlet{
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static SysConfigDAO sysConfigDAO;
+	private static StreamDAO streamDAO;
 
 	private ServletOutputStream out;
 	private String excelName = "";
@@ -66,6 +66,7 @@ public class ExportExcel  extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		sysConfigDAO = SysConfigDAO.getInstance(); 
+		streamDAO = StreamDAO.getInstance();
 
 	}
 
@@ -90,17 +91,16 @@ public class ExportExcel  extends HttpServlet{
 		String streamId = StringUtils.trim(request.getParameter("streamId"));
 		String examId = StringUtils.trim(request.getParameter("examId"));
 
-		accountId = "af2e7af5-113b-408d-82e2-fc2cb815b49a";
+		/*accountId = "af2e7af5-113b-408d-82e2-fc2cb815b49a";
 		streamId = "126385be-53e6-45e0-ad13-9264a1d2b3cd";
-		examId = "D50E6399-B913-42F2-A5B6-F0D4BAAF9571";
+		examId = "D50E6399-B913-42F2-A5B6-F0D4BAAF9571";*/
 
 		Account school = new Account();
 
 		school = accountDAO.getAccountById(accountId); 
 
-		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId); 
-
-		excelName = "test";
+		SysConfig sysConfig = sysConfigDAO.getSysConfig(accountId);  
+		excelName = streamDAO.getStream(accountId, streamId).getDescription(); 
 
 		response.setHeader("Content-Disposition","attachment; filename="+excelName+".xlsx"); 
 
