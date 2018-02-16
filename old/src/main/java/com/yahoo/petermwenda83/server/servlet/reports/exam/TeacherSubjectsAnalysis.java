@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
@@ -24,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -31,10 +35,15 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.exam.Perfomance;
+import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
 import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
@@ -51,6 +60,8 @@ import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
 
 /**
+ * /school/subjectsAnalysis
+ * 
  * @author peter
  *
  */
@@ -71,7 +82,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 
-	//private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
+	private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
 	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
@@ -82,7 +93,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 	private Logger logger;
 
-	private static String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A" };//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
+	private static String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
@@ -101,7 +112,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		//examDAO = ExamDAO.getInstance();
+		examDAO = ExamDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
 		classMeanDAO = ClassMeanDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
@@ -122,24 +133,26 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession(true);
+		//HttpSession session = request.getSession(true);
 
-		String accountId = "";
-		String streamId = "";
-		String term = "";
-		String year = "";
-		String classroomId = "";
-		String paper123Id = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-		String saveMean = "";
+		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
+		String classId = StringUtils.trimToEmpty(request.getParameter("classId")); 
+		String[] examIds= request.getParameterValues("exam");
+		//exams = examIds;
+		String term = StringUtils.trimToEmpty(request.getParameter("term")); 
+		String year = StringUtils.trimToEmpty(request.getParameter("year")); 
 
+		accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
+		term = "1";
+		year = "2018";
+		classId = "C143978A-E021-4015-BC67-5A00D6C910D1";
 
 		response.setContentType("application/pdf");
+		
+		String classname = classDAO.getClassRoom(accountId, classId).getDescription();
 
-		String examType = "";
-
-		examType = StringUtils.trimToEmpty(request.getParameter("examType"));
-
-		String fileName = "file.pdf"; 
+		String fileName = classname+"_term_"+term+"_year_"+year+".pdf";  
+		
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
@@ -151,11 +164,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			examType = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.EXAM_TYPE : "";	
-			paper123Id = StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE) ? ReportUtil.PAPER123ID : "";
-
-
-			populatePDFDocument(accountId,streamId,classroomId,term,year,examType, paper123Id, saveMean);
+			populatePDFDocument(accountId,classId,term,year);
 
 		} catch (DocumentException e) {
 			logger.error("DocumentException while writing into the document");
@@ -167,22 +176,20 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 	/**
 	 * @param args
 	 */
-	public void populatePDFDocument(String accountId, String streamId ,String classroomId, String term ,
-			String year ,String examType, String paper123Id, String saveMean) {
-		Timeit.code(() -> compute(accountId,streamId,classroomId,term,year,examType,paper123Id,saveMean));
+	public void populatePDFDocument(String accountId, String classroomId, String term , String year) {
+		Timeit.code(() -> compute(accountId,classroomId,term,year));
 	}
 
 	/**
 	 * @param args
 	 */
-	public  void compute(String accountId, String streamId ,String classroomId, String term ,
-			String year ,String examType, String paper123Id, String saveMean) {
+	public  void compute(String accountId, String classroomId, String term , String year) {
 
 		try {
 
 			document.open();
 
-			generateReport(accountId, streamId, classroomId, term, year, examType, paper123Id, saveMean);
+			generateReport(accountId, classroomId, term, year);
 
 			document.close();
 
@@ -194,88 +201,513 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 	}
 
-
-	/** TODO
-	 * pick subjects
-	 * pick stream/class
-	 * pick exams(1-3)
+	/**
 	 * 
-	 * submit
-	 * 
-	 * rank students
-	 * 
-	 * 
-	 * 1. 
-	 * - best student per subject
-	 * - number of A's B's etc per stream , and total.
-	 * - number of A's B's etc per gender , and total.
-	 * 
-	 * 
-	 *  2.
-	 * - per subject analysis
-	 *   * subject
-	 *   * A, B, C etc Entry, points, mean, grade , teacher,
-	 *  Stream
-	 *  Total
-	 *   *
-	 *   
-	 *   
-	 *   
-	 *   1) class performance analysis 
-	 *        - per stream ( How many A's , B's bra bra) 
-	 *        Duration: 
-	 *                  back end and front end - 2 days
-	 *                  
-	 *        
-	 *        - by gender ( How many A's , B's bra bra) 
-	 *        Duration:
-	 *                 back end and front end - 2 days
-	 *                 
-	 *        
-	 *   2) Subject performance analysis 
-	 *       - How many A's , B's bra bra
-	 *       Duration:
-	 *                 back end and front end - 2 days
-	 *                 
-	 *  -Testing 1 day.
-	 *  -Total Duration: 7 days.               
-	 *                 
-	 *       
-	 *       
-	 *   
-	 *   
-	 * @throws DocumentException 
-	 * 
-	 * 
-	 * 
+	 * @param accountId
+	 * @param classroomId
+	 * @param term
+	 * @param year
+	 * @throws DocumentException
 	 */
-
-
-	private void generateReport(String accountId, String streamId, String classroomId, String term, String year,
-			String examType, String paper123Id, String saveMean) throws DocumentException {
-
-
+	private void generateReport(String accountId, String classroomId, String term, String year) throws DocumentException {
+		
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
 		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
 		Account account = accountDAO.getAccountById(accountId);
 
+		PdfPTable headerTable = new PdfPTable(2);
+		headerTable.setWidthPercentage(100); 
+		headerTable.setWidths(new int[]{70,30});
 
-		document.add(new Paragraph("PDF "));  
-		
-		
-		PdfPTable rankingTable = new PdfPTable(25);   
-		rankingTable.setWidthPercentage(100); 
+		PdfPCell logo = new PdfPCell();
+		logo.addElement(createImage(LOGO_PATH)); 
+		logo.setBorder(Rectangle.NO_BORDER); 
+		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
+
+		String school = "P.O Box : " + account.getAddress() + " " + account.getTown()+" "
+				+ " , Cell : " + account.getMobile() + "\n"
+				+ "Website : " + account .getWebsite() + "             EMAIL : " + account.getEmail(); 
+
+		PdfPCell schoolInfo = new PdfPCell();
+		schoolInfo.setBorder(Rectangle.NO_BORDER); 
+		schoolInfo.setHorizontalAlignment(Element.ALIGN_LEFT);  
+		schoolInfo.addElement(new Chunk(account.getName().toUpperCase(),timesRomanBold10));
+		schoolInfo.addElement(new Chunk(school, timesRomanNormal10));
+
+		headerTable.addCell(schoolInfo); 
+		headerTable.addCell(logo);   
+
+		document.add(headerTable);
+
+		PdfContentByte topLine = writer.getDirectContent();
+		topLine.setColorStroke(BaseColor.BLACK);
+		topLine.moveTo(45, 463);//start dot, 45 is margin left, 463 is margin top , 
+		//the bigger second value the more the point move further from the margin 
+		topLine.lineTo(790, 463);
+		topLine.closePathStroke();
+
+		Phrase reportTitle = new Phrase();
+		reportTitle.add(new Chunk("FORM 1 SUBJECT ANALYSIS FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
+		reportTitle.add(new Chunk(" - Exams: Cat 1, Cat 2, End Term",  timesRomanNormal10));
+		document.add(reportTitle);
+		document.add(new Paragraph("\n"));
+
+
+		PdfPTable stream_rankingTable = new PdfPTable(21);   
+		stream_rankingTable.setWidthPercentage(100); 
 		//#,Stream,A,A-,B+,B,B-,C+,C,C-,D+,D,D-,E,X,Y,Z,Entry,Total,Mean,MG.
-		rankingTable.setWidths(new int[]{8,20,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,10,10}); 
-		rankingTable.setHeaderRows(1); 
-		rankingTable.isSkipFirstHeader();
-		
-		
-		
-		
-		
-		
+		stream_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,10,10}); 
+		stream_rankingTable.setHeaderRows(1); 
+		stream_rankingTable.isSkipFirstHeader();
+
+		PdfPTable bygender_rankingTable = new PdfPTable(21);   
+		bygender_rankingTable.setWidthPercentage(100); 
+		bygender_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,10,10}); 
+		bygender_rankingTable.setHeaderRows(1); 
+		bygender_rankingTable.isSkipFirstHeader();
+
+		PdfPCell s_r_countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
+		s_r_countCell.setBackgroundColor(baseColor);
+		s_r_countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_streamCell = new PdfPCell(new Paragraph("Stream",timesRomanBold6));
+		s_r_streamCell.setBackgroundColor(baseColor);
+		s_r_streamCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_genderCell = new PdfPCell(new Paragraph("Gender",timesRomanBold6));
+		s_r_genderCell.setBackgroundColor(baseColor);
+		s_r_genderCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_aCell = new PdfPCell(new Paragraph("A",timesRomanBold6));
+		s_r_aCell.setBackgroundColor(baseColor);
+		s_r_aCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_amCell = new PdfPCell(new Paragraph("A-",timesRomanBold6));
+		s_r_amCell.setBackgroundColor(baseColor);
+		s_r_amCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_bpCell= new PdfPCell(new Paragraph("B+",timesRomanBold6));
+		s_r_bpCell.setBackgroundColor(baseColor);
+		s_r_bpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_bCell = new PdfPCell(new Paragraph("B",timesRomanBold6));
+		s_r_bCell.setBackgroundColor(baseColor);
+		s_r_bCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_bmCell = new PdfPCell(new Paragraph("B-",timesRomanBold6));
+		s_r_bmCell.setBackgroundColor(baseColor);
+		s_r_bmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_cpCell = new PdfPCell(new Paragraph("C+",timesRomanBold6));
+		s_r_cpCell.setBackgroundColor(baseColor);
+		s_r_cpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_cCell = new PdfPCell(new Paragraph("C",timesRomanBold6));
+		s_r_cCell.setBackgroundColor(baseColor);
+		s_r_cCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_cmCell = new PdfPCell(new Paragraph("C-",timesRomanBold6));
+		s_r_cmCell.setBackgroundColor(baseColor);
+		s_r_cmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_dpCell = new PdfPCell(new Paragraph("D+",timesRomanBold6));
+		s_r_dpCell.setBackgroundColor(baseColor);
+		s_r_dpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_dCell = new PdfPCell(new Paragraph("D",timesRomanBold6));
+		s_r_dCell.setBackgroundColor(baseColor);
+		s_r_dCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_dmCell = new PdfPCell(new Paragraph("D-",timesRomanBold6));
+		s_r_dmCell.setBackgroundColor(baseColor);
+		s_r_dmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_eCell = new PdfPCell(new Paragraph("E",timesRomanBold6));
+		s_r_eCell.setBackgroundColor(baseColor);
+		s_r_eCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_xCell = new PdfPCell(new Paragraph("X",timesRomanBold6));
+		s_r_xCell.setBackgroundColor(baseColor);
+		s_r_xCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_yCell = new PdfPCell(new Paragraph("Y",timesRomanBold6));
+		s_r_yCell.setBackgroundColor(baseColor);
+		s_r_yCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_zCell = new PdfPCell(new Paragraph("Z",timesRomanBold6));
+		s_r_zCell.setBackgroundColor(baseColor);
+		s_r_zCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_entryCell = new PdfPCell(new Paragraph("Entry",timesRomanBold6));
+		s_r_entryCell.setBackgroundColor(baseColor);
+		s_r_entryCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_totalCell = new PdfPCell(new Paragraph("Total",timesRomanBold6));
+		s_r_totalCell.setBackgroundColor(baseColor);
+		s_r_totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_meanCell = new PdfPCell(new Paragraph("Mean",timesRomanBold6));
+		s_r_meanCell.setBackgroundColor(baseColor);
+		s_r_meanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell s_r_mgCell = new PdfPCell(new Paragraph("MG",timesRomanBold6));
+		s_r_mgCell.setBackgroundColor(baseColor);
+		s_r_mgCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		//#,Stream,A,A-,B+,B,B-,C+,C,C-,D+,D,D-,E,X,Y,Z,Entry,Total,Mean,MG.
+
+
+		stream_rankingTable.addCell(s_r_countCell);
+		stream_rankingTable.addCell(s_r_streamCell);
+		stream_rankingTable.addCell(s_r_aCell);
+		stream_rankingTable.addCell(s_r_amCell);
+		stream_rankingTable.addCell(s_r_bpCell);
+		stream_rankingTable.addCell(s_r_bCell);
+		stream_rankingTable.addCell(s_r_bmCell);
+		stream_rankingTable.addCell(s_r_cpCell);
+		stream_rankingTable.addCell(s_r_cCell);
+		stream_rankingTable.addCell(s_r_cmCell);
+		stream_rankingTable.addCell(s_r_dpCell);
+		stream_rankingTable.addCell(s_r_dCell);
+		stream_rankingTable.addCell(s_r_dmCell);
+		stream_rankingTable.addCell(s_r_eCell);
+		stream_rankingTable.addCell(s_r_xCell);
+		stream_rankingTable.addCell(s_r_yCell);
+		stream_rankingTable.addCell(s_r_zCell);
+		stream_rankingTable.addCell(s_r_entryCell);
+		stream_rankingTable.addCell(s_r_totalCell);
+		stream_rankingTable.addCell(s_r_meanCell);
+		stream_rankingTable.addCell(s_r_mgCell);
+
+
+
+		String[] streams = {"1 N","1 S","1 T","Total:"};
+		int c1 = 1;
+		for(int i=0;i<4;i++) {
+
+			stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
+			stream_rankingTable.addCell(new Paragraph("" + streams[i],timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("3",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("4",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("10",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("16",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("577",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("45.56",timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("A",timesRomanNormal6));
+
+			c1++;
+
+		}
+
+
+
+		bygender_rankingTable.addCell(s_r_countCell);
+		bygender_rankingTable.addCell(s_r_genderCell);
+		bygender_rankingTable.addCell(s_r_aCell);
+		bygender_rankingTable.addCell(s_r_amCell);
+		bygender_rankingTable.addCell(s_r_bpCell);
+		bygender_rankingTable.addCell(s_r_bCell);
+		bygender_rankingTable.addCell(s_r_bmCell);
+		bygender_rankingTable.addCell(s_r_cpCell);
+		bygender_rankingTable.addCell(s_r_cCell);
+		bygender_rankingTable.addCell(s_r_cmCell);
+		bygender_rankingTable.addCell(s_r_dpCell);
+		bygender_rankingTable.addCell(s_r_dCell);
+		bygender_rankingTable.addCell(s_r_dmCell);
+		bygender_rankingTable.addCell(s_r_eCell);
+		bygender_rankingTable.addCell(s_r_xCell);
+		bygender_rankingTable.addCell(s_r_yCell);
+		bygender_rankingTable.addCell(s_r_zCell);
+		bygender_rankingTable.addCell(s_r_entryCell);
+		bygender_rankingTable.addCell(s_r_totalCell);
+		bygender_rankingTable.addCell(s_r_meanCell);
+		bygender_rankingTable.addCell(s_r_mgCell);
+
+
+
+		String[] headers = {"Male","Female","Total:"};
+
+		int c2 = 1;
+		for(int i=0;i<3;i++) {
+
+			bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("3",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("4",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("10",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("16",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("577",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("45.56",timesRomanNormal6));
+			bygender_rankingTable.addCell(new Paragraph("A",timesRomanNormal6));
+
+			c2++;
+		}
+
+
+		document.add(new Paragraph("Subject-Stream Analysis", timesRomanBold10));  
+		document.add(new Paragraph("\n")); 
+
+		document.add(stream_rankingTable); 
+		document.add(new Paragraph("\n")); 
+
+		document.add(new Paragraph("Subject-Gender Analysis", timesRomanBold10));  
+		document.add(new Paragraph("\n")); 
+
+		document.add(bygender_rankingTable);
+
+
+
+
+		/**
+		 * Subject 
+		 */
+
+
+		PdfPTable subject_rankingTable = new PdfPTable(18);   
+
+		PdfPCell sub_r_countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
+		sub_r_countCell.setBackgroundColor(baseColor);
+		sub_r_countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_streamCell = new PdfPCell(new Paragraph("Stream",timesRomanBold6));
+		sub_r_streamCell.setBackgroundColor(baseColor);
+		sub_r_streamCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_aCell = new PdfPCell(new Paragraph("A",timesRomanBold6));
+		sub_r_aCell.setBackgroundColor(baseColor);
+		sub_r_aCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_amCell = new PdfPCell(new Paragraph("A-",timesRomanBold6));
+		sub_r_amCell.setBackgroundColor(baseColor);
+		sub_r_amCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_bpCell= new PdfPCell(new Paragraph("B+",timesRomanBold6));
+		sub_r_bpCell.setBackgroundColor(baseColor);
+		sub_r_bpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_bCell = new PdfPCell(new Paragraph("B",timesRomanBold6));
+		sub_r_bCell.setBackgroundColor(baseColor);
+		sub_r_bCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_bmCell = new PdfPCell(new Paragraph("B-",timesRomanBold6));
+		sub_r_bmCell.setBackgroundColor(baseColor);
+		sub_r_bmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_cpCell = new PdfPCell(new Paragraph("C+",timesRomanBold6));
+		sub_r_cpCell.setBackgroundColor(baseColor);
+		sub_r_cpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_cCell = new PdfPCell(new Paragraph("C",timesRomanBold6));
+		sub_r_cCell.setBackgroundColor(baseColor);
+		sub_r_cCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_cmCell = new PdfPCell(new Paragraph("C-",timesRomanBold6));
+		sub_r_cmCell.setBackgroundColor(baseColor);
+		sub_r_cmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_dpCell = new PdfPCell(new Paragraph("D+",timesRomanBold6));
+		sub_r_dpCell.setBackgroundColor(baseColor);
+		sub_r_dpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_dCell = new PdfPCell(new Paragraph("D",timesRomanBold6));
+		sub_r_dCell.setBackgroundColor(baseColor);
+		sub_r_dCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_dmCell = new PdfPCell(new Paragraph("D-",timesRomanBold6));
+		sub_r_dmCell.setBackgroundColor(baseColor);
+		sub_r_dmCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_eCell = new PdfPCell(new Paragraph("E",timesRomanBold6));
+		sub_r_eCell.setBackgroundColor(baseColor);
+		sub_r_eCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_entryCell = new PdfPCell(new Paragraph("Entry",timesRomanBold6));
+		sub_r_entryCell.setBackgroundColor(baseColor);
+		sub_r_entryCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_mpCell = new PdfPCell(new Paragraph("M.Points",timesRomanBold6));
+		sub_r_mpCell.setBackgroundColor(baseColor);
+		sub_r_mpCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_mgCell = new PdfPCell(new Paragraph("M.Grade",timesRomanBold6));
+		sub_r_mgCell.setBackgroundColor(baseColor);
+		sub_r_mgCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+		PdfPCell sub_r_subtCell = new PdfPCell(new Paragraph("Sub.Teacher",timesRomanBold6));
+		sub_r_subtCell.setBackgroundColor(baseColor);
+		sub_r_subtCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+
+
+
+		document.add(new Paragraph("Subject Analysis", timesRomanBold10));  
+
+		/**
+		 * 
+		 */
+
+		int subc = 1;
+		for(Subject subject : subjectDAO.getSubjects(accountId)) {
+
+			document.add(new Paragraph("Subject: " + subc + ", " + subject.getDescription()));  
+
+			subject_rankingTable = new PdfPTable(18);   
+			subject_rankingTable.setWidthPercentage(100); 
+			subject_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,14,14,14,16});
+			subject_rankingTable.setHeaderRows(1); 
+			subject_rankingTable.isSkipFirstHeader();
+
+			subject_rankingTable.addCell(sub_r_countCell);
+			subject_rankingTable.addCell(sub_r_streamCell);
+			subject_rankingTable.addCell(sub_r_aCell);
+			subject_rankingTable.addCell(sub_r_amCell);
+			subject_rankingTable.addCell(sub_r_bpCell);
+			subject_rankingTable.addCell(sub_r_bCell);
+			subject_rankingTable.addCell(sub_r_bmCell);
+			subject_rankingTable.addCell(sub_r_cpCell);
+			subject_rankingTable.addCell(sub_r_cCell);
+			subject_rankingTable.addCell(sub_r_cmCell);
+			subject_rankingTable.addCell(sub_r_dpCell);
+			subject_rankingTable.addCell(sub_r_dCell);
+			subject_rankingTable.addCell(sub_r_dmCell);
+			subject_rankingTable.addCell(sub_r_eCell);
+			subject_rankingTable.addCell(sub_r_entryCell);
+			subject_rankingTable.addCell(sub_r_mpCell);
+			subject_rankingTable.addCell(sub_r_mgCell);
+			subject_rankingTable.addCell(sub_r_subtCell);
+			
+			String exam1 = "";
+			String exam2 = "";
+			String exam3 = "";
+			
+			List<Perfomance>[] arrayOfList = null;
+			
+			
+			if(exams.length == 1) {
+				exam1 = exams[0];
+				
+				List<Perfomance> list1 = new ArrayList<>();
+				
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+				
+				arrayOfList = new ArrayList[1]; 
+				arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
+				CommonLogic.combineAnalyzer(arrayOfList);
+				
+			}if(exams.length == 2) {
+				exam1 = exams[0];
+				exam2 = exams[1];
+				
+				List<Perfomance> list1 = new ArrayList<>();
+				List<Perfomance> list2 = new ArrayList<>();
+				
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+				
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
+					 list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+				}
+			    
+				arrayOfList = new ArrayList[2]; 
+				arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
+				arrayOfList = CommonLogic.subjectAnalyzer(list2).toArray(arrayOfList); 
+				CommonLogic.combineAnalyzer(arrayOfList);
+				
+			}if(exams.length == 3) {
+				exam1 = exams[0];
+				exam2 = exams[1];
+				exam3 = exams[2];
+				
+				List<Perfomance> list1 = new ArrayList<>();
+				List<Perfomance> list2 = new ArrayList<>();
+				List<Perfomance> list3 = new ArrayList<>();
+				
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+				
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
+					 list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+				}
+			   
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year) != null) {
+					list3 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year);
+				}
+				//List<Perfomance>[] arrayOfList = new ArrayList[3];  
+				arrayOfList = new ArrayList[3];  
+				
+				arrayOfList = list1.toArray(arrayOfList);
+				//arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
+				//arrayOfList = CommonLogic.subjectAnalyzer(list2).toArray(arrayOfList); 
+				//arrayOfList = CommonLogic.subjectAnalyzer(list3).toArray(arrayOfList); 
+				CommonLogic.combineAnalyzer(arrayOfList);
+			}
+			
+			
+			
+			
+
+			String[] streamlist = {"1 N","1 S","1 T","Total:"};
+			int sc = 1;
+			for(int i=0;i<4;i++) {
+
+				subject_rankingTable.addCell(new Paragraph("" + sc,timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("" + streamlist[i] ,timesRomanNormal6)); 
+				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("5",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("9",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("12",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("35",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("8",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("B",timesRomanNormal6));
+				subject_rankingTable.addCell(new Paragraph("Peter Mwenda",timesRomanNormal6));
+
+				sc++;
+			}
+
+			document.add(new Paragraph("\n")); 
+			document.add(subject_rankingTable);
+
+
+			subc++;
+
+		}
+
 
 
 
