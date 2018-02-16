@@ -2282,8 +2282,9 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					String equity = ExamConstants.EQUITY_ACC;
 					String coop = ExamConstants.COOP_ACC;
 					
-					String accountLabel = "Pay school fee to any of the following accounts. "
-				             + " CO-OP BANK : " + coop + "  or  EQUITY BANK : " + equity;
+					String accountLabel = "Pay school fee to the following account. "
+				             + " CO-OP BANK : " + coop + " , and EQUITY : " + equity;
+					
 		            Paragraph caccounttLb = new Paragraph(accountLabel,timesRomanNormal0);
 					
 		            

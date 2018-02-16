@@ -1145,7 +1145,7 @@ public class ClassListF1 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11_11; //TODO
+					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
 					MEANMapgn.put(uuid,meangn);
 
 					Deviation dev;
