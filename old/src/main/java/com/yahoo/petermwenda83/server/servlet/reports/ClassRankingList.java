@@ -590,7 +590,7 @@ public class ClassRankingList extends HttpServlet{
 			nameCell.setBackgroundColor(baseColor);
 			nameCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell streamCell = new PdfPCell(new Paragraph("Stream",timesRomanBold6));
+			PdfPCell streamCell = new PdfPCell(new Paragraph("Class",timesRomanBold6));
 			streamCell.setBackgroundColor(baseColor);
 			streamCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -622,19 +622,19 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 			//cells = 7
-			PdfPCell totalCell = new PdfPCell(new Paragraph("Total",timesRomanBold6));
+			PdfPCell totalCell = new PdfPCell(new Paragraph("T",timesRomanBold6));
 			totalCell.setBackgroundColor(baseColor);
 			totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell pointsCell = new PdfPCell(new Paragraph("Points",timesRomanBold6));
+			PdfPCell pointsCell = new PdfPCell(new Paragraph("Pts",timesRomanBold6));
 			pointsCell.setBackgroundColor(baseColor);
 			pointsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell meanCell = new PdfPCell(new Paragraph("Mean",timesRomanBold6));
+			PdfPCell meanCell = new PdfPCell(new Paragraph("M.G",timesRomanBold6));
 			meanCell.setBackgroundColor(baseColor);
 			meanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell pmeanCell = new PdfPCell(new Paragraph("P Mean",timesRomanBold6));
+			PdfPCell pmeanCell = new PdfPCell(new Paragraph("P.MG",timesRomanBold6));
 			pmeanCell.setBackgroundColor(baseColor);
 			pmeanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -642,11 +642,11 @@ public class ClassRankingList extends HttpServlet{
 			deviationCell.setBackgroundColor(baseColor);
 			deviationCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell streamPositionCell = new PdfPCell(new Paragraph("Stream",timesRomanBold6));
+			PdfPCell streamPositionCell = new PdfPCell(new Paragraph("S.P",timesRomanBold6));
 			streamPositionCell.setBackgroundColor(baseColor);
 			streamPositionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell classPositionCell = new PdfPCell(new Paragraph("Class",timesRomanBold6));
+			PdfPCell classPositionCell = new PdfPCell(new Paragraph("C.P",timesRomanBold6));
 			classPositionCell.setBackgroundColor(baseColor);
 			classPositionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -827,6 +827,7 @@ public class ClassRankingList extends HttpServlet{
 				if(!grade7subjects && grade11subjects){
 					avgMean = performance2.getTotalMean() > 0 ? (double)performance2.getTotalMean() / 11 : 0;
 					pointsAvg = ((double)performance2.getTotalPoint() / 132) * 84;
+					pointsAvg = (int) Math.round(pointsAvg);
 
 				}
 
@@ -837,7 +838,7 @@ public class ClassRankingList extends HttpServlet{
 				String poinst_str = "";
 				String mean_str = "";
 
-				poinst_str = String.valueOf((int) Math.round(pointsAvg)); 
+				poinst_str = String.valueOf(pointsAvg); 
 				mean_str = ReportUtil.df2.format(avgMean);
 
 
@@ -1075,7 +1076,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 				rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
-				rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));
+				rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));//performance2.getTotalPoint() , poinst_str
 				rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+prevMean,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(dev,timesRomanNormal6));

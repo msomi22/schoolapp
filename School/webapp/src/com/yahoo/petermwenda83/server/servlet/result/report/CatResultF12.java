@@ -197,9 +197,12 @@ public class CatResultF12 extends HttpServlet{
 		     clssrom = roomDAO.getroom(school.getUuid(), classroomuuid);
         }
        
+        //TODO
+        boolean isFormOne = false;
 
 		if(StringUtils.contains(clssrom.getRoomName(), "FORM 1")){ 
 			classID = "C143978A-E021-4015-BC67-5A00D6C910D1";
+			isFormOne = true;
 			
 		}else if(StringUtils.contains(clssrom.getRoomName(), "FORM 2")){ 
 			classID = "3E22E428-3155-42F5-B73E-66553ED501C9";
@@ -212,6 +215,7 @@ public class CatResultF12 extends HttpServlet{
 			roomHash.put(c.getUuid() , c.getRoomName());
 		}
 
+		
 		examConfig = examConfigDAO.getExamConfig(school.getUuid());
 		gradingSystem = gradingSystemDAO.getGradingSystem(school.getUuid());
 
@@ -271,7 +275,7 @@ public class CatResultF12 extends HttpServlet{
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			populatePDFDocument(statistics, school,classroomuuid,classID,pDistinctList,pDistinctListGeneral,path);
+			populatePDFDocument(statistics, school,classroomuuid,classID,pDistinctList,pDistinctListGeneral,path,isFormOne);
 
 
 		} catch (DocumentException e) {
@@ -284,7 +288,7 @@ public class CatResultF12 extends HttpServlet{
 	}
 
 	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, String classroomuuid, 
-			String classID,List<Perfomance> pDistinctList,List<Perfomance> pDistinctListGeneral, String realPath) {
+			String classID,List<Perfomance> pDistinctList,List<Perfomance> pDistinctListGeneral, String realPath, boolean isFormOne) {
 		SimpleDateFormat formatter;
 		
 
@@ -928,7 +932,13 @@ public class CatResultF12 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					
+					if(isFormOne) {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
+					}else {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					}
+				
 					MEANMapgn.put(uuid,meangn);
 
 
@@ -1348,7 +1358,14 @@ public class CatResultF12 extends HttpServlet{
 					String uuid = item[0];
 					totalz = item[1];
 					totalmean = 0;
-					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;	//TODO
+					
+					if(isFormOne) {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;	//TODO
+					}else {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;	//TODO
+					}
+					
+					
 					totalmean = mean;
 					
 					//KCSE

@@ -1145,7 +1145,7 @@ public class ClassListF1 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11_11; //TODO
 					MEANMapgn.put(uuid,meangn);
 
 					Deviation dev;
@@ -1845,7 +1845,7 @@ public class ClassListF1 extends HttpServlet{
 					String uuid = item[0];
 					totalz = item[1];
 					totalmean = 0;
-					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;	//TODO
+					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;	//TODO
 					totalmean = mean;
 
 					GraphWeightGenerator(mean,uuid,school.getUuid()); 

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCreationHelper;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -127,62 +128,64 @@ public class ExportExcel  extends HttpServlet{
 		String year = sysConfig.getYear();
 
 		//****************************
-		XSSFWorkbook xf = new XSSFWorkbook();
-		XSSFCreationHelper ch =xf.getCreationHelper();
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFCreationHelper ch = workbook.getCreationHelper();
 
-		XSSFSheet s =xf.createSheet();
-		s.setColumnWidth(0, 1900); //RegNo
-		s.setColumnWidth(1, 3700); //Firstname
-		s.setColumnWidth(2, 3700); //Middlename
-
-		s.setColumnWidth(3, 1900);
-		s.setColumnWidth(4, 1900); 
-		s.setColumnWidth(5, 1900); 
-
-		s.setColumnWidth(6, 1900);
-		s.setColumnWidth(7, 1900); 
-		s.setColumnWidth(8, 1900); 
-
-		s.setColumnWidth(9, 1900);
-		s.setColumnWidth(10, 1900); 
-		s.setColumnWidth(11, 1900); 
-
-		s.setColumnWidth(12, 1900);
-		s.setColumnWidth(13, 1900); 
-		s.setColumnWidth(14, 1900); 
-
-		s.setColumnWidth(15, 1900); 
+		XSSFSheet sheet = workbook.createSheet();
+		sheet.setColumnWidth(0, 1900); //RegNo
+		sheet.setColumnWidth(1, 3700); //Firstname
+		sheet.setColumnWidth(2, 3700); //Middlename
+		sheet.setColumnWidth(3, 1900);
+		sheet.setColumnWidth(4, 1900); 
+		sheet.setColumnWidth(5, 1900); 
+		sheet.setColumnWidth(6, 1900);
+		sheet.setColumnWidth(7, 1900); 
+		sheet.setColumnWidth(8, 1900); 
+		sheet.setColumnWidth(9, 1900);
+		sheet.setColumnWidth(10, 1900); 
+		sheet.setColumnWidth(11, 1900); 
+		sheet.setColumnWidth(12, 1900);
+		sheet.setColumnWidth(13, 1900); 
+		sheet.setColumnWidth(14, 1900); 
+		sheet.setColumnWidth(15, 1900); 
 
 
-		CellStyle style = xf.createCellStyle();
+		CellStyle style = workbook.createCellStyle();
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 
-		CellStyle style2 = xf.createCellStyle();
+		CellStyle style2 = workbook.createCellStyle();
 		style2.setAlignment(CellStyle.ALIGN_LEFT);
 
-		XSSFFont font = xf.createFont();
+		XSSFFont font = workbook.createFont();
 		font.setFontName(XSSFFont.DEFAULT_FONT_NAME);  
 		font.setFontHeightInPoints((short)12);
 		style.setFont(font); 
 
-		//create the first row   (14 columns) 
-		XSSFRow r1 = s.createRow(0);
+		XSSFRow row0 = sheet.createRow(0);
+		XSSFCell cell0 = row0.createCell((short) 0);
+		cell0.setCellValue(ch.createRichTextString(school.getName()+" : "+excelName+" ,  TERM " + sysConfig.getTerm()+"  "+ sysConfig.getYear()));
+		cell0.setCellStyle(style);
 
-		XSSFCell cell1 = r1.createCell(0);
+		int rowFrom = 0, rowTo = 0, colFrom = 0, colTo = 15; 
+		sheet.addMergedRegion(new CellRangeAddress(rowFrom,rowTo,colFrom,colTo)); 
+		
+		XSSFRow row1 = sheet.createRow(1); 
+
+		XSSFCell cell1 = row1.createCell(0);
 		cell1.setCellValue(ch.createRichTextString("RegNo")); 
 		cell1.setCellStyle(style2);
 
-		XSSFCell cell2 = r1.createCell(1);
+		XSSFCell cell2 = row1.createCell(1);
 		cell2.setCellValue(ch.createRichTextString("Firstname"));
 		cell2.setCellStyle(style2);
 
-		XSSFCell cell3 = r1.createCell(2);
+		XSSFCell cell3 = row1.createCell(2);
 		cell3.setCellValue(ch.createRichTextString("Midlename")); 
 		cell3.setCellStyle(style2);
 
 		int c = 3;
 		for(Subject subject : subjectDAO.getSubjects(school.getUuid())){
-			XSSFCell cell = r1.createCell(c); 
+			XSSFCell cell = row1.createCell(c); 
 			cell.setCellValue(ch.createRichTextString(subject.getCode())); 
 			cell.setCellStyle(style2);
 			c++;
@@ -196,7 +199,7 @@ public class ExportExcel  extends HttpServlet{
 			count.getAndIncrement();
 			int i = count.get();
 
-			XSSFRow r = s.createRow(i);
+			XSSFRow r = sheet.createRow(i+1);  
 
 			XSSFCell c1 = r.createCell(0);
 			c1.setCellValue(student.getRegNo());
@@ -220,10 +223,10 @@ public class ExportExcel  extends HttpServlet{
 
 				});
 			});
-		
+
 		});
 
-		xf.write(out);
+		workbook.write(out);
 		out.flush();          
 		out.close();
 
@@ -242,8 +245,8 @@ public class ExportExcel  extends HttpServlet{
 			throws ServletException, IOException {
 		doPost(request, response);
 	}
-	
-	
+
+
 	/**
 	 * 
 	 */

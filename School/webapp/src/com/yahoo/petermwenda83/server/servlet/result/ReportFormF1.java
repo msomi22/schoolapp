@@ -1124,7 +1124,7 @@ public class ReportFormF1 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/11; 
+					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; 
 					MEANMapgn.put(uuid,meangn);
 					//TODO save this mean for future use  
 					Deviation dev;
@@ -1925,7 +1925,7 @@ public class ReportFormF1 extends HttpServlet{
 					String uuid = item[0];
 
 					totalz = item[1];
-					mean = Double.parseDouble(totalz)/11;  
+					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;  
 
 
 
@@ -2382,7 +2382,7 @@ public class ReportFormF1 extends HttpServlet{
 					double the_grandscore = 0;
 
 					the_grandscore = Double.parseDouble(totalz);
-					mean = the_grandscore/11; 
+					mean = the_grandscore/ExamConstants.NO_OF_SUB_11; 
 
 
 					BaseColor baseColor = new BaseColor(255,255,255);//while
