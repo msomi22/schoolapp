@@ -759,7 +759,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
 					MEANMapgn.put(uuid,meangn);
 					
 					Deviation dev;
@@ -1160,7 +1160,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					String uuid = item[0];
 					
 					totalz = item[1];
-					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;  //TODO
+					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;  //TODO
 					
 					
 				
@@ -1407,7 +1407,7 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					double the_grandscore = 0;
        
 					the_grandscore = Double.parseDouble(totalz);
-					mean = the_grandscore/ExamConstants.NO_OF_SUB;  //TODO
+					mean = the_grandscore/ExamConstants.NO_OF_SUB_11;  //TODO
 					
 
 					BaseColor baseColor = new BaseColor(255,255,255);//while
@@ -2282,8 +2282,9 @@ public class FormOneEndTermReportCard extends HttpServlet{
 					String equity = ExamConstants.EQUITY_ACC;
 					String coop = ExamConstants.COOP_ACC;
 					
-					String accountLabel = "Pay school fee to any of the following accounts. "
-				             + " CO-OP BANK : " + coop + "  or  EQUITY BANK : " + equity;
+					String accountLabel = "Pay school fee to the following account. "
+				             + " CO-OP BANK : " + coop + " , and EQUITY : " + equity;
+					
 		            Paragraph caccounttLb = new Paragraph(accountLabel,timesRomanNormal0);
 					
 		            

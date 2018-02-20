@@ -218,6 +218,16 @@
 	</servlet-mapping>
 	
 	
+	<servlet>
+		<servlet-name>TeacherSubjectsAnalysis</servlet-name>
+		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.exam.TeacherSubjectsAnalysis</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TeacherSubjectsAnalysis</servlet-name>
+		<url-pattern>/school/subjectsAnalysis</url-pattern>
+	</servlet-mapping>
+	
+	
 	
 	
 	

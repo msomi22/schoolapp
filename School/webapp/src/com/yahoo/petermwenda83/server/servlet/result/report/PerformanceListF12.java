@@ -235,6 +235,20 @@ public class PerformanceListF12 extends HttpServlet {
 		for(ClassRoom c : classroomList){
 			streamsHash.put(c.getUuid() , c.getRoomName());
 		}
+		
+		//TODO
+		String classname = "";
+		if(classesDAO.getClass(classID) !=null){
+			Classes cls = classesDAO.getClass(classID);
+			classname = cls.getClassName();
+		}
+		
+		boolean isFormOne = false;
+
+		if(StringUtils.contains(classname, "FORM 1")){ 
+			isFormOne = true;
+
+		}
 
 
 		String fileName = new StringBuffer(StringUtils.trimToEmpty("meritList")) 
@@ -266,7 +280,7 @@ public class PerformanceListF12 extends HttpServlet {
 			writer.setBoxSize("art", new Rectangle(46, 64, 559, 788));
 			writer.setPageEvent(event);
 
-			populatePDFDocument(statistics, school,classID,pDistinctListGeneral,path);
+			populatePDFDocument(statistics, school,classID,pDistinctListGeneral,path,isFormOne);
 
 
 		} catch (DocumentException e) {
@@ -281,7 +295,7 @@ public class PerformanceListF12 extends HttpServlet {
 
 
 	private void populatePDFDocument(SessionStatistics statistics, SchoolAccount school, 
-			String classID,List<Perfomance> pDistinctListGeneral, String realPath) {
+			String classID,List<Perfomance> pDistinctListGeneral, String realPath, boolean isFormOne) {
 		SimpleDateFormat formatter;
 
 		Map<String,Double> kswscoreMapgn = new LinkedHashMap<String,Double>();
@@ -1179,7 +1193,14 @@ public class PerformanceListF12 extends HttpServlet {
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					
+					if(isFormOne) {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
+					}else {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					}
+					
+					
 					MEANMapgn.put(uuid,meangn);
 
 					totalmean = 0;

@@ -19,6 +19,15 @@ public interface ScoolGradingSystemDAO {
 	 * @return
 	 */
 	public GradingSystem getGradingSystem(String accountId, String uuid);
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param categoryId
+	 * @param description
+	 * @return
+	 */
+	public GradingSystem getGradesByDesc(String accountId, String categoryId, String description);
 	/**
 	 * 
 	 * @param accountId

@@ -2587,9 +2587,9 @@ public class ReportFormF3_4_p1_p2_p3 extends HttpServlet{
 					
 					String equity = ExamConstants.EQUITY_ACC;
 					String coop = ExamConstants.COOP_ACC;
-					
 					String accountLabel = "Pay school fee to the following account. "
-				             + " CO-OP BANK : " + coop;
+				             + " CO-OP BANK : " + coop + " , and EQUITY : " + equity;
+					
 		            Paragraph caccounttLb = new Paragraph(accountLabel,timesRomanNormal0);
 		            
 
