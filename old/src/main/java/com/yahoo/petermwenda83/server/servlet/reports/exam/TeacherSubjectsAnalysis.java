@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -390,7 +392,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		//TODO
 
 		List<PerformanceBean1> finalExamList = new ArrayList<>();
-		List<PerformanceBean1> listOfList = new ArrayList<>();
+		Map<String,List<PerformanceBean1>> finalExamMap = new HashMap<>();
 
 		for(Subject subject : subjectDAO.getSubjects(accountId)) {
 
@@ -467,12 +469,13 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				examList3 = CommonLogic.subjectAnalyzer(list3, isPaper123); 
 
 				finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
-				
-				
+
+
 			}
-			
+
 			if(!finalExamList.isEmpty()) {
-				System.out.println("size : *" + finalExamList.size()); 
+				//System.out.println("size : *" + finalExamList.size()); 
+				finalExamMap.put(subject.getUuid(), finalExamList); 
 			}
 
 
@@ -491,33 +494,82 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 		int c1 = 1;
 		for(int i=0;i<streamlist.length;i++) {
-			
-			System.out.println("size : " + finalExamList.size()); 
-			
-			//TODO
-			//String value = CommonLogic.streamAnalyzer(finalExamList, streamlist[i], accountId, "A");
 
-			stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
-			stream_rankingTable.addCell(new Paragraph("" + streamlist[i],timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("3",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("4",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("10",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("16",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("577",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("45.56",timesRomanNormal6));
-			stream_rankingTable.addCell(new Paragraph("A",timesRomanNormal6));
+			//TODO
+			String ca="",cam="",cbp="",cb="",cbm="",ccp="",cc="",ccm="",cdp="",cd="",cdm="", ce="";
+			ca = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "A");
+			cam = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "A-");
+			cbp = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "B+");
+			cb = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "B");
+			cbm = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "B-");
+			ccp = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "C+");
+			cc = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "C");
+			ccm = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "C-");
+			cdp = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D+");
+			cd = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D");
+			cdm = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D-");
+			ce = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "E");
+
+
+			if(i < (streamlist.length) -1) {
+
+				stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
+				stream_rankingTable.addCell(new Paragraph("" + streamlist[i],timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ca,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cam,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cbp,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cb,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cbm,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ccp,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cc,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ccm,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cdp,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cd,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cdm,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ce,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+
+
+
+			}else if(i == (streamlist.length) -1) {
+
+
+				stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
+				stream_rankingTable.addCell(new Paragraph("" + streamlist[i],timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+
+
+
+
+
+			}
+
+
+
 
 			c1++;
 
@@ -549,32 +601,77 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 
 
-		String[] headers = {"Male","Female","Total:"};
+		String[] headers = {"Male","Female","Total"};
 
 		int c2 = 1;
 		for(int i=0;i<3;i++) {
+			
+			//TODO
+			String ca="",cam="",cbp="",cb="",cbm="",ccp="",cc="",ccm="",cdp="",cd="",cdm="", ce="";
+			ca = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "A");
+			cam = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "A-");
+			cbp = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "B+");
+			cb = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "B");
+			cbm = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "B-");
+			ccp = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "C+");
+			cc = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "C");
+			ccm = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "C-");
+			cdp = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D+");
+			cd = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D");
+			cdm = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D-");
+			ce = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "E");
+			
+			if(i < (streamlist.length) -1) {
+				
+				bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
+				bygender_rankingTable.addCell(new Paragraph("" + ca,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cam,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cbp,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cb,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cbm,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ccp,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cc,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ccm,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cdp,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cd,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cdm,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ce,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				
+			}else if(i == (streamlist.length) -1) {
+				
+				bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("*",timesRomanNormal6));
+				
+			}
 
-			bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("3",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("4",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("10",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("16",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("577",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("45.56",timesRomanNormal6));
-			bygender_rankingTable.addCell(new Paragraph("A",timesRomanNormal6));
+			
 
 			c2++;
 		}
