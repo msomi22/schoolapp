@@ -2,6 +2,7 @@ package com.yahoo.petermwenda83.server.servlet.reports.exam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -730,90 +731,469 @@ public class CommonLogic {
 	}
 
 
-
-	/*public static void testFinalList(List<PerformanceBean1> finalExamList, String accountId) {
-		finalExamList.forEach(performance -> {
-			System.out.println(subjectDAO.getSubjectById(accountId, performance.getSubjectId()).getCode() + " -- " + performance.getScore()); 
-			System.out.println("******************************************");
-		});
-	}*/
-
-
 	/**
 	 * 
-	 * @param finalExamList
+	 * @param finalExamMap
 	 * @param streamName
 	 * @param accountId
 	 * @param item (a grade, etc)  
 	 */
-	 
-	public static String streamAnalyzer(List<PerformanceBean1> finalExamList, String rowItem, String accountId,
-			String columValue) {
-		
+
+	public static String streamAnalyzer(Map<String, List<PerformanceBean1>> finalExamMap, String rowItem, String classroomId,
+			String accountId, String predicate) {
+
 		String value = "";
-		//double sum = 0;
-		//List<PerformanceBean1> list = new ArrayList<>();
-		
-		
+
 		// as long as the column is not last (the total column, this means as long as we have a stream name) 
 		if(!StringUtils.equals(rowItem, "Total")) {
 			// as long as the column item ( a stream name , is found in the database)  
 			if(streamDAO.getStreamByDesc(accountId, rowItem) != null) {
-				
-				
-				System.out.println("stream : " + streamDAO.getStreamByDesc(accountId, rowItem).getDescription());  
-				
-				//for every student
-				
-				studentDAO.getStudentByStream(accountId, streamDAO.getStreamByDesc(accountId, rowItem).getUuid(), "1")
-				.stream().forEach(student ->{
-					
-					//loop all subjects
-					
-					subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
-						
 
-						//filter the input stream, 
-						int score = finalExamList.stream()
-						//filter by the subject
-						.filter(perfor -> StringUtils.equals(perfor.getSubjectId(), subject.getUuid()))
-						//filter by active student
-						.filter(perfor -> StringUtils.equals(perfor.getStudentId(), student.getUuid()))
-						//we should return the score
-						.map(PerformanceBean1::getScore)
-						.findAny()
-						.orElse(0);
-						
-						System.out.println("Score : " + score + " regNo: " + student.getRegNo() + "  code: " + subject.getCode()); 
-						
-					
-						
-					});
-					
-					
-					System.out.println("*************************************************"); 
-					
-					//System.out.println(finalExamList.size()); 
-					
-					//System.out.println("*************************************************"); 
-					
+				List<PerformanceBean1> performanceBean1List = new ArrayList<>();
+
+				subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
+
+					if(finalExamMap.get(subject.getUuid()) != null) {
+
+						studentDAO.getStudentByStream(accountId, streamDAO.getStreamByDesc(accountId, rowItem).getUuid(), "1")
+						.stream().forEach(student ->{
+
+							int score = finalExamMap.get(subject.getUuid())
+									.stream()
+									.filter(perfor -> StringUtils.equals(perfor.getStudentId(), student.getUuid()))
+									.map(PerformanceBean1::getScore)
+									.findAny()
+									.orElse(0);
+
+							PerformanceBean1 performanceBean1 = new PerformanceBean1();
+							performanceBean1.setStudentId(student.getUuid());
+							performanceBean1.setSubjectId(subject.getUuid());
+							performanceBean1.setStreamId(student.getCurrentStream()); 
+							performanceBean1.setClassRoomId(classroomId);
+							performanceBean1.setScore(score); 
+
+							performanceBean1List.add(performanceBean1);
+
+						});
+
+					}
+
 				});
-				
-				
-				
+				//logic here
+
+				//System.out.println(performanceBean1List);
+				//System.out.println("******************************************");
+				value = analyzeStream(performanceBean1List, accountId, predicate, rowItem);
+
+
 			}
 		}
 
-		
-		
-		
-		
-		
-		
-		
-		
+
 		return value;
 
+	}
+
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param predicate
+	 * @return
+	 */
+	private static String analyzeStream(List<PerformanceBean1> performanceBean1List, String accountId, String predicate, String rowItem) {
+
+		String value = "";
+
+		switch(predicate) {
+
+		case"A":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "A");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"A-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "A-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "B+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "B");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "B-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "C+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "C");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "C-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "D+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "D");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "D-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"E":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeResult(performanceBean1List, accountId, "E");
+
+			}else {
+				//total
+			}
+			return value;
+
+		default:
+			return value;
+
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param string
+	 * @return
+	 */
+	private static String computeResult(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
+
+		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+
+		long count = 0;
+		if(gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate) != null) {
+
+			count = performanceBean1List.stream()
+					.filter(performance -> 
+					performance.getScore() >= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getLowerLimit()
+					&&
+					performance.getScore() <= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getUpperLimit()
+							).count(); 
+		}
+
+		return ""+count;
+	}
+
+
+
+	/**
+	 * 
+	 * @param finalExamMap
+	 * @param rowItem
+	 * @param accountId
+	 * @param columValue
+	 * @return
+	 */
+	public static String genderAnalyzer(Map<String, List<PerformanceBean1>> finalExamMap, String rowItem, String classroomId,
+			String accountId, String predicate) {
+		
+		
+		List<Student> studentsList = new ArrayList<>();
+
+		List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
+
+		for(Stream stream : streamList){
+
+			List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+
+			if(!studentListStream.isEmpty())
+				studentsList.addAll(studentListStream); 
+
+		}
+		
+		//System.out.println("size : " + studentsList.size());
+
+		String value = "";
+		
+		StringBuilder rowItemV = new StringBuilder();
+		// as long as the column is not last (the total column, this means as long as we have a stream name) 
+		if(!StringUtils.equals(rowItem, "Total")) {
+			// as long as the column item ( a stream name , is found in the database)  
+			
+			if(StringUtils.equals(rowItem, "Male")) {
+				rowItemV.append("M");
+			}if(StringUtils.equals(rowItem, "Female")) {
+				rowItemV.append("F");
+			}
+			
+			//System.out.println("rowItemV : " + rowItemV.toString()); 
+			
+				List<PerformanceBean1> performanceBean1List = new ArrayList<>();
+
+				subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
+
+					if(finalExamMap.get(subject.getUuid()) != null) {
+
+						studentsList
+						.stream() 
+						.filter(stu -> StringUtils.equalsIgnoreCase(stu.getGender(), rowItemV.toString().toUpperCase()))
+						.filter(stu -> StringUtils.equalsIgnoreCase(stu.getIsActive(),"1")) 
+						.forEach(student ->{ 
+
+							int score = finalExamMap.get(subject.getUuid())
+									.stream()
+									.filter(perfor -> StringUtils.equals(perfor.getStudentId(), student.getUuid()))
+									.map(PerformanceBean1::getScore)
+									.findAny()
+									.orElse(0);
+
+							PerformanceBean1 performanceBean1 = new PerformanceBean1();
+							performanceBean1.setStudentId(student.getUuid());
+							performanceBean1.setSubjectId(subject.getUuid());
+							performanceBean1.setStreamId(student.getCurrentStream()); 
+							performanceBean1.setClassRoomId(classroomId);
+							performanceBean1.setScore(score); 
+
+							performanceBean1List.add(performanceBean1);
+
+						});
+
+					}
+
+				});
+				//logic here
+
+				//System.out.println(performanceBean1List);
+				//System.out.println("******************************************");
+
+				value = analyzeGender(performanceBean1List, accountId, predicate, rowItemV.toString());
+
+
+		
+		}
+
+		return value;
+
+	}
+
+
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param accountId
+	 * @param predicate
+	 * @param rowItem
+	 * @return
+	 */
+	private static String analyzeGender(List<PerformanceBean1> performanceBean1List, String accountId, String predicate,
+			String rowItem) {
+
+		String value = "";
+
+		switch(predicate) {
+
+
+		case"A":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "A");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"A-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "A-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "B+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "B");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"B-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "B-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "C+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "C");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"C-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "C-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "D+");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "D");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"D-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "D-");
+
+			}else {
+				//total
+			}
+			return value;
+			
+		case"E":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeGender(performanceBean1List, accountId, "E");
+
+			}else {
+				//total
+			}
+			return value;
+			
+			
+
+		default:
+			return value;
+
+		}
+
+	}
+
+
+/**
+ * 
+ * @param performanceBean1List
+ * @param accountId
+ * @param string
+ * @return
+ */
+	private static String computeGender(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
+		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+
+		long count = 0;
+		if(gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate) != null) {
+
+			count = performanceBean1List.stream()
+					.filter(performance -> 
+					performance.getScore() >= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getLowerLimit()
+					&&
+					performance.getScore() <= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getUpperLimit()
+							).count(); 
+		}
+
+		return ""+count;
 	}
 
 

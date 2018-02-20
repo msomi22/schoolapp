@@ -693,6 +693,41 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		return studentList;		
 	}
+	
+	
+
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentByGender(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Student> getStudentByGender(String accountId, String gender, String currentStream, String isActive) {
+		List<Student> studentList = null;
+
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
+						+ "accountId =? AND currentStream =? AND gender =? AND isActive =?;");
+				) {
+			psmt.setString(1, accountId);
+			psmt.setString(2, currentStream);
+			psmt.setString(3, gender);
+			psmt.setString(4, isActive);
+			
+			try(ResultSet rset = psmt.executeQuery();){
+
+				studentList = beanProcessor.toBeanList(rset, Student.class);
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException when trying to get a Student List  for accountId " + accountId + " and gender " + 
+					gender + " and isActive " + isActive); 
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e)); 
+		}
+
+		return studentList;		
+	}
+
+	
 
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudents(java.lang.String)
@@ -719,6 +754,5 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		return studentList;		
 	}
 
-	
 
 }

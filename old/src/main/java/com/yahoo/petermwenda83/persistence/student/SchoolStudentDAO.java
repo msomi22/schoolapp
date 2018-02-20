@@ -52,6 +52,8 @@ public interface SchoolStudentDAO {
 	 * @return
 	 */
 	public List<Student> getStudentByStream(String accountId,String currentStream, String isActive); 
+	
+	public List<Student> getStudentByGender(String accountId, String gender, String currentStream, String isActive); 
 
 	/**
 	 * 
