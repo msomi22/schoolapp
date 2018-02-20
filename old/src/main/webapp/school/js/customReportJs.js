@@ -173,23 +173,23 @@ function scopeSwap(scopeType) {
 function scopeSwapTBID(scopeType) {
 
 	if (scopeType == "class_tbid") {
-		$('#class_option').show('2000');
-		$('#stream_option').hide('2000');
+		$('#class_option').show(2000);
+		$('#stream_option').hide(2000);
 
 	} else {
-		$('#class_option').hide('2000');
-		$('#stream_option').show('2000');
+		$('#class_option').hide(2000);
+		$('#stream_option').show(2000);
 
 	}
 }
 
 function reportCategory(cat) {
 	if (cat == 'class') {
-		$('#classAnalysisCat').show('2000');
+		$('#classAnalysisCat').show(2000);
 		$('#generateReport').attr('action', 'studentReportCard');
 
 	} else {
-		$('#classAnalysisCat').hide('2000');
+		$('#classAnalysisCat').hide(2000);
 		$('#generateReport').attr('action', 'subjectsAnalysis');
 	}
 }

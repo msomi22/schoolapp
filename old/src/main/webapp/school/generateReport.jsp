@@ -100,8 +100,7 @@
 
 
 
-						<input type="hidden" name="accountId" id="accountId"
-							value="<%=accountId%>">
+
 
 
 
@@ -126,9 +125,14 @@
 									<div class="x_content">
 										<br />
 
-										<div class="col-md-2 pull-right alert alert-info cards hand" onclick="showTBIDModal()">
-											<h4>Get Most Top, Bottom, <br>Improved or Dropped <br>per class
-											and/or stream <span><i class="fa fa-bar-chart fa-2x pull-right"></i></span></h4></div>
+										<div class="col-md-2 pull-right alert alert-info cards hand"
+											onclick="showTBIDModal()">
+											<h4>
+												Get Most Top, Bottom, <br>Improved or Dropped <br>per
+												class and/or stream <span><i
+													class="fa fa-bar-chart fa-2x pull-right"></i></span>
+											</h4>
+										</div>
 
 
 										<form action="studentReportCard" id="generateReport"
@@ -178,21 +182,20 @@
 														class="formelement SlectBox form-control "
 														required="required" multiple>
 
-													 	<%
+														<%
 															if (examList != null) {
 
 																for (Exam exam : examList) {
-																	
-																	if(!exam.getDescription().contains("P123"))
-																	{
+
+																	if (!exam.getDescription().contains("P123")) {
 														%>
 
 														<option value="<%=exam.getUuid()%>">
 															<%=exam.getDescription()%></option>
 
 														<%
-																	}
 															}
+																}
 															} else {
 														%>
 														<option value="">...</option>
@@ -214,7 +217,9 @@
 
 
 											<input type="hidden" name="paper123Id" id="paper123Id">
-											<input type="hidden" name="saveMean" value="1">
+											<input type="hidden" name="saveMean" value="1"> <input
+												type="hidden" name="accountId" id="accountId"
+												value="<%=accountId%>">
 
 
 
@@ -370,9 +375,9 @@
 
 
 											</div>
-											
+
 											<!-- Types of report -->
-											
+
 											<br> <br>
 
 											<h4>Report Category:</h4>
@@ -381,15 +386,17 @@
 
 												<div class="col-md-5 col-md-offset-1">
 													<input type="radio" id="classAnalysis" class="form-control"
-														onclick= "reportCategory('class')" name="classAnalysis" value="true"> <label for="classAnalysis">
+														onclick="reportCategory('class')" name="category"
+														value="true" checked> <label for="classAnalysis">
 														<h6>Class Analysis</h6>
 
 													</label>
 												</div>
 
 												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="subjectAnalysis" name="subjectAnalysis" value="false"
-														onclick= "reportCategory('subject')" checked> <label for="subjectAnalysis">
+													<input type="radio" id="subjectAnalysis" name="category"
+														value="false" onclick="reportCategory('subject')">
+													<label for="subjectAnalysis">
 														<h6>Subject Analysis</h6>
 
 													</label>
@@ -398,189 +405,187 @@
 											</div>
 
 											<!-- Hide points or grades element -->
-											
+
 											<div id="classAnalysisCat">
-
-											<br> <br>
-											
-											
-
-											<h4>HIDE Points:</h4>
-
-											<div class="row">
-
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="pointshide" class="form-control"
-														name="p" value="true"> <label for="pointshide">
-														<h6>Yes</h6>
-
-													</label>
-												</div>
-
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="points" name="p" value="false"
-														checked> <label for="points">
-														<h6>No</h6>
-
-													</label>
-												</div>
-
-											</div>
-
-											<h4>HIDE Grades:</h4>
-
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="gradeshide" name="g" value="true">
-													<label for="gradeshide">
-														<h6>YES</h6>
-													</label>
-												</div>
-
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="grades" name="g" value="false"
-														checked> <label for="grades">
-														<h6>NO</h6>
-													</label>
-												</div>
-
-
-											</div>
-
-
-											<br> <br>
-
-
-											<!-- Show fee element -->
-
-											<h4>Show Fee INFO:</h4>
-
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="fee" name="fee" value="true"
-														checked> <label for="fee">
-														<h6>YES</h6>
-													</label>
-												</div>
-
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="feehidden" name="fee" value="false">
-													<label for="feehidden">
-														<h6>NO</h6>
-													</label>
-												</div>
-
-											</div>
-
-
-
-
-
-											<br> <br>
-
-											<!-- Rank element -->
-
-
-											<h4>RANK:</h4>
-
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="pointsrank" name="rank"
-														value="points" checked> <label for="pointsrank">
-														<h6>Rank with points</h6>
-
-													</label>
-												</div>
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="gradesrank" name="rank"
-														value="marks"> <label for="gradesrank">
-														<h6>Rank with total marks</h6>
-
-													</label>
-												</div>
-
-											</div>
-
-
-											<!-- Number of subject element -->
-
-											<div id="no_subjects_show">
-
-												<h4>No_ of Subjects:</h4>
-
-												<div class="row">
-													<div class="col-md-5 col-md-offset-1">
-														<input type="radio" id="7sub" name="subjects"
-															value="seven" checked> <label for="7sub">
-															<h6>Grade 7 subjects</h6>
-
-														</label>
-													</div>
-													<div class="col-md-5 col-md-offset-1">
-														<input type="radio" id="11sub" name="subjects"
-															value="eleven"> <label for="11sub">
-															<h6>Grade 11 subjects</h6>
-
-														</label>
-													</div>
-
-												</div>
 
 												<br> <br>
 
-											</div>
 
-											<!-- Type of report element -->
-											<h4>Type of Report:</h4>
 
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="reportcard" name="reportcard"
-														onclick="redirect(this.id)" value="reportcard" checked>
-													<label for="reportcard">
-														<h6>Report Card</h6>
+												<h4>HIDE Points:</h4>
 
-													</label>
+												<div class="row">
+
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="pointshide" class="form-control"
+															name="p" value="true"> <label for="pointshide">
+															<h6>Yes</h6>
+
+														</label>
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="points" name="p" value="false"
+															checked> <label for="points">
+															<h6>No</h6>
+
+														</label>
+													</div>
+
 												</div>
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="ranklist" name="reportcard"
-														value="ranklist" onclick="redirect(this.id)"> <label
-														for="ranklist">
-														<h6>Rank List</h6>
 
-													</label>
+												<h4>HIDE Grades:</h4>
+
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="gradeshide" name="g" value="true">
+														<label for="gradeshide">
+															<h6>YES</h6>
+														</label>
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="grades" name="g" value="false"
+															checked> <label for="grades">
+															<h6>NO</h6>
+														</label>
+													</div>
+
+
 												</div>
 
-											</div>
+
+												<br> <br>
+
+
+												<!-- Show fee element -->
+
+												<h4>Show Fee INFO:</h4>
+
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="fee" name="fee" value="true"
+															checked> <label for="fee">
+															<h6>YES</h6>
+														</label>
+													</div>
+
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="feehidden" name="fee"
+															value="false"> <label for="feehidden">
+															<h6>NO</h6>
+														</label>
+													</div>
+
+												</div>
 
 
 
 
-											<br>
-											
+
+												<br> <br>
+
+												<!-- Rank element -->
+
+
+												<h4>RANK:</h4>
+
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="pointsrank" name="rank"
+															value="points" checked> <label for="pointsrank">
+															<h6>Rank with points</h6>
+
+														</label>
+													</div>
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="gradesrank" name="rank"
+															value="marks"> <label for="gradesrank">
+															<h6>Rank with total marks</h6>
+
+														</label>
+													</div>
+
+												</div>
+
+
+												<!-- Number of subject element -->
+
+												<div id="no_subjects_show">
+
+													<h4>No_ of Subjects:</h4>
+
+													<div class="row">
+														<div class="col-md-5 col-md-offset-1">
+															<input type="radio" id="7sub" name="subjects"
+																value="seven" checked> <label for="7sub">
+																<h6>Grade 7 subjects</h6>
+
+															</label>
+														</div>
+														<div class="col-md-5 col-md-offset-1">
+															<input type="radio" id="11sub" name="subjects"
+																value="eleven"> <label for="11sub">
+																<h6>Grade 11 subjects</h6>
+
+															</label>
+														</div>
+
+													</div>
+
+													<br> <br>
+
+												</div>
+
 												<!-- Type of report element -->
-											<h4>Type of Graph:</h4>
+												<h4>Type of Report:</h4>
 
-											<div class="row">
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="bar" name="graphType"
-														value="1" checked>
-													<label for="bar">
-														<h6>Bar Graph</h6>
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="reportcard" name="reportcard"
+															onclick="redirect(this.id)" value="reportcard" checked>
+														<label for="reportcard">
+															<h6>Report Card</h6>
 
-													</label>
+														</label>
+													</div>
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="ranklist" name="reportcard"
+															value="ranklist" onclick="redirect(this.id)"> <label
+															for="ranklist">
+															<h6>Rank List</h6>
+
+														</label>
+													</div>
+
 												</div>
-												<div class="col-md-5 col-md-offset-1">
-													<input type="radio" id="line" name="graphType"
-														value="0"> <label
-														for="line">
-														<h6>Line Graph</h6>
 
-													</label>
+
+
+
+												<br>
+
+												<!-- Type of report element -->
+												<h4>Type of Graph:</h4>
+
+												<div class="row">
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="bar" name="graphType" value="1"
+															checked> <label for="bar">
+															<h6>Bar Graph</h6>
+
+														</label>
+													</div>
+													<div class="col-md-5 col-md-offset-1">
+														<input type="radio" id="line" name="graphType" value="0">
+														<label for="line">
+															<h6>Line Graph</h6>
+
+														</label>
+													</div>
+
 												</div>
 
-											</div>
-											
 											</div>
 
 
@@ -599,15 +604,14 @@
 
 
 												<div class="col-md-2 col-md-offset-4">
-													<button type="submit" onclick="trace()" class="btn btn-primary">Generate</button>
-													
+													<button type="submit" onclick="trace()"
+														class="btn btn-primary">Generate</button>
+
 													<br>
 												</div>
-												
-												
-												<br>
-												<br>
-												<br>
+
+
+												<br> <br> <br>
 
 
 											</div>

@@ -140,7 +140,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		//HttpSession session = request.getSession(true);
 
 		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
-		String classId = StringUtils.trimToEmpty(request.getParameter("classId")); 
+		String classId = StringUtils.trimToEmpty(request.getParameter("classroom")); 
 		String[] examIds= request.getParameterValues("exam");
 		//exams = examIds;
 		String term = StringUtils.trimToEmpty(request.getParameter("term")); 
