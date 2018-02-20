@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,6 +43,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
+import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
@@ -58,6 +60,8 @@ import com.yahoo.petermwenda83.server.servlet.reports.PdfUtil;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
+
+import scala.Array;
 
 /**
  * /school/subjectsAnalysis
@@ -148,11 +152,11 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		classId = "C143978A-E021-4015-BC67-5A00D6C910D1";
 
 		response.setContentType("application/pdf");
-		
+
 		String classname = classDAO.getClassRoom(accountId, classId).getDescription();
 
 		String fileName = classname+"_term_"+term+"_year_"+year+".pdf";  
-		
+
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);
@@ -210,7 +214,8 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 	 * @throws DocumentException
 	 */
 	private void generateReport(String accountId, String classroomId, String term, String year) throws DocumentException {
-		
+
+		boolean isPaper123 = false;
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
 		//BaseColor baseColorShadow = new BaseColor(0,255,119);//#00FF77
@@ -247,9 +252,12 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		topLine.lineTo(790, 463);
 		topLine.closePathStroke();
 
+		String classname = classDAO.getClassRoom(accountId, classroomId).getDescription();
+		String stringExams = ReportUtil.getExamName(accountId, exams,2);
+
 		Phrase reportTitle = new Phrase();
-		reportTitle.add(new Chunk("FORM 1 SUBJECT ANALYSIS FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
-		reportTitle.add(new Chunk(" - Exams: Cat 1, Cat 2, End Term",  timesRomanNormal10));
+		reportTitle.add(new Chunk(classname + " SUBJECT ANALYSIS FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
+		reportTitle.add(new Chunk(" - Exams: " + stringExams ,  timesRomanNormal10));
 		document.add(reportTitle);
 		document.add(new Paragraph("\n"));
 
@@ -379,14 +387,118 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		stream_rankingTable.addCell(s_r_meanCell);
 		stream_rankingTable.addCell(s_r_mgCell);
 
+		//TODO
+
+		List<PerformanceBean1> finalExamList = new ArrayList<>();
+		List<PerformanceBean1> listOfList = new ArrayList<>();
+
+		for(Subject subject : subjectDAO.getSubjects(accountId)) {
+
+			String exam1 = "";
+			String exam2 = "";
+			String exam3 = "";
+
+			if(exams.length == 1) {
+				exam1 = exams[0];
+
+				List<Perfomance> list1 = new ArrayList<>();
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123);  
+
+				finalExamList = CommonLogic.combineExams(examList1, null, null, 1, subject.getUuid(), accountId, classroomId);
+
+			}if(exams.length == 2) {
+				exam1 = exams[0];
+				exam2 = exams[1];
+
+				List<Perfomance> list1 = new ArrayList<>();
+				List<Perfomance> list2 = new ArrayList<>();
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
+					list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+				}
+
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
+
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123); 
+				examList2 = CommonLogic.subjectAnalyzer(list2, isPaper123); 
+
+				finalExamList = CommonLogic.combineExams(examList1, examList2, null, 2, subject.getUuid(), accountId, classroomId);
 
 
-		String[] streams = {"1 N","1 S","1 T","Total:"};
+			}if(exams.length == 3) {
+				exam1 = exams[0];
+				exam2 = exams[1];
+				exam3 = exams[2];
+
+				List<Perfomance> list1 = new ArrayList<>();
+				List<Perfomance> list2 = new ArrayList<>();
+				List<Perfomance> list3 = new ArrayList<>();
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
+					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
+				}
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
+					list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+				}
+
+				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year) != null) {
+					list3 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year);
+				}
+
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
+				List<PerformanceBean1> examList3 = new ArrayList<>();
+
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123); 
+				examList2 = CommonLogic.subjectAnalyzer(list2, isPaper123); 
+				examList3 = CommonLogic.subjectAnalyzer(list3, isPaper123); 
+
+				finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
+				
+				
+			}
+			
+			if(!finalExamList.isEmpty()) {
+				System.out.println("size : *" + finalExamList.size()); 
+			}
+
+
+		}
+
+
+		//logic TODO
+		//CommonLogic.testFinalList(finalExamList, accountId); 
+		List<String> listOfStreams = new ArrayList<>(); 
+		streamDAO.getStreamList(accountId, classroomId).stream().forEach(stream -> {
+			listOfStreams.add(stream.getDescription());
+		});
+
+		String[] streamlist = listOfStreams.toArray(new String[listOfStreams.size()]);
+		streamlist = append(streamlist, "Total");
+
 		int c1 = 1;
-		for(int i=0;i<4;i++) {
+		for(int i=0;i<streamlist.length;i++) {
+			
+			System.out.println("size : " + finalExamList.size()); 
+			
+			//TODO
+			//String value = CommonLogic.streamAnalyzer(finalExamList, streamlist[i], accountId, "A");
 
 			stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
-			stream_rankingTable.addCell(new Paragraph("" + streams[i],timesRomanNormal6));
+			stream_rankingTable.addCell(new Paragraph("" + streamlist[i],timesRomanNormal6));
 			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
 			stream_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
 			stream_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
@@ -573,144 +685,293 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		int subc = 1;
 		for(Subject subject : subjectDAO.getSubjects(accountId)) {
 
-			document.add(new Paragraph("Subject: " + subc + ", " + subject.getDescription()));  
-
-			subject_rankingTable = new PdfPTable(18);   
-			subject_rankingTable.setWidthPercentage(100); 
-			subject_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,14,14,14,16});
-			subject_rankingTable.setHeaderRows(1); 
-			subject_rankingTable.isSkipFirstHeader();
-
-			subject_rankingTable.addCell(sub_r_countCell);
-			subject_rankingTable.addCell(sub_r_streamCell);
-			subject_rankingTable.addCell(sub_r_aCell);
-			subject_rankingTable.addCell(sub_r_amCell);
-			subject_rankingTable.addCell(sub_r_bpCell);
-			subject_rankingTable.addCell(sub_r_bCell);
-			subject_rankingTable.addCell(sub_r_bmCell);
-			subject_rankingTable.addCell(sub_r_cpCell);
-			subject_rankingTable.addCell(sub_r_cCell);
-			subject_rankingTable.addCell(sub_r_cmCell);
-			subject_rankingTable.addCell(sub_r_dpCell);
-			subject_rankingTable.addCell(sub_r_dCell);
-			subject_rankingTable.addCell(sub_r_dmCell);
-			subject_rankingTable.addCell(sub_r_eCell);
-			subject_rankingTable.addCell(sub_r_entryCell);
-			subject_rankingTable.addCell(sub_r_mpCell);
-			subject_rankingTable.addCell(sub_r_mgCell);
-			subject_rankingTable.addCell(sub_r_subtCell);
-			
 			String exam1 = "";
 			String exam2 = "";
 			String exam3 = "";
-			
-			List<Perfomance>[] arrayOfList = null;
-			
-			
+
+			/*List<PerformanceBean1>*/ finalExamList = new ArrayList<>();
+
 			if(exams.length == 1) {
 				exam1 = exams[0];
-				
+
 				List<Perfomance> list1 = new ArrayList<>();
-				
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
 					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
 				}
-				
-				arrayOfList = new ArrayList[1]; 
-				arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
-				CommonLogic.combineAnalyzer(arrayOfList);
-				
+
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123);  
+
+				finalExamList = CommonLogic.combineExams(examList1, null, null, 1, subject.getUuid(), accountId, classroomId);
+
 			}if(exams.length == 2) {
 				exam1 = exams[0];
 				exam2 = exams[1];
-				
+
 				List<Perfomance> list1 = new ArrayList<>();
 				List<Perfomance> list2 = new ArrayList<>();
-				
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
 					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
 				}
-				
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
-					 list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+					list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
 				}
-			    
-				arrayOfList = new ArrayList[2]; 
-				arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
-				arrayOfList = CommonLogic.subjectAnalyzer(list2).toArray(arrayOfList); 
-				CommonLogic.combineAnalyzer(arrayOfList);
-				
+
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
+
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123); 
+				examList2 = CommonLogic.subjectAnalyzer(list2, isPaper123); 
+
+				finalExamList = CommonLogic.combineExams(examList1, examList2, null, 2, subject.getUuid(), accountId, classroomId);
+
+
 			}if(exams.length == 3) {
 				exam1 = exams[0];
 				exam2 = exams[1];
 				exam3 = exams[2];
-				
+
 				List<Perfomance> list1 = new ArrayList<>();
 				List<Perfomance> list2 = new ArrayList<>();
 				List<Perfomance> list3 = new ArrayList<>();
-				
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year) != null) {
 					list1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam1, subject.getUuid(), classroomId, term, year);
 				}
-				
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year) != null) {
-					 list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
+					list2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam2, subject.getUuid(), classroomId, term, year);
 				}
-			   
+
 				if(perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year) != null) {
 					list3 = perfomanceDAO.getClassSubjectPerfomance(accountId, exam3, subject.getUuid(), classroomId, term, year);
 				}
-				//List<Perfomance>[] arrayOfList = new ArrayList[3];  
-				arrayOfList = new ArrayList[3];  
-				
-				arrayOfList = list1.toArray(arrayOfList);
-				//arrayOfList = CommonLogic.subjectAnalyzer(list1).toArray(arrayOfList); 
-				//arrayOfList = CommonLogic.subjectAnalyzer(list2).toArray(arrayOfList); 
-				//arrayOfList = CommonLogic.subjectAnalyzer(list3).toArray(arrayOfList); 
-				CommonLogic.combineAnalyzer(arrayOfList);
-			}
-			
-			
-			
-			
 
-			String[] streamlist = {"1 N","1 S","1 T","Total:"};
-			int sc = 1;
-			for(int i=0;i<4;i++) {
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
+				List<PerformanceBean1> examList3 = new ArrayList<>();
 
-				subject_rankingTable.addCell(new Paragraph("" + sc,timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("" + streamlist[i] ,timesRomanNormal6)); 
-				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("6",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("1",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("5",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("9",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("12",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("2",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("0",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("35",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("8",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("B",timesRomanNormal6));
-				subject_rankingTable.addCell(new Paragraph("Peter Mwenda",timesRomanNormal6));
+				examList1 = CommonLogic.subjectAnalyzer(list1, isPaper123); 
+				examList2 = CommonLogic.subjectAnalyzer(list2, isPaper123); 
+				examList3 = CommonLogic.subjectAnalyzer(list3, isPaper123); 
 
-				sc++;
+				finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
 			}
 
-			document.add(new Paragraph("\n")); 
-			document.add(subject_rankingTable);
+
+			if(!finalExamList.isEmpty()) {
+
+				document.add(new Paragraph("Subject: " + subc + ", " + subject.getDescription()));  
+
+				subject_rankingTable = new PdfPTable(18);   
+				subject_rankingTable.setWidthPercentage(100); 
+				subject_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,14,14,14,16});
+				subject_rankingTable.setHeaderRows(1); 
+				subject_rankingTable.isSkipFirstHeader();
+
+				subject_rankingTable.addCell(sub_r_countCell);
+				subject_rankingTable.addCell(sub_r_streamCell);
+				subject_rankingTable.addCell(sub_r_aCell);
+				subject_rankingTable.addCell(sub_r_amCell);
+				subject_rankingTable.addCell(sub_r_bpCell);
+				subject_rankingTable.addCell(sub_r_bCell);
+				subject_rankingTable.addCell(sub_r_bmCell);
+				subject_rankingTable.addCell(sub_r_cpCell);
+				subject_rankingTable.addCell(sub_r_cCell);
+				subject_rankingTable.addCell(sub_r_cmCell);
+				subject_rankingTable.addCell(sub_r_dpCell);
+				subject_rankingTable.addCell(sub_r_dCell);
+				subject_rankingTable.addCell(sub_r_dmCell);
+				subject_rankingTable.addCell(sub_r_eCell);
+				subject_rankingTable.addCell(sub_r_entryCell);
+				subject_rankingTable.addCell(sub_r_mpCell);
+				subject_rankingTable.addCell(sub_r_mgCell);
+				subject_rankingTable.addCell(sub_r_subtCell);
 
 
-			subc++;
+
+				//TODO
+				//CommonLogic.testFinalList(finalExamList, accountId); 
+				/*List<String> listOfStreams = new ArrayList<>(); 
+				streamDAO.getStreamList(accountId, classroomId).stream().forEach(stream -> {
+					listOfStreams.add(stream.getDescription());
+				});
+
+				String[] streamlist = listOfStreams.toArray(new String[listOfStreams.size()]);
+				streamlist = append(streamlist, "Total");*/
+				int tga = 0,tgam = 0,tgbp = 0,tgb = 0,tgbm = 0,tgcp = 0,tgc = 0,tgcm = 0,tgdp = 0,tgd = 0,tgdm = 0,tge = 0; 
+				int entry = 0;
+				double rmean = 0, mean = 0;
+				int sc = 1;
+				for(int i=0;i<streamlist.length;i++) {
+
+					String ga,gam,gbp,gb,gbm,gcp,gc,gcm,gdp,gd,gdm,ge;
+					String entry_ = "", mean_ = "", mgrade = "", mgrade_ = "";
+					ga = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"A",streamlist[i]);
+					gam = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"A-",streamlist[i]);
+					gbp = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"B+",streamlist[i]);
+					gb = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"B",streamlist[i]);
+					gbm = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"B-",streamlist[i]);
+					gcp = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"C+",streamlist[i]);
+					gc = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"C",streamlist[i]);
+					gcm = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"C-",streamlist[i]);
+					gdp = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"D+",streamlist[i]);
+					gd = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"D",streamlist[i]);
+					gdm = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"D-",streamlist[i]);
+					ge = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"E",streamlist[i]);
+					entry_ = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"Entry",streamlist[i]);
+					mean_ = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"Points",streamlist[i]);
+					mgrade_ = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"Grade",streamlist[i]);
+
+
+					if(ga.length() > 0) {
+						tga += Integer.valueOf(ga);
+					}
+
+					if(gam.length() > 0) {
+						tgam += Integer.valueOf(gam);
+					}
+
+					if(gbp.length() > 0) {
+						tgbp += Integer.valueOf(gbp);
+					}
+
+					if(gb.length() > 0) {
+						tgb += Integer.valueOf(gb);
+					}
+
+					if(gbm.length() > 0) {
+						tgbm += Integer.valueOf(gbm);
+					}
+
+					if(gcp.length() > 0) {
+						tgcp += Integer.valueOf(gcp);
+					}
+
+					if(gc.length() > 0) {
+						tgc += Integer.valueOf(gc);
+					}
+
+					if(gcm.length() > 0) {
+						tgcm += Integer.valueOf(gcm);
+					}
+
+					if(gdp.length() > 0) {
+						tgdp += Integer.valueOf(gdp);
+					}
+
+					if(gd.length() > 0) {
+						tgd += Integer.valueOf(gd);
+					}
+
+					if(gdm.length() > 0) {
+						tgdm += Integer.valueOf(gdm);
+					}
+
+					if(ge.length() > 0) {
+						tge += Integer.valueOf(ge);
+					}
+
+					if(entry_.length() > 0) {
+						entry += Integer.valueOf(entry_);
+					}
+
+					double m = 0;
+
+					if(mean_.length() > 0) {
+						mean += Double.valueOf(mean_);  
+
+						double t = Double.valueOf(mean_);  
+						int e = Integer.valueOf(entry_);
+						m = t/e;
+					}
+
+
+
+					if(i < (streamlist.length) -1) {
+
+
+						subject_rankingTable.addCell(new Paragraph("" + sc,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + streamlist[i] ,timesRomanNormal6)); 
+						subject_rankingTable.addCell(new Paragraph("" + ga,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gam,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gbp,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gb,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gbm,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gcp,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gc,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gcm,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gdp,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gd,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + gdm,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + ge,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + entry_,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(m),timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + mgrade_,timesRomanNormal6));
+						subject_rankingTable.addCell(new Paragraph("" + CommonLogic.getSubjectTeacher(accountId, streamlist[i], subject.getUuid()),timesRomanNormal6));
+
+					}else
+
+						if(i == (streamlist.length) -1) {
+
+							rmean = mean / entry;
+							mgrade = ReportUtil.getGradeMainForm234((int)rmean, accountId);
+
+							subject_rankingTable.addCell(new Paragraph("" + sc,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + streamlist[i] ,timesRomanNormal6)); 
+							subject_rankingTable.addCell(new Paragraph("" + tga ,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgam ,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgbp,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgb ,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgbm,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgcp,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgc,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgcm,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgdp,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgd,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tgdm,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + tge ,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + entry,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(rmean),timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" + mgrade,timesRomanNormal6));
+							subject_rankingTable.addCell(new Paragraph("" ,timesRomanNormal6));
+
+
+
+						}
+
+					sc++;
+				}
+
+				document.add(new Paragraph("\n")); 
+				document.add(subject_rankingTable);
+
+
+				subc++;
+
+			}
 
 		}
 
 
 
 
+	}
+	/**
+	 * 
+	 * @param arr
+	 * @param element
+	 * @return
+	 */
+	private <T> T[] append(T[] arr, T element) {
+		final int N = arr.length;
+		arr = Arrays.copyOf(arr, N + 1);
+		arr[N] = element;
+		return arr;
 	}
 
 

@@ -81,6 +81,38 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 
 		return gradingSystem; 
 	}
+	
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.exam.ScoolGradingSystemDAO#getGradesByDesc(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public GradingSystem getGradesByDesc(String accountId, String categoryId, String description) {
+		GradingSystem gradingSystem = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM GradingSystem"
+						+ " WHERE accountId = ? AND categoryId =? AND description =?;");       
+
+				){
+
+			pstmt.setString(1, accountId); 
+			pstmt.setString(2, categoryId); 
+			pstmt.setString(3, description); 
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				gradingSystem  = beanProcessor.toBean(rset,GradingSystem.class);
+			}
+			
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting GradingSystem with accountId " + accountId);
+			logger.error(ExceptionUtils.getStackTrace(e));
+
+		}
+
+		return gradingSystem; 
+	}
 
 	
 	/**
@@ -170,5 +202,7 @@ public class GradingSystemDAO extends GenericDAO implements ScoolGradingSystemDA
 	  }
 		return list;
 	}
+
+	
 
 }

@@ -60,6 +60,8 @@ import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
 import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
+import com.yahoo.petermwenda83.server.servlet.reports.exam.CommonLogic;
+import com.yahoo.petermwenda83.server.servlet.reports.exam.PerformanceBean1;
 import com.yahoo.petermwenda83.server.servlet.util.PeterMid;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -458,7 +460,7 @@ public class ClassRankingList extends HttpServlet{
 
 			String classMean = "0";
 			classMean = ReportUtil.getclassMean(performanceList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
-			String grade = ReportUtil.getGrade(String.valueOf((int) Math.round(Double.parseDouble(classMean)) ), "x", accountId); 
+			String grade = ReportUtil.getGrade(String.valueOf((int)  (Double.parseDouble(classMean)) ), "x", accountId); 
 
 
 			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Mean:",timesRomanBold8)); 
@@ -827,13 +829,13 @@ public class ClassRankingList extends HttpServlet{
 				if(!grade7subjects && grade11subjects){
 					avgMean = performance2.getTotalMean() > 0 ? (double)performance2.getTotalMean() / 11 : 0;
 					pointsAvg = ((double)performance2.getTotalPoint() / 132) * 84;
-					pointsAvg = (int) Math.round(pointsAvg);
+					pointsAvg = (int)  (pointsAvg);
 
 				}
 
 
-				String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf((int) Math.round(pointsAvg)),"", accountId); 
-				String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int) Math.round(avgMean)),"", accountId); 
+				String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf((int)  (pointsAvg)),"", accountId); 
+				String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int)  (avgMean)),"", accountId); 
 
 				String poinst_str = "";
 				String mean_str = "";
@@ -924,7 +926,7 @@ public class ClassRankingList extends HttpServlet{
 					}else {
 
 						//show grade on points
-						poinst_str = (int) Math.round(pointsAvg) + " " + avgGradeByTotalMean;
+						poinst_str = (int)  (pointsAvg) + " " + avgGradeByTotalMean;
 
 						YearlyMean yearlyMean;
 						if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
@@ -1171,7 +1173,7 @@ public class ClassRankingList extends HttpServlet{
 				}else if (rcount > 1){
 
 					String average = ReportUtil.df2.format(p.getAverage());
-					String agrade = ReportUtil.getGrade(String.valueOf((int) Math.round(p.getAverage())),p.getSubjectId(), accountId); 
+					String agrade = ReportUtil.getGrade(String.valueOf((int)  (p.getAverage())),p.getSubjectId(), accountId); 
 
 					average = StringUtils.equals(String.valueOf((int)p.getAverage()), "0") ? "" : average; 
 
@@ -1320,8 +1322,8 @@ public class ClassRankingList extends HttpServlet{
 		Performance3 totalExam2 = new Performance3();
 		Performance3 totalExam3 = new Performance3();
 
-		int totalPoint = 0;
-		int totalMeans = 0;
+		double totalPoint = 0;
+		double totalMeans = 0;
 
 
 		for(Student student : studentsList ){
@@ -1535,8 +1537,8 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				performance2.setStudentId(student.getUuid());
-				performance2.setTotalMean(totalMeans); 
-				performance2.setTotalPoint(totalPoint);
+				performance2.setTotalMean((int)totalMeans); 
+				performance2.setTotalPoint((int)totalPoint);
 				performance2.setStreamId(student.getCurrentStream()); 
 				performance2.setClassroomId(class_streamId); 
 
@@ -1593,29 +1595,50 @@ public class ClassRankingList extends HttpServlet{
 		SubjectPerformance totalExam1 = new SubjectPerformance();
 		SubjectPerformance totalExam2 = new SubjectPerformance();
 		SubjectPerformance totalExam3 = new SubjectPerformance();
+		
+		
 
 		//double totalAvg = 0;
 		double total = 0;
 		int entry = 0;
 
 		for(Subject subject : subjects){
+			
+			List<PerformanceBean1> finalExamList = new ArrayList<>();
 
 			if(exams.length == 3){
+				
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
+				List<PerformanceBean1> examList3 = new ArrayList<>();
 
 				if(classResult){
-					//mm
+					
 					if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
 						exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, ReportUtil.PAPER123ID, subject.getUuid(), classroomId, term, year);
 
+						String entry_ = ReportUtil.findEntry(exam1,null,null,accountId,classroomId,true, exams.length, subject.getUuid());
+						entry = Integer.valueOf(entry_);
+				
+						examList1 = CommonLogic.subjectAnalyzer(exam1, true); 
+						finalExamList = CommonLogic.combineExams(examList1, null, null, 1, subject.getUuid(), accountId, classroomId);
+						
 					}else {
 						exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
 						exam2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[1], subject.getUuid(), classroomId, term, year);
 						exam3 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[2], subject.getUuid(), classroomId, term, year);
+						
+						String entry_ = ReportUtil.findEntry(exam1,exam2,exam3,accountId,classroomId,false, exams.length, subject.getUuid());
+						entry = Integer.valueOf(entry_);
+						
+						examList1 = CommonLogic.subjectAnalyzer(exam1, false); 
+						examList2 = CommonLogic.subjectAnalyzer(exam2, false); 
+						examList3 = CommonLogic.subjectAnalyzer(exam3, false); 
+						
+						finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
 
 					}
-
-
 
 				}else{
 
@@ -1623,135 +1646,82 @@ public class ClassRankingList extends HttpServlet{
 
 						exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, ReportUtil.PAPER123ID, subject.getUuid(), streamId, term, year);
 
+						String entry_ = ReportUtil.findEntry(exam1,null,null,accountId,classroomId,true, exams.length, subject.getUuid());
+						entry = Integer.valueOf(entry_);
+						
+						examList1 = CommonLogic.subjectAnalyzer(exam1, true); 
+						finalExamList = CommonLogic.combineExams(examList1, null, null, 1, subject.getUuid(), accountId, classroomId);
+						
+						
 					}else {
 
 						exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
 						exam2 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[1], subject.getUuid(), streamId, term, year);
 						exam3 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[2], subject.getUuid(), streamId, term, year);
 
+						String entry_ = ReportUtil.findEntry(exam1,exam2,exam3, accountId, classroomId,false, exams.length, subject.getUuid());
+						entry = Integer.valueOf(entry_);
+						
+						
+						examList1 = CommonLogic.subjectAnalyzer(exam1, false); 
+						examList2 = CommonLogic.subjectAnalyzer(exam2, false); 
+						examList3 = CommonLogic.subjectAnalyzer(exam3, false); 
+						finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
 					}
+					
+					
 
 
 				}
+				
 
-
-
-				totalExam1 = ReportUtil.findSubjectPerformance(accountId, exam1, examType);
-
-				totalExam2 = ReportUtil.findSubjectPerformance(accountId, exam2, examType);
-
-				totalExam3 = ReportUtil.findSubjectPerformance(accountId, exam3, examType);
-
-
-				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
-
-
-					AtomicInteger count = new  AtomicInteger();
-					exam1.parallelStream().forEach(ex -> {
-
-						if(ex.getPaper1() > 0 || ex.getPaper2() > 0 || ex.getPaper3() > 0) {
-							count.getAndIncrement();
-						}
-					});
-
-					entry = count.get();
-
-					total = totalExam1.getTotal(); 
-
-
-				}else {
-
-
-					AtomicInteger count1 = new  AtomicInteger();
-					exam1.parallelStream().forEach(ex -> {
-						if(ex.getScore() > 0) {
-							count1.getAndIncrement();
-						}
-
-					});
-					AtomicInteger count2 = new  AtomicInteger();
-					exam2.parallelStream().forEach(ex -> {
-						if(ex.getScore() > 0) {
-							count2.getAndIncrement();
-						}
-
-					});
-					AtomicInteger count3 = new  AtomicInteger();
-					exam3.parallelStream().forEach(ex -> {
-						if(ex.getScore() > 0) {
-							count3.getAndIncrement();
-						}
-
-					});
-
-					entry = (int)PeterMid.computeMax(count1.get(), count2.get(), count3.get());
-
-					total = totalExam1.getTotal() + totalExam2.getTotal() + totalExam3.getTotal();  
-					total = Math.round(total/3);
-
-
-				}
-
-
-
+				total = ReportUtil.findTotal(finalExamList);
+				
 			}
 			if(exams.length == 2){
+				
+				List<PerformanceBean1> examList1 = new ArrayList<>();
+				List<PerformanceBean1> examList2 = new ArrayList<>();
 
 				if(classResult){
 					exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
 					exam2 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[1], subject.getUuid(), classroomId, term, year);
+					
 				}else{
 					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
 					exam2 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[1], subject.getUuid(), streamId, term, year);
+					
 				}
 
-
-				totalExam1 = ReportUtil.findSubjectPerformance(accountId, exam1, examType);
-
-				totalExam2 = ReportUtil.findSubjectPerformance(accountId, exam2, examType);
-
-				AtomicInteger count1 = new  AtomicInteger();
-				exam1.parallelStream().forEach(ex -> {
-					if(ex.getScore() > 0) {
-						count1.getAndIncrement();
-					}
-
-				});
-				AtomicInteger count2 = new  AtomicInteger();
-				exam2.parallelStream().forEach(ex -> {
-					if(ex.getScore() > 0) {
-						count2.getAndIncrement();
-					}
-
-				});
-
-				entry = (int)PeterMid.computeMax(count1.get(), count2.get(), 0);
-
-
-				total = (totalExam1.getTotal() + totalExam2.getTotal()) / 2;
+				String entry_ = ReportUtil.findEntry(exam1,exam2,null,accountId,classroomId,false, exams.length, subject.getUuid());
+				entry = Integer.valueOf(entry_);
+				
+				examList1 = CommonLogic.subjectAnalyzer(exam1, false); 
+				examList2 = CommonLogic.subjectAnalyzer(exam2, false); 
+				
+				finalExamList = CommonLogic.combineExams(examList1, examList2, null, 2, subject.getUuid(), accountId, classroomId);
+				
+				total = ReportUtil.findTotal(finalExamList);
 
 			}
 			if(exams.length == 1){
+				
+				List<PerformanceBean1> examList1 = new ArrayList<>();
 
 				if(classResult){
 					exam1 = perfomanceDAO.getClassSubjectPerfomance(accountId, exams[0], subject.getUuid(), classroomId, term, year);
+					
 				}else{
 					exam1 = perfomanceDAO.getStreamSubjectPerfomance(accountId, exams[0], subject.getUuid(), streamId, term, year);
+					
 				}
 
+				String entry_ = ReportUtil.findEntry(exam1,null,null,accountId,classroomId,false, exams.length, subject.getUuid());
+				entry = Integer.valueOf(entry_);
 
-				totalExam1 =ReportUtil.findSubjectPerformance(accountId, exam1, examType);
-
-				AtomicInteger count1 = new  AtomicInteger();
-				exam1.parallelStream().forEach(ex -> {
-					if(ex.getScore() > 0) {
-						count1.getAndIncrement();
-					}
-
-				});
-
-				entry = (int)PeterMid.computeMax(count1.get(), 0, 0);
-				total = totalExam1.getTotal();
+				examList1 = CommonLogic.subjectAnalyzer(exam1, false); 
+				finalExamList = CommonLogic.combineExams(examList1, null, null, 1, subject.getUuid(), accountId, classroomId);
+				total = ReportUtil.findTotal(finalExamList);
 
 			}
 
@@ -1759,19 +1729,15 @@ public class ClassRankingList extends HttpServlet{
 			//Business logic here
 			SubjectAnalysis subjectAnalysis = new SubjectAnalysis();
 			subjectAnalysis.setSubjectId(subject.getUuid()); 
-
+			subjectAnalysis.setTotal((int)total); 
+			
+			double mean = 0;
 			if(entry > 0) {
-				subjectAnalysis.setTotal((int)total); 
-				subjectAnalysis.setAverage(Double.parseDouble(ReportUtil.df2.format(total/entry)));
-				subjectAnalysis.setEntry(entry);
-
+				mean = total / entry;
 			}
-
+			subjectAnalysis.setAverage(Double.parseDouble(ReportUtil.df2.format(mean))); 
+			subjectAnalysis.setEntry(entry);
 			performance1List.add(subjectAnalysis);
-
-			total = 0;
-			entry = 0;
-
 
 		}//end of subject loop
 

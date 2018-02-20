@@ -769,7 +769,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
-								ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
+								ReportUtil.getGradeMainForm234((int) (mean), accountId);
 
 
 						YearlyMean yearlyMean;
@@ -839,7 +839,7 @@ public class StudentReportCard extends HttpServlet{
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						}else {
-							studentScore = Math.round(avg) + " /84 (" + ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId) + ")";
+							studentScore =  (avg) + " /84 (" + ReportUtil.getGradeMainForm234((int) (avg), accountId) + ")";
 
 
 						}
@@ -849,7 +849,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
-								ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
+								ReportUtil.getGradeMainForm234((int) (mean), accountId);
 					}
 
 					PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));
@@ -1199,7 +1199,7 @@ public class StudentReportCard extends HttpServlet{
 								//mainScore = avgPoints;
 
 							}else {
-								//mainScore = (int)Math.round(mainPoint) + "";
+								//mainScore = (int) (mainPoint) + "";
 
 							}
 
@@ -1209,7 +1209,7 @@ public class StudentReportCard extends HttpServlet{
 
 						if(!grade7subjects && grade11subjects){
 							//
-							//mainScore = (int)Math.round(avg) + "";
+							//mainScore = (int) (avg) + "";
 						}
 
 						examTable.addCell(new Paragraph(meanStr + " , " + performance2.getTotalPoint() ,timesRomanNarmal6)); 
@@ -1245,7 +1245,7 @@ public class StudentReportCard extends HttpServlet{
 							if(!rankWithPoints && rankWithTotalMarks){
 
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
+								mainExam = ReportUtil.getGradeMainForm234((int) (mean), accountId);
 
 							}
 
@@ -1260,13 +1260,13 @@ public class StudentReportCard extends HttpServlet{
 
 							if(rankWithPoints && !rankWithTotalMarks){
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(avg), accountId);
+								mainExam = ReportUtil.getGradeMainForm234((int) (avg), accountId);
 
 							}
 
 							if(!rankWithPoints && rankWithTotalMarks){
 
-								mainExam = ReportUtil.getGradeMainForm234((int)Math.round(mean), accountId);
+								mainExam = ReportUtil.getGradeMainForm234((int) (mean), accountId);
 
 							}
 
