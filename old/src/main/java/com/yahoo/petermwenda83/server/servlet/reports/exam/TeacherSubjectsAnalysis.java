@@ -13,16 +13,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -45,7 +41,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.yahoo.petermwenda83.bean.account.Account;
-import com.yahoo.petermwenda83.bean.classroom.Stream;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
@@ -61,9 +56,6 @@ import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.reports.PdfUtil;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
-import com.yahoo.petermwenda83.server.session.SessionConstants;
-
-import scala.Array;
 
 /**
  * /school/subjectsAnalysis
@@ -76,20 +68,12 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 	private static PerfomanceDAO perfomanceDAO;
 	private static SubjectDAO subjectDAO;
-	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
-	private static ExamDAO examDAO;
-	private static YearlyMeanDAO yearlyMeanDAO;
-	private static ClassMeanDAO classMeanDAO;
 	private static ClassDAO classDAO;
-	private static PrimaryDAO primaryDAO;
 
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
-
-	private Font timesRomanMormal8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
-	private Font timesRomanBold8 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
 
 	private Font timesRomanNormal6 = new Font(Font.FontFamily.TIMES_ROMAN, 6, Font.NORMAL);
 	private Font timesRomanBold6 = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
@@ -115,14 +99,9 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		super.init(config);
 		perfomanceDAO = PerfomanceDAO.getInstance();
 		subjectDAO = SubjectDAO.getInstance();
-		studentDAO = StudentDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
-		examDAO = ExamDAO.getInstance();
-		yearlyMeanDAO = YearlyMeanDAO.getInstance();
-		classMeanDAO = ClassMeanDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
-		primaryDAO = PrimaryDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -144,14 +123,14 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		String accountId = StringUtils.trimToEmpty(request.getParameter("accountId"));
 		String classId = StringUtils.trimToEmpty(request.getParameter("classroom")); 
 		String[] examIds= request.getParameterValues("exam");
-		//exams = examIds;
+		exams = examIds;
 		String term = StringUtils.trimToEmpty(request.getParameter("term")); 
 		String year = StringUtils.trimToEmpty(request.getParameter("year")); 
 
-		accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
+		/*accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
 		term = "1";
 		year = "2018";
-		classId = "C143978A-E021-4015-BC67-5A00D6C910D1";
+		classId = "C143978A-E021-4015-BC67-5A00D6C910D1";*/
 
 		response.setContentType("application/pdf");
 
