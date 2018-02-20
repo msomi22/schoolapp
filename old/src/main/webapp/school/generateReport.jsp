@@ -370,10 +370,40 @@
 
 
 											</div>
+											
+											<!-- Types of report -->
+											
+											<br> <br>
+
+											<h4>Report Category:</h4>
+
+											<div class="row">
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="classAnalysis" class="form-control"
+														onclick= "reportCategory('class')" name="classAnalysis" value="true"> <label for="classAnalysis">
+														<h6>Class Analysis</h6>
+
+													</label>
+												</div>
+
+												<div class="col-md-5 col-md-offset-1">
+													<input type="radio" id="subjectAnalysis" name="subjectAnalysis" value="false"
+														onclick= "reportCategory('subject')" checked> <label for="subjectAnalysis">
+														<h6>Subject Analysis</h6>
+
+													</label>
+												</div>
+
+											</div>
 
 											<!-- Hide points or grades element -->
+											
+											<div id="classAnalysisCat">
 
 											<br> <br>
+											
+											
 
 											<h4>HIDE Points:</h4>
 
@@ -550,6 +580,8 @@
 												</div>
 
 											</div>
+											
+											</div>
 
 
 
@@ -568,9 +600,12 @@
 
 												<div class="col-md-2 col-md-offset-4">
 													<button type="submit" onclick="trace()" class="btn btn-primary">Generate</button>
+													
+													<br>
 												</div>
 												
 												
+												<br>
 												<br>
 												<br>
 
