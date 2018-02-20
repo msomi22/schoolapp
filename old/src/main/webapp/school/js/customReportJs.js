@@ -18,11 +18,11 @@ function examWarningModal() {
 $(document).ready(function() {
 	$('#accountId_tbid').val($('#accountId').val());
 
-	if (checkAccessAcademics()){
+	if (checkAccessAcademics()) {
 		fetchClasses();
-		//fetchExams();
+		// fetchExams();
 	}
-		
+
 })
 
 $("#exam")
@@ -108,7 +108,7 @@ function validateExamSelected() {
 			$('#saveMean').val('1');
 			$('#examType').val('others');
 			$('#paper123Id').val('');
-			
+
 			$('#no_subjects_show').show(1000);
 		} else {
 
@@ -180,6 +180,17 @@ function scopeSwapTBID(scopeType) {
 		$('#class_option').hide('2000');
 		$('#stream_option').show('2000');
 
+	}
+}
+
+function reportCategory(cat) {
+	if (cat == 'class') {
+		$('#classAnalysisCat').show('2000');
+		$('#generateReport').attr('action', 'studentReportCard');
+
+	} else {
+		$('#classAnalysisCat').hide('2000');
+		$('#generateReport').attr('action', 'subjectsAnalysis');
 	}
 }
 
