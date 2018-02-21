@@ -565,7 +565,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				stream_rankingTable.addCell(new Paragraph("" + entry1,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + total1,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
-				String grade = ReportUtil.getGradeMainForm234((int)mn, accountId);
+				String grade = CommonLogic.getGrade((int)mn, accountId);
 				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 				
 
@@ -594,7 +594,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				stream_rankingTable.addCell(new Paragraph("" + entry_1,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + total_1,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6)); 
-				String grade = ReportUtil.getGradeMainForm234((int)tmn, accountId);
+				String grade = CommonLogic.getGrade((int)tmn, accountId);
 				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 				
 				
@@ -746,7 +746,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				bygender_rankingTable.addCell(new Paragraph("" + entry,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + total,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
-				String grade = ReportUtil.getGradeMainForm234((int)mn, accountId);
+				String grade = CommonLogic.getGrade((int)mn, accountId);
 				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 				
 				
@@ -774,7 +774,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				bygender_rankingTable.addCell(new Paragraph("" + entry_1,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + total_1,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6));
-				String grade = ReportUtil.getGradeMainForm234((int)tmn, accountId);
+				String grade = CommonLogic.getGrade((int)tmn, accountId);
 				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 				
 			}

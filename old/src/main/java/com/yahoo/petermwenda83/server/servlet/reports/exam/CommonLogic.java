@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import com.yahoo.petermwenda83.bean.classroom.Stream;
+import com.yahoo.petermwenda83.bean.exam.GradingSystem;
 import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.student.Student;
 import com.yahoo.petermwenda83.bean.subject.Category;
@@ -666,7 +667,7 @@ public class CommonLogic {
 					}
 
 
-					String grade = ReportUtil.getGradeMainForm234((int)avg, accountId);
+					String grade = CommonLogic.getGrade((int)avg, accountId);
 					value = "" + grade;
 
 
@@ -1283,6 +1284,35 @@ public class CommonLogic {
 		}
 
 		return ""+count;
+	}
+	
+	/**
+	 * 
+	 * @param score
+	 * @param accountId
+	 * @return
+	 */
+	public static String getGrade(int score, String accountId) {
+
+		String grade = "";
+
+
+		List<GradingSystem> gradingSystemList = new ArrayList<>();
+
+		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
+
+		for(GradingSystem gradingSystem : gradingSystemList){
+
+			if(score == gradingSystem.getPoints()){
+
+				grade = gradingSystem.getDescription();
+
+			}
+
+		}
+
+		return grade;
 	}
 
 
