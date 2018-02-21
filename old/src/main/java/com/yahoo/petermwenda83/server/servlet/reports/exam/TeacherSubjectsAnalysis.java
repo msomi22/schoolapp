@@ -1114,7 +1114,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 						if(i == (streamlist.length) -1) {
 
 							rmean = mean / entry;
-							mgrade = ReportUtil.getGradeMainForm234((int)rmean, accountId);
+							mgrade = CommonLogic.getGrade((int)rmean, accountId);
 
 							subject_rankingTable.addCell(new Paragraph("" + sc,timesRomanNormal6));
 							subject_rankingTable.addCell(new Paragraph("" + streamlist[i] ,timesRomanNormal6)); 

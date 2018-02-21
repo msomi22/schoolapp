@@ -67,6 +67,7 @@ import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.finance.StudentBalance;
+import com.yahoo.petermwenda83.server.servlet.reports.exam.CommonLogic;
 import com.yahoo.petermwenda83.server.servlet.reports.test2.FormFour;
 import com.yahoo.petermwenda83.server.servlet.reports.test2.FormOne;
 import com.yahoo.petermwenda83.server.servlet.reports.test2.FormThree;
@@ -720,7 +721,7 @@ public class StudentReportCard extends HttpServlet{
 
 						}else {
 
-							studentScore = mainPoint + " /84 (" + ReportUtil.getGradeMainForm234(mainPoint, accountId) + ")";
+							studentScore = (int)mainPoint + " /84 (" + CommonLogic.getGrade((int) (mainPoint), accountId) + ")";
 
 						}
 
@@ -769,7 +770,7 @@ public class StudentReportCard extends HttpServlet{
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
-								ReportUtil.getGradeMainForm234((int) (mean), accountId);
+								CommonLogic.getGrade((int) (mean), accountId); 
 
 
 						YearlyMean yearlyMean;
@@ -839,7 +840,7 @@ public class StudentReportCard extends HttpServlet{
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
 
 						}else {
-							studentScore =  (avg) + " /84 (" + ReportUtil.getGradeMainForm234((int) (avg), accountId) + ")";
+							studentScore =  (int)avg + " /84 (" + ReportUtil.getGradeMainForm234((int) (avg), accountId) + ")";
 
 
 						}
@@ -1282,9 +1283,14 @@ public class StudentReportCard extends HttpServlet{
 
 					//MEAN SCORE 
 					else if(count == 2){ 
-						examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
-						examTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
+						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
+						/**
+						 * examTable.addCell(new Paragraph(" "+exa1Point ,timesRomanNarmal6));
+						   examTable.addCell(new Paragraph(" "+exa2Point ,timesRomanNarmal6));
+						   examTable.addCell(new Paragraph(" "+exa3Point ,timesRomanNarmal6));
+						 */
 						examTable.addCell(new Paragraph(" " ,timesRomanNarmal6));
 					}
 					//OUT OF

@@ -1068,13 +1068,8 @@ public class CommonLogic {
 				}
 
 			});
-			//logic here
-
-			//System.out.println(performanceBean1List);
-			//System.out.println("******************************************");
-
+			
 			value = analyzeGender(performanceBean1List, accountId, predicate, rowItemV.toString());
-
 
 
 		}
@@ -1295,23 +1290,21 @@ public class CommonLogic {
 	public static String getGrade(int score, String accountId) {
 
 		String grade = "";
-
+		
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
 		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-
-		for(GradingSystem gradingSystem : gradingSystemList){
-
-			if(score == gradingSystem.getPoints()){
-
-				grade = gradingSystem.getDescription();
-
-			}
-
-		}
-
+		
+		grade = gradingSystemList
+		.stream()
+		.filter(gs -> score >= gs.getLowerLimit())
+		.filter(gs -> score <= gs.getUpperLimit())
+		.map(GradingSystem::getDescription)
+		.findAny()
+		.orElse("");
+		
 		return grade;
 	}
 
