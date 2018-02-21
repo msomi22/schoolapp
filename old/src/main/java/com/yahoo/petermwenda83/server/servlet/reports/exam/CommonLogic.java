@@ -30,7 +30,6 @@ public class CommonLogic {
 	private static GradingSystemDAO gradingSystemDAO;
 	private static StreamDAO streamDAO;
 	private static StudentDAO studentDAO;
-	//private static ClassDAO classDAO;
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static StaffDAO staffDAO;
 
@@ -41,7 +40,6 @@ public class CommonLogic {
 		gradingSystemDAO = GradingSystemDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
 		studentDAO = StudentDAO.getInstance();
-		//classDAO = ClassDAO.getInstance();
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		staffDAO = StaffDAO.getInstance();
 	}
@@ -102,14 +100,14 @@ public class CommonLogic {
 		Category cat = categoryDAO.getCategoryById(accountId, catId);
 
 		double sum = 0, grandTotal= 0;
-		int grandPoints =0;
+		//int grandPoints =0;
 
 		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 			sum = (double)(paper1 + paper2 + paper3) / 2;  
 			grandTotal += sum;
 
-			int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			grandPoints += point;
+			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
+			//grandPoints += point;
 
 
 		}
@@ -118,8 +116,8 @@ public class CommonLogic {
 			sum =  (double) (paper1 + paper2) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + paper3;  
 			grandTotal += sum;
 
-			int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			grandPoints += point;
+			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
+			//grandPoints += point;
 
 
 		}
@@ -138,8 +136,8 @@ public class CommonLogic {
 				sum =  (double) (paper1 + paper2) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT +paper3;  
 				grandTotal += sum;
 
-				int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-				grandPoints += point;
+				//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
+				//grandPoints += point;
 
 
 
@@ -148,8 +146,8 @@ public class CommonLogic {
 				sum = (double)(paper1 + paper2) / 2;
 				grandTotal += sum;
 
-				int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-				grandPoints += point; 
+				//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
+				//grandPoints += point; 
 
 			}
 
@@ -162,8 +160,8 @@ public class CommonLogic {
 			sum = (double)(paper1 + paper2) / 2;
 			grandTotal += sum;
 
-			int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			grandPoints += point; 
+			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
+			//grandPoints += point; 
 
 		}
 
@@ -771,6 +769,7 @@ public class CommonLogic {
 							performanceBean1.setStreamId(student.getCurrentStream()); 
 							performanceBean1.setClassRoomId(classroomId);
 							performanceBean1.setScore(score); 
+							performanceBean1.setCategory(rowItem); 
 
 							performanceBean1List.add(performanceBean1);
 
@@ -814,7 +813,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"A-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "A-");
@@ -823,7 +822,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "B+");
@@ -832,7 +831,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "B");
@@ -841,7 +840,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "B-");
@@ -850,7 +849,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "C+");
@@ -859,7 +858,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "C");
@@ -868,7 +867,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "C-");
@@ -877,7 +876,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "D+");
@@ -886,7 +885,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "D");
@@ -895,7 +894,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "D-");
@@ -904,7 +903,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"E":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeResult(performanceBean1List, accountId, "E");
@@ -913,6 +912,52 @@ public class CommonLogic {
 				//total
 			}
 			return value;
+
+		case"Entry":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				
+				String[] grades = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
+				int tcount = 0;
+				for(int i=0;i<grades.length;i++) {
+					tcount += Integer.valueOf(computeResult(performanceBean1List, accountId, grades[i]));
+				}
+				
+				value = tcount+"";
+
+			}else {
+				
+				value = performanceBean1List.size()+"";
+
+			}
+			return value;
+
+		case"Total":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				int sum = performanceBean1List.stream().filter(performance -> performance.getScore() > 0).mapToInt(PerformanceBean1::getScore).sum();
+				value = sum+"";
+			}else {
+				//total
+			}
+			return value;
+
+		case"Mean":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "";
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"MG":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "";
+
+			}else {
+				//total
+			}
+			return value;
+
 
 		default:
 			return value;
@@ -957,8 +1002,8 @@ public class CommonLogic {
 	 */
 	public static String genderAnalyzer(Map<String, List<PerformanceBean1>> finalExamMap, String rowItem, String classroomId,
 			String accountId, String predicate) {
-		
-		
+
+
 		List<Student> studentsList = new ArrayList<>();
 
 		List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
@@ -971,66 +1016,66 @@ public class CommonLogic {
 				studentsList.addAll(studentListStream); 
 
 		}
-		
+
 		//System.out.println("size : " + studentsList.size());
 
 		String value = "";
-		
+
 		StringBuilder rowItemV = new StringBuilder();
 		// as long as the column is not last (the total column, this means as long as we have a stream name) 
 		if(!StringUtils.equals(rowItem, "Total")) {
 			// as long as the column item ( a stream name , is found in the database)  
-			
+
 			if(StringUtils.equals(rowItem, "Male")) {
 				rowItemV.append("M");
 			}if(StringUtils.equals(rowItem, "Female")) {
 				rowItemV.append("F");
 			}
-			
+
 			//System.out.println("rowItemV : " + rowItemV.toString()); 
-			
-				List<PerformanceBean1> performanceBean1List = new ArrayList<>();
 
-				subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
+			List<PerformanceBean1> performanceBean1List = new ArrayList<>();
 
-					if(finalExamMap.get(subject.getUuid()) != null) {
+			subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
 
-						studentsList
-						.stream() 
-						.filter(stu -> StringUtils.equalsIgnoreCase(stu.getGender(), rowItemV.toString().toUpperCase()))
-						.filter(stu -> StringUtils.equalsIgnoreCase(stu.getIsActive(),"1")) 
-						.forEach(student ->{ 
+				if(finalExamMap.get(subject.getUuid()) != null) {
 
-							int score = finalExamMap.get(subject.getUuid())
-									.stream()
-									.filter(perfor -> StringUtils.equals(perfor.getStudentId(), student.getUuid()))
-									.map(PerformanceBean1::getScore)
-									.findAny()
-									.orElse(0);
+					studentsList
+					.stream() 
+					.filter(stu -> StringUtils.equalsIgnoreCase(stu.getGender(), rowItemV.toString().toUpperCase()))
+					.filter(stu -> StringUtils.equalsIgnoreCase(stu.getIsActive(),"1")) 
+					.forEach(student ->{ 
 
-							PerformanceBean1 performanceBean1 = new PerformanceBean1();
-							performanceBean1.setStudentId(student.getUuid());
-							performanceBean1.setSubjectId(subject.getUuid());
-							performanceBean1.setStreamId(student.getCurrentStream()); 
-							performanceBean1.setClassRoomId(classroomId);
-							performanceBean1.setScore(score); 
+						int score = finalExamMap.get(subject.getUuid())
+								.stream()
+								.filter(perfor -> StringUtils.equals(perfor.getStudentId(), student.getUuid()))
+								.map(PerformanceBean1::getScore)
+								.findAny()
+								.orElse(0);
 
-							performanceBean1List.add(performanceBean1);
+						PerformanceBean1 performanceBean1 = new PerformanceBean1();
+						performanceBean1.setStudentId(student.getUuid());
+						performanceBean1.setSubjectId(subject.getUuid());
+						performanceBean1.setStreamId(student.getCurrentStream()); 
+						performanceBean1.setClassRoomId(classroomId);
+						performanceBean1.setScore(score); 
 
-						});
+						performanceBean1List.add(performanceBean1);
 
-					}
+					});
 
-				});
-				//logic here
+				}
 
-				//System.out.println(performanceBean1List);
-				//System.out.println("******************************************");
+			});
+			//logic here
 
-				value = analyzeGender(performanceBean1List, accountId, predicate, rowItemV.toString());
+			//System.out.println(performanceBean1List);
+			//System.out.println("******************************************");
+
+			value = analyzeGender(performanceBean1List, accountId, predicate, rowItemV.toString());
 
 
-		
+
 		}
 
 		return value;
@@ -1062,7 +1107,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"A-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "A-");
@@ -1071,7 +1116,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "B+");
@@ -1080,7 +1125,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "B");
@@ -1089,7 +1134,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"B-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "B-");
@@ -1098,7 +1143,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "C+");
@@ -1107,7 +1152,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "C");
@@ -1116,7 +1161,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"C-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "C-");
@@ -1125,7 +1170,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D+":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "D+");
@@ -1134,7 +1179,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "D");
@@ -1143,7 +1188,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"D-":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "D-");
@@ -1152,7 +1197,7 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
+
 		case"E":
 			if(!StringUtils.equals(rowItem, "Total")) {
 				value = "" + computeGender(performanceBean1List, accountId, "E");
@@ -1161,8 +1206,52 @@ public class CommonLogic {
 				//total
 			}
 			return value;
-			
-			
+
+		case"Entry":
+			if(!StringUtils.equals(rowItem, "Total")) {
+
+				String[] grades = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
+				int tcount = 0;
+				for(int i=0;i<grades.length;i++) {
+					tcount += Integer.valueOf(computeResult(performanceBean1List, accountId, grades[i]));
+				}
+				
+				value = tcount+"";
+				
+			}else {
+				value = performanceBean1List.size()+"";
+			}
+			return value;
+
+		case"Total":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				int sum = performanceBean1List.stream().filter(performance -> performance.getScore() > 0).mapToInt(PerformanceBean1::getScore).sum();
+				value = sum+"";
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"Mean":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "";
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"MG":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "";
+
+			}else {
+				//total
+			}
+			return value;
+
+
 
 		default:
 			return value;
@@ -1172,13 +1261,13 @@ public class CommonLogic {
 	}
 
 
-/**
- * 
- * @param performanceBean1List
- * @param accountId
- * @param string
- * @return
- */
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param accountId
+	 * @param string
+	 * @return
+	 */
 	private static String computeGender(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
 		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
 

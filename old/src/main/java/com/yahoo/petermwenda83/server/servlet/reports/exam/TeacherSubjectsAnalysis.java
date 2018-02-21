@@ -45,20 +45,14 @@ import com.yahoo.petermwenda83.bean.exam.Perfomance;
 import com.yahoo.petermwenda83.bean.subject.Subject;
 import com.yahoo.petermwenda83.persistence.classroom.ClassDAO;
 import com.yahoo.petermwenda83.persistence.classroom.StreamDAO;
-import com.yahoo.petermwenda83.persistence.exam.ClassMeanDAO;
-import com.yahoo.petermwenda83.persistence.exam.ExamDAO;
 import com.yahoo.petermwenda83.persistence.exam.PerfomanceDAO;
-import com.yahoo.petermwenda83.persistence.exam.YearlyMeanDAO;
 import com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO;
-import com.yahoo.petermwenda83.persistence.student.PrimaryDAO;
-import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.persistence.subject.SubjectDAO;
 import com.yahoo.petermwenda83.server.servlet.reports.PdfUtil;
 import com.yahoo.petermwenda83.server.servlet.reports.ReportUtil;
 import com.yahoo.petermwenda83.server.servlet.util.Timeit;
 
 /**
- * /school/subjectsAnalysis
  * 
  * @author peter
  *
@@ -237,7 +231,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		String stringExams = ReportUtil.getExamName(accountId, exams,2);
 
 		Phrase reportTitle = new Phrase();
-		reportTitle.add(new Chunk(classname + " SUBJECT ANALYSIS FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
+		reportTitle.add(new Chunk(classname + " PERFORMANCE ANALYSIS FOR  TERM : " + term + ", YEAR : " + year,  timesRomanBold10));
 		reportTitle.add(new Chunk(" - Exams: " + stringExams ,  timesRomanNormal10));
 		document.add(reportTitle);
 		document.add(new Paragraph("\n"));
@@ -245,7 +239,6 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 		PdfPTable stream_rankingTable = new PdfPTable(21);   
 		stream_rankingTable.setWidthPercentage(100); 
-		//#,Stream,A,A-,B+,B,B-,C+,C,C-,D+,D,D-,E,X,Y,Z,Entry,Total,Mean,MG.
 		stream_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,10,10}); 
 		stream_rankingTable.setHeaderRows(1); 
 		stream_rankingTable.isSkipFirstHeader();
@@ -343,8 +336,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		PdfPCell s_r_mgCell = new PdfPCell(new Paragraph("MG",timesRomanBold6));
 		s_r_mgCell.setBackgroundColor(baseColor);
 		s_r_mgCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-		//#,Stream,A,A-,B+,B,B-,C+,C,C-,D+,D,D-,E,X,Y,Z,Entry,Total,Mean,MG.
-
+		
 
 		stream_rankingTable.addCell(s_r_countCell);
 		stream_rankingTable.addCell(s_r_streamCell);
@@ -368,8 +360,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		stream_rankingTable.addCell(s_r_meanCell);
 		stream_rankingTable.addCell(s_r_mgCell);
 
-		//TODO
-
+		
 		List<PerformanceBean1> finalExamList = new ArrayList<>();
 		Map<String,List<PerformanceBean1>> finalExamMap = new HashMap<>();
 
@@ -453,16 +444,13 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			}
 
 			if(!finalExamList.isEmpty()) {
-				//System.out.println("size : *" + finalExamList.size()); 
 				finalExamMap.put(subject.getUuid(), finalExamList); 
 			}
 
 
 		}
 
-
-		//logic TODO
-		//CommonLogic.testFinalList(finalExamList, accountId); 
+		
 		List<String> listOfStreams = new ArrayList<>(); 
 		streamDAO.getStreamList(accountId, classroomId).stream().forEach(stream -> {
 			listOfStreams.add(stream.getDescription());
@@ -471,11 +459,13 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		String[] streamlist = listOfStreams.toArray(new String[listOfStreams.size()]);
 		streamlist = append(streamlist, "Total");
 
+		int ca_=0,cam_=0,cbp_=0,cb_=0,cbm_=0,ccp_=0,cc_=0,ccm_=0,cdp_=0,cd_=0,cdm_=0, ce_=0;
+		int entry_1=0,total_1=0;
 		int c1 = 1;
 		for(int i=0;i<streamlist.length;i++) {
 
-			//TODO
 			String ca="",cam="",cbp="",cb="",cbm="",ccp="",cc="",ccm="",cdp="",cd="",cdm="", ce="";
+			String entry1="",total1="";
 			ca = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "A");
 			cam = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "A-");
 			cbp = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "B+");
@@ -488,8 +478,71 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			cd = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D");
 			cdm = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D-");
 			ce = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "E");
-
-
+			
+			entry1 = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "Entry");
+			total1 = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "Total");
+			
+			if(ca.length() > 0) {
+				ca_ += Integer.valueOf(ca);
+			}
+			
+			if(cam.length() > 0) {
+				cam_ += Integer.valueOf(cam);
+			}
+			
+			if(cbp.length() > 0) {
+				cbp_ += Integer.valueOf(cbp);
+			}
+			
+			if(cb.length() > 0) {
+				cb_ += Integer.valueOf(cb);
+			}
+			
+			if(cbm.length() > 0) {
+				cbm_ += Integer.valueOf(cbm);
+			}
+			
+			if(ccp.length() > 0) {
+				ccp_ += Integer.valueOf(ccp);
+			}
+			
+			if(cc.length() > 0) {
+				cc_ += Integer.valueOf(cc);
+			}
+			
+			if(ccm.length() > 0) {
+				ccm_ += Integer.valueOf(ccm);
+			}
+			
+			if(cdp.length() > 0) {
+				cdp_ += Integer.valueOf(cdp);
+			}
+			
+			if(cd.length() > 0) {
+				cd_ += Integer.valueOf(cd);
+			}
+			
+			if(cdm.length() > 0) {
+				cdm_ += Integer.valueOf(cdm);
+			}
+			
+			if(ce.length() > 0) {
+				ce_ += Integer.valueOf(ce);
+			}
+			
+			
+			if(entry1.length() > 0) {
+				entry_1 += Integer.valueOf(entry1);
+			}
+			if(total1.length() > 0) {
+				total_1 += Integer.valueOf(total1);
+			}
+			
+			double mn =0,tmn =0;
+			if(total1.length() > 0 && entry1.length() > 0) {
+				 mn = Double.valueOf(total1) / Double.valueOf(entry1);
+			}
+			
 			if(i < (streamlist.length) -1) {
 
 				stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
@@ -506,44 +559,45 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				stream_rankingTable.addCell(new Paragraph("" + cd,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + cdm,timesRomanNormal6));
 				stream_rankingTable.addCell(new Paragraph("" + ce,timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-
-
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + entry1,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + total1,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
+				String grade = ReportUtil.getGradeMainForm234((int)mn, accountId);
+				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
+				
 
 			}else if(i == (streamlist.length) -1) {
+				
+				tmn = (double)total_1 / (double)entry_1;
 
 
 				stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
 				stream_rankingTable.addCell(new Paragraph("" + streamlist[i],timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				stream_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-
-
-
-
+				stream_rankingTable.addCell(new Paragraph("" + ca_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cam_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cbp_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cb_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cbm_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" +  ccp_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cc_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ccm_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cdp_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cd_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + cdm_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ce_,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + entry_1,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + total_1,timesRomanNormal6));
+				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6)); 
+				String grade = ReportUtil.getGradeMainForm234((int)tmn, accountId);
+				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
+				
+				
 
 			}
 
@@ -581,12 +635,16 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 
 		String[] headers = {"Male","Female","Total"};
+		
+		ca_=0;cam_=0;cbp_=0;cb_=0;cbm_=0;ccp_=0;cc_=0;ccm_=0;cdp_=0;cd_=0;cdm_=0; ce_=0;
+		
+		entry_1=0;total_1=0; 
 
 		int c2 = 1;
 		for(int i=0;i<3;i++) {
 			
-			//TODO
 			String ca="",cam="",cbp="",cb="",cbm="",ccp="",cc="",ccm="",cdp="",cd="",cdm="", ce="";
+			String entry="",total="";
 			ca = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "A");
 			cam = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "A-");
 			cbp = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "B+");
@@ -599,6 +657,72 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			cd = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D");
 			cdm = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D-");
 			ce = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "E");
+			
+			entry = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "Entry");
+			total = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "Total");
+			
+			if(ca.length() > 0) {
+				ca_ += Integer.valueOf(ca);
+			}
+			
+			if(cam.length() > 0) {
+				cam_ += Integer.valueOf(cam);
+			}
+			
+			if(cbp.length() > 0) {
+				cbp_ += Integer.valueOf(cbp);
+			}
+			
+			if(cb.length() > 0) {
+				cb_ += Integer.valueOf(cb);
+			}
+			
+			if(cbm.length() > 0) {
+				cbm_ += Integer.valueOf(cbm);
+			}
+			
+			if(ccp.length() > 0) {
+				ccp_ += Integer.valueOf(ccp);
+			}
+			
+			if(cc.length() > 0) {
+				cc_ += Integer.valueOf(cc);
+			}
+			
+			if(ccm.length() > 0) {
+				ccm_ += Integer.valueOf(ccm);
+			}
+			
+			if(cdp.length() > 0) {
+				cdp_ += Integer.valueOf(cdp);
+			}
+			
+			if(cd.length() > 0) {
+				cd_ += Integer.valueOf(cd);
+			}
+			
+			if(cdm.length() > 0) {
+				cdm_ += Integer.valueOf(cdm);
+			}
+			
+			if(ce.length() > 0) {
+				ce_ += Integer.valueOf(ce);
+			}
+			
+		
+			if(entry.length() > 0) {
+				entry_1 += Integer.valueOf(entry);
+			}
+			if(total.length() > 0) {
+				total_1 += Integer.valueOf(total);
+			}
+			
+			
+			double mn =0,tmn =0;
+			if(total.length() > 0 && entry.length() > 0) {
+				mn = Double.valueOf(total) / Double.valueOf(entry);
+			}
+			
 			
 			if(i < (streamlist.length) -1) {
 				
@@ -616,37 +740,42 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				bygender_rankingTable.addCell(new Paragraph("" + cd,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + cdm,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + ce,timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + entry,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + total,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
+				String grade = ReportUtil.getGradeMainForm234((int)mn, accountId);
+				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
+				
 				
 			}else if(i == (streamlist.length) -1) {
 				
+				tmn = (double)total_1 / (double)entry_1;
+				
 				bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
-				bygender_rankingTable.addCell(new Paragraph("*",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ca_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cam_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cbp_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cb_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cbm_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ccp_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cc_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ccm_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cdp_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cd_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + cdm_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ce_,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + entry_1,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + total_1,timesRomanNormal6));
+				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6));
+				String grade = ReportUtil.getGradeMainForm234((int)tmn, accountId);
+				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 				
 			}
 
@@ -656,13 +785,13 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		}
 
 
-		document.add(new Paragraph("Subject-Stream Analysis", timesRomanBold10));  
+		document.add(new Paragraph("Stream-Performance Analysis", timesRomanBold10));  
 		document.add(new Paragraph("\n")); 
 
 		document.add(stream_rankingTable); 
 		document.add(new Paragraph("\n")); 
 
-		document.add(new Paragraph("Subject-Gender Analysis", timesRomanBold10));  
+		document.add(new Paragraph("Gender-Performance Analysis", timesRomanBold10));  
 		document.add(new Paragraph("\n")); 
 
 		document.add(bygender_rankingTable);
@@ -765,7 +894,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			String exam2 = "";
 			String exam3 = "";
 
-			/*List<PerformanceBean1>*/ finalExamList = new ArrayList<>();
+			finalExamList = new ArrayList<>();
 
 			if(exams.length == 1) {
 				exam1 = exams[0];
@@ -869,16 +998,6 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				subject_rankingTable.addCell(sub_r_subtCell);
 
 
-
-				//TODO
-				//CommonLogic.testFinalList(finalExamList, accountId); 
-				/*List<String> listOfStreams = new ArrayList<>(); 
-				streamDAO.getStreamList(accountId, classroomId).stream().forEach(stream -> {
-					listOfStreams.add(stream.getDescription());
-				});
-
-				String[] streamlist = listOfStreams.toArray(new String[listOfStreams.size()]);
-				streamlist = append(streamlist, "Total");*/
 				int tga = 0,tgam = 0,tgbp = 0,tgb = 0,tgbm = 0,tgcp = 0,tgc = 0,tgcm = 0,tgdp = 0,tgd = 0,tgdm = 0,tge = 0; 
 				int entry = 0;
 				double rmean = 0, mean = 0;

@@ -14,6 +14,7 @@ public class PerformanceBean1 {
 	private String streamId;
 	private String classRoomId;
 	private int score;
+	private String category;
 
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class PerformanceBean1 {
         streamId ="";
         classRoomId = "";
         score = 0;
+        category = "";
 	}
 
 	/**
@@ -97,12 +99,26 @@ public class PerformanceBean1 {
 	}
 
 	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "PerformanceBean1 [studentId=" + studentId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", classRoomId=" + classRoomId + ", score=" + score + "]";
+				+ ", classRoomId=" + classRoomId + ", score=" + score + ", category=" + category + "]";
 	}
 
 
