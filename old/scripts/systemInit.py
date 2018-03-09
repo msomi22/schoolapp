@@ -30,8 +30,8 @@ def newStaff():
 
 
 
-#print 'response : ' , newAccount()
-print newStaff() 
+print 'response : ' , newAccount()
+#print newStaff() 
 
 
 

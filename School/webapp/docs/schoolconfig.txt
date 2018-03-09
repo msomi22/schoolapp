@@ -69,9 +69,9 @@ export JRE_HOME
 export PATH
 
 
-sudo update-alternatives --install "/usr/bin/java" "java" "/opt/Programs/jdks/jdk1.8.0_40/jre/bin/java" 1
+sudo update-alternatives --install "/usr/bin/java" "java" "/opt/Programs/jdks/jjdk1.8.0_131/jre/bin/java" 1
 ##########UBUNTU
-sudo update-alternatives --set java /opt/Programs/jdks/jdk1.8.0_40/jre/bin/java
+sudo update-alternatives --set java /opt/Programs/jdks/jdk1.8.0_131/jre/bin/java
 
 ######## RUN
       .  /etc/profile

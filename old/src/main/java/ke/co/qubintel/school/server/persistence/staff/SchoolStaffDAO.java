@@ -1,0 +1,101 @@
+/**
+ * 
+ */
+package ke.co.qubintel.school.server.persistence.staff;
+
+import java.util.List;
+
+import ke.co.qubintel.school.server.bean.staff.Staff;
+
+/**
+ * @author peter
+ *
+ */
+public interface SchoolStaffDAO {
+	/**
+	 * 
+	 * @param accountId
+	 * @param Uuid
+	 * @return
+	 */
+	public Staff getStaff(String accountId, String uuid);
+	
+	public Staff getStaff(String accountId, String uuid, String isActive);
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param staffNo
+	 * @return
+	 */
+	public Staff getStaffByStaffNo(String accountId, String staffNo);
+	/**
+	 * 
+	 * @param accountId
+	 * @param username
+	 * @return
+	 */
+	public Staff getStaffByUsername(String accountId, String username);
+	/**
+	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public Staff getStaffByKeys(String accountId, String key);
+	/**
+	 * 
+	 * @param accountId
+	 * @param acessLevelId
+	 * @return
+	 */
+	public Staff getStaffByAccessLevel(String accountId, String acessLevelId);
+	 /**
+	  * 
+	  * @param staff
+	  * @return
+	  */
+	public boolean putStaff(Staff staff);
+	 /**
+	  * 
+	  * @param staff
+	  * @return
+	  */
+	public boolean updateStaff(Staff staff);
+	 /**
+	  * 
+	  * @param accountId
+	  * @param Uuid
+	  * @return
+	  */
+	public boolean deleteStaff(String accountId, String uuid);
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public List<Staff> getStaff(String accountId); 
+	/**
+	 * 
+	 * @param accountId
+	 * @param acessLevelId
+	 * @return
+	 */
+	public int getStaffAccessLevel(String accountId, String acessLevelId);
+	/**
+	 * 
+	 * @param accountId
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
+	 */
+	public List<Staff> getStaff(String accountId, int startIndex , int endIndex); 
+	/**
+	 * 
+	 * @param accountId
+	 * @param key
+	 * @return
+	 */
+	public List<Staff> findDuplicate(String accountId, String key); 
+
+}
