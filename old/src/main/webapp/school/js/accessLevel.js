@@ -16,7 +16,7 @@ function fetchAccessLevelsFilter() {
 
 	var curentAcessLevel = $('#accessLevel').val();
 
-	if (curentAcessLevel === 'C3915245-00EE-4EF4-9898-ACE59683DD60') {
+	/*if (curentAcessLevel === 'C3915245-00EE-4EF4-9898-ACE59683DD60') {
 
 		console.log('Principal logged in')
 		$('#addNewStudentMenu').show(2000);
@@ -82,7 +82,7 @@ function fetchAccessLevelsFilter() {
 		$('#academicsMenu').remove();
 		$('#financeMenu').remove();
 
-	}
+	}*/
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
