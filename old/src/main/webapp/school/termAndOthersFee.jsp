@@ -1,13 +1,8 @@
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-
-
-
-
-
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
 <!-- Config -->
-<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
+<%@page import="ke.co.qubintel.school.server.persistence.exam.SysConfigDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.exam.SysConfig"%>
 
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>

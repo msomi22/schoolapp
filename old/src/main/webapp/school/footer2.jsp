@@ -1,17 +1,3 @@
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-
-<%@page import="net.sf.ehcache.Element"%>
-<%@page import="net.sf.ehcache.Cache"%>
-<%@page import="net.sf.ehcache.CacheManager"%>
-
-<%@ page import="java.util.Calendar"%>
-
-
-
-
 
 <!-- footer content -->
 <footer class="mono whiteme">

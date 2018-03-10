@@ -1,26 +1,8 @@
 
-<%@page import="com.yahoo.petermwenda83.pagination.student.StudentPaginator"%>
-<%@page import="com.yahoo.petermwenda83.pagination.student.StudentPage"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.student.PrimaryDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.student.StudentPrimary"%>
-
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.persistence.student.StudentDAO"%>
 
 
- 
 <%@page import="java.util.*"%>
 
 <%@page import="java.net.URLEncoder"%>
@@ -55,30 +37,11 @@
     response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
     //return;
     
-    	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+   String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
 
-
-    CacheManager mgr = CacheManager.getInstance();
-    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
-    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
-    
-    Account school = new Account();
-    Element element;
-   
-
-    if ((element = accountsCache.get(username)) != null) {
-        school = (Account) element.getObjectValue();
-    }
-
-   
-     String schoolname = school.getName();
      
-     StudentDAO studentDAO = StudentDAO.getInstance();
-     SysConfigDAO sysConfigDAO = SysConfigDAO.getInstance();
-     SysConfig sysConfig = new SysConfig();
-     sysConfig = sysConfigDAO.getSysConfig(accountId);
-     
-    
+   StudentDAO studentDAO = StudentDAO.getInstance();
+   
 
 
  //date format

@@ -1,20 +1,4 @@
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
-
-
-
-
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.Stream"%>
-
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
-
-
-
-<!-- Config -->
-<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
-
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

@@ -1,10 +1,7 @@
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
-<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
+<%@page import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
 
-
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
-
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
 <%@ page import="java.util.Calendar"%>
 

@@ -1,20 +1,19 @@
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.StreamDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.Stream"%>
+<%@page import="ke.co.qubintel.school.server.persistence.classroom.StreamDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.classroom.Stream"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.classroom.ClassDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.classroom.ClassRoom"%>
+<%@page import="ke.co.qubintel.school.server.persistence.classroom.ClassDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.classroom.ClassRoom"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.exam.ExamDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.Exam"%>
+<%@page import="ke.co.qubintel.school.server.persistence.exam.ExamDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.exam.Exam"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
-
+<%@page import="ke.co.qubintel.school.server.persistence.student.StudentDAO"%>
 
 <!-- Config -->
-<%@page import="com.yahoo.petermwenda83.persistence.exam.SysConfigDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.exam.SysConfig"%>
+<%@page import="ke.co.qubintel.school.server.persistence.exam.SysConfigDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.exam.SysConfig"%>
 
 <%@page import="java.util.*"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
