@@ -1,3 +1,23 @@
+/**
+
+    CREATE USER quartz_user WITH PASSWORD 'quartz_password';
+    ALTER ROLE quartz_user WITH CREATEDB;
+    CREATE DATABASE  quartz_db;
+    GRANT ALL PRIVILEGES ON DATABASE  quartz_db to quartz_user;
+    ALTER DATABASE quartz_db OWNER to quartz_user;
+
+
+
+*/
+
+
+\c postgres
+
+DROP DATABASE IF EXISTS quartz_db; -- To drop a database you can't be logged into it. Drops if it exists.
+CREATE DATABASE quartz_db;
+
+-- Connect with the database on the username
+\c quartz_db quartz_user
 
 
 CREATE TABLE qrtz_blob_triggers (
