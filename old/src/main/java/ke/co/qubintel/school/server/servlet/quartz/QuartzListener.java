@@ -26,7 +26,7 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
-import ke.co.qubintel.school.server.quartz.QuartzJob;
+import ke.co.qubintel.school.server.quartz.DbOperationsJob;
 import ke.co.qubintel.school.server.quartz.SchoolQuartzJob;
 
 public class QuartzListener extends HttpServlet implements ServletContextListener {
@@ -39,7 +39,7 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
     /**
      * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
      */
-    public void contextInitialized(ServletContextEvent servletContext) {
+    public void contextInitialized(ServletContextEvent servletContext) {/*
               
     	  try {
     		  
@@ -84,7 +84,7 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
              catch (SchedulerException e) {
                e.printStackTrace();
             }
-    }
+    */}
 
     /**
      * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)

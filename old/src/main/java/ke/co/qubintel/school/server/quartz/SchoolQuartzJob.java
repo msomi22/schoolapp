@@ -12,9 +12,6 @@
  */
 package ke.co.qubintel.school.server.quartz;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -65,8 +62,7 @@ public class SchoolQuartzJob implements Job{
 				
 				staffDAO.getStaff(sch.getUuid()).parallelStream().forEach(staff -> {
 					staff.setIsActive(SYS_COSTANTS.STATUS_INACTIVE); 
-					staff.setPassword(SecurityUtil.getMD5Hash("12345-password"));   
-					staff.setAcessLevelId(SYS_COSTANTS.SYS_ACCESS_LEVEL_ID);  
+					staff.setPassword(SecurityUtil.getMD5Hash("12345-password"));
 					staffDAO.updateStaff(staff);
 				});
 				

@@ -46,7 +46,7 @@ import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.servlet.finance.FeeConstants;
 
 
-public class QuartzJob implements Job{
+public class DbOperationsJob implements Job{
 
 	private static StudentDAO studentDAO;
 	private static AccountDAO accountDAO;
@@ -75,7 +75,7 @@ public class QuartzJob implements Job{
 		perfomanceDAO = PerfomanceDAO.getInstance();
 	}
 
-	public QuartzJob() {
+	public DbOperationsJob() {
 		super();
 
 	}
