@@ -126,8 +126,8 @@ CREATE TABLE Subject (
     uuid text UNIQUE NOT NULL,
     accountId text REFERENCES Account(uuid),
     categoryId text REFERENCES Category(uuid),
-    code text UNIQUE ,
-    numericCode text UNIQUE ,
+    code text,
+    numericCode text,
     description text
 );
 -- import data from the CSV file for the status table
