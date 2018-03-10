@@ -29,6 +29,7 @@ import ke.co.qubintel.school.server.api.rest.jwt.ApiCredentials;
 import ke.co.qubintel.school.server.api.rest.jwt.JWT;
 import ke.co.qubintel.school.server.bean.staff.Staff;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.servlet.util.SecurityUtil;
 import ke.co.qubintel.school.server.session.SessionConstants;
@@ -43,6 +44,7 @@ public class SchoolLogin extends HttpServlet {
 	private static final long serialVersionUID = -5120422875987844562L;
 	private static StaffDAO staffDAO;
 	private static AccountDAO accountDAO;
+	private static AcessLevelDAO acessLevelDAO;
 	private Logger logger;
 
 	/**
@@ -56,6 +58,7 @@ public class SchoolLogin extends HttpServlet {
 
 		staffDAO = StaffDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
+		acessLevelDAO = AcessLevelDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 
@@ -70,6 +73,7 @@ public class SchoolLogin extends HttpServlet {
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);// current session
+		String message = "";
 
 		if (session != null) {
 			session.invalidate();
@@ -89,6 +93,12 @@ public class SchoolLogin extends HttpServlet {
 				staffUsername) == null) {
 
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
+			response.sendRedirect("index.jsp");
+
+		}else if (!StringUtils.contains(accountDAO.getAccount(schoolUsername, "1").getName(), "Mangu")) { 
+
+			message = "Sorry! This Software is custom made for \"Mangu Boys High School\""; 
+			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
 
 		} else {
@@ -118,20 +128,19 @@ public class SchoolLogin extends HttpServlet {
 				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
 						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 
-
-				if (StringUtils.equals(staff.getAcessLevelId(), "C3915245-00EE-4EF4-9898-ACE59683DD60")
-						| StringUtils.equals(staff.getAcessLevelId(), "615F04C1-00BF-499C-AC7A-B46B69243AAA")
-						| StringUtils.equals(staff.getAcessLevelId(), "BDF7F33D-1936-43F3-B14B-8FC3EA3A1265")
-						| StringUtils.equals(staff.getAcessLevelId(), "64553348-3229-4869-A13D-CADFC1D3AF46"))
+				if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "100").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "200").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "500").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "600").getUuid()))
 
 					response.sendRedirect("school/studentIndex.jsp");
 
-				else if (StringUtils.equals(staff.getAcessLevelId(), "1CC7F06E-9938-4850-81FB-9CC249C7CFA2")
-						| StringUtils.equals(staff.getAcessLevelId(), "0DE968C9-7309-C481-58F7-AB6CDB1011EH")
+				else if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "400").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "300").getUuid())
 						)
 					response.sendRedirect("school/generateReport.jsp");
 				
-				else if (StringUtils.equals(staff.getAcessLevelId(), "0DE968C9-7309-C481-58F7-AB6CDB1011EF"))
+				else if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "700").getUuid()))
 					response.sendRedirect("school/fee.jsp");
 
 				logger.info("success");
