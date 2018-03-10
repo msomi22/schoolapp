@@ -387,7 +387,7 @@ public class CommonLogic {
 			String subjectId, String item, String rowItem) {
 
 		String value = "";
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		String generalId = ReportUtil.getGeneralId(accountId);
 		long count = 0;
 		double sum = 0;
 		double avg = 0;
@@ -987,7 +987,7 @@ public class CommonLogic {
 	 */
 	private static String computeResult(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
 
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		String generalId = ReportUtil.getGeneralId(accountId);
 
 		long count = 0;
 		if(gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate) != null) {
@@ -1277,7 +1277,8 @@ public class CommonLogic {
 	 * @return
 	 */
 	private static String computeGender(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		
+		String generalId = ReportUtil.getGeneralId(accountId);
 
 		long count = 0;
 		if(gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate) != null) {
@@ -1306,7 +1307,7 @@ public class CommonLogic {
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		String generalId = ReportUtil.getGeneralId(accountId);
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
 		
 		grade = gradingSystemList

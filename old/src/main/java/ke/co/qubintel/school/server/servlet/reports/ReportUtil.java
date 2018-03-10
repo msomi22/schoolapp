@@ -102,8 +102,7 @@ public class ReportUtil {
 	private static StudentDAO studentDAO;
 	private static YearlyMeanDAO yearlyMeanDAO;
 	private static ExamDAO examDAO;
-
-
+	
 
 	static {
 		subCategoryDAO2 = SubCategoryDAO.getInstance();
@@ -117,6 +116,15 @@ public class ReportUtil {
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
 
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public static String getGeneralId(String accountId) {
+		return categoryDAO.getCategory(accountId, "General").getUuid();
 	}
 
 
@@ -1215,7 +1223,7 @@ public class ReportUtil {
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, categoryId);
 
 		if(gradingSystemList.isEmpty()){
-			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+			String generalId = getGeneralId(accountId);
 			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
 
 		}
@@ -1265,7 +1273,7 @@ public class ReportUtil {
 
 
 		if(gradingSystemList.isEmpty()){
-			String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+			String generalId = getGeneralId(accountId);
 			gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
 
 		}
@@ -1303,7 +1311,7 @@ public class ReportUtil {
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
-		String generalId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+		String generalId = getGeneralId(accountId);
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
 
 		for(GradingSystem gradingSystem : gradingSystemList){

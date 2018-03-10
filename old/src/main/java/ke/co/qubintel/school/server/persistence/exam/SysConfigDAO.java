@@ -122,15 +122,14 @@ public class SysConfigDAO extends GenericDAO implements SchoolSysConfigDAO {
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO SysConfig" 
-						+"(uuid,accountId,examId,term,year,cansendSMS) VALUES (?,?,?,?,?,?);");
+						+"(uuid,accountId,term,year,cansendSMS) VALUES (?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, sysConfig.getUuid());
 			pstmt.setString(2, sysConfig.getAccountId());
-			pstmt.setString(3, sysConfig.getExamId());
-			pstmt.setString(4, sysConfig.getTerm());
-			pstmt.setString(5, sysConfig.getYear());
-			pstmt.setString(6, sysConfig.getCansendSMS());
+			pstmt.setString(3, sysConfig.getTerm());
+			pstmt.setString(4, sysConfig.getYear());
+			pstmt.setString(5, sysConfig.getCansendSMS());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -150,15 +149,14 @@ public class SysConfigDAO extends GenericDAO implements SchoolSysConfigDAO {
 	public boolean updateSysConfig(SysConfig sysConfig) {
 		boolean success = true;
 		try (  Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE SysConfig SET examId=?,"
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE SysConfig SET "
 						+ "term=?, year =?, cansendSMS=? WHERE accountId = ?;");
 				) { 
 
-			pstmt.setString(1, sysConfig.getExamId());
-			pstmt.setString(2, sysConfig.getTerm());
-			pstmt.setString(3, sysConfig.getYear());
-			pstmt.setString(4, sysConfig.getCansendSMS());
-			pstmt.setString(5, sysConfig.getAccountId());
+			pstmt.setString(1, sysConfig.getTerm());
+			pstmt.setString(2, sysConfig.getYear());
+			pstmt.setString(3, sysConfig.getCansendSMS());
+			pstmt.setString(4, sysConfig.getAccountId());
 			pstmt.executeUpdate(); 
 
 		} catch (SQLException e) {

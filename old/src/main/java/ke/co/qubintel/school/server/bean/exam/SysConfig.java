@@ -27,7 +27,6 @@ public class SysConfig extends StorableBean{
 	 * 
 	 */
 	
-	private String examId;
 	private String term;
 	private String year;
 	private String cansendSMS;
@@ -36,32 +35,12 @@ public class SysConfig extends StorableBean{
 	 * 
 	 */
 	public SysConfig() {
-		examId = "";
 		term = "";
 		year = "";
 		cansendSMS = "0";
 	}
 
 	
-	
-	/**
-	 * @return the examId
-	 */
-	public String getExamId() {
-		return examId;
-	}
-
-
-
-	/**
-	 * @param examId the examId to set
-	 */
-	public void setExamId(String examId) {
-		this.examId = examId;
-	}
-
-
-
 	/**
 	 * @return the term
 	 */
@@ -121,7 +100,7 @@ public class SysConfig extends StorableBean{
 	 */
 	@Override
 	public String toString() {
-		return "SysConfig [examId=" + examId + ", term=" + term + ", year=" + year + ", cansendSMS=" + cansendSMS
+		return "SysConfig [term=" + term + ", year=" + year + ", cansendSMS=" + cansendSMS
 				+ ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 

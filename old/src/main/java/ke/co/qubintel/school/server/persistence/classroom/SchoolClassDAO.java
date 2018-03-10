@@ -19,6 +19,8 @@ public interface SchoolClassDAO {
 	 * @return
 	 */
 	public ClassRoom getClassRoom(String accountId, String uuid);
+	
+	public ClassRoom getClassRoomByDesc(String accountId, String description);
 	 /**
 	  * 
 	  * @param Class

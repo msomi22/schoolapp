@@ -46,6 +46,7 @@ import ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO;
 import ke.co.qubintel.school.server.persistence.subject.CategoryDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubCategoryDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
+import ke.co.qubintel.school.server.servlet.reports.ReportUtil;
 import ke.co.qubintel.school.server.servlet.util.SYS_COSTANTS;
 
 /**
@@ -275,290 +276,154 @@ public class AdminService {
 	 */
 	private Object populateDefaluts(String accountId) {
 
-		int newIds = 1;
-
-		ApiResponse apiResponse = new ApiResponse("success");  
+		Response response = new Response();  
 
 		String resposne = "Account registered successfully,";
-
-		String[] accessIds = {"C3915245-00EE-4EF4-9898-ACE59683DD60","615F04C1-00BF-499C-AC7A-B46B69243AAA",
-				"0DE968C9-7309-C481-58F7-AB6CDB1011EH","1CC7F06E-9938-4850-81FB-9CC249C7CFA2",
-				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
-				"0DE968C9-7309-C481-58F7-AB6CDB1011EF", SYS_COSTANTS.SYS_ACCESS_LEVEL_ID};
+		
+		/*****************************************************************************************/
 		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar",SYS_COSTANTS.SYS_ACCESS_LEVEL}; 
 		int[] a_Ids= {100,200,300,400,500,600,700,800}; 
 
-		String astr = "";
-		for(int count=0;count<accessIds.length;count++) {
+		for(int count=0;count<access.length;count++) {
 			AcessLevel acessLevel = new AcessLevel();
-			if(newIds == 1) {
-				acessLevel.setUuid(acessLevel.getUuid());
-			}else {
-				acessLevel.setUuid(accessIds[count]);
-			}
+			acessLevel.setUuid(acessLevel.getUuid());
 			acessLevel.setAccountId(accountId);
 			acessLevel.setDescription(access[count]); 
 			acessLevel.setAcessId(String.valueOf(a_Ids[count]));  
 			acessLevelDAO.putAcessLevel(acessLevel); 
-			astr = " AcessLevel(s) added,";
 		}
-
-		resposne +=astr; 
-		astr = "";
-
-
-		String[] classRoomIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
-				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD"};
-
+		/*****************************************************************************************/
 		String[] classes = {"FORM 1","FORM 2","FORM 3","FORM 4"};
 
-		for(int count=0;count<classRoomIds.length;count++) {
+		for(int count=0;count<classes.length;count++) {
 			ClassRoom classRoom = new ClassRoom();
-			if(newIds == 1) {
-				classRoom.setUuid(classRoom.getUuid());
-			}else {
-				classRoom.setUuid(classRoomIds[count]);
-			}
+			classRoom.setUuid(classRoom.getUuid());
 			classRoom.setAccountId(accountId);
 			classRoom.setDescription(classes[count]); 
 			classDAO.putClassRoom(classRoom);
-			astr =" ClassRoom(s) added,";
 		}
-
-		resposne += astr; 
-		astr = "";
-
-
-
-		String[] streamIds = {"4DA86139-6A72-4089-8858-6A3A613FDFE6","59E5F556-4B04-43B2-8139-E2D39A7836C6",
-				"46398A47-93F2-4591-B36F-1C28B03CC2F3","D3733507-C113-4795-91ED-D3CD8039EA03",
-				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63", 
-				SYS_COSTANTS.SYS_DEFAULT_STREAM_ID};
-
-		String[] classIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
-				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD",
-				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9", 
-		"14E56350-08DA-45CC-97D9-C225AF74A7AD"};
+		/*****************************************************************************************/
+		String[] classIds = {"FORM 1","FORM 2",
+				"FORM 3","FORM 4",
+				"FORM 1","FORM 2", "FORM 4"};
 
 		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S", SYS_COSTANTS.SYS_DEFAULT_STREAM}; 
 
-		for(int count=0;count<streamIds.length;count++) {
+		for(int count=0;count<classIds.length;count++) {
 			Stream stream = new Stream();
-			if(newIds == 1) {
-				stream.setUuid(stream.getUuid());
-			}else {
-				stream.setUuid(streamIds[count]);
-			}
+			stream.setUuid(stream.getUuid());
 			stream.setAccountId(accountId);
-			stream.setClassRoomId(classIds[count]);
+			stream.setClassRoomId(classDAO.getClassRoomByDesc(accountId, classIds[count]).getUuid());
 			stream.setDescription(streams[count]); 
 			streamDAO.putStream(stream);
-			astr =" Stream(s) added,";
 		}
 
-		resposne += astr; 
-		astr = "";
-
-
-
-		String[] categoryIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
-				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
-				"B8C59DA7-1013-4879-B40A-630F0E647497","55DD5463-6ECB-48A3-B6E7-03548A9E37FE"};
+		/*****************************************************************************************/
 
 		String[] categorys = {"Languages","Sciences","Humanities","Technicals","Mathematics","General"};
 
 		int[] maxNo = {2,3,3,4,2,0};
 
-		for(int count=0;count<categoryIds.length;count++) {
+		for(int count=0;count<categorys.length;count++) {
 			Category category = new Category();
-			if(newIds == 1) {
-				category.setUuid(category.getUuid());
-			}else {
-				category.setUuid(categoryIds[count]);
-			}
+			category.setUuid(category.getUuid());
 			category.setAccountId(accountId);
 			category.setMaxNo(maxNo[count]); 
 			category.setDescription(categorys[count]);
 			categoryDAO.putCategory(category);
-			astr =" Category(ies) added,"; 
 		}
 
-		resposne += astr; 
-		astr = "";
-
-
-		String[] gradingSystemIds = {"1EABC062-DC76-42FC-A817-52D89C8CDAE9","C8593353-1810-46DF-897C-1173537B78CC",
-				"ED2F088A-0D1F-45F5-88DC-CB9552FD44F5","323556CF-3695-449E-86F4-9515CC58A267",
-				"CDBCEC15-3EE0-43EF-B384-F4014E83F89D","4F819276-09F7-4B53-99E9-65FADF75F7D2",
-				"FB769B43-B092-42E4-9936-A0716F28B25D","A058D7E4-0233-4BE7-990A-D3CB229164B5",
-				"1C9DD8CF-14B2-4BF2-AACC-6B6CBEB98998","3C212576-FEB0-47B3-A3F8-71C623D38064",
-				"129BAE9E-BBE9-4FBA-B67E-BEE11FF3C1C6","0E97899E-99F2-468F-86A5-9E59F7A224DC"};
-
-		String gcateId = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
-
+		/*****************************************************************************************/
 		int[] lowerLimits = {83,75,66,56,54,48,42,40,35,31,26,1};
 		int[] upperLimits = {100,82,74,65,55,53,47,41,39,34,30,25};
 		int[] points = {12,11,10,9,8,7,6,5,4,3,2,1};
 		String[] desc = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
 
-		for(int count=0;count<gradingSystemIds.length;count++) {
+		for(int count=0;count<desc.length;count++) {
 			GradingSystem gradingSystem = new GradingSystem();
-			if(newIds == 1) {
-				gradingSystem.setUuid(gradingSystem.getUuid());
-			}else {
-				gradingSystem.setUuid(gradingSystemIds[count]);
-			}
+			gradingSystem.setUuid(gradingSystem.getUuid());
 			gradingSystem.setAccountId(accountId);
-			gradingSystem.setCategoryId(gcateId);
+			gradingSystem.setCategoryId(ReportUtil.getGeneralId(accountId));
 			gradingSystem.setLowerLimit(lowerLimits[count]);
 			gradingSystem.setUpperLimit(upperLimits[count]);
 			gradingSystem.setPoints(points[count]);
 			gradingSystem.setDescription(desc[count]);
 			gradingSystemDAO.putGradingSystem(gradingSystem);
-			astr =" Grading System added,";
 		}
 
-		resposne += astr; 
-		astr = "";
-
-		String[] miscellanousIds = {"6A017FB8-5E19-4441-A3DA-B3EB780E81A1","7B6C4D4E-DE72-4F81-A166-6AF01C5B11D5","5B0F3957-0B88-45C9-8772-7F7A94E16DBF"};
+		/*****************************************************************************************/
 		String[] keys = {"CLOSING_DATE","OPENING_DATE","HEAD_TEACHER_REMARKS"};
 		String[] values = {"Tue 03 April 2016","Wed 07 May 2016","for the fantastic term it has been awesome to see you grow and develop hope you have a wonderful holiday .For your performance all we can say is ..."};
 
 
-		for(int count=0;count<miscellanousIds.length;count++) {
+		for(int count=0;count<keys.length;count++) {
 			Miscellanous miscellanous = new Miscellanous();
-			if(newIds == 1) {
-				miscellanous.setUuid(miscellanous.getUuid());
-			}else {
-				miscellanous.setUuid(miscellanousIds[count]);
-			}
+			miscellanous.setUuid(miscellanous.getUuid());
 			miscellanous.setAccountId(accountId);
 			miscellanous.setKey(keys[count]);
 			miscellanous.setValue(values[count]);
 			miscellanousDAO.putMiscellanous(miscellanous);
-			astr =" Miscellanous key and values added,";
 		}
-
-		resposne += astr; 
-		astr = "";
-
-		String[] uuids = {"45207ABB-C547-43B6-A1FD-E9359C0F8DDF","D6C95E77-6B48-416C-AD3F-2752EB20EF23",
-				"B517BB4D-3E7F-4879-AAEB-297B43C0FD1F","FB824121-1003-44AF-B283-F163A5FC5E8F",
-				"4BB37A08-D180-47DF-8401-B3162F84E23F","D71F66A7-DCDA-4D54-BA42-612596B30E52",
-				"12039F0B-A39F-4399-B2CA-19A3D10F0A4D","82B17C63-6BBA-4B5C-B387-43DD1E74B2B1",
-				"7DBC3E02-DB92-4A34-A506-D2ED184F02A9","B393510A-2D03-44D1-8A0C-73FBEC1BEDD7",
-				"E96657DE-DFEB-4073-AA93-4F83155DCD09","FE1F19D5-C88D-411E-9543-40CE59979BEC","E8246333-CD6C-48CE-8E12-16FDCD87C903"};
-		String[] catIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","3F0330CD-47F9-42B4-B736-0E11CBB4988A",
-				"B8C59DA7-1013-4879-B40A-630F0E647497",
-				"44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
-				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F",
-				"6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA"};
-		String[] subIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323","4f59580d-1a16-4669-9ed5-4b89615d6903",
-				"552c0a24-6038-440f-add5-2dadfb9a23bd","44f23b3c-e066-4b45-931c-0e8073d3a93a","de0c86be-9bcb-4d3b-8098-b06687536c1f",
-				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4","0e5dc1c6-f62f-4a36-a1ec-064173332694",
-				"e1729cc2-524a-4069-b4a4-be5aec8473fe","b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
-
-
-
-		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
-				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
-				"44f23b3c-e066-4b45-931c-0e8073d3a93a","de0c86be-9bcb-4d3b-8098-b06687536c1f",
-				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4",
-				"0e5dc1c6-f62f-4a36-a1ec-064173332694","e1729cc2-524a-4069-b4a4-be5aec8473fe",
-				"b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
-		String[] subcatIds = {"3F0330CD-47F9-42B4-B736-0E11CBB4988A","3F0330CD-47F9-42B4-B736-0E11CBB4988A",
-				"B8C59DA7-1013-4879-B40A-630F0E647497","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
-				"44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1","44B7A7B3-4DAE-44A9-86FB-70FE1A6D31C1",
-				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F",
-				"BCD7AFBC-B5B0-45CE-806C-64051F4C6D1F","6DAAC70F-C6A5-4DD7-85AE-B928946132EA",
-				"6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA","6DAAC70F-C6A5-4DD7-85AE-B928946132EA"};
+		
+		/*****************************************************************************************/
+		String[] subcatIds = {"Languages","Languages",
+				"Mathematics","Sciences",
+				"Sciences","Sciences",
+				"Humanities","Humanities",
+				"Humanities","Technicals",
+				"Technicals","Technicals","Technicals"};
 		String[] subCodes = {"ENG","KIS","MAT","CHE","PHY","BIO","HIS","CRE","GEO","B/S","AGR","HSC","COM"};
 		String[] numCodes = {"100","101","102","103","104","105","106","107","108","109","110","111","112"};
 		String[] subDesc = {"English","Kiswahili","Mathematics","Chemistry","Physics","Biology","History",
 				"Christian Religion","Geography","Business","Agriculture","Home Science","Computer Studies"};
-
-		for(int count=0;count<subjectIds.length;count++) {
+		
+		for(int count=0;count<subCodes.length;count++) {
 			Subject subject = new Subject();
-			if(newIds == 1) {
-				subject.setUuid(subject.getUuid());
-			}else {
-				subject.setUuid(subjectIds[count]);
-			}
+			subject.setUuid(subject.getUuid());
 			subject.setAccountId(accountId);
-			subject.setCategoryId(subcatIds[count]);
+			subject.setCategoryId(categoryDAO.getCategory(accountId, subcatIds[count]).getUuid());
 			subject.setCode(subCodes[count]);
 			subject.setNumericCode(numCodes[count]);
 			subject.setDescription(subDesc[count]);
 			subjectDAO.putSubject(subject);
-			astr =" Subject(s) added."; 
 		}
-
-		resposne += astr; 
-		astr = "";
-
-
-
-		for(int count=0;count<uuids.length;count++) {
-
+		
+		/*****************************************************************************************/
+		for(int count=0;count<subCodes.length;count++) {
 			SubCategory subCategory = new SubCategory();
-			if(newIds == 1) {
-				subCategory.setUuid(subCategory.getUuid());
-			}else {
-				subCategory.setUuid(uuids[count]);
-			}
+			subCategory.setUuid(subCategory.getUuid());
 			subCategory.setAccountId(accountId);
-			subCategory.setCategoryId(catIds[count]);
-			subCategory.setSubjectId(subIds[count]);
+			Subject subject = subjectDAO.getSubjectByCode(accountId, subCodes[count]);
+			subCategory.setCategoryId(subject.getCategoryId());
+			subCategory.setSubjectId(subject.getUuid());
 			subCategoryDAO.putSubCategory(subCategory);
-			astr =" Subject Category(s) added,";
 		}
-		resposne += astr; 
-		astr = "";
-
-
-
-		String[] examIds = {"AE24F15B-5038-4A15-8607-1DB2A7A0B7DE","4531A31D-1F8A-40D7-BFE6-D3CB3D91951A",
-				"69A569CA-1D4F-458E-99DD-FB2BE705BF5C","D50E6399-B913-42F2-A5B6-F0D4BAAF9571",
-				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1",
-		"C3915245-00EE-4EF4-9898-ACE59683DD60"};
+		
+		/*****************************************************************************************/
 		String[] examCodes = {"P1","P2","P3","C1","C2","ET","P123"};
 		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term","P123"};
 		int[] examOutof = {60,80,40,30,30,70,0}; 
 
-		for(int count=0;count<examIds.length;count++) {
+		for(int count=0;count<examCodes.length;count++) {
 			Exam exam = new Exam();
-			if(newIds == 1) {
-				exam.setUuid(exam.getUuid());
-			}else {
-				exam.setUuid(examIds[count]);
-			}
+			exam.setUuid(exam.getUuid());
 			exam.setAccountId(accountId);
 			exam.setCode(examCodes[count]);
 			exam.setDescription(examDesc[count]);
 			exam.setOutOf(examOutof[count]);  
 			examDAO.putExam(exam);
-			astr =" Exam(s) added."; 
 		}
-		resposne += astr; 
-		astr = "";
 
-
+		/*****************************************************************************************/
 		SysConfig systemConfig = new SysConfig();
 		systemConfig.setAccountId(accountId);
 		systemConfig.setCansendSMS("0");
-		systemConfig.setExamId(examIds[4]);
 		systemConfig.setTerm("1");
 		systemConfig.setYear(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));  
 		sysConfigDAO.putSysConfig(systemConfig);
-		astr =" systemConfig added."; 
-
-		resposne += astr; 
-		astr = "";
-
+		
+		/*****************************************************************************************/
 		SysConfig config = sysConfigDAO.getSysConfig(accountId);
-
-
 		if(termFeeDAO.getFee(accountId, config.getTerm(), config.getYear()) == null) {
 			TermFee termFee = new TermFee();
 			termFee.setAccountId(accountId);
@@ -570,19 +435,12 @@ public class AdminService {
 
 		}
 
-
-
-		//TODO add termly fee
-		String[] apiIds = {"796E21DD-92E2-4A99-9CEA-1414EBCCE1C7","796E21DD-92E2-4A99-9CEA-1414EBCCE1C8","796E21DD-92E2-4A99-9CEA-1414EBCCE1C9"};
+		/*****************************************************************************************/
 		String[] apiCats = {"SMS_API","SYSTEM_API","MPESA_API"};
 
-		for(int count=0;count<apiIds.length;count++) {
+		for(int count=0;count<apiCats.length;count++) {
 			ApiCredential apiCredential = new ApiCredential();
-			if(newIds == 1) {
-				apiCredential.setUuid(apiCredential.getUuid());
-			}else {
-				apiCredential.setUuid(apiIds[count]);
-			}
+			apiCredential.setUuid(apiCredential.getUuid());
 			apiCredential.setAccountId(accountId);
 			apiCredential.setApiType(apiCats[count]); 
 			apiCredential.setApiKey(RandomStringUtils.randomAlphabetic(20)); 
@@ -596,10 +454,10 @@ public class AdminService {
 
 
 
-		apiResponse.setDescription(resposne);
-
-
-		return apiResponse;
+		response.setDescription(resposne);
+		response.setMessage("success");
+		
+		return response;
 	}
 
 	/**

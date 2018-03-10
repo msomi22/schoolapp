@@ -19,6 +19,8 @@ public interface SchoolSubjectDAO {
 
 	public  Subject getSubjectById(String accountId,String uuid);
 	
+	public  Subject getSubjectByCode(String accountId,String code);
+	
 	public  Subject getSubject(String accountId,String query);
 	
 	public boolean putSubject(Subject subject);

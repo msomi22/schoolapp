@@ -585,7 +585,6 @@ public class GeneralService {
 		}else {
 			SysConfig config = sysConfigDAO.getSysConfig(apiSysConfig.getAccountId());
 			config.setCansendSMS(apiSysConfig.getCansendSMS());
-			config.setExamId(apiSysConfig.getExamId());
 			config.setTerm(apiSysConfig.getTerm());
 			config.setYear(apiSysConfig.getYear());
 

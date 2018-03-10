@@ -47,9 +47,11 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 	public ClassDAO(String databaseName, String Host, String databaseUsername, String databasePassword, int databasePort) {
 		super(databaseName, Host, databaseUsername, databasePassword, databasePort);
 	}
+	
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.classroom.SchoolClassDAO#getClass(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.classroom.SchoolClassDAO#getClassRoomById(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public ClassRoom getClassRoom(String accountId, String uuid) {
 		ClassRoom classRoom = null;
 		ResultSet rset = null;
@@ -68,6 +70,34 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 			}
 		}catch(SQLException e){
 			logger.error("SQL Exception when getting ClassRoom for accountId " + accountId + " and id " + uuid);
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+		return classRoom; 
+	}
+
+	
+	/**
+	 * @see ke.co.qubintel.school.server.persistence.classroom.SchoolClassDAO#getClassRoom(java.lang.String, java.lang.String)
+	 */
+	public ClassRoom getClassRoomByDesc(String accountId, String description) {
+		ClassRoom classRoom = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM classRoom WHERE accountId = ? AND description = ?;");       
+
+				){
+
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, description);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+
+				classRoom  = beanProcessor.toBean(rset,ClassRoom.class);
+			}
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting ClassRoom for accountId " + accountId + " and description " + description);
 			logger.error(ExceptionUtils.getStackTrace(e));
 			System.out.println(ExceptionUtils.getStackTrace(e));
 		}
@@ -153,5 +183,6 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 		return list;
 	}
 
+	
 
 }

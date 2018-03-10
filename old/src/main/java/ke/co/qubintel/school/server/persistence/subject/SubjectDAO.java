@@ -86,6 +86,37 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 
 		return subject; 
 	}
+	
+
+	/**
+	 * @see ke.co.qubintel.school.server.persistence.subject.SchoolSubjectDAO#getSubjectByCode(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Subject getSubjectByCode(String accountId, String code) {
+		Subject subject = null;
+		ResultSet rset = null;
+		try(
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Subject WHERE accountId = ? AND"
+						+ " code =?;");       
+
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, code);
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				subject  = beanProcessor.toBean(rset,Subject.class);
+			}
+
+		}catch(SQLException e){
+			logger.error("SQL Exception when getting subject with code '" + code + "' for account '" + accountId+"'");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return subject; 
+	}
+
+
 
 	/**
 	 * @see ke.co.qubintel.school.server.persistence.subject.SchoolSubjectDAO#getSubjects(java.lang.String)
@@ -231,6 +262,5 @@ public class SubjectDAO extends GenericDAO implements SchoolSubjectDAO {
 
 		return list;
 	}
-
 
 }
