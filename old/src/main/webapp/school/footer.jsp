@@ -60,9 +60,9 @@
 <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
- <script src="js/accessLevel.js"></script> 
+ <!-- <script src="js/accessLevel.js"></script> 
 
-<script src="js/checkAcess.js"></script>
+<script src="js/checkAcess.js"></script> -->
 
 
 
