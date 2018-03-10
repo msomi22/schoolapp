@@ -1,17 +1,40 @@
-package ke.co.qubintel.school.server.servlet.quartz;
+package ke.co.qubintel.school.server.servlet.quartz.factory;
 
+import org.apache.log4j.Logger;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import java.util.Properties;
-/**
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+/** 
  * 
  * @author peter
  *
  */
-public class QuartzProperties {
-	public static void main(String[] args) {
+public class QuartzProperties extends HttpServlet{
+	
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1500797214116239844L;
+	private final Logger logger = Logger.getLogger(this.getClass());
+	
+	/**
+     * @param config
+     * @throws ServletException
+     */
+    public void init(ServletConfig config) throws ServletException {
+    	 super.init(config);
+
+        initQuartzProperties();
+        logger.info("Have initialized QuartzProperties");
+    }
+	
+	private void initQuartzProperties() {
 		
 		try {
 			Properties prop = new Properties();
@@ -64,4 +87,5 @@ public class QuartzProperties {
 			e.printStackTrace();
 		}
 	}
+
 }
