@@ -1,14 +1,15 @@
-
-/*************************************************************
- * Online School Management System                           *
- * Forth Year Project                                        *
- * Maasai Mara University                                    *
- * Bachelor of Science(Computer Science)                     *
- * Year:2015-2016                                            *
- * Name: Njeru Mwenda Peter                                  *
- * ADM NO : BS02/009/2012                                    *
- *                                                           *
- *************************************************************/
+/**
+ * Copy Right 2018. Qubit Intelligent Solutions Ltd.
+ *                . website: http://qubintel.co.ke
+ *                . email:   info@qubintel.co.ke 
+ *                
+ * 
+ * Licensed under the Open Software License, Version 3.0 (the “License”); you may
+ * not use this file except in compliance with the License. You may obtain a copy
+ * of the License at:
+ * http://opensource.org/licenses/OSL-3.0
+ * 
+ */
 package ke.co.qubintel.school.pagination.parent;
 
 import java.util.List;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page import="com.yahoo.petermwenda83.server.session.SessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 

@@ -34,8 +34,8 @@ public class APIApplication extends Application{
 		beanConfig.setSchemes(new String[]{"https,http"});
 		beanConfig.setHost("localhost:8080/school");
 		beanConfig.setBasePath("/webapi");
-		beanConfig.setFilterClass("com.yahoo.petermwenda83.server.api.ApiAuthorizationFilterImpl");
-		beanConfig.setResourcePackage("com.yahoo.petermwenda83.server.api.rest");
+		beanConfig.setFilterClass("ke.co.qubintel.school.server.api.ApiAuthorizationFilterImpl");
+		beanConfig.setResourcePackage("ke.co.qubintel.school.server.api.rest");
 		beanConfig.setScan(true);
 
 	}

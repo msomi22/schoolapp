@@ -76,8 +76,15 @@ public class StaffService {
 
 		Response response = new Response(); 
 		
+		
+		
 		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
 		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
+		principal = acessLevelDAO.getAcessLevelById(staff.getAccountId(), "100").getUuid();
+		deputy_Principal = acessLevelDAO.getAcessLevelById(staff.getAccountId(), "200").getUuid();
+		
+		staff.setAcessLevelId(acessLevelDAO.getAcessLevelById(staff.getAccountId(), staff.getAcessLevelId()).getUuid()); 
+		
 		
 		if(accountDAO.getAccountById(staff.getAccountId()) == null){
 			response.setMessage("error");

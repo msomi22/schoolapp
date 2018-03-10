@@ -5,7 +5,7 @@
 	version="3.1">
 	<servlet>
 		<servlet-name>Log4jInit</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.init.Log4jInit</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.init.Log4jInit</servlet-class>
 		<init-param>
 			<param-name>log4j-init-file</param-name>
 			<param-value>/WEB-INF/classes/log4j.properties</param-value>
@@ -14,7 +14,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>PropertiesConfig</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.util.PropertiesConfig</servlet-class>
 		<init-param>
 			<param-name>config-file</param-name>
 			<param-value>/WEB-INF/classes/config.properties</param-value>
@@ -23,12 +23,12 @@
 	</servlet>
 	<servlet>
 		<servlet-name>DbPoolUtil</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.util.DbPoolUtil</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.util.DbPoolUtil</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>CacheInit</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.init.CacheInit</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.init.CacheInit</servlet-class>
 		<init-param>
 			<param-name>ehcache-file</param-name>
 			<param-value>/WEB-INF/classes/ehcache.xml</param-value>
@@ -37,7 +37,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>GetBackupScript</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.quartz.GetBackupScript</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.quartz.GetBackupScript</servlet-class>
 		<load-on-startup>7</load-on-startup>
 	</servlet>
 	<context-param>
@@ -49,7 +49,7 @@
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>com.yahoo.petermwenda83.server.api.APIApplication</param-value>
+			<param-value>ke.co.qubintel.school.server.api.APIApplication</param-value>
 		</init-param>
 		<load-on-startup>5</load-on-startup>
 	</servlet>
@@ -59,11 +59,11 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>ApiOriginFilter</filter-name>
-		<filter-class>com.yahoo.petermwenda83.server.api.ApiOriginFilter</filter-class>
+		<filter-class>ke.co.qubintel.school.server.api.ApiOriginFilter</filter-class>
 	</filter>
 	<servlet>
 		<servlet-name>Bootstrap</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.api.Bootstrap</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.api.Bootstrap</servlet-class>
 		<load-on-startup>6</load-on-startup>
 	</servlet>
 	<filter-mapping>
@@ -73,7 +73,7 @@
 	
 	<servlet>
 		<servlet-name>FeeReceipt</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.fee.FeeReceipt</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.fee.FeeReceipt</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FeeReceipt</servlet-name>
@@ -82,7 +82,7 @@
 	
 	<servlet>
 		<servlet-name>StudentReportCard</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StudentReportCard</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.StudentReportCard</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StudentReportCard</servlet-name>
@@ -91,7 +91,7 @@
 	
 	<servlet>
 		<servlet-name>ClassRankingList</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.ClassRankingList</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.ClassRankingList</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ClassRankingList</servlet-name>
@@ -100,7 +100,7 @@
 	
 	<servlet>
 		<servlet-name>GetStudents</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.exam.GetStudents</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.exam.GetStudents</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetStudents</servlet-name>
@@ -109,7 +109,7 @@
 	
 	<servlet>
 		<servlet-name>ExamAjax</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.exam.ExamAjax</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.exam.ExamAjax</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ExamAjax</servlet-name>
@@ -118,7 +118,7 @@
 	
 	<servlet>
 		<servlet-name>StudentAjax</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.student.StudentAjax</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.student.StudentAjax</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StudentAjax</servlet-name>
@@ -127,7 +127,7 @@
 	
 	<servlet>
 		<servlet-name>UploadProfilePic</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.student.UploadProfilePic</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.student.UploadProfilePic</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UploadProfilePic</servlet-name>
@@ -136,7 +136,7 @@
 	
 	<servlet>
 		<servlet-name>ImportStudent</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.excel.ImportStudent</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.excel.ImportStudent</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ImportStudent</servlet-name>
@@ -145,7 +145,7 @@
 	
 	<servlet>
 		<servlet-name>SchoolLogin</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogin</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.school.login.SchoolLogin</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SchoolLogin</servlet-name>
@@ -154,7 +154,7 @@
 	
 	<servlet>
 		<servlet-name>SchoolLogout</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.school.login.SchoolLogout</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.school.login.SchoolLogout</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SchoolLogout</servlet-name>
@@ -163,7 +163,7 @@
 	
 	<servlet>
 		<servlet-name>TopBottomImprovedDroppedList</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.TopBottomImprovedDroppedList</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.TopBottomImprovedDroppedList</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TopBottomImprovedDroppedList</servlet-name>
@@ -172,7 +172,7 @@
 	
 	<servlet>
 		<servlet-name>StudentPerStream</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.student.StudentPerStream</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.student.StudentPerStream</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StudentPerStream</servlet-name>
@@ -182,7 +182,7 @@
 	
 	<servlet>
 		<servlet-name>ExportStudents</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.exam.ExportStudents</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.exam.ExportStudents</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ExportStudents</servlet-name>
@@ -191,7 +191,7 @@
 	
 	<servlet>
 		<servlet-name>StudentPerStreamExcel</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.student.StudentPerStreamExcel</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.student.StudentPerStreamExcel</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StudentPerStreamExcel</servlet-name>
@@ -200,7 +200,7 @@
 	
 	<servlet>
 		<servlet-name>StreamAnalysis</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.StreamAnalysis</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.StreamAnalysis</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StreamAnalysis</servlet-name>
@@ -210,7 +210,7 @@
 	
 	<servlet>
 		<servlet-name>ExportExcel</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.exam.ExportExcel</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.exam.ExportExcel</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ExportExcel</servlet-name>
@@ -220,7 +220,7 @@
 	
 	<servlet>
 		<servlet-name>TeacherSubjectsAnalysis</servlet-name>
-		<servlet-class>com.yahoo.petermwenda83.server.servlet.reports.exam.TeacherSubjectsAnalysis</servlet-class>
+		<servlet-class>ke.co.qubintel.school.server.servlet.reports.exam.TeacherSubjectsAnalysis</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TeacherSubjectsAnalysis</servlet-name>
@@ -233,7 +233,7 @@
 	
 	
 	<listener>
-		<listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
+		<listener-class>ke.co.qubintel.school.server.servlet.quartz.QuartzListener</listener-class>
 	</listener>
 	
 	<error-page>

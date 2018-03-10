@@ -16,9 +16,14 @@ def newAccount():
 	return response
 
 
-def newStaff(): 
-	url = 'http://localhost:8080/school/webapi/staff/b83e9b89-0d52-4191-a6bf-acf501267e2e1'
+def newStaff():
 	headers = {'content-type': 'application/json'}
+	query = 'mangu'
+	a_url = 'http://localhost:8080/school/webapi/admin/account/'+query
+	a_respo = requests.get(a_url, data={}, auth=('comPlex', 'reSt*@!Api'),headers=headers)
+	account = a_respo.json() 
+	uuid = account['uuid']
+	url = 'http://localhost:8080/school/webapi/staff/'+str(uuid)
 	data = json.load(open('staff.json')) 
 	json_string = json.dumps(data)
 	#print json_string
@@ -30,8 +35,8 @@ def newStaff():
 
 
 
-print 'response : ' , newAccount()
-#print newStaff() 
+#print 'response : ' , newAccount()
+print newStaff() 
 
 
 

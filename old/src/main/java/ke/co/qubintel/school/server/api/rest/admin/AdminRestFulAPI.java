@@ -112,11 +112,11 @@ public class AdminRestFulAPI {
 			return response; 
 		}
 		
-		//return adminService.newAccount(apiAccount);
+		return adminService.newAccount(apiAccount);
 		
-		response.setMessage("error");
+		/*response.setMessage("error");
 		response.setDescription("Ah! you are busted!");
-		return response;
+		return response;*/
 	}
 	
 	/**
@@ -145,6 +145,36 @@ public class AdminRestFulAPI {
 		}
 		
 		return adminService.updateAccount(apiAccount);
+	}
+	
+	
+	/**
+	 * 
+	 * @param query
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get school account details.", 
+			notes = "Returns school account object.", 
+			response = ApiResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "query doesn't exist.") 
+	} )
+	
+	@GET
+	@Path("/account/{query}")  
+	public Object getAccountInfo(@PathParam("query") String query, 
+			@HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		response.setMessage("error");
+		response.setDescription("User not authenticated");
+
+		if(!RestAUth.isAdminAuthenticated(auth)){
+			return response; 
+		}
+		
+		return adminService.getAccountInfo(query); 
 	}
 	
 

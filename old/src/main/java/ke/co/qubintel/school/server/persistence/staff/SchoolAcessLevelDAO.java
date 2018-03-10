@@ -18,6 +18,8 @@ public interface SchoolAcessLevelDAO {
 	
 	public AcessLevel getAcessLevel(String accountId, String uuid);
 	
+	public AcessLevel getAcessLevelById(String accountId, String  acessId);
+	
 	public boolean putAcessLevel(AcessLevel acessLevel);
 	
 	public boolean updateAcessLevel(AcessLevel acessLevel);

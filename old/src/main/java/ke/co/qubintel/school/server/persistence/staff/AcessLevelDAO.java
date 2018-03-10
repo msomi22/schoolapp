@@ -69,9 +69,7 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 	
 	        	acessLevel  = beanProcessor.toBean(rset,AcessLevel.class);
 	   }
-     	
-     	
-     	
+     
      }catch(SQLException e){
      	  logger.error("SQL Exception when getting AcessLevel with uuid: " + uuid);
           logger.error(ExceptionUtils.getStackTrace(e));
@@ -81,6 +79,37 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 		return acessLevel; 
 	}
 	
+	
+	/**
+	 * @see ke.co.qubintel.school.server.persistence.staff.SchoolAcessLevelDAO#getAcessLevelById(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public AcessLevel getAcessLevelById(String accountId, String acessId) {
+		AcessLevel acessLevel = new AcessLevel();
+        ResultSet rset = null;
+     try(
+     		      Connection conn = dbutils.getConnection();
+        	      PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM AcessLevel WHERE accountId =? AND acessId =?;");       
+     		
+     		){
+     	     pstmt.setString(1, accountId);
+     	     pstmt.setString(2, acessId);
+	         rset = pstmt.executeQuery();
+	        while(rset.next()){
+	
+	        	acessLevel  = beanProcessor.toBean(rset,AcessLevel.class);
+	   }
+     	
+     }catch(SQLException e){
+     	  logger.error("SQL Exception when getting AcessLevel with acessId: " + acessId);
+          logger.error(ExceptionUtils.getStackTrace(e));
+          System.out.println(ExceptionUtils.getStackTrace(e));
+     }
+     
+		return acessLevel; 
+	
+	}
+
 	
 	/**
 	 * @see ke.co.qubintel.school.server.persistence.staff.SchoolAcessLevelDAO#getAcessLevel(java.lang.String, java.lang.String)
@@ -205,5 +234,6 @@ public class AcessLevelDAO extends GenericDAO implements SchoolAcessLevelDAO {
 		return false;
 	}
 
+	
 	
 }

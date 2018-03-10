@@ -18,6 +18,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import com.google.gson.Gson;
 
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
+import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.api.rest.bean.admin.ApiAccount;
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.bean.account.ApiCredential;
@@ -141,7 +142,7 @@ public class AdminService {
 		ApiResponse apiResponse = new ApiResponse(); 
 
 		String accountId = "b83e9b89-0d52-4191-a6bf-acf501267e2e1";
-		//accountId = "";
+		accountId = "";
 
 
 		if(accountDAO.getAccountById(accountId) != null) { 
@@ -230,7 +231,7 @@ public class AdminService {
 
 
 			Account account = new Account();
-			//accountId = account.getUuid();
+			accountId = account.getUuid();
 			account.setIsActive("1");
 			account.setName(apiAccount.getName());
 			account.setMotto(apiAccount.getMotto());
@@ -273,8 +274,8 @@ public class AdminService {
 	 * @return
 	 */
 	private Object populateDefaluts(String accountId) {
-		
-		int newIds = 0;
+
+		int newIds = 1;
 
 		ApiResponse apiResponse = new ApiResponse("success");  
 
@@ -283,7 +284,7 @@ public class AdminService {
 		String[] accessIds = {"C3915245-00EE-4EF4-9898-ACE59683DD60","615F04C1-00BF-499C-AC7A-B46B69243AAA",
 				"0DE968C9-7309-C481-58F7-AB6CDB1011EH","1CC7F06E-9938-4850-81FB-9CC249C7CFA2",
 				"BDF7F33D-1936-43F3-B14B-8FC3EA3A1265","64553348-3229-4869-A13D-CADFC1D3AF46",
-		"0DE968C9-7309-C481-58F7-AB6CDB1011EF", SYS_COSTANTS.SYS_ACCESS_LEVEL_ID};
+				"0DE968C9-7309-C481-58F7-AB6CDB1011EF", SYS_COSTANTS.SYS_ACCESS_LEVEL_ID};
 		String[] access = {"Principal","Deputy Principal","CM","HOD","Teacher","Secretary","Bursar",SYS_COSTANTS.SYS_ACCESS_LEVEL}; 
 		int[] a_Ids= {100,200,300,400,500,600,700,800}; 
 
@@ -333,12 +334,12 @@ public class AdminService {
 				"46398A47-93F2-4591-B36F-1C28B03CC2F3","D3733507-C113-4795-91ED-D3CD8039EA03",
 				"37D3223A-547E-4BA9-BD0C-28F6187BB5D4","58444390-EFCA-4C4B-9010-577C31499A63", 
 				SYS_COSTANTS.SYS_DEFAULT_STREAM_ID};
-		
+
 		String[] classIds = {"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9",
 				"A4BFC2BD-262F-4207-99C8-057D6ADF80C7","14E56350-08DA-45CC-97D9-C225AF74A7AD",
 				"C143978A-E021-4015-BC67-5A00D6C910D1","3E22E428-3155-42F5-B73E-66553ED501C9", 
-				"14E56350-08DA-45CC-97D9-C225AF74A7AD"};
-		
+		"14E56350-08DA-45CC-97D9-C225AF74A7AD"};
+
 		String[] streams = {"FORM 1 N","FORM 2 N","FORM 3 N","FORM 4 N","FORM 1 S","FORM 2 S", SYS_COSTANTS.SYS_DEFAULT_STREAM}; 
 
 		for(int count=0;count<streamIds.length;count++) {
@@ -458,7 +459,7 @@ public class AdminService {
 				"c9caf109-c27d-4062-9b9f-ac4268629e27","f098e943-26fd-4dc0-b6a0-2d02477004a4","0e5dc1c6-f62f-4a36-a1ec-064173332694",
 				"e1729cc2-524a-4069-b4a4-be5aec8473fe","b9bbd718-b32f-4466-ab34-42f544ff900e","C1F28FF4-1A18-4552-822A-7A4767643643","F1972BF2-C788-4F41-94FE-FBA1869C92BC"};
 
-		
+
 
 		String[] subjectIds = {"D0F7EC32-EA25-7D32-8708-2CC132446","66027e51-b1ad-4b10-8250-63af64d23323",
 				"4f59580d-1a16-4669-9ed5-4b89615d6903","552c0a24-6038-440f-add5-2dadfb9a23bd",
@@ -495,9 +496,9 @@ public class AdminService {
 
 		resposne += astr; 
 		astr = "";
-		
-		
-		
+
+
+
 		for(int count=0;count<uuids.length;count++) {
 
 			SubCategory subCategory = new SubCategory();
@@ -520,7 +521,7 @@ public class AdminService {
 		String[] examIds = {"AE24F15B-5038-4A15-8607-1DB2A7A0B7DE","4531A31D-1F8A-40D7-BFE6-D3CB3D91951A",
 				"69A569CA-1D4F-458E-99DD-FB2BE705BF5C","D50E6399-B913-42F2-A5B6-F0D4BAAF9571",
 				"34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1",
-				"C3915245-00EE-4EF4-9898-ACE59683DD60"};
+		"C3915245-00EE-4EF4-9898-ACE59683DD60"};
 		String[] examCodes = {"P1","P2","P3","C1","C2","ET","P123"};
 		String[] examDesc = {"Paper 1","Paper 2","Paper 3","Cat 1","Cat 2","End Term","P123"};
 		int[] examOutof = {60,80,40,30,30,70,0}; 
@@ -554,10 +555,10 @@ public class AdminService {
 
 		resposne += astr; 
 		astr = "";
-		
+
 		SysConfig config = sysConfigDAO.getSysConfig(accountId);
-		
-		
+
+
 		if(termFeeDAO.getFee(accountId, config.getTerm(), config.getYear()) == null) {
 			TermFee termFee = new TermFee();
 			termFee.setAccountId(accountId);
@@ -568,13 +569,13 @@ public class AdminService {
 			termFeeDAO.putFee(termFee, accountId, config.getTerm(), config.getYear());
 
 		}
-		
-		
-		
+
+
+
 		//TODO add termly fee
 		String[] apiIds = {"796E21DD-92E2-4A99-9CEA-1414EBCCE1C7","796E21DD-92E2-4A99-9CEA-1414EBCCE1C8","796E21DD-92E2-4A99-9CEA-1414EBCCE1C9"};
 		String[] apiCats = {"SMS_API","SYSTEM_API","MPESA_API"};
-		
+
 		for(int count=0;count<apiIds.length;count++) {
 			ApiCredential apiCredential = new ApiCredential();
 			if(newIds == 1) {
@@ -588,12 +589,12 @@ public class AdminService {
 			apiCredential.setApisecret(RandomStringUtils.randomAlphabetic(20)); 
 			apiCredentialDAO.putApiCredential(apiCredential); 
 		}
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 
 		apiResponse.setDescription(resposne);
 
@@ -735,7 +736,7 @@ public class AdminService {
 	 * @return
 	 */
 	public Object getAccount(String accountId) {
-		
+
 		ApiResponse apiResponse = new ApiResponse(); 
 
 		if(accountDAO.getAccountById(accountId) == null) {
@@ -765,17 +766,17 @@ public class AdminService {
 	public Object getAccountList() {
 
 		ApiResponse apiResponse = new ApiResponse(); 
-		
+
 		if(accountDAO.getAccounts() == null) {
 			apiResponse.setMessage("error");
 			apiResponse.setDescription("No account found!");
 			return apiResponse;
-			
+
 		}else {
 			List<ApiAccount> ListapiAccount = new ArrayList<>();
 			accountDAO.getAccounts().forEach(account -> {
 				ApiAccount apiAccount = new ApiAccount();
-				
+
 				try {
 					BeanUtils.copyProperties(apiAccount, account); 
 				} catch (IllegalAccessException e) {
@@ -783,13 +784,35 @@ public class AdminService {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-				
+
 				ListapiAccount.add(apiAccount);
 			});
-			
+
 			return ListapiAccount; 
-			
+
 		}
+	}
+
+
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	public Object getAccountInfo(String query) {
+		Response response = new Response(); 
+		
+		if(accountDAO.getAccount(query, "1") != null) {
+			/*response.setMessage("success");
+			response.setDescription("Account found!");
+			return response;*/
+			return accountDAO.getAccount(query, "1"); 
+		}else {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+		}
+
 	}
 
 
@@ -847,7 +870,7 @@ public class AdminService {
 
 	}
 
-	
+
 
 	/**
 	 * to detect duplicate value

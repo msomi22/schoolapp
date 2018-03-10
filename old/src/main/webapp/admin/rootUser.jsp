@@ -1,11 +1,11 @@
 
-<%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.AdminSessionConstants"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.AcessLevelDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.AcessLevel"%>
+<%@page import="ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.staff.AcessLevel"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.schoolaccount.AccountDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>

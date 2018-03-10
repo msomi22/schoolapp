@@ -1,20 +1,17 @@
 
-<%@page import="com.yahoo.petermwenda83.bean.account.Account"%>
+<%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.student.StudentDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.student.Student"%>
+<%@page import="ke.co.qubintel.school.server.persistence.student.StudentDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.student.Student"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
+<%@page import="ke.co.qubintel.school.server.persistence.staff.StaffDAO"%>
+<%@page import="ke.co.qubintel.school.server.bean.staff.Staff"%>
 
-<%@page import="com.yahoo.petermwenda83.persistence.staff.StaffDAO"%>
-<%@page import="com.yahoo.petermwenda83.bean.staff.Staff"%>
-
-<%@page import="com.yahoo.petermwenda83.server.session.SessionStatistics"%>
-<%@page import="com.yahoo.petermwenda83.server.cache.CacheVariables"%>
+<%@page import="ke.co.qubintel.school.server.session.SessionStatistics"%>
+<%@page import="ke.co.qubintel.school.server.cache.CacheVariables"%>
 
 
-<%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.AdminSessionConstants"%>
 
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>

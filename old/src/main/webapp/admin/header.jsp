@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.AdminSessionConstants"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

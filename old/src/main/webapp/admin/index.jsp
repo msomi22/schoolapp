@@ -2,10 +2,10 @@
 
 <%@page import="org.apache.commons.lang3.RandomStringUtils"%>
 <%@page import="org.jasypt.util.text.BasicTextEncryptor"%>
-<%@page import="com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator"%>
-<%@page import="com.yahoo.petermwenda83.server.servlet.util.PropertiesConfig"%>
+<%@page import="ke.co.qubintel.school.server.servlet.util.FontImageGenerator"%>
+<%@page import="ke.co.qubintel.school.server.servlet.util.PropertiesConfig"%>
 
-<%@page import="com.yahoo.petermwenda83.server.session.AdminSessionConstants"%>
+<%@page import="ke.co.qubintel.school.server.session.AdminSessionConstants"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 
