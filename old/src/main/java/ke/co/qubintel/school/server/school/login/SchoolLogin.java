@@ -95,13 +95,13 @@ public class SchoolLogin extends HttpServlet {
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
-		}else if (!StringUtils.contains(accountDAO.getAccount(schoolUsername, "1").getName(), "Mangu")) { 
+		}/*else if (!StringUtils.contains(accountDAO.getAccount(schoolUsername, "1").getName(), "Mangu")) { 
 
 			message = "Sorry! This Software is custom made for \"Mangu Boys High School\""; 
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
 
-		} else {
+		} */else {
 
 			Staff staff = staffDAO.getStaffByUsername(accountDAO.getAccount(schoolUsername, "1").getUuid(),
 					staffUsername);
