@@ -375,9 +375,10 @@ public class QuartzJob implements Job{
 
 		String pg_version = "9.3";
 		String pg_home = " \"C:/Program Files/PostgreSQL/"+pg_version+"/bin/pg_dump.exe\"";  
-		String backupDir = " \"D:/pgBackup/schooldb.backup\" ";
+		//String backupDir = " \"D:/pgBackup/schooldb.backup\" ";
+		String dir = WriteToFile.DB_DIRECTORY;
 
-		String pg = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+backupDir+" schooldb";
+		String pg = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+dir+" schooldb";
 		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 		java.lang.Process p = rt.exec(pg);
 	}

@@ -25,6 +25,7 @@ public class WriteToFile {
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 
 	static final String FILENAME = "/home/"+USER_SYSTEM+"/school/.dbscripts/backup.sh";
+    static final String DB_DIRECTORY = "/home/"+USER_SYSTEM+"/school/dbBackup/";
 	
    /**
     * 
@@ -34,6 +35,7 @@ public class WriteToFile {
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 
+		makeBackupDir();
 		createFile(FILENAME);
 
 		try {
@@ -71,7 +73,7 @@ public class WriteToFile {
 			bw = new BufferedWriter(fw);
 			bw.write(content);
 
-			System.out.println("Done");
+			System.out.println("Done creating backup script");
 
 		} catch (IOException e) {
 
@@ -108,11 +110,15 @@ public class WriteToFile {
 		if (OSValidator.isWindows()) {
 
 			System.out.println("This is Windows");
+			
+			makeLinuxFile(filename);
 
 
 		} else if (OSValidator.isMac()) {
 
 			System.out.println("This is Mac");
+			
+			makeLinuxFile(filename);
 		}
 
 
@@ -141,6 +147,25 @@ public class WriteToFile {
 		if (!dir.exists()) {
 			try {
 				FileUtils.forceMkdir(dir.getParentFile());
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+	}
+	
+	/**
+	 * 
+	 */
+	public static void makeBackupDir(){ 
+		
+		System.out.println("Done creating backup directory");
+
+		File dir = new File(DB_DIRECTORY);
+		
+		if (!dir.exists()) {
+			try {
+				FileUtils.forceMkdir(new File(DB_DIRECTORY));
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage());
 			}

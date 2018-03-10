@@ -37,6 +37,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -157,6 +158,10 @@ public class UploadProfilePic extends HttpServlet {
                     
                    
                     // saves the file to upload directory
+                    if(!uploadedFile.exists()) {
+                    	FileUtils.forceMkdir(new File(DATA_DIRECTORY));
+                    }
+                    
                     item.write(uploadedFile);
                 }
                if( StringUtils.equalsIgnoreCase(item.getFieldName(),"avatar_data")) {
