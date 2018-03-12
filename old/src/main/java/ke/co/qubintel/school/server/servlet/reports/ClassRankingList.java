@@ -1093,8 +1093,15 @@ public class ClassRankingList extends HttpServlet{
 				rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+prevMean,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(dev,timesRomanNormal6));
-				rankingTable.addCell(new Paragraph(streamPositionMSG,timesRomanNormal6));
-				rankingTable.addCell(new Paragraph(classPositionMSG,timesRomanNormal6));
+				
+				String[] arr_s = streamPositionMSG.split("\\/");
+				String[] arr_c = classPositionMSG.split("\\/");
+				
+				String s_pos = arr_s[0];
+				String c_pos = arr_c[0];
+				
+				rankingTable.addCell(new Paragraph(s_pos,timesRomanNormal6));
+				rankingTable.addCell(new Paragraph(c_pos,timesRomanNormal6));
 
 
 				position++;
