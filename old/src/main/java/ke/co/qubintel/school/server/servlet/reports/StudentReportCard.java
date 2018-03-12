@@ -77,6 +77,7 @@ import ke.co.qubintel.school.server.persistence.staff.TeacherSubjectDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
+import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.finance.StudentBalance;
 import ke.co.qubintel.school.server.servlet.reports.exam.CommonLogic;
 import ke.co.qubintel.school.server.servlet.reports.test2.FormFour;
@@ -143,9 +144,7 @@ public class StudentReportCard extends HttpServlet{
 	private boolean grade11subjects = false;
 	private boolean classResult = true;
 
-
-	private static final String USER_SYSTEM = System.getProperty("user.name");
-	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
 	/**  
 	 *
@@ -549,7 +548,7 @@ public class StudentReportCard extends HttpServlet{
 
 
 				PdfPCell logo = new PdfPCell();
-				logo.addElement(createImage(LOGO_PATH)); 
+				logo.addElement(createImage(LOGO_PATH+account.getLogo())); 
 				logo.setBorder(Rectangle.NO_BORDER); 
 				logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
@@ -2234,7 +2233,7 @@ public class StudentReportCard extends HttpServlet{
 
 			File file = new File(realPath);
 			if(!file.exists()){
-				realPath = getServletContext().getRealPath("/images/default.jpg");
+				realPath = getServletContext().getRealPath("/school/images/logo.png");   
 
 			}
 

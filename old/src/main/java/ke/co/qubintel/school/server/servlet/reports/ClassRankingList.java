@@ -71,6 +71,7 @@ import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
+import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.reports.exam.CommonLogic;
 import ke.co.qubintel.school.server.servlet.reports.exam.PerformanceBean1;
 import ke.co.qubintel.school.server.servlet.util.PeterMid;
@@ -131,8 +132,7 @@ public class ClassRankingList extends HttpServlet{
 	private boolean grade11subjects = false;
 	private boolean classResult = true;
 
-	private static final String USER_SYSTEM = System.getProperty("user.name");
-	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
 
 	/**  
@@ -416,7 +416,7 @@ public class ClassRankingList extends HttpServlet{
 			headerTable.setWidths(new int[]{70,30});
 
 			PdfPCell logo = new PdfPCell();
-			logo.addElement(createImage(LOGO_PATH)); 
+			logo.addElement(createImage(LOGO_PATH+account.getLogo()));  
 			logo.setBorder(Rectangle.NO_BORDER); 
 			logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
@@ -1259,7 +1259,7 @@ public class ClassRankingList extends HttpServlet{
 			AtomicInteger c_count = new AtomicInteger();
 			
 			List<ClassMean> clist = classMeanDAO.getClassMeanList(accountId, classroomId, ReportUtil.getExamName(accountId, exams,1), term, year);
-			//sort the list TODO
+			//sort the list 
 			Collections.sort(clist, new ClassMeanComparator());
 			Collections.reverse(clist);
 			
@@ -1765,20 +1765,23 @@ public class ClassRankingList extends HttpServlet{
 
 
 
-	/**
+	/** TODO
 	 * @param realPath
 	 * @return
 	 */
 	private Element createImage(String realPath) {
 		Image img = null;
-
+		
 		try {
 
 			File file = new File(realPath);
+			
 			if(!file.exists()){
-				realPath = getServletContext().getRealPath("/images/default.jpg");
+				realPath = getServletContext().getRealPath("/school/images/logo.png");   
 
 			}
+			
+			System.out.println("realPath : " + realPath);  
 
 			BufferedImage bufferedImage = ImageIO.read(new File(realPath));
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

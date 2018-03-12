@@ -59,6 +59,7 @@ import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.PerfomanceDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
+import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.reports.PdfUtil;
 import ke.co.qubintel.school.server.servlet.reports.ReportUtil;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
@@ -90,8 +91,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 	private static String[] exams = {"D50E6399-B913-42F2-A5B6-F0D4BAAF9571", "34C4244E-5CE0-4D5D-AD85-60E97FDDD80A","16C4BF00-941C-40E4-9891-272D5F0979A1"};//, "16C4BF00-941C-40E4-9891-272D5F0979A1"
 
-	private static final String USER_SYSTEM = System.getProperty("user.name");
-	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
 
 	/**  
@@ -212,7 +212,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		headerTable.setWidths(new int[]{70,30});
 
 		PdfPCell logo = new PdfPCell();
-		logo.addElement(createImage(LOGO_PATH)); 
+		logo.addElement(createImage(LOGO_PATH+account.getLogo())); 
 		logo.setBorder(Rectangle.NO_BORDER); 
 		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
@@ -1192,7 +1192,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 			File file = new File(realPath);
 			if(!file.exists()){
-				realPath = getServletContext().getRealPath("/images/default.jpg");
+				realPath = getServletContext().getRealPath("/school/images/logo.png");   
 
 			}
 
