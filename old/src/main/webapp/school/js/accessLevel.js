@@ -16,7 +16,7 @@ function fetchAccessLevelsFilter() {
 
 	var curentAcessLevel = $('#accessLevel').val();
 
-	/*if (curentAcessLevel === 'C3915245-00EE-4EF4-9898-ACE59683DD60') {
+	if (curentAcessLevel === '100') {
 
 		console.log('Principal logged in')
 		$('#addNewStudentMenu').show(2000);
@@ -28,27 +28,27 @@ function fetchAccessLevelsFilter() {
 		}
 	}
 
-	else if (curentAcessLevel === '615F04C1-00BF-499C-AC7A-B46B69243AAA') {
+	else if (curentAcessLevel === '200') {
 		console.log('Deputy Principal logged in')
 		$('#financeMenu').remove();
 		
 
 	}
 
-	else if (curentAcessLevel === '0DE968C9-7309-C481-58F7-AB6CDB1011EH') {
+	else if (curentAcessLevel === '300') {
 		console.log('CM logged in')
 		$('#financeMenu').remove();
 		$('#studentMenu').remove();
 		// $('#finance').remove();
 
-	} else if (curentAcessLevel === '1CC7F06E-9938-4850-81FB-9CC249C7CFA2') {
+	} else if (curentAcessLevel === '400') {
 		console.log('HOD logged in')
 		$('#financeMenu').remove();
 		$('#studentMenu').remove();
 		
 		// $('#finance').remove();
 
-	} else if (curentAcessLevel === 'BDF7F33D-1936-43F3-B14B-8FC3EA3A1265') {
+	} else if (curentAcessLevel === '500') {
 		console.log('Teacher logged in')
 		$('#financeMenu').remove();
 		$('#studentListMenu').remove();
@@ -57,14 +57,14 @@ function fetchAccessLevelsFilter() {
 		$('#controlMenu').remove();
 		$('#staffMenu').remove();
 
-	} else if (curentAcessLevel === '64553348-3229-4869-A13D-CADFC1D3AF46') {
+	} else if (curentAcessLevel === '600') {
 		console.log('Secretary logged in')
 		$('#financeMenu').remove();
 		$('#controlMenu').remove();
 		$('#staffMenu').remove();
 		$('#academicsMenu').remove();
 
-	} else if (curentAcessLevel === '0DE968C9-7309-C481-58F7-AB6CDB1011EF') {
+	} else if (curentAcessLevel === '700') {
 		console.log('Bursar logged in')
 		$('#studentMenu').remove();
 		$('#controlMenu').remove();
@@ -82,7 +82,7 @@ function fetchAccessLevelsFilter() {
 		$('#academicsMenu').remove();
 		$('#financeMenu').remove();
 
-	}*/
+	}
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
