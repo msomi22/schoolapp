@@ -240,10 +240,11 @@
 	
 	
 	
-	
+	<!--  
 	<listener>
 		<listener-class>ke.co.qubintel.school.server.servlet.quartz.QuartzListener</listener-class>
 	</listener>
+	-->
 	
 	<listener>
 		<listener-class>ke.co.qubintel.school.server.servlet.quartz.factory.ScheduleJOb</listener-class>
