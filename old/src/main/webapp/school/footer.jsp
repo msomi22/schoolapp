@@ -1,5 +1,6 @@
 <%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
-<%@page import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
+<%@page
+	import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
 
 <%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
@@ -7,13 +8,12 @@
 
 <%
 	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
-   
+
 	AccountDAO accountDAO = AccountDAO.getInstance();
-	
+
 	Account account = new Account();
-	
+
 	account = accountDAO.getAccountById(accountId);
-	
 %>
 
 
@@ -25,17 +25,18 @@
 
 	<div class="row">
 
-		<div class="col-md-4 col-md-offset-2 col-sm-6">
+		<div class="col-md-3 col-md-offset-2 col-sm-6">Contacts:
+			(info@qubintel.co.ke , +254 718 953974 )</div>
 
-			Contacts: (<%=account.getEmail() + " , " + account.getMobile()%>)
+		<div class="col-md-4">
 			Motto:
 			<%=account.getMotto()%>
 
 		</div>
 
 
-		<div class="col-md-2 col-sm-6 col-md-offset-4">
-			&copy; F.M.S 
+		<div class="col-md-2 col-sm-6 col-md-offset-1">
+			&copy; F.M.S
 			<%=Calendar.getInstance().get(Calendar.YEAR)%>.
 		</div>
 
@@ -60,9 +61,9 @@
 <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
-  <script src="js/accessLevel.js"></script> 
+<script src="js/accessLevel.js"></script>
 
-<script src="js/checkAcess.js"></script> 
+<script src="js/checkAcess.js"></script>
 
 
 
@@ -103,12 +104,20 @@
 		autoclose : true
 
 	});
-	
+
 	var message = "function disabled";
 
-	function rtclickcheck(keyp){ if (navigator.appName == "Netscape" && keyp.which == 3){  console.log(message); return false; }
+	function rtclickcheck(keyp) {
+		if (navigator.appName == "Netscape" && keyp.which == 3) {
+			console.log(message);
+			return false;
+		}
 
-	if (navigator.appVersion.indexOf("MSIE") != -1 && event.button == 2) { console.log(message); return false; } }
+		if (navigator.appVersion.indexOf("MSIE") != -1 && event.button == 2) {
+			console.log(message);
+			return false;
+		}
+	}
 
 	document.onmousedown = rtclickcheck;
 </script>
@@ -158,12 +167,10 @@
 <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script
 	src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-	
-	<script
-	src="../vendors/datatables.net-bs/js/dataTables.select.min.js"></script>
-	
-	<script
-	src="../vendors/datatables.net-bs/js/dataTables.editor.min.js"></script>
+
+<script src="../vendors/datatables.net-bs/js/dataTables.select.min.js"></script>
+
+<script src="../vendors/datatables.net-bs/js/dataTables.editor.min.js"></script>
 <script
 	src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
 <script
@@ -310,7 +317,7 @@
 		console.log('Heheheh');
 		// sessionStorage.clear();
 
-	//	disableBackButton();
+		//	disableBackButton();
 
 	})
 
@@ -318,15 +325,15 @@
 		window.history.forward();
 	}
 	//setTimeout("disableBackButton()", 0);
-	
+
 	window.onhashchange = function() {
-		 //blah blah blah
-		 
-				console.log(window.location);
-		 
-		 alert(window.location);
-		}
-	
+		//blah blah blah
+
+		console.log(window.location);
+
+		alert(window.location);
+	}
+
 	console.log(window.location);
 </script>
 

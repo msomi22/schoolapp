@@ -29,6 +29,11 @@
 <!-- Custom Theme Style -->
 <link href="build/css/custom.min.css" rel="stylesheet">
 
+<!-- Styling -->
+
+
+<link rel="stylesheet" href="school/css/ui-styling2.css">
+
 <link rel="icon" href="resources/favicon.ico">
 </head>
 
@@ -45,20 +50,16 @@
 				<section class="login_content">
 					<%
 						String loginErrStr = "";
-					
-				
 
-						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null | session !=null) {
+						if (session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY) != null | session != null) {
 							loginErrStr = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR);
 
-							
 							//  session.invalidate();
-							 // session.invalidate(); 
+							// session.invalidate(); 
 
-						     //   response.sendRedirect("index.jsp");
-							
-						
-						} 
+							//   response.sendRedirect("index.jsp");
+
+						}
 
 						if (StringUtils.isNotEmpty(loginErrStr)) {
 					%>
@@ -92,10 +93,11 @@
 						</div>
 
 						<div>
-							<button type="submit" class="btn btn-primary btn-block btn-flat">Log
+							<button type="submit" class="btn btn-primary btn-block btn-flat cards">Log
 								in</button>
 
-							<a class="reset_pass" onclick="forgotPassword()" href="#">Lost your password?</a>
+							<a class="reset_pass" onclick="forgotPassword()" href="#">Lost
+								your password?</a>
 						</div>
 
 						<div class="clearfix"></div>
@@ -114,6 +116,8 @@
 									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
+								<a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a>
 							</div>
 						</div>
 					</form>
@@ -161,6 +165,8 @@
 									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
+								<a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a>
 							</div>
 						</div>
 					</form>
@@ -168,7 +174,7 @@
 			</div>
 
 
-			<div id="forgotPassword" class="animate form" style="display:none">
+			<div id="forgotPassword" class="animate form" style="display: none">
 				<section class="login_content">
 					<form action="#" method="post" id="forgotPasswordForm">
 						<h1>Forgot Password</h1>
@@ -176,14 +182,14 @@
 						<div class="row alert alert-info">
 
 
-							<h2>Please enter the following to get your
-								password:</h2>
-								<h6>School account name or email for the first field</h6>
-						
-								<h6>Your Email Address or Phone number for the second input field</h6>
+							<h2>Please enter the following to get your password:</h2>
+							<h6>School account name or email for the first field</h6>
+
+							<h6>Your Email Address or Phone number for the second input
+								field</h6>
 
 
-					
+
 
 						</div>
 						<div>
@@ -191,8 +197,8 @@
 								placeholder="Enter School Account Name or Email"
 								required="required" />
 						</div>
-						
-						
+
+
 						<div>
 							<input type="text" class="form-control"
 								placeholder="Your Phone number or  email" id="query"
@@ -200,8 +206,8 @@
 						</div>
 
 						<div>
-							<button type="button" onclick="requestPassword()" class="btn btn-primary btn-block btn-flat">Submit
-							</button>
+							<button type="button" onclick="requestPassword()"
+								class="btn btn-primary btn-block btn-flat">Submit</button>
 						</div>
 
 						<div class="clearfix"></div>
@@ -220,6 +226,8 @@
 									<i class="fa fa-graduation-cap"></i>F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
+								<a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a>
 							</div>
 						</div>
 					</form>
@@ -232,76 +240,67 @@
 
 
 	</div>
-	
+
 	<!-- jQuery -->
-<script src="vendors/jquery/dist/jquery.min.js"></script>
-<!-- <script src="../vendors/jquery-ui/jquery-ui.min.js"></script> -->
+	<script src="vendors/jquery/dist/jquery.min.js"></script>
+	<!-- <script src="../vendors/jquery-ui/jquery-ui.min.js"></script> -->
 
 
-<!-- Bootstrap -->
-<script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-	
-	
+	<!-- Bootstrap -->
+	<script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
 	<!-- Json conversion -->
 
-<script src="school/js/json/jquery.serializejson.js"></script>
+	<script src="school/js/json/jquery.serializejson.js"></script>
 
 
-<!-- RootApiCall js -->
-<script src="school/js/apiCalls/rootApiCall.js"></script>
+	<!-- RootApiCall js -->
+	<script src="school/js/apiCalls/rootApiCall.js"></script>
 
 
 
-<!-- RootApiCall Response Parser js -->
-<script src="school/js/apiCalls/rootApisResponseParser.js"></script>
+	<!-- RootApiCall Response Parser js -->
+	<script src="school/js/apiCalls/rootApisResponseParser.js"></script>
 
 
-<!-- RootForm validator js -->
-<script src="school/js/rootFormValidator.js"></script>
+	<!-- RootForm validator js -->
+	<script src="school/js/rootFormValidator.js"></script>
 
 
 	<script src="school/js/passwordUpdate.js"></script>
-	
-	
-	<script  type="text/javascript">
-	$(document).ready(function() {
-		console.log('Heheheh');
-		// sessionStorage.clear();
 
-		disableBackButton();
-		
-		/* window.location = location.protocol + "//" + window.location.host
-		+ "/school/schoolLogout"; 
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			console.log('Heheheh');
+			// sessionStorage.clear();
+
+			disableBackButton();
+
+			/* window.location = location.protocol + "//" + window.location.host
+			+ "/school/schoolLogout"; 
+			window.onhashchange = function() {
+			//blah blah blah
+			}*/
+
+		})
+
 		window.onhashchange = function() {
- //blah blah blah
-}*/
-		
+			//blah blah blah
 
-	})
-	
-	window.onhashchange = function() {
- //blah blah blah
- 
-		console.log(window.location);
-}
+			console.log(window.location);
+		}
 
-	function disableBackButton() {
-		window.history.forward();
-	}
-	setInterval("disableBackButton()", 10);
-	
-	
-	
-	
-	
-	
-	
-	
+		function disableBackButton() {
+			window.history.forward();
+		}
+		setInterval("disableBackButton()", 10);
 	</script>
-	
-	
-<!-- State Modal -->
-<jsp:include page="school/modals/initModals.html" />
-	
+
+
+	<!-- State Modal -->
+	<jsp:include page="school/modals/initModals.html" />
+
 </body>
 </html>
