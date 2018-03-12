@@ -196,7 +196,7 @@ public class StudentPerStream extends HttpServlet{
 		//headerTable.isSkipFirstHeader();
 
 		PdfPCell logo = new PdfPCell();
-		logo.addElement(createImage(LOGO_PATH)); 
+		logo.addElement(createImage(LOGO_PATH+account.getLogo())); 
 		logo.setBorder(Rectangle.NO_BORDER); 
 		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 

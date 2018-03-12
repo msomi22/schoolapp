@@ -254,7 +254,7 @@ public class FeeBalancePerStream extends HttpServlet{
 				schoolTable.setWidths(new int[]{70,30});  
 
 				PdfPCell logoCell = new PdfPCell();
-				logoCell.addElement(createImage(LOGO_PATH)); 
+				logoCell.addElement(createImage(LOGO_PATH+account.getLogo())); 
 				logoCell.setBorder(Rectangle.NO_BORDER); 
 				logoCell.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
