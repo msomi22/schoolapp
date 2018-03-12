@@ -39,12 +39,12 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
     /**
      * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
      */
-    public void contextInitialized(ServletContextEvent servletContext) {/*
+    public void contextInitialized(ServletContextEvent servletContext) {
               
     	  try {
     		  
                     // Setup the Job class and the Job group
-                    JobDetail job = newJob(QuartzJob.class).withIdentity(
+                    JobDetail job = newJob(DbOperationsJob.class).withIdentity(
                                     "CronQuartzJob", "Group").build();
 
                     // Create a Trigger that fires every 1 minutes 
@@ -84,7 +84,7 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
              catch (SchedulerException e) {
                e.printStackTrace();
             }
-    */}
+    }
 
     /**
      * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
