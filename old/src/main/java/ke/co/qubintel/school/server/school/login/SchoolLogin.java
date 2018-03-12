@@ -118,7 +118,8 @@ public class SchoolLogin extends HttpServlet {
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME, staff.getUsername());
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY,
-						staff.getAcessLevelId());
+						acessLevelDAO.getAcessLevel(staff.getAccountId(), staff.getAcessLevelId()).getAcessId());
+
 
 				// token
 				ApiCredentials apiKey = new ApiCredentials();
