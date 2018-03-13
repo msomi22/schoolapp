@@ -27,7 +27,7 @@
 <link href="vendors/animate.css/animate.min.css" rel="stylesheet">
 
 <!-- Custom Theme Style -->
-<link href="build/css/custom.min.css" rel="stylesheet">
+<link href="build/css/custom.css" rel="stylesheet">
 
 <!-- Styling -->
 
@@ -49,7 +49,7 @@
 				<div class="row">
 
 					<div
-						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-6 ">
+						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-offset-1 col-xs-5 ">
 
 						<img class="img-responsive cards logoPlace"
 							src="school/images/logo.png">
