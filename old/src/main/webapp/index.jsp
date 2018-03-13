@@ -49,9 +49,9 @@
 				<div class="row">
 
 					<div
-						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-offset-1 col-xs-5 ">
+						class="col-md-offset-2 col-md-2 col-sm-offset-2 col-sm-4 col-xs-offset-1 col-xs-5 ">
 
-						<img class="img-responsive cards logoPlace"
+						<img class="img-responsive cards logoPlace" width="80%"
 							src="school/images/logo.png">
 
 					</div>
@@ -59,7 +59,7 @@
 
 
 					<div
-						class="col-md-offset-3 col-md-3 col-sm-offset-2 col-sm-4 col-xs-6 ">
+						class="col-md-offset-5 col-md-3 col-sm-offset-2 col-sm-4 col-xs-6 ">
 
 						<div class="logoPlace">
 
