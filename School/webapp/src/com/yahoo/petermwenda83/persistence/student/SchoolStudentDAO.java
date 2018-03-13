@@ -76,6 +76,8 @@ public interface SchoolStudentDAO {
 	   
 	public List<Student> getAllStudents(String schoolaccountUuid,String classRoomUuid);
 	
+	public List<Student> getAllStudents(String schoolaccountUuid,String classRoomUuid, String statusuuid);
+	
 	
 	/**
 	 * 

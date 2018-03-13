@@ -55,6 +55,7 @@ import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
+import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.reports.PdfUtil;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
 
@@ -76,8 +77,7 @@ public class StudentPerStream extends HttpServlet{
 
 	//private Font timesRomanBold12_colored = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
 
-	private static final String USER_SYSTEM = System.getProperty("user.name");
-	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
 	private Document document;
 	private PdfWriter writer;
@@ -196,7 +196,7 @@ public class StudentPerStream extends HttpServlet{
 		//headerTable.isSkipFirstHeader();
 
 		PdfPCell logo = new PdfPCell();
-		logo.addElement(createImage(LOGO_PATH)); 
+		logo.addElement(createImage(LOGO_PATH+account.getLogo())); 
 		logo.setBorder(Rectangle.NO_BORDER); 
 		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
@@ -424,7 +424,7 @@ public class StudentPerStream extends HttpServlet{
 
 			File file = new File(realPath);
 			if(!file.exists()){
-				realPath = getServletContext().getRealPath("/images/default.jpg");
+				realPath = getServletContext().getRealPath("/school/images/logo.png");   
 
 			}
 

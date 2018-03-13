@@ -26,6 +26,8 @@ public class WriteToFile {
 
 	static final String FILENAME = "/home/"+USER_SYSTEM+"/school/.dbscripts/backup.sh";
     static final String DB_DIRECTORY = "/home/"+USER_SYSTEM+"/school/dbBackup/";
+    public static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/";
+    
 	
    /**
     * 
@@ -35,7 +37,7 @@ public class WriteToFile {
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 
-		makeBackupDir();
+		makeDirs();
 		createFile(FILENAME);
 
 		try {
@@ -157,19 +159,30 @@ public class WriteToFile {
 	/**
 	 * 
 	 */
-	public static void makeBackupDir(){ 
+	public static void makeDirs(){ 
 		
-		System.out.println("Done creating backup directory");
+		System.out.println("Done creating directories");
 
-		File dir = new File(DB_DIRECTORY);
+		File backup_dir = new File(DB_DIRECTORY);
+		File logo_dir = new File(LOGO_PATH);
 		
-		if (!dir.exists()) {
+		if (!backup_dir.exists()) {
 			try {
 				FileUtils.forceMkdir(new File(DB_DIRECTORY));
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage());
 			}
 		}
+		
+		
+		if (!logo_dir.exists()) {
+			try {
+				FileUtils.forceMkdir(new File(LOGO_PATH));
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
 
 	}
 

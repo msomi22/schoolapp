@@ -55,6 +55,7 @@ import ke.co.qubintel.school.server.persistence.exam.ClassMeanDAO;
 import ke.co.qubintel.school.server.persistence.exam.ExamDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
 
 /** /school/streamAnalysis?accountId=b83e9b89-0d52-4191-a6bf-acf501267e2e1&streamId=4DA86139-6A72-4089-8858-6A3A613FDFE6&examId=1_CAT 1
@@ -83,8 +84,7 @@ public class StreamAnalysis extends HttpServlet{
 
 	private Logger logger;
 	
-	private static final String USER_SYSTEM = System.getProperty("user.name");
-	private static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/logo.png";
+	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
 	/**  
 	 *
@@ -204,7 +204,7 @@ public class StreamAnalysis extends HttpServlet{
 		headerTable.setWidths(new int[]{70,30});
 
 		PdfPCell logo = new PdfPCell();
-		logo.addElement(createImage(LOGO_PATH)); 
+		logo.addElement(createImage(LOGO_PATH+account.getLogo())); 
 		logo.setBorder(Rectangle.NO_BORDER); 
 		logo.setHorizontalAlignment(Element.ALIGN_CENTER); 
 
@@ -321,7 +321,7 @@ public class StreamAnalysis extends HttpServlet{
 
 			File file = new File(realPath);
 			if(!file.exists()){
-				realPath = getServletContext().getRealPath("/images/default.jpg");
+				realPath = getServletContext().getRealPath("/school/images/logo.png");   
 
 			}
 

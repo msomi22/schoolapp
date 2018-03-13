@@ -117,7 +117,8 @@
 
      StudentDAO studentDAO = StudentDAO.getInstance();
      List<Student> studentList = new ArrayList<Student>(); 
-     studentList = studentDAO.getAllStudents(accountuuid,classroomuuid2);
+     String active_status = "85C6F08E-902C-46C2-8746-8C50E7D11E2E";
+     studentList = studentDAO.getAllStudents(accountuuid,classroomuuid2,active_status);
     
       if(studentList !=null){
      for(Student stu : studentList){
