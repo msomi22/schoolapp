@@ -34,6 +34,8 @@
 
 <link rel="stylesheet" href="school/css/ui-styling2.css">
 
+<link rel="stylesheet" href="school/css/formelementBorder.css">
+
 <link rel="icon" href="resources/favicon.ico">
 </head>
 
@@ -42,14 +44,14 @@
 
 		<div class="container">
 
-			<div class="row">
+			<div class="">
 
 				<div class="row">
 
 					<div
-						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-offset-2 col-xs-4 ">
+						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-6 ">
 
-						<img class="img-responsive cards logoPlace" width="20%"
+						<img class="img-responsive cards logoPlace"
 							src="school/images/logo.png">
 
 					</div>
@@ -57,7 +59,7 @@
 
 
 					<div
-						class="col-md-offset-3 col-md-3 col-sm-offset-2 col-sm-4 col-xs-offset-2 col-xs-4  ">
+						class="col-md-offset-3 col-md-3 col-sm-offset-2 col-sm-4 col-xs-6 ">
 
 						<div class="logoPlace">
 
@@ -125,17 +127,17 @@
 						<h1>Login Form</h1>
 
 						<div>
-							<input type="text" class="form-control"
+							<input type="text" class="form-control formelement"
 								placeholder="School Username" required name="schoolUsername" />
 						</div>
 
 						<div>
-							<input type="text" class="form-control"
+							<input type="text" class="form-control formelement"
 								placeholder="Staff Username" required name="staffUsername" />
 						</div>
 
 						<div>
-							<input type="password" class="form-control"
+							<input type="password" class="form-control formelement"
 								placeholder="Password" required name="staffPassword" />
 						</div>
 
@@ -163,8 +165,8 @@
 									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
-								<a class="btn btn-primary secondary-assent cards"
-									data-toggle="modal" data-target="#contact">Contact Us...</a>
+								<!-- <a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a> -->
 							</div>
 						</div>
 					</form>
@@ -212,8 +214,8 @@
 									<i class="fa fa-graduation-cap"></i> F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
-								<a class="btn btn-primary secondary-assent cards"
-									data-toggle="modal" data-target="#contact">Contact Us...</a>
+								<!-- <a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a> -->
 							</div>
 						</div>
 					</form>
@@ -273,8 +275,8 @@
 									<i class="fa fa-graduation-cap"></i>F.M.S
 								</h1>
 								<p>&copy;2017 All Rights Reserved.</p>
-								<a class="btn btn-primary secondary-assent cards"
-									data-toggle="modal" data-target="#contact">Contact Us...</a>
+							<!-- 	<a class="btn btn-primary secondary-assent cards"
+									data-toggle="modal" data-target="#contact">Contact Us...</a> -->
 							</div>
 						</div>
 					</form>
