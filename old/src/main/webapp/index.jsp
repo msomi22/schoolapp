@@ -226,12 +226,12 @@
 			<div id="forgotPassword" class="animate form" style="display: none">
 				<section class="login_content">
 					<form action="#" method="post" id="forgotPasswordForm">
-						<h1>Forgot Password</h1>
+						<h3>Forgot Password</h3>
 
 						<div class="row alert alert-info">
 
 
-							<h2>Please enter the following to get your password:</h2>
+							<h4>Please enter the following to get your password:</h4>
 							<h6>School account name or email for the first field</h6>
 
 							<h6>Your Email Address or Phone number for the second input
