@@ -39,6 +39,53 @@
 
 <body class="login" onload="disableBackButton()">
 	<div>
+
+		<div class="container">
+
+			<div class="row">
+
+				<div class="row">
+
+					<div
+						class="col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4 col-xs-offset-2 col-xs-4 ">
+
+						<img class="img-responsive cards logoPlace" width="20%"
+							src="school/images/logo.png">
+
+					</div>
+
+
+
+					<div
+						class="col-md-offset-3 col-md-3 col-sm-offset-2 col-sm-4 col-xs-offset-2 col-xs-4  ">
+
+						<div class="logoPlace">
+
+							<h4>
+								<b>Email : info@qubintel.co.ke</b>
+							</h4>
+							<h4>
+								<b>Tel 1 : +254 718 953974</b>
+							</h4>
+							<h4>
+								<b>Tel 2 : +254 706 975801</b>
+							</h4>
+
+
+						</div>
+
+					</div>
+
+
+
+				</div>
+
+
+
+			</div>
+
+
+		</div>
 		<a class="hiddenanchor" id="signup"></a> <a class="hiddenanchor"
 			id="signin"></a>
 
@@ -93,8 +140,8 @@
 						</div>
 
 						<div>
-							<button type="submit" class="btn btn-primary btn-block btn-flat cards">Log
-								in</button>
+							<button type="submit"
+								class="btn btn-primary btn-block btn-flat cards">Log in</button>
 
 							<a class="reset_pass" onclick="forgotPassword()" href="#">Lost
 								your password?</a>
