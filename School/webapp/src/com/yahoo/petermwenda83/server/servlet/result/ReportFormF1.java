@@ -226,6 +226,8 @@ public class ReportFormF1 extends HttpServlet{
 	String EndTermOnly = "";
 	String EndTermAndC2 = "";
 	String EndTermC1AndC2 = "";
+	
+	private boolean isFormTwo = false;
 
 
 	/**
@@ -307,6 +309,10 @@ public class ReportFormF1 extends HttpServlet{
 		}
 		
 		//System.out.println("stffID: " + stffID + ", classIDL " + classID);
+		
+		if(StringUtils.equals(classID, "3E22E428-3155-42F5-B73E-66553ED501C9")) { 
+			isFormTwo = true;
+		}
 
 
 		examConfig = examConfigDAO.getExamConfig(school.getUuid());
@@ -1124,7 +1130,15 @@ public class ReportFormF1 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; 
+					
+					//TODO
+					
+					if(isFormTwo) {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; 
+					}else {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; 
+					}
+					
 					MEANMapgn.put(uuid,meangn);
 					//TODO save this mean for future use  
 					Deviation dev;
@@ -1925,7 +1939,14 @@ public class ReportFormF1 extends HttpServlet{
 					String uuid = item[0];
 
 					totalz = item[1];
-					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;  
+					
+					//TODO
+					if(isFormTwo) {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;  
+					}else {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;  
+					}
+					
 
 
 
@@ -2382,7 +2403,14 @@ public class ReportFormF1 extends HttpServlet{
 					double the_grandscore = 0;
 
 					the_grandscore = Double.parseDouble(totalz);
-					mean = the_grandscore/ExamConstants.NO_OF_SUB_11; 
+					
+					//TODO
+					
+					if(isFormTwo) {
+						mean = the_grandscore/ExamConstants.NO_OF_SUB; 
+					}else {
+						mean = the_grandscore/ExamConstants.NO_OF_SUB_11;  
+					}
 
 
 					BaseColor baseColor = new BaseColor(255,255,255);//while
