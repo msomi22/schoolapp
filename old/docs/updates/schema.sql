@@ -29,11 +29,6 @@ CREATE TABLE StudentHouse (
 ALTER TABLE StudentHouse OWNER TO school;
 
 
----Future update
----examSubNumber can be 11 or 12 for form one, 11 or 10 for from 2, 8 for from 3 and 7 for form 4
----these are the number of subjects to be used in granding 
-ALTER TABLE classRoom ADD COLUMN examSubNumber INTEGER NOT NULL; 
-
-ALTER TABLE Student indexNo ADD COLUMN VARCHAR(50) NOT NULL;
-
-ALTER TABLE StudentPrimary ADD COLUMN kcpeGrade VARCHAR(50) NOT NULL;
+ALTER TABLE classRoom ADD COLUMN examSubNumber INTEGER; 
+ALTER TABLE Student ADD COLUMN indexNo VARCHAR;
+ALTER TABLE StudentPrimary ADD COLUMN kcpeGrade VARCHAR;
