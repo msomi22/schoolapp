@@ -160,7 +160,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 		try (
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Student WHERE accountId = ? AND "
-						+ "(regNo ILIKE ? OR firstname ILIKE ? OR middlename ILIKE ? OR lastname ILIKE ? OR bcertNo ILIKE ?) ORDER BY "
+						+ "(regNo ILIKE ? OR indexNo ILIKE ? OR firstname ILIKE ? OR middlename ILIKE ? OR lastname ILIKE ? OR bcertNo ILIKE ?) ORDER BY "
 						+ "regNo ASC LIMIT ? OFFSET ?;");    		   
 				) {
 			pstmt.setString(1, accountId);           
@@ -169,8 +169,9 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			pstmt.setString(4, "%" + query + "%");
 			pstmt.setString(5, "%" + query + "%");
 			pstmt.setString(6, "%" + query + "%");
-			pstmt.setInt(7, 15);
-			pstmt.setInt(8, 0);
+			pstmt.setString(7, "%" + query + "%");
+			pstmt.setInt(8, 15);
+			pstmt.setInt(9, 0);
 			try( ResultSet rset = pstmt.executeQuery();){
 
 				list = beanProcessor.toBeanList(rset, Student.class);
@@ -196,9 +197,9 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Student (uuid, accountId, regStream, currentStream , "
-						+ "isActive, isAlumni, isBoarding, isGoKFeeEligibe, regNo, firstname, middlename, lastname, gender, dob, bcertNo, county, "
+						+ "isActive, isAlumni, isBoarding, isGoKFeeEligibe, regNo, indexNo, firstname, middlename, lastname, gender, dob, bcertNo, county, "
 						+ "regTerm, finalYear, finalTerm, passport, lastUpdated, admissionDate)"
-						+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+						+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 				){
 		
 			pstmt.setString(1, student.getUuid());
@@ -210,19 +211,20 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			pstmt.setString(7, student.getIsBoarding());
 			pstmt.setString(8, student.getIsGoKFeeEligibe());
 			pstmt.setString(9, student.getRegNo());
-			pstmt.setString(10, student.getFirstname());
-			pstmt.setString(11, student.getMiddlename());
-			pstmt.setString(12, student.getLastname());
-			pstmt.setString(13, student.getGender());
-			pstmt.setString(14, student.getDob());
-			pstmt.setString(15, student.getBcertNo());
-			pstmt.setString(16, student.getCounty());
-			pstmt.setString(17, student.getRegTerm());
-			pstmt.setInt(18, student.getFinalYear());
-			pstmt.setInt(19, student.getFinalTerm());
-			pstmt.setString(20, student.getPassport());
-			pstmt.setString(21, student.getLastUpdated());
-			pstmt.setTimestamp(22, new Timestamp(student.getAdmissionDate().getTime()));
+			pstmt.setString(10, student.getIndexNo());
+			pstmt.setString(11, student.getFirstname());
+			pstmt.setString(12, student.getMiddlename());
+			pstmt.setString(13, student.getLastname());
+			pstmt.setString(14, student.getGender());
+			pstmt.setString(15, student.getDob());
+			pstmt.setString(16, student.getBcertNo());
+			pstmt.setString(17, student.getCounty());
+			pstmt.setString(18, student.getRegTerm());
+			pstmt.setInt(19, student.getFinalYear());
+			pstmt.setInt(20, student.getFinalTerm());
+			pstmt.setString(21, student.getPassport());
+			pstmt.setString(22, student.getLastUpdated());
+			pstmt.setTimestamp(23, new Timestamp(student.getAdmissionDate().getTime()));
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -247,7 +249,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE Student SET regStream =?, currentStream =?, isActive =?, isAlumni =?, "
-						+ "isBoarding =?, isGoKFeeEligibe=?, regNo =?, firstname =?, middlename =?, lastname=?, gender =?, dob =?, bcertNo =?, county =?, "
+						+ "isBoarding =?, isGoKFeeEligibe=?, regNo =?, indexNo =?, firstname =?, middlename =?, lastname=?, gender =?, dob =?, bcertNo =?, county =?, "
 						+ "regTerm =?, finalYear=?, finalTerm=?, passport=?, lastUpdated=? WHERE uuid = ? AND accountId = ?;");
 				){
 			
@@ -259,20 +261,21 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 			pstmt.setString(5, student.getIsBoarding());
 			pstmt.setString(6, student.getIsGoKFeeEligibe());
 			pstmt.setString(7, student.getRegNo());
-			pstmt.setString(8, student.getFirstname());
-			pstmt.setString(9, student.getMiddlename());
-			pstmt.setString(10, student.getLastname());
-			pstmt.setString(11, student.getGender());
-			pstmt.setString(12, student.getDob());
-			pstmt.setString(13, student.getBcertNo());
-			pstmt.setString(14, student.getCounty());
-			pstmt.setString(15, student.getRegTerm());
-			pstmt.setInt(16, student.getFinalYear());
-			pstmt.setInt(17, student.getFinalTerm());
-			pstmt.setString(18, student.getPassport());
-			pstmt.setString(19, student.getLastUpdated());
-			pstmt.setString(20, student.getUuid());
-			pstmt.setString(21, student.getAccountId());
+			pstmt.setString(8, student.getIndexNo()); 
+			pstmt.setString(9, student.getFirstname());
+			pstmt.setString(10, student.getMiddlename());
+			pstmt.setString(11, student.getLastname());
+			pstmt.setString(12, student.getGender());
+			pstmt.setString(13, student.getDob());
+			pstmt.setString(14, student.getBcertNo());
+			pstmt.setString(15, student.getCounty());
+			pstmt.setString(16, student.getRegTerm());
+			pstmt.setInt(17, student.getFinalYear());
+			pstmt.setInt(18, student.getFinalTerm());
+			pstmt.setString(19, student.getPassport());
+			pstmt.setString(20, student.getLastUpdated());
+			pstmt.setString(21, student.getUuid());
+			pstmt.setString(22, student.getAccountId());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){

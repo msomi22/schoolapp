@@ -26,6 +26,7 @@ public class StudentPrimary extends StorableBean {
 	private String index;
 	private String kcpeyear;
 	private String kcpemark;
+	private String kcpeGrade;
 	
 	
 	/**
@@ -38,6 +39,7 @@ public class StudentPrimary extends StorableBean {
 		index ="";
 		kcpeyear ="";
 		kcpemark ="";
+		kcpeGrade = "";
 	}
 
 	
@@ -133,13 +135,31 @@ public class StudentPrimary extends StorableBean {
 
 
 	/**
+	 * @return the kcpeGrade
+	 */
+	public String getKcpeGrade() {
+		return kcpeGrade;
+	}
+
+
+
+	/**
+	 * @param kcpeGrade the kcpeGrade to set
+	 */
+	public void setKcpeGrade(String kcpeGrade) {
+		this.kcpeGrade = kcpeGrade;
+	}
+
+
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "StudentPrimary [studentId=" + studentId + ", schoolName=" + schoolName + ", index=" + index
-				+ ", kcpeyear=" + kcpeyear + ", kcpemark=" + kcpemark + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+				+ ", kcpeyear=" + kcpeyear + ", kcpemark=" + kcpemark + ", kcpeGrade=" + kcpeGrade + ", getUuid()="
+				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

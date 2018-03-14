@@ -28,22 +28,12 @@ CREATE TABLE StudentHouse (
 );
 ALTER TABLE StudentHouse OWNER TO school;
 
--- -------------------
--- Table StudentMisc
-----------------------
--- Stores any new property belonging to a student
-CREATE TABLE StudentMisc (
-    id SERIAL PRIMARY KEY,
-    uuid VARCHAR(100) UNIQUE NOT NULL,
-    accountId VARCHAR(100) REFERENCES Account(uuid),
-    studentId VARCHAR(100) REFERENCES Student(uuid),
-    key VARCHAR(255),
-    value VARCHAR(255)
-);
-ALTER TABLE StudentMisc OWNER TO school;
-
 
 ---Future update
 ---examSubNumber can be 11 or 12 for form one, 11 or 10 for from 2, 8 for from 3 and 7 for form 4
 ---these are the number of subjects to be used in granding 
 ALTER TABLE classRoom ADD COLUMN examSubNumber INTEGER NOT NULL; 
+
+ALTER TABLE Student indexNo ADD COLUMN VARCHAR(50) NOT NULL;
+
+ALTER TABLE StudentPrimary ADD COLUMN kcpeGrade VARCHAR(50) NOT NULL;
