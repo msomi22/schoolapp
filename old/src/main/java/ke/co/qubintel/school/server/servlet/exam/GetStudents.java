@@ -68,7 +68,7 @@ public class GetStudents extends HttpServlet{
 		String examId = StringUtils.trimToEmpty(request.getParameter("examId"));
 
 		String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
-
+		
 		String jwt = (String) session.getAttribute(SessionConstants.USER_JSON_WEB_TOKEN);  
 		String userId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
 		String jwtSubject = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_USERNAME);
@@ -78,10 +78,6 @@ public class GetStudents extends HttpServlet{
 		idsMap.put("streamId", streamId);
 		idsMap.put("examId", examId); 
 		idsMap.put("subjectId", subjectId); 
-		
-		/*System.out.println(jwt);
-		System.out.println("userId : " + userId);
-		System.out.println("jwtSubject : " + jwtSubject);*/
 		
 		ApiCredentials apiKey = new ApiCredentials();
 
@@ -109,6 +105,8 @@ public class GetStudents extends HttpServlet{
 			if(studentDAO.getStudentByStream(accountId, streamId) != null){
 				students = studentDAO.getStudentByStream(accountId, streamId);
 			}
+			
+			//System.out.println(students); 
 
              
 			       students
@@ -140,6 +138,12 @@ public class GetStudents extends HttpServlet{
 		 * Read more here ( https://www.journaldev.com/780/comparable-and-comparator-in-java-example ) 
 		 */
 		Collections.sort(selectedStudents); 
+		
+		/*System.out.println("*********************************************************");
+		System.out.println(selectedStudents); 
+		System.out.println("streamId: " + streamId + ", subjectId: " + subjectId + ", examId:" + examId + ", accountId: " + accountId); */
+		
+		//streamId,subjectId,examId,accountId
 
 		session.setAttribute(SessionConstants.EXAM_GET_STUDENTS_IDS, idsMap);  
 		session.setAttribute(SessionConstants.EXAM_GET_STUDENTS, selectedStudents); 
