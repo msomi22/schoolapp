@@ -59,8 +59,8 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
                     scheduler = new StdSchedulerFactory().getScheduler();
-                    scheduler.start();
-                    scheduler.scheduleJob(job, trigger);
+                    //scheduler.start();
+                   // scheduler.scheduleJob(job, trigger);
                     
                     
                     
@@ -77,8 +77,8 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
                     scheduler = new StdSchedulerFactory().getScheduler();
-                    scheduler.start();
-                    scheduler.scheduleJob(job2, trigger2);
+                   // scheduler.start();
+                    //scheduler.scheduleJob(job2, trigger2);
                  
                  }
              catch (SchedulerException e) {
