@@ -24,6 +24,7 @@ import ke.co.qubintel.school.server.bean.StorableBean;
 public class ClassRoom  extends StorableBean{
 
 	private String description;
+	private String examSubNumber;
 	
 	/**
 	 * 
@@ -31,19 +32,16 @@ public class ClassRoom  extends StorableBean{
 	public ClassRoom() {
 		super();
 		description ="";
+		examSubNumber ="";
 		
 	}
 	
-	
-
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description.toUpperCase();
+		return description;
 	}
-
-
 
 	/**
 	 * @param description the description to set
@@ -52,17 +50,29 @@ public class ClassRoom  extends StorableBean{
 		this.description = description;
 	}
 
+	/**
+	 * @return the examSubNumber
+	 */
+	public String getExamSubNumber() {
+		return examSubNumber;
+	}
 
+	/**
+	 * @param examSubNumber the examSubNumber to set
+	 */
+	public void setExamSubNumber(String examSubNumber) {
+		this.examSubNumber = examSubNumber;
+	}
 
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "ClassRoom [description=" + description + ", getUuid()=" + getUuid() + ", getAccountId()="
-				+ getAccountId() + "]";
+		return "ClassRoom [description=" + description + ", examSubNumber=" + examSubNumber + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
 	}
-
 
 
 	/** 

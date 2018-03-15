@@ -21,8 +21,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import ke.co.qubintel.school.server.api.rest.bean.ApiExam;
+import ke.co.qubintel.school.server.api.rest.bean.ApiHouse;
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
 import ke.co.qubintel.school.server.api.rest.bean.ApiStream;
+import ke.co.qubintel.school.server.api.rest.bean.ApiStudentHouse;
+import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.api.rest.bean.SmsExams;
 import ke.co.qubintel.school.server.servlet.reports.PerStudentSMSResult;
 
@@ -429,6 +432,290 @@ public class GeneralRestFulAPI {
 	}
 
 	
+	//////////////////////////////////////////////////////////////////// TODO
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "get an house info List.", 
+			notes = "Return an house List.", 
+			response = ApiHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/house/{accountId}")  
+	public Object getHouseList(@PathParam("accountId")String accountId, @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getHouseList(accountId);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param houseName
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "get an house info.", 
+			notes = "Return an house object.", 
+			response = ApiHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/house/{accountId}/{houseName}")  
+	public Object getHouse(@PathParam("accountId")String accountId, @PathParam("houseName")String houseName, 
+			      @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getHouse(accountId, houseName);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param apiHouse
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Add an house.", 
+			notes = "Return whether the house was added successfully.", 
+			response = ApiHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/house/new")  
+	public Object putHouse(ApiHouse apiHouse, @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, apiHouse.getAccountId())){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.putHouse(apiHouse);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param apiHouse
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Update an house.", 
+			notes = "Return whether the house was updated successfully.", 
+			response = ApiHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@PUT
+	@Path("/house/update")   
+	public Object getUpdateHouse(ApiHouse apiHouse, @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, apiHouse.getAccountId())){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getUpdateHouse(apiHouse);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param apiHouse
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Delete an house.", 
+			notes = "Return whether the house was deleted successfully.", 
+			response = ApiHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@DELETE
+	@Path("/house/delete/{accountId}/{uuid}")   
+	public Object deleteHouse(@PathParam("accountId")String accountId, @PathParam("uuid")String uuid, 
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.deleteHouse(accountId,uuid);
+		}
+	}
+	
+	
+	////////////////////////////////////////////////////////////////// TODO
+	/**
+	 * 
+	 * @param apiStudentHouse
+	 * @param auth
+	 * @return
+	 */
+	
+	@ApiOperation(value = "Assign house to a student.", 
+			notes = "Return whether the house was assigned successfully.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/house/student/new")  
+	public Object AssignHouse(ApiStudentHouse apiStudentHouse,  @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, apiStudentHouse.getAccountId())){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.AssignHouse(apiStudentHouse);
+		}
+	}
+	/**
+	 * 
+	 * @param apiStudentHouse
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Change house assigned to a student.", 
+			notes = "Return whether the house was changed successfully.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/house/student/change")  
+	public Object changeHouse(ApiStudentHouse apiStudentHouse, @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, apiStudentHouse.getAccountId())){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.changeHouse(apiStudentHouse); 
+		}
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param uuid
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Exit house assigned to a student.", 
+			notes = "Return whether the house was exited successfully.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@DELETE
+	@Path("/house/student/delete/{accountId}/{uuid}")  
+	public Object exitAssignedHouse(@PathParam("accountId")String accountId, @PathParam("uuid")String uuid,  
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.exitAssignedHouse(accountId, uuid);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param houseId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get list of students per house.", 
+			notes = "Return StudentHouse List.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/house/studentlist/{accountId}/{houseId}")  
+	public Object getStudentHouseList(@PathParam("accountId")String accountId, @PathParam("houseId")String houseId,  
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getStudentHouseList(accountId, houseId);
+		}
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param studentId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get students - house object.", 
+			notes = "Return students - house object.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/house/student/{accountId}/{studentId}")  
+	public Object getStudentHouse(@PathParam("accountId")String accountId, @PathParam("studentId")String studentId,  
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getStudentHouse(accountId, studentId);
+		}
+	}
 
 	
 

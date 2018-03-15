@@ -164,7 +164,8 @@ CREATE TABLE classRoom (
     id SERIAL PRIMARY KEY,
     uuid VARCHAR(100) UNIQUE NOT NULL,
     accountId VARCHAR(100) REFERENCES Account(uuid),
-    description VARCHAR(255) NOT NULL
+    description VARCHAR(255) NOT NULL,
+    examSubNumber INTEGER NOT NULL
 
 );
 -- import data from the CSV file for the status table
@@ -211,6 +212,7 @@ CREATE TABLE Student(
     isBoarding VARCHAR(2) NOT NULL,
     isGoKFeeEligibe VARCHAR(2) NOT NULL,
     regNo VARCHAR(50) NOT NULL,
+    indexNo VARCHAR(50) NOT NULL,
     firstname VARCHAR(255) NOT NULL,
     middlename VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
@@ -280,7 +282,8 @@ CREATE TABLE StudentPrimary (
     schoolName VARCHAR(255) NOT NULL,
     index VARCHAR(100) NOT NULL,
     kcpeYear VARCHAR(50) NOT NULL,
-    kcpeMark VARCHAR(50) NOT NULL
+    kcpeMark VARCHAR(50) NOT NULL,
+    kcpeGrade VARCHAR(50) NOT NULL
 );
 --\COPY StudentPrimary(uuid,accountId,studentId,schoolName,index,kcpeYear,kcpeMark) FROM '/tmp/StudentPrimary.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE StudentPrimary OWNER TO school;
@@ -295,7 +298,6 @@ CREATE TABLE House (
     accountId VARCHAR(100) REFERENCES Account(uuid),
     houseName VARCHAR(200) NOT NULL,
     description VARCHAR(200) NOT NULL
-
 );
 ALTER TABLE House OWNER TO school;
 
@@ -312,8 +314,6 @@ CREATE TABLE StudentHouse (
     houseId VARCHAR(100) REFERENCES House(uuid),
     dateOut timestamp NOT NULL,
     dateIn timestamp with time zone DEFAULT now()
-
-   
 );
 ALTER TABLE StudentHouse OWNER TO school;
 
@@ -363,8 +363,7 @@ CREATE TABLE Staff (
 );
 --\COPY Staff(uuid,accountId,acessLevelId,staffNo,isActive,firstname,middlename,lastname,gender,mobile,email,username,password,lastUpdated) FROM '/tmp/Staff.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE Staff OWNER TO school;
---uuid  accountId   acessLevelId    staffNo isActive    firstname   middlename  lastname    
---gender  mobile  email   username    password    lastUpdated
+
 
 -- -------------------
 -- Table TeacherSubject

@@ -403,8 +403,14 @@
 																	score = paper1 + paper2 + paper3;
 
 																} else {
+																	
+																	if(perfomance.getScore() <= 0){
+																		score = "";
+																	}else{
+																		score = perfomance.getScore() + "";
+																	}
 
-																	score = perfomance.getScore() + "";
+																	
 																}
 													%>
 

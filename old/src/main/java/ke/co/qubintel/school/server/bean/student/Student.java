@@ -35,6 +35,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 		private String isBoarding;
 		private String isGoKFeeEligibe;
 		private String regNo;
+		private String indexNo;
 		private String firstname;
 		private String middlename;		
 		private String lastname;
@@ -60,6 +61,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 		isBoarding = "";//boarders = 1, day = 0
 		isGoKFeeEligibe = "0"; // 0 = not eligibale, 1 = eligibe 
 		regNo = "";
+		indexNo = "";
 		firstname = "";
 		middlename = "";
 		lastname = "";
@@ -186,6 +188,22 @@ public class Student extends StorableBean implements Comparable<Student> {
 	 */
 	public void setRegNo(String regNo) {
 		this.regNo = regNo;
+	}
+
+
+	/**
+	 * @return the indexNo
+	 */
+	public String getIndexNo() {
+		return indexNo;
+	}
+
+
+	/**
+	 * @param indexNo the indexNo to set
+	 */
+	public void setIndexNo(String indexNo) {
+		this.indexNo = indexNo;
 	}
 
 
@@ -397,6 +415,7 @@ public class Student extends StorableBean implements Comparable<Student> {
 	}
 
 
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -404,11 +423,11 @@ public class Student extends StorableBean implements Comparable<Student> {
 	public String toString() {
 		return "Student [regStream=" + regStream + ", currentStream=" + currentStream + ", isActive=" + isActive
 				+ ", isAlumni=" + isAlumni + ", isBoarding=" + isBoarding + ", isGoKFeeEligibe=" + isGoKFeeEligibe
-				+ ", regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename + ", lastname="
-				+ lastname + ", gender=" + gender + ", dob=" + dob + ", bcertNo=" + bcertNo + ", county=" + county
-				+ ", regTerm=" + regTerm + ", finalYear=" + finalYear + ", finalTerm=" + finalTerm + ", passport="
-				+ passport + ", lastUpdated=" + lastUpdated + ", admissionDate=" + admissionDate + ", getUuid()="
-				+ getUuid() + ", getAccountId()=" + getAccountId() + "]";
+				+ ", regNo=" + regNo + ", indexNo=" + indexNo + ", firstname=" + firstname + ", middlename="
+				+ middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob=" + dob + ", bcertNo=" + bcertNo
+				+ ", county=" + county + ", regTerm=" + regTerm + ", finalYear=" + finalYear + ", finalTerm="
+				+ finalTerm + ", passport=" + passport + ", lastUpdated=" + lastUpdated + ", admissionDate="
+				+ admissionDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
 	}
 
 

@@ -86,7 +86,7 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentPrimary" 
-						+"(uuid,accountId,studentId,schoolName,index,kcpeYear,kcpeMark) VALUES (?,?,?,?,?,?,?);");
+						+"(uuid,accountId,studentId,schoolName,index,kcpeYear,kcpeMark,kcpeGrade) VALUES (?,?,?,?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, Primary.getUuid());
@@ -96,6 +96,7 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 			pstmt.setString(5, Primary.getIndex());
 			pstmt.setString(6, Primary.getKcpeyear());
 			pstmt.setString(7, Primary.getKcpemark());
+			pstmt.setString(8, Primary.getKcpeGrade());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -117,7 +118,7 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 
 		try (  Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentPrimary SET schoolName = ?,index = ?,kcpeYear = ?,"
-						+ "kcpeMark =? WHERE accountId = ? AND studentId =?;");
+						+ " kcpeMark =?, kcpeGrade =?  WHERE accountId = ? AND studentId =?;");
 				) {           			 	            
 
 
@@ -125,8 +126,9 @@ public class PrimaryDAO extends GenericDAO implements SchoolPrimaryDAO {
 			pstmt.setString(2, Primary.getIndex());
 			pstmt.setString(3, Primary.getKcpeyear());
 			pstmt.setString(4, Primary.getKcpemark());
-			pstmt.setString(5, Primary.getAccountId());
-			pstmt.setString(6, Primary.getStudentId());	           
+			pstmt.setString(5, Primary.getKcpeGrade());
+			pstmt.setString(6, Primary.getAccountId());
+			pstmt.setString(7, Primary.getStudentId());	           
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

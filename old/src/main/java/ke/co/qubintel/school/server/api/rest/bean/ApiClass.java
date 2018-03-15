@@ -16,6 +16,7 @@ public class ApiClass {
 	private String uuid;
 	private String accountId;
 	private String description;
+	private String examSubNumber;
 
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class ApiClass {
 		uuid = "";
 		accountId = "";
 		description = "";
+		examSubNumber = "";
 	}
 
 	public String getUuid() {
@@ -50,10 +52,29 @@ public class ApiClass {
 		this.description = description;
 	}
 
+	/**
+	 * @return the examSubNumber
+	 */
+	public String getExamSubNumber() {
+		return examSubNumber;
+	}
+
+	/**
+	 * @param examSubNumber the examSubNumber to set
+	 */
+	public void setExamSubNumber(String examSubNumber) {
+		this.examSubNumber = examSubNumber;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "ApiClass [uuid=" + uuid + ", accountId=" + accountId
-				+ ", description=" + description + "]";
+		return "ApiClass [uuid=" + uuid + ", accountId=" + accountId + ", description=" + description
+				+ ", examSubNumber=" + examSubNumber + "]";
 	}
+
+	
 
 }

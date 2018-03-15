@@ -113,12 +113,13 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ClassRoom" 
-						+"(uuid,accountId,description) VALUES (?,?,?);");
+						+"(uuid,accountId,description,examSubNumber) VALUES (?,?,?,?);");
 				){
 
 			pstmt.setString(1, classRoom.getUuid());
 			pstmt.setString(2, classRoom.getAccountId());
 			pstmt.setString(3, classRoom.getDescription());
+			pstmt.setString(4, classRoom.getExamSubNumber());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -139,12 +140,13 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 		boolean success = true;
 
 		try (  Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassRoom SET description = ?"
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE ClassRoom SET description = ?, examSubNumber =?"
 						+ "WHERE uuid = ? AND accountId = ?;");
 				) {           			 	            
 			pstmt.setString(1, classRoom.getDescription());
-			pstmt.setString(2, classRoom.getUuid());
-			pstmt.setString(3, classRoom.getAccountId());
+			pstmt.setString(2, classRoom.getExamSubNumber());
+			pstmt.setString(3, classRoom.getUuid());
+			pstmt.setString(4, classRoom.getAccountId());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {

@@ -75,7 +75,7 @@
 	<servlet>
 		<servlet-name>QuartzProperties</servlet-name>
 		<servlet-class>ke.co.qubintel.school.server.servlet.quartz.factory.QuartzProperties</servlet-class>
-		<load-on-startup>7</load-on-startup>
+		<load-on-startup>8</load-on-startup>
 	</servlet>
 	
 	

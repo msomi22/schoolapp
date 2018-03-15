@@ -39,6 +39,6 @@ export PGUSER=$DB_USERNAME
 export PGHOST=$DB_HOST
 export PGPASSWORD=$DB_PASSWORD
 
-psql -f quartz_jdbc_store.sql -d postgres
+#psql -f quartz_jdbc_store.sql -d postgres
 
 echo "Have finished initializing database."

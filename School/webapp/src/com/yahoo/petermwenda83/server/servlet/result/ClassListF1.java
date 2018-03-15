@@ -144,6 +144,8 @@ public class ClassListF1 extends HttpServlet{
 	String EndTermOnly = "";
 	String EndTermAndC2 = "";
 	String EndTermC1AndC2 = "";
+	
+	private boolean isFormTwo = false;
 
 
 
@@ -198,6 +200,10 @@ public class ClassListF1 extends HttpServlet{
 
 		String classID = "";
 		classID = StringUtils.trimToEmpty(request.getParameter("classID"));
+		
+		if(StringUtils.equals(classID, "3E22E428-3155-42F5-B73E-66553ED501C9")) { 
+			isFormTwo = true;
+		}
 
 
 		net.sf.ehcache.Element element;
@@ -1145,7 +1151,16 @@ public class ClassListF1 extends HttpServlet{
 
 					double the_grandscoregn = 0;
 					the_grandscoregn = Double.parseDouble(totalzgn);
-					meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
+					
+					if(isFormTwo) {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB; //TODO
+					}else {
+						meangn = the_grandscoregn/ExamConstants.NO_OF_SUB_11; //TODO
+					}
+					
+					
+					
+					
 					MEANMapgn.put(uuid,meangn);
 
 					Deviation dev;
@@ -1845,7 +1860,15 @@ public class ClassListF1 extends HttpServlet{
 					String uuid = item[0];
 					totalz = item[1];
 					totalmean = 0;
-					mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;	//TODO
+					
+					if(isFormTwo) {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB;	//TODO
+					}else {
+						mean = Double.parseDouble(totalz)/ExamConstants.NO_OF_SUB_11;	//TODO 
+					}
+					
+					
+					
 					totalmean = mean;
 
 					GraphWeightGenerator(mean,uuid,school.getUuid()); 

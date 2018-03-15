@@ -22,6 +22,7 @@ public class StudentInfo {
 	private String isGoKFeeEligibe;
 	private int studentCount;
 	private String regNo;
+	private String indexNo;
 	private String firstname;
 	private String middlename;
 	private String lastname;
@@ -44,6 +45,7 @@ public class StudentInfo {
 	private String index;
 	private String kcpeyear;
 	private String kcpemark;
+	private String kcpeGrade;
 
 	/**
 	 * 
@@ -59,6 +61,7 @@ public class StudentInfo {
 		isGoKFeeEligibe = "0"; // 0 = not eligibale, 1 = eligibe 
 		studentCount = 0;
 		regNo = "";
+		indexNo = "";
 		firstname = "";
 		middlename = "";
 		lastname = "";
@@ -81,6 +84,7 @@ public class StudentInfo {
 		index ="";
 		kcpeyear ="";
 		kcpemark ="";
+		kcpeGrade = "";
 	}
 
 	/**
@@ -221,6 +225,20 @@ public class StudentInfo {
 	 */
 	public void setRegNo(String regNo) {
 		this.regNo = regNo;
+	}
+
+	/**
+	 * @return the indexNo
+	 */
+	public String getIndexNo() {
+		return indexNo;
+	}
+
+	/**
+	 * @param indexNo the indexNo to set
+	 */
+	public void setIndexNo(String indexNo) {
+		this.indexNo = indexNo;
 	}
 
 	/**
@@ -504,6 +522,20 @@ public class StudentInfo {
 	}
 
 	/**
+	 * @return the kcpeGrade
+	 */
+	public String getKcpeGrade() {
+		return kcpeGrade;
+	}
+
+	/**
+	 * @param kcpeGrade the kcpeGrade to set
+	 */
+	public void setKcpeGrade(String kcpeGrade) {
+		this.kcpeGrade = kcpeGrade;
+	}
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -511,13 +543,15 @@ public class StudentInfo {
 		return "StudentInfo [uuid=" + uuid + ", accountId=" + accountId + ", regStream=" + regStream
 				+ ", currentStream=" + currentStream + ", isActive=" + isActive + ", isAlumni=" + isAlumni
 				+ ", isBoarding=" + isBoarding + ", isGoKFeeEligibe=" + isGoKFeeEligibe + ", studentCount="
-				+ studentCount + ", regNo=" + regNo + ", firstname=" + firstname + ", middlename=" + middlename
-				+ ", lastname=" + lastname + ", gender=" + gender + ", dob=" + dob + ", bcertNo=" + bcertNo
-				+ ", county=" + county + ", regTerm=" + regTerm + ", finalYear=" + finalYear + ", finalTerm="
-				+ finalTerm + ", passport=" + passport + ", hasParent=" + hasParent + ", parentName=" + parentName
-				+ ", parentMobile=" + parentMobile + ", parentEmail=" + parentEmail + ", hasPrimary=" + hasPrimary
-				+ ", schoolName=" + schoolName + ", index=" + index + ", kcpeyear=" + kcpeyear + ", kcpemark="
-				+ kcpemark + "]";
+				+ studentCount + ", regNo=" + regNo + ", indexNo=" + indexNo + ", firstname=" + firstname
+				+ ", middlename=" + middlename + ", lastname=" + lastname + ", gender=" + gender + ", dob=" + dob
+				+ ", bcertNo=" + bcertNo + ", county=" + county + ", regTerm=" + regTerm + ", finalYear=" + finalYear
+				+ ", finalTerm=" + finalTerm + ", passport=" + passport + ", hasParent=" + hasParent + ", parentName="
+				+ parentName + ", parentMobile=" + parentMobile + ", parentEmail=" + parentEmail + ", hasPrimary="
+				+ hasPrimary + ", schoolName=" + schoolName + ", index=" + index + ", kcpeyear=" + kcpeyear
+				+ ", kcpemark=" + kcpemark + ", kcpeGrade=" + kcpeGrade + "]";
 	}
+
+	
 
 }
