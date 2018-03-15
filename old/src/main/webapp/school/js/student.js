@@ -16,12 +16,14 @@ function pagination(button) {
 	$('#pagination').show();
 
 	if (button === "N") {
+		
+		console.log(total_size);
 
 		$('#F,#P').show(1000);
 		$('#N,#L').show(1000);
 		$('#F,#L,#P').attr('disabled', false);
 
-		if (start < total_size)
+		if (start < total_size && total_size > 14)
 			{
 			start += size;
 		current_page+= 1;
@@ -117,7 +119,12 @@ $(document).ready(
 			$('.currentPage').html(current_page);
 
 			console.log(total_size + "page Size:"+page_size +"total :"+total_size);
-			total_size = total_size - 15;
+			//total_size = total_size - 15;
+			if (total_size < 15){
+				
+				$('#N').attr('disabled', true);
+				$('#L').attr('disabled', true);
+			}
 			
 			
 			varying_url = "student/" + $('#accountId').val() + "?limit=" + size
@@ -140,8 +147,13 @@ function delayInput() {
 		varying_url = "student/" + $('#accountId').val() + "?query="
 				+ $('#query').val();
 
-		if ($('#query').val().length <= 0)
+		if ($('#query').val().length <= 0){
+			
 			$('#pagination').show(1000);
+			
+			varying_url = "student/" + $('#accountId').val() + "?limit=10&offset=0";	
+			}
+			
 		
 		count=0;
 
@@ -175,7 +187,7 @@ function fetchStudents(paginate) {
 
 	globalApiCall(function(data) {
 
-		console.log('Genius Code for fetching students');
+		console.log('Code for fetching students');
 
 		console.log(varying_url);
 
@@ -183,6 +195,7 @@ function fetchStudents(paginate) {
 
 		if (data.length <= 0) {
 
+			if(table)
 			table.clear();
 
 			$('#studentsList').DataTable({
@@ -288,7 +301,7 @@ function fetchStudents(paginate) {
 										},
 										
 										{
-											"targets" : [ 9 ],
+											"targets" : [ 10 ],
 											"visible" : false
 										},
 										

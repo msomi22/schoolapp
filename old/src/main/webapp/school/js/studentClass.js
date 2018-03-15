@@ -349,7 +349,7 @@ function fetchStudents(streamId) {
 											"visible" : false
 										},
 										{
-											"targets" : [ 11 ],
+											"targets" : [ 7 ],
 											"visible" : false
 										},
 										{
@@ -398,6 +398,10 @@ function fetchStudents(streamId) {
 										},
 										{
 											"targets" : [ 23 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 24 ],
 											"data" : null,
 											
 											"defaultContent" : '<input type="checkbox" class="students">'

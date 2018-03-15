@@ -667,13 +667,15 @@
 
 
 
+
+
+<!-- import Modal -->
+<jsp:include page="modals/importStudents.html" />
+
 <!-- footer -->
 
 
 <jsp:include page="footer.jsp" />
-
-<!-- import Modal -->
-<jsp:include page="modals/importStudents.html" />
 
 
 <script src="js/registerNewStudent.js"></script>

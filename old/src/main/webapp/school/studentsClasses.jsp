@@ -200,6 +200,7 @@
 															<th class="column-title hidden">isGoKFeeEligibe</th>
 
 															<th class="column-title">regNo</th>
+															<th class="column-title hidden">index</th>
 															<th class="column-title">firstname</th>
 															<th class="column-title">middlename</th>
 															<th class="column-title">lastname</th>
