@@ -286,10 +286,12 @@ function fetchStudents(paginate) {
 											"targets" : [ 7 ],
 											"visible" : false
 										},
+										
 										{
-											"targets" : [ 14 ],
+											"targets" : [ 9 ],
 											"visible" : false
 										},
+										
 										{
 											"targets" : [ 15 ],
 											"visible" : false
@@ -352,6 +354,10 @@ function fetchStudents(paginate) {
 										},
 										{
 											"targets" : [ 30 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 31 ],
 											"data" : null,
 											"defaultContent" : '<button class="btn btn-info ">'
 													+ 'Profile   <span class="fa fa-info"></span></button>'

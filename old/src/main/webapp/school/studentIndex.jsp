@@ -167,6 +167,7 @@
                            
                            
                             <th class="column-title">regNo</th>
+                            <th class="column-title hidden">indexNo</th>
                             <th class="column-title">firstname</th>
                             <th class="column-title">middlename</th>
                             <th class="column-title">lastname</th>
