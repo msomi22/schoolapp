@@ -189,6 +189,8 @@
                             <th class="column-title hidden">index</th>
                             <th class="column-title hidden">kcpeyear</th>
                             <th class="column-title hidden">kcpemark</th>
+                            <th class="column-title hidden">kcpeGrade</th>
+                           
                            
                             <th class="column-title"> 
                                Profile

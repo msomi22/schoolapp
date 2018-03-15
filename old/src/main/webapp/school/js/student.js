@@ -358,6 +358,10 @@ function fetchStudents(paginate) {
 										},
 										{
 											"targets" : [ 31 ],
+											"visible" : false
+										},
+										{
+											"targets" : [ 32 ],
 											"data" : null,
 											"defaultContent" : '<button class="btn btn-info ">'
 													+ 'Profile   <span class="fa fa-info"></span></button>'
