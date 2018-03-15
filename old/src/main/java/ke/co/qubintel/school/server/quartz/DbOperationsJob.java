@@ -106,52 +106,61 @@ public class DbOperationsJob implements Job{
 
 
 	private void checkExamDuplicate() {
-
-		accountDAO.getAccounts().parallelStream().forEach(account -> {
+		
+		if(accountDAO.getAccounts() != null) {
 			
-			studentDAO.getStudents(account.getUuid()).parallelStream().forEach(student -> {
+			accountDAO.getAccounts().stream().forEach(account -> {
 				
-				subjectDAO.getSubjects(account.getUuid()).parallelStream().forEach(subject -> {
-					
-					examDAO.getExamList(account.getUuid()).parallelStream().forEach(exam -> {
+				if(studentDAO.getStudents(account.getUuid()) != null) {
+
+					studentDAO.getStudents(account.getUuid()).stream().forEach(student -> {
 						
-						streamDAO.getStreamList(account.getUuid()).parallelStream().forEach(stream -> {
+						subjectDAO.getSubjects(account.getUuid()).stream().forEach(subject -> {
 							
-							SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
-							List<Perfomance> list = new ArrayList<>();
-						
-							if(!perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
-									stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear()).isEmpty()) {
+							examDAO.getExamList(account.getUuid()).stream().forEach(exam -> {
 								
-								list = perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
-										stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear());
-
-								int size = list.size();
+								streamDAO.getStreamList(account.getUuid()).stream().forEach(stream -> {
+									
+									SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+									List<Perfomance> list = new ArrayList<>();
 								
-								if(size > 1) {
+									if(!perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
+											stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear()).isEmpty()) {
+										
+										list = perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
+												stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear());
 
-									for(int i=1;i<size;i++) {
-										//i will start with 1, then 2 .... skipping index zero
-										//delete all except index zero
-										deleteDuplicate(list.get(i));
+										int size = list.size();
+										
+										if(size > 1) {
+
+											for(int i=1;i<size;i++) {
+												//i will start with 1, then 2 .... skipping index zero
+												//delete all except index zero
+												deleteDuplicate(list.get(i));
+
+											}
+
+										}
 
 									}
+								
 
-								}
+								});
+							});
 
-							}
-						
 
 						});
+						
+						
 					});
-
-
-				});
-				
+				}
 				
 			});
-		});
 
+		}
+
+		
 	}
 	/**
 	 * 
@@ -171,7 +180,7 @@ public class DbOperationsJob implements Job{
 
 		if(accountDAO.getAccounts() != null) {
 
-			accountDAO.getAccounts().forEach(account -> {//.parallelStream()
+			accountDAO.getAccounts().forEach(account -> {
 
 				if(sysConfigDAO.getSysConfig(account.getUuid()) != null) {
 
