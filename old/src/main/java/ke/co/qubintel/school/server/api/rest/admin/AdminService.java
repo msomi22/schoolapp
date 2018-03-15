@@ -28,6 +28,7 @@ import ke.co.qubintel.school.server.bean.classroom.Stream;
 import ke.co.qubintel.school.server.bean.exam.Exam;
 import ke.co.qubintel.school.server.bean.exam.GradingSystem;
 import ke.co.qubintel.school.server.bean.exam.SysConfig;
+import ke.co.qubintel.school.server.bean.house.House;
 import ke.co.qubintel.school.server.bean.money.TermFee;
 import ke.co.qubintel.school.server.bean.staff.AcessLevel;
 import ke.co.qubintel.school.server.bean.subject.Category;
@@ -38,6 +39,7 @@ import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.ExamDAO;
 import ke.co.qubintel.school.server.persistence.exam.GradingSystemDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
+import ke.co.qubintel.school.server.persistence.house.HouseDAO;
 import ke.co.qubintel.school.server.persistence.money.TermFeeDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.ApiCredentialDAO;
@@ -71,6 +73,8 @@ public class AdminService {
 	private static SysConfigDAO sysConfigDAO;
 	private static ApiCredentialDAO apiCredentialDAO;
 	private static TermFeeDAO termFeeDAO;
+	
+	private static HouseDAO houseDAO;
 
 	static {
 		accountDAO = AccountDAO.getInstance();
@@ -89,6 +93,8 @@ public class AdminService {
 		sysConfigDAO = SysConfigDAO.getInstance();
 		apiCredentialDAO = ApiCredentialDAO.getInstance();
 		termFeeDAO = TermFeeDAO.getInstance();
+		
+		houseDAO = HouseDAO.getInstance();
 	}
 
 	/**
@@ -294,12 +300,14 @@ public class AdminService {
 		}
 		/*****************************************************************************************/
 		String[] classes = {"FORM 1","FORM 2","FORM 3","FORM 4"};
+		int[] examSubNo = {11,11,7,7};
 
 		for(int count=0;count<classes.length;count++) {
 			ClassRoom classRoom = new ClassRoom();
 			classRoom.setUuid(classRoom.getUuid());
 			classRoom.setAccountId(accountId);
 			classRoom.setDescription(classes[count]); 
+			classRoom.setDescription(examSubNo[count]+"");  
 			classDAO.putClassRoom(classRoom);
 		}
 		/*****************************************************************************************/
@@ -448,8 +456,14 @@ public class AdminService {
 			apiCredentialDAO.putApiCredential(apiCredential); 
 		}
 
-
-
+        
+		String[] houses = {"Mt. Kenya","Mt. Longonot"}; 
+        for(int count=0;count<houses.length;count++) {
+        	House house = new House();
+        	house.setAccountId(accountId);
+        	house.setHouseName(houses[count]);  
+        	houseDAO.putHouse(house);
+        }
 
 
 
