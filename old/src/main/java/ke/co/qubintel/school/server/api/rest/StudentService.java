@@ -160,6 +160,8 @@ public class StudentService {
 					apiParentPrimary.setIndex(primary.getIndex());
 					apiParentPrimary.setKcpemark(primary.getKcpemark());
 					apiParentPrimary.setKcpeyear(primary.getKcpeyear());
+					apiParentPrimary.setKcpeGrade(primary.getKcpeGrade()); 
+					
 				}
 
 				// parent
@@ -220,6 +222,7 @@ public class StudentService {
 				apiStudent.setIsBoarding(student.getIsBoarding());
 				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setIndexNo(student.getIndexNo()); 
 				apiStudent.setFirstname(student.getFirstname());
 				apiStudent.setMiddlename(student.getMiddlename());
 				apiStudent.setLastname(student.getLastname());
@@ -286,6 +289,7 @@ public class StudentService {
 				apiStudent.setIsBoarding(student.getIsBoarding());
 				apiStudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 				apiStudent.setRegNo(student.getRegNo());
+				apiStudent.setIndexNo(student.getIndexNo()); 
 				apiStudent.setFirstname(student.getFirstname());
 				apiStudent.setMiddlename(student.getMiddlename());
 				apiStudent.setLastname(student.getLastname());
@@ -1188,6 +1192,7 @@ public class StudentService {
 		newstudent.setIsBoarding(student.getIsBoarding());
 		newstudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 		newstudent.setRegNo(student.getRegNo());
+		newstudent.setIndexNo(student.getIndexNo()); 
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());
 		newstudent.setLastname(student.getLastname());
@@ -1257,6 +1262,7 @@ public class StudentService {
 					studentPrimary.setIndex(student.getIndex());
 					studentPrimary.setKcpemark(student.getKcpemark());
 					studentPrimary.setKcpeyear(student.getKcpeyear());
+					studentPrimary.setKcpeGrade(student.getKcpeGrade()); 
 					if (primaryDAO.putStudentPrimary(studentPrimary)) {
 
 						response += "Student primary info added successfully.\n";
@@ -1272,6 +1278,7 @@ public class StudentService {
 					studentPrimary.setIndex(student.getIndex());
 					studentPrimary.setKcpemark(student.getKcpemark());
 					studentPrimary.setKcpeyear(student.getKcpeyear());
+					studentPrimary.setKcpeGrade(student.getKcpeGrade()); 
 
 					if (primaryDAO.updateStudentPrimary(studentPrimary)) {
 
@@ -1314,6 +1321,7 @@ public class StudentService {
 		newstudent.setIsBoarding(student.getIsBoarding());
 		newstudent.setIsGoKFeeEligibe("0"); 
 		newstudent.setRegNo(student.getRegNo());
+		newstudent.setIndexNo(student.getIndex());
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());
 		newstudent.setLastname(student.getLastname());
@@ -1374,6 +1382,7 @@ public class StudentService {
 				studentPrimary.setIndex(student.getIndex());
 				studentPrimary.setKcpemark(student.getKcpemark());
 				studentPrimary.setKcpeyear(student.getKcpeyear());
+				studentPrimary.setKcpeGrade(student.getKcpeGrade()); 
 
 				if (primaryDAO.putStudentPrimary(studentPrimary)) {
 

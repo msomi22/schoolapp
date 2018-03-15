@@ -19,6 +19,7 @@ public class APIParentPrimary {
 		private String index;
 		private String kcpeyear;
 		private String kcpemark;
+		private String kcpeGrade;
 
 	/**
 	 * 
@@ -32,6 +33,7 @@ public class APIParentPrimary {
 		index ="";
 		kcpeyear ="";
 		kcpemark ="";
+		kcpeGrade ="";
 	}
 
 	public String getParentName() {
@@ -90,11 +92,28 @@ public class APIParentPrimary {
 		this.kcpemark = kcpemark;
 	}
 
+	/**
+	 * @return the kcpeGrade
+	 */
+	public String getKcpeGrade() {
+		return kcpeGrade;
+	}
+
+	/**
+	 * @param kcpeGrade the kcpeGrade to set
+	 */
+	public void setKcpeGrade(String kcpeGrade) {
+		this.kcpeGrade = kcpeGrade;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "APIParentPrimary [parentName=" + parentName + ", parentMobile=" + parentMobile + ", parentEmail="
 				+ parentEmail + ", schoolName=" + schoolName + ", index=" + index + ", kcpeyear=" + kcpeyear
-				+ ", kcpemark=" + kcpemark + "]";
+				+ ", kcpemark=" + kcpemark + ", kcpeGrade=" + kcpeGrade + "]";
 	}
 
 }
