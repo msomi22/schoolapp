@@ -164,6 +164,7 @@
 						class="main_menu_side hidden-print main_menu">
 						<div class="menu_section">
 						<h3><span class="year sec_text" ></span>  <span class="term sec_text"></span></h3>
+						<br>
 						
 						
 
@@ -210,6 +211,7 @@
 									<ul class="nav child_menu">
 										<li id="examsMenu"><a href="exam.jsp">Exam</a></li>
 										<li id="streamsMenu"><a href="streams.jsp">Stream</a></li>
+										<li id="streamsMenu"><a href="house.jsp">House</a></li>
 										<li id="settingsMenu"><a href="settings.jsp">Settings</a></li>
 										<li id="miscSettingsMenu"><a href="misc.jsp">Misc Settings</a></li>
 									</ul></li>
