@@ -232,7 +232,7 @@ function assignHouse() {
 
 	$('#hseUuid').val($('#houseName').val());
 
-	$('#hse_studentId').val($('#accountId').val());
+	$('#hse_studentId').val($('#uuid').val());
 
 	$('#studentName').val($('#fname').val() +" "+$('#lname').val());
 

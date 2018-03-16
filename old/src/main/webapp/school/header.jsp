@@ -177,6 +177,8 @@
 										<li id="studentNewMenu"><a href="registerStudent.jsp">New Student</a></li>
 
 										<li><a href="studentsClasses.jsp">Student and Class</a></li>
+										<li><a href="studentsHouses.jsp">Student and Class</a></li>
+										
 									</ul></li>
 
 								<li id="academicsMenu"><a><i class="fa fa-book"></i> Academics <span

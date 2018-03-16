@@ -774,7 +774,7 @@
 
 
 							<form action="#" method="post" id="assignHouse">
-								<input type="hidden" name="uuid" id="uuid"> <input
+								<input type="hidden" name="uuid" id="hse_uuid"> <input
 									type="hidden" name="accountId" id="hse_accountId"> <input
 									type="hidden" name="houseId" id="hseUuid"> <input
 									type="hidden" name="studentId" id="hse_studentId"> <input
