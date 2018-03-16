@@ -310,7 +310,7 @@ public class ClassRankingList extends HttpServlet{
 		List<Performance2> classperformanceList =  new ArrayList<>();
 
 		String correctClass = "";
-
+		
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
 
@@ -339,7 +339,7 @@ public class ClassRankingList extends HttpServlet{
 			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
 			for(Stream stream : streamList){
-
+				
 				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
 
 				if(!studentListStream.isEmpty())
@@ -347,7 +347,7 @@ public class ClassRankingList extends HttpServlet{
 
 			}
 		}
-
+		
 		if(studentsList.isEmpty()){
 			//avoid document has no page exception
 			document.add(new Paragraph("No students for " + correctClass)); 
@@ -357,11 +357,10 @@ public class ClassRankingList extends HttpServlet{
 			if(classResult){//
 				performanceList = getStudentScore3(accountId, classroomId, term, year, studentsList, examType, classResult, paper123Id);	
 
-
 			}else{
 
 				performanceList = getStudentScore3(accountId, streamId, term, year, studentsList, examType, classResult, paper123Id);
-
+				
 				String classId = streamDAO.getStream(accountId, streamId).getClassRoomId();
 
 				classperformanceList  = getStudentScore3(accountId, classId, term, year, classstudentsList, examType, true, paper123Id); 
@@ -379,6 +378,8 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 			}
+			
+			
 
 
 
@@ -730,12 +731,6 @@ public class ClassRankingList extends HttpServlet{
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
 
-				/*System.out.println(" exam1: " + exam1);
-				System.out.println(" exam2: " + exam2);
-				System.out.println(" exam3: " + exam3);*/
-
-
-
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 
@@ -1057,8 +1052,7 @@ public class ClassRankingList extends HttpServlet{
 
 				}
 
-				//System.out.println(" *** *** accurateYear: " + accurateYear + "******* " + yearlymean); 
-
+				
 				prevMean = ReportUtil.df2.format(previousMean);
 
 				if(StringUtils.equals(String.valueOf((int)previousMean), "0")){
@@ -1080,8 +1074,6 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				double deviation = thisMean - Double.valueOf(ReportUtil.df2.format(previousMean)); 
-
-				//System.out.println(" *** *** deviation : " + deviation + ", previousMean: " + previousMean + ", thisMean : " + thisMean); 
 
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
@@ -1342,14 +1334,11 @@ public class ClassRankingList extends HttpServlet{
 
 		double totalPoint = 0;
 		double totalMeans = 0;
-
+		
 
 		for(Student student : studentsList ){
 
 			if(exams.length == 3){
-
-
-
 
 				if(classResult){
 
@@ -1443,15 +1432,6 @@ public class ClassRankingList extends HttpServlet{
 
 				}
 
-
-				/*System.out.println("*****************************************"); 
-				System.out.println(" student: " + student.getRegNo());
-				System.out.println(" totalExam1: " + totalExam1.getTotalMean());
-				System.out.println(" totalExam12: " + totalExam2.getTotalMean());
-				System.out.println(" totalExam3: " + totalExam3.getTotalMean());
-				System.out.println("*****************************************");*/
-
-
 			}
 
 			if(exams.length == 2){
@@ -1498,7 +1478,7 @@ public class ClassRankingList extends HttpServlet{
 
 				exam1 = classResult ? perfomanceDAO.getClassPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year) : 
 					perfomanceDAO.getStreamPerformance(accountId, exams[0], student.getUuid(), class_streamId, term, year);
-
+				
 				//rank 7 subjects
 				if(grade7subjects && !grade11subjects){
 					totalExam1 = ReportUtil.findExamTotalForm234(accountId, student.getCurrentStream(), exam1, examType);
@@ -1515,8 +1495,6 @@ public class ClassRankingList extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean();
 
-				//System.out.println(" --totalExam1--- " + totalExam1);
-
 
 
 			}
@@ -1527,10 +1505,6 @@ public class ClassRankingList extends HttpServlet{
 			if(totalMeans > 0 || totalPoint > 0){
 
 				Performance2 performance2 = new Performance2();
-
-				//System.out.println(" --totalExam1--- " + totalExam1 + " , paper123Id : " + paper123Id);
-
-
 
 				if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 
@@ -1567,9 +1541,6 @@ public class ClassRankingList extends HttpServlet{
 		}
 
 
-
-
-
 		if(StringUtils.equals(paper123Id, ReportUtil.PAPER123ID)) {
 			return performance2List;
 
@@ -1577,10 +1548,6 @@ public class ClassRankingList extends HttpServlet{
 			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects,exams.length);
 
 		}
-
-		//System.out.println(" ------ " + performance2List);
-
-		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
 
 	}
 
@@ -1781,8 +1748,6 @@ public class ClassRankingList extends HttpServlet{
 
 			}
 			
-			System.out.println("realPath : " + realPath);  
-
 			BufferedImage bufferedImage = ImageIO.read(new File(realPath));
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

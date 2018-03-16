@@ -1820,8 +1820,7 @@ public class StudentReportCard extends HttpServlet{
 	 */
 	private void generateTable(PdfPTable perfTable, PerformanceTable performanceT) {
 
-		//	System.out.println(performanceT); 
-		//*****************************************TERM 1
+	
 		PdfPCell t1_termCell = new PdfPCell(new Paragraph("1" ,timesRomanNarmal4));											
 		t1_termCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -2073,14 +2072,6 @@ public class StudentReportCard extends HttpServlet{
 
 					totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean() + totalExam3.getTotalMean();
 					totalMeans = totalMeans / 3;
-
-
-					/*System.out.println(student.getRegNo() + " ** " + student.getFirstname() + 
-							" ,e1 :" + totalExam1.getTotalMean() + " ,e2 : " + totalExam2.getTotalMean() + " , e3: " + totalExam3.getTotalMean() 
-							+ " ,totalMeans : " + totalMeans );*/
-
-
-
 				}
 
 
@@ -2121,11 +2112,6 @@ public class StudentReportCard extends HttpServlet{
 
 				totalMeans = totalExam1.getTotalMean() + totalExam2.getTotalMean();
 				totalMeans = totalMeans / 2;
-
-
-				/*System.out.println(student.getRegNo() + " ** " + student.getFirstname() + 
-						" ,e1 :" + totalExam1.getTotalMean() + " ,e2 : " + totalExam2.getTotalMean() + " ,totalMeans : " + totalMeans );*/
-
 
 			}
 
@@ -2199,12 +2185,8 @@ public class StudentReportCard extends HttpServlet{
 
 				performance2List.add(performance2);
 
-				//System.out.println(" ************** " +  student.getRegNo() + " " + student.getFirstname() + " " + totalPoint);
-
 
 			}
-
-			//System.out.println("**********************************************************"); 
 
 		}
 
@@ -2215,8 +2197,6 @@ public class StudentReportCard extends HttpServlet{
 			return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects,exams.length);
 
 		}
-
-		//return ReportUtil.getAverage(performance2List,accountId,grade7subjects,grade11subjects);
 
 	}
 

@@ -255,10 +255,17 @@ public class ReportUtil {
 				paper3Map.put(perfomance.getSubjectId(), perfomance.getPaper3());
 
 				//perfomance.setScore(performanceP123.getTotalMean()); 
-
-
-				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
-				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+				String catId = "";
+				String desc = "";
+				
+                if(subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()) != null) {
+                	catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
+                }
+                
+                if(categoryDAO.getCategoryById(accountId, catId) != null) {
+                	desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+                }
+			
 
 				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
@@ -383,7 +390,7 @@ public class ReportUtil {
 			boolean grade11subjects, int length) {
 
 		List<Performance2> finalList = new ArrayList<>();
-
+		
 		if(!performanceList.isEmpty()) {
 			for(Performance2 performance2 : performanceList){
 
@@ -438,10 +445,6 @@ public class ReportUtil {
 					linaResultList.add(finaResult);
 
 				});
-
-
-				//Student stu = studentDAO.getStudentById(accountId, performance2.getStudentId());
-				//System.out.println(" ______________ " + stu.getRegNo() + " , name : " + stu.getFirstname());
 
 				if(grade7subjects && !grade11subjects) {
 
@@ -733,8 +736,6 @@ public class ReportUtil {
 		for( FinaResult result : finalPerfomanceList ){
 
 			total += result.getAverage();
-
-			//System.out.println(" ,,,,,,,,,,,,,,,,,,, avg:  " + result.getAverage() + " , total : " + total); 
 		}
 		return total;
 	}
@@ -749,7 +750,6 @@ public class ReportUtil {
 			int point = result.getPoint();
 			totalPoint += point;
 
-			//System.out.println(" ,,,,,,,,,,,,,,,,, avg: " + result.getAverage() + " , totalPoint : " + totalPoint); 
 		}
 		return totalPoint;
 	}
@@ -1027,17 +1027,23 @@ public class ReportUtil {
 
 				perfomanceMap.put(perfomance.getSubjectId(), perfomance.getScore());
 
-				String catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
-				String desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+				//
+				String catId = "";
+				String desc = "";
+
+                if(subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()) != null) {
+                	catId = subCategoryDAO.getSubCategory(accountId, perfomance.getSubjectId()).getCategoryId();
+                }
+                
+                if(categoryDAO.getCategoryById(accountId, catId) != null) {
+                	desc = categoryDAO.getCategoryById(accountId, catId).getDescription();
+                }
 
 				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
 					selectedLanguagesList.add(perfomance);
 					languagesCount++;
-
-					//System.out.println("____________" + " Languages " + perfomance.getSubjectId() + " *** "+ perfomance.getScore());
-
-
+					
 					if (languagesCount > 2) {
 						Collections.sort(selectedLanguagesList, new PerformanceComparator());
 						removedSubjectsPerfomanceList.add(selectedLanguagesList.remove(0));
@@ -1049,8 +1055,6 @@ public class ReportUtil {
 				if (StringUtils.equalsIgnoreCase(desc, "Sciences")) {
 					selectedSciencesList.add(perfomance);
 					sciencesCount++;
-
-					//System.out.println("____________" + " Sciences " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
 
 					if (sciencesCount > 3) {
 						//add remaining subjects if any to technical list
@@ -1065,8 +1069,6 @@ public class ReportUtil {
 					selectedHumanitiesList.add(perfomance);
 					humanitiesCount++;
 
-					//System.out.println("____________" + " Humanities " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
-
 					if (humanitiesCount > 3) {
 						//add remaining subjects if any to technical list
 						Collections.sort(selectedHumanitiesList, new PerformanceComparator());
@@ -1080,8 +1082,6 @@ public class ReportUtil {
 					selectedTechnicalsList.add(perfomance);
 					technicalCount++;
 
-					//System.out.println("____________" + " Technicals " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
-
 					if(technicalCount > 2){
 						Collections.sort(selectedTechnicalsList, new PerformanceComparator());
 						selectedTechnicalsList.remove(0);
@@ -1093,9 +1093,7 @@ public class ReportUtil {
 				//add mathematics
 				if (StringUtils.equalsIgnoreCase(desc, "Mathematics")) {
 					finalPerfomanceList.add(perfomance);
-					//System.out.println("____________" + " Mathematics " + perfomance.getSubjectId() + " *** "+ perfomance.getScore()); 
-
-
+					
 				}
 
 			}//end for each loop
@@ -2113,9 +2111,7 @@ public class ReportUtil {
 				classMean = getclassMean(subList, rankWithPoints, rankWithTotalMarks, grade7subjects, grade11subjects);
 			}
 
-			//
-
-			//System.out.println("classMean -- " + classMean); 
+			
 			if(StringUtils.isBlank(classMean)) {
 				classMean = "0.0";
 			}
@@ -2166,7 +2162,6 @@ public class ReportUtil {
 		
 		String entry_  = "0";
 		
-		//System.out.println("c " + classroomId ); 
 
 		for(Subject subject : subjectDAO.getSubjects(accountId)) {
 
@@ -2218,7 +2213,6 @@ public class ReportUtil {
 
 		}
 
-		//System.out.println("entry_:" + entry_); 
 
 		return entry_;
 
