@@ -48,7 +48,7 @@ public class SchoolLogin extends HttpServlet {
 	private static AccountDAO accountDAO;
 	private static AcessLevelDAO acessLevelDAO;
 	private Logger logger;
-	private String[] nameArr = {"maliga","sigalame","burumba","njuri","qubit","ngoto","mekaro"}; //"mangu",
+	private String[] nameArr;
 	private List<String> allowedNames;
 
 	/**
@@ -64,6 +64,7 @@ public class SchoolLogin extends HttpServlet {
 		accountDAO = AccountDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
 		
+		nameArr = new String[]{"Maliga","Sigalame","Burumba","Njuri","Qubit","Ggoto","Mekaro"}; //"Mangu", 
 		allowedNames = Arrays.asList(nameArr); 
 
 		logger = Logger.getLogger(this.getClass());
@@ -101,8 +102,7 @@ public class SchoolLogin extends HttpServlet {
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
-		}else if (!allowedNames.contains(accountDAO.getAccount(schoolUsername, "1").getName().toLowerCase())) {  
-			
+		}else if(!validAccount(accountDAO.getAccount(schoolUsername, "1").getName())) { 
 			message = "Sorry! Account \""+accountDAO.getAccount(schoolUsername, "1").getName()+"\" is not allowed to use this Software";  
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
@@ -160,6 +160,23 @@ public class SchoolLogin extends HttpServlet {
 
 		}
 
+	}
+	
+	
+	/**
+	 * 
+	 * @param accountName
+	 * @return
+	 */
+	private boolean validAccount(String accountName) {
+		boolean valid = false;
+		
+		for(String name : allowedNames) {
+			if(accountName.contains(name)) {
+				return true;
+			}
+		}
+		return valid;
 	}
 
 	/**
