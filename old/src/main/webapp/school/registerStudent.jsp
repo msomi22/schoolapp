@@ -1,7 +1,8 @@
 <%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 
 <!-- Config -->
-<%@page import="ke.co.qubintel.school.server.persistence.exam.SysConfigDAO"%>
+<%@page
+	import="ke.co.qubintel.school.server.persistence.exam.SysConfigDAO"%>
 <%@page import="ke.co.qubintel.school.server.bean.exam.SysConfig"%>
 
 <%@page import="java.util.*"%>
@@ -49,8 +50,6 @@
 	int currentYear = Integer.parseInt(sysConfig.getYear());
 
 	int currentTerm = Integer.parseInt(sysConfig.getTerm());
-
-	
 %>
 <jsp:include page="header.jsp" />
 <!-- Custom report style -->
@@ -129,7 +128,8 @@
 
 											<!-- Current avatar -->
 											<div class="avatar-view" title="Change the avatar">
-												<img id="img_avatar_student"src="images/user.png" alt="Avatar">
+												<img id="img_avatar_student" src="images/user.png"
+													alt="Avatar">
 												<!-- Since i can't get the dist dir need to create a preview here simiar 
 												to the one in the cropping option, thus i will have to look at the code
 												that previews that image before cropping it then i will have achieved my goal. setting a new input file wint work
@@ -308,7 +308,7 @@
 
 											<div class="row">
 
-												<div class="col-md-5 col-md-offset-1">
+												<div class="col-md-3 col-md-offset-1">
 													<h4>Type</h4>
 													<select name="isBoarding" class="form-control formelement">
 														<option value="1">Boarding</option>
@@ -318,7 +318,7 @@
 
 
 
-												<div class="col-md-5 col-md-offset-1">
+												<div class="col-md-3 col-md-offset-1">
 													<h4>Admission No_</h4>
 
 													<input type="text" id="regno" name="regNo" maxlength="10"
@@ -326,6 +326,15 @@
 														placeholder="Registration number" pattern="[0-9]{1,10}"
 														title="Registration number, should contain numerics only and should be numbers only e.g 900, 1234"
 														required>
+												</div>
+
+												<div class="col-md-3 col-md-offset-1">
+													<h4>Index No_</h4>
+
+													<input type="text" id="indexNo" name="indexNo"
+														class="form-control formelement" maxlength="15"
+														placeholder="Index number" pattern="[0-9]{2,10}"
+														title="Index number, should contain numerics only">
 												</div>
 
 
@@ -341,18 +350,21 @@
 
 
 											<div class="row">
-											
-											
 
 
-							
+
+
+
 												<div class="col-md-5 col-md-offset-1">
 
 
 													<h4>Class</h4>
 
-													<select class="form-control formelement populateOptions classId"  id="classList" onchange="fetchStreams(this.value)" required="required">
-													
+													<select
+														class="form-control formelement populateOptions classId"
+														id="classList" onchange="fetchStreams(this.value)"
+														required="required">
+
 													</select>
 
 
@@ -366,8 +378,9 @@
 
 													<h4>Stream</h4>
 
-													<select class="form-control formelement populateStreamOptions" name="regStream"
-														id="regStream" required="required">
+													<select
+														class="form-control formelement populateStreamOptions"
+														name="regStream" id="regStream" required="required">
 
 
 
@@ -449,7 +462,7 @@
 
 
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>School's Name</h4>
 														<input type="text" id="schoolname"
 															class="form-control formelement" name="schoolName"
@@ -459,7 +472,7 @@
 
 													</div>
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>Index Number</h4>
 														<input type="text" id="indexno"
 															class="form-control formelement" name="index"
@@ -467,6 +480,36 @@
 															pattern="[0-9]{6,12}"
 															title="Index Number,Only numbers are allowed and should be numbers">
 
+													</div>
+													
+													
+													<div class="col-md-3 col-md-offset-1">
+														<h4>KCPE Grade</h4>
+														
+														<select class="form-control formelement " id="kcpeGrade" name="kcpeGrade">
+														<option>...</option>
+														<option>A</option>
+														
+														<option>A-</option>
+														<option>B+</option>
+														
+														<option>B</option>
+														<option>B-</option>
+														
+														<option>C+</option>
+														
+														<option>C</option>
+														<option>C-</option>
+														
+														<option>D+</option>
+														
+														<option>D</option>
+														<option>D-</option>
+														
+														<option>E</option>
+														
+														</select>
+														
 													</div>
 
 
