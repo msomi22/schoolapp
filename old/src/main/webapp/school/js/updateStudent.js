@@ -67,6 +67,11 @@ function fetchBasicInfo() {
 				$.each(data['apiParentPrimary'], function(key, value) {
 					$("#updateStudentInfo").find("input[name='" + key + "']")
 							.val(value);
+					
+					if (key === "kcpeGrade")
+						$('#kcpeGrade').val(value);
+					
+					
 				});
 
 			}
@@ -94,6 +99,8 @@ function fetchBasicInfo() {
 
 			if (key === "county")
 				$('#county').val(value);
+			
+			
 
 		});
 
