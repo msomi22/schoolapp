@@ -628,6 +628,7 @@ ALTER TABLE GradingSystem OWNER TO school;
     ET text,
     ETCtwo text,
     ETConetwo text,
+    c1c2 text,
     sendSMS text
    
    
@@ -637,7 +638,7 @@ ALTER TABLE GradingSystem OWNER TO school;
 \COPY ExamConfig(Uuid,SchoolAccountUuid,Term,Year,Exam,ExamMode,ETFone,ET,ETCtwo,ETConetwo,sendSMS) FROM '/tmp/ExamConfig.csv' WITH DELIMITER AS '|' CSV HEADER
 ALTER TABLE ExamConfig OWNER TO school;
 
-
+--ALTER TABLE ExamConfig ADD COLUMN c1c2 text; 
 
 
 -- -------------------

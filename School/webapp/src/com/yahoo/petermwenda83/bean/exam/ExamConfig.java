@@ -32,6 +32,7 @@ public class ExamConfig extends StorableBean{
 	private String eT;
 	private String eTCtwo;
 	private String eTConetwo;
+	private String c1c2;
 	private String sendSMS;
 
 	/**
@@ -47,6 +48,7 @@ public class ExamConfig extends StorableBean{
 		eT = "";
 		eTCtwo = "";
 		eTConetwo = "";
+		c1c2 = "";
 		sendSMS = "";
 	}
 
@@ -178,6 +180,20 @@ public class ExamConfig extends StorableBean{
 	}
 
 	/**
+	 * @return the c1c2
+	 */
+	public String getC1c2() {
+		return c1c2;
+	}
+
+	/**
+	 * @param c1c2 the c1c2 to set
+	 */
+	public void setC1c2(String c1c2) {
+		this.c1c2 = c1c2;
+	}
+
+	/**
 	 * @return the sendSMS
 	 */
 	public String getSendSMS() {
@@ -213,6 +229,8 @@ public class ExamConfig extends StorableBean{
 		builder.append(eTCtwo);
 		builder.append(", eTConetwo=");
 		builder.append(eTConetwo);
+		builder.append(", c1c2=");
+		builder.append(c1c2);
 		builder.append(", sendSMS=");
 		builder.append(sendSMS);
 		builder.append("]");

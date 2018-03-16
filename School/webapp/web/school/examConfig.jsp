@@ -266,6 +266,7 @@
                         <th>ET</th>
                         <th>ET C2</th>
                         <th>ET C1 C2</th>
+                        <th>C1 C2</th>
                         
                         <th>Action</th>
                        
@@ -283,6 +284,7 @@
                          <td class="center"><%=examConfig.geteT() %></td>  
                          <td class="center"><%=examConfig.geteTCtwo() %></td>  
                          <td class="center"><%=examConfig.geteTConetwo() %></td>  
+                         <td class="center"><%=examConfig.getC1c2() %></td>  
                         
                          <td class="center">
                                 <form name="edit" method="POST" action="updateExamConfig.jsp" > 
@@ -295,6 +297,7 @@
                                 <input type="hidden" name="eT" value="<%=examConfig.geteT()%>">
                                 <input type="hidden" name="eTCtwo" value="<%=examConfig.geteTCtwo()%>">
                                 <input type="hidden" name="eTConetwo" value="<%=examConfig.geteTConetwo()%>">
+                                <input type="hidden" name="c1c2" value="<%=examConfig.getC1c2()%>">
                                 <input type="hidden" name="sendSmsEnable" value="<%=examConfig.getSendSMS()%>">
                                 <input class="btn btn-success" type="submit" name="edit" id="submit" value="Update" /> 
                                 </form>                          

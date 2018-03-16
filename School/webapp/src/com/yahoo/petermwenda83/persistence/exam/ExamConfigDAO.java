@@ -89,7 +89,8 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 		boolean success = true;
 		 try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ExamConfig" 
-			        		+"(Uuid,SchoolAccountUuid,Term,Year,Exam,ExamMode,eTFone,eT,eTCtwo,eTConetwo,SendSMS) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+			        		+"(Uuid,SchoolAccountUuid,Term,Year,Exam,ExamMode,eTFone,eT,eTCtwo,eTConetwo,c1c2,SendSMS) "
+			        		+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
        		){
 			
 			    pstmt.setString(1, examConfig.getUuid());
@@ -102,7 +103,8 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 	            pstmt.setString(8, examConfig.geteT());
 	            pstmt.setString(9, examConfig.geteTCtwo());
 	            pstmt.setString(10, examConfig.geteTConetwo());
-	            pstmt.setString(11, examConfig.getSendSMS());
+	            pstmt.setString(11, examConfig.getC1c2());
+	            pstmt.setString(12, examConfig.getSendSMS());
 	           
 	            pstmt.executeUpdate();
 			 
@@ -124,7 +126,7 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 		boolean success = true;
         try (  Connection conn = dbutils.getConnection();
         	PreparedStatement pstmt = conn.prepareStatement("UPDATE ExamConfig SET Term=?,"
-        			+ "Year=?,Exam =?, ExamMode=?,eTFone =?,eT =?,eTCtwo =?,eTConetwo =?,SendSMS=? WHERE SchoolAccountUuid = ?;");
+        			+ " Year=?, Exam =?, ExamMode=?, eTFone =?, eT =?, eTCtwo =?, eTConetwo =?, c1c2 =?, SendSMS=? WHERE SchoolAccountUuid = ?;");
         	) { 
 	            pstmt.setString(1, examConfig.getTerm());
 	            pstmt.setString(2, examConfig.getYear());
@@ -134,8 +136,9 @@ public class ExamConfigDAO extends GenericDAO implements SchoolExamConfigDAO {
 	            pstmt.setString(6, examConfig.geteT());
 	            pstmt.setString(7, examConfig.geteTCtwo());
 	            pstmt.setString(8, examConfig.geteTConetwo());
-	            pstmt.setString(9, examConfig.getSendSMS());
-	            pstmt.setString(10, examConfig.getSchoolAccountUuid());
+	            pstmt.setString(9, examConfig.getC1c2());
+	            pstmt.setString(10, examConfig.getSendSMS());
+	            pstmt.setString(11, examConfig.getSchoolAccountUuid());
                 pstmt.executeUpdate(); 
 
         } catch (SQLException e) {

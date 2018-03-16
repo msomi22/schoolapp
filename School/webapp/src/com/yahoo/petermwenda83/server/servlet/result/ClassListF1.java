@@ -141,9 +141,10 @@ public class ClassListF1 extends HttpServlet{
 	String USER= "";
 	String path ="";
 
-	String EndTermOnly = "";
-	String EndTermAndC2 = "";
-	String EndTermC1AndC2 = "";
+	private String EndTermOnly = "";
+	private String EndTermAndC2 = "";
+	private String EndTermC1AndC2 = "";
+	private String Cat1Cat2 = "";
 	
 	private boolean isFormTwo = false;
 
@@ -221,6 +222,7 @@ public class ClassListF1 extends HttpServlet{
 		EndTermOnly = examConfig.geteT();
 		EndTermAndC2 = examConfig.geteTCtwo();
 		EndTermC1AndC2 = examConfig.geteTConetwo();
+		Cat1Cat2 = examConfig.getC1c2();
 
 		ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByteacherId(stffID);
 		if(classTeacher !=null){
@@ -653,6 +655,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 
 							engscoregn = totalscoregn;				
@@ -689,6 +694,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = ((cat1gn+cat2gn)/2) + endtermgn;
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -727,6 +735,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -766,6 +777,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -801,6 +815,10 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}
+							else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -838,6 +856,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -874,6 +895,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 
 
@@ -911,6 +935,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -947,6 +974,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -987,6 +1017,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
 
@@ -1025,6 +1058,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
 
@@ -1060,6 +1096,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
 
@@ -1093,6 +1132,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscoregn = ((cat1gn+cat2gn)/2) + 70; 
+									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
 
@@ -1303,6 +1345,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1341,6 +1386,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1380,6 +1428,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1420,6 +1471,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1458,6 +1512,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1496,6 +1553,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 							matscore = totalscore;
@@ -1534,6 +1594,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1571,6 +1634,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 							crescore = totalscore;
@@ -1609,6 +1675,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 							histscore = totalscore;
@@ -1651,6 +1720,9 @@ public class ClassListF1 extends HttpServlet{
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+								totalscore = ((cat1+cat2)/2) + 70; 
+								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
 
@@ -1692,6 +1764,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscore = ((cat1+cat2)/2) + 70; 
+									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic
 
@@ -1732,6 +1807,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscore = ((cat1+cat2)/2) + 70; 
+									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic
 
@@ -1769,6 +1847,9 @@ public class ClassListF1 extends HttpServlet{
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 
 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+									totalscore = ((cat1+cat2)/2) + 70; 
+									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic
 

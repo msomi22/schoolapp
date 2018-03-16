@@ -25,7 +25,7 @@ echo "droping the current database s..."
 
 sudo service postgresql restart
 
-psql -f ../etc/sql/drop.sql -d postgres
+psql -f drop.sql -d postgres 
 
 echo "Restoring from /home/"$USER"/school/dbBackup/buckup.sql.."
 
