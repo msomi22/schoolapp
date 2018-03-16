@@ -101,7 +101,7 @@ public class SchoolLogin extends HttpServlet {
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
-		}else if (!allowedNames.contains(accountDAO.getAccount(schoolUsername, "1").getName().toLowerCase())) {  
+		}else if (allowedNames.contains(accountDAO.getAccount(schoolUsername, "1").getName().toLowerCase())) {  
 			
 			message = "Sorry! Account \""+accountDAO.getAccount(schoolUsername, "1").getName()+"\" is not allowed to use this Software";  
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);

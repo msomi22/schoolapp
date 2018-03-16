@@ -31,9 +31,15 @@ $(document)
 					fetchSubjects();
 
 					fetchHouses();
+					
+					
 
 					// fetchClasses();
 					fetchStreamsStudent();
+					
+					setTimeout(function(){
+						FetchAssignedHouse();
+					},500);
 
 				});
 
@@ -253,6 +259,36 @@ function assignHouse() {
 	globalApiCall(function(data) {
 
 		console.log('Code for assigning a house to a student');
+
+		//parseData(data)
+
+	});
+}
+
+
+
+
+function FetchAssignedHouse() {
+
+	
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "general/house/student/"+$('#accountId').val()+"/"+$('#uuid').val();// url;
+
+	global_data_passed = {};
+	
+	console.log(global_data_passed);
+
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+		
+		
+
+		console.log('Code for fetching students house');
+		
+		if(!data.error)
+			$('#houseName').val(data.houseId)
 
 		//parseData(data)
 
