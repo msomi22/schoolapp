@@ -119,6 +119,44 @@ function fetchClasses() {
 
 
 
+
+function fetchHouses() {
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "general/house/" + $('#accountId').val();//url;
+
+	global_data_passed = {};
+
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for fetching Houses');
+
+		console.log(data);
+
+		var houseSelect = $('#houseName');
+		houseSelect.empty();
+		// classSelect.options[classSelect.options.length]
+		// = new Option('Form 1', 'Value1');
+
+		for (var i = 0; i < data.length; i++) {
+			houseSelect.append('<option id=' + data[i].uuid + ' value='
+					+ data[i].uuid + '>' + data[i].houseName + '</option>');
+			// classSelect.options[classSelect.options.length]
+			// = new Option(data[i].description,
+			// data[i].uuid);
+		}
+
+		
+
+	});
+
+}
+
+
+
 function fetchExams() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));

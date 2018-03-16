@@ -31,7 +31,6 @@
 	String uuid = request.getParameter("uuid");
 
 	String name = request.getParameter("name");
-	
 %>
 <jsp:include page="header.jsp" />
 
@@ -320,8 +319,6 @@
 												</div>
 
 
-												<br>
-
 
 
 												<!-- dob and bcertno -->
@@ -363,7 +360,7 @@
 
 												<div class="row">
 
-													<div class="col-md-3 col-md-offset-1">
+													<div class="col-md-5 col-md-offset-1">
 														<h4>Type</h4>
 														<select name="isBoarding" id="isBoarding"
 															class="form-control formelement">
@@ -374,7 +371,7 @@
 
 
 
-													<div class="col-md-3 col-md-offset-1">
+													<div class="col-md-5 col-md-offset-1">
 														<h4>Registration No_</h4>
 
 														<input type="text" id="regNo" name="regNo"
@@ -383,15 +380,27 @@
 															title="Registration number, should contain numerics only"
 															required>
 													</div>
-													
-													<div class="col-md-3 col-md-offset-1">
+
+													<div class="col-md-5 col-md-offset-1">
+														<h4>House</h4>
+
+														<select class="form-control formelement " id="houseName"
+															required="required">
+															<option>...</option>
+
+
+
+														</select>
+													</div>
+
+
+													<div class="col-md-5 col-md-offset-1">
 														<h4>Index No_</h4>
 
 														<input type="text" id="indexNo" name="indexNo"
 															class="form-control formelement" maxlength="15"
 															placeholder="Index number" pattern="[0-9]{2,10}"
-															title="Index number, should contain numerics only"
-															>
+															title="Index number, should contain numerics only">
 													</div>
 
 
@@ -406,14 +415,16 @@
 
 
 														<h4>Govt Fund Eligible</h4>
-														
-													
 
-														<select class="form-control formelement " id="isGoKFeeEligibe" name="isGoKFeeEligibe" required="required">
-														<option value="1">YES</option>
-														
-														<option value="0">NO</option>
-														
+
+
+														<select class="form-control formelement "
+															id="isGoKFeeEligibe" name="isGoKFeeEligibe"
+															required="required">
+															<option value="1">YES</option>
+
+															<option value="0">NO</option>
+
 														</select>
 
 
@@ -426,11 +437,13 @@
 													<div class="col-md-5 col-md-offset-1">
 
 														<h4>Stream</h4>
-														
-														
 
-														<select class="form-control formelement populateStreamOptionsStudent"
-															name="currentStream" id="currentStream" required="required">
+
+
+														<select
+															class="form-control formelement populateStreamOptionsStudent"
+															name="currentStream" id="currentStream"
+															required="required">
 
 														</select>
 
@@ -572,34 +585,35 @@
 															title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
 
 													</div>
-													
+
 													<div class="col-md-3 col-md-offset-1">
 														<h4>KCPE Grade</h4>
-														
-														<select class="form-control formelement " id="kcpeGrade" name="kcpeGrade">
-														<option>...</option>
-														<option>A</option>
-														
-														<option>A-</option>
-														<option>B+</option>
-														
-														<option>B</option>
-														<option>B-</option>
-														
-														<option>C+</option>
-														
-														<option>C</option>
-														<option>C-</option>
-														
-														<option>D+</option>
-														
-														<option>D</option>
-														<option>D-</option>
-														
-														<option>E</option>
-														
+
+														<select class="form-control formelement " id="kcpeGrade"
+															name="kcpeGrade">
+															<option>...</option>
+															<option>A</option>
+
+															<option>A-</option>
+															<option>B+</option>
+
+															<option>B</option>
+															<option>B-</option>
+
+															<option>C+</option>
+
+															<option>C</option>
+															<option>C-</option>
+
+															<option>D+</option>
+
+															<option>D</option>
+															<option>D-</option>
+
+															<option>E</option>
+
 														</select>
-														
+
 													</div>
 
 
@@ -756,6 +770,21 @@
 									type="hidden" name="description" id="sub_description">
 
 							</form>
+
+
+
+							<form action="#" method="post" id="assignHouse">
+								<input type="hidden" name="uuid" id="uuid"> <input
+									type="hidden" name="accountId" id="hse_accountId"> <input
+									type="hidden" name="houseId" id="hseUuid"> <input
+									type="hidden" name="studentId" id="hse_studentId"> <input
+									type="hidden" name="studentName" id="studentName"> <input
+									type="hidden" name="regNo" id="hse_regNo"> <input
+									type="hidden" name="houseName" id="hse_Name"> <input
+									type="hidden" name="dateOut"> <input type="hidden"
+									name="dateIn">
+
+							</form>
 						</div>
 
 
@@ -769,8 +798,6 @@
 	</div>
 </div>
 <!-- /page content -->
-
-
 
 
 <!-- footer -->

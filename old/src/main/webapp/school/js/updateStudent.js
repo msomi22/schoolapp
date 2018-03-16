@@ -29,8 +29,10 @@ $(document)
 					fetchBasicInfo();
 
 					fetchSubjects();
-					
-					//fetchClasses();
+
+					fetchHouses();
+
+					// fetchClasses();
 					fetchStreamsStudent();
 
 				});
@@ -65,10 +67,11 @@ function fetchBasicInfo() {
 
 			if (key === "currentStream") {
 				$('#currentStream').val(value);
-/*
-				
-
-				console.log(key + " value:" + value.trim());*/
+				/*
+				 * 
+				 * 
+				 * console.log(key + " value:" + value.trim());
+				 */
 
 			}
 
@@ -101,19 +104,14 @@ function fetchBasicInfo() {
 var students_subjects = {};
 
 function fetchSubjects() {
-	
-	
 
-	
 	request_type = 'GET';
 	var all_subjects = {};
-	data_passed={};
+	data_passed = {};
 
 	url = "subject/" + $('#passedParam').val();
-	
+
 	console.log(url);
-	
-	
 
 	apiCall(function(data) {
 
@@ -133,15 +131,13 @@ function fetchSubjects() {
 					console.log(" All Subjects loadded");
 
 					console.log(data);
-					
+
 					$('#subjectList').html('');
 
 					for (var i = 0; i < data.length; i++) {
 
 						if (searchSubject(data[i]['subjectId'],
 								students_subjects)) {
-
-							
 
 						} else {
 
@@ -174,26 +170,22 @@ function searchSubject(subjectID, subjects) {
 
 	for (var i = 0; i < subjects.length; i++) {
 
-		if (subjectID === subjects[i]['subjectId']){
-			
-			
-			
+		if (subjectID === subjects[i]['subjectId']) {
+
 			$('#subjectList')
-			.append(
-					'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
-							+ subjects[i]['uuid']
-							+ '" type="checkbox" class="form-control  chk" value="'
-							+ subjects[i]['uuid']
-							+ '" onchange="alterSubject(this.id)" checked /><label for="'
-							+ subjects[i]['uuid']
-							+ '">'
-							+ subjects[i]['description']
-							+ '</label> </div>');
-			
-			
+					.append(
+							'<div class="col-md-3 col-md-offset-1 col-sm-12 col-xs-12"><input id="'
+									+ subjects[i]['uuid']
+									+ '" type="checkbox" class="form-control  chk" value="'
+									+ subjects[i]['uuid']
+									+ '" onchange="alterSubject(this.id)" checked /><label for="'
+									+ subjects[i]['uuid'] + '">'
+									+ subjects[i]['description']
+									+ '</label> </div>');
+
 			return true;
 		}
-			
+
 		// console.log(subjects[i]);
 
 	}
@@ -211,7 +203,8 @@ function apiCall(handleData) {
 				contentType : 'application/json',
 				accept : 'application/json',
 				beforeSend : function(xhr) {
-					xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA==');
+					xhr.setRequestHeader('Authorization',
+							'Basic ZGVtbzoxMjM0NTY3OA==');
 				}
 			}).done(function(data) {
 
@@ -219,9 +212,7 @@ function apiCall(handleData) {
 
 		returnData = data;
 
-		
 		handleData(data);
-
 
 	}).fail(function(jqXHR, textStatus) {
 
@@ -235,79 +226,118 @@ function apiCall(handleData) {
 	return returnData;
 }
 
+function assignHouse() {
+
+	$('#hse_accountId').val($('#accountId').val());
+
+	$('#hseUuid').val($('#houseName').val());
+
+	$('#hse_studentId').val($('#accountId').val());
+
+	$('#studentName').val($('#fname').val() +" "+$('#lname').val());
+
+	$('#hse_regNo').val($('#regNo').val());
+	
+	$('#hse_Name').val($( "#houseName option:selected" ).text());
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "general/house/student/new";// url;
+
+	global_data_passed = $('#assignHouse').serializeJSON();
+	
+	console.log(global_data_passed);
+
+	global_request_type = 'POST';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for assigning a house to a student');
+
+		//parseData(data)
+
+	});
+}
+
 function updateStudent() {
 
-	// if(!checkFormValidation($('#updateStudentInfo'))){
-	
-	if($('#schoolName').val() !="" || $('#index').val() !="" || $('#kcpeyear').val() !="" || $('#kcpemark').val() !=""){
-		
-		$('#hasPrimary').val("true");
-		
-	}else{
-		$('#hasPrimary').val("false");
-	}
-	
-	
-		
-	
-	if($('#parentMobile').val() !="" || $('#parentName').val() !="" || $('#parentEmail').val() !="" )
-		$('#hasParent').val("true")
-		
+	assignHouse();
+
+	setTimeout(function() {
+
+		// if(!checkFormValidation($('#updateStudentInfo'))){
+
+		if ($('#schoolName').val() != "" || $('#index').val() != ""
+				|| $('#kcpeyear').val() != "" || $('#kcpemark').val() != "") {
+
+			$('#hasPrimary').val("true");
+
+		} else {
+			$('#hasPrimary').val("false");
+		}
+
+		if ($('#parentMobile').val() != "" || $('#parentName').val() != ""
+				|| $('#parentEmail').val() != "")
+			$('#hasParent').val("true")
+
 		else
 			$('#hasParent').val("false");
 
-	request_type = 'PUT';
+		request_type = 'PUT';
 
-	url = $('#accountId').val();
+		url = $('#accountId').val();
 
-	data_passed = $('#updateStudentInfo').serializeJSON();
+		data_passed = $('#updateStudentInfo').serializeJSON();
 
-	console.log(data_passed);
+		console.log(data_passed);
 
-	apiCall(function(data) {
+		apiCall(function(data) {
 
-		console.log('Smart Code');
+			console.log('Smart Code');
 
-		console.log(data);
+			console.log(data);
 
-		parseData(data)
+			parseData(data)
 
-	});
+		});
 
-	// }
+		// }
 
-	/*
-	 * data_passed= $('#updateStudentInfo').serializeJSON();
-	 * 
-	 * console.log(JSON.stringify(data_passed)); $ .ajax( { url :
-	 * location.protocol + "//" + window.location.host +
-	 * "/school/webapi/student/" + $('#accountId').val(), type : 'PUT', dataType :
-	 * 'json', data : JSON.stringify($('#updateStudentInfo') .serializeJSON()),
-	 * contentType : 'application/json', accept : 'application/json', beforeSend :
-	 * function(xhr) { xhr.setRequestHeader('Authorization', 'Basic
-	 * ZGVtbzoxMjM0NTY3OA=='); } }).done(function(data) {
-	 * 
-	 * 
-	 * console.log(data); } );
-	 */
+		/*
+		 * data_passed= $('#updateStudentInfo').serializeJSON();
+		 * 
+		 * console.log(JSON.stringify(data_passed)); $ .ajax( { url :
+		 * location.protocol + "//" + window.location.host +
+		 * "/school/webapi/student/" + $('#accountId').val(), type : 'PUT',
+		 * dataType : 'json', data : JSON.stringify($('#updateStudentInfo')
+		 * .serializeJSON()), contentType : 'application/json', accept :
+		 * 'application/json', beforeSend : function(xhr) {
+		 * xhr.setRequestHeader('Authorization', 'Basic ZGVtbzoxMjM0NTY3OA=='); }
+		 * }).done(function(data) {
+		 * 
+		 * 
+		 * console.log(data); } );
+		 */
+
+	}, 1000)
 
 }
 
 function alterSubject(id) {
-	
-	var checked_state= false;
+
+	var checked_state = false;
 
 	console.log(id);
 
-	if ($('#'+id).is(':checked')) {
-		
-		checked_state=true;
+	if ($('#' + id).is(':checked')) {
+
+		checked_state = true;
 
 		request_type = 'POST';
 
 		url = 'subject';
 
-		$('#sub_description').val($('#'+id).val());
+		$('#sub_description').val($('#' + id).val());
 
 		$('#sub_studentId').val($('#uuid').val());
 		$('#sub_subjectId').val(id);
@@ -316,23 +346,22 @@ function alterSubject(id) {
 
 		data_passed = $('#alterSujectForm').serializeJSON();
 
-		
-		/* * data_passed = '{ "uuid": "","accountId": '+$("#accountId").val()
+		/*
+		 * * data_passed = '{ "uuid": "","accountId": '+$("#accountId").val()
 		 * +',"studentId": $('#uuid').val(),"subjectId": id,"description":
 		 * description}';
-*/		 
+		 */
 	} else {
-		
-		checked_state= false;
-		
+
+		checked_state = false;
+
 		request_type = 'DELETE';
 
-		url = 'subject/'+$('#accountId').val()+'/'+id;
-		
-		
+		url = 'subject/' + $('#accountId').val() + '/' + id;
+
 		console.log(url);
-		
-		data_passed={};
+
+		data_passed = {};
 
 	}
 
@@ -344,20 +373,16 @@ function alterSubject(id) {
 
 		console.log(data);
 
-		if(!parseData(data)){
-			
+		if (!parseData(data)) {
+
 			console.log(checked_state);
-			
-			
-			
-				
-				fetchSubjects();
-			
-		}else{
+
 			fetchSubjects();
-			
+
+		} else {
+			fetchSubjects();
+
 		}
-		
 
 	});
 
@@ -439,16 +464,15 @@ function parseData(data) {
 
 			$('#success').modal('hide');
 		}, 2500);
-		
+
 		request_type = 'GET';
-		
-		data_passed={};
+
+		data_passed = {};
 
 		url = "one/" + $('#passedParam').val();
 
 		fetchBasicInfo();
-		
-		
+
 		return true;
 
 	} else if (data.message.includes("error")) {
@@ -463,8 +487,7 @@ function parseData(data) {
 
 			$('#error').modal('hide');
 		}, 3500);
-		
-		
+
 		return false;
 
 	}
