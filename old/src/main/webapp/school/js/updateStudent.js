@@ -311,7 +311,7 @@ function updateStudent() {
 		// if(!checkFormValidation($('#updateStudentInfo'))){
 
 		if ($('#schoolName').val() != "" || $('#index').val() != ""
-				|| $('#kcpeyear').val() != "" || $('#kcpemark').val() != "") {
+				|| $('#kcpeyear').val() != "" || $('#kcpemark').val() != "" || $('#kcpeGrade').val() != "") {
 
 			$('#hasPrimary').val("true");
 
