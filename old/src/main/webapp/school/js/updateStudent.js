@@ -297,7 +297,7 @@ function FetchAssignedHouse() {
 		if(!data.error)
 			$('#houseName').val(data.houseId)
 
-		//parseData(data)
+		parseData(data)
 
 	});
 }
