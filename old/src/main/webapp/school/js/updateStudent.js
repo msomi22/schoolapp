@@ -267,7 +267,7 @@ function assignHouse() {
 
 		console.log('Code for assigning a house to a student');
 
-		//parseData(data)
+		parseData(data)
 
 	});
 }
@@ -297,7 +297,7 @@ function FetchAssignedHouse() {
 		if(!data.error)
 			$('#houseName').val(data.houseId)
 
-		parseData(data)
+		//parseData(data)
 
 	});
 }
