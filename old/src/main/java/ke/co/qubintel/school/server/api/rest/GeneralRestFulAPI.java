@@ -678,6 +678,14 @@ public class GeneralRestFulAPI {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param accountId
+	 * @param list
+	 * @param uuid
+	 * @param auth
+	 * @return
+	 */
 	@ApiOperation(value = "Exit house assigned to a student.", 
 			notes = "Return whether the house was exited successfully.", 
 			response = ApiStudentHouse.class)
@@ -727,6 +735,36 @@ public class GeneralRestFulAPI {
 			
 		} else {
 			return generalService.getStudentHouseList(accountId, houseId);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param accountId
+	 * @param houseId
+	 * @param streamId
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Get list of students per house and stream.", 
+			notes = "Return StudentHouse List.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@GET
+	@Path("/house/studentlist/{accountId}/{houseId}/{streamId}")  
+	public Object getStudentHouseListPerStream(@PathParam("accountId")String accountId, @PathParam("houseId")String houseId,  
+			 @PathParam("streamId")String streamId, @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.getStudentHouseListPerStream(accountId,houseId,streamId); 
 		}
 	}
 	

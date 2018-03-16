@@ -1030,7 +1030,7 @@ public class StudentService {
 		return apiResponse;
 	}
 
-	/**
+	/** TODO
 	 * 
 	 * @param accountId
 	 * @param student
@@ -1193,6 +1193,7 @@ public class StudentService {
 		newstudent.setIsGoKFeeEligibe(student.getIsGoKFeeEligibe()); 
 		newstudent.setRegNo(student.getRegNo());
 		newstudent.setIndexNo(student.getIndexNo()); 
+		newstudent.setIndexNo(student.getIndexNo()); 
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());
 		newstudent.setLastname(student.getLastname());
@@ -1279,6 +1280,7 @@ public class StudentService {
 					studentPrimary.setKcpemark(student.getKcpemark());
 					studentPrimary.setKcpeyear(student.getKcpeyear());
 					studentPrimary.setKcpeGrade(student.getKcpeGrade()); 
+					studentPrimary.setKcpeGrade(student.getKcpeGrade()); 
 
 					if (primaryDAO.updateStudentPrimary(studentPrimary)) {
 
@@ -1298,7 +1300,7 @@ public class StudentService {
 
 	}
 
-	/**
+	/** TODO
 	 * 
 	 * @param student
 	 * @param accountId
@@ -1321,6 +1323,7 @@ public class StudentService {
 		newstudent.setIsBoarding(student.getIsBoarding());
 		newstudent.setIsGoKFeeEligibe("0"); 
 		newstudent.setRegNo(student.getRegNo());
+		newstudent.setIndexNo(student.getIndexNo());  
 		newstudent.setIndexNo(student.getIndex());
 		newstudent.setFirstname(student.getFirstname());
 		newstudent.setMiddlename(student.getMiddlename());
@@ -1648,7 +1651,7 @@ public class StudentService {
 		return response;
 	}
 
-	/** TODO
+	/** 
 	 * 
 	 * @param accountId
 	 * @param changeClass
@@ -1727,7 +1730,7 @@ public class StudentService {
 	}
 	
 	
-	/** TODO
+	/** 
 	 * 
 	 * @param accountId
 	 * @param status
