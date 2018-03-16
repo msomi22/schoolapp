@@ -1496,8 +1496,7 @@ public class GeneralService {
 		}else {
 
 			sh_list.stream().forEach(sh -> {
-
-
+				
 				StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(sh.getAccountId(), sh.getUuid()); 
 				studentHouse.setDateOut(new StudentHouse().getDateOut()); 
 
@@ -1506,7 +1505,7 @@ public class GeneralService {
 			});
 
 			response.setMessage("success");
-			response.setDescription("House existed successfully!");
+			response.setDescription("House exited successfully!");
 			return response;
 
 		}
