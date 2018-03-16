@@ -68,7 +68,7 @@ function fetchBasicInfo() {
 					$("#updateStudentInfo").find("input[name='" + key + "']")
 							.val(value);
 					
-					if (key === "kcpeGrade")
+					if (key === "kcpeGrade" && value != "")
 						$('#kcpeGrade').val(value);
 					
 					
@@ -311,7 +311,7 @@ function updateStudent() {
 		// if(!checkFormValidation($('#updateStudentInfo'))){
 
 		if ($('#schoolName').val() != "" || $('#index').val() != ""
-				|| $('#kcpeyear').val() != "" || $('#kcpemark').val() != "" || $('#kcpeGrade').val() != "") {
+				|| $('#kcpeyear').val() != "" || $('#kcpemark').val() != "" || $('#kcpeGrade').val() != "...") {
 
 			$('#hasPrimary').val("true");
 
