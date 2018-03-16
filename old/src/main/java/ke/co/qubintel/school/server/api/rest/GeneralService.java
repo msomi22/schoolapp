@@ -1237,6 +1237,11 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
+		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
+			response.setMessage("error");
+			response.setDescription("House already assigned!"); 
+			return response;
+			
 		}else {
 
 
@@ -1282,6 +1287,12 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
+			
+		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("No house to change!"); 
+			return response;
+			
 		}else {
 
 
@@ -1485,8 +1496,7 @@ public class GeneralService {
 		}else {
 
 			sh_list.stream().forEach(sh -> {
-
-
+				
 				StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(sh.getAccountId(), sh.getUuid()); 
 				studentHouse.setDateOut(new StudentHouse().getDateOut()); 
 
@@ -1495,7 +1505,7 @@ public class GeneralService {
 			});
 
 			response.setMessage("success");
-			response.setDescription("House existed successfully!");
+			response.setDescription("House exited successfully!");
 			return response;
 
 		}
