@@ -170,7 +170,7 @@ function updateHouse(form) {
 
 function deleteHouse() {
 	
-		varying_url = "general/house/delete/" + $('#accountId').val()+"/" + $('#uuid').val();;
+		varying_url = "general/house/delete/" + $('#accountId').val()+"/" + $('#uuid').val();
 
 		global_data_passed = {};
 		global_request_type = 'DELETE';

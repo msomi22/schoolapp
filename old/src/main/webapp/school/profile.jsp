@@ -363,7 +363,7 @@
 
 												<div class="row">
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>Type</h4>
 														<select name="isBoarding" id="isBoarding"
 															class="form-control formelement">
@@ -374,14 +374,24 @@
 
 
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>Registration No_</h4>
 
 														<input type="text" id="regNo" name="regNo"
 															class="form-control formelement" maxlength="15"
 															placeholder="Registration number" pattern="[0-9]{2,10}"
-															title="Registration number, should contain numerics only and should be 4 numbers only"
+															title="Registration number, should contain numerics only"
 															required>
+													</div>
+													
+													<div class="col-md-3 col-md-offset-1">
+														<h4>Index No_</h4>
+
+														<input type="text" id="indexNo" name="indexNo"
+															class="form-control formelement" maxlength="15"
+															placeholder="Index number" pattern="[0-9]{2,10}"
+															title="Index number, should contain numerics only"
+															>
 													</div>
 
 
@@ -544,7 +554,7 @@
 
 
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>KCPE YEAR</h4>
 														<input type="text" id="kcpeyear"
 															class="form-control formelement" name="kcpeyear"
@@ -553,7 +563,7 @@
 
 													</div>
 
-													<div class="col-md-5 col-md-offset-1">
+													<div class="col-md-3 col-md-offset-1">
 														<h4>KCPE MARKS</h4>
 														<input type="text" id="kcpemark"
 															class="form-control formelement" name="kcpemark"
@@ -561,6 +571,35 @@
 															pattern="[0-9]{1,3}"
 															title="KCPE mark,Only numbers are allowed and should be less than 3 numbers .e.g 234,345,467 e.t.c">
 
+													</div>
+													
+													<div class="col-md-3 col-md-offset-1">
+														<h4>KCPE Grade</h4>
+														
+														<select class="form-control formelement " id="kcpeGrade" name="kcpeGrade">
+														<option>...</option>
+														<option>A</option>
+														
+														<option>A-</option>
+														<option>B+</option>
+														
+														<option>B</option>
+														<option>B-</option>
+														
+														<option>C+</option>
+														
+														<option>C</option>
+														<option>C-</option>
+														
+														<option>D+</option>
+														
+														<option>D</option>
+														<option>D-</option>
+														
+														<option>E</option>
+														
+														</select>
+														
 													</div>
 
 
