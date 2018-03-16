@@ -22,6 +22,7 @@ public class PerformanceBean1 {
 	private String subjectId;
 	private String streamId;
 	private String classRoomId;
+	private String houseId;
 	private int score;
 	private String category;
 
@@ -33,6 +34,7 @@ public class PerformanceBean1 {
         subjectId ="";
         streamId ="";
         classRoomId = "";
+        houseId = "";
         score = 0;
         category = "";
 	}
@@ -94,6 +96,20 @@ public class PerformanceBean1 {
 	}
 
 	/**
+	 * @return the houseId
+	 */
+	public String getHouseId() {
+		return houseId;
+	}
+
+	/**
+	 * @param houseId the houseId to set
+	 */
+	public void setHouseId(String houseId) {
+		this.houseId = houseId;
+	}
+
+	/**
 	 * @return the score
 	 */
 	public int getScore() {
@@ -127,10 +143,8 @@ public class PerformanceBean1 {
 	@Override
 	public String toString() {
 		return "PerformanceBean1 [studentId=" + studentId + ", subjectId=" + subjectId + ", streamId=" + streamId
-				+ ", classRoomId=" + classRoomId + ", score=" + score + ", category=" + category + "]";
+				+ ", classRoomId=" + classRoomId + ", houseId=" + houseId + ", score=" + score + ", category="
+				+ category + "]";
 	}
-
-
-	
 
 }

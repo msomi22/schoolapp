@@ -154,6 +154,7 @@ public class ClassListF3_4 extends HttpServlet{
 	String EndTermOnly = "";
 	String EndTermAndC2 = "";
 	String EndTermC1AndC2 = "";
+	private String Cat1Cat2 = "";
 
 	/**
 	 *
@@ -219,6 +220,7 @@ public class ClassListF3_4 extends HttpServlet{
 		EndTermOnly = examConfig.geteT();
 		EndTermAndC2 = examConfig.geteTCtwo();
 		EndTermC1AndC2 = examConfig.geteTConetwo();
+		Cat1Cat2 = examConfig.getC1c2();
 
 
 		ClassTeacher classTeacher = classTeacherDAO.getClassTeacherByteacherId(stffID);
@@ -487,6 +489,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -526,6 +531,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -579,6 +587,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -619,6 +630,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -659,6 +673,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -699,6 +716,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -754,6 +774,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -795,6 +818,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -836,6 +862,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -877,6 +906,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -930,6 +962,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -970,6 +1005,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1010,6 +1048,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotalgn = ((cat1gn+cat2gn)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1356,6 +1397,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1400,6 +1444,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1455,6 +1502,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1498,6 +1548,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1540,6 +1593,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1582,6 +1638,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1639,6 +1698,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1682,6 +1744,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1725,6 +1790,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1768,6 +1836,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1824,6 +1895,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1867,6 +1941,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */
@@ -1910,6 +1987,9 @@ public class ClassListF3_4 extends HttpServlet{
 										catmean = catTotals/2;
 										examcattotal = catmean + endterm;
 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
+										examcattotal = ((cat1+cat2)/2) + 70; 
+										
 									}
 
 									/**  end if     */

@@ -4,7 +4,9 @@
 package com.yahoo.petermwenda83.server.servlet.exam;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -54,6 +56,7 @@ public class UpdateExamConfig extends HttpServlet{
 	final String ERROR_TERM_NUMERIC = "Term can only be numeric";
 	final String ERROR_YEAR_NUMERIC = "Year can only be numeric";
 	final String ERROR_EXAM_MODE_NOT_ALLOWED = "Exam Code can only be  ON or OFF";
+	final String ERROR_C1C2_NOT_ALLOWED = "C1C2 can only be  ON or OFF";
 	final String ERROR_SMS_SEND_NOT_ALLOWED = "SMS send enable can onlyy be ON or OFF";
 	final String ERROR_EXAM_NOT_FOUND = "Exam code not found";
 	
@@ -91,6 +94,7 @@ public class UpdateExamConfig extends HttpServlet{
        String eT = StringUtils.trimToEmpty(request.getParameter("eT"));
        String eTCtwo = StringUtils.trimToEmpty(request.getParameter("eTCtwo"));
        String eTConetwo = StringUtils.trimToEmpty(request.getParameter("eTConetwo"));
+       String c1c2 = StringUtils.trimToEmpty(request.getParameter("c1c2"));
 
        if(StringUtils.isEmpty(exam)){
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EMPTY_FIELD); 
@@ -116,7 +120,10 @@ public class UpdateExamConfig extends HttpServlet{
        }else if(!exammodeList.contains(eTConetwo)){  
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EXAM_MODE_NOT_ALLOWED); 
     	   
-       }else if(!validCodes(eT,eTCtwo,eTConetwo)){  //
+       }else if(!exammodeList.contains(c1c2)){  
+    	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, ERROR_EXAM_MODE_NOT_ALLOWED); 
+    	   
+       }else if(!validCodes(eT,eTCtwo,eTConetwo,c1c2)){  //
     	   session.setAttribute(SessionConstants.EXAM_CONFIG_UPDATE_ERROR, "Only one of the 'ET', 'ET C2' or 'ET C1 C2' can be ON "); 
     	   
        }else if(!smsSendList.contains(sendSmsEnable)){  
@@ -138,6 +145,7 @@ public class UpdateExamConfig extends HttpServlet{
        examConfig.seteT(eT);
        examConfig.seteTCtwo(eTCtwo);
        examConfig.seteTConetwo(eTConetwo); 
+       examConfig.setC1c2(c1c2); 
        
        if(examConfigDAO.updateExamConfig(examConfig)){
     	   logUtil.writeLog("update examConfig " + examConfig);
@@ -160,15 +168,32 @@ public class UpdateExamConfig extends HttpServlet{
  * @param eT
  * @param eTCtwo
  * @param eTConetwo
+ * @param c1c2 
  * @return
  */
-private boolean validCodes(String eT, String eTCtwo, String eTConetwo) {
+private boolean validCodes(String eT, String eTCtwo, String eTConetwo, String c1c2) {
 	boolean valid = true;
 	
-	if(StringUtils.equals(eT, "ON") && StringUtils.equals(eTCtwo, "ON") && StringUtils.equals(eTConetwo, "ON")){
+	String[] arr = {eT,eTCtwo,eTConetwo,c1c2}; 
+	List<String> arrlist = new ArrayList<>();
+	arrlist = Arrays.asList(arr);
+	
+	int on_count = Collections.frequency(arrlist,"ON");
+	
+	if(on_count == 1) {
+		valid = true;
+	}else if(on_count != 1) {
+		valid = false;
+	}
+	
+	return valid;
+	
+	/*if(StringUtils.equals(eT, "ON") && StringUtils.equals(eTCtwo, "ON") && 
+			StringUtils.equals(eTConetwo, "ON") && StringUtils.equals(c1c2, "ON")){
 		valid = false;
 		
-	}else if(StringUtils.equals(eT, "OFF") && StringUtils.equals(eTCtwo, "OFF") && StringUtils.equals(eTConetwo, "OFF")){
+	}else if(StringUtils.equals(eT, "OFF") && StringUtils.equals(eTCtwo, "OFF") && 
+			StringUtils.equals(eTConetwo, "OFF") && StringUtils.equals(c1c2, "OFF")){
 		valid = false;
 		
 	}else if(StringUtils.equals(eT, "ON") && StringUtils.equals(eTCtwo, "ON") ){
@@ -180,15 +205,16 @@ private boolean validCodes(String eT, String eTCtwo, String eTConetwo) {
 	}else if(StringUtils.equals(eT, "ON") && StringUtils.equals(eTCtwo, "ON") ){
 		valid = false;	
 		
+	}else if(StringUtils.equals(eT, "ON") && StringUtils.equals(c1c2, "ON") ){
+		valid = false;	
+		
 	}else if(StringUtils.equals(eTCtwo, "ON") && StringUtils.equals(eTConetwo, "ON") ){
 		valid = false;	
 		
 	}else{
 		valid = true;
 	}
-	
-	
-	return valid;
+	*/
 }
 
 @Override

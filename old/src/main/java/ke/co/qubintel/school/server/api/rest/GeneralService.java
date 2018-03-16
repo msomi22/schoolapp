@@ -79,7 +79,6 @@ public class GeneralService {
 	private static StudentHouseDAO studentHouseDAO;
 
 
-
 	static {
 		streamDAO = StreamDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
@@ -1096,16 +1095,16 @@ public class GeneralService {
 
 	}
 
-    /**
-     * 
-     * @param accountId
-     * @return
-     */
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
 	public Object getHouseList(String accountId) {
 		Response response = new Response();
 		if(houseDAO.getHouseList(accountId) != null) {
 			return houseDAO.getHouseList(accountId); 
-			
+
 		}else {
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
@@ -1122,7 +1121,7 @@ public class GeneralService {
 		Response response = new Response();
 		if(houseDAO.getHouse(accountId, houseName) != null) { 
 			return houseDAO.getHouse(accountId, houseName);  
-			
+
 		}else {
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
@@ -1140,26 +1139,26 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("An house with a similar name already exists!");
 			return response;
-			
+
 		}else {
-			
+
 			House house = new House();
 			house.setAccountId(apiHouse.getAccountId());
 			house.setDescription(apiHouse.getDescription());
 			house.setHouseName(apiHouse.getHouseName()); 
-			
+
 			if(houseDAO.putHouse(house)) {
 				response.setMessage("success");
 				response.setDescription("House added successfully!"); 
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, contact Admin!");
 				return response;
 			}
-			
-			
+
+
 		}
 	}
 	/**
@@ -1173,25 +1172,25 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("Nothing to update!");
 			return response;
-			
+
 		}else {
-			
+
 			House house = houseDAO.getHouseById(apiHouse.getAccountId(), apiHouse.getUuid()); 
 			house.setDescription(apiHouse.getDescription());
 			house.setHouseName(apiHouse.getHouseName()); 
-			
+
 			if(houseDAO.updateHouse(house)) {
 				response.setMessage("success");
 				response.setDescription("House updated successfully!"); 
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, contact Admin!");
 				return response;
 			}
-			
-			
+
+
 		}
 	}
 	/**
@@ -1205,69 +1204,113 @@ public class GeneralService {
 			response.setMessage("success");
 			response.setDescription("House deleted successfully!");
 			return response;
-			
+
 		}else {
 			response.setMessage("error");
 			response.setDescription("Nothing to Delete!");
 			return response;
 		}
 	}
-	
-	
-	///////////////////////////////////////////////////////////////
+
+
+	/////////////////////////////////////////////////////////////// TODO
 	/**
 	 * 
 	 * @param apiStudentHouse
 	 * @return
 	 */
-	public Object AssignHouse(ApiStudentHouse apiStudentHouse) {
+	public Object AssignHouse(ApiStudentHouse sh) {
 		Response response = new Response();
-	
-		StudentHouse studentHouse = new StudentHouse();
-		studentHouse.setAccountId(apiStudentHouse.getAccountId());
-		studentHouse.setStudentId(apiStudentHouse.getStudentId());
-		studentHouse.setHouseId(apiStudentHouse.getHouseId()); 
-		
-		if(studentHouseDAO.putStudentHouse(studentHouse)) { 
-			response.setMessage("success");
-			response.setDescription("House assigned successfully!");
+
+
+		if(accountDAO.getAccountById(sh.getAccountId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+
+		}else if(studentDAO.getStudentById(sh.getAccountId(), sh.getStudentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Student not found!");
+			return response;
+
+		}else if(houseDAO.getHouseById(sh.getAccountId(), sh.getHouseId()) == null) {
+			response.setMessage("error");
+			response.setDescription("House not found!");
 			return response;
 		}else {
-			response.setMessage("error");
-			response.setDescription("Something went wrong, contact Admin!");
-			return response;
-		}
-	
-	}
-	/**
-	 * 
-	 * @param apiStudentHouse
-	 * @return
-	 */
-	public Object changeHouse(ApiStudentHouse apiStudentHouse) {
-		Response response = new Response();
-		if(studentHouseDAO.getStudentHouseById(apiStudentHouse.getAccountId(), apiStudentHouse.getUuid()) == null) {
-			response.setMessage("error");
-			response.setDescription("Nothing to change!");
-			return response;
-			
-		}else{  
-			
-			StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(apiStudentHouse.getAccountId(), apiStudentHouse.getUuid());
-			studentHouse.setHouseId(apiStudentHouse.getHouseId()); 
-			
-			if(studentHouseDAO.changeHouse(studentHouse)) {
+
+
+			StudentHouse studentHouse = new StudentHouse();
+			studentHouse.setAccountId(sh.getAccountId());
+			studentHouse.setStudentId(sh.getStudentId());
+			studentHouse.setHouseId(sh.getHouseId()); 
+
+			if(studentHouseDAO.putStudentHouse(studentHouse)) { 
 				response.setMessage("success");
-				response.setDescription("House changed successfully!");
+				response.setDescription("House assigned successfully!");
 				return response;
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, contact Admin!");
 				return response;
 			}
-			
+
 		}
-	
+
+
+
+	}
+	/**
+	 * 
+	 * @param apiStudentHouse
+	 * @return
+	 */
+	public Object changeHouse(ApiStudentHouse sh) {
+		Response response = new Response();
+
+		if(accountDAO.getAccountById(sh.getAccountId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+
+		}else if(studentDAO.getStudentById(sh.getAccountId(), sh.getStudentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("Student not found!");
+			return response;
+
+		}else if(houseDAO.getHouseById(sh.getAccountId(), sh.getHouseId()) == null) {
+			response.setMessage("error");
+			response.setDescription("House not found!");
+			return response;
+		}else {
+
+
+			if(studentHouseDAO.getStudentHouseById(sh.getAccountId(), sh.getUuid()) == null) {
+				response.setMessage("error");
+				response.setDescription("Nothing to change!");
+				return response;
+
+			}else{  
+
+				StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(sh.getAccountId(), sh.getUuid());
+				studentHouse.setHouseId(sh.getHouseId()); 
+
+				if(studentHouseDAO.changeHouse(studentHouse)) {
+					response.setMessage("success");
+					response.setDescription("House changed successfully!");
+					return response;
+				}else {
+					response.setMessage("error");
+					response.setDescription("Something went wrong, contact Admin!");
+					return response;
+				}
+
+			}
+
+		}
+
+
+
 	}
 	/**
 	 * 
@@ -1277,29 +1320,40 @@ public class GeneralService {
 	 */
 	public Object exitAssignedHouse(String accountId, String uuid) {
 		Response response = new Response();
-		
-		if(studentHouseDAO.getStudentHouseById(accountId, uuid) == null) {
+
+		if(accountDAO.getAccountById(accountId) == null) {
+			response.setMessage("error");
+			response.setDescription("Account not found!");
+			return response;
+
+		}else if(houseDAO.getHouseById(accountId, uuid) == null) {  
+			response.setMessage("error");
+			response.setDescription("House not found!");
+			return response;
+
+		}else if(studentHouseDAO.getStudentHouseById(accountId, uuid) == null) {
 			response.setMessage("error");
 			response.setDescription("No house to exit!"); 
 			return response;
+
 		}else {
-			
+
 			StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(accountId, uuid);
 			studentHouse.setDateOut(new StudentHouse().getDateOut()); 
-			
+
 			if(studentHouseDAO.exitHouse(studentHouse)) {
 				response.setMessage("success");
 				response.setDescription("House exited successfully!");
 				return response;
-				
+
 			}else {
 				response.setMessage("error");
 				response.setDescription("Something went wrong, contact Admin!"); 
 				return response;
 			}
-			
+
 		}
-		
+
 	}
 	/**
 	 * 
@@ -1312,10 +1366,10 @@ public class GeneralService {
 		if(studentHouseDAO.getStudentHouseList(accountId, houseId) != null) {
 			List<ApiStudentHouse> stu_house_list = new ArrayList<>();
 			studentHouseDAO.getStudentHouseList(accountId, houseId).stream().forEach(sh ->{
-				
+
 				Student student = studentDAO.getStudentById(accountId, sh.getStudentId());  
 				String name = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
-				
+
 				ApiStudentHouse studentHouse = new ApiStudentHouse();
 				studentHouse.setUuid(sh.getUuid());
 				studentHouse.setAccountId(accountId);
@@ -1326,14 +1380,14 @@ public class GeneralService {
 				studentHouse.setHouseName(houseDAO.getHouseById(accountId, sh.getHouseId()).getHouseName());
 				studentHouse.setDateOut(sh.getDateOut().toString());
 				studentHouse.setDateIn(sh.getDateIn().toString());
-				
+
 				stu_house_list.add(studentHouse);
-			
-				
+
+
 			});
-			
+
 			return stu_house_list;
-			
+
 		}else {
 			response.setMessage("error");
 			response.setDescription("Nothing to delete or something went wrong, contact Admin!"); 
@@ -1350,11 +1404,11 @@ public class GeneralService {
 		Response response = new Response();
 
 		if(studentHouseDAO.getStudentHouse(accountId, studentId) != null) { 
-			
+
 			StudentHouse sh = studentHouseDAO.getStudentHouse(accountId, studentId);
 			Student student = studentDAO.getStudentById(accountId, studentId); 
 			String name = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
-			
+
 			ApiStudentHouse studentHouse = new ApiStudentHouse();
 			studentHouse.setUuid(sh.getUuid());
 			studentHouse.setAccountId(accountId);
@@ -1365,17 +1419,88 @@ public class GeneralService {
 			studentHouse.setHouseName(houseDAO.getHouseById(accountId, sh.getHouseId()).getHouseName()); 
 			studentHouse.setDateOut(sh.getDateOut().toString());
 			studentHouse.setDateIn(sh.getDateIn().toString());
-			
+
 			return studentHouse;
 		}else {
 			response.setMessage("error");
 			response.setDescription("Nothing to display!");
 			return response;
 		}
-	
+
 	}
 
 
+
+
+
+	/**
+	 * 
+	 * @param apiStudentHouseList
+	 * @return
+	 */
+	public Object AssignHouseList(List<ApiStudentHouse> sh_list) {
+		Response response = new Response();
+		
+		//boolean success = false;
+
+		if(sh_list.isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("List is empty!");
+			return response;
+		}else {
+
+			sh_list.stream().forEach(sh -> {
+
+
+				StudentHouse studentHouse = new StudentHouse();
+				studentHouse.setAccountId(sh.getAccountId());
+				studentHouse.setStudentId(sh.getStudentId());
+				studentHouse.setHouseId(sh.getHouseId()); 
+
+			    studentHouseDAO.putStudentHouse(studentHouse);
+
+			});
+
+			response.setMessage("success");
+			response.setDescription("House assigned successfully!");
+			return response;
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param apiStudentHouseList
+	 * @return
+	 */
+	public Object exitAssignedHouseList(List<ApiStudentHouse> sh_list) {
+		Response response = new Response();
+		
+		//boolean success = false;
+
+		if(sh_list.isEmpty()) {
+			response.setMessage("error");
+			response.setDescription("List is empty!");
+			return response;
+		}else {
+
+			sh_list.stream().forEach(sh -> {
+
+
+				StudentHouse studentHouse = studentHouseDAO.getStudentHouseById(sh.getAccountId(), sh.getUuid()); 
+				studentHouse.setDateOut(new StudentHouse().getDateOut()); 
+
+				studentHouseDAO.exitHouse(studentHouse);
+
+			});
+
+			response.setMessage("success");
+			response.setDescription("House existed successfully!");
+			return response;
+
+		}
+
+	}
 
 
 
@@ -1533,8 +1658,6 @@ public class GeneralService {
 			return false;
 		}
 	}
-
-
 
 
 }

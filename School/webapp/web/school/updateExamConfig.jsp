@@ -167,6 +167,13 @@
                         </div>
                     </div>
 
+                    <div class="control-group">
+                        <label class="control-label" for="c1c2">C1 + C2</label>
+                        <div class="controls">
+                            <input class="input-xlarge focused"   name="c1c2" type="text" value="<%=request.getParameter("c1c2")%>">
+                        </div>
+                    </div>
+
                 
                     <div class="form-actions">
                         <input class="input-xlarge focused"  name="year" type="hidden" value="<%=request.getParameter("year")%>" readonly>

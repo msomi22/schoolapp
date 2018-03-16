@@ -601,6 +601,27 @@ public class GeneralRestFulAPI {
 			return generalService.AssignHouse(apiStudentHouse);
 		}
 	}
+	
+	@ApiOperation(value = "Assign house to a student.", 
+			notes = "Return whether the house was assigned successfully.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@POST
+	@Path("/house/student/new/{accountId}")  
+	public Object AssignHouseList(@PathParam("accountId")String accountId, List<ApiStudentHouse> list,  @HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.AssignHouseList(list);
+		}
+	}
 	/**
 	 * 
 	 * @param apiStudentHouse
@@ -654,6 +675,29 @@ public class GeneralRestFulAPI {
 			
 		} else {
 			return generalService.exitAssignedHouse(accountId, uuid);
+		}
+	}
+	
+	@ApiOperation(value = "Exit house assigned to a student.", 
+			notes = "Return whether the house was exited successfully.", 
+			response = ApiStudentHouse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "accountId not found.") 
+	} )
+	@DELETE
+	@Path("/house/student/delete/{accountId}")  
+	public Object exitAssignedHouseList(@PathParam("accountId")String accountId,List<ApiStudentHouse> list,
+			@PathParam("uuid")String uuid,  
+			@HeaderParam("authorization") String auth) {
+		Response response = new Response();
+
+		if(!RestAUth.isUserAuthenticated(auth, accountId)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated!");
+			return response; 
+			
+		} else {
+			return generalService.exitAssignedHouseList(list);  
 		}
 	}
 	
