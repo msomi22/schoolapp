@@ -15,6 +15,7 @@ package ke.co.qubintel.school.server.servlet.reports;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import ke.co.qubintel.school.server.bean.classroom.Stream;
 import ke.co.qubintel.school.server.bean.exam.ClassMean;
 import ke.co.qubintel.school.server.bean.exam.GradingSystem;
 import ke.co.qubintel.school.server.bean.exam.Perfomance;
@@ -103,6 +103,9 @@ public class ReportUtil {
 	private static YearlyMeanDAO yearlyMeanDAO;
 	private static ExamDAO examDAO;
 	
+	private static String[] allowedG;
+	private static List<String> allowedList;
+	
 
 	static {
 		subCategoryDAO2 = SubCategoryDAO.getInstance();
@@ -115,6 +118,9 @@ public class ReportUtil {
 		studentDAO = StudentDAO.getInstance();
 		yearlyMeanDAO = YearlyMeanDAO.getInstance();
 		examDAO = ExamDAO.getInstance();
+		
+		allowedG = new String[]{"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};  
+		allowedList = Arrays.asList(allowedG);
 
 	}
 	
@@ -1361,7 +1367,7 @@ public class ReportUtil {
 			Category cat = categoryDAO2.getCategoryById(subject.getAccountId(), catId);
 
 			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
-				//TODO
+				
 				sum = Integer.parseInt(exam1Score) + Integer.parseInt(exam2Score) + Integer.parseInt(exam3Score); 
 				//mean =  (sum/2); 
 				mean =sum/2; 
@@ -2128,24 +2134,14 @@ public class ReportUtil {
 			class_stream_Mean.setTerm(term);
 			class_stream_Mean.setYear(year); 
 
-			//TODO 
+			
 			classMeanDAO.putClassMean(class_stream_Mean, accountId, classroomId, strm.getUuid(), examNames, term, year);
 
 		});
 
 	}
 
-	/**
-	 * 
-	 * @param exam1
-	 * @param exam2
-	 * @param exam3
-	 * @param accountId
-	 * @param classroomId
-	 * @param predicate
-	 * @param length 
-	 * @param subjectId 
-	 */
+	
 	/**
 	 * @param exam1
 	 * @param exam2
@@ -2177,7 +2173,7 @@ public class ReportUtil {
 				examList2 = CommonLogic.subjectAnalyzer(exam2, isPaper123); 
 				examList3 = CommonLogic.subjectAnalyzer(exam3, isPaper123); 
 
-				//TODO return final list
+				// return final list
 				finalExamList = CommonLogic.combineExams(examList1, examList2, examList3, 3, subject.getUuid(), accountId, classroomId);
 				entry_ = finalExamList.size() + "";
 				
@@ -2192,7 +2188,7 @@ public class ReportUtil {
 				examList1 = CommonLogic.subjectAnalyzer(exam1, isPaper123); 
 				examList2 = CommonLogic.subjectAnalyzer(exam2, isPaper123); 
 
-				//TODO return final list
+				// return final list
 				finalExamList = CommonLogic.combineExams(examList1, examList2, null, 2, subject.getUuid(), accountId, classroomId);
 				entry_ = CommonLogic.getGradeCount(finalExamList,accountId,subject.getUuid(),"Entry","");
 				entry_ = finalExamList.size() + "";
@@ -2220,7 +2216,11 @@ public class ReportUtil {
 	
 	
 	
-	
+	/**
+	 * 
+	 * @param finalExamList
+	 * @return
+	 */
 	public static double findTotal(List<PerformanceBean1> finalExamList) {
 		double total = 0;
 		total = finalExamList.stream().filter(performance -> performance.getScore() > 0).mapToInt(PerformanceBean1::getScore).sum();
@@ -2228,6 +2228,21 @@ public class ReportUtil {
 	}
 	
 	
+	/**
+	 * 
+	 * @param accountId
+	 * @param kcpeGrade
+	 * @return
+	 */
+	public static int kcpePntsFromGrade(String accountId, String kcpeGrade) {
+		int point = 0;
+		String generalId = getGeneralId(accountId);
+		
+		if(allowedList.contains(kcpeGrade)) {
+			point = gradingSystemDAO.getGradesByDesc(accountId, generalId, kcpeGrade).getPoints(); 
+		}
+		return point;
+	}
 	
 	
 

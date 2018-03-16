@@ -758,16 +758,29 @@ public class ClassRankingList extends HttpServlet{
 
 
 				StudentPrimary primary = new StudentPrimary();
+				int kcpePints = 0;
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null){
 					primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
+					
+					if(!StringUtils.equals(primary.getKcpeGrade(), "")) { 
+						kcpePints = ReportUtil.kcpePntsFromGrade(accountId, primary.getKcpeGrade()); 
+					}
+					
 
 				}
 
 				String kcpe = primary.getKcpemark();
 
 				if(StringUtils.equals(kcpe, "0")){
-					kcpe = "";
+					kcpe = primary.getKcpeGrade();
+					
+					if(StringUtils.equals(kcpe, "0")) {
+						kcpe = "";
+					}
+					
 				}
+				
+				
 
 				rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
