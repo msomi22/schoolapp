@@ -62,6 +62,7 @@ import ke.co.qubintel.school.server.bean.exam.Perfomance;
 import ke.co.qubintel.school.server.bean.exam.YearlyMean;
 import ke.co.qubintel.school.server.bean.staff.Staff;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.bean.student.StudentPrimary;
 import ke.co.qubintel.school.server.bean.subject.Subject;
 import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
@@ -629,13 +630,21 @@ public class StudentReportCard extends HttpServlet{
 				double vadd = 0;
 				String kcpemarks = "0"; 
 				double valuea = 0;
+				int kcpePints = 0;
 				String kcpe = " , KCPE : ";
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
 
 					
 
+					StudentPrimary primary = new StudentPrimary();
 					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
-						kcpemarks = primaryDAO.getStudentPrimary(accountId, student.getUuid()).getKcpemark();//out of 500
+						primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
+						
+						kcpemarks = primary.getKcpemark();//out of 500 
+						
+						if(!StringUtils.equals(primary.getKcpeGrade(), "")) { 
+							kcpePints = ReportUtil.kcpePntsFromGrade(accountId, primary.getKcpeGrade()); 
+						}
 					}
 
 					kcpe += kcpemarks;
@@ -643,6 +652,12 @@ public class StudentReportCard extends HttpServlet{
 					int kcpem = Integer.valueOf(kcpemarks);
 					if(kcpem > 0) {
 						valuea = (double)kcpem/500*84; 
+					}else {
+						
+						if(kcpePints > 0) {
+							valuea = kcpePints * (84/12); 
+						}
+						
 					}
 
 

@@ -15,6 +15,7 @@ package ke.co.qubintel.school.server.servlet.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -49,10 +50,13 @@ public class ImportUtil {
 	private List<String> genderList;
 	private String[] categoryArray;
 	private List<String> categoryList;
-	
+
 	private static SubjectDAO subjectDAO;
 	private static PrimaryDAO primaryDAO;
 	
+	private String[] allowedG;
+	private List<String> allowedList;
+
 	static {
 		subjectDAO = SubjectDAO.getInstance();
 		primaryDAO = PrimaryDAO.getInstance();
@@ -61,8 +65,12 @@ public class ImportUtil {
 	public ImportUtil(){
 		genderArray = new String[] {"M", "F", "m", "f"};
 		genderList = Arrays.asList(genderArray);
+		
 		categoryArray = new String[] {"Day", "Boarder"};
 		categoryList = Arrays.asList(categoryArray);
+		
+		allowedG = new String[]{"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};  
+		allowedList = Arrays.asList(allowedG);
 	}
 
 
@@ -146,7 +154,13 @@ public class ImportUtil {
 								return ("Invalid gender " + gender + " on line " + count);
 							}
 
-							if (StringUtils.isBlank(kcpe) || StringUtils.equalsIgnoreCase(kcpe, "null")) {
+							//**********************************************************************************
+
+							if(!validKcpe(kcpe.replace(".0", ""))) {
+								return ("Invalid K.C.P.E marks/grade");  
+							}
+
+							/*if (StringUtils.isBlank(kcpe) || StringUtils.equalsIgnoreCase(kcpe, "null")) {
 								return ("Blank K.C.P.E marks " + kcpe.replace(".0", "") + " on line " + count);
 							} 
 
@@ -156,7 +170,9 @@ public class ImportUtil {
 
 							if(Integer.parseInt(kcpe.replace(".0", "")) < 100 || Integer.parseInt( kcpe.replace(".0", "")) > 500 ){ 
 								return ("Invalid (out of range) K.C.P.E marks " + kcpe.replace(".0", "") + " on line " + count);	
-							}
+							}*/
+
+							//*********************************************************************************************
 
 							if(studentDAO.getStudentByregNo(accounId, regNo.replace(".0", "")) != null){
 								return ("Student with admission number " + regNo.replace(".0", "") + " on line " + count + " already exist.");
@@ -198,6 +214,32 @@ public class ImportUtil {
 
 
 
+	/**
+	 * 
+	 * @param replace
+	 * @return
+	 */
+	private boolean validKcpe(String replace) {
+	
+		if(StringUtils.isNumeric(replace)) {//validate Numeric data
+			
+			if(Integer.parseInt(replace) < 100 || Integer.parseInt(replace) > 500 ) {
+				return false;
+			}else {
+				return true;
+			}
+			
+		}
+		else {//validate grade data
+			if(allowedList.contains(replace)) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}
+	}
+
 
 	/**
 	 * @param uploadedFile
@@ -233,12 +275,12 @@ public class ImportUtil {
 				String kcpe = "";
 				String isDay = "";
 				String status = "";
-				
+
 
 				int totalColumn = 0;
 				for(int i=0; i<=totalRow; i++){
 					XSSFRow row = mySheet.getRow(i);
-					
+
 					if(row !=null){
 						totalColumn = row.getLastCellNum();
 					}
@@ -258,47 +300,47 @@ public class ImportUtil {
 							gender =  row.getCell(4)+"";
 							kcpe =  row.getCell(5)+"";
 							isDay = row.getCell(6)+""; 
-							
-							
+
+
 							//"Day", "Boarder"
 							////boarders = 1, day = 0
 							if(StringUtils.equalsIgnoreCase(isDay, "Day")) {
 								status = "0";
-								
+
 							}else {
 								status = "1";
 							}
-							
+
 							regNo = regNo.replace(".0", "");
 							kcpe = kcpe.replace(".0", "");
 
-							
-							
+
+
 
 
 						}//end if
 
-						
+
 
 					}
-					
+
 					if(i>1) {//skip the first line (header) 
 						/**
 						System.out.println("regNo : " + regNo + " , firstName: " + firstName + " , middleName: " + middleName +
 								" , gender:" + gender + " , kcpe:" + kcpe + " , isDay: " + isDay);
-						
+
 						System.out.println("stream : " + stream);*/
-						
+
 						Student student = new Student();
 						student.setAccountId(accountId);
 						student.setIsActive("1");
 						student.setIsAlumni("0");
 						student.setIsBoarding(status);
 						student.setIsGoKFeeEligibe("0");  
-						
+
 						student.setCurrentStream(streamDAO.getStreamByDesc(accountId, stream).getUuid());
 						student.setRegStream(streamDAO.getStreamByDesc(accountId, stream).getUuid()); 
-						
+
 						String regterm = "";
 						String regyear = "";
 						if(sysConfigDAO.getSysConfig(accountId) != null) {
@@ -306,14 +348,14 @@ public class ImportUtil {
 							regterm = sysConfig.getTerm();
 							regyear = sysConfig.getYear();
 						}
-						
+
 						int finaly = Integer.valueOf(regyear) + 3;
-						
-						
+
+
 						student.setRegTerm(regterm);
 						student.setFinalTerm(3); 
 						student.setFinalYear(finaly); 
-						
+
 						student.setRegNo(regNo);
 						student.setFirstname(firstName);
 						student.setMiddlename(middleName);
@@ -324,9 +366,9 @@ public class ImportUtil {
 						}
 						student.setGender(gender);
 						student.setLastUpdated(new Date().toString()); 
-						
+
 						if(studentDAO.putStudent(student)) {
-							
+
 							StudentPrimary primary = new StudentPrimary();
 							primary.setAccountId(accountId);
 							primary.setStudentId(student.getUuid());
@@ -335,8 +377,8 @@ public class ImportUtil {
 							primary.setKcpeyear("2017"); 
 							primary.setKcpemark(kcpe);
 							primaryDAO.putStudentPrimary(primary);
-							
-							
+
+
 							StudentService studentService = new StudentService();
 							subjectDAO.getSubjects(accountId).forEach(subject -> {
 								ApiSubject apiSubject = new ApiSubject();
@@ -344,16 +386,16 @@ public class ImportUtil {
 								apiSubject.setStudentId(student.getUuid()); 
 								apiSubject.setSubjectId(subject.getUuid());
 								studentService.assignSubject(apiSubject);
-								
+
 							});
 						}
-						
+
 					}
-					
+
 
 				}
-				
-				
+
+
 
 
 			}
