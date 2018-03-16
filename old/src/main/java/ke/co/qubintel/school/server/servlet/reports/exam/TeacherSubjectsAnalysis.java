@@ -952,7 +952,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
 				house_rankingTable.addCell(new Paragraph("" + entry,timesRomanNormal6));
 				house_rankingTable.addCell(new Paragraph("" + total,timesRomanNormal6));
-				house_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
 				String grade = CommonLogic.getGrade((int)mn, accountId);
 				house_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
 
@@ -981,7 +981,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
 				house_rankingTable.addCell(new Paragraph("" + h_entry,timesRomanNormal6));
 				house_rankingTable.addCell(new Paragraph("" + h_total,timesRomanNormal6));
-				house_rankingTable.addCell(new Paragraph("",timesRomanNormal6)); 
+				house_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6)); 
 				String grade = CommonLogic.getGrade((int)tmn, accountId);
 				house_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
             

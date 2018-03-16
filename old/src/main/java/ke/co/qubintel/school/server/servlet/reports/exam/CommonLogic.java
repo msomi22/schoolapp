@@ -81,12 +81,7 @@ public class CommonLogic {
 			obj.setSubjectId(performance.getSubjectId());
 			obj.setStreamId(performance.getStreamId());
 			obj.setClassRoomId(performance.getClassRoomId());
-
-			if(studentHouseDAO.getStudentHouse(performance.getAccountId(), performance.getStudentId()) != null) { 
-				obj.setHouseId(studentHouseDAO.getStudentHouse(performance.getAccountId(), performance.getStudentId()).getHouseId()); 
-			}
-
-
+			
 
 			if(isPaper123) {
 
@@ -300,6 +295,11 @@ public class CommonLogic {
 				performanceBean1.setStreamId(student.getCurrentStream());
 				performanceBean1.setClassRoomId(classroomId);
 				performanceBean1.setScore((int)mean);
+				
+				if(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()) != null) { 
+					performanceBean1.setHouseId(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()).getHouseId()); 
+				}
+				
 
 				if(sum > 0) {
 					examListFinal.add(performanceBean1); 
@@ -344,6 +344,11 @@ public class CommonLogic {
 				performanceBean1.setStreamId(student.getCurrentStream());
 				performanceBean1.setClassRoomId(classroomId);
 				performanceBean1.setScore((int)mean);
+				
+				if(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()) != null) { 
+					performanceBean1.setHouseId(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()).getHouseId()); 
+				}
+				
 
 				if(sum > 0) {
 					examListFinal.add(performanceBean1); 
@@ -375,6 +380,11 @@ public class CommonLogic {
 				performanceBean1.setStreamId(student.getCurrentStream());
 				performanceBean1.setClassRoomId(classroomId);
 				performanceBean1.setScore(score1);
+				
+				if(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()) != null) { 
+					performanceBean1.setHouseId(studentHouseDAO.getStudentHouse(student.getAccountId(), student.getUuid()).getHouseId()); 
+				}
+				
 
 				if(score1 > 0) {
 					examListFinal.add(performanceBean1); 
@@ -774,7 +784,7 @@ public class CommonLogic {
 			// as long as the column item ( a stream name , is found in the database)  
 			if(streamDAO.getStreamByDesc(accountId, rowItem) != null) {
 
-				List<PerformanceBean1> performanceBean1List = new ArrayList<>();//TODO
+				List<PerformanceBean1> performanceBean1List = new ArrayList<>();
 
 				subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
 
@@ -1348,17 +1358,24 @@ public class CommonLogic {
 	 */
 	public static List<PerformanceBean1> houseAnalyzer(Map<String, List<PerformanceBean1>> finalExamMap, String rowItem,
 			String accountId) {
+		
+		//System.out.println("**************************************************");
+		//System.out.println(finalExamMap); TODO
 
 		List<PerformanceBean1> performanceBean1List = new ArrayList<>();
 
 		if(!StringUtils.equals(rowItem, "Total")) {
-
+			
 			subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
 
 				if(finalExamMap.get(subject.getUuid()) != null) {
 
 					if(houseDAO.getHouse(accountId, rowItem) != null) {
-
+						
+						/*System.out.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  " + studentHouseDAO.getStudentHouseList(accountId, 
+								houseDAO.getHouse(accountId, rowItem).getHouseName()
+								+ "  %%%%%%%%%%%%%%%%% ")); 
+*/
 						studentHouseDAO.getStudentHouseList(accountId, houseDAO.getHouse(accountId, rowItem).getUuid()) 
 						.stream().forEach(stuHouse ->{
 
