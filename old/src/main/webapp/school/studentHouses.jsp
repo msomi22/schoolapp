@@ -1,0 +1,434 @@
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
+
+<%@page import="java.util.*"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+
+<!-- testing -->
+
+
+<%
+	if (session == null) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
+
+	String username = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_KEY);
+	if (StringUtils.isEmpty(username)) {
+		response.sendRedirect("../index.jsp");
+		//return;
+	}
+
+	session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+	//response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../index.jsp");
+	response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=../schoolLogout");
+
+	String accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID);
+
+	String loggedUserId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID);
+
+	String loggedUserAccessId = (String) session.getAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY);
+
+	//get student's details
+	//int reg= Integer.parseInt( request.getParameter("uuid"));
+
+	String uuid = request.getParameter("uuid");
+
+	//get class list
+%>
+<jsp:include page="header.jsp" />
+
+<!-- Styled checkbox -->
+
+ <link href="css/customReportStyle.css" rel="stylesheet" />
+
+
+<!-- page content -->
+<div class="right_col" role="main">
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h3>Students and Houses</h3>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+
+
+
+							<input type="hidden" name="passedLogId" id="passedLogId"
+								value="<%=loggedUserId%>"> <input type="hidden"
+								name="passedLogAcessId" id="passedLogAcessId"
+								value="<%=loggedUserAccessId%>"> <input type="hidden"
+								name="accountId" id="accountId" value="<%=accountId%>">
+
+							<div class="">
+								
+								<div id="" class="">
+									<div role="tabpanel" class="tab-pane fade active in"
+										id="tab_content1" aria-labelledby="home-tab">
+
+										<br>
+
+										<div class="row">
+
+
+											<div class="col-md-3">
+
+
+												<button class="btn btn-primary secondary-assent  cards"
+													onclick="studentsListModa('studentPerStream')" disabled>
+													Export <i class="fa fa-file-pdf-o"> </i>
+												</button>
+												
+												<button class="btn btn-primary secondary-assent  cards pull-right"
+													onclick="studentsListModa('studentPerStreamExcel')" disabled>
+													Export <i class="fa fa-file-excel-o"> </i>
+												</button>
+											</div>
+
+											<div class="col-md-5 col-md-offset-1 alert alert-info">
+												Alter student's houses </div>
+												
+												
+											<div class="col-md-2 col-md-offset-1">
+
+
+												
+											</div>
+
+
+
+										</div>
+
+
+										<div class="row">
+
+											<form action="#" method="post" id="shiftForm">
+
+
+
+												<div class="col-md-4" id="classDiv">
+													<h6 for="classId">House:</h6>
+													<select
+														class="form-control formelement populateHouses"
+														
+														onchange="fetchHouseStudents(this.value)"
+														required="required">
+
+
+													</select>
+												</div>
+
+												
+
+												<div class="col-md-1 pull-right">
+													<br>
+
+													<button class="form-control btn btn-primary" type="button"
+														id="btn_shift" onclick="initShift()">Submit</button>
+												</div>
+
+												<div class="col-md-2 pull-right">
+													<h6 for="movestreamId">Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptions"
+														name="streamId" id="movestreamId" required>
+
+													</select>
+												</div>
+
+												<div class="col-md-2 col-md-offset-1 pull-right">
+													<h6 for="classMoveList">Move to Class/Form:</h6>
+													<select class="form-control formelement populateOptions"
+														id="classList" onchange="fetchStreams(this.value)"
+														required="required">
+
+
+													</select>
+												</div>
+
+
+
+
+											</form>
+
+										</div>
+
+
+
+										<br>
+
+										<div class="row">
+
+											<div class="table-responsive">
+												<table class="table table-striped jambo_table bulk_action"
+													id="studentsPerClass">
+													<thead>
+														<tr class="headings secondary-assent">
+
+															<th class="column-title hidden">regStream</th>
+															<th class="column-title hidden">currentStream</th>
+															<th class="column-title hidden">isActive</th>
+															<th class="column-title hidden">isAlumni</th>
+															<th class="column-title hidden">isBoarding</th>
+															<th class="column-title hidden">isGoKFeeEligibe</th>
+
+															<th class="column-title">regNo</th>
+															<th class="column-title hidden">index</th>
+															<th class="column-title">firstname</th>
+															<th class="column-title">middlename</th>
+															<th class="column-title">lastname</th>
+															<th class="column-title">gender</th>
+															<th class="column-title hidden">dob</th>
+															<th class="column-title hidden">bcertNo</th>
+															<th class="column-title hidden">county</th>
+															<th class="column-title hidden">regTerm</th>
+															<th class="column-title hidden">finalYear</th>
+															<th class="column-title hidden">finalTerm</th>
+															<th class="column-title hidden">passport</th>
+															<th class="column-title hidden">lastUpdated</th>
+															<th class="column-title hidden">admissionDate</th>
+															<th class="column-title hidden">apiParentPrimary</th>
+
+															<th class="column-title hidden">uuid</th>
+															<th class="column-title hidden">accountId</th>
+
+															<th class="column-title"> <input type="checkbox" id="selectCurrentStream" onclick="selectCurrentStream()"></th>
+
+														</tr>
+													</thead>
+
+													<tbody class='tablebody'>
+
+
+
+														<!-- <tr class="tabledit" style='color: black;'>
+
+										<td width="5%">1</td>
+										<td class="center hidden">### ###</td>
+										<td class="center">Form 1N</td>
+										<td>
+
+											<button class="btn btn-warning editStream" id="edit"
+												onclick="streamModal(this.id)">
+												Edit <span class="fa fa-edit"></span>
+											</button>
+											<button class="btn btn-danger" id="Form 1N"
+												onclick="delStream(this.id)">
+												Delete <span class="fa fa-trash"></span>
+											</button>
+										</td>
+
+									</tr> -->
+
+
+													</tbody>
+
+
+												</table>
+											</div>
+
+										</div>
+
+										<br> <br>
+
+
+
+
+
+									</div>
+									<div role="tabpanel" class="tab-pane fade" id="tab_content2"
+										aria-labelledby="profile-tab">
+
+										<!-- start subjects -->
+
+										<br>
+
+
+
+										<div class="row">
+
+											<div class="col-md-6 col-md-offset-3 alert alert-info">
+												Alter student's state(Active or Inactive)</div>
+												
+												<div class="col-md-2 col-md-offset-1">
+
+
+												<button class="btn btn-primary secondary-assent  cards"
+													onclick="studentStatus('activate')">
+													Activate <i class="fa fa-file-pdf-o"> </i>
+												</button>
+											</div>
+
+
+
+										</div>
+										
+											<div class="row">
+
+											<form action="#" method="post" id="deactivateForm">
+
+
+
+												<div class="col-md-2">
+													<h6 >Class/Form:</h6>
+													<select
+														class="form-control formelement populateOptionsStudents"
+														id="populateOptionsStudentsInative"
+														onchange="fetchStreamsStudentsInactive(this.value)"
+														required="required">
+
+
+													</select>
+												</div>
+
+												<div class="col-md-2" >
+													<h6>Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptionsStudentsInactive"
+														name="streamId" id="streamIdInactive"
+														onchange="fetchStreamsStudentsInactive(this.value)" required>
+
+													</select>
+												</div>
+												
+												</form>
+												<br>
+												</div>
+
+
+
+
+
+										<div class="row">
+
+											<div class="table-responsive">
+												<table class="table table-striped jambo_table bulk_action"
+													id="studentsPerClassInactive">
+													<thead>
+														<tr class="headings secondary-assent">
+
+															<th class="column-title hidden">regStream</th>
+															<th class="column-title hidden">currentStream</th>
+															<th class="column-title hidden">isActive</th>
+															<th class="column-title hidden">isAlumni</th>
+															<th class="column-title hidden">isBoarding</th>
+															<th class="column-title hidden">isGoKFeeEligibe</th>
+
+															<th class="column-title">regNo</th>
+															<th class="column-title">firstname</th>
+															<th class="column-title">middlename</th>
+															<th class="column-title">lastname</th>
+															<th class="column-title">gender</th>
+															<th class="column-title hidden">dob</th>
+															<th class="column-title hidden">bcertNo</th>
+															<th class="column-title hidden">county</th>
+															<th class="column-title hidden">regTerm</th>
+															<th class="column-title hidden">finalYear</th>
+															<th class="column-title hidden">finalTerm</th>
+															<th class="column-title hidden">passport</th>
+															<th class="column-title hidden">lastUpdated</th>
+															<th class="column-title hidden">admissionDate</th>
+															<th class="column-title hidden">apiParentPrimary</th>
+
+															<th class="column-title hidden">uuid</th>
+															<th class="column-title hidden">accountId</th>
+
+															<th class="column-title"> <input type="checkbox" id="selectCurrentStreamInactive" onclick="selectCurrentStreamInactive()"></th>
+
+														</tr>
+													</thead>
+
+													<tbody class='tablebody'>
+
+
+
+														<!-- <tr class="tabledit" style='color: black;'>
+
+										<td width="5%">1</td>
+										<td class="center hidden">### ###</td>
+										<td class="center">Form 1N</td>
+										<td>
+
+											<button class="btn btn-warning editStream" id="edit"
+												onclick="streamModal(this.id)">
+												Edit <span class="fa fa-edit"></span>
+											</button>
+											<button class="btn btn-danger" id="Form 1N"
+												onclick="delStream(this.id)">
+												Delete <span class="fa fa-trash"></span>
+											</button>
+										</td>
+
+									</tr> -->
+
+
+													</tbody>
+
+
+												</table>
+											</div>
+
+										</div>
+
+
+										<br> <br> <br>
+
+
+
+
+
+
+
+
+										<!-- end subjects -->
+
+										<br> <br> <br>
+
+									</div>
+
+
+
+
+
+								</div>
+							</div>
+
+
+						</div>
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /page content -->
+
+
+
+<!-- Students List Modal -->
+<jsp:include page="modals/studentsListModal.html" />
+
+<!-- footer -->
+<jsp:include page="footer.jsp" />
+
+
+<script src="js/studentClass.js"></script>
+
+
+
+
+
