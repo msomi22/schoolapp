@@ -159,7 +159,7 @@
 												<div class="col-md-2">
 													<h6>Shift:</h6>
 													<button class="form-control btn btn-primary" type="button"
-														id="btn_shift" onclick="initShiftHouse()" disabled>Shift</button>
+														id="btn_shift" onclick="initShiftHouse()" >Shift</button>
 												</div>
 
 
@@ -194,7 +194,7 @@
 															<th class="column-title hidden">dateOut</th>
 															<th class="column-title hidden">dateIn</th>
 															<th class="column-title"><input type="checkbox"
-																id="selectCurrentStream" onclick="selectCurrentStream()"></th>
+																id="selectCurrentHouse" onclick="selectCurrentHouse()"></th>
 
 														</tr>
 													</thead>

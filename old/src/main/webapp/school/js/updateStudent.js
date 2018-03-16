@@ -247,7 +247,7 @@ function assignHouse() {
 
 	$('#hse_studentId').val($('#uuid').val());
 
-	$('#studentName').val($('#fname').val() +" "+$('#lname').val());
+	$('#studentName').val($('#fname').val());
 
 	$('#hse_regNo').val($('#regNo').val());
 	
