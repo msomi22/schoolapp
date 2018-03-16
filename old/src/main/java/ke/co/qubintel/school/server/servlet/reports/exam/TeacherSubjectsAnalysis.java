@@ -57,6 +57,7 @@ import ke.co.qubintel.school.server.bean.subject.Subject;
 import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.PerfomanceDAO;
+import ke.co.qubintel.school.server.persistence.house.HouseDAO;
 import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.quartz.WriteToFile;
@@ -77,6 +78,8 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 	private static AccountDAO accountDAO;
 	private static StreamDAO streamDAO;
 	private static ClassDAO classDAO;
+
+	private static HouseDAO houseDAO;
 
 	private Font timesRomanNormal10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
 	private Font timesRomanBold10 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
@@ -107,6 +110,8 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		accountDAO = AccountDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
 		classDAO = ClassDAO.getInstance();
+
+		houseDAO = HouseDAO.getInstance();
 
 		logger = Logger.getLogger(this.getClass());
 	}
@@ -260,6 +265,13 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		bygender_rankingTable.setHeaderRows(1); 
 		bygender_rankingTable.isSkipFirstHeader();
 
+
+		PdfPTable house_rankingTable = new PdfPTable(21);   
+		house_rankingTable.setWidthPercentage(100); 
+		house_rankingTable.setWidths(new int[]{8,15,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,10,10}); 
+		house_rankingTable.setHeaderRows(1); 
+		house_rankingTable.isSkipFirstHeader();
+
 		PdfPCell s_r_countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
 		s_r_countCell.setBackgroundColor(baseColor);
 		s_r_countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -347,7 +359,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		PdfPCell s_r_mgCell = new PdfPCell(new Paragraph("MG",timesRomanBold6));
 		s_r_mgCell.setBackgroundColor(baseColor);
 		s_r_mgCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-		
+
 
 		stream_rankingTable.addCell(s_r_countCell);
 		stream_rankingTable.addCell(s_r_streamCell);
@@ -371,7 +383,7 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		stream_rankingTable.addCell(s_r_meanCell);
 		stream_rankingTable.addCell(s_r_mgCell);
 
-		
+
 		List<PerformanceBean1> finalExamList = new ArrayList<>();
 		Map<String,List<PerformanceBean1>> finalExamMap = new HashMap<>();
 
@@ -489,71 +501,71 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			cd = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D");
 			cdm = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "D-");
 			ce = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "E");
-			
+
 			entry1 = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "Entry");
 			total1 = CommonLogic.streamAnalyzer(finalExamMap, streamlist[i], classroomId, accountId, "Total");
-			
+
 			if(ca.length() > 0) {
 				ca_ += Integer.valueOf(ca);
 			}
-			
+
 			if(cam.length() > 0) {
 				cam_ += Integer.valueOf(cam);
 			}
-			
+
 			if(cbp.length() > 0) {
 				cbp_ += Integer.valueOf(cbp);
 			}
-			
+
 			if(cb.length() > 0) {
 				cb_ += Integer.valueOf(cb);
 			}
-			
+
 			if(cbm.length() > 0) {
 				cbm_ += Integer.valueOf(cbm);
 			}
-			
+
 			if(ccp.length() > 0) {
 				ccp_ += Integer.valueOf(ccp);
 			}
-			
+
 			if(cc.length() > 0) {
 				cc_ += Integer.valueOf(cc);
 			}
-			
+
 			if(ccm.length() > 0) {
 				ccm_ += Integer.valueOf(ccm);
 			}
-			
+
 			if(cdp.length() > 0) {
 				cdp_ += Integer.valueOf(cdp);
 			}
-			
+
 			if(cd.length() > 0) {
 				cd_ += Integer.valueOf(cd);
 			}
-			
+
 			if(cdm.length() > 0) {
 				cdm_ += Integer.valueOf(cdm);
 			}
-			
+
 			if(ce.length() > 0) {
 				ce_ += Integer.valueOf(ce);
 			}
-			
-			
+
+
 			if(entry1.length() > 0) {
 				entry_1 += Integer.valueOf(entry1);
 			}
 			if(total1.length() > 0) {
 				total_1 += Integer.valueOf(total1);
 			}
-			
+
 			double mn =0,tmn =0;
 			if(total1.length() > 0 && entry1.length() > 0) {
-				 mn = Double.valueOf(total1) / Double.valueOf(entry1);
+				mn = Double.valueOf(total1) / Double.valueOf(entry1);
 			}
-			
+
 			if(i < (streamlist.length) -1) {
 
 				stream_rankingTable.addCell(new Paragraph("" + c1,timesRomanNormal6)); 
@@ -578,10 +590,10 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
 				String grade = CommonLogic.getGrade((int)mn, accountId);
 				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
-				
+
 
 			}else if(i == (streamlist.length) -1) {
-				
+
 				tmn = (double)total_1 / (double)entry_1;
 
 
@@ -607,8 +619,8 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				stream_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6)); 
 				String grade = CommonLogic.getGrade((int)tmn, accountId);
 				stream_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
-				
-				
+
+
 
 			}
 
@@ -646,14 +658,14 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 
 
 		String[] headers = {"Male","Female","Total"};
-		
+
 		ca_=0;cam_=0;cbp_=0;cb_=0;cbm_=0;ccp_=0;cc_=0;ccm_=0;cdp_=0;cd_=0;cdm_=0; ce_=0;
-		
+
 		entry_1=0;total_1=0; 
 
 		int c2 = 1;
 		for(int i=0;i<3;i++) {
-			
+
 			String ca="",cam="",cbp="",cb="",cbm="",ccp="",cc="",ccm="",cdp="",cd="",cdm="", ce="";
 			String entry="",total="";
 			ca = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "A");
@@ -668,75 +680,75 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 			cd = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D");
 			cdm = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "D-");
 			ce = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "E");
-			
+
 			entry = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "Entry");
 			total = CommonLogic.genderAnalyzer(finalExamMap, headers[i], classroomId, accountId, "Total");
-			
+
 			if(ca.length() > 0) {
 				ca_ += Integer.valueOf(ca);
 			}
-			
+
 			if(cam.length() > 0) {
 				cam_ += Integer.valueOf(cam);
 			}
-			
+
 			if(cbp.length() > 0) {
 				cbp_ += Integer.valueOf(cbp);
 			}
-			
+
 			if(cb.length() > 0) {
 				cb_ += Integer.valueOf(cb);
 			}
-			
+
 			if(cbm.length() > 0) {
 				cbm_ += Integer.valueOf(cbm);
 			}
-			
+
 			if(ccp.length() > 0) {
 				ccp_ += Integer.valueOf(ccp);
 			}
-			
+
 			if(cc.length() > 0) {
 				cc_ += Integer.valueOf(cc);
 			}
-			
+
 			if(ccm.length() > 0) {
 				ccm_ += Integer.valueOf(ccm);
 			}
-			
+
 			if(cdp.length() > 0) {
 				cdp_ += Integer.valueOf(cdp);
 			}
-			
+
 			if(cd.length() > 0) {
 				cd_ += Integer.valueOf(cd);
 			}
-			
+
 			if(cdm.length() > 0) {
 				cdm_ += Integer.valueOf(cdm);
 			}
-			
+
 			if(ce.length() > 0) {
 				ce_ += Integer.valueOf(ce);
 			}
-			
-		
+
+
 			if(entry.length() > 0) {
 				entry_1 += Integer.valueOf(entry);
 			}
 			if(total.length() > 0) {
 				total_1 += Integer.valueOf(total);
 			}
-			
-			
+
+
 			double mn =0,tmn =0;
 			if(total.length() > 0 && entry.length() > 0) {
 				mn = Double.valueOf(total) / Double.valueOf(entry);
 			}
-			
-			
+
+
 			if(i < (streamlist.length) -1) {
-				
+
 				bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
 				bygender_rankingTable.addCell(new Paragraph("" + ca,timesRomanNormal6));
@@ -759,12 +771,12 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(mn),timesRomanNormal6));
 				String grade = CommonLogic.getGrade((int)mn, accountId);
 				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
-				
-				
+
+
 			}else if(i == (streamlist.length) -1) {
-				
+
 				tmn = (double)total_1 / (double)entry_1;
-				
+
 				bygender_rankingTable.addCell(new Paragraph("" + c2,timesRomanNormal6));
 				bygender_rankingTable.addCell(new Paragraph("" + headers[i],timesRomanNormal6)); 
 				bygender_rankingTable.addCell(new Paragraph("" + ca_,timesRomanNormal6));
@@ -787,13 +799,201 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 				bygender_rankingTable.addCell(new Paragraph("" + ReportUtil.df2.format(tmn),timesRomanNormal6));
 				String grade = CommonLogic.getGrade((int)tmn, accountId);
 				bygender_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
-				
+
 			}
 
-			
+
 
 			c2++;
 		}
+
+
+
+		house_rankingTable.addCell(s_r_countCell);
+		house_rankingTable.addCell(s_r_genderCell);
+		house_rankingTable.addCell(s_r_aCell);
+		house_rankingTable.addCell(s_r_amCell);
+		house_rankingTable.addCell(s_r_bpCell);
+		house_rankingTable.addCell(s_r_bCell);
+		house_rankingTable.addCell(s_r_bmCell);
+		house_rankingTable.addCell(s_r_cpCell);
+		house_rankingTable.addCell(s_r_cCell);
+		house_rankingTable.addCell(s_r_cmCell);
+		house_rankingTable.addCell(s_r_dpCell);
+		house_rankingTable.addCell(s_r_dCell);
+		house_rankingTable.addCell(s_r_dmCell);
+		house_rankingTable.addCell(s_r_eCell);
+		house_rankingTable.addCell(s_r_xCell);
+		house_rankingTable.addCell(s_r_yCell);
+		house_rankingTable.addCell(s_r_zCell);
+		house_rankingTable.addCell(s_r_entryCell);
+		house_rankingTable.addCell(s_r_totalCell);
+		house_rankingTable.addCell(s_r_meanCell);
+		house_rankingTable.addCell(s_r_mgCell);
+
+		
+		List<String> listOfhouse = new ArrayList<>(); 
+		houseDAO.getHouseList(accountId).stream().forEach(house -> { 
+			listOfhouse.add(house.getHouseName());
+		});
+
+		String[] houselist = listOfhouse.toArray(new String[listOfhouse.size()]);
+		houselist = append(houselist, "Total");
+        
+		
+		//TODO
+		int h_a=0,h_am=0,h_bp=0,h_b=0,h_bm=0,h_cp=0,h_c=0,h_cm=0,h_dp=0,h_d=0,h_dm=0, h_e=0; 
+		int h_entry=0; int h_total=0;
+		int house_c = 1;
+		for(int i=0;i<houselist.length;i++) {
+			
+			String ha="",ham="",hbp="",hb="",hbm="",hcp="",hc="",hcm="",hdp="",hd="",hdm="", he="";
+			String entry="",total="";
+			
+			List<PerformanceBean1> performanceBean1List = CommonLogic.houseAnalyzer(finalExamMap, houselist[i], accountId);
+			
+			ha = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "A");
+			ham = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "A-");
+			hbp = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "B+");
+			hb = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "B");
+			hbm = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "B-");
+			hcp = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "C+");
+			hc = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "C");
+			hcm = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "C-");
+			hdp = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "D+");
+			hd = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "D");
+			hdm = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "D-");
+			he = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "E");
+			
+			entry = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "Entry");
+			total = CommonLogic.analyzeHouse(performanceBean1List, accountId, houselist[i], "Total");
+			
+			if(ha.length() > 0) {
+				h_a += Integer.valueOf(ha);
+			}
+
+			if(ham.length() > 0) {
+				h_am += Integer.valueOf(ham);
+			}
+
+			if(hbp.length() > 0) {
+				h_bp += Integer.valueOf(hbp);
+			}
+
+			if(hb.length() > 0) {
+				h_b += Integer.valueOf(hb);
+			}
+			
+			if(hbm.length() > 0) {
+				h_bm += Integer.valueOf(hbm);
+			}
+
+			if(hcp.length() > 0) {
+				h_cp += Integer.valueOf(hcp);
+			}
+
+			if(hc.length() > 0) {
+				h_c += Integer.valueOf(hc);
+			}
+
+			if(hcm.length() > 0) {
+				h_cm += Integer.valueOf(hcm);
+			}
+
+			if(hdp.length() > 0) {
+				h_dp += Integer.valueOf(hdp);
+			}
+
+			if(hd.length() > 0) {
+				h_d += Integer.valueOf(hd);
+			}
+
+			if(hdm.length() > 0) {
+				h_dm += Integer.valueOf(hdm);
+			}
+
+			if(he.length() > 0) {
+				h_e += Integer.valueOf(he);
+			}
+
+
+			if(entry.length() > 0) {
+				h_entry += Integer.valueOf(entry);
+			}
+			if(total.length() > 0) {
+				h_total += Integer.valueOf(total);
+			}
+			
+			
+			double mn =0,tmn =0;
+			if(total.length() > 0 && entry.length() > 0) {
+				mn = Double.valueOf(total) / Double.valueOf(entry);
+			}
+			
+			
+			if(i < (streamlist.length) -1) {
+;
+				house_rankingTable.addCell(new Paragraph("" + house_c,timesRomanNormal6)); 
+				house_rankingTable.addCell(new Paragraph("" + houselist[i],timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + ha,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + ham,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hbp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hb,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hbm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hcp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hc,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hcm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hdp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hd,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + hdm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + he,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + entry,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + total,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("",timesRomanNormal6));
+				String grade = CommonLogic.getGrade((int)mn, accountId);
+				house_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
+
+
+			}else if(i == (streamlist.length) -1) {
+				
+				tmn = (double)h_total / (double)h_entry;
+
+
+				house_rankingTable.addCell(new Paragraph("" + house_c,timesRomanNormal6)); 
+				house_rankingTable.addCell(new Paragraph("" + houselist[i],timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_a,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_am,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_bp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_b,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_bm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_cp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_c,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_cm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_dp,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_d,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_dm,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_e,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("-",timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_entry,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("" + h_total,timesRomanNormal6));
+				house_rankingTable.addCell(new Paragraph("",timesRomanNormal6)); 
+				String grade = CommonLogic.getGrade((int)tmn, accountId);
+				house_rankingTable.addCell(new Paragraph("" + grade,timesRomanNormal6));
+            
+
+
+			}
+
+			house_c++;
+	
+		}
+
+
 
 
 		document.add(new Paragraph("Stream-Performance Analysis", timesRomanBold10));  
@@ -806,6 +1006,11 @@ public class TeacherSubjectsAnalysis extends HttpServlet{
 		document.add(new Paragraph("\n")); 
 
 		document.add(bygender_rankingTable);
+
+		document.add(new Paragraph("House-Performance Analysis", timesRomanBold10));  
+		document.add(new Paragraph("\n")); 
+
+		document.add(house_rankingTable);
 
 
 

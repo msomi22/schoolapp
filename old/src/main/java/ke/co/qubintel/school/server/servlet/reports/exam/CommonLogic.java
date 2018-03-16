@@ -27,6 +27,8 @@ import ke.co.qubintel.school.server.bean.subject.Category;
 import ke.co.qubintel.school.server.bean.subject.Subject;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.GradingSystemDAO;
+import ke.co.qubintel.school.server.persistence.house.HouseDAO;
+import ke.co.qubintel.school.server.persistence.house.StudentHouseDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.persistence.staff.TeacherSubjectDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
@@ -46,6 +48,9 @@ public class CommonLogic {
 	private static TeacherSubjectDAO teacherSubjectDAO;
 	private static StaffDAO staffDAO;
 
+	private static StudentHouseDAO studentHouseDAO;
+	private static HouseDAO houseDAO;
+
 	static {
 		subCategoryDAO = SubCategoryDAO.getInstance();
 		categoryDAO = CategoryDAO.getInstance(); 
@@ -55,6 +60,9 @@ public class CommonLogic {
 		studentDAO = StudentDAO.getInstance();
 		teacherSubjectDAO = TeacherSubjectDAO.getInstance();
 		staffDAO = StaffDAO.getInstance();
+
+		studentHouseDAO = StudentHouseDAO.getInstance();
+		houseDAO = HouseDAO.getInstance();
 	}
 	/**
 	 * 
@@ -73,6 +81,12 @@ public class CommonLogic {
 			obj.setSubjectId(performance.getSubjectId());
 			obj.setStreamId(performance.getStreamId());
 			obj.setClassRoomId(performance.getClassRoomId());
+
+			if(studentHouseDAO.getStudentHouse(performance.getAccountId(), performance.getStudentId()) != null) { 
+				obj.setHouseId(studentHouseDAO.getStudentHouse(performance.getAccountId(), performance.getStudentId()).getHouseId()); 
+			}
+
+
 
 			if(isPaper123) {
 
@@ -760,7 +774,7 @@ public class CommonLogic {
 			// as long as the column item ( a stream name , is found in the database)  
 			if(streamDAO.getStreamByDesc(accountId, rowItem) != null) {
 
-				List<PerformanceBean1> performanceBean1List = new ArrayList<>();
+				List<PerformanceBean1> performanceBean1List = new ArrayList<>();//TODO
 
 				subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
 
@@ -928,17 +942,17 @@ public class CommonLogic {
 
 		case"Entry":
 			if(!StringUtils.equals(rowItem, "Total")) {
-				
+
 				String[] grades = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
 				int tcount = 0;
 				for(int i=0;i<grades.length;i++) {
 					tcount += Integer.valueOf(computeResult(performanceBean1List, accountId, grades[i]));
 				}
-				
+
 				value = tcount+"";
 
 			}else {
-				
+
 				value = performanceBean1List.size()+"";
 
 			}
@@ -1080,7 +1094,7 @@ public class CommonLogic {
 				}
 
 			});
-			
+
 			value = analyzeGender(performanceBean1List, accountId, predicate, rowItemV.toString());
 
 
@@ -1223,9 +1237,9 @@ public class CommonLogic {
 				for(int i=0;i<grades.length;i++) {
 					tcount += Integer.valueOf(computeResult(performanceBean1List, accountId, grades[i]));
 				}
-				
+
 				value = tcount+"";
-				
+
 			}else {
 				value = performanceBean1List.size()+"";
 			}
@@ -1277,7 +1291,7 @@ public class CommonLogic {
 	 * @return
 	 */
 	private static String computeGender(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
-		
+
 		String generalId = ReportUtil.getGeneralId(accountId);
 
 		long count = 0;
@@ -1293,7 +1307,7 @@ public class CommonLogic {
 
 		return ""+count;
 	}
-	
+
 	/**
 	 * 
 	 * @param score
@@ -1303,23 +1317,304 @@ public class CommonLogic {
 	public static String getGrade(int score, String accountId) {
 
 		String grade = "";
-		
+
 
 		List<GradingSystem> gradingSystemList = new ArrayList<>();
 
 		String generalId = ReportUtil.getGeneralId(accountId);
 		gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalId);
-		
+
 		grade = gradingSystemList
-		.stream()
-		.filter(gs -> score >= gs.getLowerLimit())
-		.filter(gs -> score <= gs.getUpperLimit())
-		.map(GradingSystem::getDescription)
-		.findAny()
-		.orElse("");
-		
+				.stream()
+				.filter(gs -> score >= gs.getLowerLimit())
+				.filter(gs -> score <= gs.getUpperLimit())
+				.map(GradingSystem::getDescription)
+				.findAny()
+				.orElse("");
+
 		return grade;
 	}
+
+
+
+
+	/**
+	 * 
+	 * @param finalExamMap
+	 * @param house
+	 * @param accountId
+	 * @param predicate
+	 * @return
+	 */
+	public static List<PerformanceBean1> houseAnalyzer(Map<String, List<PerformanceBean1>> finalExamMap, String rowItem,
+			String accountId) {
+
+		List<PerformanceBean1> performanceBean1List = new ArrayList<>();
+
+		if(!StringUtils.equals(rowItem, "Total")) {
+
+			subjectDAO.getSubjects(accountId).stream().forEach(subject -> {
+
+				if(finalExamMap.get(subject.getUuid()) != null) {
+
+					if(houseDAO.getHouse(accountId, rowItem) != null) {
+
+						studentHouseDAO.getStudentHouseList(accountId, houseDAO.getHouse(accountId, rowItem).getUuid()) 
+						.stream().forEach(stuHouse ->{
+
+							int score = finalExamMap.get(subject.getUuid())
+									.stream()
+									.filter(perfor -> StringUtils.equals(perfor.getHouseId(), houseDAO.getHouse(accountId, rowItem).getUuid()))
+									.map(PerformanceBean1::getScore)
+									.findAny()
+									.orElse(0); 
+
+							Student student = studentDAO.getStudentById(accountId, stuHouse.getStudentId()); 
+
+							if(StringUtils.equals(student.getIsActive(), "1")) {
+
+								PerformanceBean1 performanceBean1 = new PerformanceBean1();
+								performanceBean1.setStudentId(student.getUuid());
+								performanceBean1.setSubjectId(subject.getUuid());
+								performanceBean1.setStreamId(student.getCurrentStream()); 
+								performanceBean1.setClassRoomId(streamDAO.getStream(accountId, student.getCurrentStream()).getClassRoomId()); 
+								performanceBean1.setScore(score); 
+								performanceBean1.setCategory(rowItem); 
+								performanceBean1.setHouseId(houseDAO.getHouse(accountId, rowItem).getUuid()); 
+
+								performanceBean1List.add(performanceBean1);
+
+							}
+
+
+
+						});
+
+					}
+
+
+				}
+
+			});
+
+
+		}
+
+		return performanceBean1List;
+
+	}
+
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param accountId
+	 * @param rowItem
+	 * @param predicate
+	 * @return
+	 */
+	public static String analyzeHouse(List<PerformanceBean1> performanceBean1List, String accountId, String rowItem,String  predicate) {
+
+		String value = "";
+
+		switch(predicate) {
+
+
+		case"A":
+			if(!StringUtils.equals(rowItem, "Total")) {
+
+				value = "" + computeHouse(performanceBean1List, accountId, "A");
+
+			}else {
+				//total
+			}
+			return value;
+
+
+		case"A-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "A-");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"B+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "B+");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"B":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "B");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"B-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "B-");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"C+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "C+");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"C":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "C");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"C-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "C-");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"D+":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "D+");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"D":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "D");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"D-":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "D-");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"E":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				value = "" + computeHouse(performanceBean1List, accountId, "E");
+
+			}else {
+				//total
+			}
+			return value;
+
+		case"Entry":
+			if(!StringUtils.equals(rowItem, "Total")) {
+
+				String[] grades = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","E"};
+				int tcount = 0;
+				for(int i=0;i<grades.length;i++) {
+					tcount += Integer.valueOf(computeHouse(performanceBean1List, accountId, grades[i]));
+				}
+
+				value = tcount+"";
+
+			}else {
+				value = performanceBean1List.size()+"";
+			}
+			return value;
+
+		case"Total":
+			if(!StringUtils.equals(rowItem, "Total")) {
+				int sum = performanceBean1List.stream().filter(performance -> performance.getScore() > 0).mapToInt(PerformanceBean1::getScore).sum();
+				value = sum+"";
+
+			}else {
+				//total
+			}
+			return value;
+
+
+		default:
+			return value;
+
+
+		}
+	}
+
+
+	/**
+	 * 
+	 * @param performanceBean1List
+	 * @param accountId
+	 * @param string
+	 * @return
+	 */
+	private static String computeHouse(List<PerformanceBean1> performanceBean1List, String accountId, String predicate) {
+		String generalId = ReportUtil.getGeneralId(accountId);
+
+		long count = 0;
+		if(gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate) != null) {
+
+			count = performanceBean1List.stream()
+					.filter(performance -> 
+					performance.getScore() >= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getLowerLimit()
+					&&
+					performance.getScore() <= gradingSystemDAO.getGradesByDesc(accountId, generalId, predicate).getUpperLimit()
+							).count(); 
+		}
+
+		return ""+count;
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
