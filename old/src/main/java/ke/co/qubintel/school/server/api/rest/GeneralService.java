@@ -1237,6 +1237,11 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
+		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
+			response.setMessage("error");
+			response.setDescription("House already assigned!"); 
+			return response;
+			
 		}else {
 
 
@@ -1282,6 +1287,12 @@ public class GeneralService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
+			
+		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) == null) {
+			response.setMessage("error");
+			response.setDescription("No house to change!"); 
+			return response;
+			
 		}else {
 
 
