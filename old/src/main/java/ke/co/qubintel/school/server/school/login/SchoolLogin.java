@@ -103,7 +103,7 @@ public class SchoolLogin extends HttpServlet {
 
 		}else if (!allowedNames.contains(accountDAO.getAccount(schoolUsername, "1").getName().toLowerCase())) {  
 			
-			message = "Sorry! This Software is custom made for \""+accountDAO.getAccount(schoolUsername, "1").getName()+"\"";  
+			message = "Sorry! Account \""+accountDAO.getAccount(schoolUsername, "1").getName()+"\" is not allowed to use this Software";  
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
 
