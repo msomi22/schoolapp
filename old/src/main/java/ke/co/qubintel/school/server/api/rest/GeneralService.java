@@ -1468,7 +1468,10 @@ public class GeneralService {
 				studentHouse.setStudentId(sh.getStudentId());
 				studentHouse.setHouseId(sh.getHouseId()); 
 
-				studentHouseDAO.putStudentHouse(studentHouse);
+				if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) == null) {
+					studentHouseDAO.putStudentHouse(studentHouse);
+				}
+				
 
 			});
 
