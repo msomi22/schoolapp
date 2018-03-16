@@ -632,24 +632,33 @@ public class StudentReportCard extends HttpServlet{
 				double valuea = 0;
 				int kcpePints = 0;
 				String kcpe = " , KCPE : ";
+				int kcpem = 0;
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
-
-					
 
 					StudentPrimary primary = new StudentPrimary();
 					if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null) {
+						
 						primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
 						
-						kcpemarks = primary.getKcpemark();//out of 500 
-						
-						if(!StringUtils.equals(primary.getKcpeGrade(), "")) { 
-							kcpePints = ReportUtil.kcpePntsFromGrade(accountId, primary.getKcpeGrade()); 
+						if(Integer.valueOf(primary.getKcpemark()) > 0){  
+							kcpemarks = primary.getKcpemark();
+							kcpem = Integer.valueOf(kcpemarks);
+							
+						}else {
+							kcpemarks = primary.getKcpeGrade();
+							
+							if(!StringUtils.equals(primary.getKcpeGrade(), "")) { 
+								kcpePints = ReportUtil.kcpePntsFromGrade(accountId, primary.getKcpeGrade()); 
+							}
 						}
+						
 					}
+					
+					
 
 					kcpe += kcpemarks;
 
-					int kcpem = Integer.valueOf(kcpemarks);
+					
 					if(kcpem > 0) {
 						valuea = (double)kcpem/500*84; 
 					}else {

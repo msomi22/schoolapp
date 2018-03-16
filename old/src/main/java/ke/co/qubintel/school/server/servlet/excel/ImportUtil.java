@@ -375,7 +375,13 @@ public class ImportUtil {
 							primary.setSchoolName("Default"); 
 							primary.setIndex("308303119");
 							primary.setKcpeyear("2017"); 
-							primary.setKcpemark(kcpe);
+							
+							if(StringUtils.isNumeric(kcpe)) {
+								primary.setKcpemark(kcpe);
+							}else {
+								primary.setKcpeGrade(kcpe); 
+							}
+	
 							primaryDAO.putStudentPrimary(primary);
 
 

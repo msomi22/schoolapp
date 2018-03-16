@@ -11,6 +11,8 @@
  *************************************************************/
 package ke.co.qubintel.school.server.bean.student;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ke.co.qubintel.school.server.bean.StorableBean;
 
 /**
@@ -38,7 +40,7 @@ public class StudentPrimary extends StorableBean {
 		schoolName ="";
 		index ="";
 		kcpeyear ="";
-		kcpemark ="";
+		kcpemark = "0";
 		kcpeGrade = "";
 	}
 
@@ -120,6 +122,9 @@ public class StudentPrimary extends StorableBean {
 	 * @return the kcpemark
 	 */
 	public String getKcpemark() {
+		if(StringUtils.isEmpty(kcpemark)) {
+			return "0";
+		}
 		return kcpemark;
 	}
 
