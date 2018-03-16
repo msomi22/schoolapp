@@ -384,7 +384,7 @@
 													<div class="col-md-5 col-md-offset-1">
 														<h4>House</h4>
 
-														<select class="form-control formelement " id="houseName"
+														<select class="form-control formelement populateHouses " id="houseName"
 															required="required">
 															<option>...</option>
 

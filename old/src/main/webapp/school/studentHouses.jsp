@@ -88,8 +88,7 @@
 													Export <i class="fa fa-file-pdf-o"> </i>
 												</button>
 
-												<button
-													class="btn btn-primary secondary-assent  cards pull-right"
+												<button class="btn btn-primary secondary-assent  cards"
 													onclick="studentsListModa('studentPerStreamExcel')"
 													disabled>
 													Export <i class="fa fa-file-excel-o"> </i>
@@ -112,11 +111,32 @@
 											<form action="#" method="post" id="shiftForm">
 
 
+												<div class="col-md-2" id="classDiv">
+													<h6 for="classId">Class/Form:</h6>
+													<select class="form-control formelement populateOptions"
+														id="populateOptionsStudents"
+														onchange="fetchStreams(this.value,'house')" required="required">
 
-												<div class="col-md-4" id="classDiv">
-													<h6 for="classId">House:</h6>
+
+													</select>
+												</div>
+
+												<div class="col-md-2" id="classDiv">
+													<h6 for="classId">Stream:</h6>
+													<select
+														class="form-control formelement populateStreamOptions"
+														name="streamId" id="streamId" onchange="fetchStudents()"
+														onreset="fetchStudents()" required>
+
+													</select>
+												</div>
+
+
+
+												<div class="col-md-2" id="classDiv">
+													<h6 for="houseId">House:</h6>
 													<select class="form-control formelement populateHouses"
-														onchange="fetchHouseStudents(this.value)"
+														onchange="fetchStudents()" id="houseId"
 														required="required">
 
 
@@ -127,20 +147,19 @@
 
 
 
-												<div class="col-md-4 col-md-offset-2 pull-right">
-													<h6 for="movestreamId">House:</h6>
+												<div class="col-md-2 col-md-offset-2">
+													<h6 for="moveHouse">House:</h6>
 													<select class="form-control formelement populateHouses"
-														name="streamId" id="movestreamId" required>
+														name="houseId" id="moveHouseID" required>
 
 													</select>
 												</div>
 
 
-												<div class="col-md-3">
-													<br>
-
+												<div class="col-md-2">
+													<h6>Shift:</h6>
 													<button class="form-control btn btn-primary" type="button"
-														id="btn_shift" onclick="initShiftHouse()">Shift</button>
+														id="btn_shift" onclick="initShiftHouse()" disabled>Shift</button>
 												</div>
 
 
@@ -160,25 +179,20 @@
 
 											<div class="table-responsive">
 												<table class="table table-striped jambo_table bulk_action"
-													id="studentsPerClass">
+													id="studentsPerHouse">
 													<thead>
 														<tr class="headings secondary-assent">
-
-															<th class="column-title hidden">studentId</th>
-															<th class="column-title hidden">houseId</th>
-															<th class="column-title hidden">dateOut</th>
-															<th class="column-title hidden">dateIn</th>
-
-															<th class="column-title">studentName</th>
-															
-															<th class="column-title">regNo</th>
-															<th class="column-title">houseName</th>
-															<th class="column-title">lastname</th>
-															
 
 															<th class="column-title hidden">uuid</th>
 															<th class="column-title hidden">accountId</th>
 
+															<th class="column-title hidden">studentId</th>
+															<th class="column-title">studentName</th>
+															<th class="column-title">regNo</th>
+															<th class="column-title hidden">houseId</th>
+															<th class="column-title">houseName</th>
+															<th class="column-title hidden">dateOut</th>
+															<th class="column-title hidden">dateIn</th>
 															<th class="column-title"><input type="checkbox"
 																id="selectCurrentStream" onclick="selectCurrentStream()"></th>
 
@@ -224,7 +238,7 @@
 
 
 									</div>
-						
+
 
 
 
@@ -257,7 +271,7 @@
 <jsp:include page="footer.jsp" />
 
 
-<script src="js/studentClass.js"></script>
+<script src="js/houseStudent.js"></script>
 
 
 
