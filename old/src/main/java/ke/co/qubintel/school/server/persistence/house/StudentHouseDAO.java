@@ -136,14 +136,15 @@ public class StudentHouseDAO extends GenericDAO implements SchoolStudentHouseDAO
 
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentHouse" 
-						+"(uuid,accountId,studentId,houseId,dateIn) VALUES (?,?,?,?,?);");
+						+"(uuid,accountId,studentId,houseId,dateOut,dateIn) VALUES (?,?,?,?,?,?);");
 				){
 
 			pstmt.setString(1, studentHouse.getUuid());
 			pstmt.setString(2, studentHouse.getAccountId());
 			pstmt.setString(3, studentHouse.getStudentId());
 			pstmt.setString(4, studentHouse.getHouseId());
-			pstmt.setTimestamp(5, studentHouse.getDateIn());
+			pstmt.setTimestamp(5, studentHouse.getDateOut());
+			pstmt.setTimestamp(6, studentHouse.getDateIn());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){

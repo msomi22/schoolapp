@@ -1440,7 +1440,7 @@ public class GeneralService {
 	 */
 	public Object AssignHouseList(List<ApiStudentHouse> sh_list) {
 		Response response = new Response();
-		
+
 		//boolean success = false;
 
 		if(sh_list.isEmpty()) {
@@ -1457,7 +1457,7 @@ public class GeneralService {
 				studentHouse.setStudentId(sh.getStudentId());
 				studentHouse.setHouseId(sh.getHouseId()); 
 
-			    studentHouseDAO.putStudentHouse(studentHouse);
+				studentHouseDAO.putStudentHouse(studentHouse);
 
 			});
 
@@ -1475,7 +1475,7 @@ public class GeneralService {
 	 */
 	public Object exitAssignedHouseList(List<ApiStudentHouse> sh_list) {
 		Response response = new Response();
-		
+
 		//boolean success = false;
 
 		if(sh_list.isEmpty()) {
@@ -1503,7 +1503,70 @@ public class GeneralService {
 	}
 
 
+	/**
+	 * 
+	 * @param accountId
+	 * @param houseId
+	 * @param streamId
+	 * @return
+	 */
+	public Object getStudentHouseListPerStream(String accountId, String houseId, String streamId) {
+		Response response = new Response();
+		
+		if(studentHouseDAO.getStudentHouseList(accountId, houseId) != null) {
+			
+			List<ApiStudentHouse> stu_house_list = new ArrayList<>();
+			
+			if(studentDAO.getStudentByStream(accountId, streamId, "1") == null) {
+				response.setMessage("error");
+				response.setDescription("No students to display for the given stream!"); 
+				return response;
+				
+			}else {
+				
+				studentDAO.getStudentByStream(accountId, streamId, "1").stream().forEach(student -> {
+					
+					
+					studentHouseDAO.getStudentHouseList(accountId, houseId)
+					.stream()
+					.filter(stu -> StringUtils.equals(stu.getStudentId(), student.getUuid()))  
+					.forEach(sh ->{
 
+						String name = student.getFirstname() + " " + student.getMiddlename() + " " + student.getLastname();
+
+						ApiStudentHouse studentHouse = new ApiStudentHouse();
+						studentHouse.setUuid(sh.getUuid());
+						studentHouse.setAccountId(accountId);
+						studentHouse.setStudentId(sh.getStudentId());
+						studentHouse.setStudentName(name);
+						studentHouse.setRegNo(student.getRegNo());
+						studentHouse.setHouseId(houseId);
+						studentHouse.setHouseName(houseDAO.getHouseById(accountId, sh.getHouseId()).getHouseName());
+						studentHouse.setDateOut(sh.getDateOut().toString());
+						studentHouse.setDateIn(sh.getDateIn().toString());
+
+						stu_house_list.add(studentHouse);
+
+
+					});
+
+										
+					
+				});
+				
+				
+				return stu_house_list;
+
+			}
+			
+			
+
+		}else {
+			response.setMessage("error");
+			response.setDescription("Nothing to display for the given house!"); 
+			return response;
+		}
+	}
 
 
 
@@ -1658,6 +1721,8 @@ public class GeneralService {
 			return false;
 		}
 	}
+
+
 
 
 }
