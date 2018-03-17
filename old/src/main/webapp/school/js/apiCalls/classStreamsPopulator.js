@@ -34,7 +34,7 @@ function fetchStreams(classIdVal, state="not_set") {
 		//default_streamID=classId.options[classId.selectedIndex].value;
 		
 		if(state == "house")
-			fetchStudents();
+			fetchStreamStudents();
 		
 		
 		//$('.DefaultStream').val(default_streamID);
@@ -123,7 +123,7 @@ function fetchClasses() {
 
 
 
-function fetchHouses() {
+function fetchHouses(state='not_set') {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
@@ -145,11 +145,22 @@ function fetchHouses() {
 		// = new Option('Form 1', 'Value1');
 
 		for (var i = 0; i < data.length; i++) {
+			
+			if(state== 'twerk' && i == 0){
+				houseSelect.append('<option>...</option>');
+				houseSelect.append('<option id=' + data[i].uuid + ' value='
+						+ data[i].uuid + '>' + data[i].houseName + '</option>');
+				
+			}else
+			
+			
 			houseSelect.append('<option id=' + data[i].uuid + ' value='
 					+ data[i].uuid + '>' + data[i].houseName + '</option>');
 			// classSelect.options[classSelect.options.length]
 			// = new Option(data[i].description,
 			// data[i].uuid);
+			
+			
 		}
 
 		
