@@ -13,6 +13,7 @@ import ke.co.qubintel.school.server.api.rest.ConfigRestFulAPI;
 import ke.co.qubintel.school.server.api.rest.ExamResourceAPI;
 import ke.co.qubintel.school.server.api.rest.FinanceRestFulAPI;
 import ke.co.qubintel.school.server.api.rest.GeneralRestFulAPI;
+import ke.co.qubintel.school.server.api.rest.HouseResource;
 import ke.co.qubintel.school.server.api.rest.ReportRestFulAPI;
 import ke.co.qubintel.school.server.api.rest.StaffRestFulAPI;
 import ke.co.qubintel.school.server.api.rest.StudentRestFulAPI;
@@ -58,7 +59,9 @@ public class APIApplication extends Application{
 	        
 	        set.add(ExamResourceAPI.class); 
 	        
+	        set.add(HouseResource.class); 
 	        
+	       
 	        set.add(io.swagger.jaxrs.listing.ApiListingResource.class);
 	        set.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);
 
