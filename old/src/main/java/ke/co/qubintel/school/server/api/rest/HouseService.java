@@ -202,7 +202,7 @@ public class HouseService {
 			studentHouse.setStudentId(sh.getStudentId());
 			studentHouse.setHouseId(sh.getHouseId()); 
 
-			if(studentHouseDAO.putStudentHouse(studentHouse)) { 
+			if(studentHouseDAO.putStudentHouse(studentHouse, sh.getAccountId(), sh.getStudentId(), sh.getHouseId())) { 
 				response.setMessage("success");
 				response.setDescription("House assigned successfully!");
 				return response;
@@ -383,7 +383,7 @@ public class HouseService {
 				studentHouse.setHouseId(sh.getHouseId()); 
 
 				if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) == null) {
-					studentHouseDAO.putStudentHouse(studentHouse);
+					studentHouseDAO.putStudentHouse(studentHouse, sh.getAccountId(), sh.getStudentId(), sh.getHouseId());
 				}
 
 

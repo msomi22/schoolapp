@@ -18,8 +18,10 @@ public interface SchoolStudentHouseDAO {
 	public StudentHouse getStudentHouse(String accountId, String studentId);
 
 	public List<StudentHouse> getStudentHouseList(String accountId, String houseId);
+	
+	public boolean existStudentHouse(String accountId, String studentId,String houseId); 
 
-	public boolean putStudentHouse(StudentHouse studentHouse); 
+	public boolean putStudentHouse(StudentHouse studentHouse, String accountId, String studentId,String houseId); 
 
 	public boolean exitHouse(StudentHouse studentHouse); 
 	

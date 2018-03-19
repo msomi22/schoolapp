@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbutils.BeanProcessor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
@@ -127,35 +128,109 @@ public class StudentHouseDAO extends GenericDAO implements SchoolStudentHouseDAO
 		return list;
 	}
 
+	
+
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.house.SchoolStudentHouseDAO#putStudentHouse(ke.co.qubintel.school.server.bean.house.StudentHouse)
+	 * @see ke.co.qubintel.school.server.persistence.house.SchoolStudentHouseDAO#existStudentHouse(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean putStudentHouse(StudentHouse studentHouse) {
-		boolean success = true;
-
-		try(   Connection conn = dbutils.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentHouse" 
-						+"(uuid,accountId,studentId,houseId,dateOut,dateIn) VALUES (?,?,?,?,?,?);");
+	public boolean existStudentHouse(String accountId, String studentId, String houseId) {
+		boolean exist = false;
+		String dbaccountId = "";
+		String dbstudentId = "";
+		String dbhouseId = "";
+		try(    Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM StudentHouse "
+						+ "WHERE accountId = ? AND studentId =? AND houseId =? ;");
 				){
 
-			pstmt.setString(1, studentHouse.getUuid());
-			pstmt.setString(2, studentHouse.getAccountId());
-			pstmt.setString(3, studentHouse.getStudentId());
-			pstmt.setString(4, studentHouse.getHouseId());
-			pstmt.setTimestamp(5, studentHouse.getDateOut());
-			pstmt.setTimestamp(6, studentHouse.getDateIn());
-			pstmt.executeUpdate();
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, studentId);
+			pstmt.setString(3, studentId);
+			try(
+					ResultSet rset = pstmt.executeQuery();
+
+					) {
+
+				if(rset.next()) {
+					dbaccountId = rset.getString("accountId");	
+					dbstudentId = rset.getString("studentId");	
+					dbhouseId = rset.getString("houseId");	
+					
+					exist = (
+							StringUtils.equals(dbaccountId, accountId) && 
+							StringUtils.equals(dbstudentId, studentId) &&
+							StringUtils.equals(dbhouseId, houseId)
+							) ? true : false;		
+				} 
+			}
 
 		}catch(SQLException e){
-			logger.error("SQL Exception trying to put StudentHouse " + studentHouse);
+			logger.error("SQL Exception trying to get StudentHouse for accountId: " + accountId + 
+					"  studentId: " + studentId + " and houseId: " + houseId);
 			logger.error(ExceptionUtils.getStackTrace(e)); 
 			System.out.println(ExceptionUtils.getStackTrace(e));
-			success = false;
+			exist = false;
 		}
+
+		return exist;
+	}
+
+	/**
+	 * @see ke.co.qubintel.school.server.persistence.house.SchoolStudentHouseDAO#putStudentHouse(ke.co.qubintel.school.server.bean.house.StudentHouse, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean putStudentHouse(StudentHouse studentHouse, String accountId, String studentId, String houseId) {
+		boolean success = true;
+		
+		if(existStudentHouse(accountId,studentId,houseId)) {
+			
+			try (  Connection conn = dbutils.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement("UPDATE StudentHouse SET houseId =?, dateOut =? "
+							+ "WHERE accountId =? AND studentId =?;");
+					) {           			 	            
+				pstmt.setString(1, studentHouse.getHouseId());
+				pstmt.setTimestamp(2, studentHouse.getDateOut());
+				pstmt.setString(3, studentHouse.getAccountId());
+				pstmt.setString(4, studentHouse.getStudentId());
+				pstmt.executeUpdate();
+
+			} catch (SQLException e) {
+				logger.error("SQL Exception when updating StudentHouse " + studentHouse);
+				logger.error(ExceptionUtils.getStackTrace(e));
+				System.out.println(ExceptionUtils.getStackTrace(e));
+				success = false;
+			} 
+
+
+		} else { 
+			
+			try(   Connection conn = dbutils.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement("INSERT INTO StudentHouse" 
+							+"(uuid,accountId,studentId,houseId,dateOut,dateIn) VALUES (?,?,?,?,?,?);");
+					){
+
+				pstmt.setString(1, studentHouse.getUuid());
+				pstmt.setString(2, studentHouse.getAccountId());
+				pstmt.setString(3, studentHouse.getStudentId());
+				pstmt.setString(4, studentHouse.getHouseId());
+				pstmt.setTimestamp(5, studentHouse.getDateOut());
+				pstmt.setTimestamp(6, studentHouse.getDateIn());
+				pstmt.executeUpdate();
+
+			}catch(SQLException e){
+				logger.error("SQL Exception trying to put StudentHouse " + studentHouse);
+				logger.error(ExceptionUtils.getStackTrace(e)); 
+				System.out.println(ExceptionUtils.getStackTrace(e));
+				success = false;
+			}
+			
+		}
+
 
 		return success;
 	}
+
 	
 	
 	
