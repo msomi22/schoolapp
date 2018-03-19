@@ -108,6 +108,7 @@ public class OutGoingSMSDAO extends GenericDAO implements SchoolOutGoingSMSDAO {
 	 */
 	@Override
 	public boolean putOutGoingSMS(OutGoingSMS outGoingSMS) {
+		
 		boolean success = true;
 		try(   Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO OutGoingSMS" 

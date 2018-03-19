@@ -27,7 +27,8 @@ public class SmsUtil {
 	private static OutGoingSMSDAO outGoingSMSDAO;
 	
 	static {
-		outGoingSMSDAO = OutGoingSMSDAO.getInstance();
+		//outGoingSMSDAO = OutGoingSMSDAO.getInstance(); TODO
+		outGoingSMSDAO = new OutGoingSMSDAO("schooldb", "localhost", "school", "AllaManO1", 5432); 
 	}
 	
 	
@@ -59,7 +60,7 @@ public class SmsUtil {
 	                  
 	                  OutGoingSMS outGoingSMS = new OutGoingSMS();
 	                  outGoingSMS.setAccountId(smsObject.getAccount()); 
-	                  outGoingSMS.setMessage(smsObject.getMessage());//result.getString("messageId")
+	                  outGoingSMS.setMessage(smsObject.getMessage());
 	                  outGoingSMS.setMobile(result.getString("number"));
 	                  outGoingSMS.setStatus(result.getString("status"));
 	                  outGoingSMS.setSmsCost(result.getString("cost")); 
@@ -73,9 +74,15 @@ public class SmsUtil {
 	       catch (Exception e) {
 	    	   description = "Encountered an error while sending " + e.getMessage();
 	           System.out.println("Encountered an error while sending " + e.getMessage() + " *");
+	           System.out.println(description);
 	        }
 			
 		}
+		
+		/**
+		 * SmsObject [account=22bf25b1-23f4-4ed0-a9f4-46a5d7f7d65d, mobile=718953974, message=test, apiUsername=msomi22, apiKey=e052e0296b5f1e828401c12308f05ae9d85959ab6f0eae50ca6880da31beb693]
+
+		 */
 		
 		return description;
 	}

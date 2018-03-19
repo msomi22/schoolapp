@@ -92,6 +92,7 @@ import ke.co.qubintel.school.server.servlet.reports.test2.TermOneObj;
 import ke.co.qubintel.school.server.servlet.reports.test2.TermThreeObj;
 import ke.co.qubintel.school.server.servlet.reports.test2.TermTwoObj;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
+import ke.co.qubintel.school.server.servlet.util.sms.core.ExamSmsSender;
 import ke.co.qubintel.school.server.session.SessionConstants;
 import ke.co.qubintel.school.util.performance.comparator.MeanComparator;
 import ke.co.qubintel.school.util.performance.comparator.PointsComparator;
@@ -144,6 +145,7 @@ public class StudentReportCard extends HttpServlet{
 	private boolean grade7subjects = true;
 	private boolean grade11subjects = false;
 	private boolean classResult = true;
+	private boolean sendSMS = false;
 
 	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
@@ -205,6 +207,7 @@ public class StudentReportCard extends HttpServlet{
 
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
 		hideGds= Boolean.parseBoolean(request.getParameter("g"));
+		sendSMS= Boolean.parseBoolean(request.getParameter("sendSMS"));
 
 		String rank = request.getParameter("rank");
 
@@ -894,6 +897,20 @@ public class StudentReportCard extends HttpServlet{
 
 
 				}
+				
+				
+				//TODO send SMS
+				if(sendSMS) {
+					ExamSmsSender.sendScoreSMS(
+							accountId,
+							student,
+							meanTotal,
+							ReportUtil.df2.format(mean),
+							ReportUtil.getGradeMainForm234((int) (mean), accountId));
+				}
+				/**
+				 * ExamSmsSender.sendScoreSMS(accountId,student,performance2.getTotalMean(),mean_str);
+				 */
 
 
 

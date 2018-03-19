@@ -55,7 +55,7 @@ CREATE TABLE  outGoingSMS (
     id SERIAL PRIMARY KEY,
     uuid VARCHAR(100) UNIQUE NOT NULL,
     accountId VARCHAR(100) REFERENCES Account(uuid),
-    status VARCHAR(2) NOT NULL,
+    status VARCHAR(50) NOT NULL, 
     mobile VARCHAR(15) NOT NULL,
     message text NOT NULL,
     smsCost VARCHAR(50) NOT NULL,

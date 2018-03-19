@@ -76,6 +76,7 @@ import ke.co.qubintel.school.server.servlet.reports.exam.CommonLogic;
 import ke.co.qubintel.school.server.servlet.reports.exam.PerformanceBean1;
 import ke.co.qubintel.school.server.servlet.util.PeterMid;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
+import ke.co.qubintel.school.server.servlet.util.sms.core.ExamSmsSender;
 import ke.co.qubintel.school.server.session.SessionConstants;
 import ke.co.qubintel.school.util.performance.comparator.ClassMeanComparator;
 import ke.co.qubintel.school.util.performance.comparator.MeanComparator;
@@ -131,6 +132,7 @@ public class ClassRankingList extends HttpServlet{
 	private boolean grade7subjects = true;
 	private boolean grade11subjects = false;
 	private boolean classResult = true;
+	private boolean sendSMS = false;
 
 	private static final String LOGO_PATH = WriteToFile.LOGO_PATH;
 
@@ -187,6 +189,7 @@ public class ClassRankingList extends HttpServlet{
 
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
 		hideGds= Boolean.parseBoolean(request.getParameter("g"));
+		sendSMS= Boolean.parseBoolean(request.getParameter("sendSMS"));
 
 		String rank = request.getParameter("rank");
 
@@ -940,6 +943,17 @@ public class ClassRankingList extends HttpServlet{
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
+						
+						//TODO send SMS
+						if(sendSMS) {
+							ExamSmsSender.sendScoreSMS(
+									accountId,
+									student,
+									performance2.getTotalMean(),
+									poinst_str, 
+									avg_points_grade);
+						}
+
 
 
 					}else {
@@ -985,14 +999,12 @@ public class ClassRankingList extends HttpServlet{
 					}
 
 
-
-
 				}
 
 				if(!rankWithPoints && rankWithTotalMarks){
 					//show grade on avg
 					mean_str = ReportUtil.df2.format(avgMean) + " " +  avgGradeByMean;
-
+					
 
 					YearlyMean yearlyMean;
 					if(yearlyMeanDAO.getYearlyMean(accountId, student.getUuid(), year) == null) {
@@ -1028,6 +1040,18 @@ public class ClassRankingList extends HttpServlet{
 					if(StringUtils.equals(saveMean, "1")) {
 						yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 					}
+					
+
+					//TODO send SMS
+					if(sendSMS) {
+						ExamSmsSender.sendScoreSMS(
+								accountId,
+								student,
+								performance2.getTotalMean(),
+								mean_str, 
+								avgGradeByMean);
+					}
+
 
 
 				}
@@ -1090,6 +1114,9 @@ public class ClassRankingList extends HttpServlet{
 
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
+				
+				
+				
 
 
 
