@@ -125,7 +125,7 @@
 													<h6 for="classId">Stream:</h6>
 													<select
 														class="form-control formelement populateStreamOptions"
-														name="streamId" id="streamId" onchange="fetchStreamStudents()"
+														name="streamId" id="streamId" onchange="fetchStudents()"
 														 required>
 
 													</select>

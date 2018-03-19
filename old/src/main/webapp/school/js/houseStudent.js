@@ -1,6 +1,8 @@
 var studentsHolder = [];
 var table;
 
+var houseId = "";
+
 var assignObj = {
 	uuid : "string",
 	accountId : "string",
@@ -22,7 +24,15 @@ $(document).ready(function() {
 
 	setTimeout(function() {
 
-		fetchStreamStudents();
+		// fetchStreamStudents();
+
+		if ($('#houseId').val() == "...") {
+
+			houseId = "1";
+
+		}
+
+		fetchStudents();
 
 		$('#studentsPerHouse tbody').on('click', 'input', function() {
 			var data = table.row($(this).parents('tr')).data();
@@ -69,25 +79,23 @@ function fetchStreamStudents() {
 			+ $('#streamId').val();
 
 	console.log(varying_url);
-	
+
 	global_data_passed = {};
 
 	global_request_type = 'GET';
 
 	globalApiCall(function(data) {
-		
+
 		studentsHolder = [];
 
 		console.log(' Code for fetching students in a stream');
 
 		console.log(data);
-		
+
 		if (table)
 			table.clear().draw();
-		
+
 		$('#selectCurrentHouse').prop('checked', false);
-		
-		
 
 		if (!data.error && data.length > 0) {
 
@@ -209,7 +217,7 @@ function initShiftHouse() {
 	} else if (rootCheckFormValidation($('#shiftForm'))) {
 
 		if (updateNewHouse(studentsHolder)) {
-			varying_url = "general/house/student/new/" + $('#accountId').val();
+			varying_url = "house/student/assign/many/" + $('#accountId').val();
 
 			global_data_passed = studentsHolder;
 
@@ -260,16 +268,33 @@ function initShiftHouse() {
 	}
 }
 
+function checkHouse(){
+	
+	if($('#houseId').val() != '...')
+		houseId = $('#houseId').val();
+	else
+		houseId = 1;
+	
+	
+}
+
 function fetchStudents() {
+	
+	
+	checkHouse();
+
+	
+
+	console.log("called");
 
 	setTimeout(function() {
-		
-		if($('#houseId').val() == "...")
-			fetchStreamStudents();
-		else{
 
-		varying_url = "general/house/studentlist/" + $('#accountId').val()
-				+ "/" + $('#houseId').val() + "/" + $('#streamId').val();
+		
+
+		varying_url = "house/student/filter/" + $('#accountId').val() + "/"
+				+ houseId + "/" + $('#streamId').val();
+
+		console.log(varying_url);
 
 		/*
 		 * table = $('#studentsPerClass').DataTable({ destroy : true,
@@ -281,11 +306,11 @@ function fetchStudents() {
 		global_request_type = 'GET';
 
 		globalApiCall(function(data) {
-			
+
 			studentsHolder = [];
 
 			console.log('Code for fetching students in a house');
-			
+
 			$('#selectCurrentHouse').prop('checked', false);
 
 			console.log(data);
@@ -293,8 +318,6 @@ function fetchStudents() {
 			populateTable(data);
 
 		})
-		
-		}
 
 	}, 100)
 
@@ -313,7 +336,7 @@ function populateTable(data) {
 		var keys = Object.keys(getCol);
 
 		studentsHolder = data;
-		
+
 		$('#selectCurrentHouse').prop('checked', true);
 
 		keys.some(function(k) {
@@ -330,46 +353,54 @@ function populateTable(data) {
 
 		});
 
-		table = $('#studentsPerHouse').DataTable({
+		table = $('#studentsPerHouse')
+				.DataTable(
+						{
 
-			destroy : true,
-			"bPaginate" : false,
-			"scrollY" : "400px",
-			/* "scrollX": "100%", */
+							destroy : true,
+							"bPaginate" : false,
+							"scrollY" : "400px",
+							/* "scrollX": "100%", */
 
-			columns : cols,
-			"columnDefs" : [ {
-				"targets" : [ 0 ],
-				"visible" : false,
-				"searchable" : false
-			}, {
-				"targets" : [ 1 ],
-				"visible" : false
-			}, {
-				"targets" : [ 2 ],
-				"visible" : false
-			},
+							columns : cols,
+							"columnDefs" : [
+									{
+										"targets" : [ 0 ],
+										"visible" : false,
+										"searchable" : false
+									},
+									{
+										"targets" : [ 1 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 2 ],
+										"visible" : false
+									},
 
-			{
-				"targets" : [ 5 ],
-				"visible" : false
-			}, {
-				"targets" : [ 7 ],
-				"visible" : false
-			}, {
-				"targets" : [ 8 ],
-				"visible" : false
-			}, {
-				"targets" : [ 9 ],
-				"data" : null,
+									{
+										"targets" : [ 5 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 7 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 8 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 9 ],
+										"data" : null,
 
-				"defaultContent" : '<input type="checkbox" class="students" checked>'
-			} ],
+										"defaultContent" : '<input type="checkbox" class="students" checked>'
+									} ],
 
-			"order" : [ [ 6, "desc" ] ]
-		/* "iDisplayLength": 100 */
+							"order" : [ [ 6, "desc" ] ]
+						/* "iDisplayLength": 100 */
 
-		});
+						});
 
 		table.rows.add(data).draw();
 

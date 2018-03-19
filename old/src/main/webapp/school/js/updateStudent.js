@@ -255,7 +255,7 @@ function assignHouse() {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "general/house/student/new";// url;
+	varying_url = "house/student/assign/single";// url;
 
 	global_data_passed = $('#assignHouse').serializeJSON();
 	
@@ -280,7 +280,7 @@ function FetchAssignedHouse() {
 	
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "general/house/student/"+$('#accountId').val()+"/"+$('#uuid').val();// url;
+	varying_url = "house/student/get/"+$('#accountId').val()+"/"+$('#uuid').val();// url;
 
 	global_data_passed = {};
 	

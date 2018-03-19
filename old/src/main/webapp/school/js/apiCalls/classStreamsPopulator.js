@@ -34,7 +34,7 @@ function fetchStreams(classIdVal, state="not_set") {
 		//default_streamID=classId.options[classId.selectedIndex].value;
 		
 		if(state == "house")
-			fetchStreamStudents();
+			fetchStudents();
 		
 		
 		//$('.DefaultStream').val(default_streamID);
@@ -127,7 +127,7 @@ function fetchHouses(state='not_set') {
 
 	// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-	varying_url = "general/house/" + $('#accountId').val();//url;
+	varying_url = "house/all/" + $('#accountId').val();//url;
 
 	global_data_passed = {};
 

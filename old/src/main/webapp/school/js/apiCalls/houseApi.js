@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 function fetchHouses() {
 
-	varying_url = "general/house/" + $('#accountId').val();
+	varying_url = "house/all/" + $('#accountId').val();
 
 	global_data_passed = {};
 
@@ -99,7 +99,7 @@ function addHouse(form) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "general/house/new";
+		varying_url = "house/new";
 
 		global_data_passed = $(form).serializeJSON();
 		
@@ -138,7 +138,7 @@ function updateHouse(form) {
 
 		// alert(JSON.stringify($('#staffForm').serializeJSON()));
 
-		varying_url = "general/house/update";
+		varying_url = "house/update";
 
 		global_data_passed = $(form).serializeJSON();
 		
@@ -170,7 +170,7 @@ function updateHouse(form) {
 
 function deleteHouse() {
 	
-		varying_url = "general/house/delete/" + $('#accountId').val()+"/" + $('#uuid').val();
+		varying_url = "house/delete/" + $('#accountId').val()+"/" + $('#uuid').val();
 
 		global_data_passed = {};
 		global_request_type = 'DELETE';
