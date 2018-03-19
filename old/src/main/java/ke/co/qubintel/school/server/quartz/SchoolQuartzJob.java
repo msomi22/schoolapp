@@ -12,6 +12,9 @@
  */
 package ke.co.qubintel.school.server.quartz;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -54,17 +57,20 @@ public class SchoolQuartzJob implements Job{
 
 	private void changeStatus() {
 		
-		accountDAO.getAccounts().parallelStream().forEach(sch -> {
+		List<Account> accountList = new ArrayList<>();
+		accountList = accountDAO.getAccounts();
+		
+		accountList.parallelStream().forEach(sch -> {
 				sch.setIsActive(SYS_COSTANTS.STATUS_INACTIVE);  
 				sch.setUsername("school"); 
 				sch.setPassword("password"); 
 				accountDAO.updateAccount(sch);
 				
-				staffDAO.getStaff(sch.getUuid()).parallelStream().forEach(staff -> {
+				/*staffDAO.getStaff(sch.getUuid()).parallelStream().forEach(staff -> {
 					staff.setIsActive(SYS_COSTANTS.STATUS_INACTIVE); 
 					staff.setPassword(SecurityUtil.getMD5Hash("12345-password"));
 					staffDAO.updateStaff(staff);
-				});
+				});*/
 				
 				
 				updateSchoolCache(sch);

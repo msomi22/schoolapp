@@ -117,30 +117,21 @@ public class CommonLogic {
 	 */
 	private static int computePaper123(String accountId,String subjetId, int paper1, int paper2, int paper3) { 
 
-		Subject subject = subjectDAO.getSubjectById(accountId, subjetId);
-		String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
-		Category cat = categoryDAO.getCategoryById(accountId, catId);
+		Subject subject = new Subject();String catId = "";Category cat = new Category();
+		subject = subjectDAO.getSubjectById(accountId, subjetId);
+		catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
+		cat = categoryDAO.getCategoryById(accountId, catId);
 
 		double sum = 0, grandTotal= 0;
-		//int grandPoints =0;
-
+	
 		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 			sum = (double)(paper1 + paper2 + paper3) / 2;  
 			grandTotal += sum;
-
-			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			//grandPoints += point;
-
-
 		}
 
 		if(StringUtils.equals(cat.getDescription(), "Sciences")){
 			sum =  (double) (paper1 + paper2) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + paper3;  
 			grandTotal += sum;
-
-			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			//grandPoints += point;
-
 
 		}
 
@@ -158,18 +149,10 @@ public class CommonLogic {
 				sum =  (double) (paper1 + paper2) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT +paper3;  
 				grandTotal += sum;
 
-				//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-				//grandPoints += point;
-
-
-
 			}else{
 
 				sum = (double)(paper1 + paper2) / 2;
 				grandTotal += sum;
-
-				//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-				//grandPoints += point; 
 
 			}
 
@@ -181,9 +164,6 @@ public class CommonLogic {
 
 			sum = (double)(paper1 + paper2) / 2;
 			grandTotal += sum;
-
-			//int point = ReportUtil.getPoints(String.valueOf((int)Math.round(sum)), subjetId, accountId);
-			//grandPoints += point; 
 
 		}
 
@@ -436,8 +416,6 @@ public class CommonLogic {
 
 
 		if(!list.isEmpty()) {
-
-			//System.out.println("sum : " + sum + " size :" + list.size() + " sub: " + subjectDAO.getSubjectById(accountId, subjectId).getCode());  
 
 
 			switch(item) {

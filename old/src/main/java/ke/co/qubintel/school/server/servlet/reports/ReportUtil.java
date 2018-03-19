@@ -105,6 +105,8 @@ public class ReportUtil {
 
 	private static String[] allowedG;
 	private static List<String> allowedList;
+	
+	//private static List<Subject> subjects = new ArrayList<>();
 
 
 	static {
@@ -404,15 +406,17 @@ public class ReportUtil {
 				Map<String,Integer> exam2 = performance2.getExam2();
 				Map<String,Integer> exam3 = performance2.getExam3(); 
 
-				List<Subject> subjects = subjectDAO.getSubjects(accountId);
+				List<Subject> subjects = new ArrayList<>();
+				subjects = subjectDAO.getSubjects(accountId);
 
 				List<FinaResult> linaResultList = new ArrayList<>();
 
 				subjects.parallelStream().forEach(subject -> {
 
-					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
-					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
-					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+					String exam1Score = "";String exam2Score ="";String exam3Score = "";
+					exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+					exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+					exam3Score = String.valueOf(exam3.get(subject.getUuid()));
 
 
 
@@ -440,8 +444,9 @@ public class ReportUtil {
 					}
 
 
-					String avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
-					int point =  Integer.valueOf(avgpoint); 
+					String avgpoint = "";int point = 0;
+					avgpoint = String.valueOf(ReportUtil.getPoints(String.valueOf((int)average), subject.getUuid(),accountId));
+					point = Integer.valueOf(avgpoint); 
 
 					FinaResult finaResult = new FinaResult();
 					finaResult.setAverage((int)average); 
@@ -457,7 +462,8 @@ public class ReportUtil {
 					if(!linaResultList.isEmpty() || linaResultList != null) {
 						
 						if(examAverage(linaResultList, accountId, performance2.getStudentId()) != null) {
-							ExamAvg examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
+							ExamAvg examavg = new ExamAvg();
+							examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
 							performance2.setTotalMean(examavg.getToatlAverage());
 							performance2.setTotalPoint(examavg.getTotalPoint());
 							finalList.add(performance2);
@@ -471,7 +477,8 @@ public class ReportUtil {
 				if(!grade7subjects && grade11subjects) {
 
 					if(!linaResultList.isEmpty() || linaResultList != null) {
-						ExamAvg examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
+						ExamAvg examavg = new ExamAvg();
+						examavg = examAverage11(linaResultList, accountId, performance2.getStudentId()); 
 						performance2.setTotalMean(examavg.getToatlAverage());
 						performance2.setTotalPoint(examavg.getTotalPoint());
 						finalList.add(performance2);
@@ -515,7 +522,7 @@ public class ReportUtil {
 
 			for (FinaResult finaResult : linaResultList) {
 
-				Subject subj;
+				Subject subj = new Subject();
 
 				if(finaResult.getSubjectId() != null) {
 
@@ -646,8 +653,9 @@ public class ReportUtil {
 
 			for (FinaResult finaResult : linaResultList) {
 
-				Subject subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
-				String desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
+				Subject subj = new Subject();String desc = "";
+				subj = subjectDAO.getSubjectById(accountId, finaResult.getSubjectId()); 
+				desc = categoryDAO.getCategoryById(accountId, subj.getCategoryId()).getDescription(); 
 
 				//select two best languages
 				if (StringUtils.equalsIgnoreCase(desc, "Languages")) {
@@ -782,9 +790,8 @@ public class ReportUtil {
 		int grandPoints = 0;
 		double sum = 0;
 
-		//List<String> paper1 = new ArrayList<>();
-
-		List<Subject> subjects = subjectDAO.getSubjects(accountId);
+		List<Subject> subjects = new ArrayList<>();
+		subjects = subjectDAO.getSubjects(accountId);
 
 		Map<String,Subject> subjectMap = new HashMap<>();
 		for(Subject sub : subjects){
@@ -796,20 +803,19 @@ public class ReportUtil {
 
 			performanceP123.setStudentId(perfomance.getStudentId()); 
 
-			Subject subject = subjectMap.get(perfomance.getSubjectId());
-			String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
-			Category cat = categoryDAO.getCategoryById(accountId, catId);
-
-			//Exam exam = examDAO.getExam(accountId, perfomance.getExamId());
+			Subject subject = new Subject(); String catId = "";Category cat = new Category();
+			subject = subjectMap.get(perfomance.getSubjectId());
+			catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
+			cat = categoryDAO.getCategoryById(accountId, catId);
 
 
 			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 				//check the exam
 				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2() + perfomance.getPaper3()) / 2; 
 				grandTotal += sum;
-				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
-
-				int point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+				
+				int point = 0;
+				point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
 
 
@@ -819,10 +825,9 @@ public class ReportUtil {
 				//check the exam
 				sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
 				grandTotal += sum;
-
-				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
-
-				int point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+				
+				int point = 0;
+				point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
 
 
@@ -842,8 +847,6 @@ public class ReportUtil {
 					sum =  (double) (perfomance.getPaper1() + perfomance.getPaper2()) / ReportUtil.PAPER_1_2_DIVISOR * ReportUtil.PAPER_1_2_CONSTANT + perfomance.getPaper3();  
 					grandTotal += sum;
 
-					//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
-
 					int point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 					grandPoints += point;
 
@@ -853,10 +856,8 @@ public class ReportUtil {
 
 					sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
 					grandTotal += sum;
-
-					//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
-
-					int point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+					int point = 0;
+					point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 					grandPoints += point;
 
 				}
@@ -870,9 +871,8 @@ public class ReportUtil {
 				sum = (double)(perfomance.getPaper1() + perfomance.getPaper2()) / 2;
 				grandTotal += sum;
 
-				//paper1.add("sum:" + sum + " , grandTotal:" + grandTotal);
-
-				int point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
+				int point = 0;
+				point = getPoints(String.valueOf((int) (sum)),perfomance.getSubjectId(),perfomance.getAccountId());
 				grandPoints += point;
 
 			}
@@ -904,17 +904,18 @@ public class ReportUtil {
 		int points = 0;
 		double sum = 0;
 
-		List<Subject> subjects = subjectDAO.getSubjects(accountId);
+		List<Subject> subjects = new ArrayList<>();
+		subjects = subjectDAO.getSubjects(accountId);
 
 		Map<String,Subject> subjectMap = new HashMap<>();
 		for(Subject sub : subjects){
 			subjectMap.put(sub.getUuid(), sub);
 		}
 
-
-		Subject subject = subjectMap.get(perfomance.getSubjectId());
-		String catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
-		Category cat = categoryDAO.getCategoryById(accountId, catId);
+		Subject subject = new Subject();String catId = ""; Category cat = new Category();
+		subject = subjectMap.get(perfomance.getSubjectId());
+		catId = subCategoryDAO.getSubCategory(accountId, subject.getUuid()).getCategoryId();
+		cat = categoryDAO.getCategoryById(accountId, catId);
 
 
 		if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
@@ -1370,8 +1371,9 @@ public class ReportUtil {
 
 		if(StringUtils.equalsIgnoreCase(examType, EXAM_TYPE)){
 
-			String catId = subCategoryDAO2.getSubCategory(subject.getAccountId(), subject.getUuid()).getCategoryId();
-			Category cat = categoryDAO2.getCategoryById(subject.getAccountId(), catId);
+			String catId = "";Category cat = new Category();
+			catId = subCategoryDAO2.getSubCategory(subject.getAccountId(), subject.getUuid()).getCategoryId();
+			cat = categoryDAO2.getCategoryById(subject.getAccountId(), catId);
 
 			if(StringUtils.equalsIgnoreCase(cat.getDescription(), "Languages")){
 
@@ -1780,9 +1782,6 @@ public class ReportUtil {
 	static String getStreamPosition(String accountId, String studentId, String streamId,
 			List<Performance2> performanceList, boolean rankWithPoints, boolean rankWithTotalMarks) {
 
-
-
-
 		List<Performance2> result = performanceList.parallelStream()
 				.filter(performance -> streamId.equals(performance.getStreamId()))
 				.collect(Collectors.toList()); 
@@ -1959,9 +1958,6 @@ public class ReportUtil {
 
 		for(Performance2 performance : performanceList){
 
-
-			//if(!rankWithPoints && rankWithTotalMarks){
-
 			total = performance.getTotalMean();
 
 			if(grade7subjects && !grade11subjects){
@@ -1970,21 +1966,6 @@ public class ReportUtil {
 			if(!grade7subjects && grade11subjects){
 				median = total > 0 ? total / 11 : 0;
 			}
-
-			/*}/*else{
-
-				total = performance.getTotalPoint();
-
-				if(grade7subjects && !grade11subjects){
-					median = total;
-				}
-				if(!grade7subjects && grade11subjects){
-
-					median = (total / 132) * 84;
-				}
-
-			}*/
-
 
 			totalMean += median;
 			//a += b is short-hand for a = a + b
@@ -2108,15 +2089,12 @@ public class ReportUtil {
 	public static void generateClassMeans(List<Performance2> performanceList, String accountId, String classroomId, boolean rankWithPoints, 
 			boolean rankWithTotalMarks, boolean grade7subjects, boolean grade11subjects, String[] exams, String term, String year, ClassMeanDAO classMeanDAO) {
 
-		//Map<String,List<Performance2>> sublistMap = new HashMap<>();
-
 		streamDAO.getStreamList(accountId).stream().
 		filter(stream -> StringUtils.equals(stream.getClassRoomId(), classroomId)).
 		filter(stream -> !StringUtils.equalsIgnoreCase(stream.getDescription(), "SYS_DEFAULT_STREAM")).forEach(strm -> {
 
 			List<Performance2> subList = new ArrayList<>();
 			subList = performanceList.stream().filter(sub -> StringUtils.equals(strm.getUuid(), sub.getStreamId())).collect(Collectors.toList());
-
 
 			String classMean = "0.0";
 

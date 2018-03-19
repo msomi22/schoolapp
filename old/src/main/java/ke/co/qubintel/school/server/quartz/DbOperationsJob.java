@@ -27,12 +27,15 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import ke.co.qubintel.school.server.bean.account.Account;
+import ke.co.qubintel.school.server.bean.classroom.Stream;
+import ke.co.qubintel.school.server.bean.exam.Exam;
 import ke.co.qubintel.school.server.bean.exam.Perfomance;
 import ke.co.qubintel.school.server.bean.exam.SysConfig;
 import ke.co.qubintel.school.server.bean.money.FeeBreakdown;
 import ke.co.qubintel.school.server.bean.money.GokeMoneyUsage;
 import ke.co.qubintel.school.server.bean.money.StudentFee;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.bean.subject.Subject;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.ExamDAO;
 import ke.co.qubintel.school.server.persistence.exam.PerfomanceDAO;
@@ -109,35 +112,55 @@ public class DbOperationsJob implements Job{
 		
 		if(accountDAO.getAccounts() != null) {
 			
-			accountDAO.getAccounts().stream().forEach(account -> {
+			List<Account> accountList = new ArrayList<>();
+			accountList = accountDAO.getAccounts();
+			
+			accountList.stream().forEach(account -> {
 				
 				if(studentDAO.getStudents(account.getUuid()) != null) {
-
-					studentDAO.getStudents(account.getUuid()).stream().forEach(student -> {
+					
+					List<Student> studentList = new ArrayList<>();
+					studentList = studentDAO.getStudents(account.getUuid());
+					
+					studentList.stream().forEach(student -> {
 						
-						subjectDAO.getSubjects(account.getUuid()).stream().forEach(subject -> {
+						List<Subject> subjectList  = new ArrayList<>();
+						subjectList = subjectDAO.getSubjects(account.getUuid());
+						
+						subjectList.stream().forEach(subject -> {
 							
-							examDAO.getExamList(account.getUuid()).stream().forEach(exam -> {
+							 List<Exam> examList  = new ArrayList<>();
+							 examList = examDAO.getExamList(account.getUuid());
+							 examList.stream().forEach(exam -> {
 								
-								streamDAO.getStreamList(account.getUuid()).stream().forEach(stream -> {
+								 List<Stream> streamList = new ArrayList<>();
+								 streamList = streamDAO.getStreamList(account.getUuid());
+								 streamList.stream().forEach(stream -> {
 									
-									SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
-									List<Perfomance> list = new ArrayList<>();
+									SysConfig sysConfig = new SysConfig();
+									sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+									
+									List<Perfomance> performanceList = new ArrayList<>();
+									
+									performanceList = perfomanceDAO.getPerformanceList(
+											account.getUuid(), 
+											exam.getUuid(), 
+											student.getUuid(),
+											stream.getUuid(), 
+											subject.getUuid(),  
+											sysConfig.getTerm(), 
+											sysConfig.getYear());
 								
-									if(!perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
-											stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear()).isEmpty()) {
+									if(!performanceList.isEmpty()) {
 										
-										list = perfomanceDAO.getPerformanceList(account.getUuid(), exam.getUuid(), student.getUuid(),
-												stream.getUuid(), subject.getUuid(),  sysConfig.getTerm(), sysConfig.getYear());
-
-										int size = list.size();
+										int size = performanceList.size();
 										
 										if(size > 1) {
 
 											for(int i=1;i<size;i++) {
 												//i will start with 1, then 2 .... skipping index zero
 												//delete all except index zero
-												deleteDuplicate(list.get(i));
+												deleteDuplicate(performanceList.get(i));
 
 											}
 
@@ -179,35 +202,49 @@ public class DbOperationsJob implements Job{
 	private void synchGoKeMoney() {
 
 		if(accountDAO.getAccounts() != null) {
+			
+			List<Account> accountList = new ArrayList<>();
+			accountList = accountDAO.getAccounts();
 
-			accountDAO.getAccounts().forEach(account -> {
+			accountList.forEach(account -> {
 
 				if(sysConfigDAO.getSysConfig(account.getUuid()) != null) {
 
-					SysConfig sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+					SysConfig sysConfig = new SysConfig();
+					sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
+					
+					FeeBreakdown feeBreakdown = new FeeBreakdown();
+					
+					feeBreakdown = feeBreakdownDAO.getFeeBreakdown(
+							account.getUuid(), 
+							FeeConstants.GVMT_MONEY_CODE, 
+							sysConfigDAO.getSysConfig(account.getUuid()).getTerm(),
+							sysConfigDAO.getSysConfig(account.getUuid()).getYear(), 
+							FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
 
 
-					if(feeBreakdownDAO.getFeeBreakdown(account.getUuid(), 
-							FeeConstants.GVMT_MONEY_CODE,
-							sysConfig.getTerm(),
-							sysConfig.getYear(), 
-							FeeConstants.GVMT_MONEY_STATUS_ACTIVE) != null){ 
-
-						FeeBreakdown feeBreakdown = feeBreakdownDAO.getFeeBreakdown(account.getUuid(), FeeConstants.GVMT_MONEY_CODE, sysConfig.getTerm(),
-								sysConfig.getYear(), FeeConstants.GVMT_MONEY_STATUS_ACTIVE);
+					if(feeBreakdown != null){ 
 
 						int amountToEachStudent = (int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdown.getUuid());
 
 						AtomicInteger scount = new AtomicInteger();
+						
+						List<Student> studentList  = new ArrayList<>();
+						studentList = studentDAO.getActiveStudents(account.getUuid(), "1","1");
 
-						if(!studentDAO.getActiveStudents(account.getUuid(), "1","1").isEmpty()) {
-
-							studentDAO.getActiveStudents(account.getUuid(), "1","1").parallelStream().forEach(st -> {
-
-								if(studentFeeDAO.getStudentFee(account.getUuid(), st.getUuid(), 
+						if(!studentList.isEmpty()) {
+							
+							studentList.forEach(st -> {
+								
+								StudentFee studentFee = new StudentFee();
+								studentFee = studentFeeDAO.getStudentFee(
+										account.getUuid(), 
+										st.getUuid(), 
 										FeeConstants.GVMT_MONEY_CODE,
-										sysConfig.getTerm(),
-										sysConfig.getYear()) == null) {
+										sysConfigDAO.getSysConfig(account.getUuid()).getTerm(),
+										sysConfigDAO.getSysConfig(account.getUuid()).getYear());
+
+								if(studentFee == null) {
 
 									scount.getAndIncrement();
 
@@ -221,7 +258,6 @@ public class DbOperationsJob implements Job{
 
 
 						double totalAmount = feeBreakdown.getAmount();
-						//int no_of_students = studentDAO.activeCount(account.getUuid(), "1"); 
 						int no_of_students = scount.get();
 						double expected_amount_per_head = 0;
 						double balance = 0;
@@ -263,8 +299,8 @@ public class DbOperationsJob implements Job{
 							studentDAO.getActiveStudents(account.getUuid(), "1","1").parallelStream().forEach(student -> {
 
 								if(studentDAO.getActiveStudents(account.getUuid(), "1","1") != null) {
-									boolean status = allocateGokMoney(account, sysConfig, student, amountToEachStudent);
-									//System.out.println("status : " + status);  
+									allocateGokMoney(account, sysConfigDAO.getSysConfig(account.getUuid()), student, amountToEachStudent);
+					
 								}
 
 							});
