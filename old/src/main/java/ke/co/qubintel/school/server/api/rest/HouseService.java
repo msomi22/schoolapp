@@ -366,8 +366,6 @@ public class HouseService {
 	public Object AssignHouseList(List<ApiStudentHouse> sh_list) {
 		Response response = new Response();
 
-		//boolean success = false;
-
 		if(sh_list.isEmpty()) {
 			response.setMessage("error");
 			response.setDescription("List is empty!");
@@ -381,11 +379,8 @@ public class HouseService {
 				studentHouse.setAccountId(sh.getAccountId());
 				studentHouse.setStudentId(sh.getStudentId());
 				studentHouse.setHouseId(sh.getHouseId()); 
-
-				if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) == null) {
-					studentHouseDAO.putStudentHouse(studentHouse, sh.getAccountId(), sh.getStudentId(), sh.getHouseId());
-				}
-
+					
+				studentHouseDAO.putStudentHouse(studentHouse, sh.getAccountId(), sh.getStudentId(), sh.getHouseId());
 
 			});
 
