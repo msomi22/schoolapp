@@ -12,6 +12,10 @@
  */
 package ke.co.qubintel.school.server.school.login;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 
 import ke.co.qubintel.school.server.api.rest.jwt.ApiCredentials;
@@ -63,9 +68,9 @@ public class SchoolLogin extends HttpServlet {
 		staffDAO = StaffDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
-		
-		nameArr = new String[]{"Maliga","Sigalame","Burumba","Njuri","Qubit","Ggoto","Mekaro"}; //"Mangu", 
-		allowedNames = Arrays.asList(nameArr); 
+
+		nameArr = new String[] { "Maliga", "Sigalame", "Burumba", "Njuri", "Qubit", "Ggoto", "Mekaro" }; // "Mangu",
+		allowedNames = Arrays.asList(nameArr);
 
 		logger = Logger.getLogger(this.getClass());
 
@@ -90,6 +95,8 @@ public class SchoolLogin extends HttpServlet {
 		String schoolUsername = StringUtils.trimToEmpty(request.getParameter("schoolUsername"));
 		String staffUsername = StringUtils.trimToEmpty(request.getParameter("staffUsername"));
 		String staffPassword = StringUtils.trimToEmpty(request.getParameter("staffPassword"));
+		
+		checkTimeout();
 
 		if (accountDAO.getAccount(schoolUsername, "1") == null) {
 
@@ -102,10 +109,10 @@ public class SchoolLogin extends HttpServlet {
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 			response.sendRedirect("index.jsp");
 
+		} else if (!validAccount(accountDAO.getAccount(schoolUsername, "1").getName())) {
 
-		}else if(!validAccount(accountDAO.getAccount(schoolUsername, "1").getName())) { 
-
-			message = "Sorry! Account \""+accountDAO.getAccount(schoolUsername, "1").getName()+"\" is not allowed to use this Software";  
+			message = "Sorry! Account \"" + accountDAO.getAccount(schoolUsername, "1").getName()
+					+ "\" is not allowed to use this Software";
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
 
@@ -128,28 +135,33 @@ public class SchoolLogin extends HttpServlet {
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY,
 						acessLevelDAO.getAcessLevel(staff.getAccountId(), staff.getAcessLevelId()).getAcessId());
 
-
 				// token
 				ApiCredentials apiKey = new ApiCredentials();
 				// String id, String issuer, String subject, long ttlMillis, String secret
-				
-				//String id, String issuer, String subject, long ttlMillis, String secret
-				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN,JWT.createJWT(staff.getUuid(), 
+
+				// String id, String issuer, String subject, long ttlMillis, String secret
+				request.getSession().setAttribute(SessionConstants.USER_JSON_WEB_TOKEN, JWT.createJWT(staff.getUuid(),
 						staff.getAccountId(), staff.getUsername(), System.currentTimeMillis(), apiKey.getSecret()));
 
-				if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "100").getUuid())
-						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "200").getUuid())
-						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "500").getUuid())
-						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "600").getUuid()))
+				if (StringUtils.equals(staff.getAcessLevelId(),
+						acessLevelDAO.getAcessLevelById(staff.getAccountId(), "100").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(),
+								acessLevelDAO.getAcessLevelById(staff.getAccountId(), "200").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(),
+								acessLevelDAO.getAcessLevelById(staff.getAccountId(), "500").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(),
+								acessLevelDAO.getAcessLevelById(staff.getAccountId(), "600").getUuid()))
 
 					response.sendRedirect("school/studentIndex.jsp");
 
-				else if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "400").getUuid())
-						| StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "300").getUuid())
-						)
+				else if (StringUtils.equals(staff.getAcessLevelId(),
+						acessLevelDAO.getAcessLevelById(staff.getAccountId(), "400").getUuid())
+						| StringUtils.equals(staff.getAcessLevelId(),
+								acessLevelDAO.getAcessLevelById(staff.getAccountId(), "300").getUuid()))
 					response.sendRedirect("school/generateReport.jsp");
-				
-				else if (StringUtils.equals(staff.getAcessLevelId(), acessLevelDAO.getAcessLevelById(staff.getAccountId(), "700").getUuid()))
+
+				else if (StringUtils.equals(staff.getAcessLevelId(),
+						acessLevelDAO.getAcessLevelById(staff.getAccountId(), "700").getUuid()))
 					response.sendRedirect("school/fee.jsp");
 
 				logger.info("success");
@@ -163,8 +175,7 @@ public class SchoolLogin extends HttpServlet {
 		}
 
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param accountName
@@ -172,13 +183,54 @@ public class SchoolLogin extends HttpServlet {
 	 */
 	private boolean validAccount(String accountName) {
 		boolean valid = false;
-		
-		for(String name : allowedNames) {
-			if(accountName.contains(name)) {
+
+		for (String name : allowedNames) {
+			if (accountName.contains(name)) {
 				return true;
 			}
 		}
 		return valid;
+	}
+
+	private String checkTimeout() {
+		
+		String startDate = "";
+		
+		String path = "";
+		
+		if(SystemUtils.IS_OS_WINDOWS){
+			path= "C:/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
+		}
+
+		if(SystemUtils.IS_OS_LINUX){
+			path = "/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
+		}
+
+		File file = new File(path);
+
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		try {
+			
+			startDate = br.readLine().substring(0,20);
+			//while ((st = br.readLine()) != null)
+			System.out.println("**************************#################################"+startDate);
+			
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return startDate;
 	}
 
 	/**
