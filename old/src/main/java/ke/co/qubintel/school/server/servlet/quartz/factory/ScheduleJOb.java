@@ -75,7 +75,7 @@ public class ScheduleJOb extends HttpServlet implements ServletContextListener{
             Trigger db_backup_trigger = newTrigger().withIdentity
                     ("backupTrigger", "Database")
                     .startNow().withSchedule(simpleSchedule()
-                    .withIntervalInSeconds(10)
+                    .withIntervalInSeconds(20)
                     .repeatForever())  
                     .build();
             

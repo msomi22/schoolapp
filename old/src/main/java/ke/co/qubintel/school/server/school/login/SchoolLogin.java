@@ -12,10 +12,6 @@
  */
 package ke.co.qubintel.school.server.school.login;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
@@ -29,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 
 import ke.co.qubintel.school.server.api.rest.jwt.ApiCredentials;
@@ -55,6 +50,8 @@ public class SchoolLogin extends HttpServlet {
 	private Logger logger;
 	private String[] nameArr;
 	private List<String> allowedNames;
+	
+	private String contacts = "+254 718 953974 or +254 706 975801"; 
 
 	/**
 	 *
@@ -96,23 +93,24 @@ public class SchoolLogin extends HttpServlet {
 		String staffUsername = StringUtils.trimToEmpty(request.getParameter("staffUsername"));
 		String staffPassword = StringUtils.trimToEmpty(request.getParameter("staffPassword"));
 		
-		checkTimeout();
-
 		if (accountDAO.getAccount(schoolUsername, "1") == null) {
 
-			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
+			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials! , "
+					+ "if the error persists please contact " + contacts);
 			response.sendRedirect("index.jsp");
 
 		} else if (staffDAO.getStaffByUsername(accountDAO.getAccount(schoolUsername, "1").getUuid(),
 				staffUsername) == null) {
 
-			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
+			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!, "
+					+ "if the error persists please contact " + contacts);
 			response.sendRedirect("index.jsp");
 
 		} else if (!validAccount(accountDAO.getAccount(schoolUsername, "1").getName())) {
 
 			message = "Sorry! Account \"" + accountDAO.getAccount(schoolUsername, "1").getName()
-					+ "\" is not allowed to use this Software";
+					+ "\" is not allowed to use this Software, please contact " + contacts;
+			
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
 
@@ -192,46 +190,7 @@ public class SchoolLogin extends HttpServlet {
 		return valid;
 	}
 
-	private String checkTimeout() {
-		
-		String startDate = "";
-		
-		String path = "";
-		
-		if(SystemUtils.IS_OS_WINDOWS){
-			path= "C:\\opt\\Programs\\WildFly\\8.2.0\\standalone\\log\\log4jSchool.log";
-		}
-
-		if(SystemUtils.IS_OS_LINUX){
-			path = "/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
-		}
-
-		File file = new File(path);
-
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
-		try {
-			
-			startDate = br.readLine().substring(0,20);
-			//while ((st = br.readLine()) != null)
-			System.out.println("**************************#################################"+startDate);
-			
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return startDate;
-	}
+	
 
 	/**
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,

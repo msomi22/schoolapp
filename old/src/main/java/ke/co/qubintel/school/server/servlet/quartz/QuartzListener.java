@@ -51,14 +51,14 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
                     Trigger trigger = newTrigger()
                     .withIdentity("TriggerName", "Group")
                     .startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?"))
                     .build(); 
                     
                     //create a trigger that simply fires every 5 minutes
                     //“0 0/5 * * * ?”
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
-                    scheduler = new StdSchedulerFactory().getScheduler();
+                   // scheduler = new StdSchedulerFactory().getScheduler();
                     //scheduler.start();
                    // scheduler.scheduleJob(job, trigger);
                     
@@ -77,8 +77,9 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
                     scheduler = new StdSchedulerFactory().getScheduler();
-                   // scheduler.start();
-                    //scheduler.scheduleJob(job2, trigger2);
+                    scheduler.start();
+                    scheduler.scheduleJob(job2, trigger2);
+                    scheduler.scheduleJob(job, trigger);
                  
                  }
              catch (SchedulerException e) {

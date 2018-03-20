@@ -400,6 +400,7 @@ public class ReportUtil {
 		List<Performance2> finalList = new ArrayList<>();
 
 		if(!performanceList.isEmpty()) {
+			
 			for(Performance2 performance2 : performanceList){
 
 				Map<String,Integer> exam1 = performance2.getExam1();
@@ -461,13 +462,12 @@ public class ReportUtil {
 
 					if(!linaResultList.isEmpty() || linaResultList != null) {
 						
-						if(examAverage(linaResultList, accountId, performance2.getStudentId()) != null) {
 							ExamAvg examavg = new ExamAvg();
 							examavg = examAverage(linaResultList, accountId, performance2.getStudentId()); 
 							performance2.setTotalMean(examavg.getToatlAverage());
 							performance2.setTotalPoint(examavg.getTotalPoint());
 							finalList.add(performance2);
-						}
+						
 						
 					}
 
@@ -523,8 +523,10 @@ public class ReportUtil {
 			for (FinaResult finaResult : linaResultList) {
 
 				Subject subj = new Subject();
+				
+				//System.out.println("getSubjectId: " + finaResult.getSubjectId()); 
 
-				if(finaResult.getSubjectId() != null) {
+				if(finaResult.getSubjectId() != null) {////ReportUtil.java:527		
 
 					if(finaResult.getSubjectId().length() > 0) {
 
@@ -534,7 +536,7 @@ public class ReportUtil {
 						}else {
 
 							subj = new Subject();
-						}
+				}
 					}else {
 						subj = new Subject();
 					}

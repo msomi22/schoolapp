@@ -15,13 +15,19 @@ package ke.co.qubintel.school.server.quartz;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -47,6 +53,8 @@ import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.servlet.finance.FeeConstants;
+import ke.co.qubintel.school.server.servlet.quartz.factory.StartDateFromLog;
+import ke.co.qubintel.school.server.servlet.util.SYS_COSTANTS;
 
 
 public class DbOperationsJob implements Job{
@@ -76,6 +84,8 @@ public class DbOperationsJob implements Job{
 		examDAO = ExamDAO.getInstance();
 		streamDAO = StreamDAO.getInstance();
 		perfomanceDAO = PerfomanceDAO.getInstance();
+
+
 	}
 
 	public DbOperationsJob() {
@@ -88,6 +98,7 @@ public class DbOperationsJob implements Job{
 
 		synchGoKeMoney();
 		checkExamDuplicate();  
+		lockAccount();
 
 		try {
 
@@ -108,40 +119,74 @@ public class DbOperationsJob implements Job{
 	}
 
 
-	private void checkExamDuplicate() {
-		
-		if(accountDAO.getAccounts() != null) {
+	/**
+	 * 
+	 */
+	private static void lockAccount() {
+
+		accountDAO.getAccounts().parallelStream().forEach(sch -> {
+			sch.setIsActive(SYS_COSTANTS.STATUS_INACTIVE);  
+			sch.setUsername("lock"); 
+			sch.setPassword("lock123"); 
 			
+			StartDateFromLog.checkTimeout();
+			
+			if(!StringUtils.contains(sch.getName(), "Burumba")) {
+				
+				//TODO
+				Timestamp now = new Timestamp(new Date().getTime()); 
+				int days = timeDiff(now,sch.getCreationDate());  
+				
+				//System.out.println("Account locked!" + days);  
+				
+				if(Math.abs(days) > 60) {
+					accountDAO.updateAccount(sch);
+				}
+				
+			}
+
+			
+		});
+
+	}
+
+	/**
+	 * 
+	 */
+	private void checkExamDuplicate() {
+
+		if(accountDAO.getAccounts() != null) {
+
 			List<Account> accountList = new ArrayList<>();
 			accountList = accountDAO.getAccounts();
-			
+
 			accountList.stream().forEach(account -> {
-				
+
 				if(studentDAO.getStudents(account.getUuid()) != null) {
-					
+
 					List<Student> studentList = new ArrayList<>();
 					studentList = studentDAO.getStudents(account.getUuid());
-					
+
 					studentList.stream().forEach(student -> {
-						
+
 						List<Subject> subjectList  = new ArrayList<>();
 						subjectList = subjectDAO.getSubjects(account.getUuid());
-						
+
 						subjectList.stream().forEach(subject -> {
-							
-							 List<Exam> examList  = new ArrayList<>();
-							 examList = examDAO.getExamList(account.getUuid());
-							 examList.stream().forEach(exam -> {
-								
-								 List<Stream> streamList = new ArrayList<>();
-								 streamList = streamDAO.getStreamList(account.getUuid());
-								 streamList.stream().forEach(stream -> {
-									
+
+							List<Exam> examList  = new ArrayList<>();
+							examList = examDAO.getExamList(account.getUuid());
+							examList.stream().forEach(exam -> {
+
+								List<Stream> streamList = new ArrayList<>();
+								streamList = streamDAO.getStreamList(account.getUuid());
+								streamList.stream().forEach(stream -> {
+
 									SysConfig sysConfig = new SysConfig();
 									sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
-									
+
 									List<Perfomance> performanceList = new ArrayList<>();
-									
+
 									performanceList = perfomanceDAO.getPerformanceList(
 											account.getUuid(), 
 											exam.getUuid(), 
@@ -150,11 +195,11 @@ public class DbOperationsJob implements Job{
 											subject.getUuid(),  
 											sysConfig.getTerm(), 
 											sysConfig.getYear());
-								
+
 									if(!performanceList.isEmpty()) {
-										
+
 										int size = performanceList.size();
-										
+
 										if(size > 1) {
 
 											for(int i=1;i<size;i++) {
@@ -167,23 +212,23 @@ public class DbOperationsJob implements Job{
 										}
 
 									}
-								
+
 
 								});
 							});
 
 
 						});
-						
-						
+
+
 					});
 				}
-				
+
 			});
 
 		}
 
-		
+
 	}
 	/**
 	 * 
@@ -193,7 +238,7 @@ public class DbOperationsJob implements Job{
 
 		perfomanceDAO.deleteStreamSubjectDuplicate(perfomance.getAccountId(), perfomance.getUuid());
 
-		System.out.println(" ----------- Duplicate detected and deleted!  --------- " + perfomance + " ----------------------------- "); 
+		//System.out.println(" ----------- Duplicate detected and deleted!  --------- " + perfomance + " ----------------------------- "); 
 	}
 
 	/**
@@ -202,7 +247,7 @@ public class DbOperationsJob implements Job{
 	private void synchGoKeMoney() {
 
 		if(accountDAO.getAccounts() != null) {
-			
+
 			List<Account> accountList = new ArrayList<>();
 			accountList = accountDAO.getAccounts();
 
@@ -212,9 +257,9 @@ public class DbOperationsJob implements Job{
 
 					SysConfig sysConfig = new SysConfig();
 					sysConfig = sysConfigDAO.getSysConfig(account.getUuid());
-					
+
 					FeeBreakdown feeBreakdown = new FeeBreakdown();
-					
+
 					feeBreakdown = feeBreakdownDAO.getFeeBreakdown(
 							account.getUuid(), 
 							FeeConstants.GVMT_MONEY_CODE, 
@@ -228,14 +273,14 @@ public class DbOperationsJob implements Job{
 						int amountToEachStudent = (int)FeeConstants.getGoKeFee(account.getUuid(), feeBreakdown.getUuid());
 
 						AtomicInteger scount = new AtomicInteger();
-						
+
 						List<Student> studentList  = new ArrayList<>();
 						studentList = studentDAO.getActiveStudents(account.getUuid(), "1","1");
 
 						if(!studentList.isEmpty()) {
-							
+
 							studentList.forEach(st -> {
-								
+
 								StudentFee studentFee = new StudentFee();
 								studentFee = studentFeeDAO.getStudentFee(
 										account.getUuid(), 
@@ -300,7 +345,7 @@ public class DbOperationsJob implements Job{
 
 								if(studentDAO.getActiveStudents(account.getUuid(), "1","1") != null) {
 									allocateGokMoney(account, sysConfigDAO.getSysConfig(account.getUuid()), student, amountToEachStudent);
-					
+
 								}
 
 							});
@@ -402,7 +447,7 @@ public class DbOperationsJob implements Job{
 			String line = null;
 
 			while((line=br.readLine())!=null){
-				System.out.println(line);
+				//System.out.println(line);
 
 			}
 
@@ -430,11 +475,44 @@ public class DbOperationsJob implements Job{
 
 
 
+	public static Timestamp strToTstamp(String date_str) {
+		//System.out.println(" date_str:  " + date_str); 
+		SimpleDateFormat formatter;
+		//Feb 14 2018 15:10:59 -> MMM dd yyyy hh:mm:ss
+		//14 Feb 2018 15:10:59 -> dd MMM yyyy hh:mm:ss
+		formatter = new SimpleDateFormat("dd MMM yyyy hh:mm:ss"); 
+		Date date;
+		try {
+
+			date = (Date) formatter.parse(date_str);
+			java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
+			return timeStampDate;
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 
 
 
+	/**
+	 * 
+	 * @param date_start
+	 * @param date_stop
+	 * @return
+	 */
+	public static int timeDiff(Timestamp date_start, Timestamp date_stop) {
 
+		DateTime dt1 = new DateTime(date_start);
+		DateTime dt2 = new DateTime(date_stop);
+
+		int days = Days.daysBetween(dt1, dt2).getDays();
+
+		return days;
+	}
 
 
 

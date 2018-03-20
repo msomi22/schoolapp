@@ -12,6 +12,7 @@
  */
 package ke.co.qubintel.school.server.servlet.quartz.factory;
 
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
@@ -44,14 +45,16 @@ public class AccountLockJOB implements Job {
 			sch.setIsActive(SYS_COSTANTS.STATUS_INACTIVE);  
 			sch.setUsername("lock"); 
 			sch.setPassword("lock123"); 
-			accountDAO.updateAccount(sch);
 			
-			staffDAO.getStaff(sch.getUuid()).parallelStream().forEach(staff -> {
+			//accountDAO.updateAccount(sch);
+			
+			/*staffDAO.getStaff(sch.getUuid()).parallelStream().forEach(staff -> {
 				staff.setIsActive(SYS_COSTANTS.STATUS_INACTIVE); 
 				staff.setPassword(SecurityUtil.getMD5Hash("lock123"));   
 				staffDAO.updateStaff(staff);
-			});
-			System.out.println("Account locked!"); 
+			});*/
+			
+			//System.out.println("Account locked!"); 
 		});
 		
 	}
