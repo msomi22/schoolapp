@@ -199,7 +199,7 @@ public class SchoolLogin extends HttpServlet {
 		String path = "";
 		
 		if(SystemUtils.IS_OS_WINDOWS){
-			path= "C:/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
+			path= "C:\\opt\\Programs\\WildFly\\8.2.0\\standalone\\log\\log4jSchool.log";
 		}
 
 		if(SystemUtils.IS_OS_LINUX){
