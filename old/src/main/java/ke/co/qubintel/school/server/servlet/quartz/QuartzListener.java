@@ -27,7 +27,6 @@ import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import ke.co.qubintel.school.server.quartz.DbOperationsJob;
-import ke.co.qubintel.school.server.quartz.SchoolQuartzJob;
 
 public class QuartzListener extends HttpServlet implements ServletContextListener {
 	
@@ -51,34 +50,17 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
                     Trigger trigger = newTrigger()
                     .withIdentity("TriggerName", "Group")
                     .startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
                     .build(); 
                     
                     //create a trigger that simply fires every 5 minutes
                     //“0 0/5 * * * ?”
+                    //"0 0 16 ? 1/2 MON#1"- execute the first Monday of every 2 months //
 
-                    // Setup the Job and Trigger with Scheduler & schedule jobs
-                   // scheduler = new StdSchedulerFactory().getScheduler();
-                    //scheduler.start();
-                   // scheduler.scheduleJob(job, trigger);
-                    
-                    
-                    
-                 // Setup the Job class and the Job group
-                    JobDetail job2 = newJob(SchoolQuartzJob.class).withIdentity(
-                                    "CronQuartzJob2", "Group2").build();
-
-                    // Create a Trigger
-                    Trigger trigger2 = newTrigger()
-                    .withIdentity("TriggerName2", "Group2")
-                    .startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 16 ? 1/2 MON#1"))//execute the first Monday of every 2 months //
-                    .build(); 
 
                     // Setup the Job and Trigger with Scheduler & schedule jobs
                     scheduler = new StdSchedulerFactory().getScheduler();
                     scheduler.start();
-                    scheduler.scheduleJob(job2, trigger2);
                     scheduler.scheduleJob(job, trigger);
                  
                  }

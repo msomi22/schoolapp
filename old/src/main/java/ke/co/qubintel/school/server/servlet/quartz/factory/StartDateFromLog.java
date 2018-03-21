@@ -49,10 +49,7 @@ public class StartDateFromLog {
 		try {
 
 			startDate = br.readLine().substring(0,20);
-			//while ((st = br.readLine()) != null)
-			//System.out.println("**************************#################################"+startDate);
-
-
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

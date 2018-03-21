@@ -75,7 +75,7 @@ public class WriteToFile {
 			bw = new BufferedWriter(fw);
 			bw.write(content);
 
-			System.out.println("Done creating backup script");
+			//System.out.println("Done creating backup script");
 
 		} catch (IOException e) {
 
@@ -111,14 +111,14 @@ public class WriteToFile {
 
 		if (OSValidator.isWindows()) {
 
-			System.out.println("This is Windows");
+			//System.out.println("This is Windows");
 			
 			makeLinuxFile(filename);
 
 
 		} else if (OSValidator.isMac()) {
 
-			System.out.println("This is Mac");
+			//System.out.println("This is Mac");
 			
 			makeLinuxFile(filename);
 		}
@@ -126,7 +126,7 @@ public class WriteToFile {
 
 		else if (OSValidator.isUnix()) {
 
-			System.out.println("This is Unix");
+			//System.out.println("This is Unix");
 
 			makeLinuxFile(filename);
 
@@ -161,7 +161,7 @@ public class WriteToFile {
 	 */
 	public static void makeDirs(){ 
 		
-		System.out.println("Done creating directories");
+		//System.out.println("Done creating directories");
 
 		File backup_dir = new File(DB_DIRECTORY);
 		File logo_dir = new File(LOGO_PATH);
