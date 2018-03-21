@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.rest;
+package ke.co.qubintel.school.server.api.rest.auth;
 
 import java.io.IOException;
 import java.util.Base64;

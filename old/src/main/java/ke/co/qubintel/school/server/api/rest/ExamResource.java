@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.api.rest.bean.StudentExam;
 import ke.co.qubintel.school.server.api.rest.bean.SubmitExam;
@@ -28,7 +29,7 @@ import ke.co.qubintel.school.server.api.rest.bean.SubmitExam;
 @Api(value = "/exam") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class ExamResourceAPI {
+public class ExamResource {
 	
 	ExamService examService = new ExamService();
 

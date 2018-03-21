@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.APIStaff;
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
 import ke.co.qubintel.school.server.api.rest.bean.ApiStaffFull;
@@ -36,7 +37,7 @@ import ke.co.qubintel.school.server.bean.staff.Staff;
 @Api(value = "/staff") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class StaffRestFulAPI {
+public class StaffResource {
 
 	StaffService staffService = new StaffService();
 	
@@ -235,13 +236,13 @@ public class StaffRestFulAPI {
 
 
 	@Path("/{staffId}/subjects")
-	public SubClassRestFulAPI getSubjectServiceResource(){
-		return new SubClassRestFulAPI(); 
+	public SubClassResource getSubjectServiceResource(){
+		return new SubClassResource(); 
 	}
 	
 	@Path("/classteacher") 
-	public ClassTeacherRestFulAPI getClassTeacherResource(){
-		return new ClassTeacherRestFulAPI();  
+	public ClassTeacherResource getClassTeacherResource(){
+		return new ClassTeacherResource();  
 	}
 
 

@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.GokeMoneyUsageCheck;
 import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.bean.money.FeeBreakdown;
@@ -34,7 +35,7 @@ import ke.co.qubintel.school.server.bean.otherfee.OtherFee;
 @Api(value = "/finance") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class FinanceRestFulAPI {
+public class FinanceResource {
 	
 	FinanceRestService financeRestService = new FinanceRestService();
 	

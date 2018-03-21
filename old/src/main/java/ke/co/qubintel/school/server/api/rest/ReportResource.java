@@ -33,7 +33,7 @@ import io.swagger.annotations.Api;
 @Path("/reports") 
 @Api(value = "/reports") 
 @Produces("application/pdf")
-public class ReportRestFulAPI {
+public class ReportResource {
 
 	
 	@GET

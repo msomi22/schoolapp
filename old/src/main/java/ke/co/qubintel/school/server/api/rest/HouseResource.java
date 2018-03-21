@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.ApiHouse;
 import ke.co.qubintel.school.server.api.rest.bean.ApiStudentHouse;
 import ke.co.qubintel.school.server.api.rest.bean.Response;

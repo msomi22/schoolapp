@@ -25,6 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import ke.co.qubintel.school.server.api.filter.StudentFilter;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.APIOtherFee;
 import ke.co.qubintel.school.server.api.rest.bean.APIRevertGoKeFee;
 import ke.co.qubintel.school.server.api.rest.bean.APIStudent;
@@ -50,7 +51,7 @@ import ke.co.qubintel.school.server.bean.otherfee.RevertedMoney;
 @Api(value = "/student") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class StudentRestFulAPI{
+public class StudentResource{
 
 	StudentService studentService = new StudentService();
 

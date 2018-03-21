@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.*;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.APISubjectClasss;
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
 import ke.co.qubintel.school.server.api.rest.bean.Response;
@@ -26,7 +27,7 @@ import ke.co.qubintel.school.server.api.rest.bean.Response;
 @Path("/")
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class SubClassRestFulAPI {
+public class SubClassResource {
 
 	StaffService staffService = new StaffService();
 

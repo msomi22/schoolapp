@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.auth.RestAUth;
 import ke.co.qubintel.school.server.api.rest.bean.ApiGradingScale;
 import ke.co.qubintel.school.server.api.rest.bean.ApiMisc;
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
@@ -34,7 +35,7 @@ import ke.co.qubintel.school.server.servlet.util.sms.AccountBalance;
 @Api(value = "/config") 
 @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
-public class ConfigRestFulAPI {
+public class ConfigResource {
 
 	GeneralService generalService = new GeneralService();
 

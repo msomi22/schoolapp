@@ -1,4 +1,4 @@
-package ke.co.qubintel.school.server.api.rest;
+package ke.co.qubintel.school.server.api.rest.client;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;

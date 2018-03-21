@@ -1,4 +1,4 @@
-package ke.co.qubintel.school.server.api.rest;
+package ke.co.qubintel.school.server.api.rest.util;
 
 //import org.apache.commons.lang3.StringUtils;
 
