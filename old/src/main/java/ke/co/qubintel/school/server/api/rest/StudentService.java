@@ -64,6 +64,7 @@ import ke.co.qubintel.school.server.persistence.money.StudentFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.OtherFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.RevertedMoneyDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO;
+import ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
@@ -90,6 +91,8 @@ public class StudentService {
 	private static RevertedMoneyDAO revertedMoneyDAO;
 
 	private static SysConfigDAO sysConfigDAO;
+	private static  AcessLevelDAO acessLevelDAO;
+	
 	private static EmailValidator emailValidator;
 
 	private static PrimaryDAO primaryDAO;
@@ -114,6 +117,8 @@ public class StudentService {
 		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
 
 		sysConfigDAO = SysConfigDAO.getInstance();
+		acessLevelDAO = AcessLevelDAO.getInstance();
+		
 		emailValidator = EmailValidator.getInstance();
 
 		parentsDAO = ParentsDAO.getInstance();
@@ -393,7 +398,7 @@ public class StudentService {
 			account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
 			student.getIsBoarding();//boarders = 1, day = 0
 
-			if (!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
+			if (!staffAllowedToAlterFee(staff.getUuid(), acessLevelDAO.getAcessLevel(staff.getAccountId(), staff.getAcessLevelId()).getAcessId())) {
 				response.setMessage("error");
 				response.setDescription("Staff not allowed to alter with fee!");
 

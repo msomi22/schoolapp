@@ -120,7 +120,7 @@ public class ExamSmsSender {
 		String message = "";
 		boolean isMale = false;
 		SmsObject smsObject = new SmsObject();
-		String accountName = "";
+		//String accountName = "";
 		String term = "";
 		String year = "";
 
@@ -149,7 +149,7 @@ public class ExamSmsSender {
 					message += ", your daughter ";
 				}
 
-				accountName = accountDAO.getAccountById(studentFee.getAccountId()).getName();  
+				//accountName = accountDAO.getAccountById(studentFee.getAccountId()).getName();  
 				term = sysConfigDAO.getSysConfig(studentFee.getAccountId()).getTerm(); 
 				year = sysConfigDAO.getSysConfig(studentFee.getAccountId()).getYear();
 
