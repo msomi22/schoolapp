@@ -208,7 +208,7 @@ public class StudentReportCard extends HttpServlet{
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
 		hideGds = Boolean.parseBoolean(request.getParameter("g"));
 		sendSMS = Boolean.parseBoolean(request.getParameter("sendSMS"));
-		sendSMS = true;
+		//sendSMS = true;
 
 		String rank = request.getParameter("rank");
 
@@ -473,6 +473,8 @@ public class StudentReportCard extends HttpServlet{
 			double total = 0;
 			double prevtotal =0;
 			String pos = "";
+			
+			String examNames = ReportUtil.getExamName(accountId, exams,1);
 
 
 
@@ -765,7 +767,8 @@ public class StudentReportCard extends HttpServlet{
 										student,
 										meanTotal,
 										avgPoints,
-										avg_points_grade);
+										avg_points_grade,
+										examNames);
 							}
 
 						}else {
@@ -781,7 +784,8 @@ public class StudentReportCard extends HttpServlet{
 										student,
 										meanTotal,
 										String.valueOf((int)mainPoint), 
-										CommonLogic.getGrade((int) (mainPoint), accountId));
+										CommonLogic.getGrade((int) (mainPoint), accountId),
+										examNames);
 							}
 
 						}
@@ -841,7 +845,8 @@ public class StudentReportCard extends HttpServlet{
 									student,
 									meanTotal,
 									ReportUtil.df2.format(mean),
-									CommonLogic.getGrade((int) (mean), accountId));
+									CommonLogic.getGrade((int) (mean), accountId),
+									examNames);
 						}
 
 
@@ -919,7 +924,8 @@ public class StudentReportCard extends HttpServlet{
 										student,
 										meanTotal,
 										avgPoints,
-										avg_points_grade);
+										avg_points_grade,
+										examNames);
 							}
 
 						}else {
@@ -933,7 +939,8 @@ public class StudentReportCard extends HttpServlet{
 										student,
 										meanTotal,
 										String.valueOf((int)avg),
-										ReportUtil.getGradeMainForm234((int) (avg), accountId));
+										ReportUtil.getGradeMainForm234((int) (avg), accountId),
+										examNames);
 							}
 
 
@@ -957,7 +964,8 @@ public class StudentReportCard extends HttpServlet{
 									student,
 									meanTotal,
 									ReportUtil.df2.format(mean),
-									ReportUtil.getGradeMainForm234((int) (mean), accountId));
+									ReportUtil.getGradeMainForm234((int) (mean), accountId),
+									examNames);
 						}
 						
 					}

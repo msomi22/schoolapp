@@ -1,6 +1,6 @@
 <%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
 <%@page
-	import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
+	import="ke.co.qubintel.school.server.persistence.account.AccountDAO"%>
 
 <%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
 

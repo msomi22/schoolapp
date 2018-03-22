@@ -9,6 +9,7 @@ import ke.co.qubintel.school.server.bean.student.Student;
 import ke.co.qubintel.school.server.bean.student.guardian.StudentParent;
 import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.account.ApiCredentialDAO;
+import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
 import ke.co.qubintel.school.server.persistence.guardian.ParentsDAO;
 import ke.co.qubintel.school.server.servlet.util.sms.SmsObject;
 import ke.co.qubintel.school.server.servlet.util.sms.SmsUtil;
@@ -22,11 +23,13 @@ public class ExamSmsSender {
 	private static ParentsDAO parentsDAO;
 	private static AccountDAO accountDAO;
 	private static ApiCredentialDAO smsApiDAO;
+	private static SysConfigDAO sysConfigDAO;
 	
 	static {
 		parentsDAO = ParentsDAO.getInstance();
 		accountDAO = AccountDAO.getInstance();
 		smsApiDAO = ApiCredentialDAO.getInstance();
+		sysConfigDAO = SysConfigDAO.getInstance();
 	}
 	
 	/**
@@ -38,7 +41,7 @@ public class ExamSmsSender {
 	 * @param grade
 	 * @return
 	 */
-	public static Object sendScoreSMS(String accountId, Student student, int totalMean, String mean, String grade) { 
+	public static Object sendScoreSMS(String accountId, Student student, int totalMean, String mean, String grade, String examNames) { 
 		
 		String parentName = "";
 		String parentMobile = "";
@@ -46,10 +49,14 @@ public class ExamSmsSender {
 		boolean isMale = false;
 		SmsObject smsObject = new SmsObject();
 		String accountName = "";
+		String term = "";
+		String year = "";
 		
 		if(parentsDAO.getParent(accountId, student.getUuid()) != null) {
 			StudentParent studentParent = parentsDAO.getParent(accountId, student.getUuid());
-			parentName = studentParent.getName();
+			
+			String multiName[] = studentParent.getName().split("\\s+"); //split by space 
+		
 			parentMobile = studentParent.getMobile();
 			
 			if(StringUtils.equalsAnyIgnoreCase(student.getGender(), "M")) {
@@ -57,7 +64,9 @@ public class ExamSmsSender {
 			}
 			
 			
-			if(parentMobile.length() == 9 && parentName.length() > 3) {  
+			if(parentMobile.length() == 9 && multiName.length > 0) {   
+				
+				parentName = multiName[0];
 				
 				message = "Hi " + parentName;
 				
@@ -67,10 +76,13 @@ public class ExamSmsSender {
 					message += ", your daughter ";
 				}
 				
-				message += student.getFirstname() + "Score is ";
-				message += ",T " + totalMean + ",M " + mean + ",G " + grade; 
-				
 				accountName = accountDAO.getAccountById(accountId).getName();  
+				term = sysConfigDAO.getSysConfig(accountId).getTerm(); 
+				year = sysConfigDAO.getSysConfig(accountId).getYear();
+				
+				message += student.getFirstname() + " scores for term: " + term + ", year: " + year + " are"; 
+				message += ", T " + totalMean + ", M " + mean + ", G " + grade +", Exam " + examNames;  
+				
 				
 				if(smsApiDAO.getApiCredential(accountId, "SMS_API") != null) {
 					

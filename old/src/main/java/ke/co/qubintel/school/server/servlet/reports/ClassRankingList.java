@@ -191,7 +191,7 @@ public class ClassRankingList extends HttpServlet{
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
 		hideGds = Boolean.parseBoolean(request.getParameter("g"));
 		sendSMS = Boolean.parseBoolean(request.getParameter("sendSMS"));
-		sendSMS = true;
+		//sendSMS = true;
 
 		String rank = request.getParameter("rank");
 
@@ -302,7 +302,7 @@ public class ClassRankingList extends HttpServlet{
 			String year, String examType, String paper123Id, String saveMean)
 					throws DocumentException {
 		
-		sendSMS = true;
+		//sendSMS = true;
 
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
@@ -317,6 +317,7 @@ public class ClassRankingList extends HttpServlet{
 		List<Performance2> classperformanceList =  new ArrayList<>();
 
 		String correctClass = "";
+		String examNames = ReportUtil.getExamName(accountId, exams,1);
 		
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
@@ -505,9 +506,6 @@ public class ClassRankingList extends HttpServlet{
 			PdfPTable examTable = new PdfPTable(2);
 			examTable.setWidthPercentage(60);  
 			examTable.setWidths(new int[]{10,50});  
-
-			
-			
 			
 			if(classResult) {
 				//classes
@@ -517,8 +515,6 @@ public class ClassRankingList extends HttpServlet{
 				
 				
 			}else {//single stream
-				
-				String examNames = ReportUtil.getExamName(accountId, exams,1);
 				
 				ClassMean class_stream_Mean = new ClassMean();
 				class_stream_Mean.setAccountId(accountId);
@@ -966,7 +962,8 @@ public class ClassRankingList extends HttpServlet{
 									student,
 									performance2.getTotalMean(),
 									avgPoints, 
-									avg_points_grade);
+									avg_points_grade,
+									examNames);
 						}
 
 
@@ -1019,7 +1016,8 @@ public class ClassRankingList extends HttpServlet{
 									student,
 									performance2.getTotalMean(),
 									String.valueOf((int)pointsAvg),  
-									avgGradeByTotalMean);
+									avgGradeByTotalMean,
+									examNames);
 						}
 
 
@@ -1079,7 +1077,8 @@ public class ClassRankingList extends HttpServlet{
 								student,
 								performance2.getTotalMean(),
 								ReportUtil.df2.format(avgMean), 
-								avgGradeByMean);
+								avgGradeByMean,
+								examNames);
 					}
 
 
