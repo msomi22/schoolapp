@@ -72,6 +72,7 @@ import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.servlet.finance.FeeConstants;
 import ke.co.qubintel.school.server.servlet.finance.StudentBalance;
 import ke.co.qubintel.school.server.servlet.util.SecurityUtil;
+import ke.co.qubintel.school.server.servlet.util.sms.core.ExamSmsSender;
 
 /**
  * @author peter
@@ -410,6 +411,16 @@ public class StudentService {
 				studentFee.setTransactingStaffId(staff.getUuid());
 
 				if (studentFeeDAO.putStudentFee(studentFee)) {
+					
+					if(sysConfigDAO.getSysConfig(studentPayFee.getAccountId()) != null) {
+						
+						if(StringUtils.equals(sysConfigDAO.getSysConfig(studentPayFee.getAccountId()).getCansendSMS(), "1")) {
+							ExamSmsSender.sendFeeBalSMS(studentFee);
+						}
+					}
+					
+					
+					
 					response.setMessage("success");
 					response.setDescription("Fee paid successsfully.");
 
