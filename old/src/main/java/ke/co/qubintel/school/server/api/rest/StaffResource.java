@@ -109,6 +109,8 @@ public class StaffResource {
 			return error; 
 
 		}else {
+			
+			System.out.println(apiStaff);
 
 			Staff staff = new Staff();
 			staff.setAccountId(accountId);
