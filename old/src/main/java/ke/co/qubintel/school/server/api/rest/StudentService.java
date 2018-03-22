@@ -2212,7 +2212,7 @@ public class StudentService {
 	 */
 	private boolean staffAllowedToAlterFee(String uuid, String acessLevelId) {
 		// Principal_Bursar
-		String[] allowed = { "C3915245-00EE-4EF4-9898-ACE59683DD60", "0DE968C9-7309-C481-58F7-AB6CDB1011EF" };
+		String[] allowed = { "100", "700" };
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
 		if (allowedList.contains(acessLevelId)) {
