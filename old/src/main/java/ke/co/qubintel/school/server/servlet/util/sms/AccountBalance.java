@@ -21,8 +21,8 @@ import org.json.*;
 import ke.co.qubintel.school.server.api.ApiConstants;
 import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
 import ke.co.qubintel.school.server.bean.account.ApiCredential;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.ApiCredentialDAO;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.ApiCredentialDAO;
 public class AccountBalance {
 	
 	private static AccountDAO accountDAO;

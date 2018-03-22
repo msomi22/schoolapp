@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.cache.CacheVariables;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.servlet.util.SecurityUtil;
 import ke.co.qubintel.school.server.session.AdminSessionConstants;
 import net.sf.ehcache.CacheManager;

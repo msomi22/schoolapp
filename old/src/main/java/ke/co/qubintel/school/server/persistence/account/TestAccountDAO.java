@@ -1,4 +1,4 @@
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 /**
  * 
  *//*

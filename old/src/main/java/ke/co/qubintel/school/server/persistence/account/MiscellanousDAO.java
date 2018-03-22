@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,7 +50,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolMiscellanousDAO#getKey(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolMiscellanousDAO#getKey(java.lang.String)
 	 */
 	@Override
 	public String getValueByKey(String accountId,String key) {
@@ -80,7 +80,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	}
 	
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolMiscellanousDAO#getMiscById(java.lang.String, java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolMiscellanousDAO#getMiscById(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Miscellanous getMiscById(String accountId, String uuid) {
@@ -113,7 +113,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolMiscellanousDAO#putMiscellanous(ke.co.qubintel.school.server.bean.account.Miscellanous)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolMiscellanousDAO#putMiscellanous(ke.co.qubintel.school.server.bean.account.Miscellanous)
 	 */
 	@Override
 	public boolean putMiscellanous(Miscellanous misc) {
@@ -140,7 +140,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolMiscellanousDAO#updateMiscellanous(ke.co.qubintel.school.server.bean.account.Miscellanous)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolMiscellanousDAO#updateMiscellanous(ke.co.qubintel.school.server.bean.account.Miscellanous)
 	 */
 	@Override
 	public boolean updateMiscellanous(Miscellanous misc) {
@@ -164,7 +164,7 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolMiscellanousDAO#getMiscellanousList(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolMiscellanousDAO#getMiscellanousList(java.lang.String)
 	 */
 	@Override
 	public List<Miscellanous> getMiscellanousList(String accountId) {

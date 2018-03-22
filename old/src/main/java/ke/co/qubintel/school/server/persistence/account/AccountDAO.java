@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,7 +54,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#get(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#get(java.lang.String)
 	 */
 	public Account getAccountById(String uuid) {
 		Account school = null;
@@ -84,7 +84,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#getSchoolByUsername(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#getSchoolByUsername(java.lang.String)
 	 */
 	public Account getAccount(String credentials,String isActive) {
 		Account school = null;
@@ -117,7 +117,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#getSchool(ke.co.qubintel.school.server.bean.account.Account)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#getSchool(ke.co.qubintel.school.server.bean.account.Account)
 	 */
 	@Override
 	public Account getAccountByPassword(String Uuid,String password) {
@@ -146,7 +146,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#put(ke.co.qubintel.school.server.bean.account.Account)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#put(ke.co.qubintel.school.server.bean.account.Account)
 	 */
 	public boolean putAccount(Account school) {
 		boolean success = true; 
@@ -188,7 +188,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#update(ke.co.qubintel.school.server.bean.account.Account)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#update(ke.co.qubintel.school.server.bean.account.Account)
 	 */
 
 	public boolean updateAccount(Account school) {
@@ -227,7 +227,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#delete(ke.co.qubintel.school.server.bean.account.Account)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#delete(ke.co.qubintel.school.server.bean.account.Account)
 	 */
 	@Override
 	public boolean deleteAccount(String uuid) {
@@ -250,7 +250,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#getAllSchools()
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#getAllSchools()
 	 */
 	public List<Account> getAccounts() {
 		List<Account> list = null;
@@ -273,7 +273,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolAccountDAO#findAccountDuplicate(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolAccountDAO#findAccountDuplicate(java.lang.String)
 	 */
 	@Override
 	public List<Account> findAccountDuplicate(String credentials) {

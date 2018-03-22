@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +49,7 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolApiCredentialDAO#getSmsApi(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolApiCredentialDAO#getSmsApi(java.lang.String)
 	 */
 	@Override
 	public ApiCredential getApiCredential(String accountId) {
@@ -75,7 +75,7 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 	
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolApiCredentialDAO#getApiCredential(java.lang.String, java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolApiCredentialDAO#getApiCredential(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public ApiCredential getApiCredential(String accountId, String apiType) {
@@ -101,7 +101,7 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolApiCredentialDAO#putSmsApi(ke.co.qubintel.school.server.bean.account.ApiCredential)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolApiCredentialDAO#putSmsApi(ke.co.qubintel.school.server.bean.account.ApiCredential)
 	 */
 	@Override
 	public boolean putApiCredential(ApiCredential smsApi) {
@@ -128,7 +128,7 @@ public class ApiCredentialDAO extends GenericDAO implements SchoolApiCredentialD
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolApiCredentialDAO#updateSmsApi(ke.co.qubintel.school.server.bean.account.ApiCredential)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolApiCredentialDAO#updateSmsApi(ke.co.qubintel.school.server.bean.account.ApiCredential)
 	 */
 	@Override
 	public boolean updateApiCredential(ApiCredential smsApi) {

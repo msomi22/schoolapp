@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 import ke.co.qubintel.school.server.api.rest.jwt.ApiCredentials;
 import ke.co.qubintel.school.server.api.rest.jwt.JWT;
 import ke.co.qubintel.school.server.bean.staff.Staff;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.servlet.util.SecurityUtil;

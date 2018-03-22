@@ -26,12 +26,12 @@ import ke.co.qubintel.school.server.bean.money.StudentFee;
 import ke.co.qubintel.school.server.bean.money.TermFee;
 import ke.co.qubintel.school.server.bean.otherfee.StudentOtherFee;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
 import ke.co.qubintel.school.server.persistence.money.StudentFeeDAO;
 import ke.co.qubintel.school.server.persistence.money.TermFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.OtherFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.servlet.reports.ReportUtil;
 

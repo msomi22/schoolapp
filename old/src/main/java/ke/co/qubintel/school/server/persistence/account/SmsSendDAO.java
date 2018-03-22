@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,7 +53,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSend(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#getSmsSend(java.lang.String)
 	 */
 	@Override
 	public OutGoingSMS getSmsSend(String Uuid) {
@@ -78,7 +78,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSendByStatus(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#getSmsSendByStatus(java.lang.String)
 	 */
 	@Override
 	public OutGoingSMS getSmsSendByStatus(String status) {
@@ -103,7 +103,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#putSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#putSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
 	 */
 	@Override
 	public boolean putSmsSend(OutGoingSMS outGoingSMS) {
@@ -130,7 +130,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#updateSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#updateSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
 	 */
 	@Override
 	public boolean updateSmsSend(OutGoingSMS outGoingSMS) {
@@ -157,7 +157,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#deleteSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#deleteSmsSend(ke.co.qubintel.school.server.bean.account.OutGoingSMS)
 	 */
 	@Override
 	public boolean deleteSmsSend(OutGoingSMS outGoingSMS) {
@@ -182,7 +182,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSend()
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#getSmsSend()
 	 */
 	@Override
 	public List<OutGoingSMS> getSmsSendList(String status) {
@@ -207,7 +207,7 @@ public class SmsSendDAO extends GenericDAO implements SchoolSmsSendDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolSmsSendDAO#getSmsSendList()
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolSmsSendDAO#getSmsSendList()
 	 */
 	@Override
 	public List<OutGoingSMS> getSmsSend() {

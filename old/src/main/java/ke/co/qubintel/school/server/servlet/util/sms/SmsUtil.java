@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.*;
 
 import ke.co.qubintel.school.server.bean.account.OutGoingSMS;
-import ke.co.qubintel.school.server.persistence.schoolaccount.OutGoingSMSDAO;
+import ke.co.qubintel.school.server.persistence.account.OutGoingSMSDAO;
 
 /**
  * @author peter

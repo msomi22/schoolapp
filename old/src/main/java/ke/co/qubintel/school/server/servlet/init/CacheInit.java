@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 import ke.co.qubintel.school.server.bean.StorableBean;
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.cache.CacheVariables;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.servlet.util.PropertiesConfig;
 
 /**

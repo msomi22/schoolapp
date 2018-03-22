@@ -14,10 +14,10 @@ import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.bean.house.House;
 import ke.co.qubintel.school.server.bean.house.StudentHouse;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.house.HouseDAO;
 import ke.co.qubintel.school.server.persistence.house.StudentHouseDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 
 /**

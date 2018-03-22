@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.persistence.schoolaccount;
+package ke.co.qubintel.school.server.persistence.account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +49,7 @@ public class IncomingSMSDAO extends GenericDAO implements SchoolIncomingSMSDAO {
 	}
 	
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolIncomingSMSDAO#getIncomingSMS(java.lang.String, java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolIncomingSMSDAO#getIncomingSMS(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public IncomingSMS getIncomingSMS(String accountId, String uuid) {
@@ -75,7 +75,7 @@ public class IncomingSMSDAO extends GenericDAO implements SchoolIncomingSMSDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolIncomingSMSDAO#getIncomingSMSList(java.lang.String, int, int)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolIncomingSMSDAO#getIncomingSMSList(java.lang.String, int, int)
 	 */
 	@Override
 	public List<IncomingSMS> getIncomingSMSList(String accountId, int startIndex, int endIndex) {
@@ -102,7 +102,7 @@ public class IncomingSMSDAO extends GenericDAO implements SchoolIncomingSMSDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolIncomingSMSDAO#putIncomingSMS(ke.co.qubintel.school.server.bean.account.IncomingSMS)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolIncomingSMSDAO#putIncomingSMS(ke.co.qubintel.school.server.bean.account.IncomingSMS)
 	 */
 	@Override
 	public boolean putIncomingSMS(IncomingSMS incomingSMS) {
@@ -129,7 +129,7 @@ public class IncomingSMSDAO extends GenericDAO implements SchoolIncomingSMSDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolIncomingSMSDAO#deleteIncomingSMS(java.lang.String, java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolIncomingSMSDAO#deleteIncomingSMS(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean deleteIncomingSMS(String accountId, String uuid) {
@@ -155,7 +155,7 @@ public class IncomingSMSDAO extends GenericDAO implements SchoolIncomingSMSDAO {
 	}
 
 	/**
-	 * @see ke.co.qubintel.school.server.persistence.schoolaccount.SchoolIncomingSMSDAO#deleteIncomingSMS(java.lang.String)
+	 * @see ke.co.qubintel.school.server.persistence.account.SchoolIncomingSMSDAO#deleteIncomingSMS(java.lang.String)
 	 */
 	@Override
 	public boolean deleteIncomingSMS(String accountId) {
