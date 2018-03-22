@@ -36,7 +36,7 @@ public class TestSend {
 		SmsObject smsObject = new SmsObject(accountId,mobile,message,secret,key);
 		SmsUtil.sendSMS(smsObject); 
 		
-		System.out.println(smsObject); 
+		//System.out.println(smsObject); 
 		
 		
 		
