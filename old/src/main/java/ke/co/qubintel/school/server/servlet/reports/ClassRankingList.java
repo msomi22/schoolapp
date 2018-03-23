@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,12 +63,12 @@ import ke.co.qubintel.school.server.bean.exam.YearlyMean;
 import ke.co.qubintel.school.server.bean.student.Student;
 import ke.co.qubintel.school.server.bean.student.StudentPrimary;
 import ke.co.qubintel.school.server.bean.subject.Subject;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.ClassMeanDAO;
 import ke.co.qubintel.school.server.persistence.exam.PerfomanceDAO;
 import ke.co.qubintel.school.server.persistence.exam.YearlyMeanDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
@@ -188,8 +189,9 @@ public class ClassRankingList extends HttpServlet{
 		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
-		hideGds= Boolean.parseBoolean(request.getParameter("g"));
-		sendSMS= Boolean.parseBoolean(request.getParameter("sendSMS"));
+		hideGds = Boolean.parseBoolean(request.getParameter("g"));
+		sendSMS = Boolean.parseBoolean(request.getParameter("sendSMS"));
+		//sendSMS = true;
 
 		String rank = request.getParameter("rank");
 
@@ -299,6 +301,8 @@ public class ClassRankingList extends HttpServlet{
 	private void generateReport(String accountId, String streamId, String classroomId, String term, 
 			String year, String examType, String paper123Id, String saveMean)
 					throws DocumentException {
+		
+		//sendSMS = true;
 
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
@@ -313,6 +317,7 @@ public class ClassRankingList extends HttpServlet{
 		List<Performance2> classperformanceList =  new ArrayList<>();
 
 		String correctClass = "";
+		String examNames = ReportUtil.getExamName(accountId, exams,1);
 		
 
 		if(streamDAO.getStream(accountId, streamId) != null && !classResult){
@@ -320,13 +325,18 @@ public class ClassRankingList extends HttpServlet{
 			classroomId = streamDAO.getStream(accountId, streamId).getClassRoomId();			
 			correctClass = streamDAO.getStream(accountId, streamId).getDescription();
 
-			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ? studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
+			studentsList = studentDAO.getStudentByStream(accountId, streamId) != null ?
+					studentDAO.getStudentByStream(accountId, streamId) : new ArrayList<>();
 
-			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
+			List<Stream> streamList = new ArrayList<>();
+			streamList = streamDAO.getStreamList(accountId, classroomId) != null ?
+					streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
 			streamList.forEach(stream -> {
 
-				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+				List<Student> studentListStream = new ArrayList<>();
+				studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ?
+						studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
 
 				if(!studentListStream.isEmpty())
 					classstudentsList.addAll(studentListStream); 
@@ -339,11 +349,15 @@ public class ClassRankingList extends HttpServlet{
 
 			correctClass = classDAO.getClassRoom(accountId, classroomId).getDescription(); 
 
-			List<Stream> streamList = streamDAO.getStreamList(accountId, classroomId) != null ? streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
+			List<Stream> streamList = new ArrayList<>();
+			streamList = streamDAO.getStreamList(accountId, classroomId) != null ?
+					streamDAO.getStreamList(accountId, classroomId) : new ArrayList<>();
 
 			for(Stream stream : streamList){
 				
-				List<Student> studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ? studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
+				List<Student> studentListStream = new ArrayList<>();
+				studentListStream = studentDAO.getStudentByStream(accountId, stream.getUuid()) != null ?
+						studentDAO.getStudentByStream(accountId, stream.getUuid()) : new ArrayList<>(); 
 
 				if(!studentListStream.isEmpty())
 					studentsList.addAll(studentListStream); 
@@ -492,9 +506,6 @@ public class ClassRankingList extends HttpServlet{
 			PdfPTable examTable = new PdfPTable(2);
 			examTable.setWidthPercentage(60);  
 			examTable.setWidths(new int[]{10,50});  
-
-			
-			
 			
 			if(classResult) {
 				//classes
@@ -504,8 +515,6 @@ public class ClassRankingList extends HttpServlet{
 				
 				
 			}else {//single stream
-				
-				String examNames = ReportUtil.getExamName(accountId, exams,1);
 				
 				ClassMean class_stream_Mean = new ClassMean();
 				class_stream_Mean.setAccountId(accountId);
@@ -689,11 +698,7 @@ public class ClassRankingList extends HttpServlet{
 
 				String avg_points_grade = "0";
 				String avgPoints = "0";
-				//int avg_points = 0;
-
-
-				//int mainPoint = performance2.getTotalPoint();
-				//int totalMean = performance2.getTotalMean();
+				
 
 				if(rankWithPoints && !rankWithTotalMarks){ 
 
@@ -720,7 +725,8 @@ public class ClassRankingList extends HttpServlet{
 
 				}
 
-				Student student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
+				Student student = new Student();
+				student = studentDAO.getStudentById(accountId, performance2.getStudentId()); 
 
 				String stream = "";
 				if(streamDAO.getStream(accountId, student.getCurrentStream()) != null){
@@ -730,9 +736,13 @@ public class ClassRankingList extends HttpServlet{
 				stream = StringUtils.remove(stream, "FORM"); 
 
 
-				Map<String,Integer> exam1 = performance2.getExam1();
-				Map<String,Integer> exam2 = performance2.getExam2();
-				Map<String,Integer> exam3 = performance2.getExam3(); 
+				Map<String,Integer> exam1 = new HashMap<>();
+				Map<String,Integer> exam2 = new HashMap<>();
+				Map<String,Integer> exam3 = new HashMap<>();
+				
+				exam1 = performance2.getExam1();
+				exam2 = performance2.getExam2();
+				exam3 = performance2.getExam3(); 
 
 				if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
@@ -796,10 +806,10 @@ public class ClassRankingList extends HttpServlet{
 
 				for(Subject subject : subjects){
 
-
-					String exam1Score = String.valueOf(exam1.get(subject.getUuid()));
-					String exam2Score = String.valueOf(exam2.get(subject.getUuid()));
-					String exam3Score = String.valueOf(exam3.get(subject.getUuid()));
+					String exam1Score = "";String exam2Score = "";String exam3Score = "";
+					exam1Score = String.valueOf(exam1.get(subject.getUuid()));
+					exam2Score = String.valueOf(exam2.get(subject.getUuid()));
+					exam3Score = String.valueOf(exam3.get(subject.getUuid()));
 
 					if(StringUtils.equals(exam1Score, "0") || exam1Score.equalsIgnoreCase("null")){
 						exam1Score = "";
@@ -812,12 +822,12 @@ public class ClassRankingList extends HttpServlet{
 					}
 
 
-					String examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
+					String examAverage = "";String avgrade = "";String avgpoints = "";
+					examAverage = ReportUtil.findExamAverage(subject,exam1Score,exam2Score,exam3Score, exams.length,examType);
 
 
-
-					String avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId);
-					String avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId));
+					avgrade = ReportUtil.getGrade(examAverage,subject.getUuid(), accountId);
+					avgpoints = String.valueOf(ReportUtil.getPoints(examAverage, subject.getUuid(),accountId));
 
 					examAverage = StringUtils.equals(examAverage, "0") ? "" : examAverage;
 					avgpoints = StringUtils.equals(avgpoints, "0") ? "" : avgpoints;
@@ -855,9 +865,9 @@ public class ClassRankingList extends HttpServlet{
 
 				}
 
-
-				String avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf((int)  (pointsAvg)),"", accountId); 
-				String avgGradeByMean = ReportUtil.getGrade(String.valueOf((int)  (avgMean)),"", accountId); 
+				String avgGradeByTotalMean = "";String avgGradeByMean = "";
+				avgGradeByTotalMean = ReportUtil.getGrade(String.valueOf((int)  (pointsAvg)),"", accountId); 
+				avgGradeByMean = ReportUtil.getGrade(String.valueOf((int)  (avgMean)),"", accountId); 
 
 				String poinst_str = "";
 				String mean_str = "";
@@ -946,12 +956,14 @@ public class ClassRankingList extends HttpServlet{
 						
 						//TODO send SMS
 						if(sendSMS) {
+							//System.out.println("****************** " + sendSMS + " *****************************************");
 							ExamSmsSender.sendScoreSMS(
 									accountId,
 									student,
 									performance2.getTotalMean(),
-									poinst_str, 
-									avg_points_grade);
+									avgPoints, 
+									avg_points_grade,
+									examNames);
 						}
 
 
@@ -995,8 +1007,23 @@ public class ClassRankingList extends HttpServlet{
 						if(StringUtils.equals(saveMean, "1")) {
 							yearlyMeanDAO.putYearlyMean(yearlyMean, accountId, student.getUuid(), classroomId, year);
 						}
+						
+						//TODO send SMS
+						if(sendSMS) {
+							//System.out.println("****************** " + sendSMS + " *****************************************");
+							ExamSmsSender.sendScoreSMS(
+									accountId,
+									student,
+									performance2.getTotalMean(),
+									String.valueOf((int)pointsAvg),  
+									avgGradeByTotalMean,
+									examNames);
+						}
+
 
 					}
+					
+					
 
 
 				}
@@ -1044,12 +1071,14 @@ public class ClassRankingList extends HttpServlet{
 
 					//TODO send SMS
 					if(sendSMS) {
+						//System.out.println("****************** " + sendSMS + " *****************************************");
 						ExamSmsSender.sendScoreSMS(
 								accountId,
 								student,
 								performance2.getTotalMean(),
-								mean_str, 
-								avgGradeByMean);
+								ReportUtil.df2.format(avgMean), 
+								avgGradeByMean,
+								examNames);
 					}
 
 
@@ -1115,10 +1144,6 @@ public class ClassRankingList extends HttpServlet{
 				String dev = deviation == thisMean ? "" : ReportUtil.df2.format(deviation); 
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
 				
-				
-				
-
-
 
 				rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));//performance2.getTotalPoint() , poinst_str
@@ -1558,7 +1583,7 @@ public class ClassRankingList extends HttpServlet{
 
 				}else {
 
-					performance2.setExam1(totalExam1.getPerfomanceMap());
+					performance2.setExam1(totalExam1.getPerfomanceMap());//ClassRankingList.java:1561) 
 					performance2.setExam2(totalExam2.getPerfomanceMap());
 					performance2.setExam3(totalExam3.getPerfomanceMap()); 
 
@@ -1617,9 +1642,9 @@ public class ClassRankingList extends HttpServlet{
 		List<Perfomance> exam2 = new ArrayList<>();
 		List<Perfomance> exam3 = new ArrayList<>();
 
-		SubjectPerformance totalExam1 = new SubjectPerformance();
-		SubjectPerformance totalExam2 = new SubjectPerformance();
-		SubjectPerformance totalExam3 = new SubjectPerformance();
+		//SubjectPerformance totalExam1 = new SubjectPerformance();
+		//SubjectPerformance totalExam2 = new SubjectPerformance();
+		//SubjectPerformance totalExam3 = new SubjectPerformance();
 		
 		
 
@@ -1772,7 +1797,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 
-	/** TODO
+	/** 
 	 * @param realPath
 	 * @return
 	 */

@@ -10,8 +10,8 @@ import ke.co.qubintel.school.server.api.rest.bean.ApiClassTeacher;
 import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.bean.staff.ClassTeacher;
 import ke.co.qubintel.school.server.bean.staff.Staff;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.staff.ClassTeacherDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 

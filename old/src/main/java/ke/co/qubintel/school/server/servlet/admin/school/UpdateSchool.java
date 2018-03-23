@@ -26,7 +26,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.cache.CacheVariables;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.session.AdminSessionConstants;
 import ke.co.qubintel.school.server.session.SessionConstants;
 import net.sf.ehcache.CacheManager;

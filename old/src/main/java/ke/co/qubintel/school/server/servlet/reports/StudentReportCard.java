@@ -64,6 +64,8 @@ import ke.co.qubintel.school.server.bean.staff.Staff;
 import ke.co.qubintel.school.server.bean.student.Student;
 import ke.co.qubintel.school.server.bean.student.StudentPrimary;
 import ke.co.qubintel.school.server.bean.subject.Subject;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
+import ke.co.qubintel.school.server.persistence.account.MiscellanousDAO;
 import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.ClassMeanDAO;
@@ -71,8 +73,6 @@ import ke.co.qubintel.school.server.persistence.exam.ExamDAO;
 import ke.co.qubintel.school.server.persistence.exam.GradingSystemDAO;
 import ke.co.qubintel.school.server.persistence.exam.PerfomanceDAO;
 import ke.co.qubintel.school.server.persistence.exam.YearlyMeanDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.MiscellanousDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.persistence.staff.TeacherSubjectDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
@@ -206,8 +206,9 @@ public class StudentReportCard extends HttpServlet{
 		accountId = (String) session.getAttribute(SessionConstants.SCHOOL_ACCOUNT_SIGN_IN_ACCOUNTUUID); 
 
 		hidePts = Boolean.parseBoolean(request.getParameter("p"));
-		hideGds= Boolean.parseBoolean(request.getParameter("g"));
-		sendSMS= Boolean.parseBoolean(request.getParameter("sendSMS"));
+		hideGds = Boolean.parseBoolean(request.getParameter("g"));
+		sendSMS = Boolean.parseBoolean(request.getParameter("sendSMS"));
+		//sendSMS = true;
 
 		String rank = request.getParameter("rank");
 
@@ -472,9 +473,10 @@ public class StudentReportCard extends HttpServlet{
 			double total = 0;
 			double prevtotal =0;
 			String pos = "";
+			
+			String examNames = ReportUtil.getExamName(accountId, exams,1);
 
 
-			//TODO classMeanDAO
 
 			for(Performance2 performance2 : performanceList){
 
@@ -742,6 +744,7 @@ public class StudentReportCard extends HttpServlet{
 
 				termPosition = classPositionMSG;
 
+				
 				if(grade7subjects && !grade11subjects){
 
 
@@ -755,10 +758,35 @@ public class StudentReportCard extends HttpServlet{
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
+							
+							//TODO send SMS
+							if(sendSMS) {
+								//System.out.println("****************** " + sendSMS + " *****************************************");
+								ExamSmsSender.sendScoreSMS(
+										accountId,
+										student,
+										meanTotal,
+										avgPoints,
+										avg_points_grade,
+										examNames);
+							}
 
 						}else {
 
 							studentScore = (int)mainPoint + " /84 (" + CommonLogic.getGrade((int) (mainPoint), accountId) + ")";
+							
+							
+							//TODO send SMS
+							if(sendSMS) {
+								//System.out.println("****************** " + sendSMS + " *****************************************");
+								ExamSmsSender.sendScoreSMS(
+										accountId,
+										student,
+										meanTotal,
+										String.valueOf((int)mainPoint), 
+										CommonLogic.getGrade((int) (mainPoint), accountId),
+										examNames);
+							}
 
 						}
 
@@ -808,6 +836,18 @@ public class StudentReportCard extends HttpServlet{
 
 						studentScore = "Total: " + meanTotal + "/700 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 								CommonLogic.getGrade((int) (mean), accountId); 
+						
+						//TODO send SMS
+						if(sendSMS) {
+							//System.out.println("****************** " + sendSMS + " *****************************************");
+							ExamSmsSender.sendScoreSMS(
+									accountId,
+									student,
+									meanTotal,
+									ReportUtil.df2.format(mean),
+									CommonLogic.getGrade((int) (mean), accountId),
+									examNames);
+						}
 
 
 						YearlyMean yearlyMean;
@@ -858,7 +898,7 @@ public class StudentReportCard extends HttpServlet{
 				}
 
 
-
+                 
 				//rank 11 subjects 
 				if(!grade7subjects && grade11subjects){
 					//
@@ -875,44 +915,75 @@ public class StudentReportCard extends HttpServlet{
 						if(StringUtils.equalsIgnoreCase(examType, ReportUtil.EXAM_TYPE)){
 
 							studentScore = avgPoints + " /84 (" + avg_points_grade + ")";
+							
+							//TODO send SMS
+							if(sendSMS) {
+								//System.out.println("****************** " + sendSMS + " *****************************************");
+								ExamSmsSender.sendScoreSMS(
+										accountId,
+										student,
+										meanTotal,
+										avgPoints,
+										avg_points_grade,
+										examNames);
+							}
 
 						}else {
 							studentScore =  (int)avg + " /84 (" + ReportUtil.getGradeMainForm234((int) (avg), accountId) + ")";
+							
+							//TODO send SMS
+							if(sendSMS) {
+								//System.out.println("****************** " + sendSMS + " *****************************************");
+								ExamSmsSender.sendScoreSMS(
+										accountId,
+										student,
+										meanTotal,
+										String.valueOf((int)avg),
+										ReportUtil.getGradeMainForm234((int) (avg), accountId),
+										examNames);
+							}
 
 
 						}
+						
+						
 
 					}
 
+					
 					if(!rankWithPoints && rankWithTotalMarks){
 
 						studentScore = "Total: " + meanTotal + "/1100 , Avg: " + ReportUtil.df2.format(mean) +" , " + 
 								ReportUtil.getGradeMainForm234((int) (mean), accountId);
+						
+						//TODO send SMS
+						if(sendSMS) {
+							//System.out.println("****************** " + sendSMS + " *****************************************");
+							ExamSmsSender.sendScoreSMS(
+									accountId,
+									student,
+									meanTotal,
+									ReportUtil.df2.format(mean),
+									ReportUtil.getGradeMainForm234((int) (mean), accountId),
+									examNames);
+						}
+						
 					}
 
 					PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(studentScore ,  timesRomanNarmal6));
 					mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 					mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 					studentLeft.addCell(mainGradeDescCell);
+					
+					
+					
 
 
 				}
 				
 				
-				//TODO send SMS
-				if(sendSMS) {
-					ExamSmsSender.sendScoreSMS(
-							accountId,
-							student,
-							meanTotal,
-							ReportUtil.df2.format(mean),
-							ReportUtil.getGradeMainForm234((int) (mean), accountId));
-				}
-				/**
-				 * ExamSmsSender.sendScoreSMS(accountId,student,performance2.getTotalMean(),mean_str);
-				 */
-
-
+				
+				
 
 				/**
 				 * right column

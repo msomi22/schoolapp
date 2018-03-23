@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <%@page import="ke.co.qubintel.school.server.bean.account.Account"%>
-<%@page import="ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO"%>
+<%@page import="ke.co.qubintel.school.server.persistence.account.AccountDAO"%>
 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 

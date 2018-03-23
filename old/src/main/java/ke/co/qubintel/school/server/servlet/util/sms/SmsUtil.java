@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.*;
 
 import ke.co.qubintel.school.server.bean.account.OutGoingSMS;
-import ke.co.qubintel.school.server.persistence.schoolaccount.OutGoingSMSDAO;
+import ke.co.qubintel.school.server.persistence.account.OutGoingSMSDAO;
 
 /**
  * @author peter
@@ -27,8 +27,8 @@ public class SmsUtil {
 	private static OutGoingSMSDAO outGoingSMSDAO;
 	
 	static {
-		//outGoingSMSDAO = OutGoingSMSDAO.getInstance(); TODO
-		outGoingSMSDAO = new OutGoingSMSDAO("schooldb", "localhost", "school", "AllaManO1", 5432); 
+		outGoingSMSDAO = OutGoingSMSDAO.getInstance(); //TODO
+		//outGoingSMSDAO = new OutGoingSMSDAO("schooldb", "localhost", "school", "AllaManO1", 5432); 
 	}
 	
 	
@@ -66,24 +66,27 @@ public class SmsUtil {
 	                  outGoingSMS.setSmsCost(result.getString("cost")); 
 	                  
 	                  outGoingSMSDAO.putOutGoingSMS(outGoingSMS);
+	                  
+	                  System.out.println(outGoingSMS); 
 	        
 	                  description = "Message sent successfully.";
 	                 
 	        }
 	       }
 	       catch (Exception e) {
+	    	   OutGoingSMS outGoingSMS = new OutGoingSMS();
+               outGoingSMS.setAccountId(smsObject.getAccount()); 
+               outGoingSMS.setMessage(smsObject.getMessage());
+               outGoingSMS.setMobile(smsObject.getMobile());
+               outGoingSMS.setStatus("api_auth_err");
+               outGoingSMS.setSmsCost("");  
+               outGoingSMSDAO.putOutGoingSMS(outGoingSMS);
+               
 	    	   description = "Encountered an error while sending " + e.getMessage();
-	           System.out.println("Encountered an error while sending " + e.getMessage() + " *");
 	           System.out.println(description);
 	        }
 			
 		}
-		
-		/**
-		 * SmsObject [account=22bf25b1-23f4-4ed0-a9f4-46a5d7f7d65d, mobile=718953974, message=test, apiUsername=msomi22, apiKey=e052e0296b5f1e828401c12308f05ae9d85959ab6f0eae50ca6880da31beb693]
-
-		 */
-		
 		return description;
 	}
 	

@@ -50,11 +50,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.bean.exam.SysConfig;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.ClassMeanDAO;
 import ke.co.qubintel.school.server.persistence.exam.ExamDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
 

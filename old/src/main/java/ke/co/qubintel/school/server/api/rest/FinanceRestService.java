@@ -15,6 +15,7 @@ import ke.co.qubintel.school.server.bean.money.FeeBreakdown;
 import ke.co.qubintel.school.server.bean.money.FeeBreakdownDesc;
 import ke.co.qubintel.school.server.bean.money.TermFee;
 import ke.co.qubintel.school.server.bean.otherfee.OtherFee;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
 import ke.co.qubintel.school.server.persistence.money.FeeBreakdownDAO;
 import ke.co.qubintel.school.server.persistence.money.FeeBreakdownDescDAO;
@@ -22,7 +23,6 @@ import ke.co.qubintel.school.server.persistence.money.GokeMoneyUsageDAO;
 import ke.co.qubintel.school.server.persistence.money.StudentFeeDAO;
 import ke.co.qubintel.school.server.persistence.money.TermFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.OtherFeeDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.servlet.finance.FeeConstants;
 

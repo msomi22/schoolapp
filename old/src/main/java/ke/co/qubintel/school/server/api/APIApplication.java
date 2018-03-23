@@ -8,17 +8,17 @@ import java.util.*;
 import javax.ws.rs.core.Application;
 
 import io.swagger.jaxrs.config.BeanConfig;
-import ke.co.qubintel.school.server.api.rest.ClassTeacherRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.ConfigRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.ExamResourceAPI;
-import ke.co.qubintel.school.server.api.rest.FinanceRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.GeneralRestFulAPI;
+import ke.co.qubintel.school.server.api.rest.ClassTeacherResource;
+import ke.co.qubintel.school.server.api.rest.ConfigResource;
+import ke.co.qubintel.school.server.api.rest.ExamResource;
+import ke.co.qubintel.school.server.api.rest.FinanceResource;
+import ke.co.qubintel.school.server.api.rest.GeneralResource;
 import ke.co.qubintel.school.server.api.rest.HouseResource;
-import ke.co.qubintel.school.server.api.rest.ReportRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.StaffRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.StudentRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.SubClassRestFulAPI;
-import ke.co.qubintel.school.server.api.rest.admin.AdminRestFulAPI;
+import ke.co.qubintel.school.server.api.rest.ReportResource;
+import ke.co.qubintel.school.server.api.rest.StaffResource;
+import ke.co.qubintel.school.server.api.rest.StudentResource;
+import ke.co.qubintel.school.server.api.rest.SubClassResource;
+import ke.co.qubintel.school.server.api.rest.admin.AdminResource;
 import ke.co.qubintel.school.server.api.safaricom.SafaricomAPI;
 
 /**
@@ -45,19 +45,19 @@ public class APIApplication extends Application{
 	    public Set<Class<?>> getClasses() {
 	        HashSet<Class<?>> set = new HashSet<Class<?>>();
 
-	        set.add(StaffRestFulAPI.class);
-	        set.add(SubClassRestFulAPI.class);
-	        set.add(ClassTeacherRestFulAPI.class);
+	        set.add(StaffResource.class);
+	        set.add(SubClassResource.class);
+	        set.add(ClassTeacherResource.class);
 	        
-	        set.add(StudentRestFulAPI.class);
+	        set.add(StudentResource.class);
 	        set.add(SafaricomAPI.class);
-	        set.add(GeneralRestFulAPI.class);
-	        set.add(AdminRestFulAPI.class);
-	        set.add(ReportRestFulAPI.class);
-	        set.add(ConfigRestFulAPI.class);
-	        set.add(FinanceRestFulAPI.class);
+	        set.add(GeneralResource.class);
+	        set.add(AdminResource.class);
+	        set.add(ReportResource.class);
+	        set.add(ConfigResource.class);
+	        set.add(FinanceResource.class);
 	        
-	        set.add(ExamResourceAPI.class); 
+	        set.add(ExamResource.class); 
 	        
 	        set.add(HouseResource.class); 
 	        

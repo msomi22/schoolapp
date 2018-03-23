@@ -1,7 +1,0 @@
-sshfs root@105.57.183.90:/storage/sdcard0 /home/peter/phone
-
-./standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 &
-
-d /opt/wildfly-8.2.0.Final/bin ./jboss-cli.sh --connect --command=:shutdown
-
-

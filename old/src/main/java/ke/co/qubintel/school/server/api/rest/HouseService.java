@@ -14,10 +14,10 @@ import ke.co.qubintel.school.server.api.rest.bean.Response;
 import ke.co.qubintel.school.server.bean.house.House;
 import ke.co.qubintel.school.server.bean.house.StudentHouse;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.house.HouseDAO;
 import ke.co.qubintel.school.server.persistence.house.StudentHouseDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 
 /**
@@ -189,12 +189,12 @@ public class HouseService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
-		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
+		}/*else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
 			response.setMessage("error");
 			response.setDescription("House already assigned!"); 
 			return response;
 
-		}else {
+		}*/else {
 
 
 			StudentHouse studentHouse = new StudentHouse();

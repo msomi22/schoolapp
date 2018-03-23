@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import org.javalite.http.Http;
 import org.javalite.http.Post;
 
-import ke.co.qubintel.school.server.api.rest.JsonFromObj;
+import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 
 /**
  * @author peter

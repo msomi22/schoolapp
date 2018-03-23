@@ -51,9 +51,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import ke.co.qubintel.school.server.bean.account.Account;
 import ke.co.qubintel.school.server.bean.student.Student;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.ClassDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
 import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.reports.PdfUtil;

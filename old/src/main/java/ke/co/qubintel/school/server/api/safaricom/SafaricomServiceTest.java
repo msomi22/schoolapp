@@ -3,7 +3,7 @@
  */
 package ke.co.qubintel.school.server.api.safaricom;
 
-import ke.co.qubintel.school.server.api.rest.JsonFromObj;
+import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 import ke.co.qubintel.school.server.api.safaricom.bean.VCResponse;
 
 /**

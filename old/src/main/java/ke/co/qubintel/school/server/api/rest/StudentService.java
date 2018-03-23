@@ -55,6 +55,7 @@ import ke.co.qubintel.school.server.bean.student.Student;
 import ke.co.qubintel.school.server.bean.student.StudentPrimary;
 import ke.co.qubintel.school.server.bean.student.StudentSubject;
 import ke.co.qubintel.school.server.bean.student.guardian.StudentParent;
+import ke.co.qubintel.school.server.persistence.account.AccountDAO;
 import ke.co.qubintel.school.server.persistence.classroom.StreamDAO;
 import ke.co.qubintel.school.server.persistence.exam.SysConfigDAO;
 import ke.co.qubintel.school.server.persistence.guardian.ParentsDAO;
@@ -63,7 +64,7 @@ import ke.co.qubintel.school.server.persistence.money.StudentFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.OtherFeeDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.RevertedMoneyDAO;
 import ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO;
-import ke.co.qubintel.school.server.persistence.schoolaccount.AccountDAO;
+import ke.co.qubintel.school.server.persistence.staff.AcessLevelDAO;
 import ke.co.qubintel.school.server.persistence.staff.StaffDAO;
 import ke.co.qubintel.school.server.persistence.student.PrimaryDAO;
 import ke.co.qubintel.school.server.persistence.student.StudentDAO;
@@ -72,6 +73,7 @@ import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.servlet.finance.FeeConstants;
 import ke.co.qubintel.school.server.servlet.finance.StudentBalance;
 import ke.co.qubintel.school.server.servlet.util.SecurityUtil;
+import ke.co.qubintel.school.server.servlet.util.sms.core.ExamSmsSender;
 
 /**
  * @author peter
@@ -89,6 +91,8 @@ public class StudentService {
 	private static RevertedMoneyDAO revertedMoneyDAO;
 
 	private static SysConfigDAO sysConfigDAO;
+	private static  AcessLevelDAO acessLevelDAO;
+	
 	private static EmailValidator emailValidator;
 
 	private static PrimaryDAO primaryDAO;
@@ -113,6 +117,8 @@ public class StudentService {
 		revertedMoneyDAO = RevertedMoneyDAO.getInstance();
 
 		sysConfigDAO = SysConfigDAO.getInstance();
+		acessLevelDAO = AcessLevelDAO.getInstance();
+		
 		emailValidator = EmailValidator.getInstance();
 
 		parentsDAO = ParentsDAO.getInstance();
@@ -392,7 +398,7 @@ public class StudentService {
 			account.getIsBoarding();//1 = boarding only, 0 = day only, 2 = day and boarding 
 			student.getIsBoarding();//boarders = 1, day = 0
 
-			if (!staffAllowedToAlterFee(staff.getUuid(), staff.getAcessLevelId())) {
+			if (!staffAllowedToAlterFee(staff.getUuid(), acessLevelDAO.getAcessLevel(staff.getAccountId(), staff.getAcessLevelId()).getAcessId())) {
 				response.setMessage("error");
 				response.setDescription("Staff not allowed to alter with fee!");
 
@@ -410,6 +416,16 @@ public class StudentService {
 				studentFee.setTransactingStaffId(staff.getUuid());
 
 				if (studentFeeDAO.putStudentFee(studentFee)) {
+					
+					if(sysConfigDAO.getSysConfig(studentPayFee.getAccountId()) != null) {
+						
+						if(StringUtils.equals(sysConfigDAO.getSysConfig(studentPayFee.getAccountId()).getCansendSMS(), "1")) {
+							ExamSmsSender.sendFeeBalSMS(studentFee);
+						}
+					}
+					
+					
+					
 					response.setMessage("success");
 					response.setDescription("Fee paid successsfully.");
 
@@ -2201,7 +2217,7 @@ public class StudentService {
 	 */
 	private boolean staffAllowedToAlterFee(String uuid, String acessLevelId) {
 		// Principal_Bursar
-		String[] allowed = { "C3915245-00EE-4EF4-9898-ACE59683DD60", "0DE968C9-7309-C481-58F7-AB6CDB1011EF" };
+		String[] allowed = { "100", "700" };
 		List<String> allowedList = new ArrayList<>();
 		allowedList = Arrays.asList(allowed);
 		if (allowedList.contains(acessLevelId)) {
