@@ -729,6 +729,7 @@ public class StaffService {
 			}
 			
 			apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+			apiStaffFull.setAcessLevelId(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getAcessId()); 
 			
 			//System.out.println("cat : " + acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription());
 			//System.out.println("***************************************************");
@@ -766,6 +767,7 @@ public class StaffService {
 				}
 				
 				apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+				apiStaffFull.setAcessLevelId(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getAcessId()); 
 				
 			//	System.out.println("cat : " + acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription());
 				//System.out.println("***************************************************");
