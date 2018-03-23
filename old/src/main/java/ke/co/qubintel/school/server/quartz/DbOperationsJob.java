@@ -139,7 +139,7 @@ public class DbOperationsJob implements Job{
 				
 				//System.out.println("Account locked!" + days);  
 				
-				if(Math.abs(days) > 60) {
+				if(Math.abs(days) > 80) {
 					accountDAO.updateAccount(sch);
 				}
 				

@@ -9,7 +9,7 @@
  * of the License at:
  * http://opensource.org/licenses/OSL-3.0
  * 
- */
+ *//*
 package ke.co.qubintel.school.server.persistence;
 
 import java.sql.Connection;
@@ -17,11 +17,11 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-/**
+*//**
  * Tests our class with database credentials.
  * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
- */
+ *//*
 
 public class TestDBCredentials {
 	private DBCredentials dBCredentials;
@@ -37,3 +37,4 @@ public class TestDBCredentials {
 	}
 
 }
+*/

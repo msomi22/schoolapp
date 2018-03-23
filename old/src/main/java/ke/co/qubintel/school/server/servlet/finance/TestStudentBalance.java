@@ -9,23 +9,23 @@
  * of the License at:
  * http://opensource.org/licenses/OSL-3.0
  * 
- */
+ *//*
 package ke.co.qubintel.school.server.servlet.finance;
 
 //import org.junit.Ignore;
 import org.junit.Test;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStudentBalance {
 	
 	
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.servlet.finance.StudentBalance#findBalance(java.util.Date, java.lang.String, int, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore
 	@Test
 	public void testFindBalance() {
@@ -45,3 +45,4 @@ public class TestStudentBalance {
 	}
 
 }
+*/

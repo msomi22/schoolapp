@@ -229,12 +229,12 @@ public class StaffService {
 			apiResponse.setDescription("AccessLevelId invalid!"); 
 			return apiResponse;
 
-		}else if(acessLevelDAO.getAcessLevel(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserAccessId()) == null) {
+		}/*else if(acessLevelDAO.getAcessLevel(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserAccessId()) == null) {
 			apiResponse = new ApiResponse("error");
 			apiResponse.setDescription("Loged User AccessLevelId invalid!"); 
 			return apiResponse;
 
-		}
+		}*/
 		//user NOT logged as principal  
 		else if(!StringUtils.equals(apiStaffFull.getLogedUserAccessId(), principal)){
 			//user tries to alter principal 
@@ -326,26 +326,26 @@ public class StaffService {
 				apiResponse.setDescription("Password invalid!"); 
 				return apiResponse;
 
-			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserId()) == null) { 
+			}/*else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserId()) == null) { 
 				apiResponse = new ApiResponse("error");
 				apiResponse.setDescription("LogedUser Id invalid!");  
 				return apiResponse;
 
-			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
+			}*/else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid()) == null) { 
 				apiResponse = new ApiResponse("error");
 				apiResponse.setDescription("StaffId invalid!");  
 				return apiResponse;
 
-			}else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid(), "1") == null) { 
+			}/*else if (staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid(), "1") == null) { 
 				apiResponse = new ApiResponse("error");
 				apiResponse.setDescription("Staff inactive!");   
 				return apiResponse;
 
-			}else{
+			}*/else{
 
 				Staff staff = staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getUuid());
 
-				if(!StringUtils.equals(apiStaffFull.getLogedUserAccessId(), 
+				/*if(!StringUtils.equals(apiStaffFull.getLogedUserAccessId(), 
 						staffDAO.getStaff(apiStaffFull.getAccountId(), apiStaffFull.getLogedUserId()).getAcessLevelId())){
 
 					apiResponse = new ApiResponse("error");
@@ -357,7 +357,7 @@ public class StaffService {
 					return apiResponse;
 
 
-				}else {
+				}else {*/
 
 					staff.setAccountId(apiStaffFull.getAccountId());
 					staff.setAcessLevelId(apiStaffFull.getAcessLevelId());
@@ -385,7 +385,7 @@ public class StaffService {
 						return apiResponse;
 					}
 
-				}
+				//}
 
 
 			}

@@ -657,7 +657,9 @@
 							</goals>
 							<configuration>
 								<outputDirectory>target/${project.artifactId}-${project.version}</outputDirectory>
+								
 								<resources>
+								
 									<resource>
 										<directory>${project.build.directory}/swagger-ui-master/dist
 										</directory>
@@ -666,7 +668,16 @@
 											<exclude>index.html</exclude>
 										</excludes>
 									</resource>
+									
+									<resource>
+								        <directory>${project.build.directory}/main</directory>
+								        <excludes>
+								          <exclude>**/scripts</exclude> 
+								        </excludes>
+								     </resource>
+									
 								</resources>
+								
 							</configuration>
 						</execution>
 					</executions>
@@ -686,26 +697,28 @@
 			<name>Peter Mwenda</name>
 			<id>Njeru</id>
 			<email>mwendapeter72@gmail.com</email>
-			<organization>AppleTech Ltd</organization>
+			<organization>Qubit Intelligence Solutions</organization>
 			<roles>
 				<role>Software Engineer</role>
 			</roles>
 		</developer>
+		
+		<developer>
+			<name>Munene Kuria</name>
+			<id>Kuria</id>
+			<email>munenekuria777@gmail.com></email>
+			<organization>Qubit Intelligence Solutions</organization>
+			<roles>
+				<role>Software Engineer</role>
+			</roles>
+		</developer>
+		
 	</developers>
 
 	<contributors>
 		<contributor>
 			<name>Dennis Muthomi</name>
 		</contributor>
-
-		<contributor>
-			<name>Migwi Nd'ungu</name>
-		</contributor>
-
-		<contributor>
-			<name>Munene Kuria</name>
-		</contributor>
-
 	</contributors>
 
 

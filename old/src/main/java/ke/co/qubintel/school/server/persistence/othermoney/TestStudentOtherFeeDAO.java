@@ -1,6 +1,6 @@
 /**
  * 
- */
+ *//*
 package ke.co.qubintel.school.server.persistence.othermoney;
 
 import static org.junit.Assert.*;
@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/**
+*//**
  * @author peter
  *
- */
+ *//*
 public class TestStudentOtherFeeDAO {
 	
 	
@@ -23,53 +23,53 @@ public class TestStudentOtherFeeDAO {
 	
 	private StudentOtherFeeDAO storable = new StudentOtherFeeDAO(databaseName, Host, databaseUsername, databasePassword, databasePort); 
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#StudentOtherFeeDAO(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int)}.
-	 */
+	 *//*
 	@Ignore 
 	@Test
 	public void testStudentOtherFeeDAOStringStringStringStringInt() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#getStudentOtherFee(java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore 
 	@Test
 	public void testGetStudentOtherFee() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#putStudentOtherFee(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)}.
-	 */
+	 *//*
 	@Ignore 
 	@Test
 	public void testPutStudentOtherFee() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#updateStudentOtherFee(com.yahoo.petermwenda83.bean.otherfee.StudentOtherFee)}.
-	 */
+	 *//*
 	@Test
 	public void testUpdateStudentOtherFee() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#getStudentOtherFeeList(java.lang.String, java.lang.String, int, int)}.
-	 */
+	 *//*
 	@Ignore 
 	@Test
 	public void testGetStudentOtherFeeListStringStringIntInt() {
 		fail("Not yet implemented");
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#getStudentOtherFeeList(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	//@Ignore 
 	@Test
 	public void testGetStudentOtherFeeListStringStringStringString() {
@@ -82,9 +82,9 @@ public class TestStudentOtherFeeDAO {
 		System.out.println(storable.getStudentOFeeList(accountId, studentId, term, year));
 	}
 
-	/**
+	*//**
 	 * Test method for {@link ke.co.qubintel.school.server.persistence.othermoney.StudentOtherFeeDAO#getStudentOtherFeeList(java.lang.String, java.lang.String)}.
-	 */
+	 *//*
 	@Ignore 
 	@Test
 	public void testGetStudentOtherFeeListStringString() {
@@ -92,3 +92,4 @@ public class TestStudentOtherFeeDAO {
 	}
 
 }
+*/
