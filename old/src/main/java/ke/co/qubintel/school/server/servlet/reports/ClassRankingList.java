@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
+//import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -75,7 +75,6 @@ import ke.co.qubintel.school.server.persistence.subject.SubjectDAO;
 import ke.co.qubintel.school.server.quartz.WriteToFile;
 import ke.co.qubintel.school.server.servlet.reports.exam.CommonLogic;
 import ke.co.qubintel.school.server.servlet.reports.exam.PerformanceBean1;
-import ke.co.qubintel.school.server.servlet.util.PeterMid;
 import ke.co.qubintel.school.server.servlet.util.Timeit;
 import ke.co.qubintel.school.server.servlet.util.sms.core.ExamSmsSender;
 import ke.co.qubintel.school.server.session.SessionConstants;
@@ -493,7 +492,7 @@ public class ClassRankingList extends HttpServlet{
 
 
 			PdfPCell mainGradeInfoCell = new PdfPCell(new Phrase("Mean:",timesRomanBold8)); 
-			PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(classMean + " / " + performanceList.size() + " Grade : " + grade,  timesRomanNormal6));
+			PdfPCell mainGradeDescCell = new PdfPCell(new Phrase(classMean + " Grade : " + grade,  timesRomanNormal6));
 			mainGradeInfoCell.setBorder(Rectangle.NO_BORDER);
 			mainGradeDescCell.setBorder(Rectangle.NO_BORDER);
 
@@ -816,8 +815,11 @@ public class ClassRankingList extends HttpServlet{
 
 				rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
+				
 				String name = student.getFirstname() + " " +  student.getMiddlename() + " " + student.getLastname(); 
+				
 				name = name.substring(0, Math.min(name.length(), 20));
+				
 				rankingTable.addCell(new Paragraph(name ,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(kcpe,timesRomanNormal6));
