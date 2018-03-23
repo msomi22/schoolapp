@@ -25,6 +25,7 @@ public class ApiStaffFull extends GenericUser{
 	private String password;
 	private String uuid;
 	private String accountId;
+	private String category; 
 	
 	
 
@@ -45,6 +46,7 @@ public class ApiStaffFull extends GenericUser{
 		password = "";
 		uuid = "";
 		accountId = "";
+		category = "";
 	}
 
 
@@ -257,6 +259,22 @@ public class ApiStaffFull extends GenericUser{
 
 
 	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -264,11 +282,10 @@ public class ApiStaffFull extends GenericUser{
 		return "ApiStaffFull [acessLevelId=" + acessLevelId + ", staffNo=" + staffNo + ", isActive=" + isActive
 				+ ", firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname + ", gender="
 				+ gender + ", mobile=" + mobile + ", email=" + email + ", username=" + username + ", password="
-				+ password + ", uuid=" + uuid + ", accountId=" + accountId + ", getLogedUserId()=" + getLogedUserId()
-				+ ", getLogedUserAccessId()=" + getLogedUserAccessId() + "]";
+				+ password + ", uuid=" + uuid + ", accountId=" + accountId + ", category=" + category + "]";
 	}
 
-	
+
 	
 
 }

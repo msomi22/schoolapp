@@ -714,6 +714,8 @@ public class StaffService {
 
 			try {
 				BeanUtils.copyProperties(apiStaffFull, staffDAO.getStaff(accountId, staffId)); 
+				apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+				
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
