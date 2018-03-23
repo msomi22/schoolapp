@@ -510,6 +510,9 @@ public class StudentResource{
 		if(!RestAUth.isUserAuthenticated(auth, accountId)){
 			return response; 
 		}
+		
+		//System.out.println("studentId: " + student); TODO
+		//System.out.println("******************************************"); 
 
 		return studentService.updateStudent(accountId, student);
 

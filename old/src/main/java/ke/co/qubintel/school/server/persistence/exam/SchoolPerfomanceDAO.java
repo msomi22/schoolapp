@@ -43,6 +43,8 @@ public interface SchoolPerfomanceDAO {
 	
 	public List<Perfomance> getClassSubjectPerfomance(String accountId,String examId,String subjectId,String classRoomId,String term,String year);
 	
+	public int getStudentSubCount(String accountId, String examId, String studentId, String streamId, String term, String year);
+	
 	
 	/**
 	 *  This method is called whenever there is a duplicate in performance table, and the duplicate must be deleted.

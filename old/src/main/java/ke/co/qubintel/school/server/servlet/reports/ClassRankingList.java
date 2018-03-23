@@ -596,9 +596,9 @@ public class ClassRankingList extends HttpServlet{
 
 			size += 12;
 
-			PdfPTable rankingTable = new PdfPTable(25);   
+			PdfPTable rankingTable = new PdfPTable(26);  //7
 			rankingTable.setWidthPercentage(100); 
-			rankingTable.setWidths(new int[]{8,12,20,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,12,12,12}); 
+			rankingTable.setWidths(new int[]{8,12,26,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,7,10,12,12,12,10,8,8}); 
 			rankingTable.setHeaderRows(1); 
 			rankingTable.isSkipFirstHeader();
 
@@ -648,6 +648,10 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 			//cells = 7
+			PdfPCell sub_c_Cell = new PdfPCell(new Paragraph("Su",timesRomanBold6));
+			sub_c_Cell.setBackgroundColor(baseColor);
+			sub_c_Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			
 			PdfPCell totalCell = new PdfPCell(new Paragraph("T",timesRomanBold6));
 			totalCell.setBackgroundColor(baseColor);
 			totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -676,7 +680,7 @@ public class ClassRankingList extends HttpServlet{
 			classPositionCell.setBackgroundColor(baseColor);
 			classPositionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-
+			rankingTable.addCell(sub_c_Cell);
 			rankingTable.addCell(totalCell);
 			rankingTable.addCell(pointsCell);
 			rankingTable.addCell(meanCell);
@@ -734,7 +738,29 @@ public class ClassRankingList extends HttpServlet{
 				}
 
 				stream = StringUtils.remove(stream, "FORM"); 
-
+				
+				//TODO
+				String student_sub_count = "";
+				int c1 = 0, c2 = 0, c3 = 0;
+				if(exams.length == 1) {
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
+					student_sub_count = "c1 : " + c1;
+					
+				}if(exams.length == 2) {
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year);
+					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year);
+					student_sub_count = "c1 : " + c1 + ", c2: " + c2;
+					
+				}if(exams.length == 3) {
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
+					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year); 
+					c3 = perfomanceDAO.getStudentSubCount(accountId, exams[2], performance2.getStudentId(), streamId, term, year); 
+					student_sub_count = "c1 : " + c1 + ", c2: " + c2 + ", c3: " + c3;
+					
+				}
+				
+			   int max =  Math.max(Math.max(c1,c2),c3);
+				
 
 				Map<String,Integer> exam1 = new HashMap<>();
 				Map<String,Integer> exam2 = new HashMap<>();
@@ -771,15 +797,8 @@ public class ClassRankingList extends HttpServlet{
 
 
 				StudentPrimary primary = new StudentPrimary();
-				int kcpePints = 0;
 				if(primaryDAO.getStudentPrimary(accountId, student.getUuid()) != null){
 					primary = primaryDAO.getStudentPrimary(accountId, student.getUuid());
-					
-					if(!StringUtils.equals(primary.getKcpeGrade(), "")) { 
-						kcpePints = ReportUtil.kcpePntsFromGrade(accountId, primary.getKcpeGrade()); 
-					}
-					
-
 				}
 
 				String kcpe = primary.getKcpemark();
@@ -797,8 +816,8 @@ public class ClassRankingList extends HttpServlet{
 
 				rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
-				String name = student.getFirstname() + " " +  student.getMiddlename();
-				name = name.substring(0, Math.min(name.length(), 14));//14
+				String name = student.getFirstname() + " " +  student.getMiddlename() + " " + student.getLastname(); 
+				name = name.substring(0, Math.min(name.length(), 20));
 				rankingTable.addCell(new Paragraph(name ,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(stream,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(kcpe,timesRomanNormal6));
@@ -1145,6 +1164,7 @@ public class ClassRankingList extends HttpServlet{
 				dev = StringUtils.equals(dev, "0") ? "" : dev;
 				
 
+				rankingTable.addCell(new Paragraph(""+max,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+performance2.getTotalMean(),timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(""+poinst_str,timesRomanNormal6));//performance2.getTotalPoint() , poinst_str
 				rankingTable.addCell(new Paragraph(""+mean_str,timesRomanNormal6));
@@ -1340,17 +1360,18 @@ public class ClassRankingList extends HttpServlet{
 					prevTerm = "3";
 					
 				}else if(StringUtils.equals(term, "2")){
+					prevYear = String.valueOf(Integer.valueOf(year)); 
 					prevTerm = "1";
 					
 				}else if(StringUtils.equals(term, "3")){
+					prevYear = String.valueOf(Integer.valueOf(year)); 
 					prevTerm = "2";
 					
 				}
 				
-				
-				
-				if(classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear) != null) {
-					classMean2 = classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear);
+				if(classMeanDAO.getClassMean(accountId, cmean.getStreamId(), ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear) != null) {
+					classMean2 = classMeanDAO.getClassMean(accountId, cmean.getStreamId(), ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear);
+					
 					
 				}
 				

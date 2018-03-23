@@ -305,5 +305,40 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
         return list;
 	}
 
+	/**
+	 * @see ke.co.qubintel.school.server.persistence.exam.SchoolPerfomanceDAO#getStudentSubCount(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int getStudentSubCount(String accountId, String examId, String studentId, String streamId, String term,
+			String year) {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Performance WHERE accountId =? "
+						+ "AND examId =? AND studentId =? AND streamId =? AND term =? AND year =?"
+						+ " AND (score > 0 OR paper1 > 0 OR paper2 > 0 OR paper3 > 0);");     		   
+				) {
+			pstmt.setString(1, accountId);
+			pstmt.setString(2, examId);
+			pstmt.setString(3, studentId);
+			pstmt.setString(4, streamId);
+			pstmt.setString(5, term);
+			pstmt.setString(6, year);
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException while getting student Performance count for accountId " + accountId +
+					" and examId : " + examId + " and studentId : " + studentId + " and streamId : " + streamId +" and term "
+							+ "" + term + " and year : " + year);
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
+		return count;
+	}
+
 	
 }
