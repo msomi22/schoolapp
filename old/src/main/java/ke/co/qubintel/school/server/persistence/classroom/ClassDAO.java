@@ -119,7 +119,7 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 			pstmt.setString(1, classRoom.getUuid());
 			pstmt.setString(2, classRoom.getAccountId());
 			pstmt.setString(3, classRoom.getDescription());
-			pstmt.setString(4, classRoom.getExamSubNumber());
+			pstmt.setInt(4, classRoom.getExamSubNumber());
 			pstmt.executeUpdate();
 
 		}catch(SQLException e){
@@ -144,7 +144,7 @@ public class ClassDAO extends GenericDAO implements SchoolClassDAO {
 						+ "WHERE uuid = ? AND accountId = ?;");
 				) {           			 	            
 			pstmt.setString(1, classRoom.getDescription());
-			pstmt.setString(2, classRoom.getExamSubNumber());
+			pstmt.setInt(2, classRoom.getExamSubNumber());
 			pstmt.setString(3, classRoom.getUuid());
 			pstmt.setString(4, classRoom.getAccountId());
 			pstmt.executeUpdate();

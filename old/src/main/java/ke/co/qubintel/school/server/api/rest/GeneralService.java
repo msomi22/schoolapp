@@ -146,7 +146,7 @@ public class GeneralService {
 				apiClass.setAccountId(stream.getAccountId());
 				apiClass.setDescription(stream.getDescription());
 				apiClass.setUuid(stream.getUuid()); 
-				apiClass.setExamSubNumber(stream.getExamSubNumber()); 
+				apiClass.setExamSubNumber(stream.getExamSubNumber());  
 
 				list.add(apiClass);
 			});

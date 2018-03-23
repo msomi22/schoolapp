@@ -24,7 +24,7 @@ import ke.co.qubintel.school.server.bean.StorableBean;
 public class ClassRoom  extends StorableBean{
 
 	private String description;
-	private String examSubNumber;
+	private int examSubNumber;
 	
 	/**
 	 * 
@@ -32,7 +32,7 @@ public class ClassRoom  extends StorableBean{
 	public ClassRoom() {
 		super();
 		description ="";
-		examSubNumber ="";
+		examSubNumber = 0;
 		
 	}
 	
@@ -53,14 +53,14 @@ public class ClassRoom  extends StorableBean{
 	/**
 	 * @return the examSubNumber
 	 */
-	public String getExamSubNumber() {
+	public int getExamSubNumber() {
 		return examSubNumber;
 	}
 
 	/**
 	 * @param examSubNumber the examSubNumber to set
 	 */
-	public void setExamSubNumber(String examSubNumber) {
+	public void setExamSubNumber(int examSubNumber) {
 		this.examSubNumber = examSubNumber;
 	}
 

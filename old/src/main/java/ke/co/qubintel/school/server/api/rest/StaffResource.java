@@ -110,7 +110,7 @@ public class StaffResource {
 
 		}else {
 			
-			System.out.println(apiStaff);
+			//System.out.println(apiStaff);
 
 			Staff staff = new Staff();
 			staff.setAccountId(accountId);

@@ -16,7 +16,7 @@ public class ApiClass {
 	private String uuid;
 	private String accountId;
 	private String description;
-	private String examSubNumber;
+	private int examSubNumber;
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class ApiClass {
 		uuid = "";
 		accountId = "";
 		description = "";
-		examSubNumber = "";
+		examSubNumber = 0;
 	}
 
 	public String getUuid() {
@@ -55,14 +55,14 @@ public class ApiClass {
 	/**
 	 * @return the examSubNumber
 	 */
-	public String getExamSubNumber() {
+	public int getExamSubNumber() {
 		return examSubNumber;
 	}
 
 	/**
 	 * @param examSubNumber the examSubNumber to set
 	 */
-	public void setExamSubNumber(String examSubNumber) {
+	public void setExamSubNumber(int examSubNumber) {
 		this.examSubNumber = examSubNumber;
 	}
 

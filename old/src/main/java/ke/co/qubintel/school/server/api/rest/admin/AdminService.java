@@ -307,7 +307,7 @@ public class AdminService {
 			classRoom.setUuid(classRoom.getUuid());
 			classRoom.setAccountId(accountId);
 			classRoom.setDescription(classes[count]); 
-			classRoom.setDescription(examSubNo[count]+"");  
+			classRoom.setExamSubNumber(examSubNo[count]); 
 			classDAO.putClassRoom(classRoom);
 		}
 		/*****************************************************************************************/
