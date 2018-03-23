@@ -213,8 +213,14 @@ public class StaffService {
 	public ApiResponse updateStaff(ApiStaffFull apiStaffFull){
 
 		ApiResponse apiResponse = new ApiResponse(); 
-		String principal = "C3915245-00EE-4EF4-9898-ACE59683DD60";
-		String deputy_Principal = "615F04C1-00BF-499C-AC7A-B46B69243AAA";
+		
+		String principal = "100";
+		String deputy_Principal = "200";
+		
+		apiStaffFull.setAcessLevelId(acessLevelDAO.getAcessLevelById(apiStaffFull.getAccountId(), apiStaffFull.getAcessLevelId()).getUuid()); 
+		
+		principal = acessLevelDAO.getAcessLevelById(apiStaffFull.getAccountId(), "100").getUuid();
+		deputy_Principal = acessLevelDAO.getAcessLevelById(apiStaffFull.getAccountId(), "200").getUuid();
 
 		boolean allowed = false;
 
