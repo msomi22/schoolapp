@@ -181,8 +181,8 @@ function fetchStaffs(){
 						/* "iDisplayLength": 100 */
 
 						});
-		
 		}
+		
 		
 		fetchAccessLevels();
 
@@ -210,7 +210,7 @@ function fetchStaffs(){
 									+ "//"
 									+ window.location.host
 									+ "/school/school/staffProfile.jsp?uuid="
-									+ data['staffNo'];
+									+ data['uuid'];
 
 						});
 
