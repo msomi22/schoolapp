@@ -113,6 +113,7 @@
 										<th class="column-title hidden">password</th>
 										<th class="column-title hidden">uuid</th>
 										<th class="column-title hidden">accountId</th>
+										<th class="column-title">category</th>
 										<th class="column-title">Modify</th>
 
 									</tr>

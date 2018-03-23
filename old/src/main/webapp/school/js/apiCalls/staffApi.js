@@ -74,8 +74,8 @@ function fetchAccessLevels() {
 		// = new Option('Form 1', 'Value1');
 
 		for (var i = 0; i < data.length; i++) {
-			accessSelect.append('<option id=' + data[i].uuid + ' value='
-					+ data[i].uuid + '>' + data[i].description
+			accessSelect.append('<option id=' + data[i].acessId + ' value='
+					+ data[i].acessId + '>' + data[i].description
 					+ '</option>');
 			// classSelect.options[classSelect.options.length]
 			// = new Option(data[i].description,
@@ -169,7 +169,7 @@ function fetchStaffs(){
 										"visible" : false
 									},
 									{
-										"targets" : [ 15 ],
+										"targets" : [ 16 ],
 										"data" : null,
 										"defaultContent" : '<button class="btn btn-info ">'
 												+ 'Profile   <span class="fa fa-info"></span></button>'
