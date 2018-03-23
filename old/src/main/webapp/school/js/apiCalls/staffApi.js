@@ -98,6 +98,8 @@ function fetchStaffs(){
 		console.log('Code for staff altering');
 
 		console.log(data);
+		
+		if(data.length > 0){
 
 		var cols = [];
 
@@ -180,6 +182,8 @@ function fetchStaffs(){
 
 						});
 		
+		}
+		
 		fetchAccessLevels();
 
 		table.rows.add(data).draw();
@@ -206,7 +210,7 @@ function fetchStaffs(){
 									+ "//"
 									+ window.location.host
 									+ "/school/school/staffProfile.jsp?uuid="
-									+ data['uuid'];
+									+ data['staffNo'];
 
 						});
 

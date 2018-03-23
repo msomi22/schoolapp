@@ -169,6 +169,8 @@ function fetchStaffRoles() {
 		console.log('Genius Code for specific staff roles fetch');
 
 		console.log(data);
+		
+		if(data.length > 0){
 
 		var cols = [];
 
@@ -245,6 +247,8 @@ function fetchStaffRoles() {
 						/* "iDisplayLength": 100 */
 
 						});
+		
+		}
 
 		table.rows.add(data).draw();
 
