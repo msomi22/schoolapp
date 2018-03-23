@@ -1331,10 +1331,26 @@ public class ClassRankingList extends HttpServlet{
 				
 				ClassMean classMean2 = new ClassMean();
 				String pmean = "";
-				String prevYear = String.valueOf(Integer.valueOf(year) - 1);
 				
-				if(classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), term, prevYear) != null) {
-					classMean2 = classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), term, prevYear);
+				String prevYear = "0";
+				String prevTerm = "0";
+				
+				if(StringUtils.equals(term, "1")){
+					prevYear = String.valueOf(Integer.valueOf(year) - 1);
+					prevTerm = "3";
+					
+				}else if(StringUtils.equals(term, "2")){
+					prevTerm = "1";
+					
+				}else if(StringUtils.equals(term, "3")){
+					prevTerm = "2";
+					
+				}
+				
+				
+				
+				if(classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear) != null) {
+					classMean2 = classMeanDAO.getClassMean(accountId, streamId, ReportUtil.getExamName(accountId, exams,1), prevTerm, prevYear);
 					
 				}
 				
