@@ -294,6 +294,8 @@ function feePayment() {
 			// warn IE users somehow :)
 		}
 	} else {
+		
+		$('#btn_feePayment').attr('disabled', true);
 
 		console.log($('#accountId').val() + " Regno" + $('#p_regNo').val());
 
@@ -320,6 +322,8 @@ function feePayment() {
 					// $('#addStreamForm').get(0).reset();
 
 					// console.log(JSON.stringify($('#addStreamForm').serializeJSON()));
+							
+							$('#btn_feePayment').attr('disabled', false);
 
 					if (data.description.includes("success")) {
 
