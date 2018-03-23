@@ -66,7 +66,7 @@ public class SchoolLogin extends HttpServlet {
 		accountDAO = AccountDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
 
-		nameArr = new String[] { "Maliga", "Sigalame", "Burumba", "Njuri", "Qubit", "Ggoto", "Mekaro" }; // "Mangu",
+		nameArr = new String[] { "Maliga", "Sigalame", "Burumba", "Njuri", "Qubit", "Ngoto", "Mekaro","Mangu" };
 		allowedNames = Arrays.asList(nameArr);
 
 		logger = Logger.getLogger(this.getClass());

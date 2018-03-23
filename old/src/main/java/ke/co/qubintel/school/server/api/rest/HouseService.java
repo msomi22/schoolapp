@@ -189,12 +189,12 @@ public class HouseService {
 			response.setMessage("error");
 			response.setDescription("House not found!");
 			return response;
-		}else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
+		}/*else if(studentHouseDAO.getStudentHouse(sh.getAccountId(), sh.getStudentId()) != null) {
 			response.setMessage("error");
 			response.setDescription("House already assigned!"); 
 			return response;
 
-		}else {
+		}*/else {
 
 
 			StudentHouse studentHouse = new StudentHouse();
