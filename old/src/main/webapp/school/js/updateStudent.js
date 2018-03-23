@@ -267,7 +267,7 @@ function assignHouse() {
 
 		console.log('Code for assigning a house to a student');
 
-		parseData(data)
+		//parseData(data)
 
 	});
 }
@@ -336,7 +336,7 @@ function updateStudent() {
 
 		apiCall(function(data) {
 
-			console.log('Smart Code');
+			console.log('Smart Code updating students details');
 
 			console.log(data);
 
