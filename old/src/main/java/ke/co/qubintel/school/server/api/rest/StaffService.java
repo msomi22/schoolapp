@@ -714,13 +714,18 @@ public class StaffService {
 
 			try {
 				BeanUtils.copyProperties(apiStaffFull, staffDAO.getStaff(accountId, staffId)); 
-				apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+				
 				
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
+			
+			apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+			
+			//System.out.println("cat : " + acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription());
+			//System.out.println("***************************************************");
 
 			return apiStaffFull;
 		}
@@ -753,6 +758,11 @@ public class StaffService {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
+				
+				apiStaffFull.setCategory(acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription()); 
+				
+			//	System.out.println("cat : " + acessLevelDAO.getAcessLevel(accountId, apiStaffFull.getAcessLevelId()).getDescription());
+				//System.out.println("***************************************************");
 
 				apiStaffFullList.add(apiStaffFull);
 			});
