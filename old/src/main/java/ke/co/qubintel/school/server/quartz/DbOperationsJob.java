@@ -14,6 +14,7 @@ package ke.co.qubintel.school.server.quartz;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -96,24 +97,29 @@ public class DbOperationsJob implements Job{
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
-		synchGoKeMoney();
-		checkExamDuplicate();  
-		lockAccount();
-		
+		//synchGoKeMoney();
+		//checkExamDuplicate();  
+		//lockAccount();
+		checksentSMS();
+
 
 		try {
-			
-			//backUpWin();
 
 			if(SystemUtils.IS_OS_WINDOWS){
+			
 				backUpWin();
+				
+				
 			}
 
 			if(SystemUtils.IS_OS_LINUX){
+				
 				StartBackup();
+				
+				
 			}
 
-			checksentSMS();
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -126,30 +132,52 @@ public class DbOperationsJob implements Job{
 	 * 
 	 */
 	private static void lockAccount() {
+		
+		if(!accountDAO.getAccounts().isEmpty() && accountDAO.getAccounts() !=null ) {
+			
+			accountDAO.getAccounts().parallelStream().forEach(sch -> {
+				sch.setIsActive(SYS_COSTANTS.STATUS_INACTIVE);  
+				sch.setUsername("lock"); 
+				sch.setPassword("lock123"); 
+				
+				String path = "";
+				
+				if(SystemUtils.IS_OS_WINDOWS){
+					
+					path = "C:\\opt\\Programs\\WildFly\\8.2.0\\standalone\\log\\log4jSchool.log";
+					
+				}if(SystemUtils.IS_OS_LINUX){
+					
+					path = "/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
+					
+				}
 
-		accountDAO.getAccounts().parallelStream().forEach(sch -> {
-			sch.setIsActive(SYS_COSTANTS.STATUS_INACTIVE);  
-			sch.setUsername("lock"); 
-			sch.setPassword("lock123"); 
-			
-			StartDateFromLog.checkTimeout();
-			
-			if(!StringUtils.contains(sch.getName(), "Burumba")) {
 				
 				//TODO
-				Timestamp now = new Timestamp(new Date().getTime()); 
-				int days = timeDiff(now,sch.getCreationDate());  
 				
-				//System.out.println("Account locked!" + days);  
+				String dateFromFile = StartDateFromLog.checkTimeout(path,0);
 				
-				if(Math.abs(days) > 80) {
-					accountDAO.updateAccount(sch);
-				}
-				
-			}
 
-			
-		});
+				if(!StringUtils.contains(sch.getName(), "Burumba")) {
+
+					//TODO
+					Timestamp now = new Timestamp(new Date().getTime()); 
+					int days = 0;
+					
+					days = sch != null ? timeDiff(now, sch.getCreationDate()) : timeDiff(now, strToTstamp(dateFromFile));
+					
+					//System.out.println("Account locked!" + days);  
+
+					if(Math.abs(days) > 80) {
+						accountDAO.updateAccount(sch);
+					}
+
+				}
+
+
+			});
+
+		}
 
 	}
 
@@ -158,12 +186,9 @@ public class DbOperationsJob implements Job{
 	 */
 	private void checkExamDuplicate() {
 
-		if(accountDAO.getAccounts() != null) {
+		if(!accountDAO.getAccounts().isEmpty() && accountDAO.getAccounts() !=null ) {
 
-			List<Account> accountList = new ArrayList<>();
-			accountList = accountDAO.getAccounts();
-
-			accountList.stream().forEach(account -> {
+			accountDAO.getAccounts().stream().forEach(account -> {
 
 				if(studentDAO.getStudents(account.getUuid()) != null) {
 
@@ -241,7 +266,6 @@ public class DbOperationsJob implements Job{
 
 		perfomanceDAO.deleteStreamSubjectDuplicate(perfomance.getAccountId(), perfomance.getUuid());
 
-		//System.out.println(" ----------- Duplicate detected and deleted!  --------- " + perfomance + " ----------------------------- "); 
 	}
 
 	/**
@@ -249,12 +273,9 @@ public class DbOperationsJob implements Job{
 	 */
 	private void synchGoKeMoney() {
 
-		if(accountDAO.getAccounts() != null) {
+		if(!accountDAO.getAccounts().isEmpty() && accountDAO.getAccounts() !=null ) {
 
-			List<Account> accountList = new ArrayList<>();
-			accountList = accountDAO.getAccounts();
-
-			accountList.forEach(account -> {
+			accountDAO.getAccounts().forEach(account -> {
 
 				if(sysConfigDAO.getSysConfig(account.getUuid()) != null) {
 
@@ -436,6 +457,8 @@ public class DbOperationsJob implements Job{
 	private void checksentSMS() {
 
 	}
+	
+
 
 	/**
 	 * 
@@ -448,37 +471,40 @@ public class DbOperationsJob implements Job{
 			Process p = pb.start();
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); 
 			String line = null;
-
+			
 			while((line=br.readLine())!=null){
 				//System.out.println(line);
-
 			}
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
-
 	}
+	
+
 
 	/**
 	 * @throws IOException
 	 */
-	private void backUpWin() throws IOException {
-
-		String pg_version = "9.3";
-		String pg_home = " \"C:/Program Files/PostgreSQL/"+pg_version+"/bin/pg_dump.exe\"";  
-		//String backupDir = " \"D:/pgBackup/schooldb.backup\" ";
-		String dir = WriteToFile.DB_DIRECTORY;
-
-		String pg = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+dir+" schooldb";
-		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-		java.lang.Process p = rt.exec(pg);
-		//System.out.println("*********************************************************"); 
-		//System.out.println(p.toString()); 
+	/**
+	 * @throws IOException
+	 */
+	private void backUpWin() throws IOException { 
+		
+		 System.out.println("**********************************************");
+		
+		 String pg = WriteToFile.BACKUP_BAT;
+		 java.lang.Runtime rt = java.lang.Runtime.getRuntime();
+			try {
+				java.lang.Process p = rt.exec(pg);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		 
+		 
 	}
-
-
+	
+	
 
 	public static Timestamp strToTstamp(String date_str) {
 		//System.out.println(" date_str:  " + date_str); 

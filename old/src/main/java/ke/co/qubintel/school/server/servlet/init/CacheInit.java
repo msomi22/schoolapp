@@ -76,7 +76,7 @@ public class CacheInit extends HttpServlet {
         sizeOfPolicyConfiguration.setMaxDepthExceededBehavior("abort");
 
         logger.info("Starting to initialize cache");
-        initCache();
+       // initCache();
         logger.info("Have finished initializing cache");
     }
     
@@ -200,6 +200,6 @@ public class CacheInit extends HttpServlet {
     public void destroy() {
         super.destroy();
 
-        CacheManager.getInstance().shutdown();
+       // CacheManager.getInstance().shutdown();
     }
 }

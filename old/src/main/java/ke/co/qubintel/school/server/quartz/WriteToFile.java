@@ -17,30 +17,94 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 
+import ke.co.qubintel.school.server.servlet.quartz.factory.StartDateFromLog;
+
 public class WriteToFile {
-	
+
 	private static final String USER_SYSTEM = System.getProperty("user.name");
 
 	static final String FILENAME = "/home/"+USER_SYSTEM+"/school/.dbscripts/backup.sh";
-    static final String DB_DIRECTORY = "/home/"+USER_SYSTEM+"/school/dbBackup/";
-    public static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/";
-    
-	
-   /**
-    * 
-    */
+	static final String DB_DIRECTORY = "/home/"+USER_SYSTEM+"/school/dbBackup/";
+	public static final String LOGO_PATH = "/home/"+USER_SYSTEM+"/school/logo/";
+
+	static final String PG_DUMP_BAT = "/home/"+USER_SYSTEM+"/school/dbBackup/pgdump.bat";
+
+	static final String BACKUP_BAT = "/home/"+USER_SYSTEM+"/school/dbBackup/backup.bat";
+
+
+
+
+	/**
+	 * 
+	 */
 	public static void createScript() {
 
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 
 		makeDirs();
-		createFile(FILENAME);
+
+
+
+		if (OSValidator.isWindows()) {
+
+			createPGDumpFile(PG_DUMP_BAT);
+			createBackupFile(BACKUP_BAT); 
+
+			writeToPgDumpFile(bw, fw);
+			
+
+			executePgdump();
+			
+
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+
+			writeToBackupFile(bw, fw); 
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			
+
+
+		}
+
+		else if (OSValidator.isUnix()) {
+
+			makeLinuxFile(FILENAME);
+
+			linuxBackukScripts(bw, fw);
+		}
+
+
+
+	}
+
+
+
+
+	/**
+	 * @param bw
+	 * @param fw
+	 */
+	private static void linuxBackukScripts(BufferedWriter bw, FileWriter fw) {
+
 
 		try {
+
+			// 1
 
 			String content = "# Begin automatic creation of role\n" + 
 					"DB_USERNAME=\"postgres\"\n" + 
@@ -75,7 +139,6 @@ public class WriteToFile {
 			bw = new BufferedWriter(fw);
 			bw.write(content);
 
-			//System.out.println("Done creating backup script");
 
 		} catch (IOException e) {
 
@@ -98,51 +161,131 @@ public class WriteToFile {
 			}
 
 		}
-
-
 	}
+
+
+	/**
+	 * @param bw
+	 * @param fw
+	 */
+	private static void writeToPgDumpFile(BufferedWriter bw, FileWriter fw) {
+
+		try {
+			// 2
+			String content = "SET location=where pg_dump.exe\n" + 
+					"\n" + 
+					"echo|%location%>>\"C:\\home\\%username%\\school\\dbBackup\\backupPath.txt\"\n" + 
+					"    for /f \"tokens=* delims=\" %%x in (C:\\home\\%username%\\school\\dbBackup\\backupPath.txt) do (\n" + 
+					"    set output=%%x\n" + 
+					"    )\n" + 
+					"    ::del /q %temp%\\tmp.txt\n" + 
+					"    ::End Of Code You Need\n" + 
+					"    echo This Is The Output:\n" + 
+					"    echo %output%";
+
+			fw = new FileWriter(PG_DUMP_BAT);
+			bw = new BufferedWriter(fw);
+			bw.write(content);
+
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+	}
+
+
+
+	/**
+	 * @param bw
+	 * @param fw
+	 */
+	private static void writeToBackupFile(BufferedWriter bw, FileWriter fw) {
+
+
+		String path_to_psql_file =  WriteToFile.DB_DIRECTORY;
+		String pg_home = StartDateFromLog.checkTimeout(path_to_psql_file+"backupPath.txt",1);
+
+		String backup_dir = WriteToFile.DB_DIRECTORY+"database.backup ";
+
+		String content = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+backup_dir+" schooldb";
+
+		try {
+
+			fw = new FileWriter(BACKUP_BAT);
+			bw = new BufferedWriter(fw);
+			bw.write(content);
+
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+	}
+
+
+
+
+	/**
+	 * 
+	 */
+	private static void executePgdump() {
+		String pg = WriteToFile.PG_DUMP_BAT;
+		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
+		try {
+			java.lang.Process p = rt.exec(pg);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+	
+	}
+
+
+
+
+
 
 
 	/**
 	 * 
 	 * @param filename
 	 */
-	static void createFile(String filename) {
-
-		if (OSValidator.isWindows()) {
-
-			//System.out.println("This is Windows");
-			
-			makeLinuxFile(filename);
-
-
-		} else if (OSValidator.isMac()) {
-
-			//System.out.println("This is Mac");
-			
-			makeLinuxFile(filename);
-		}
-
-
-		else if (OSValidator.isUnix()) {
-
-			//System.out.println("This is Unix");
-
-			makeLinuxFile(filename);
-
-		}
-
-	}
-
-
-
-
-
-	/**
-	 * 
-	 * @param filename
-	 */
-	public static void makeLinuxFile(String filename){
+	public static void createPGDumpFile(String filename){
 
 		File dir = new File(filename);
 
@@ -155,17 +298,59 @@ public class WriteToFile {
 		}
 
 	}
-	
+
+	/**
+	 * 
+	 * @param filename
+	 */
+	public static void createBackupFile(String filename){
+
+		File dir = new File(filename);
+
+		if (!dir.exists()) {
+			try {
+				FileUtils.forceMkdir(dir.getParentFile());
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+	}
+
+
+
+	/**
+	 * 
+	 * @param filename
+	 */
+	public static void makeLinuxFile(String filename){
+
+		File backup_file = new File(filename);
+
+		if (!backup_file.exists()) {
+			try {
+				FileUtils.forceMkdir(backup_file.getParentFile());
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+	}
+
+
+
+
+
 	/**
 	 * 
 	 */
 	public static void makeDirs(){ 
-		
+
 		//System.out.println("Done creating directories");
 
 		File backup_dir = new File(DB_DIRECTORY);
 		File logo_dir = new File(LOGO_PATH);
-		
+
 		if (!backup_dir.exists()) {
 			try {
 				FileUtils.forceMkdir(new File(DB_DIRECTORY));
@@ -173,8 +358,8 @@ public class WriteToFile {
 				System.out.println(ex.getMessage());
 			}
 		}
-		
-		
+
+
 		if (!logo_dir.exists()) {
 			try {
 				FileUtils.forceMkdir(new File(LOGO_PATH));
@@ -182,6 +367,8 @@ public class WriteToFile {
 				System.out.println(ex.getMessage());
 			}
 		}
+
+
 
 
 	}

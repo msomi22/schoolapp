@@ -9,8 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.commons.lang3.SystemUtils;
-
 /**
  * @author peter
  *
@@ -21,19 +19,9 @@ public class StartDateFromLog {
 	 * 
 	 * @return
 	 */
-	public static String checkTimeout() {
+	public static String checkTimeout(String path, int logic) {
 
-		String startDate = "";
-
-		String path = "";
-
-		if(SystemUtils.IS_OS_WINDOWS){
-			path= "C:\\opt\\Programs\\WildFly\\8.2.0\\standalone\\log\\log4jSchool.log";
-		}
-
-		if(SystemUtils.IS_OS_LINUX){
-			path = "/opt/Programs/WildFly/8.2.0/standalone/log/log4jSchool.log";
-		}
+		String firstLine = "";
 
 		File file = new File(path);
 
@@ -47,8 +35,14 @@ public class StartDateFromLog {
 
 
 		try {
+			
+			if(logic == 0) {
+				firstLine = br.readLine().substring(0,20);
+			}else if(logic == 1) {
+				firstLine = br.readLine(); 
+			}
 
-			startDate = br.readLine().substring(0,20);
+			
 			
 
 		} catch (IOException e) {
@@ -56,7 +50,7 @@ public class StartDateFromLog {
 			e.printStackTrace();
 		}
 
-		return startDate;
+		return firstLine;
 	}
 
 }
