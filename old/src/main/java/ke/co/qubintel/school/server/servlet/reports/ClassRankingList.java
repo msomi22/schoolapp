@@ -656,7 +656,7 @@ public class ClassRankingList extends HttpServlet{
 			totalCell.setBackgroundColor(baseColor);
 			totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell pointsCell = new PdfPCell(new Paragraph("Pts",timesRomanBold6));
+			PdfPCell pointsCell = new PdfPCell(new Paragraph("Points",timesRomanBold6));
 			pointsCell.setBackgroundColor(baseColor);
 			pointsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
