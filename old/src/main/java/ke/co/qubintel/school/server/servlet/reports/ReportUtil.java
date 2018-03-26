@@ -134,7 +134,7 @@ public class ReportUtil {
 	public static String getGeneralId(String accountId) {
 		return categoryDAO.getCategory(accountId, "General").getUuid();
 	}
-
+	
 
 	public static String getExamName(String accountId, String[] exams, int i) { 
 
@@ -1835,7 +1835,7 @@ public class ReportUtil {
 			}
 
 			StreamResult streamResult = new StreamResult();
-			streamResult.setResult(cposition + " Out of: " + result.size());
+			streamResult.setResult(cposition + " / " + result.size());
 			streamResult.setStudentId(performance.getStudentId());
 
 			positionList.add(streamResult);

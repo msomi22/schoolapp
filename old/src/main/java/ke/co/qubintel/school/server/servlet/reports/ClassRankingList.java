@@ -229,7 +229,7 @@ public class ClassRankingList extends HttpServlet{
 
 		examType = StringUtils.trimToEmpty(request.getParameter("examType"));
 
-		String fileName = "file.pdf"; 
+		String fileName = ReportUtil.getExamName(accountId, exams,1)+".pdf";  
 		response.setHeader("Content-Disposition", "inline; filename=\""+fileName);
 
 		document = new Document(PageSize.A4.rotate(), 46, 46, 64, 64);

@@ -718,9 +718,7 @@ public class StudentReportCard extends HttpServlet{
 
 				if(classResult){
 
-
-
-					classPositionMSG = pos + " Out of : " + performanceList.size();
+					classPositionMSG = pos + " / " + performanceList.size();
 
 					streamPositionMSG = ReportUtil.getStreamPosition(accountId, student.getUuid(), student.getCurrentStream(), 
 							performanceList,rankWithPoints,rankWithTotalMarks); 
@@ -736,8 +734,7 @@ public class StudentReportCard extends HttpServlet{
 						}
 					}
 
-
-					streamPositionMSG = pos + " Out of : " + performanceList.size();
+					streamPositionMSG = pos + " / " + performanceList.size();
 
 				}
 
@@ -1240,16 +1237,12 @@ public class StudentReportCard extends HttpServlet{
 
 				});
 
-				String[] headers = { "TOTAL", "MEAN GRADE", "MEAN SCORE"};
+				String[] headers = { "TOTAL", "MEAN GRADE"};//, "MEAN SCORE" TODO
 				int count = 0;
-
-
 
 				for(String header : headers){
 
 					examTable.addCell(new Paragraph(header,timesRomanNarmal8));
-
-
 
 					String exm1 = "0";
 					String exm2 = "0";
@@ -1479,7 +1472,7 @@ public class StudentReportCard extends HttpServlet{
 
 										// show grading scale here
 
-										String generalGradingScale = "55DD5463-6ECB-48A3-B6E7-03548A9E37FE";
+										String generalGradingScale = ReportUtil.getGeneralId(accountId);
 
 										List<GradingSystem> gradingSystemList = gradingSystemDAO.getGradingSystemList(accountId, generalGradingScale);
 
@@ -1697,10 +1690,12 @@ public class StudentReportCard extends HttpServlet{
 										}
 
 										if(!yearlyMeanList.isEmpty()) {
+											
 
 											yearlyMeanList.parallelStream().forEach(yearlymean ->{
 
-												if(StringUtils.equals(yearlymean.getClassId(), "C143978A-E021-4015-BC67-5A00D6C910D1")) {
+												//form 1 TODO FORM 1
+												if(StringUtils.equals(yearlymean.getClassId(), classDAO.getClassRoomByDesc(accountId, "FORM 1").getUuid())) {
 
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
@@ -1742,7 +1737,8 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
 
-												}else if(StringUtils.equals(yearlymean.getClassId(), "3E22E428-3155-42F5-B73E-66553ED501C9")) {
+													//form 2 TODO FORM 2
+												}else if(StringUtils.equals(yearlymean.getClassId(), classDAO.getClassRoomByDesc(accountId, "FORM 2").getUuid())) {
 
 
 
@@ -1787,8 +1783,8 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermThreeObj(t3);
 
 
-
-												}else if(StringUtils.equals(yearlymean.getClassId(), "A4BFC2BD-262F-4207-99C8-057D6ADF80C7")) {
+                                                // form 3 TODO  FORM 3
+												}else if(StringUtils.equals(yearlymean.getClassId(), classDAO.getClassRoomByDesc(accountId, "FORM 3").getUuid())) {
 
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
@@ -1829,8 +1825,10 @@ public class StudentReportCard extends HttpServlet{
 													performanceT.setTermOneObj(t1);
 													performanceT.setTermTwoObj(t2);
 													performanceT.setTermThreeObj(t3);
-
-												}else if(StringUtils.equals(yearlymean.getClassId(), "14E56350-08DA-45CC-97D9-C225AF74A7AD")) {
+													
+													
+                                                 // form 4 TODO  FORM 4
+												}else if(StringUtils.equals(yearlymean.getClassId(), classDAO.getClassRoomByDesc(accountId, "FORM 4").getUuid())) {
 
 													TermOneObj t1 = new TermOneObj();
 													Forms forms_t1 = new Forms(); ///
