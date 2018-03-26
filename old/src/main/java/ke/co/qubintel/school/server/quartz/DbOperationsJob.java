@@ -99,8 +99,11 @@ public class DbOperationsJob implements Job{
 		synchGoKeMoney();
 		checkExamDuplicate();  
 		lockAccount();
+		
 
 		try {
+			
+			//backUpWin();
 
 			if(SystemUtils.IS_OS_WINDOWS){
 				backUpWin();
@@ -471,6 +474,8 @@ public class DbOperationsJob implements Job{
 		String pg = pg_home+" -i -h localhost -p 5432 -U school -f c -b -v -f "+dir+" schooldb";
 		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 		java.lang.Process p = rt.exec(pg);
+		//System.out.println("*********************************************************"); 
+		//System.out.println(p.toString()); 
 	}
 
 

@@ -595,17 +595,17 @@ public class ClassRankingList extends HttpServlet{
 
 			size += 12;
 
-			PdfPTable rankingTable = new PdfPTable(26);  //7
+			PdfPTable rankingTable = new PdfPTable(25);  //4
 			rankingTable.setWidthPercentage(100); 
-			rankingTable.setWidths(new int[]{8,12,26,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,7,10,12,12,12,10,8,8}); 
+			rankingTable.setWidths(new int[]{12,26,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,10,10,10,11,11,9,8,8}); 
 			rankingTable.setHeaderRows(1); 
 			rankingTable.isSkipFirstHeader();
 
 
 			//cells = 5
-			PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
+			/*PdfPCell countCell = new PdfPCell(new Paragraph("#",timesRomanBold6));
 			countCell.setBackgroundColor(baseColor);
-			countCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			countCell.setHorizontalAlignment(Element.ALIGN_LEFT);*/
 
 			PdfPCell regNoCell = new PdfPCell(new Paragraph("RegNo",timesRomanBold6));
 			regNoCell.setBackgroundColor(baseColor);
@@ -623,7 +623,7 @@ public class ClassRankingList extends HttpServlet{
 			kcpeCell.setBackgroundColor(baseColor);
 			kcpeCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			rankingTable.addCell(countCell);
+			//rankingTable.addCell(countCell);
 			rankingTable.addCell(regNoCell);
 			rankingTable.addCell(nameCell);
 			rankingTable.addCell(streamCell);
@@ -647,11 +647,12 @@ public class ClassRankingList extends HttpServlet{
 			}
 
 			//cells = 7
-			PdfPCell sub_c_Cell = new PdfPCell(new Paragraph("Su",timesRomanBold6));
+			String mean_s = "\u03A3";
+			PdfPCell sub_c_Cell = new PdfPCell(new Paragraph("Sub",timesRomanBold6));
 			sub_c_Cell.setBackgroundColor(baseColor);
 			sub_c_Cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			
-			PdfPCell totalCell = new PdfPCell(new Paragraph("T",timesRomanBold6));
+			PdfPCell totalCell = new PdfPCell(new Paragraph("Total",timesRomanBold6));
 			totalCell.setBackgroundColor(baseColor);
 			totalCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -659,11 +660,11 @@ public class ClassRankingList extends HttpServlet{
 			pointsCell.setBackgroundColor(baseColor);
 			pointsCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell meanCell = new PdfPCell(new Paragraph("M.G",timesRomanBold6));
+			PdfPCell meanCell = new PdfPCell(new Paragraph("Mn",timesRomanBold6));
 			meanCell.setBackgroundColor(baseColor);
 			meanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-			PdfPCell pmeanCell = new PdfPCell(new Paragraph("P.MG",timesRomanBold6));
+			PdfPCell pmeanCell = new PdfPCell(new Paragraph("P.Mn",timesRomanBold6));
 			pmeanCell.setBackgroundColor(baseColor);
 			pmeanCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 
@@ -739,25 +740,26 @@ public class ClassRankingList extends HttpServlet{
 				stream = StringUtils.remove(stream, "FORM"); 
 				
 				//TODO
-				String student_sub_count = "";
+				//String student_sub_count = "";
 				int c1 = 0, c2 = 0, c3 = 0;
 				if(exams.length == 1) {
 					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
-					student_sub_count = "c1 : " + c1;
+					//student_sub_count = "c1 : " + c1;
 					
 				}if(exams.length == 2) {
 					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year);
 					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year);
-					student_sub_count = "c1 : " + c1 + ", c2: " + c2;
+					//student_sub_count = "c1 : " + c1 + ", c2: " + c2;
 					
 				}if(exams.length == 3) {
 					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
 					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year); 
 					c3 = perfomanceDAO.getStudentSubCount(accountId, exams[2], performance2.getStudentId(), streamId, term, year); 
-					student_sub_count = "c1 : " + c1 + ", c2: " + c2 + ", c3: " + c3;
+					//student_sub_count = "c1 : " + c1 + ", c2: " + c2 + ", c3: " + c3;
 					
 				}
 				
+				//TODO
 			   int max =  Math.max(Math.max(c1,c2),c3);
 				
 
@@ -813,7 +815,7 @@ public class ClassRankingList extends HttpServlet{
 				
 				
 
-				rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
+				//rankingTable.addCell(new Paragraph(" " + count,timesRomanNormal6));
 				rankingTable.addCell(new Paragraph(student.getRegNo(),timesRomanNormal6));
 				
 				String name = student.getFirstname() + " " +  student.getMiddlename() + " " + student.getLastname(); 
