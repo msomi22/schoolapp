@@ -25,10 +25,14 @@ echo "droping the current database s..."
 
 sudo service postgresql restart
 
-#psql -f drop.sql -d postgres 
+#psql -f ../etc/sql/drop.sql -d postgres
 
-echo "Restoring from /home/"$USER"/school/dbBackup/buckup.sql.."
+#echo "Restoring from /home/"$USER"/school/dbBackup/buckup.sql.."
 
-psql  -U school -d schooldb -f /home/$USER/school/dbBackup/buckup.sql
+#psql  -U safadc -d intermapper -f database.bak
+
+#pg_restore -Fc -C database.bak
+
+pg_restore -d schooldb buckup.sql
 
 echo "done.!!!! .."

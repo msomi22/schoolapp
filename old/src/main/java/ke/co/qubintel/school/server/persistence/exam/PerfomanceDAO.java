@@ -316,9 +316,11 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 		try (
 				Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Performance WHERE accountId =? "
-						+ "AND examId =? AND studentId =? AND streamId =? AND term =? AND year =?"
-						+ " AND (score > 0 OR paper1 > 0 OR paper2 > 0 OR paper3 > 0);");     		   
+						+ "AND examId =? AND studentId =? AND streamId =? AND term =? AND year =?;");    
+				//"
+				//+ " AND (score > 0 OR paper1 > 0 OR paper2 > 0 OR paper3 > 0)
 				) {
+		
 			pstmt.setString(1, accountId);
 			pstmt.setString(2, examId);
 			pstmt.setString(3, studentId);
@@ -330,6 +332,8 @@ public class PerfomanceDAO extends GenericDAO  implements SchoolPerfomanceDAO {
 			while(rset.next()){
 				count = rset.getInt("count");
 			}
+			
+			
 		} catch (SQLException e) {
 			logger.error("SQLException while getting student Performance count for accountId " + accountId +
 					" and examId : " + examId + " and studentId : " + studentId + " and streamId : " + streamId +" and term "

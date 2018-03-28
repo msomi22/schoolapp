@@ -742,19 +742,24 @@ public class ClassRankingList extends HttpServlet{
 				//TODO
 				//String student_sub_count = "";
 				int c1 = 0, c2 = 0, c3 = 0;
+				//performance2
+				
+			
+				//performance2.ge
+				
+				
 				if(exams.length == 1) {
-					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
-					//student_sub_count = "c1 : " + c1;
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), student.getCurrentStream(), term, year); 
 					
 				}if(exams.length == 2) {
-					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year);
-					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year);
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), student.getCurrentStream(), term, year);
+					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), student.getCurrentStream(), term, year);
 					//student_sub_count = "c1 : " + c1 + ", c2: " + c2;
 					
 				}if(exams.length == 3) {
-					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), streamId, term, year); 
-					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), streamId, term, year); 
-					c3 = perfomanceDAO.getStudentSubCount(accountId, exams[2], performance2.getStudentId(), streamId, term, year); 
+					c1 = perfomanceDAO.getStudentSubCount(accountId, exams[0], performance2.getStudentId(), student.getCurrentStream(), term, year); 
+					c2 = perfomanceDAO.getStudentSubCount(accountId, exams[1], performance2.getStudentId(), student.getCurrentStream(), term, year); 
+					c3 = perfomanceDAO.getStudentSubCount(accountId, exams[2], performance2.getStudentId(), student.getCurrentStream(), term, year); 
 					//student_sub_count = "c1 : " + c1 + ", c2: " + c2 + ", c3: " + c3;
 					
 				}

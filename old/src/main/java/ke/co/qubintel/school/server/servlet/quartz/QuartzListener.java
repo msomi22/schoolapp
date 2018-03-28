@@ -50,7 +50,7 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
                     Trigger trigger = newTrigger()
                     .withIdentity("TriggerName", "Group")
                     .startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 * * * ?"))
                     .build(); 
                     
                     //create a trigger that simply fires every 5 minutes

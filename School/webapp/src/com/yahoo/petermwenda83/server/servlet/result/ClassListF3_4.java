@@ -489,8 +489,8 @@ public class ClassListF3_4 extends HttpServlet{
 										catmeangn = catTotalsgn/2;
 										examcattotalgn = catmeangn + endtermgn;
 
-									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 										
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -532,7 +532,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -588,7 +588,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -631,7 +631,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -674,7 +674,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -717,7 +717,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -775,7 +775,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -819,7 +819,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -863,7 +863,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -907,7 +907,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -963,7 +963,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -1006,7 +1006,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -1049,7 +1049,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotalgn = catmeangn + endtermgn;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+										examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 										
 									}
 
@@ -1398,7 +1398,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1445,7 +1445,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3);  
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2);  
 										
 									}
 
@@ -1503,7 +1503,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1549,7 +1549,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1594,7 +1594,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1639,7 +1639,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1699,7 +1699,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1745,7 +1745,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1791,7 +1791,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1837,7 +1837,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1896,7 +1896,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1942,7 +1942,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 
@@ -1988,7 +1988,7 @@ public class ClassListF3_4 extends HttpServlet{
 										examcattotal = catmean + endterm;
 
 									}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-										examcattotal = (cat1+cat2) * (5/3); 
+										examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2); 
 										
 									}
 

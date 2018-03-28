@@ -541,7 +541,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 								}
 
 								/**  end if     */
@@ -578,7 +578,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn = ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -626,7 +626,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -663,7 +663,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -700,7 +700,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -736,7 +736,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -784,7 +784,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -820,7 +820,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -856,7 +856,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -892,7 +892,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -939,7 +939,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -975,7 +975,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -1013,7 +1013,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotalgn = catmeangn + endtermgn;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotalgn = (cat1gn+cat2gn) * (5/3); 
+									examcattotalgn =  ExamConstants.sumCat1andCat2(cat1gn, cat1gn);
 									
 								}
 
@@ -1262,8 +1262,8 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									catmean = catTotals/2;
 									examcattotal = catmean + endterm;
 
-								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+								}else if(StringUtils.equals(Cat1Cat2, "ON")) {
+									examcattotal = ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1312,7 +1312,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1371,7 +1371,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1414,7 +1414,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1458,7 +1458,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1502,7 +1502,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1558,7 +1558,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1602,7 +1602,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1647,7 +1647,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1692,7 +1692,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1747,7 +1747,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 
@@ -1791,7 +1791,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3);  
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2); 
 									
 								}
 
@@ -1837,7 +1837,7 @@ public class ReportFormF3_4_c1_c2_et extends HttpServlet{
 									examcattotal = catmean + endterm;
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									examcattotal = (cat1+cat2) * (5/3); 
+									examcattotal =ExamConstants.sumCat1andCat2(cat1, cat2);
 									
 								}
 

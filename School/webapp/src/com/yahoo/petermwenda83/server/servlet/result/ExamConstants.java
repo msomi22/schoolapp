@@ -51,5 +51,13 @@ public class ExamConstants {
 	public static final String HIST_UUID = "c9caf109-c27d-4062-9b9f-ac4268629e27";
 	
 	
+	
+	public static double sumCat1andCat2(double cat1, double cat2) {
+		return (cat1+cat2)* 5/3;
+	}
+	
+	
+	
+	
 
 }

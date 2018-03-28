@@ -66,7 +66,7 @@ public class SchoolLogin extends HttpServlet {
 		accountDAO = AccountDAO.getInstance();
 		acessLevelDAO = AcessLevelDAO.getInstance();
 
-		nameArr = new String[] { "Maliga", "Sigalame", "Burumba", "Njuri", "Qubit", "Ngoto", "Mekaro","Mangu" };
+		nameArr = new String[] { "Maliga", "Sigalame", "Burumba", "Njuri", "Qubit", "Ngoto", "Mekaro","Mangu" };//Burumba
 		allowedNames = Arrays.asList(nameArr);
 
 		logger = Logger.getLogger(this.getClass());
@@ -183,7 +183,7 @@ public class SchoolLogin extends HttpServlet {
 		boolean valid = false;
 
 		for (String name : allowedNames) {
-			if (accountName.contains(name)) {
+			if (accountName.toLowerCase().contains(name.toLowerCase())) {
 				return true;
 			}
 		}

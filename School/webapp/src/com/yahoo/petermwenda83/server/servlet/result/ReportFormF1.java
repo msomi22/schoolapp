@@ -589,7 +589,7 @@ public class ReportFormF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 
@@ -633,7 +633,7 @@ public class ReportFormF1 extends HttpServlet{
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -674,7 +674,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -717,7 +717,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -758,7 +758,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -801,7 +801,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -843,7 +843,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -885,7 +885,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -927,7 +927,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -973,7 +973,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscoregn = (cat1gn+cat2gn) * (5/3); 
+								totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 								totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 							}
 							// end exam logic
@@ -1017,7 +1017,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscoregn = (cat1gn+cat2gn) * (5/3); 
+									totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
@@ -1059,7 +1059,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscoregn = (cat1gn+cat2gn) * (5/3);  
+									totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn);  
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
@@ -1099,7 +1099,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscoregn = (cat1gn+cat2gn) * (5/3); 
+									totalscoregn = ExamConstants.sumCat1andCat2(cat1gn, cat2gn); 
 									totalscoregn = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscoregn)))));
 								}
 								// end exam logic
@@ -1371,7 +1371,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1416,7 +1416,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1463,7 +1463,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1510,7 +1510,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1555,7 +1555,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1600,7 +1600,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1647,7 +1647,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1692,7 +1692,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1737,7 +1737,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1786,7 +1786,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 							}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-								totalscore = (cat1+cat2) * (5/3); 
+								totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 								totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 							}
 							// end exam logic
@@ -1835,7 +1835,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscore = (cat1+cat2) * (5/3); 
+									totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic
@@ -1882,7 +1882,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscore = (cat1+cat2) * (5/3); 
+									totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic
@@ -1926,7 +1926,7 @@ public class ReportFormF1 extends HttpServlet{
 
 
 								}else if(StringUtils.equals(Cat1Cat2, "ON")) { 
-									totalscore = (cat1+cat2) * (5/3); 
+									totalscore = ExamConstants.sumCat1andCat2(cat1, cat2);
 									totalscore = Double.parseDouble(rf2.format((double)Math.round(Double.parseDouble(rf.format(totalscore)))));
 								}
 								// end exam logic

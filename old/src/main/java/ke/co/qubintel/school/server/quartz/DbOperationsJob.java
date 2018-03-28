@@ -97,9 +97,9 @@ public class DbOperationsJob implements Job{
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
-		//synchGoKeMoney();
-		//checkExamDuplicate();  
-		//lockAccount();
+		synchGoKeMoney();
+		checkExamDuplicate();  
+		lockAccount();
 		checksentSMS();
 
 
@@ -490,8 +490,6 @@ public class DbOperationsJob implements Job{
 	 * @throws IOException
 	 */
 	private void backUpWin() throws IOException { 
-		
-		 System.out.println("**********************************************");
 		
 		 String pg = WriteToFile.BACKUP_BAT;
 		 java.lang.Runtime rt = java.lang.Runtime.getRuntime();
