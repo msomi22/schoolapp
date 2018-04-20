@@ -491,6 +491,10 @@ public class DbOperationsJob implements Job{
 	 */
 	private void backUpWin() throws IOException { 
 		
+		/**
+		 * pg_dump.exe -h localhost -U school -c schooldb > database.backup
+		 */
+		
 		 String pg = WriteToFile.BACKUP_BAT;
 		 java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 			try {

@@ -112,11 +112,11 @@ public class AdminResource {
 			return response; 
 		}
 		
-		//return adminService.newAccount(apiAccount);
+		return adminService.newAccount(apiAccount);
 		
-		response.setMessage("error");
-		response.setDescription("Ah! you are busted!");
-		return response;
+		//response.setMessage("error");
+		//response.setDescription("Ah! you are busted!");
+		//return response;
 	}
 	
 	/**

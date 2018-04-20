@@ -50,7 +50,7 @@ public class SchoolLogin extends HttpServlet {
 	private Logger logger;
 	private String[] nameArr;
 	private List<String> allowedNames;
-	
+
 	private String contacts = "+254 718 953974 or +254 706 975801"; 
 
 	/**
@@ -92,12 +92,13 @@ public class SchoolLogin extends HttpServlet {
 		String schoolUsername = StringUtils.trimToEmpty(request.getParameter("schoolUsername"));
 		String staffUsername = StringUtils.trimToEmpty(request.getParameter("staffUsername"));
 		String staffPassword = StringUtils.trimToEmpty(request.getParameter("staffPassword"));
-		
+
 		if (accountDAO.getAccount(schoolUsername, "1") == null) {
 
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials! , "
 					+ "if the error persists please contact " + contacts);
 			response.sendRedirect("index.jsp");
+			return;
 
 		} else if (staffDAO.getStaffByUsername(accountDAO.getAccount(schoolUsername, "1").getUuid(),
 				staffUsername) == null) {
@@ -105,14 +106,16 @@ public class SchoolLogin extends HttpServlet {
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!, "
 					+ "if the error persists please contact " + contacts);
 			response.sendRedirect("index.jsp");
+			return;
 
 		} else if (!validAccount(accountDAO.getAccount(schoolUsername, "1").getName())) {
 
 			message = "Sorry! Account \"" + accountDAO.getAccount(schoolUsername, "1").getName()
 					+ "\" is not allowed to use this Software, please contact " + contacts;
-			
+
 			session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, message);
 			response.sendRedirect("index.jsp");
+			return;
 
 		} else {
 
@@ -132,6 +135,11 @@ public class SchoolLogin extends HttpServlet {
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_ID, staff.getUuid());
 				request.getSession().setAttribute(SessionConstants.SCHOOL_STAFF_SIGN_IN_CATEGORY,
 						acessLevelDAO.getAcessLevel(staff.getAccountId(), staff.getAcessLevelId()).getAcessId());
+				
+				
+				//logger.info("**** schoolUsername " + schoolUsername);
+				//logger.info("**** staffUsername " + staffUsername);
+				//logger.info("**** staffPassword " + staffPassword);
 
 				// token
 				ApiCredentials apiKey = new ApiCredentials();
@@ -152,21 +160,25 @@ public class SchoolLogin extends HttpServlet {
 
 					response.sendRedirect("school/studentIndex.jsp");
 
+
 				else if (StringUtils.equals(staff.getAcessLevelId(),
 						acessLevelDAO.getAcessLevelById(staff.getAccountId(), "400").getUuid())
 						| StringUtils.equals(staff.getAcessLevelId(),
 								acessLevelDAO.getAcessLevelById(staff.getAccountId(), "300").getUuid()))
 					response.sendRedirect("school/generateReport.jsp");
+				
 
 				else if (StringUtils.equals(staff.getAcessLevelId(),
 						acessLevelDAO.getAcessLevelById(staff.getAccountId(), "700").getUuid()))
 					response.sendRedirect("school/fee.jsp");
 
 				logger.info("success");
+				return;
 
 			} else {
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, "Incorrect Credentials!");
 				response.sendRedirect("index.jsp");
+				return;
 
 			}
 
@@ -190,7 +202,7 @@ public class SchoolLogin extends HttpServlet {
 		return valid;
 	}
 
-	
+
 
 	/**
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,

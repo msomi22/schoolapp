@@ -1,29 +1,7 @@
  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    pg_dump.exe -h localhost -U school -c schooldb > database.backup
 
     su
   
