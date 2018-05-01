@@ -2,6 +2,8 @@
 
 AppleTech school Information System
 
+-c standalone-full.xml 
+
 
 
 ### REST API GUIDE ###

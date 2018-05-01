@@ -27,3 +27,11 @@ http://framebox.org/uuDJ-jYbrjx
 https://github.com/msomi22/School
 
  svn revert --depth infinity bootstrap/
+
+
+/home/peter/adc_server_d
+
+scp xx developers@10.28.0.66:~/home/Downloads
+
+
+sshfs developers@10.28.0.66:/home/Desktop ~/adc_server_d
