@@ -16,7 +16,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -81,6 +83,10 @@ import ke.co.qubintel.school.server.servlet.util.Timeit;
  * http://127.0.0.1:8080/school/school/feeReceipt 
  * http://127.0.0.1:8080/school/school/feeReceipt?accountId=E3CDC578-37BA-4CDB-B150-DAB0409270CD&studentId=B3D6957B-0DAE-4E1B-A244-09C33F6FEF80
  * 
+ * http://127.0.0.1:8080/school/school/feeReceipt?accountId=a423d80a-3855-4008-b69f-88bb4382bf8a&studentId=b49ae551-ce88-4424-9c78-6b6f681cfe78
+ * 
+ * 
+ * 
  * @author peter
  *
  */
@@ -98,6 +104,7 @@ public class FeeReceipt extends HttpServlet{
 
 	private Document document;
 	private PdfWriter writer;
+	private ByteArrayOutputStream pdf_baos = new ByteArrayOutputStream();
 
 	private Logger logger;
 
@@ -195,11 +202,15 @@ public class FeeReceipt extends HttpServlet{
 	private void compute(String accountId, String studentId) {
 		try {
 
+			PdfWriter.getInstance(document, pdf_baos); 
 			document.open();
 
 			generateReport(accountId, studentId);
-
+			
 			document.close();
+			
+			//save the document in the file system
+			//saveToFileSystem();
 
 		}catch(DocumentException e) {
 			logger.error("DocumentException while writing into the document");
@@ -207,9 +218,40 @@ public class FeeReceipt extends HttpServlet{
 		} 
 	}
 
+	/**
+	 * 
+	 * @param document
+	 */
+	public void saveToFileSystem() {
+		
+		String destination = "/home/peter/data/sample.pdf"; 
+	    File targetFile = new File(destination); 
+	    
+	    byte[] pdfBytes = pdf_baos.toByteArray();
+		
+		try {
+			
+			OutputStream output = new FileOutputStream(targetFile);
+			output.write(pdfBytes);
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} 
+			
+			output.close();
+			
+			
+		} catch (IOException e) {  
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 
 	private void generateReport(String accountId, String studentId) throws DocumentException {
-
 
 		//BaseColor baseColorWhite = new BaseColor(255,255,255);//while
 		BaseColor baseColor = new BaseColor(117,229,210);//#75e5d2
