@@ -283,6 +283,13 @@ public class SafaricomAPI {
 			EmailUtil util = new EmailUtil(FROM, emailsTo[i], SUBJECT, BODY, OUT_E_SERVER, OUT_E_PORT,
 					FROM, "w3nd@@dc");  
 			
+			
+			/**
+			 *      String from, String to, String subject, String body, 
+		    		String outgoingEmailServer, int outgoingEmailPort,
+		    		String outgoingUsername, String outgoingPassword
+			 */
+			
 			util.run();
 		}
 
