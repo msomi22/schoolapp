@@ -6,6 +6,7 @@ package ke.co.qubintel.school.server.api.rest.safaricom;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,12 +20,15 @@ import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.Balances;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameter;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameters;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.SafResponse;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.SimulateRequest;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.VCResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
+import ke.co.qubintel.school.server.servlet.util.email.EmailUtil;
 
 /** 
  * http://localhost:8080/school/webapi/account/balance
@@ -42,6 +46,38 @@ import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 @Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML}) 
 public class SafaricomAPI {
 
+	/**
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "Simulate MPESA C2B Request.", 
+			notes = "Response Message.", 
+			response = SimulateRequest.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	@POST
+	@Path("/simulate")  
+	@Produces(value = {MediaType.APPLICATION_JSON})  
+	public Object simulateRequest() {
+
+		String consumer_key = "Rwqrrjj4wV2UhgMZYtLMF2X8SQhci6TV";
+		String consumer_secret = "GeGSs75GrGGa5zAv"; 
+
+		SafaricomService.registerURLS(consumer_key,consumer_secret);
+
+		String res = SafaricomService.SimulateRequest(consumer_key,consumer_secret);
+
+		return res;
+	}
+
+
+	/**
+	 * 
+	 * @param object
+	 * @param auth
+	 * @return
+	 */
 	@ApiOperation(value = "Log Response From Safaricom MPESA.", 
 			notes = "Response Message.", 
 			response = SafResponse.class)
@@ -52,7 +88,7 @@ public class SafaricomAPI {
 	@POST
 	@Path("/balance") 
 	@Produces(value = {MediaType.APPLICATION_JSON})  
-	public Balances getAcctBalResponse(SafResponse object) {
+	public Balances getAcctBalResponse(SafResponse object, @HeaderParam("authorization") String auth) {
 
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(object); 
@@ -113,8 +149,8 @@ public class SafaricomAPI {
 		return object;
 	}
 
-	
-	
+
+
 
 	@ApiOperation(value = "Validation Response From Safaricom MPESA.", 
 			notes = "Response Message.", 
@@ -127,11 +163,11 @@ public class SafaricomAPI {
 	@POST
 	@Path("/validation") 
 	public String validationURL(VCResponse vresponse) {
-		
+
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(vresponse);  
 		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
-		
+
 		response.getBillRefNumber();
 		response.getBusinessShortCode();
 		response.getInvoiceNumber();
@@ -142,27 +178,27 @@ public class SafaricomAPI {
 		response.getTransAmount();
 		response.getTransID();
 		response.getTransTime();
-		
+
 		response.getFirstName();
 		response.getLastName();
 		response.getMiddleName();
-		
+
 		//put into the DB
 
 		System.out.println(vresponse + "  validation"); 
 
 		Response MPESAresponse = new Response();
 		String TOMPESA = JsonFromObj.getJsonStringFromObject(MPESAresponse); 
-		
+
 		//TOMPESA = TOMPESA+";";
-		
+
 		System.out.println();
 		System.out.println(TOMPESA); 
-		
-		
+
+
 		return TOMPESA;
 	}
-	
+
 	@ApiOperation(value = "Confirmation Response From Safaricom MPESA.", 
 			notes = "Response Message.", 
 			response = VCResponse.class)
@@ -174,11 +210,11 @@ public class SafaricomAPI {
 	@POST
 	@Path("/confirmation")  
 	public String confirmationURL(VCResponse cresponse) {
-		
+
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(cresponse);  
 		VCResponse response = gson.fromJson(jsonObject, VCResponse.class);
-		
+
 		response.getBillRefNumber();
 		response.getBusinessShortCode();
 		response.getInvoiceNumber();
@@ -189,23 +225,51 @@ public class SafaricomAPI {
 		response.getTransAmount();
 		response.getTransID();
 		response.getTransTime();
-		
+
 		response.getFirstName();
 		response.getLastName();
 		response.getMiddleName();
-		
+
 		//update DB
-		
-		
-        
+
+
+
 		System.out.println(response + "  confirmation"); 
+		sendEmail(response);
 
 		return jsonObject;
 	}
 
+	/**
+	 * 
+	 * @param response
+	 */
+	private void sendEmail(VCResponse response) {
+		
+		final String OUT_E_SERVER ="mail.adcea.com"; 
+		final int OUT_E_PORT = 143;
+		final String FROM ="peter.mwenda@adcea.com";
+		
+		final String SUBJECT = "MPESA EMAIL ALERTS"; 
+		
+		
+		String BODY = "Hello there, MPESA response is : " + response;   
+		
+		String[] emailsTo = {"mwendapeter72@gmail.com", "cornewabwile@gmail.com "}; 
+		
+		for(int i=0;i<emailsTo.length;i++) {
+			
+			EmailUtil util = new EmailUtil(FROM, emailsTo[i], SUBJECT, BODY, OUT_E_SERVER, OUT_E_PORT,
+					FROM, "w3nd@@dc");  
+			
+			util.run();
+		}
 
-
+	}
 	
+
+
+
 
 	/**
 	 * 
@@ -213,12 +277,12 @@ public class SafaricomAPI {
 	 *
 	 */
 	class Response{
-		
+
 		@JsonProperty
 		private String ResponseCode;
 		@JsonProperty
 		private String ResponseDesc;
-		
+
 		public Response() {
 			ResponseCode = "00000000";
 			ResponseDesc = "success";
@@ -244,10 +308,10 @@ public class SafaricomAPI {
 		public String toString() {
 			return "Response [ResponseCode=" + ResponseCode + ", ResponseDesc=" + ResponseDesc + "]";
 		}
-		
+
 	}
-	
-	
+
+
 
 
 
