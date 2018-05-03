@@ -3,9 +3,12 @@
  */
 package ke.co.qubintel.school.server.api.rest.safaricom;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,7 +23,7 @@ import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
-
+import ke.co.qubintel.school.server.api.rest.bean.ApiResponse;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.Balances;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameter;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameters;
@@ -48,6 +51,7 @@ public class SafaricomAPI {
 
 	/**
 	 * 
+	 * @param auth
 	 * @return
 	 */
 	@ApiOperation(value = "Simulate MPESA C2B Request.", 
@@ -56,10 +60,18 @@ public class SafaricomAPI {
 
 	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
 	} )
-	@POST
+	@GET
 	@Path("/simulate")  
 	@Produces(value = {MediaType.APPLICATION_JSON})  
-	public Object simulateRequest() {
+	public Object simulateRequest(@HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		if(!isUserAuthenticated(auth)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
+
+		}
 
 		String consumer_key = "Rwqrrjj4wV2UhgMZYtLMF2X8SQhci6TV";
 		String consumer_secret = "GeGSs75GrGGa5zAv"; 
@@ -88,7 +100,16 @@ public class SafaricomAPI {
 	@POST
 	@Path("/balance") 
 	@Produces(value = {MediaType.APPLICATION_JSON})  
-	public Balances getAcctBalResponse(SafResponse object, @HeaderParam("authorization") String auth) {
+	public Object getAcctBalResponse(SafResponse object, @HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		
+		if(!isUserAuthenticated(auth)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
+
+		}
 
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(object); 
@@ -268,6 +289,56 @@ public class SafaricomAPI {
 	}
 	
 
+	
+	/**
+	 * @param auth 
+	 * @param accountId 
+	 * @return
+	 */
+	public boolean isUserAuthenticated(String auth) {
+		String decodedAuth = "";
+		boolean success = false;
+		String username = "demo";
+		String password = "demo@2018"; 
+
+		if(!StringUtils.isBlank(auth)){
+
+			// Header is in the format "Basic 5tyc0uiDat4"
+			// We need to extract data before decoding it back to original string
+			String[] authParts = auth.split("\\s+");
+			String authInfo = authParts[1];
+			// Decode the data back to original string
+			
+			byte[] base64decodedBytes = Base64.getDecoder().decode(authInfo); 
+			
+			
+			try {
+				
+				decodedAuth = new String(base64decodedBytes, "utf-8");
+				
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+
+			
+			//System.out.println("*****    auth: "+ decodedAuth);
+
+			String[] parts = decodedAuth.split(":"); 
+
+			if(parts.length == 2){
+
+				if(StringUtils.equals(parts[0], username) && 
+						StringUtils.equals(parts[1], password)){
+					success= true;
+				}
+			}
+
+		}
+
+
+		return success;
+	}
 
 
 
