@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom;
+package ke.co.qubintel.school.server.api.rest.safaricom;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.Balances;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameter;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameters;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.SafResponse;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.VCResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
-import ke.co.qubintel.school.server.api.safaricom.bean.Balances;
-import ke.co.qubintel.school.server.api.safaricom.bean.ResultParameter;
-import ke.co.qubintel.school.server.api.safaricom.bean.ResultParameters;
-import ke.co.qubintel.school.server.api.safaricom.bean.SafResponse;
-import ke.co.qubintel.school.server.api.safaricom.bean.VCResponse;
 
 /** 
  * http://localhost:8080/school/webapi/account/balance

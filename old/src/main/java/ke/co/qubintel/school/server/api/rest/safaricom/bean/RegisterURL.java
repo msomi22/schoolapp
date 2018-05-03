@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom.bean;
+package ke.co.qubintel.school.server.api.rest.safaricom.bean;
 
 /**
  * 
@@ -15,7 +15,7 @@ public class RegisterURL{
 	private String ValidationURL;
 	
 	public RegisterURL(){
-		ShortCode = "600321";
+		ShortCode = "600610";
 		ResponseType = "Completed";
 		ConfirmationURL = "http://41.203.216.222:8080/school/webapi/account/confirmation";
 		ValidationURL = "http://41.203.216.222:8080/school/webapi/account/validation";

@@ -1,13 +1,13 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom.bean;
+package ke.co.qubintel.school.server.api.rest.safaricom.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import ke.co.qubintel.school.server.api.safaricom.Result;
+import ke.co.qubintel.school.server.api.rest.safaricom.Result;
 
 /**
  * @author peter

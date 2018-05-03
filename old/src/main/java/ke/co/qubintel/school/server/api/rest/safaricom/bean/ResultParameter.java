@@ -1,30 +1,18 @@
-/**
- * 
- */
-package ke.co.qubintel.school.server.api.safaricom.bean;
+package ke.co.qubintel.school.server.api.rest.safaricom.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * @author peter
- *
- */
-
-//@JsonIgnoreProperties(ignoreUnknown = true)
-@XmlRootElement(name = "ReferenceItem") 
-public class ReferenceItem {
+@XmlRootElement(name = "ResultParameter") 
+public class ResultParameter {
 	
 	@JsonProperty
 	private String Key;
 	@JsonProperty
 	private String Value;
-	
-	/**
-	 * 
-	 */
-	public ReferenceItem() {
+   
+	public ResultParameter() {
 		Key = "";
 		Value = "";
 	}
@@ -44,12 +32,14 @@ public class ReferenceItem {
 	public void setValue(String value) {
 		Value = value;
 	}
-
 	
+	
+
 	@Override
 	public String toString() {
-		return "ReferenceItem [Key=" + Key + ", Value=" + Value + "]";
+		return "ResultParameter [Key=" + Key + ", Value=" + Value + "]";
 	}
+	
 	
 
 }

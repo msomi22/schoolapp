@@ -1,10 +1,10 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom;
+package ke.co.qubintel.school.server.api.rest.safaricom;
 
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.VCResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
-import ke.co.qubintel.school.server.api.safaricom.bean.VCResponse;
 
 /**
  * @author peter
@@ -31,9 +31,10 @@ public class SafaricomServiceTest {
 
 		//System.out.println(SafaricomService.getBalance(balUrl, consumer_key, consumer_secret)); 
 		
-		System.out.println(SafaricomService.SimulateRequest(consumer_key,consumer_secret)); 
+		String regUrls = SafaricomService.registerURLS(consumer_key,consumer_secret);
+		System.out.println("regUrls : " + regUrls);  
 		
-		//System.out.println(SafaricomService.registerURLS(consumer_key,consumer_secret)); 
+		System.out.println(SafaricomService.SimulateRequest(consumer_key,consumer_secret)); 
 		
 		//System.out.println(Generic.getAccessToken(url, username, password));
 

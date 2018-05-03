@@ -1,4 +1,4 @@
-package ke.co.qubintel.school.server.api.safaricom.bean;
+package ke.co.qubintel.school.server.api.rest.safaricom.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

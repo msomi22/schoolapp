@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom;
+package ke.co.qubintel.school.server.api.rest.safaricom;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
@@ -13,8 +13,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.*;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
-import ke.co.qubintel.school.server.api.safaricom.bean.*;
 
 /**
  * @author peter
@@ -46,6 +46,7 @@ public class SafaricomService {
 		// POST method
         ClientResponse response = webResource
         		                    .accept("application/json")	
+        		                    .header("Host", "sandbox.safaricom.co.ke")  
         		                    .header("Authorization", "Bearer " + authEncoded)
                                     .type("application/json")
                                     .post(ClientResponse.class, query);
@@ -75,7 +76,7 @@ public class SafaricomService {
 		RegisterURL registerURL = new RegisterURL();
 		String query = JsonFromObj.getJsonStringFromObject(registerURL); 
 		
-		System.out.println(query);
+		System.out.println("query : " + query);
 		
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
@@ -83,6 +84,7 @@ public class SafaricomService {
 		 // POST method
         ClientResponse response = webResource
         		                    .accept("application/json")	
+        		                    .header("Host", "sandbox.safaricom.co.ke")  
         		                    .header("Authorization", "Bearer " + authEncoded)
                                     .type("application/json")
                                     .post(ClientResponse.class, query);
@@ -141,6 +143,7 @@ public class SafaricomService {
 		 // POST method
         ClientResponse response = webResource
         		                    .accept("application/json")	
+        		                    .header("Host", "sandbox.safaricom.co.ke")  
         		                    .header("Authorization", "Bearer " + authEncoded)
                                     .type("application/json")
                                     .post(ClientResponse.class, query);

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom.bean;
+package ke.co.qubintel.school.server.api.rest.safaricom.bean;
 /**
  * 
  * @author peter
@@ -15,11 +15,11 @@ public class SimulateRequest{
 	private String BillRefNumber;
 	
 	public SimulateRequest() {
-		ShortCode = "600321";
+		ShortCode = "600610";
 	    CommandID = "CustomerPayBillOnline";
-	    Amount = "1000";
+	    Amount = "100";
 	    Msisdn = "254708374149";
-	    BillRefNumber = "xxx";
+	    BillRefNumber = "account";
 	}
 
 	public String getShortCode() {

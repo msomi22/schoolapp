@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ke.co.qubintel.school.server.api.safaricom;
+package ke.co.qubintel.school.server.api.rest.safaricom;
 
 import java.io.UnsupportedEncodingException;
 

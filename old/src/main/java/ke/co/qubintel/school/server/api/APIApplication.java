@@ -19,7 +19,7 @@ import ke.co.qubintel.school.server.api.rest.StaffResource;
 import ke.co.qubintel.school.server.api.rest.StudentResource;
 import ke.co.qubintel.school.server.api.rest.SubClassResource;
 import ke.co.qubintel.school.server.api.rest.admin.AdminResource;
-import ke.co.qubintel.school.server.api.safaricom.SafaricomAPI;
+import ke.co.qubintel.school.server.api.rest.safaricom.SafaricomAPI;
 
 /**
  * @author peter
@@ -33,7 +33,7 @@ public class APIApplication extends Application{
 		BeanConfig beanConfig = new BeanConfig();
 		beanConfig.setVersion("1.0.2");
 		beanConfig.setSchemes(new String[]{"https,http"});
-		beanConfig.setHost("localhost:8080/school");
+		beanConfig.setHost("41.203.216.222:8080/school");
 		beanConfig.setBasePath("/webapi");
 		beanConfig.setFilterClass("ke.co.qubintel.school.server.api.ApiAuthorizationFilterImpl");
 		beanConfig.setResourcePackage("ke.co.qubintel.school.server.api.rest");
@@ -60,6 +60,8 @@ public class APIApplication extends Application{
 	        set.add(ExamResource.class); 
 	        
 	        set.add(HouseResource.class); 
+	        
+	        //set.add(SafaricomAPI.class); 
 	        
 	       
 	        set.add(io.swagger.jaxrs.listing.ApiListingResource.class);
