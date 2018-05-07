@@ -30,6 +30,7 @@ import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameters;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.SafResponse;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.SimulateRequest;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.VCResponse;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm.LnmStkPushResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 import ke.co.qubintel.school.server.servlet.util.email.EmailUtil;
 
@@ -260,6 +261,38 @@ public class SafaricomAPI {
 
 		return jsonObject;
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @param response
+	 * @return
+	 */
+	@ApiOperation(value = "Stk Push Response From Safaricom MPESA.", 
+			notes = "Response Message.", 
+			response = LnmStkPushResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Resource not found.") 
+	} )
+
+	// stk push response 
+	@POST
+	@Path("/sktresponse")   
+	public Object skkPushListener(LnmStkPushResponse response) {
+
+		System.out.println(response + "  confirmation"); 
+		
+		return response;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 

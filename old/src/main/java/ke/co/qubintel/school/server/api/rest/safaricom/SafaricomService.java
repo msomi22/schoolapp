@@ -14,6 +14,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.*;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm.LnmStkPushResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 
 /**
@@ -98,6 +99,59 @@ public class SafaricomService {
 		return output;
 	}
 	
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public static Object lnm_STKP_PUSH(String username,String password) {
+		String url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
+		Client restClient = Client.create();
+		WebResource webResource = restClient.resource(url);
+		
+		LnmStkPush lnmStkPush = new LnmStkPush();
+		lnmStkPush.setBusinessShortCode("174379");
+		lnmStkPush.setPassword("MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMTgwNDA5MDkzMDAy");
+		lnmStkPush.setTimestamp("20180409093002");
+		lnmStkPush.setTransactionType("");
+		lnmStkPush.setAmount("1000");
+		lnmStkPush.setPartyA("254708374149");
+		lnmStkPush.setPartyB("174379");
+		lnmStkPush.setPhoneNumber("254708374149");
+		lnmStkPush.setCallBackURL("http://41.203.216.222:8080/school/webapi/account/sktresponse");
+		lnmStkPush.setAccountReference("account");
+		lnmStkPush.setTransactionDesc("test");
+		
+		String query = JsonFromObj.getJsonStringFromObject(lnmStkPush);  
+		
+		System.out.println("query : " + query);
+		
+		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
+		String authEncoded = getAccessToken(url,username,password);
+
+		 // POST method
+        ClientResponse response = webResource
+        		                    .accept("application/json")	
+        		                    .header("Host", "sandbox.safaricom.co.ke")  
+        		                    .header("Authorization", "Bearer " + authEncoded)
+                                    .type("application/json")
+                                    .post(ClientResponse.class, query);
+
+		if(response.getStatus() != 200){
+			System.err.println("Unable to connect to the server");
+		}
+		
+		String output = response.getEntity(String.class);
+		
+		System.out.println("output : " + output);
+
+		
+		return output;
+	}
+	
+	
+	
 	
 
 
@@ -158,6 +212,8 @@ public class SafaricomService {
 		return output;
 	}
 
+	
+	
 
 	/**
 	 * 

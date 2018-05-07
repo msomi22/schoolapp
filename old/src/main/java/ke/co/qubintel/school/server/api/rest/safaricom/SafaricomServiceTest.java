@@ -31,10 +31,12 @@ public class SafaricomServiceTest {
 
 		//System.out.println(SafaricomService.getBalance(balUrl, consumer_key, consumer_secret)); 
 		
-		String regUrls = SafaricomService.registerURLS(consumer_key,consumer_secret);
-		System.out.println("regUrls : " + regUrls);  
+		//String regUrls = SafaricomService.registerURLS(consumer_key,consumer_secret);
+		//System.out.println("regUrls : " + regUrls);  
 		
-		System.out.println(SafaricomService.SimulateRequest(consumer_key,consumer_secret)); 
+		//System.out.println(SafaricomService.SimulateRequest(consumer_key,consumer_secret)); 
+		
+		System.out.println("*** " + SafaricomService.lnm_STKP_PUSH(consumer_key,consumer_secret));
 		
 		//System.out.println(Generic.getAccessToken(url, username, password));
 
