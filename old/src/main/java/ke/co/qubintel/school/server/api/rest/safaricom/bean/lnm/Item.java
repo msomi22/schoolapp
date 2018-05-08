@@ -1,11 +1,20 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 
  * @author peter
  *
  */
+@XmlRootElement(name = "Item") 
 public class Item {
+	
+	@JsonProperty
 	private String Name;
+	@JsonProperty
 	private String Value;
 
 	public Item() {

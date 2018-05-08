@@ -4,17 +4,26 @@
 package ke.co.qubintel.school.server.api.rest.safaricom;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+//import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+//import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+/*import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;*/
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.*;
-import ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm.LnmStkPushResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 
 /**
@@ -22,8 +31,8 @@ import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
  *
  */
 public class SafaricomService {
-	
-	
+
+
 	/**
 	 * 
 	 * @param username
@@ -31,38 +40,39 @@ public class SafaricomService {
 	 * @return
 	 */
 	public static String SimulateRequest(String username,String password) {
-		
+
 		String url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate";
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
 		SimulateRequest simulateRequest = new SimulateRequest();
-		
+
 		String query = JsonFromObj.getJsonStringFromObject(simulateRequest); 
-		
-		System.out.println(query);
-		
+
+		//System.out.println(jsonPrettyPrint(query));
+
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
-		
+
 		// POST method
-        ClientResponse response = webResource
-        		                    .accept("application/json")	
-        		                    .header("Host", "sandbox.safaricom.co.ke")  
-        		                    .header("Authorization", "Bearer " + authEncoded)
-                                    .type("application/json")
-                                    .post(ClientResponse.class, query);
+		ClientResponse response = webResource
+				.accept("application/json")	
+				.header("Host", "sandbox.safaricom.co.ke")  
+				.header("Authorization", "Bearer " + authEncoded)
+				.type("application/json")
+				.post(ClientResponse.class, query);
 
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
 
 		String output = response.getEntity(String.class);
-		
+		//System.out.println(jsonPrettyPrint(output));
+
 		return output;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param username
@@ -73,32 +83,32 @@ public class SafaricomService {
 		String url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl";
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
-		
+
 		RegisterURL registerURL = new RegisterURL();
 		String query = JsonFromObj.getJsonStringFromObject(registerURL); 
-		
+
 		System.out.println("query : " + query);
-		
+
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
 
-		 // POST method
-        ClientResponse response = webResource
-        		                    .accept("application/json")	
-        		                    .header("Host", "sandbox.safaricom.co.ke")  
-        		                    .header("Authorization", "Bearer " + authEncoded)
-                                    .type("application/json")
-                                    .post(ClientResponse.class, query);
+		// POST method
+		ClientResponse response = webResource
+				.accept("application/json")	
+				.header("Host", "sandbox.safaricom.co.ke")  
+				.header("Authorization", "Bearer " + authEncoded)
+				.type("application/json")
+				.post(ClientResponse.class, query);
 
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
 
 		String output = response.getEntity(String.class);
-		
+
 		return output;
 	}
-	
+
 	/**
 	 * 
 	 * @param username
@@ -106,15 +116,20 @@ public class SafaricomService {
 	 * @return
 	 */
 	public static Object lnm_STKP_PUSH(String username,String password) {
-		String url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
+		String url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";//
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
+
+		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
+		String authEncoded = getAccessToken(url,username,password);
 		
 		LnmStkPush lnmStkPush = new LnmStkPush();
 		lnmStkPush.setBusinessShortCode("174379");
-		lnmStkPush.setPassword("MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMTgwNDA5MDkzMDAy");
-		lnmStkPush.setTimestamp("20180409093002");
-		lnmStkPush.setTransactionType("");
+		String timestamp = generateCurrentTime();
+		String lnmpasskey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+		lnmStkPush.setPassword(generatePassword("174379", lnmpasskey, timestamp));  
+		lnmStkPush.setTimestamp(timestamp);  
+		lnmStkPush.setTransactionType("CustomerPayBillOnline");
 		lnmStkPush.setAmount("1000");
 		lnmStkPush.setPartyA("254708374149");
 		lnmStkPush.setPartyB("174379");
@@ -122,52 +137,45 @@ public class SafaricomService {
 		lnmStkPush.setCallBackURL("http://41.203.216.222:8080/school/webapi/account/sktresponse");
 		lnmStkPush.setAccountReference("account");
 		lnmStkPush.setTransactionDesc("test");
-		
-		String query = JsonFromObj.getJsonStringFromObject(lnmStkPush);  
-		
-		System.out.println("query : " + query);
-		
-		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
-		String authEncoded = getAccessToken(url,username,password);
 
-		 // POST method
-        ClientResponse response = webResource
-        		                    .accept("application/json")	
-        		                    .header("Host", "sandbox.safaricom.co.ke")  
-        		                    .header("Authorization", "Bearer " + authEncoded)
-                                    .type("application/json")
-                                    .post(ClientResponse.class, query);
+		String query = JsonFromObj.getJsonStringFromObject(lnmStkPush);  
+
+		//System.out.println(jsonPrettyPrint(query));
+
+		// POST method
+		ClientResponse response = webResource
+				.accept("application/json")	
+				.header("Host", "sandbox.safaricom.co.ke")  
+				.header("Authorization", "Bearer " + authEncoded)
+				.type("application/json")
+				.post(ClientResponse.class, query);
 
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
-		
-		String output = response.getEntity(String.class);
-		
-		System.out.println("output : " + output);
 
-		
+		String output = response.getEntity(String.class);
+		//System.out.println(jsonPrettyPrint(output));
+
 		return output;
 	}
-	
-	
-	
-	
 
 
-	
-/**
- * 
- * @param url Safariocm Account Balance Resource URL
- * @param username Consumer Key as provided by Safaricom
- * @param password Consumer Secret as provided by Safaricom
- * @return Result in form of JSON 
- */
+
+
+
+	/**
+	 * 
+	 * @param url Safariocm Account Balance Resource URL
+	 * @param username Consumer Key as provided by Safaricom
+	 * @param password Consumer Secret as provided by Safaricom
+	 * @return Result in form of JSON 
+	 */
 	public static String getBalance(String url,String username,String password) {
 
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
-		
+
 		/**
 		 * Base64 encoded string of the:
 		 *  a) M-Pesa short code and 
@@ -175,7 +183,7 @@ public class SafaricomService {
 		 *  which is encrypted using M-Pesa public key and validates the transaction on M-Pesa Core system.
 		 */
 		String SecurityCredential = "pSSoqpsVhavqrOzCLSeZ7T7R80tVAc75Y+tpwnqAKg6yd00vXKjS7wz/4/K8kPCSlrgtcfoTpTYXKPpnTnguKD7hYLqxlPiGniNAYKU57yAm6PRXhoYMy/Evz946uomKVhmiFwxZFH4HnGr/w7tImMIqQQK1/F8KD7XC4PUTG36T6Es3I+20H8wCeiyqUmmU0/WlD2502jAdwOH4543VEujiuagZO2uVgHWnJzfllioKPRhmXblR7yDAYGhpq4vl/G/k1zGzg3sznj3tKkiqIxc/aSnAHoaS37crHHrarxbOwtedqErSK9aeXTq13CM3BDMVobZ1SdNTWYUDb2mN7w==";
-       
+
 		AccountBalance balance = new AccountBalance();
 		balance.setInitiator("testapi0321");
 		balance.setSecurityCredential(SecurityCredential); 
@@ -186,34 +194,34 @@ public class SafaricomService {
 		String domain = "http://41.203.216.222:8080"; 
 		balance.setQueueTimeOutURL(domain+"/school/webapi/account/timeout");
 		balance.setResultURL(domain+"/school/webapi/account/balance");
-		
+
 		String query = JsonFromObj.getJsonStringFromObject(balance); 
-		
-		System.out.println(query);
-		
+
+		//System.out.println(jsonPrettyPrint(query));
+
 		url = "https://sandbox.safaricom.co.ke/oauth/v1/generate";
 		String authEncoded = getAccessToken(url,username,password);
 
-		 // POST method
-        ClientResponse response = webResource
-        		                    .accept("application/json")	
-        		                    .header("Host", "sandbox.safaricom.co.ke")  
-        		                    .header("Authorization", "Bearer " + authEncoded)
-                                    .type("application/json")
-                                    .post(ClientResponse.class, query);
+		// POST method
+		ClientResponse response = webResource
+				.accept("application/json")	
+				.header("Host", "sandbox.safaricom.co.ke")  
+				.header("Authorization", "Bearer " + authEncoded)
+				.type("application/json")
+				.post(ClientResponse.class, query);
 
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
 
 		String output = response.getEntity(String.class);
-		//System.out.println(output);
+		//System.out.println(jsonPrettyPrint(output));
 
 		return output;
 	}
 
-	
-	
+
+
 
 	/**
 	 * 
@@ -223,9 +231,9 @@ public class SafaricomService {
 	 * @return Auth2 access token 
 	 */
 	public static String getAccessToken(String url,String username,String password) {
-	
+
 		String authEncoded = getAuthBase64(username,password);
-		
+
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
 		ClientResponse resp = webResource.queryParam("grant_type", "client_credentials")
@@ -239,13 +247,13 @@ public class SafaricomService {
 		}
 
 		String output = resp.getEntity(String.class);
-		
+
 		Gson g = new Gson(); 
 		Token token = g.fromJson(output, Token.class);
-		
+
 		return token.getAccess_token(); 
 	}
-	
+
 	/**
 	 *
 	 * @param username Consumer Key as provided by Safaricom
@@ -262,12 +270,12 @@ public class SafaricomService {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return authEncoded;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param accountBalance
@@ -349,12 +357,44 @@ public class SafaricomService {
 
 	}
 
+	/**
+	 * @param string
+	 * @param authEncoded
+	 * @return
+	 */
+	public static String generatePassword(String shortCode, String  lnmPasskey, String timestamp) { 
+		String passcode = shortCode+lnmPasskey+timestamp;
+		byte[] passcodeBteArray = passcode.getBytes();
+		String encoded = Base64.getEncoder().withoutPadding().encodeToString(passcodeBteArray);
+		return encoded;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public static String generateCurrentTime() {
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		return sdf.format(now);
+	}
 	
 	
-	
-	
-	
-	
+	/**
+	 * 
+	 * @param jsonStr
+	 * @return
+	 */
+	public static String jsonPrettyPrint(String jsonStr) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonParser jp = new JsonParser();
+		JsonElement je = jp.parse(jsonStr);
+		String prettyJsonString = gson.toJson(je);
+		//System.out.println(prettyJsonString);
+		return prettyJsonString;
+	}
+
+
+
 	/**
 	 * API TEST CODE 
 	 * 
@@ -369,7 +409,7 @@ public class SafaricomService {
 
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
-		
+
 		SubClass subclass = new SubClass();
 		subclass.setAccountId("E3CDC578-37BA-4CDB-B150-DAB0409270CD");
 		subclass.setStreamId("D3733507-C113-4795-91ED-D3CD8039EA03");
@@ -396,7 +436,7 @@ public class SafaricomService {
 		String output = response.getEntity(String.class);
 
 		return output;
-	*/
+	 */
 		return null;}
 
 

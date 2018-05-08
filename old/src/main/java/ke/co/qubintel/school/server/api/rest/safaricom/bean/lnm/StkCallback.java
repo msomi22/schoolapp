@@ -1,15 +1,26 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 
  * @author peter
  *
  */
+@XmlRootElement(name = "StkCallback") 
 public class StkCallback {
 	
+	@JsonProperty
 	private String MerchantRequestID;
+	@JsonProperty
 	private String CheckoutRequestID;
+	@JsonProperty
 	private int ResultCode;
+	@JsonProperty
 	private String ResultDesc;
+	@JsonProperty
 	private CallbackMetadata CallbackMetadata;
 
 	public StkCallback() {

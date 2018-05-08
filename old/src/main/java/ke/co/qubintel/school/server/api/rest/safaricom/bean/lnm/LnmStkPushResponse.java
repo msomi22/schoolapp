@@ -3,12 +3,18 @@
  */
 package ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author peter
  *
  */
+@XmlRootElement(name = "LnmStkPushResponse") 
 public class LnmStkPushResponse {
 
+	@JsonProperty
 	private Body Body;
 
 	/**

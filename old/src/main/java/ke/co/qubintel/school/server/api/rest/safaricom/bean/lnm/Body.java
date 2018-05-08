@@ -1,7 +1,13 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@XmlRootElement(name = "Body") 
 public class Body {
 
+	@JsonProperty
 	private StkCallback stkCallback;
 
 	public Body() {

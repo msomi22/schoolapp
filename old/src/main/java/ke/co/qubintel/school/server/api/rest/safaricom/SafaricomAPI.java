@@ -30,6 +30,7 @@ import ke.co.qubintel.school.server.api.rest.safaricom.bean.ResultParameters;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.SafResponse;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.SimulateRequest;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.VCResponse;
+import ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm.LnmResponse;
 import ke.co.qubintel.school.server.api.rest.safaricom.bean.lnm.LnmStkPushResponse;
 import ke.co.qubintel.school.server.api.rest.util.JsonFromObj;
 import ke.co.qubintel.school.server.servlet.util.email.EmailUtil;
@@ -74,12 +75,43 @@ public class SafaricomAPI {
 
 		}
 
-		String consumer_key = "Rwqrrjj4wV2UhgMZYtLMF2X8SQhci6TV";
-		String consumer_secret = "GeGSs75GrGGa5zAv"; 
+		String consumer_key = "BdxK4NoxTTzibPykKoCjQ1YFhgknwpMM";
+		String consumer_secret = "OogO6G9bB7Lad933"; 
 
 		SafaricomService.registerURLS(consumer_key,consumer_secret);
 
 		String res = SafaricomService.SimulateRequest(consumer_key,consumer_secret);
+
+		return res;
+	}
+	/**
+	 * 
+	 * @param auth
+	 * @return
+	 */
+	@ApiOperation(value = "Simulate LINA NA MPESA Request.", 
+			notes = "Response Message.", 
+			response = LnmResponse.class)
+
+	@ApiResponses( { @io.swagger.annotations.ApiResponse(code = 404, message = "Account Id not found.") 
+	} )
+	@GET
+	@Path("/simulateLNM")  
+	@Produces(value = {MediaType.APPLICATION_JSON})  
+	public Object simulateLNM(@HeaderParam("authorization") String auth) {
+		
+		ApiResponse response = new ApiResponse();
+		if(!isUserAuthenticated(auth)){
+			response.setMessage("error");
+			response.setDescription("User not authenticated");
+			return response; 
+
+		}
+
+		String consumer_key = "BdxK4NoxTTzibPykKoCjQ1YFhgknwpMM";
+		String consumer_secret = "OogO6G9bB7Lad933"; 
+
+		Object res = SafaricomService.lnm_STKP_PUSH(consumer_key,consumer_secret);
 
 		return res;
 	}
@@ -257,7 +289,8 @@ public class SafaricomAPI {
 
 
 		System.out.println(response + "  confirmation"); 
-		sendEmail(response);
+		String[] emailsTo = {"mwendapeter72@gmail.com", "cornewabwile@gmail.com "}; 
+		sendEmail(response, emailsTo);
 
 		return jsonObject;
 	}
@@ -280,10 +313,20 @@ public class SafaricomAPI {
 	@POST
 	@Path("/sktresponse")   
 	public Object skkPushListener(LnmStkPushResponse response) {
-
-		System.out.println(response + "  confirmation"); 
 		
-		return response;
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(response);  
+		LnmStkPushResponse resp = gson.fromJson(jsonObject, LnmStkPushResponse.class);
+
+		System.out.println(resp + "  sktresponse"); 
+		
+		
+		
+
+		String[] emailsTo = {"mwendapeter72@gmail.com"};  
+		sendEmail(resp, emailsTo);
+		
+		return jsonObject;
 	}
 	
 	
@@ -298,7 +341,7 @@ public class SafaricomAPI {
 	 * 
 	 * @param response
 	 */
-	private void sendEmail(VCResponse response) {
+	private void sendEmail(Object response, String[] emailsTo) {
 		
 		final String OUT_E_SERVER ="mail.adcea.com"; 
 		final int OUT_E_PORT = 143;
@@ -306,10 +349,7 @@ public class SafaricomAPI {
 		
 		final String SUBJECT = "MPESA EMAIL ALERTS"; 
 		
-		
 		String BODY = "Hello there, MPESA response is : " + response;   
-		
-		String[] emailsTo = {"mwendapeter72@gmail.com", "cornewabwile@gmail.com "}; 
 		
 		for(int i=0;i<emailsTo.length;i++) {
 			
