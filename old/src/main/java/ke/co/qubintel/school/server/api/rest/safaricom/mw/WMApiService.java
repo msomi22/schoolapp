@@ -1,6 +1,11 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.mw;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+
+import javax.xml.bind.DatatypeConverter;
+
+//import org.apache.commons.lang3.RandomStringUtils;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -21,10 +26,10 @@ public class WMApiService {
 		//String endPoint2 = "http://47.91.105.10:10786";
 		String meterNo = "0120012000812";
 		//System.out.println(wmApi.queryCustomerInfo(endPoint,meterNo)); 
-		
-		//System.out.println(wmApi.purchaseToken(endPoint,meterNo)); 
-		
-		wmApi.getGuid();
+
+		System.out.println(wmApi.purchaseToken(endPoint,meterNo)); 
+
+		//wmApi.getGuid();
 
 
 	}
@@ -34,7 +39,7 @@ public class WMApiService {
 	 * 
 	 * function=querycustomerbymeternumber&errorcode=0&customername=0120011000243
 	 * &customernumber=1704000006&identificationnumber=0120011000243&telephonenumber=18158120370&debt=0.000
-     *
+	 *
 	 * @return
 	 */
 	public String queryCustomerInfo(String endPoint, String meterNo) {
@@ -50,7 +55,7 @@ public class WMApiService {
 				.type("text/html")
 				.accept("text/html")	
 				.get(ClientResponse.class);
-		
+
 		//System.out.println("status : " + response.getStatus()); 
 
 		if(response.getStatus() != 200){
@@ -61,7 +66,7 @@ public class WMApiService {
 
 		return output;
 	}
-	
+
 	/**
 	 * 
 	 * RESPONSE
@@ -96,14 +101,14 @@ public class WMApiService {
 	 * @param endPoint
 	 * @return
 	 */
-	
+
 	public String purchaseToken(String endPoint,String meterNo) {
 		String url = endPoint;
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
-        String id = "fb4821bd0e6a43b3";//16 ASCII characters
-        //String payment = "3353568817039E903AD4D87E2FEFD23B"; //200.00 (32 ascii characters) 
-        String payment = "12ADDB7DEA58A503D41263F4EA44274F";
+		String id = "fb4821bd0e6a43b3";//16 ASCII characters
+		//String payment = "3353568817039E903AD4D87E2FEFD23B"; //200.00 (32 ascii characters) 
+		String payment = "12ADDB7DEA58A503D41263F4EA44274F";
 		String query = "operatetype=purchasebytransid&transid="+id+"&meternumber="+meterNo+"&purchaseparam="+payment; 
 
 		// POST method
@@ -111,7 +116,7 @@ public class WMApiService {
 				.header("Host", endPoint)  
 				.type("text/html")
 				.post(ClientResponse.class, query);
-		
+
 		if(response.getStatus() != 200){
 			System.err.println("Unable to connect to the server");
 		}
@@ -120,23 +125,65 @@ public class WMApiService {
 
 		return output;
 	}
-	
+
 	/**
 	 * UUID has 32+ characters at 4 bits/char, so 128 bits.
+	 * 
+	 * fb4821bd0e6a43b3
+	 * 
+	 * 9950545748519998
 	 * 
 	 * @return  16 ASCII characters 
 	 */
 	public String getGuid() {
-        UUID uuid = UUID.randomUUID();
-        String randomUUIDString = uuid.toString();
+		UUID uuid = UUID.randomUUID();
+		String uuidStr = uuid.toString();
 
-        System.out.println("Random UUID        = " + uuid);
-        System.out.println("Random UUID String = " + randomUUIDString);
-        System.out.println("UUID version       = " + uuid.version());
-        System.out.println("UUID variant       = " + uuid.variant());
-        System.out.println("Len                = " + randomUUIDString.length());
-        return randomUUIDString;
-    }
-	
-	
+		System.out.println("UUID = " + uuidStr);
+
+		StringBuilder sb = new StringBuilder();
+		char[] letters = uuidStr.toCharArray();
+		for (char ch : letters) {
+			sb.append((byte) ch);
+		}
+
+		System.out.println("******************************************************"); 
+		String ascii = sb.toString();
+		System.out.println("ASCII = " + ascii); 
+		String ascii_out = ascii.substring(0, Math.min(ascii.length(), 16));
+		System.out.println("16 ASCII = " + ascii_out); 
+
+		System.out.println("******************************************************"); 
+
+		try {
+			String hex = toHexadecimal(uuidStr);
+			String hex_out = hex.substring(0, Math.min(hex.length(), 16));
+
+			System.out.println("hex = " + hex); 
+			System.out.println("16 hex = " + hex_out); 
+
+
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		System.out.println("******************************************************"); 
+
+
+		return ascii_out;
+	}
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public String toHexadecimal(String text) throws UnsupportedEncodingException{
+		byte[] myBytes = text.getBytes("UTF-8");
+		return DatatypeConverter.printHexBinary(myBytes);
+		//String rad = RandomStringUtils.randomAlphanumeric(16).toString().toLowerCase();  
+		//System.out.println("rad = " + rad);  
+	}
+
+
+
 }
