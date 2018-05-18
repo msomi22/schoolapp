@@ -10,7 +10,7 @@ import com.sun.jersey.api.client.WebResource;
 
 /**
  * 
- * @author peter
+ *  @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
 public class WMApiService {

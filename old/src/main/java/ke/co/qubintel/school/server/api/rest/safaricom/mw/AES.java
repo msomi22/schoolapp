@@ -1,16 +1,13 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.mw;
 
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 /**
  * 
- * @author peter
+ *  @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
  */
 public class AES {
