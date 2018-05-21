@@ -1,9 +1,7 @@
 package ke.co.qubintel.school.server.api.rest.safaricom.mw;
 
-import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 
 /**
  * 
@@ -12,50 +10,62 @@ import java.util.Base64;
  */
 public class AES {
 
-	private static final String ALGO = "AES";
-	
 	/**
 	 * 
-	 * @param data
+	 * @param sSrc
 	 * @param mykey
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] encrypt(byte[] data, byte[] mykey) throws Exception {
-		Key key = generateKey(mykey); 
-		Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
-		c.init(Cipher.ENCRYPT_MODE, key);
-		return c.doFinal(data);
+	public static byte[] ecbEncrypt(byte data[], byte[] mykey) throws Exception {
+		if (mykey == null) {
+			System.out.print("key null");
+			return null;
+		}
+		if (mykey.length % 16 != 0) {
+			System.out.print("key must be equal to 16");
+			return null;
+		}
+		SecretKeySpec skeySpec = new SecretKeySpec(mykey, "AES");
+		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+		byte[] encrypted = cipher.doFinal(data);
+		return encrypted;
 	}
-	
 
 	/**
 	 * 
-	 * @param encryptedData
+	 * @param sSrc
 	 * @param mykey
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decrypt(String encryptedData, byte[] mykey) throws Exception {
-		Key key = generateKey(mykey);
-		Cipher c = Cipher.getInstance(ALGO);
-		c.init(Cipher.DECRYPT_MODE, key);
-		byte[] decordedValue = Base64.getDecoder().decode(encryptedData);
-		byte[] decValue = c.doFinal(decordedValue);
-		return new String(decValue);
+	public static byte[] ecbDecrypt(byte data[], byte[] mykey) throws Exception {
+		try {
+			if (mykey == null) {
+				System.out.print("Key null");
+				return null;
+			}
+
+			if (mykey.length % 16 != 0) {
+				System.out.print("key must be equal to 16");
+				return null;
+			}
+
+			SecretKeySpec skeySpec = new SecretKeySpec(mykey, "AES");
+			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+			cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+			try {
+				return cipher.doFinal(data);
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				return null;
+			}
+		} catch (Exception ex) {
+			System.out.println(ex.toString());
+			return null;
+		}
 	}
 
 
-	/**
-	 * 
-	 * @param mykey
-	 * @return
-	 * @throws Exception
-	 */
-	private static Key generateKey(byte[] mykey) throws Exception {
-		return new SecretKeySpec(mykey, ALGO);
-	}
-
-
-	
 }

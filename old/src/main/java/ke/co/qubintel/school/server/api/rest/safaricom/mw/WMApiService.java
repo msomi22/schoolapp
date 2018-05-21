@@ -2,13 +2,15 @@ package ke.co.qubintel.school.server.api.rest.safaricom.mw;
 
 import java.io.UnsupportedEncodingException;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.codec.binary.Hex;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-/**
+/** 
  * 
  *  @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
  *
@@ -16,25 +18,32 @@ import com.sun.jersey.api.client.WebResource;
 public class WMApiService {
 
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	private static final String rk = "2CCBA387A3B10B126F20DFB38E2B4B6C";
-	//private static final byte[] rootKey = new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; 
-	private static final byte[] rootKey = rk.getBytes();
-	
+	//private static final String rk = "2CCBA387A3B10B126F20DFB38E2B4B6C";
+	private static final byte[] rootKey = new byte[]{0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30}; 
+	//private static final byte[] rootKey = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
+	//private static final byte[] rootKey = rk.getBytes();
+
 
 	public static void main(String[] args) throws Exception {
 
 		WMApiService wmApi = new WMApiService();
-		//System.out.println("sending...."); 
+		System.out.println("sending...."); 
 		String endPoint = "http://47.91.105.10:10786";
-		//String endPoint2 = "http://47.91.105.10:10786";
+		//String endPoint = "http://10.172.19.106:18010";//TCP-18010, 9001-both
 		String meterNo = "0120012000812";
 		//System.out.println(wmApi.queryCustomerInfo(endPoint,meterNo)); 
 
-		String transactionId = wmApi.randomAlphaNumeric(16);
-		String purchaseParam = generatePurchaseString(transactionId, 250.0);
-		String ps = wmApi.purchaseToken(endPoint,meterNo, transactionId, purchaseParam);
 
+		String transactionId = wmApi.randomAlphaNumeric(16);
+		System.out.println("transactionId = " + transactionId);
+		String purchaseParam = generatePurchaseString(transactionId, 400.00);
+		String ps = wmApi.purchaseToken(endPoint, meterNo, transactionId , purchaseParam);
+
+		System.out.println("purchaseParam = " + purchaseParam);  
 		System.out.println("Response = " + ps);  
+		
+		//String paymentstr = getEncryptedAmount(transactionId,300.00,"ED880A97CCD44A4741B4AA034A4A7203");
+		//System.out.println("paymentstr = " + paymentstr);  
 
 
 	}
@@ -49,38 +58,69 @@ public class WMApiService {
 	public static String generatePurchaseString(String transactionID, Double payment) throws Exception{
 
 		byte[] transidbytes = getBytes16(transactionID);
-		byte[] encryptedtransaction = AES.encrypt(transidbytes, rootKey); 
-		
+		byte[] encryptedtransaction = AES.ecbEncrypt(transidbytes, rootKey); 
+
 		String paymentStr = String.valueOf(payment);
 		byte[] paymentbytes = getBytes16(paymentStr);  
-		
-		byte[] purchasebytes = AES.encrypt(paymentbytes, encryptedtransaction); 
-		
-		String hex = hexEncode(purchasebytes).toUpperCase();
-		
+
+		byte[] purchasebytes = AES.ecbEncrypt(paymentbytes, encryptedtransaction); 
+
+		String hex = hexEncode(purchasebytes); 
+
 		return hex; 
 	}
+
+	/**
+	 * 
+	 * @param transactionID
+	 * @param payment
+	 * @param encryptedTransaction
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	public static String getEncryptedAmount(String transactionID, Double payment, String encryptedParam) throws Exception {
+
+		byte[] transidbytes = getBytes16(transactionID);
+		byte[] encryptedtransaction = AES.ecbEncrypt(transidbytes, rootKey); 
+
+		//encryptedTransaction hex to bytes
+		byte[] encryptedbytes = hexStringToBytes(encryptedParam);
+
+		byte[] paymentbytes = AES.ecbDecrypt(encryptedbytes, encryptedtransaction);
+
+		String paymentstr = bytesToASCIIString(paymentbytes); 
+
+		return paymentstr;
+	}
+
+
 	/**
 	 * 
 	 * @param transactionId
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public static byte[] getBytes16(String transactionId) throws UnsupportedEncodingException {
-		if ((transactionId.length() < 1)) {
+	public static byte[] getBytes16(String toConvert) throws UnsupportedEncodingException {
+
+		if ((toConvert.length() < 1)) {
 			return null;
 		}
 
-		if ((transactionId.length() > 16)) {
-			transactionId = transactionId.substring(0, 16);
+		if ((toConvert.length() > 16)) {
+			toConvert = toConvert.substring(0, 16);
 			return null;
 		}
 
-		byte[] strbytes = transactionId.getBytes("UTF-8");
+		byte[] strbytes = toConvert.getBytes("UTF-8");
+		/**
+		 * Append 0x00 fill to 16 bytes 
+		 */
 		byte[] resultbytes = new byte[16];
 		System.arraycopy(strbytes, 0, resultbytes, 0, strbytes.length); 
 		return resultbytes;
 	}
+
+
 	/**
 	 * 
 	 * @param data
@@ -89,13 +129,11 @@ public class WMApiService {
 	public static String hexEncode(final byte[] data) {
 		try {
 			final char[] result = Hex.encodeHex(data);
-			return new String(result);
+			return String.valueOf(result).toUpperCase(); 
 		} catch (final Exception e) {
 			return null;
 		}
 	}
-
-
 
 	/**
 	 * RESPONSE 
@@ -108,7 +146,7 @@ public class WMApiService {
 	 * @param meterNo
 	 * @return
 	 */
-	
+
 	public String queryCustomerInfo(String endPoint, String meterNo) {
 		String url = endPoint;
 		Client restClient = Client.create();
@@ -120,7 +158,7 @@ public class WMApiService {
 				.queryParam("meternumber", meterNo)
 				.header("Host", endPoint)  
 				.type("text/html")
-				.accept("text/html")	
+				//.accept("text/html")	
 				.get(ClientResponse.class);
 
 		//System.out.println("status : " + response.getStatus()); 
@@ -148,7 +186,7 @@ public class WMApiService {
 	 * @param purchaseParam
 	 * @return
 	 */
-	
+
 	public String purchaseToken(String endPoint,String meterNo, String transactionId, String purchaseParam) { 
 		String url = endPoint;
 		Client restClient = Client.create();
@@ -184,6 +222,29 @@ public class WMApiService {
 		return builder.toString().toLowerCase();
 	}
 
+	//****************************************************************** 
+	/**
+	 * 
+	 * @param encryptedParam
+	 * @return
+	 */
+	public static byte[] hexStringToBytes(String encryptedParam) {
+		return DatatypeConverter.parseHexBinary(encryptedParam);
+	}
+	/**
+	 * 
+	 * @param paymentbytes
+	 * @return
+	 */
+	public static String bytesToASCIIString(byte[] paymentbytes) {
+		return  new String(paymentbytes);
+	}
+
+
+
+
+
 
 
 }
+
