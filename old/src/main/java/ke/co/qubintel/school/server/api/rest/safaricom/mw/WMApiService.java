@@ -16,7 +16,10 @@ import com.sun.jersey.api.client.WebResource;
 public class WMApiService {
 
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	private static final byte[] rootKey = new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; 
+	private static final String rk = "2CCBA387A3B10B126F20DFB38E2B4B6C";
+	//private static final byte[] rootKey = new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; 
+	private static final byte[] rootKey = rk.getBytes();
+	
 
 	public static void main(String[] args) throws Exception {
 
