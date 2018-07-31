@@ -32,9 +32,11 @@ export PGPASSWORD=$DB_PASSWORD
 echo "Creating new role..."
 
 #If a user has not been created, uncomment the line below
-#psql -c "CREATE USER sema WITH PASSWORD 'g6kp7lwt' CREATEDB"
 
-echo "Finished creating new role."
+psql -c "CREATE USER school WITH PASSWORD 'AllaManO1' CREATEDB"  
+psql -c "ALTER ROLE school WITH CREATEDB"  
+
+echo "Finished creating new role." 
 #End automatic creation of role
 
 # Initialize the following variables as appropriate:

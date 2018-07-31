@@ -28,8 +28,8 @@ public class WMApiService {
 
 		WMApiService wmApi = new WMApiService();
 		System.out.println("sending...."); 
-		String endPoint = "http://47.91.105.10:10786";
-		//String endPoint = "http://10.172.19.106:18010";//TCP-18010, 9001-both
+		//String endPoint = "http://47.91.105.10:10786";
+		String endPoint = "http://10.172.19.106:18010";//TCP-18010, 9001-both - 41.90.111.70
 		String meterNo = "0120012000812";
 		//System.out.println(wmApi.queryCustomerInfo(endPoint,meterNo)); 
 

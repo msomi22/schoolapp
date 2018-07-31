@@ -33,7 +33,7 @@ public class APIApplication extends Application{
 		BeanConfig beanConfig = new BeanConfig();
 		beanConfig.setVersion("1.0.2");
 		beanConfig.setSchemes(new String[]{"https,http"});
-		beanConfig.setHost("41.203.216.222:8080/school");
+		beanConfig.setHost("41.90.111.70:8080/school");//41.90.111.70  , 41.203.216.222
 		beanConfig.setBasePath("/webapi");
 		beanConfig.setFilterClass("ke.co.qubintel.school.server.api.ApiAuthorizationFilterImpl");
 		beanConfig.setResourcePackage("ke.co.qubintel.school.server.api.rest");
