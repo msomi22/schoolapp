@@ -219,6 +219,12 @@
 			<version>1.0.19</version>
 		</dependency>
 
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
 
 
 
@@ -626,62 +632,6 @@
 				</plugin>
 
 
-				<plugin>
-					<groupId>com.googlecode.maven-download-plugin</groupId>
-					<artifactId>download-maven-plugin</artifactId>
-					<version>1.2.1</version>
-					<executions>
-						<execution>
-							<id>swagger-ui</id>
-							<goals>
-								<goal>wget</goal>
-							</goals>
-							<configuration>
-								<url>https://github.com/swagger-api/swagger-ui/archive/master.tar.gz</url>
-								<unpack>true</unpack>
-								<outputDirectory>${project.build.directory}</outputDirectory>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<executions>
-						<execution>
-							<id>copy-resources</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>copy-resources</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>target/${project.artifactId}-${project.version}</outputDirectory>
-								
-								<resources>
-								
-									<resource>
-										<directory>${project.build.directory}/swagger-ui-master/dist
-										</directory>
-										<filtering>true</filtering>
-										<excludes>
-											<exclude>index.html</exclude>
-										</excludes>
-									</resource>
-									
-									<resource>
-								        <directory>${project.build.directory}/main</directory>
-								        <excludes>
-								          <exclude>**/scripts</exclude> 
-								        </excludes>
-								     </resource>
-									
-								</resources>
-								
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 
 
 			</plugins>
@@ -702,7 +652,7 @@
 				<role>Software Engineer</role>
 			</roles>
 		</developer>
-		
+
 		<developer>
 			<name>Munene Kuria</name>
 			<id>Kuria</id>
@@ -712,15 +662,8 @@
 				<role>Software Engineer</role>
 			</roles>
 		</developer>
-		
+
 	</developers>
-
-	<contributors>
-		<contributor>
-			<name>Dennis Muthomi</name>
-		</contributor>
-	</contributors>
-
 
 
 </project>

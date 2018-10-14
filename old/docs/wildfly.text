@@ -18,6 +18,10 @@
 *  bind to all available IP addresses, then you can do:
 * ./standalone.sh -b=0.0.0.0
 
+* -Djboss.http.port=8085 
+
+* ./standalone.sh -b=0.0.0.0 -Djboss.http.port=8085  
+
 * WildFly “management” interface can be bound to a specific IP address as:
 * ./standalone.sh -bmanagement=192.168.1.14
 
