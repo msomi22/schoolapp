@@ -31,8 +31,17 @@ public class WMApiService {
 
 		//wmApi.getGuid();
 
-
 	}
+
+	public static byte[] stringToBytesASCII(String str) {
+		byte[] b = new byte[str.length()];
+		for (int i = 0; i < b.length; i++) {
+			b[i] = (byte) str.charAt(i);
+		}
+		return b;
+	}
+
+
 
 	/**
 	 * RESPONSE 
@@ -106,9 +115,10 @@ public class WMApiService {
 		String url = endPoint;
 		Client restClient = Client.create();
 		WebResource webResource = restClient.resource(url);
-		String id = "fb4821bd0e6a43b3";//16 ASCII characters
+		//String id = "fb4821bd0e6a43b3";//16 ASCII characters
+		String id = "21cc78c4a3bcddd4";//16 ASCII characters
 		//String payment = "3353568817039E903AD4D87E2FEFD23B"; //200.00 (32 ascii characters) 
-		String payment = "12ADDB7DEA58A503D41263F4EA44274F";
+		String payment = "12ADDB7DEA58A503D41263F4EA44274G";
 		String query = "operatetype=purchasebytransid&transid="+id+"&meternumber="+meterNo+"&purchaseparam="+payment; 
 
 		// POST method
