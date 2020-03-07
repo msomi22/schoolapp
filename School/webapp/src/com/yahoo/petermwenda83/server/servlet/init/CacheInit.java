@@ -7,9 +7,11 @@ package com.yahoo.petermwenda83.server.servlet.init;
 
 import java.io.File;
 import java.util.List;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -60,13 +62,13 @@ public class CacheInit extends HttpServlet {
 
         accountDAO = AccountDAO.getInstance();
        
+        
         sizeOfPolicyConfiguration = new SizeOfPolicyConfiguration();
         sizeOfPolicyConfiguration.setMaxDepthExceededBehavior("abort");
 
         logger.info("Starting to initialize cache");
         initCache();
         logger.info("Have finished initializing cache");
-        
     }
     
 
@@ -90,8 +92,10 @@ public class CacheInit extends HttpServlet {
         objList = accountDAO.getAllSchools();
         initCacheByUuid(CacheVariables.CACHE_ACCOUNTS_BY_UUID, objList);
        
+
         initAccountsCache(CacheVariables.CACHE_SCHOOL_ACCOUNTS_BY_USERNAME);
            
+
         initGenericCache(CacheVariables.CACHE_STATISTICS_BY_SCHOOL_ACCOUNT);
         initGenericCache(CacheVariables.CACHE_ALL_ACCOUNTS_STATISTICS);        
     }
@@ -189,5 +193,4 @@ public class CacheInit extends HttpServlet {
 
         CacheManager.getInstance().shutdown();
     }
-   
 }

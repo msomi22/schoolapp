@@ -4,7 +4,6 @@
  */
 package com.yahoo.petermwenda83.server.servlet.util;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
@@ -20,7 +19,7 @@ import org.apache.log4j.Logger;
 public class LogUtil {
 	
 	String user;
-	static String logDir;
+	String logDir;
 	private Logger logger;
 
 	/**
@@ -31,13 +30,8 @@ public class LogUtil {
 		logDir = "/home/"+user+"/school/logs/log.txt";
 	}
 	
-	public static void main(String[] x) {
-		File file = new File(logDir);
-		System.out.println(file.exists());
-	}
-	
 	public void writeLog(String logstr){
-		/*try
+		try
 		{
 		    String filename= logDir;  
 		    FileWriter fw = new FileWriter(filename,true); //the true will append the new data
@@ -47,7 +41,7 @@ public class LogUtil {
 		catch(IOException ioe)
 		{
 			logger.info("IOException while writing log: " + ioe.getMessage()); 
-		}*/
+		}
 	}
 	
 }

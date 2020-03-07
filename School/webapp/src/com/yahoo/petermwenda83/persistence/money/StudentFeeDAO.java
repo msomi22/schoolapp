@@ -243,7 +243,7 @@ public class StudentFeeDAO extends GenericDAO implements SchoolStudentFeeDAO {
 	}
 
 	@Override
-	public List<StudentFee> getStudentFeeByStudentUuidList(String schoolAccountUuid, String studentUuid, String Term, String Year) {
+	public List<StudentFee> getStudentFeeByStudentUuidList(String schoolAccountUuid, String studentUuid,String Term,String Year) {
 		List<StudentFee> studentFeeList = null;
 		try(
 				Connection conn = dbutils.getConnection();

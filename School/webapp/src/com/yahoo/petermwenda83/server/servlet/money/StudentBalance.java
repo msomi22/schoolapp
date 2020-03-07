@@ -56,7 +56,7 @@ public class StudentBalance {
 
 	public double findBalance(TermFeeDAO termFeeDAO, ExamConfigDAO examConfigDAO, StudentFeeDAO studentFeeDAO,
 			StudentOtherMoniesDAO studentOtherMoniesDAO, Date admissiondate, String studentRegTerm, String studentuuid, String schooluuid,int finalYear) {
-		System.out.println("START: " + new Date());
+		//System.out.println("START: " + new Date());
 		double balance = 0;
 		double amountPaid = 0;
 		double otherPaid = 0;
@@ -87,17 +87,12 @@ public class StudentBalance {
 			for(int i=0;i<terms.length;i++){
 				term = terms[i];
 				
-				System.out.println("schooluuid = " +schooluuid);
-				System.out.println("studentuuid = " + studentuuid);
-				System.out.println("term = " + term);
-				System.out.println("year = " + year);
 				//start finding the balance here
 				studentFeeList = studentFeeDAO.getStudentFeeByStudentUuidList(schooluuid, studentuuid, term, year);
-				System.out.println("size = " + studentFeeList.size());
 				othermoneyList = studentOtherMoniesDAO.getStudentOtherList(studentuuid, term, year);
 				TermFee admTermFee = new TermFee();
 				admTermFee = termFeeDAO.getFee(schooluuid,term, year);
-				System.out.println("[ TermFee = " + admTermFee.getTermAmount() +" Term " + admTermFee.getTerm() + " Year " + admTermFee.getYear() +  "]");
+				//System.out.println("[ TermFee = " + admTermFee.getTermAmount() +" Term " + admTermFee.getTerm()+" ]");
 				
 				amountPaid = 0;
 				otherPaid = 0;
@@ -106,14 +101,14 @@ public class StudentBalance {
 				
 				for(StudentFee studentFee :studentFeeList){
 					amountPaid +=studentFee.getAmountPaid();//amount paid per term
-					System.out.println("amountPaid = " + amountPaid +" Term " + studentFee.getTerm() + " Year " + studentFee.getYear());
+					//System.out.println("amountPaid = " + amountPaid +" Term " + studentFee.getTerm());
 					feeStudentType = studentFee.getStudentType();//last payment type , day/boarder
-					System.out.println("feeStudentType " + feeStudentType);
+					//System.out.println("feeStudentType " + feeStudentType);
 				}
 
 				for(StudentOtherMonies otherMoney :othermoneyList){
 					otherPaid += otherMoney.getAmountPiad();
-					System.out.println("otherPaid = " + otherPaid +" Term " + otherMoney.getTerm() + " Year " + otherMoney.getYear());
+					//System.out.println("otherPaid = " + otherPaid +" Term " + otherMoney.getTerm());
 				}
 		
 				if(StringUtils.equals(feeStudentType, "Boarder")){
@@ -125,8 +120,6 @@ public class StudentBalance {
 				studentFeeList.clear();
 				othermoneyList.clear();
 				
-				System.out.println("***balance***" + balance);
-				
 				if(admYr == crrntYr && crrntYr <= finalYear){
 					if(StringUtils.equals(term, currentTerm)){
 						break;
@@ -137,7 +130,7 @@ public class StudentBalance {
 			
 			terms = new String [] {"1","2","3"}; 
 			admYr +=1;
-			System.out.println("STOP: " + new Date());
+			//System.out.println("STOP: " + new Date());
 		}
 		logUtil.writeLog("find fee balance = " + balance);
 		return balance;
