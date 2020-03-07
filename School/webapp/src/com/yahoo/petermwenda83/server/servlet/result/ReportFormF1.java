@@ -2973,9 +2973,14 @@ public class ReportFormF1 extends HttpServlet{
 
 					nexttermBoardingfee = termFeenex.getTermAmount();
 					nexttermDayfee = termFeenex.getDayAmount();
-
+					NumberFormat nf = null;
+					try {
 					Locale locale = new Locale("en","KE"); 
-					NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+					nf = NumberFormat.getCurrencyInstance(locale);
+					}catch(Exception e) {
+						nf = NumberFormat.getCurrencyInstance();
+						continue;
+					}
 					double balance = 0;
 					String feebalance = "";
 					StudentBalance studentBal = new StudentBalance();

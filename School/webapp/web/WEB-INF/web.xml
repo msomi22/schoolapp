@@ -41,6 +41,14 @@
         </init-param>
         <load-on-startup>4</load-on-startup>
     </servlet>
+    
+    <listener>
+    <listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
+    </listener>
+
+    <listener>
+		<listener-class>com.yahoo.petermwenda83.ThreadManager</listener-class>
+	</listener>
 
 
   <servlet>
@@ -476,23 +484,6 @@
         <servlet-name>ClearStudent</servlet-name>
         <servlet-class>com.yahoo.petermwenda83.server.servlet.student.clearance.ClearStudent</servlet-class>
     </servlet>
-
-
-
-
-
-
-
-
-
-
-
-
-    <listener>
-    <listener-class>com.yahoo.petermwenda83.server.servlet.quartz.QuartzListener</listener-class>
-    </listener>
-
-
 
 
 

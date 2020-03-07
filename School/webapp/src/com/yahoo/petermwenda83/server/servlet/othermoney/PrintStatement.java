@@ -56,6 +56,7 @@ import com.yahoo.petermwenda83.persistence.othermoney.RevertedMoneyDAO;
 import com.yahoo.petermwenda83.persistence.othermoney.StudentOtherMoniesDAO;
 import com.yahoo.petermwenda83.persistence.student.StudentDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
+import com.yahoo.petermwenda83.server.servlet.money.StudentBalance;
 import com.yahoo.petermwenda83.server.servlet.result.PdfUtil;
 import com.yahoo.petermwenda83.server.servlet.util.LogUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -385,10 +386,8 @@ public class PrintStatement extends HttpServlet {
 
 		//if initial term is 1, compute and move to term 2
 		if(Integer.parseInt(regterm) == 1){
-		    double lastTermfeeBal;
-		    lastTermfeeBal = 0;
-
-
+		    double lastTermfeeBal = 0;
+		  
 			//table here
 			PdfPCell countHeader = new PdfPCell(new Paragraph("S.N",boldFont));
 			countHeader.setBackgroundColor(baseColor);
@@ -463,8 +462,8 @@ public class PrintStatement extends HttpServlet {
 					if(stuOthermoniList !=null){
 						
 						for(StudentOtherMonies som  : stuOthermoniList){
-							other_m_amount = som.getAmountPiad();
-							other_m_totals +=other_m_amount;
+							//other_m_amount = som.getAmountPiad();
+							other_m_totals += som.getAmountPiad();
 						}
 					}
 					
@@ -480,6 +479,11 @@ public class PrintStatement extends HttpServlet {
 						lastTermfeeBal = (( termfee.getDayAmount() + other_m_totals) - totalpaid);
 						termfees = termfee.getDayAmount();
 					}
+                    
+                    /*StudentBalance studentBalance = new StudentBalance();
+            		double feeBalance =  studentBalance.findBalance(termFeeDAO, examConfigDAO, studentFeeDAO,
+            				studentOtherMoniesDAO, stuudent.getAdmissionDate(), 
+            				stuudent.getRegTerm(), stuudent.getUuid(), stuudent.getSchoolAccountUuid(), stuudent.getFinalYear());*/
 					
 					
 					PdfPCell closeHeader = new PdfPCell(new Paragraph("Total Paid = " + nf.format( totalpaid) +""
