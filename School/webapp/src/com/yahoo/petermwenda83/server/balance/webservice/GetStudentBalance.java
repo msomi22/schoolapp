@@ -37,7 +37,13 @@ public class GetStudentBalance implements SchoolGetStudentBalance {
 		ResponseParam param1 = new ResponseParam();
 		param1.setParamName("Name");
 		param1.setParamValue("Peter Mwenda"); 
+		
+		ResponseParam param2 = new ResponseParam();
+		param2.setParamName("Name");
+		param2.setParamValue("Peter Mwenda"); 
+		
 		responseParams.add(param1); 
+		responseParams.add(param2); 
 		response.setResponseParams(responseParams);
 		return response;
 	}
