@@ -1,0 +1,62 @@
+<!-- edit misc-->
+
+<div id="miscModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="examTiltle">Edit Misc Details</h4>
+			</div>
+
+			<form method="post" action="#" id="miscForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2">
+								<label for="key">Key Name:</label>
+
+								<input type="text" id="key" class="form-control formelement cards"
+									name="key"  placeholder="Exam Code"  maxlength="20"
+									title="Key,Only alphanumeric characters are allowed and should be more than one and less than 20 characters"
+									readonly="readonly">
+							</div>
+							
+							
+							</div>
+							
+							
+							<div class="row" id="value_holder">
+
+						
+
+						</div>
+						
+						
+						<input type="hidden" name="uuid" id="uuid" value="not_set"> 
+						
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info pull-right cards" id="misc_btn" onclick="updateMisc()">
+						Save Changes <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>

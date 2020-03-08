@@ -1,0 +1,107 @@
+/**
+ * Copy Right 2018. Qubit Intelligent Solutions Ltd.
+ *                . website: http://qubintel.co.ke
+ *                . email:   info@qubintel.co.ke 
+ *                
+ * 
+ * Licensed under the Open Software License, Version 3.0 (the “License”); you may
+ * not use this file except in compliance with the License. You may obtain a copy
+ * of the License at:
+ * http://opensource.org/licenses/OSL-3.0
+ * 
+ */
+
+package ke.co.qubintel.school.server.bean.exam;
+
+import ke.co.qubintel.school.server.bean.StorableBean;
+
+/**  
+ * An exam in a school
+ * 
+ * @author <a href="mailto:mwendapeter72@gmail.com">Peter mwenda</a>
+ *
+ */
+public class Exam extends StorableBean{
+	
+	private String code;
+	private String description;
+	private int outOf;
+	
+	/**
+	 * 
+	 */
+	public Exam() {
+		super();
+		code ="";
+		description ="";
+		outOf = 0;
+	}
+	
+
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code.toUpperCase();
+	}
+
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description.toUpperCase();
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	/**
+	 * @return the outOf
+	 */
+	public int getOutOf() {
+		return outOf;
+	}
+
+
+	/**
+	 * @param outOf the outOf to set
+	 */
+	public void setOutOf(int outOf) {
+		this.outOf = outOf;
+	}
+
+
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Exam [code=" + code + ", description=" + description + ", outOf=" + outOf + ", getUuid()=" + getUuid()
+				+ ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2625893752188549331L;
+	
+	
+}

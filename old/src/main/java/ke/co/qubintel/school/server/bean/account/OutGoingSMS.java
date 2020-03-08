@@ -1,0 +1,130 @@
+/**
+ * 
+ */
+package ke.co.qubintel.school.server.bean.account;
+
+import java.sql.Timestamp;
+import java.util.Date;
+
+import ke.co.qubintel.school.server.bean.StorableBean;
+
+/** 
+ * @author peter
+ *
+ */
+public class OutGoingSMS extends StorableBean{
+	
+	   private String status;
+	   private String mobile;
+	   private String message;
+	   private String smsCost;
+	   private Timestamp sendDate;
+
+	/**
+	 * 
+	 */
+	public OutGoingSMS() {
+		 status = "";
+		 mobile = "";
+		 message = "";
+		 smsCost = "";
+		 sendDate = new Timestamp(new Date().getTime()); 
+
+	}
+	
+	
+	   /**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	/**
+	 * @return the mobile
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+
+
+	/**
+	 * @param mobile the mobile to set
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
+	/**
+	 * @return the smsCost
+	 */
+	public String getSmsCost() {
+		return smsCost;
+	}
+
+
+	/**
+	 * @param smsCost the smsCost to set
+	 */
+	public void setSmsCost(String smsCost) {
+		this.smsCost = smsCost;
+	}
+
+
+	/**
+	 * @return the sendDate
+	 */
+	public Timestamp getSendDate() {
+		return sendDate;
+	}
+
+
+	/**
+	 * @param sendDate the sendDate to set
+	 */
+	public void setSendDate(Timestamp sendDate) {
+		this.sendDate = sendDate;
+	}
+
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "OutGoingSMS [status=" + status + ", mobile=" + mobile + ", message=" + message + ", smsCost=" + smsCost
+				+ ", sendDate=" + sendDate + ", getUuid()=" + getUuid() + ", getAccountId()=" + getAccountId() + "]";
+	}
+
+
+	/**
+		 * 
+		 */
+		private static final long serialVersionUID = -7291438428747377588L;
+}

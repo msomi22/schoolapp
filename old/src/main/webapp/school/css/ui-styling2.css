@@ -1,0 +1,166 @@
+.bg-text {
+	color: #000;
+}
+
+.scale_old{
+	overflow-y: scroll;
+	overflow-x:hidden;
+	height: 370px; 
+}
+
+.del{
+	color: red;
+}
+
+.examelement{
+	border: 3px solid #1ABB9C;
+	 
+	  background-color: #f7f7f7;
+	  color:black;
+	 
+}
+
+.examelement:hover{
+	border: 3px solid #1ABB9C;
+	
+	  background-color: #fff;
+	 
+}
+
+.examelement:focus{
+	border: 3px solid #2A3F54;
+	 
+	  background-color: #fff;
+	 
+} 
+
+
+.fee_header{
+	text-align: center;
+}
+.hr_list{
+	
+	
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #1ABB9C;
+    margin: 1em 0;
+    padding: 0; 
+}
+
+.bg-blue {
+	background-color:#D7E8EF  !important;
+	border-color: #D7E8EF !important;
+}
+
+.bg-color {
+	background-color: #014081 !important;
+}
+
+.centerMe{
+	
+	text-align: center;;
+}
+
+
+#map {
+	width: 100%;
+	height: 200px;
+	background-color: grey;
+}
+
+.whiteme {
+	color: white;
+}
+
+.themeColor {
+	background-color: #2A3F54  !important;
+	border-color: #F7F7F7 !important;
+	color: #fff;
+}
+
+.secondary-assent {
+	background-color:#1ABB9C !important;
+	color: #fff;
+}
+
+.print{
+	
+	color: #1ABB9C;
+}
+
+
+.sec_text{
+	color: #1ABB9C !important;
+}
+
+.back {
+    background-color: #1ABB9C;
+    color: white;
+}
+.round {
+    border-radius: 90%;
+}
+
+.back:hover{
+	 background-color: #ddd;
+    color: black;
+}
+
+.my_btn{
+	
+	background-color:#1ABB9C !important;
+	color: #fff;
+	
+}
+
+.my_btn:hover{
+	background-color:#2A3F54 !important;
+	color: #fff;
+}
+
+.loading {
+	background-color: #3A60DB;
+	color: white;
+}
+
+.error {
+	background-color: #a40000 !important;
+	color: #fff;
+}
+
+.mono {
+	background-color:#3B5976 !important;
+}
+
+.hand{
+	cursor: pointer !important;;
+}
+
+.bg_modal {
+	background-color: white;
+	color: black;
+}
+
+.btn-primary {
+	background-color: #3c8dbc;
+	border-color: #367fa9;
+}
+
+.shadowme:hover {
+	box-shadow: 0 4px 8px 0 #008ABB, 0 6px 20px 0 #008ABB !important;
+}
+
+.cards {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19) !important;
+}
+
+.icon {
+	font-size: 70px !important;
+}
+
+.logoPlace{
+	margin-top : 20px !important;
+}

@@ -1,0 +1,293 @@
+<!-- Add a new/edit staff -->
+<%@page import="ke.co.qubintel.school.server.session.SessionConstants"%>
+<%@page import="java.util.*"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<div id="staff" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="staffTiltle">Add a new Staff</h4>
+			</div>
+
+			<form method="post" action="#" id="staffForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+							<input type="hidden" name="acessLevelId" id="acessLevelId"
+								value="BDF7F33D-1936-43F3-B14B-8FC3EA3A1265">
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="staffNo">Staff Number:</label> <input type="text"
+									id="staffNo" class="form-control formelement" name="staffNo" maxlength="10"
+									placeholder="Staff number" pattern="[0-9]{2,10}"
+									title="Staff Number,enter a valid number e.g 1234, 4567">
+
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="fname">First Name</label> <input type="text"
+									id="fname" class="form-control formelement" name="firstname" maxlength="20"
+									placeholder="First Name" pattern="[A-Za-z]{3,20}"
+									title="First Name,Only characters are allowed and should be more than two and less than 20 characters"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="mname">Middle Name</label> <input type="text"
+									id="mname" name="middlename" class="form-control formelement" maxlength="20"
+									placeholder="Middle Name" pattern="[A-Za-z]{3,20}" 
+									title="Middle Name,Only characters are allowed and should be less than 20 characters ">
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="lname">Last Name</label> <input type="text"
+									id="lname" name="lastname" class="form-control formelement" maxlength="20"
+									placeholder="Last Name" pattern="[A-Za-z]{3,20}"
+									title="Last Name,Only characters are allowed and should be more than two and less than 20 characters"
+									required>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="gender">Gender</label> <select id="gender"
+									name="gender" class="form-control formelement">
+									<option value="M">Male</option>
+									<option value="F">Female</option>
+								</select>
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="email">Email</label> <input type="email" id="email" maxlength="30" placeholder="Email"
+									class="form-control formelement" name="email">
+
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="phone">Phone Number</label>
+
+								<div class="input-group">
+									<span class="input-group-addon">+254</span> <input type="text"
+										id="phone" class="form-control formelement" name="mobile" maxlength="9"
+										placeholder="Phone number" pattern="[0-9]{9}"
+										title="Phone,enter a valid number e.g 712345678">
+								</div>
+
+
+
+							</div>
+
+
+
+
+
+
+
+
+
+							<div class="col-md-8 col-md-offset-2">
+
+
+
+								<hr></hr>
+
+								<label for="username">User name</label>
+
+								<div class="input-group">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-user"></i></span> <input type="text" id="username"
+									class="form-control formelement" name="username" maxlength="20"
+									placeholder="Username" pattern="[A-Za-z0-9]{3,20}"
+									title="Username, Alpha numeric characters are allowed and should be more than two and less than 20 characters"
+									required>
+								</div>
+								
+
+
+								
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="password">Password</label> 
+								
+								<div class="input-group">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-lock"></i></span> <input type="password"
+									id="password" class="form-control formelement" name="password"
+									placeholder="Password" pattern="[A-Za-z0-9\s]{6,20}" maxlength="20"
+									title="Password, Alpha numeric characters are allowed and should be more than six characters"
+									required>
+								</div>
+								
+								
+							</div>
+
+							<div class="col-md-8 col-md-offset-2">
+								<label for="acessLevelId">Staff Type:</label> <select
+									id="acessLevelId" name="acessLevelId"
+									class="form-control formelement accessLevels" required="required">
+
+								</select>
+							</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						</div>
+
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" onclick="addStaffApiCall()"
+						class="btn btn-info pull-right" id="staff_btn">
+						Submit <i class="fa fa-save"></i>
+					</button>
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+<div id="staffSujectModal" class="modal modal-info fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content alert alert-info">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="staffSCTiltle">Assign A new Subject
+					to a staff</h4>
+			</div>
+
+			<form method="post" action="#" id="editStaffRolesForm">
+				<div class="modal-body">
+
+					<div class="box-body">
+
+						<div class="row">
+
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Class/Form:</label> <select
+									class="form-control formelement populateOptions classId"
+									id="classList" onchange="fetchStreams(this.value)">
+
+
+								</select>
+							</div>
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Stream:</label> <select
+									class="form-control formelement populateStreamOptions"
+									name="streamId" id="streamId">
+
+								</select>
+							</div>
+
+
+
+
+
+
+							<div class="col-md-8 col-md-offset-2" id="classDiv">
+								<br> <label for="classId">Subject:</label> <select
+									class="form-control formelement populateSubjectOptions classId"
+									name="subjectId" id="subjectId">
+
+
+								</select>
+							</div>
+
+
+
+							<input type="hidden" name="teacherId" id="teacherId" value="">
+
+							<input type="hidden" name="accountId"
+								id="alterStaffRole_accountId" value=""> <input
+								type="hidden" name="uuid" id="alterSR_uuid" value="">
+
+
+
+
+
+
+
+
+
+						</div>
+
+
+
+
+
+
+
+					</div>
+					<!-- /.box-body -->
+
+
+
+				</div>
+				<div class="modal-footer">
+					<!-- 	<button type="submit" style="display:none" onclick="addNewStream()" class="btn btn-info pull-right" id="stream_btn_add">
+						Submit <i class="fa fa-save"></i>
+					</button> -->
+
+
+
+
+					<button type="button" id="btn_editStaffRoles"
+						onclick="alterStaffRoles()" class="btn btn-primary pull-right">
+						Submit <i class="fa fa-save"></i>
+					</button>
+
+
+					<button type="button" class="btn btn-default pull-left"
+						data-dismiss="modal">Close</button>
+				</div>
+
+			</form>
+		</div>
+
+	</div>
+</div>
+
+
+
