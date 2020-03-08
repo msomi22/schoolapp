@@ -4,9 +4,6 @@
 package com.yahoo.petermwenda83.server.servlet.roomhouse;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -57,7 +54,8 @@ public class UpdateRoom extends HttpServlet{
    }
    
    
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
+   @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
 
 	   HttpSession session = request.getSession(true);

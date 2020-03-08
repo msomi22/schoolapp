@@ -159,6 +159,7 @@ public class PrintStatement extends HttpServlet {
 		path = "/home/"+USER+"/school/logo/logo.png";
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

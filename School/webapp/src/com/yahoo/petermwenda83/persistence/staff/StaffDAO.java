@@ -54,6 +54,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaff(java.lang.String)
 	 */
+	@Override
 	public Staff getStaff(String schoolAccountUuid,String Uuid) {
 		Staff staff = null;
         ResultSet rset = null;
@@ -115,6 +116,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffByUsername(java.lang.String)
 	 */
+	@Override
 	public Staff getStaffByUsername(String schoolAccountUuid,String username) {
 		Staff staff = null;
         ResultSet rset = null;
@@ -180,6 +182,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#putStaff(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
+	@Override
 	public boolean putStaff(Staff staff) {
 		boolean success = true; 
 		  
@@ -209,6 +212,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#updateStaff(com.yahoo.petermwenda83.bean.staff.Staff)
 	 */
+	@Override
 	public boolean updateStaff(Staff staff) {
 		boolean success = true; 
 		 try(   Connection conn = dbutils.getConnection();
@@ -247,6 +251,7 @@ public class StaffDAO extends GenericDAO implements SchoolStaffDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.staff.SchoolStaffDAO#getStaffList(java.lang.String)
 	 */
+	@Override
 	public List<Staff> getStaffList(String schoolAccountUuid) {
 		 List<Staff> list = null;
 		 try(   

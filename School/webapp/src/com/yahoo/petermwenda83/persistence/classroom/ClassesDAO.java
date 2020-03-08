@@ -50,6 +50,7 @@ public class ClassesDAO extends GenericDAO implements SchoolClassesDAO {
 	/**
 	 * @see com.yahoo.petermwenda83.persistence.classroom.SchoolClassesDAO#getClass(java.lang.String)
 	 */
+	@Override
 	public Classes getClass(String Uuid) {
 		Classes Classes = null;
         ResultSet rset = null;

@@ -82,7 +82,8 @@ public class UploadExam extends HttpServlet {
     * @throws ServletException
     */
  
-   public void init(ServletConfig config) throws ServletException {
+   @Override
+public void init(ServletConfig config) throws ServletException {
        super.init(config);
        
        // Create a factory for disk-based file items

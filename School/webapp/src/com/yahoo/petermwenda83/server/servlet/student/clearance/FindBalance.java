@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.yahoo.petermwenda83.bean.money.StudentClearance;
 import com.yahoo.petermwenda83.bean.money.StudentFee;
 import com.yahoo.petermwenda83.bean.money.TermFee;
 import com.yahoo.petermwenda83.bean.othermoney.StudentOtherMonies;
@@ -74,7 +73,8 @@ public class FindBalance extends HttpServlet{
    }
    
    
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
+   @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
 
        HttpSession session = request.getSession(true);

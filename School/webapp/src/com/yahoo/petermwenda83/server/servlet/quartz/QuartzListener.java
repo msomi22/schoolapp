@@ -3,10 +3,13 @@ package com.yahoo.petermwenda83.server.servlet.quartz;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import java.util.Date;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -19,16 +22,14 @@ import com.yahoo.petermwenda83.server.quartz.SchoolQuartzJob;
 
 public class QuartzListener extends HttpServlet implements ServletContextListener {
 	
-	/** 
-	 * 
-	 */
+	private Logger logger = Logger.getLogger(this.getClass());
 	private static final long serialVersionUID = -1289063163218775813L;
-	Scheduler scheduler = null;
+	private Scheduler scheduler = null;
     /**
      * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent servletContext) {
-              
+    	logger.info("Startin QuartzListener");
     	  try {
     		  
                     // Setup the Job class and the Job group
@@ -69,6 +70,7 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
              catch (SchedulerException e) {
                e.printStackTrace();
             }
+    	  logger.info("QuartzListener started successfully");
     }
 
     /**
@@ -77,11 +79,13 @@ public class QuartzListener extends HttpServlet implements ServletContextListene
     public void contextDestroyed(ServletContextEvent servletContext) {
             try 
             {
+            	logger.info("QuartzListener Shutting down ");
                 scheduler.shutdown();
               } 
               catch (SchedulerException e) 
              {
                  e.printStackTrace();
             }
+            logger.info("QuartzListener Shutting down successfully");
        }
 }

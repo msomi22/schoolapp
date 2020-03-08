@@ -161,6 +161,7 @@ public class ClassListF3_4 extends HttpServlet{
 	 * @param config
 	 * @throws ServletException
 	 */
+	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		logger = Logger.getLogger(this.getClass());
@@ -1083,6 +1084,7 @@ public class ClassListF3_4 extends HttpServlet{
 				@SuppressWarnings("unchecked")
 				ArrayList<?> as = new ArrayList(grandscoremapgn.entrySet());
 				Collections.sort(as,new Comparator(){
+					@Override
 					public int compare(Object o1,Object o2){
 						Map.Entry e1 = (Map.Entry)o1;
 						Map.Entry e2 = (Map.Entry)o2;
@@ -2020,6 +2022,7 @@ public class ClassListF3_4 extends HttpServlet{
 
 				ArrayList<?> as = new ArrayList(grandscoremap.entrySet());
 				Collections.sort(as,new Comparator(){
+					@Override
 					public int compare(Object o1,Object o2){
 						Map.Entry e1 = (Map.Entry)o1;
 						Map.Entry e2 = (Map.Entry)o2;

@@ -1,7 +1,7 @@
 /**
  * Copy Right 2016. FasTech Solutions Ltd.
  * 
- * Licensed under the Open Software License, Version 3.0 (the “License”); you may
+ * Licensed under the Open Software License, Version 3.0 (the License); you may
  * not use this file except in compliance with the License. You may obtain a copy
  * of the License at:
  * http://opensource.org/licenses/OSL-3.0
@@ -58,7 +58,6 @@ public class DbPoolUtil extends HttpServlet {
     @Override
     public void destroy() {
 		logger.info("Now shutting down database pools.");
-    	
 		dBCredentials.closeConnections();		
 	} 
     

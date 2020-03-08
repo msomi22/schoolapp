@@ -52,5 +52,10 @@ public interface SchoolMiscellanousDAO {
 	  * @return
 	  */
 	public List<Miscellanous> getMiscellanousList(String schoolAccountUuid);
+	/**
+	 * 
+	 * @return
+	 */
+	public int getCount();
 
 }

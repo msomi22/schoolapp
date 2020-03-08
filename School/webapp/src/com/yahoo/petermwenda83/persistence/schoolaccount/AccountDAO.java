@@ -326,6 +326,7 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 	 */
 	public List<SchoolAccount> getAllSchools(String status) {
 		List<SchoolAccount> list = new ArrayList<>();
+		logger.info("SELECT * FROM SchoolAccount WHERE statusUuid = " + status); 
 		try (Connection conn = dbutils.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SchoolAccount WHERE statusUuid =?;")) {
 			pstmt.setString(1, status);

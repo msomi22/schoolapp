@@ -22,6 +22,7 @@ import com.yahoo.petermwenda83.bean.schoolaccount.SchoolAccount;
 import com.yahoo.petermwenda83.bean.staff.Staff;
 import com.yahoo.petermwenda83.persistence.staff.StaffDAO;
 import com.yahoo.petermwenda83.server.cache.CacheVariables;
+import com.yahoo.petermwenda83.server.servlet.upload.ExcelUtil;
 import com.yahoo.petermwenda83.server.servlet.util.FontImageGenerator;
 import com.yahoo.petermwenda83.server.servlet.util.SecurityUtil;
 import com.yahoo.petermwenda83.server.session.SessionConstants;
@@ -40,8 +41,8 @@ public class Login extends HttpServlet{
 	final String ERROR_WRONG_USER_DETAIL = "Incorrect staff credentials.";
 	final String BLANK_FIELDS_NOT_ALLOWED = "blank fields are not allowed.";
 	final String ERROR_SCHOOL_INACTIVE = "You can't login to your school account, call +254718953974 for help.";
-
 	final String STATUS_INACTIVE = "6C03705B-E05E-420B-B5B8-C7EE36643E60";
+	final String ERROR_SYSTEM_DATE_NOT_SET = "Please make sure System Date is set correctly.";
 
 	/**
 	 * 
@@ -135,9 +136,10 @@ public class Login extends HttpServlet{
 				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_WRONG_USER_DETAIL);
 				response.sendRedirect("index.jsp");
 
-			}
-
-			else{
+			}else if(!ExcelUtil.validByCreationDate(school)) {
+				session.setAttribute(SessionConstants.SCHOOL_ACCOUNT_LOGIN_ERROR, ERROR_SYSTEM_DATE_NOT_SET);
+				response.sendRedirect("index.jsp");
+			}else{
 
 
 				if (StringUtils.equals(SecurityUtil.getMD5Hash(staffpassword), staff.getPassword())) {

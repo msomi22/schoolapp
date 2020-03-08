@@ -214,5 +214,30 @@ public class MiscellanousDAO extends GenericDAO  implements SchoolMiscellanousDA
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getStudentCount(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public int getCount() {
+		int count = 0;
+		ResultSet rset = null;
+		try (
+				Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM Miscellanous;");    		   
+				) {
+	
+			rset = pstmt.executeQuery();
+
+			while(rset.next()){
+				count = rset.getInt("count");
+			}
+		} catch (SQLException e) {
+			logger.error("SQL Exception when getting all Miscellanous");
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+		return count;
+	}
+
+
 	
 }
