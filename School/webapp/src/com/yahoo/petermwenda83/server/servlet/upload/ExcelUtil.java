@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -712,17 +711,4 @@ public class ExcelUtil {
 		
 	  }
 	}
-	
-	/**
-	 * 
-	 * @param seconds
-	 */
-	public static void sleep(int seconds) {
-		try {
-			TimeUnit.SECONDS.sleep(seconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
 }

@@ -514,30 +514,7 @@ public class StudentDAO extends GenericDAO implements SchoolStudentDAO {
 	}
 
 
-	/**
-	 * @see com.yahoo.petermwenda83.persistence.student.SchoolStudentDAO#getAllStudentList(java.lang.String)
-	 */
-	public List<Student> getAllStudentList(String schoolaccountUuid,String statusuuid) {
-		List<Student> studentList = new ArrayList<>();
-		try(
-				Connection conn = dbutils.getConnection();
-				PreparedStatement psmt= conn.prepareStatement("SELECT * FROM Student WHERE "
-						+ "SchoolAccountUuid = ?  AND statusuuid =?;");
-				) {
-			psmt.setString(1, schoolaccountUuid);
-			psmt.setString(2, statusuuid);
-			try(ResultSet rset = psmt.executeQuery();){
 
-				studentList = beanProcessor.toBeanList(rset, Student.class);
-			}
-		} catch (SQLException e) {
-			logger.error("SQLException when trying to get a Student List for school"+schoolaccountUuid);
-			logger.error(ExceptionUtils.getStackTrace(e));
-			System.out.println(ExceptionUtils.getStackTrace(e)); 
-		}
-
-		return studentList;
-	}
 
 
 }

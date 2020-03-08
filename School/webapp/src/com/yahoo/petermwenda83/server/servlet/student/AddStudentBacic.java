@@ -238,7 +238,7 @@ public class AddStudentBacic extends HttpServlet{
 		   student.setSysUser(systemuser); 
 		   
 		   if(StringUtils.isBlank(StydentType)){
-			   StydentType = "Boarder";
+			   StydentType = "Day";
 		   }
 		   student.setStudentType(StydentType); 
 		   
