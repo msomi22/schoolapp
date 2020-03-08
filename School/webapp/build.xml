@@ -55,6 +55,7 @@
       optimize="${compile.optimize}"
       excludes="**/Test*.java"
       includeantruntime="false"
+	  encoding="utf-8"
       >
       <classpath refid="compile.classpath" />
     </javac>

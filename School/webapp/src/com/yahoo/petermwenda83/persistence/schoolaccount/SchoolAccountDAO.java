@@ -72,6 +72,12 @@ public interface SchoolAccountDAO {
      */
     public List<SchoolAccount> getAllSchools();
     
+    /**
+     * 
+     * @param status
+     * @return
+     */
+	public List<SchoolAccount> getAllSchools(String status);
     
 
 }
