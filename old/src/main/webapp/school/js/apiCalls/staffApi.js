@@ -1,0 +1,225 @@
+var table;
+
+$(document)
+		.ready(
+				function() {
+
+				
+					
+					if(checkAccessStaff())
+					fetchStaffs();
+
+				});
+
+
+
+
+function addStaffApiCall() {
+	
+	
+	
+
+	if (rootCheckFormValidation($('#staffForm'))) {
+
+		// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+		varying_url = "staff/"+$('#accountId').val();
+
+		global_data_passed = $('#staffForm').serializeJSON();
+		
+		console.log(varying_url);
+
+		console.log(JSON.stringify(global_data_passed));
+
+		global_request_type = 'POST';
+
+		globalApiCall(function(data) {
+
+			console.log('Genius Code for staff adding');
+
+			console.log(data);
+
+			if(rootParseApiResponseData(data)){
+				
+				
+				$('#staff').modal('hide');
+				fetchStaffs();
+			}
+
+		});
+
+	}
+
+}
+
+
+function fetchAccessLevels() {
+
+	// alert(JSON.stringify($('#staffForm').serializeJSON()));
+
+	varying_url = "config/accsslevel/" + $('#accountId').val();
+
+	global_data_passed = {};
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Genius Code for fetching access levels');
+
+		console.log(data);
+
+		var accessSelect = $('.accessLevels');
+		accessSelect.empty();
+		// classSelect.options[classSelect.options.length]
+		// = new Option('Form 1', 'Value1');
+
+		for (var i = 0; i < data.length; i++) {
+			accessSelect.append('<option id=' + data[i].acessId + ' value='
+					+ data[i].acessId + '>' + data[i].description
+					+ '</option>');
+			// classSelect.options[classSelect.options.length]
+			// = new Option(data[i].description,
+			// data[i].uuid);
+		}
+
+	});
+
+}
+
+function fetchStaffs(){
+	varying_url = "staff/"+ $('#accountId').val()+"/";
+
+	global_data_passed = {};
+
+	global_request_type = 'GET';
+
+	globalApiCall(function(data) {
+
+		console.log('Code for staff altering');
+
+		console.log(data);
+		
+		if(data.length > 0){
+
+		var cols = [];
+
+		var getCol = data[0];
+
+		var keys = Object.keys(getCol);
+
+		keys.forEach(function(k) {
+
+			cols.push({
+				title : k,
+				data : k
+			// optionally do some type detection here for render
+			// function
+
+			});
+
+		});
+
+		if (table)
+			table.clear();
+
+		table = $('#staffs')
+				.DataTable(
+						{
+
+							destroy : true,
+							columns : cols,
+							"columnDefs" : [
+									{
+										"targets" : [ 0 ],
+										"visible" : false,
+										"searchable" : false
+									},
+									{
+										"targets" : [ 1 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 2 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 3 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 4 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 6 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 9 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 12 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 13 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 14 ],
+										"visible" : false
+									},
+									{
+										"targets" : [ 16 ],
+										"data" : null,
+										"defaultContent" : '<button class="btn btn-info ">'
+												+ 'Profile   <span class="fa fa-info"></span></button>'
+									} ],
+
+							"order" : [ [ 5, "desc" ] ],
+						/* "iDisplayLength": 100 */
+
+						});
+		}
+		
+		
+		fetchAccessLevels();
+
+		table.rows.add(data).draw();
+
+		$('#staffs tbody')
+				.on(
+						'click',
+						'button',
+						function() {
+							var data = table.row(
+									$(this).parents('tr'))
+									.data();
+
+							console.log(data['uuid']);
+
+							/*
+							 * window .open( location.protocol +
+							 * "//" + window.location.host +
+							 * "/school/school/staffProfile.jsp?uuid=" +
+							 * data['uuid'], "_blank");
+							 */
+
+							window.location = location.protocol
+									+ "//"
+									+ window.location.host
+									+ "/school/school/staffProfile.jsp?uuid="
+									+ data['uuid'];
+
+						});
+
+	});
+}
+
+
+
+
+
+
+

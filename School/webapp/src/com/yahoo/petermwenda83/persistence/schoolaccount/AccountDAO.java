@@ -321,5 +321,24 @@ public class AccountDAO extends GenericDAO implements SchoolAccountDAO {
 		return list;
 	}
 
+	/**
+	 * @see com.yahoo.petermwenda83.persistence.schoolaccount.SchoolAccountDAO#getAllSchools()
+	 */
+	public List<SchoolAccount> getAllSchools(String status) {
+		List<SchoolAccount> list = new ArrayList<>();
+		try (Connection conn = dbutils.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SchoolAccount WHERE statusUuid =?;")) {
+			pstmt.setString(1, status);
+			try (ResultSet rset = pstmt.executeQuery();) {
+				list = beanProcessor.toBeanList(rset, SchoolAccount.class);
+			}
 
+		} catch (SQLException e) {
+			logger.error("SQL Exception when getting all Schools");
+			logger.error(ExceptionUtils.getStackTrace(e));
+			System.out.println(ExceptionUtils.getStackTrace(e));
+		}
+
+		return list;
+	}
 }

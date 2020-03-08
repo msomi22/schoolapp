@@ -1,0 +1,109 @@
+
+<!--The import interface-->
+<div class="modal fade" id="import_show">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header secondary-assent">
+				<button type="button" class="close" data-dismiss="modal">
+					<span>&times;</span>
+				</button>
+				<h4 class="modal-title">File Import</h4>
+			</div>
+			<form action="#" method="post" enctype="multipart/form-data" >
+			
+			<div class="modal-body">
+ 					<div class="row" id="import_intro">
+						<div class="row">
+							<div class="col-xs-2"></div>
+							<div class="col-xs-9">
+								<h4>Import New Students</h4>
+
+								<p>New FastPro  web application allows you to
+									import new students via:</p>
+								<ul>
+									<li>Downloading a template</li>
+									<li>Browsing to a file(.txt or .csv)</li>
+								</ul>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2"></div>
+							<div class="col-xs-9">
+								<h4>Download a template</h4>
+
+
+								<p>Allows you to enter the required details for the students
+									to be imported. Its highly advised to use this template in any
+									import to be performed. If not so, ensure the format
+									corresponds with your intend file import in order to have a
+									successful import</p>
+								 <a class="btn btn btn-info btn-block themeColor" type="button"
+									href="../../school/resources/students.xlsx">Download an excel file
+									template </a>
+							</div>
+
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-2 col-xs-2"></div>
+							<div class="col-md-9 col-xs-9">
+							
+								<h4>Browse to a file</h4>
+								<button id="block_excel" onclick="swap()" type="button"
+									class="btn btn-info btn-block themeColor">Import from an Excel File</button>
+								
+							</div>
+						</div>
+					</div>
+
+
+
+					<div  id="browse_excel" class="row browse"  style="display: none">
+
+						<br> <br>
+						<div class="col-md-6 col-md-offset-3">
+
+							<h3>
+							<label for="file">Please click to navigate to the file</label>
+								<input type="file" id="file" name="file" class="form-control formelement cards"
+									 required>
+							</h3>
+
+
+							<br>
+
+						</div>
+
+
+					</div>
+
+				</div>
+
+
+
+				<div class="modal-footer">
+					
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal"
+						id="cancel_Import">Cancel</button>
+						
+						<button type="button" id="back_btn" class="btn btn-default"  onclick="back()"
+						disabled>Back</button>
+					<button type="button" id="import_btn" class="btn btn-primary pull-right" onclick="importBegin(this.form)"
+						disabled>Import</button>
+						
+
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
