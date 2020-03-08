@@ -90,26 +90,6 @@ public interface SchoolPerfomanceDAO {
 	public int getSubjectCountPerClass(String accountUuid,String subjectUuid, String classUuid,String term,String year);
 	
 	
-
-	/**
-	 * 
-	 * @param schoolAccountUuid
-	 * @param classRoomUuid
-	 * @param studentUuid
-	 * @param subjectUuid
-	 * @param Term
-	 * @param Year
-	 * @return
-	 */
-	public List<Perfomance>  getPerformance(String schoolAccountUuid, String classId, String studentUuid,
-			String subjectUuid, String Term, String Year);
- 	
-	/**
-	 * 
-	 * @param perfomance
-	 * @return
-	 */
-	public boolean deleteDuplicate(Perfomance perfomance); 
- 	
+	
 	
 }

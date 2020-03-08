@@ -102,13 +102,10 @@ public interface SchoolStudentDAO {
 	 * @return
 	 */
 	public int getStudentCount(String statusuuid,String schoolaccountUuid);
+	
+	
 
-	/**
-	 * 
-	 * @param schoolaccountUuid
-	 * @param statusuuid
-	 * @return
-	 */
-	public List<Student> getAllStudentList(String schoolaccountUuid,String statusuuid);
+	
+	
 
 }
