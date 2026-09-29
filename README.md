@@ -1,6 +1,6 @@
 # SchoolApp
 
-A legacy **school management system** originally created in **2015** during my university years. The project was built as a full Java web application for managing day-to-day secondary-school operations, including students, staff, academics, fees, examinations, reporting, communication, and administrative workflows.
+A legacy **school management system** that I started building in **2015 while at university**. I continued developing it into my **fourth year in 2016**, when I formally presented the same system as my university project. The application was designed as a full Java web platform for managing day-to-day secondary-school operations, including students, staff, academics, fees, examinations, reporting, communication, and administrative workflows.
 
 This repository preserves the original implementation and its history as an example of an early real-world Java enterprise application.
 
@@ -275,9 +275,21 @@ Anyone modernizing the project should review at least:
 
 ## Historical context
 
-I originally started this project in **2015 while at university**.
+I started building SchoolApp in **2015 while at university**. Development continued into **2016, my fourth year**, when I formally presented the same application as my university project.
 
-The goal was to build a practical school-management platform rather than a small classroom exercise. The code grew to cover a wide range of operational areas such as student records, school fees, examinations, staff management, reporting, SMS communication, and integrations.
+It was not only an academic exercise. I developed it as a practical school-management product intended for real school operations, covering areas such as student records, fees, examinations, staff management, reporting, SMS communication, and integrations.
+
+The project also moved beyond the university setting into real-world use:
+
+| Year | Milestone |
+| --- | --- |
+| **2015** | Initial development started while I was at university |
+| **2016** | Presented as my fourth-year university project |
+| **2016** | Sold and deployed to the first school |
+| **2017** | Sold to four additional schools |
+| **Total** | Adopted by **5 schools** |
+
+That progression, from a university project to software purchased by five schools, is an important part of the project's history. It gave me early experience not only in software development, but also in turning software into a usable product for real institutions, responding to operational needs, and supporting a system outside the classroom.
 
 The repository is valuable to me as a record of my early software-engineering work and of how I approached a fairly large business domain before later moving into modern backend systems, APIs, integrations, messaging, and distributed architectures.
 
@@ -332,4 +344,4 @@ Software Engineer focused on Java, backend systems, APIs, integrations, messagin
 
 ---
 
-_Originally created in 2015. Migrated from Bitbucket to GitHub with repository history preserved._
+_Started in 2015, presented as my fourth-year university project in 2016, and subsequently sold to 5 schools. Migrated from Bitbucket to GitHub with repository history preserved._
